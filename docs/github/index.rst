@@ -11,3 +11,4 @@
    ssh-keys
    cloning
    pushing
+   signed-off
