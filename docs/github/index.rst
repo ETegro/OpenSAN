@@ -7,6 +7,7 @@
 .. toctree::
    :maxdepth: 1
 
+   name_and_email
    overview
    ssh-keys
    cloning
