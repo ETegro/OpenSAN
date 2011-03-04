@@ -6,5 +6,6 @@ Welcome to astor2's documentation!
 
    github/index
    luci/index
+   coding/index
 
 * :ref:`search`
