@@ -5,5 +5,6 @@ Welcome to astor2's documentation!
    :maxdepth: 1
 
    github/index
+   luci/index
 
 * :ref:`search`
