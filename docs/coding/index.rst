@@ -11,3 +11,4 @@
 
    common
    log_messages
+   commiting_rules
