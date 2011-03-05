@@ -57,11 +57,11 @@
 
 Команда **make run** считается устаревшей и не используется.
 
-Для запуска LuCI WebUI, использая LuCIttpd::
+Для запуска LuCI WebUI, используя LuCIttpd::
 
   make runhttpd
 
-Для запуска LuCI WebUI, использая Boa/Webuci::
+Для запуска LuCI WebUI, используя Boa/Webuci::
 
   make runboa
 
