@@ -1,0 +1,60 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "Active UPnP Redirects"
+msgstr ""
+
+msgid "Client Address"
+msgstr ""
+
+msgid "Client Port"
+msgstr ""
+
+msgid "Collecting data..."
+msgstr ""
+
+msgid "Delete Redirect"
+msgstr ""
+
+msgid "Downlink"
+msgstr ""
+
+msgid "Enable NAT-PMP"
+msgstr ""
+
+msgid "Enable UPnP Service"
+msgstr ""
+
+msgid "Enable secure mode"
+msgstr ""
+
+msgid "External Port"
+msgstr ""
+
+msgid "Log output"
+msgstr ""
+
+msgid "Protocol"
+msgstr ""
+
+msgid "There are no active redirects."
+msgstr ""
+
+msgid ""
+"UPNP allows clients in the local network to automatically configure the "
+"router."
+msgstr ""
+
+msgid ""
+"UPnP allows clients in the local network to automatically configure the "
+"router."
+msgstr ""
+
+msgid "Universal Plug & Play"
+msgstr ""
+
+msgid "Uplink"
+msgstr ""
+
+msgid "enable"
+msgstr ""

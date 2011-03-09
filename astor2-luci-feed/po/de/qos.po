@@ -1,0 +1,116 @@
+#  qos.po
+#  generated from ./applications/luci-qos/luasrc/i18n/qos.en.lua
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-25 22:10+0100\n"
+"PO-Revision-Date: 2009-05-21 19:21+0200\n"
+"Last-Translator: Jo-Philipp Wich <xm@subsignal.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0\n"
+
+msgid "Quality of Service"
+msgstr "Quality of Service"
+
+#, fuzzy
+msgid ""
+"With <abbr title=\"Quality of Service\">QoS</abbr> you can prioritize "
+"network traffic selected by addresses, ports or services."
+msgstr ""
+"Mit Hilfe von QoS kann Netzwerkverkehr anhand von Adressen, Ports und "
+"verwendeten Protokollen priorisiert werden."
+
+msgid "Interfaces"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+#, fuzzy
+msgid "Classification group"
+msgstr "Klassifizierung"
+
+msgid "default"
+msgstr ""
+
+#, fuzzy
+msgid "Calculate overhead"
+msgstr "Overheadberechnung"
+
+#, fuzzy
+msgid "Half-duplex"
+msgstr "Halb-Duplex"
+
+msgid "Download speed (kbit/s)"
+msgstr ""
+
+msgid "Upload speed (kbit/s)"
+msgstr ""
+
+#, fuzzy
+msgid "Classification Rules"
+msgstr "Klassifizierung"
+
+#, fuzzy
+msgid "Target"
+msgstr "Zieladresse"
+
+msgid "priority"
+msgstr "priorisiert"
+
+msgid "express"
+msgstr "express"
+
+msgid "normal"
+msgstr "normal"
+
+msgid "low"
+msgstr "niedrig"
+
+#, fuzzy
+msgid "Source host"
+msgstr "Quelladresse"
+
+msgid "all"
+msgstr ""
+
+msgid "Destination host"
+msgstr ""
+
+msgid "Service"
+msgstr ""
+
+msgid "Protocol"
+msgstr ""
+
+#, fuzzy
+msgid "Ports"
+msgstr "Priorität"
+
+msgid "Number of bytes"
+msgstr ""
+
+#~ msgid "Downlink"
+#~ msgstr "Downlink"
+
+#~ msgid "Uplink"
+#~ msgstr "Uplink"
+
+#~ msgid "Prioritization"
+#~ msgstr "Priorisierung"
+
+#~ msgid "source network / source host"
+#~ msgstr "Quellnetz / Quellhost"
+
+#~ msgid "target network / target host"
+#~ msgstr "Zielnetz / Zielhost"
+
+#~ msgid "portrange"
+#~ msgstr "Portbereich"
+
+#~ msgid "qos_connbytes"
+#~ msgstr "Bytes gesendet"

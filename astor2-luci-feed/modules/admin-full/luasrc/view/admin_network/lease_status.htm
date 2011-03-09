@@ -1,0 +1,68 @@
+<script type="text/javascript">//<![CDATA[
+	var stxhr = new XHR();
+	var update_status = function() {
+		stxhr.get('<%=luci.dispatcher.build_url("admin", "network", "dhcplease_status")%>', null,
+			function(x, st)
+			{
+				var tb = document.getElementById('lease_status_table');
+				if (st && tb)
+				{
+					/* clear all rows */
+					while( tb.rows.length > 1 )
+						tb.deleteRow(1);
+
+					for( var i = 0; i < st.length; i++ )
+					{
+						var timestr;
+
+						if (st[i].expires <= 0)
+						{
+							timestr = '<em><%:expired%></em>';
+						}
+						else
+						{
+							timestr = String.format('%t', st[i].expires);
+						}
+
+						var tr = tb.insertRow(-1);
+							tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
+
+						tr.insertCell(-1).innerHTML = st[i].hostname ? st[i].hostname : '?';
+						tr.insertCell(-1).innerHTML = st[i].ipaddr;
+						tr.insertCell(-1).innerHTML = st[i].macaddr;
+						tr.insertCell(-1).innerHTML = timestr;
+					}
+
+					if( tb.rows.length == 1 )
+					{
+						var tr = tb.insertRow(-1);
+							tr.className = 'cbi-section-table-row';
+
+						var td = tr.insertCell(-1);
+							td.colSpan = 4;
+							td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
+					}
+				}
+
+				window.setTimeout(update_status, 5000);
+			}
+		)
+	};
+
+	update_status();
+//]]></script>
+
+<fieldset class="cbi-section">
+	<legend><%:Active Leases%></legend>
+	<table class="cbi-section-table" id="lease_status_table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:Hostname%></th>
+			<th class="cbi-section-table-cell"><%:IPv4-Address%></th>
+			<th class="cbi-section-table-cell"><%:MAC-Address%></th>
+			<th class="cbi-section-table-cell"><%:Leasetime remaining%></th>
+		</tr>
+		<tr class="cbi-section-table-row">
+			<td colspan="4"><em><br /><%:Collecting data...%></em></td>
+		</tr>
+	</table>
+</fieldset>

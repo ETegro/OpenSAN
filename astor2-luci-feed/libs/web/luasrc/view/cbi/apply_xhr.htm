@@ -1,0 +1,57 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2010 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: apply_xhr.htm 6485 2010-11-18 03:07:21Z jow $
+
+-%>
+
+<% export("cbi_apply_xhr", function(id, configs, redirect) -%>
+<fieldset class="cbi-section" id="cbi-apply-<%=id%>">
+	<legend><%:Applying changes%></legend>
+	<script type="text/javascript">//<![CDATA[
+		var apply_xhr = new XHR();
+
+		apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "restart", table.concat(configs, ","))%>', null,
+			function() {
+				var checkfinish = function() {
+					apply_xhr.get('<%=luci.dispatcher.build_url("servicectl", "status")%>', null,
+						function(x) {
+							if( x.responseText == 'finish' )
+							{
+								var e = document.getElementById('cbi-apply-<%=id%>-status');
+								if( e )
+								{
+									e.innerHTML = '<%:Configuration applied.%>';
+									window.setTimeout(function() {
+										e.parentNode.style.display = 'none';
+										<% if redirect then %>location.href='<%=redirect%>';<% end %>
+									}, 1000);
+								}
+							}
+							else
+							{
+								var e = document.getElementById('cbi-apply-<%=id%>-status');
+								if( e && x.responseText ) e.innerHTML = x.responseText;
+
+								window.setTimeout(checkfinish, 1000);
+							}
+						}
+					);
+				}
+
+				window.setTimeout(checkfinish, 1000);
+			}
+		);
+	//]]></script>
+
+	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
+	<span id="cbi-apply-<%=id%>-status"><%:Waiting for router...%></span>
+</fieldset>
+<%-	end) %>

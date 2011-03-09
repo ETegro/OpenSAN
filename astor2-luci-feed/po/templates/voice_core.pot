@@ -1,0 +1,5 @@
+msgid "Phones"
+msgstr ""
+
+msgid "l_v_adminphones"
+msgstr ""

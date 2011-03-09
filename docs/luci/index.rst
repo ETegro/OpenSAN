@@ -8,3 +8,4 @@ LuCI
    :maxdepth: 1
 
    local_environment
+   modules

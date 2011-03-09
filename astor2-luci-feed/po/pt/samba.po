@@ -1,0 +1,75 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-26 19:03+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.1.1\n"
+
+msgid "Network Shares"
+msgstr "Compartilhamentos de Rede"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Workgroup"
+msgstr "Grupo de Trabalho"
+
+msgid "Share home-directories"
+msgstr "Compartilhar diretórios home"
+
+#, fuzzy
+msgid "Allow system users to reach their home directories via network shares"
+msgstr ""
+"Usuários do sistema poderão acessar seu diretório home através dos "
+"compartilhamentos de rede."
+
+msgid "Shared Directories"
+msgstr "Diretórios Compartilhados"
+
+msgid "Path"
+msgstr ""
+
+#, fuzzy
+msgid "Allowed users"
+msgstr "Usuários Permitidos"
+
+#, fuzzy
+msgid "Read-only"
+msgstr "Somente Leitura"
+
+#, fuzzy
+msgid "Allow guests"
+msgstr "Permitir Convidados"
+
+#, fuzzy
+msgid "Create mask"
+msgstr "Criar Máscara"
+
+msgid "Mask for new files"
+msgstr "Máscara para novos arquivos"
+
+#, fuzzy
+msgid "Directory mask"
+msgstr "Máscara do Diretório"
+
+msgid "Mask for new directories"
+msgstr "Máscara para novos diretórios"
+
+#~ msgid "Shared Directory"
+#~ msgstr "Diretório Compartilhado"
+
+#~ msgid "Physical Path"
+#~ msgstr "Caminho Físico"
+
+#~ msgid "optional"
+#~ msgstr "opcional"

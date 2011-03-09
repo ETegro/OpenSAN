@@ -1,0 +1,48 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: splash.htm 6480 2010-11-17 22:59:08Z soma $
+
+-%>
+<%
+require("luci.fs")
+
+function expand (e)        
+	return (string.gsub(e, "###([A-Z_]+)###", R))
+end
+
+local c = luci.model.uci.cursor():get_all("freifunk", "community")
+if c and c.name then
+	community = c.name
+else
+	community = "Freifunk"
+end
+
+if c and c.homepage then
+	homepage = c.homepage
+else
+	homepage = "http://freifunk.net"
+end
+
+local s = luci.model.uci.cursor():get_all("luci_splash", "general")
+if s and s.leasetime then
+	leasetime = s.leasetime
+else
+	leasetime = ""
+end
+
+R = {COMMUNITY = community, COMMUNITY_URL = homepage, LEASETIME = leasetime, ACCEPT = tostring(translate("Accept"))}
+
+splashtext = expand(luci.fs.readfile("/usr/lib/luci-splash/splashtext.html"))
+%>
+
+<%=splashtext%>
+

@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-25 22:10+0100\n"
+"PO-Revision-Date: 2010-07-01 20:16+0200\n"
+"Last-Translator: Vasilis Tsiligiannis <b_tsiligiannis@silverton.gr>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0\n"
+
+msgid "Quality of Service"
+msgstr "Ποιότητα Υπηρεσίας"
+
+#, fuzzy
+msgid ""
+"With <abbr title=\"Quality of Service\">QoS</abbr> you can prioritize "
+"network traffic selected by addresses, ports or services."
+msgstr ""
+"Με το QoS μπορείτε να ορίσετε προτεραιότητες στην κίνηση του δικτύου με βάση "
+"διευθύνσεις, θύρες ή υπηρεσίες."
+
+msgid "Interfaces"
+msgstr "Διεπαφές"
+
+msgid "Enable"
+msgstr ""
+
+#, fuzzy
+msgid "Classification group"
+msgstr "Κατηγοριοποίηση"
+
+msgid "default"
+msgstr "προεπιλογή"
+
+#, fuzzy
+msgid "Calculate overhead"
+msgstr "Υπολογισμός Overhead"
+
+#, fuzzy
+msgid "Half-duplex"
+msgstr "Μη-ταυτόχρονη αμφίδρομη επικοινωνία"
+
+msgid "Download speed (kbit/s)"
+msgstr ""
+
+msgid "Upload speed (kbit/s)"
+msgstr ""
+
+#, fuzzy
+msgid "Classification Rules"
+msgstr "Κατηγοριοποίηση"
+
+#, fuzzy
+msgid "Target"
+msgstr "Διεύθυνση στόχου"
+
+msgid "priority"
+msgstr "προτεραιότητα"
+
+msgid "express"
+msgstr "εξπρές"
+
+msgid "normal"
+msgstr "κανονική"
+
+msgid "low"
+msgstr "χαμηλή"
+
+#, fuzzy
+msgid "Source host"
+msgstr "Διεύθυνση πηγής"
+
+msgid "all"
+msgstr ""
+
+msgid "Destination host"
+msgstr ""
+
+msgid "Service"
+msgstr ""
+
+msgid "Protocol"
+msgstr ""
+
+#, fuzzy
+msgid "Ports"
+msgstr "Προτεραιότητα"
+
+msgid "Number of bytes"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Downlink"
+#~ msgstr "Ταχύτητα κατεβάσματος"
+
+#, fuzzy
+#~ msgid "Uplink"
+#~ msgstr "Ταχύτητα ανεβάσματος"
+
+#~ msgid "Prioritization"
+#~ msgstr "Προτεραιότητες"
+
+#~ msgid "source network / source host"
+#~ msgstr "πηγαίο δίκτυο / πηγαίος υπολογιστής"
+
+#~ msgid "target network / target host"
+#~ msgstr "δίκτυο στόχος / υπολογιστής στόχος"
+
+#~ msgid "portrange"
+#~ msgstr "εύρος θυρών"
+
+#~ msgid "Bytes sent"
+#~ msgstr "Απεσταλμένα byte"
