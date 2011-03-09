@@ -19,4 +19,44 @@ check_openwrt_existence()
 	popd
 }
 
+update_feeds_configuration()
+{
+	local feeds_conf=feeds.conf.default
+
+	pushd "$TARGET_DIR"
+	cp /dev/null "$feeds_conf"
+	echo "$FEEDS" | while read feed; do
+		echo "Feed: $feed"
+		feed_type=`echo "$feed" | awk '{print $1}'`
+		feed_name=`echo "$feed" | awk '{print $2}'`
+		if [ `echo "$feed" | wc -w` = "3" ]; then
+			revision=""
+			true
+		else
+			revision=`echo "$feed" | awk '{print $NF}'`
+			feed=`echo "$feed" | awk '{print $1,$2,$3}'`
+		fi
+		echo "$feed" >> "$feeds_conf"
+		./scripts/feeds update $feed_name
+		if [ "$revision" = "" ]; then
+			true
+		else
+			case $feed_type in
+			"src-svn")
+				pushd feeds/$feed_name
+				$SVN update -r$revision
+				popd
+				;;
+			*)
+				echo "Unsupported feed type for retreiving specified version"
+				exit 1
+				;;
+			esac
+		fi
+		./scripts/feeds install -a -p $feed_name
+	done
+	popd
+}
+
 check_openwrt_existence
+update_feeds_configuration
