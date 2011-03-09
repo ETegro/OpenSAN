@@ -1,0 +1,90 @@
+<%+header%>
+
+<%
+local fs  = require "luci.fs"
+local utl = require "luci.util"
+
+-- check if nameservice plugin is enabled and where to find the services file
+local has_services = false
+
+local uci = require "luci.model.uci".cursor()
+uci:foreach("olsrd", "LoadPlugin", function(s)
+	if s.library == "olsrd_nameservice.so.0.3" then
+		if s.services_file and fs.access(s.services_file) then
+			has_services = true
+			services_file = s.services_file
+		else
+			if fs.access("/var/run/services_olsr") then
+				has_services = true
+				services_file = "/var/run/services_olsr"
+			end
+		end
+	end
+end)
+
+
+function fetch_services()
+	local rawdata = fs.readfile(services_file)
+
+	if #rawdata == 0 then
+		return nil
+	end
+
+	local data = {}
+
+	local tables = utl.split(utl.trim(rawdata), "\n", nil, true)
+	-- remove the first 3 lines
+	table.remove(tables,1)
+	table.remove(tables,1)
+	table.remove(tables,1)
+
+        -- store last line in last_update and remove it, then remove another empty line at the end
+        last_update=table.remove(tables)
+	table.remove(tables)
+
+	for i, tbl in ipairs(tables) do
+		local lines = utl.split(tbl, "\n", nil, true)
+	end
+	
+	return tables
+end
+%>
+
+<% if has_services then %>
+<div class="cbi-map">
+	<h2><a id="content" name="content"><%:Services%></a></h2>
+	<div class="cbi-map-descr"/>
+                <div class="cbi-section">
+                        <div class="cbi-section-node">
+                                <table class="cbi-section-table">
+                                        <tr class="cbi-section-table-titles">
+						<th class="cbi-section-table-cell"><%:Url%></th>
+						<th class="cbi-section-table-cell"><%:Source%></th>
+					</tr>
+
+	<% table=fetch_services()
+	local i = 1
+	for k, line in ipairs(table) do
+		local field = {}
+		-- split line at # and |, 1=url, 2=proto, 3=description, 4=source
+		local field = utl.split(line, "[#|]", split, true)
+		local url,descr,origin = pcdata(field[1]),pcdata(field[3]),pcdata(field[4])
+		%>
+					<tr class="cbi-section-table-row cbi-rowstyle-<%=i%>">
+						<td class="cbi-section-table-cell"><a href="<%=url%>"><%=descr%></a></td>
+						<td class="cbi-section-table-cell"><%=origin%></td>
+					</tr>
+	<% if i == 1 then i = 0 elseif i == 0 then i = 1 end %>
+	<%end%>
+				</table>
+			</div>
+		</div>
+	</div>
+	<br />
+	<%=last_update%>
+
+<%else%>
+	<%:No services can be shown, because olsrd is not running or the olsrd-nameservice Plugin is not loaded.%>
+<%end%>
+
+<%+footer%>

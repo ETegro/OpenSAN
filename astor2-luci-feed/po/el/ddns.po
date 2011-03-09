@@ -1,0 +1,89 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-02 13:44+0100\n"
+"PO-Revision-Date: 2009-09-13 16:00+0200\n"
+"Last-Translator: Vasilis Tsiligiannis <b_tsiligiannis@silverton.gr>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0\n"
+
+msgid "Dynamic DNS"
+msgstr "Δυναμικό DNS"
+
+#, fuzzy
+msgid ""
+"Dynamic DNS allows that your router can be reached with a fixed hostname "
+"while having a dynamically changing IP address."
+msgstr ""
+"Το Δυναμικό DNS επιτρέπει την πρόσβαση στον router σας έχοντας ένα σταθερό "
+"όνομα υπολογιστή παρόλο που η διεύθυνση IP του μπορεί να αλλάζει δυναμικά."
+
+msgid "Enable"
+msgstr ""
+
+msgid "Service"
+msgstr ""
+
+msgid "custom"
+msgstr ""
+
+msgid "Custom update-URL"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+#, fuzzy
+msgid "Source of IP address"
+msgstr "Πηγή διεύθυνσης IP"
+
+msgid "network"
+msgstr ""
+
+msgid "interface"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Network"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Check for changed IP every"
+msgstr "Έλεγχος για αλλαγή IP κάθε"
+
+#, fuzzy
+msgid "Check-time unit"
+msgstr "Μονάδα ώρας για έλεγχο"
+
+# Minutes (not minimum)
+msgid "min"
+msgstr ""
+
+# Hours
+msgid "h"
+msgstr ""
+
+msgid "Force update every"
+msgstr "Εξαναγκασμός ενημέρωσης κάθε"
+
+#, fuzzy
+msgid "Force-time unit"
+msgstr "Μόναδα ώρας για εξαναγκασμό"
+
+#, fuzzy
+#~ msgid "ddns_service_updateurl"
+#~ msgstr "Προσαρμογή URL ενημέρωσης"

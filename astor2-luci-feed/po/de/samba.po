@@ -1,0 +1,75 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-26 17:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.1.1\n"
+
+msgid "Network Shares"
+msgstr "Netzwerkfreigaben"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Workgroup"
+msgstr "Arbeitsgruppe"
+
+msgid "Share home-directories"
+msgstr "Heimatverzeichnisse freigeben"
+
+#, fuzzy
+msgid "Allow system users to reach their home directories via network shares"
+msgstr ""
+"Systembenutzer können ihre Heimatverzeichnis über Netzwerkfreigaben "
+"erreichen."
+
+msgid "Shared Directories"
+msgstr "Dateifreigaben"
+
+msgid "Path"
+msgstr ""
+
+#, fuzzy
+msgid "Allowed users"
+msgstr "Erlaubte Benutzer"
+
+#, fuzzy
+msgid "Read-only"
+msgstr "Nur Lesen"
+
+#, fuzzy
+msgid "Allow guests"
+msgstr "Gäste erlauben"
+
+#, fuzzy
+msgid "Create mask"
+msgstr "Anlegemaske"
+
+msgid "Mask for new files"
+msgstr "Maske für neue Dateien"
+
+#, fuzzy
+msgid "Directory mask"
+msgstr "Verzeichnismaske"
+
+msgid "Mask for new directories"
+msgstr "Maske für neue Verzeichnisse"
+
+#~ msgid "Shared Directory"
+#~ msgstr "Freigabepfad"
+
+#~ msgid "Physical Path"
+#~ msgstr "Physischer Pfad"
+
+#~ msgid "optional"
+#~ msgstr "optional"

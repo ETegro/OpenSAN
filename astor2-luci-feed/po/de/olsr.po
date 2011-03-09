@@ -1,0 +1,590 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2011-02-12 14:23+0100\n"
+"Last-Translator: Manuel Munz <freifunk@somakoma.de>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.1.1\n"
+
+msgid "Active MID announcements"
+msgstr "Aktive MID-Ankündigungen"
+
+msgid "Active OLSR nodes"
+msgstr "Aktive OLSR-Knoten"
+
+msgid "Active host net announcements"
+msgstr "Aktive HNA-Ankündigungen"
+
+msgid "Advanced Settings"
+msgstr ""
+
+msgid "Announced network"
+msgstr "Angekündigtes Netzwerk"
+
+msgid "Broadcast address"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Device"
+msgstr ""
+
+msgid "Display"
+msgstr "Anzeige"
+
+msgid "Downlink"
+msgstr ""
+
+msgid "Download Config"
+msgstr "Konfiguration herunterladen"
+
+msgid "ETX"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Enable this interface."
+msgstr "Dieses Interface benutzen."
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Expected retransmission count"
+msgstr "Zu erwartende Sendeversuche pro Paket"
+
+msgid "FIB metric"
+msgstr "FIB-Metrik"
+
+msgid ""
+"FIBMetric controls the metric value of the host-routes OLSRd sets. \"flat\" "
+"means that the metric value is always 2. This is the preferred value because "
+"it helps the linux kernel routing to clean up older routes. \"correct\" uses "
+"the hopcount as the metric value. \"approx\" use the hopcount as the metric "
+"value too, but does only update the hopcount if the nexthop changes too. "
+"Default is \"flat\"."
+msgstr ""
+"FIBMetric bestimmt die Metrik für Hostrouten die olsrd setzt. \"flat\" setzt "
+"die Metrik immer auf 2. Dies ist der bevorzugte Wert, da er dem Kernel dabei "
+"hilft, veraltete Routen zu löschen. \"correct\" verwendet den Hopcount als "
+"Metrik. \"approx\" benutzt ebenfalls den Hopcount als Metrik, updated diese "
+"aber nur, wenn sich auch der Nexthop verändert hat. Der Defaultwert ist "
+"\"flat\"."
+
+msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
+msgstr ""
+"Fisheye Mechanismus für TC-Nachrichten (ausgewählt entspricht ein). Der "
+"Defaultwert ist \"ein\""
+
+msgid "Gateway"
+msgstr ""
+
+msgid "General Settings"
+msgstr ""
+
+msgid "General settings"
+msgstr "Allgemeine Einstellungen"
+
+msgid "HNA"
+msgstr ""
+
+msgid "HNA Announcements"
+msgstr ""
+
+msgid "HNA interval"
+msgstr "HNA-Intervall"
+
+msgid "HNA validity time"
+msgstr "HNA-Gültigkeit"
+
+msgid "Hello"
+msgstr ""
+
+msgid "Hello interval"
+msgstr "Hello-Intervall"
+
+msgid "Hello validity time"
+msgstr "Hello-Gültigkeit"
+
+msgid "Hops"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid ""
+"Hysteresis for link sensing (only for hopcount metric). Hysteresis adds more "
+"robustness to the link sensing but delays neighbor registration. Defaults is "
+"\"yes\""
+msgstr ""
+"Verwende Hysterese zur Berechnung von Links (nur verfügbar für Hopcount "
+"Metric). Hysterese erhöht die Stabilität von berechneten Routen, verzögert "
+"aber das Registrieren von Nachbarknoten. Der Defaultwert ist \"eingeschaltet"
+"\"."
+
+msgid "IP Addresses"
+msgstr ""
+
+msgid ""
+"IP-version to use. If 6and4 is selected then one olsrd instance is started "
+"for each protocol."
+msgstr ""
+"Die zu verwendende IP-Version. Wird 6and4 gewählt dann wird ein OLSRd-"
+"Prozess für jedes Protokoll gestartet."
+
+msgid "IPv4"
+msgstr ""
+
+msgid "IPv4 broadcast"
+msgstr "IPv4 Broadcast"
+
+msgid ""
+"IPv4 broadcast address for outgoing OLSR packets. One useful example would "
+"be 255.255.255.255. Default is \"0.0.0.0\", which triggers the usage of the "
+"interface broadcast IP."
+msgstr ""
+"IPv4 Broadcastadresse für ausgehende OLSR-Pakete. Ein häufig verwendetes "
+"Beispiel ist 255.255.255.255. Der Defaultwert ist \"0.0.0.0\". Dies "
+"verwendet die Broadcastadresse des Interfaces."
+
+msgid "IPv4 source"
+msgstr ""
+
+msgid ""
+"IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
+"triggers usage of the interface IP."
+msgstr ""
+"IPv4 Quell-IP für ausgehende OLSR-Nachrichten. Der Defaultwert ist "
+"\"0.0.0.0\", dann wird die IP des Interfaces verwendet."
+
+msgid "IPv6"
+msgstr ""
+
+msgid "IPv6 multicast"
+msgstr ""
+
+msgid ""
+"IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
+"multicast."
+msgstr ""
+"IPv6 Multicast-Adresse. Der Defaultwert ist \"FF02::6D\", die linklocal "
+"Multicastadresse für MANETs."
+
+msgid "IPv6 source"
+msgstr ""
+
+msgid ""
+"IPv6 src prefix. OLSRd will choose one of the interface IPs which matches "
+"the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
+"of a not-linklocal interface IP."
+msgstr ""
+"IPv6 Quell-Prefix. OLSRd wählt eine IP als Quell-IP die innerhalb des "
+"angegebenen Prefix liegt. Der Defaultwert ist \"0::/0\", damit wird eine "
+"IPv6-Adresse des Interfaces verwendet die nicht linklocal ist."
+
+msgid ""
+"If the route to the current gateway is to be changed, the ETX value of this "
+"gateway is multiplied with this value before it is compared to the new one. "
+"The parameter can be a value between 0.1 and 1.0, but should be close to 1.0 "
+"if changed.<br /><b>WARNING:</b> This parameter should not be used together "
+"with the etx_ffeth metric!<br />Defaults to \"1.0\"."
+msgstr ""
+"Wenn sich die Route zum aktuellen Gateway ändert, dann wird sein ETX-Wert "
+"zunächst mit diesem Wert multipliziert bevor er mit dem neuen ETX-Wert "
+"verglichen wird. Damit kann \"flapping\" von Routen reduziert werden. Der "
+"Wert kann zwischen 0.1 und 1.0 liegen, sollte aber nahe bei 1.0 sein.<br /"
+"><b>ACHTUNG:</b> Diese Einstellung darf nicht zusammen mit der etx_ffeth "
+"Metrik verwendet werden!<br />Der Defaultwert ist \"1.0\"."
+
+msgid "Interface"
+msgstr ""
+
+msgid ""
+"Interface Mode is used to prevent unnecessary packet forwarding on switched "
+"ethernet interfaces. valid Modes are \"mesh\" and \"ether\". Default is "
+"\"mesh\"."
+msgstr ""
+"Mit dieser Einstellung kann unnötiges Forwarden von Paketen auf geswitchten "
+"Ethernetschnittstellen unterbunden werden. Gültige Werte sind \"mesh\" und "
+"\"ether\". Der Defaultwert ist \"mesh\"."
+
+msgid "Interfaces"
+msgstr ""
+
+msgid "Interfaces Defaults"
+msgstr ""
+
+msgid "Internet protocol"
+msgstr "Internet Protokoll"
+
+msgid ""
+"Interval to poll network interfaces for configuration changes (in seconds). "
+"Default is \"2.5\"."
+msgstr ""
+"Intervall mit dem Netzwerkschnittstellen auf Änderungen in ihrer "
+"Konfiguration überprüft werden (in Sekunden). Der Defaultwert ist \"2.5\"."
+
+msgid "Known OLSR routes"
+msgstr "Bekannte OLSR-Routen"
+
+msgid "LQ aging"
+msgstr ""
+
+msgid "LQ algorithm"
+msgstr ""
+
+msgid "LQ fisheye"
+msgstr ""
+
+msgid "LQ level"
+msgstr ""
+
+msgid "Last hop"
+msgstr "letzter Hop"
+
+msgid "Legend"
+msgstr "Legende"
+
+msgid "Library"
+msgstr "Bibliothek"
+
+msgid "Link Quality Settings"
+msgstr ""
+
+msgid ""
+"Link quality aging factor (only for lq level 2). Tuning parameter for "
+"etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
+"(allowed values are between 0.01 and 1.0)"
+msgstr ""
+"Der Linkqualitäts-Alterungsfaktor kann nur zusammen mit Linkqualitylevel 2 "
+"verwendet werden. Kleinere Werte bedeuten, dass ETX-Werte sich langsamer "
+"verändern. Erlaubte Werte sind 0.01 bis 1.0."
+
+msgid ""
+"Link quality algorithm (only for lq level 2).<br /><b>etx_float</b>: "
+"floating point ETX with exponential aging<br /><b>etx_fpm</b> : same as "
+"ext_float, but with integer arithmetic<br /><b>etx_ff</b> : ETX freifunk, an "
+"etx variant which use all OLSR traffic (instead of only hellos) for ETX "
+"calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
+"allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
+msgstr ""
+"Algorithmus zur Bestimmung der Linkqualität, kann nur zusammen mit "
+"Linkquality Level 2 verwendet werden.<br /><b>etx_float</b>: floating point "
+"ETX mit exponentieller Alterung<br /><b>etx_fpm</b> : wie ext_float, rechnet "
+"aber mit integeren Zahlen.<br /><b>etx_ff</b> : ETX freifunk, eine ETX-"
+"Variante die den kompletten OLSR Traffic (statt nur Hellos) zur ETX-"
+"Berechnung verwendet.<br /><b>etx_ffeth</b>: Inkompatible Variante von "
+"etx_ff, die ETX 0.1 für kabelgebundene Links erlaubt.<br />Der Defaultwert "
+"ist \"etx_ff\"."
+
+msgid ""
+"Link quality level switch between hopcount and cost-based (mostly ETX) "
+"routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
+"quality for MPR selection and routing<br />Default is \"2\""
+msgstr ""
+"Mit dieser Option kann der Linkquality-Algorithmus gewählt werden.<br /"
+"><b>0</b> = Linkquality nicht benutzen<br /><b>2</b> = Linkquality für die "
+"Wahl von MPRs und fürs Routing benutzen.<br />Der Defaultwert ist \"2\"."
+
+msgid "LinkQuality Multiplicator"
+msgstr ""
+
+msgid "Links per node (average)"
+msgstr "Verbindungen pro Node (Durchschnitt)"
+
+msgid "Links total"
+msgstr "Verbindungen insgesamt"
+
+msgid "Local interface IP"
+msgstr "Lokale Interface-IP"
+
+msgid "MID"
+msgstr ""
+
+msgid "MID interval"
+msgstr "MID-Intervall"
+
+msgid "MID validity time"
+msgstr "MID-Gültigkeit"
+
+msgid "MTU"
+msgstr ""
+
+msgid "Main IP"
+msgstr ""
+
+msgid ""
+"Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
+"configured on port 2006 and accepts connections from \"127.0.0.1\"."
+msgstr ""
+"Stellen Sie sicher das OLSRd läuft und das \"txtinfo\" Plugin auf Port 2006 "
+"geladen und \"127.0.0.1\" als Accept-Host gesetzt ist."
+
+msgid "Metric"
+msgstr ""
+
+msgid "Mode"
+msgstr ""
+
+msgid ""
+"Multiply routes with the factor given here. Allowed values are between 0.01 "
+"and 1. It is only used when LQ-Level is greater than 0. Examples:<br /"
+">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
+"nodes on this interface by 20%: default 0.8"
+msgstr ""
+"Multipliziere die Linkquality (LQ) für Routen mit dem hier angegebenen "
+"Faktor, der zwischen 0.01 und 1 liegen kann. Beispiele:<br />halbiere die LQ "
+"zu 192.168.0.1: 192.168.0.1 0.5<br />reduziere die LQ für alle Nodes die mit "
+"diesem Interface kommunizieren um 20%: default 0.8"
+
+msgid "NAT threshold"
+msgstr ""
+
+msgid "Neighbors"
+msgstr "Nachbarn"
+
+msgid "Neighbour IP"
+msgstr "Nachbar-IP"
+
+msgid "Neighbours"
+msgstr "Nachbarn"
+
+msgid "Netmask"
+msgstr "Netzmaske"
+
+msgid "Network"
+msgstr ""
+
+msgid "Network address"
+msgstr "Netzwerk"
+
+msgid "Nic changes poll interval"
+msgstr ""
+
+msgid "Nodes"
+msgstr ""
+
+msgid "OLSR"
+msgstr ""
+
+msgid "OLSR - Display Options"
+msgstr "OLSR - Anzeige"
+
+msgid "OLSR - HNA-Announcements"
+msgstr "OLSR - HNA-Ankündigungen"
+
+msgid "OLSR - Plugins"
+msgstr "OLSR - Plugins"
+
+msgid "OLSR Daemon"
+msgstr "OLSR Daemon"
+
+msgid "OLSR Daemon - Interface"
+msgstr ""
+
+msgid "OLSR connections"
+msgstr "OLSR-Verbindungen"
+
+msgid "OLSR gateway"
+msgstr "OLSR-Gateway"
+
+msgid "OLSR node"
+msgstr "OLSR-Knoten"
+
+msgid "Overview"
+msgstr ""
+
+msgid "Overview of currently active OLSR host net announcements"
+msgstr "Übersicht über zur Zeit aktive OLSR-Netzwerk-Ankündigungen"
+
+msgid "Overview of currently established OLSR connections"
+msgstr "Übersicht über aktuell bestehende OLSR-Verbindungen"
+
+msgid "Overview of currently known OLSR nodes"
+msgstr "Übersicht über zur Zeit bekannte andere OLSR-Knoten"
+
+msgid "Overview of currently known routes to other OLSR nodes"
+msgstr "Übersicht über zur Zeit bekannte Routen zu anderen OLSR-Knoten"
+
+msgid "Overview of interfaces where OLSR is running"
+msgstr "Übersicht über Interfaces auf denen OLSRd läuft."
+
+msgid "Overview of known multiple interface announcements"
+msgstr "Übersicht über bekannte Mehrfachschnittstellenmeldungen"
+
+msgid "Overview of smart gateways in this network"
+msgstr "Übersicht über Smart Gateways in diesem Netzwerk."
+
+msgid "Plugin configuration"
+msgstr "Pluginkonfiguration"
+
+msgid "Plugins"
+msgstr ""
+
+msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
+msgstr "Abfragerate für OLSRd-Sockets in Sekunden. Der Defaultwert ist 0.05."
+
+msgid "Pollrate"
+msgstr "Abfragerate"
+
+msgid "Port"
+msgstr ""
+
+msgid "Prefix"
+msgstr "Prefix"
+
+msgid "Resolve"
+msgstr ""
+
+msgid ""
+"Resolve hostnames on status pages. It is generally safe to allow this, but "
+"if you use public IPs and have unstable DNS-Setup then those pages will load "
+"really slow. In this case disable it here."
+msgstr ""
+"Hostnamen auf den Statusseiten auflösen. Dies ist in der Regel kein Problem, "
+"wenn aber öffentliche IPs benutzt werden und das DNS-Setup nicht stabil ist, "
+"dann werden die OLSR-Statusseiten nur sehr langsam laden. In diesem Fall "
+"sollte man diese Option deaktivieren."
+
+msgid "Routen"
+msgstr ""
+
+msgid "Routes"
+msgstr "Routen"
+
+msgid "Secondary OLSR interfaces"
+msgstr "Sekundäre OLSR Schnittstellen"
+
+msgid ""
+"Sets the main IP (originator ip) of the router. This IP will NEVER change "
+"during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
+"IP of the first interface."
+msgstr ""
+"Setzt die Haupt-IP (originator ip) für diesen Router. Diese IP wird sich "
+"NIEMALS während der Laufzeit von OLSRD verändern. Der Defaultwert ist "
+"0.0.0.0. Damit wird die IP des ersten Interfaces verwendet."
+
+msgid "SmartGW"
+msgstr ""
+
+msgid "SmartGW announcements"
+msgstr "Smart Gateway Ankündigungen"
+
+msgid "SmartGateway is not configured on this system."
+msgstr "SmartGateway ist auf diesem System nicht konfiguriert."
+
+msgid "Source address"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Success rate of packages received from the neighbour"
+msgstr "Erfolgsquote vom Nachbarn empfangener Pakete"
+
+msgid "Success rate of packages sent to the neighbour"
+msgstr "Erfolgsquote zum Nachbarn gesendeter Pakete"
+
+msgid "TC"
+msgstr ""
+
+msgid "TC interval"
+msgstr "TC-Intervall"
+
+msgid "TC validity time"
+msgstr "TC-Gültigkeit"
+
+msgid "TOS value"
+msgstr ""
+
+msgid ""
+"The OLSR daemon is an implementation of the Optimized Link State Routing "
+"protocol. As such it allows mesh routing for any network equipment. It runs "
+"on any wifi card that supports ad-hoc mode and of course on any ethernet "
+"device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
+"documentation."
+msgstr ""
+"OLSR ist eine Implementation des Optimized Link State Routing Protokolls und "
+"erlaubt damit Mesh-Routing für jegliche Netzwerkgeräte. Besuche <a "
+"href='http://www.olsr.org'>olsrd.org</a> für Hilfe und Dokumentation."
+
+msgid ""
+"The fixed willingness to use. If not set willingness will be calculated "
+"dynamically based on battery/power status. Default is \"3\"."
+msgstr ""
+"Hier kann ein Bereitschaftswert angegeben werden. Bleibt dieses Feld leer, "
+"dann wird der Bereitschaftswert automatisch anhand von Akkukapazität und "
+"Stromversorgung berechnet"
+
+msgid "The interface OLSRd should serve."
+msgstr "Interface das OLSRd verwenden soll."
+
+msgid ""
+"The port OLSR uses. This should usually stay at the IANA assigned port 698. "
+"It can have a value between 1 and 65535."
+msgstr ""
+"Port, den OLSRd benutzt. Dieser sollte in der Regel auf dem Defaultwert 698 "
+"bleiben, was dem von IANA zugewiesenen Port für OLSRd entspricht."
+
+msgid "Timing and Validity"
+msgstr ""
+
+msgid "Topologie"
+msgstr ""
+
+msgid "Topology"
+msgstr "Topologie"
+
+msgid ""
+"Type of service value for the IP header of control traffic. Default is "
+"\"16\"."
+msgstr ""
+"TOS-Wert für den IP-Header von OLSR-Nachrichten. Der Defaultwert ist \"16\"."
+
+msgid "Unable to connect to the OLSR daemon!"
+msgstr "Es konnte keine Verbindung zum OLSR-Daemon hergestellt werden!"
+
+msgid "Uplink"
+msgstr ""
+
+msgid "Use hysteresis"
+msgstr "Hysterese aktivieren"
+
+msgid "Version"
+msgstr ""
+
+msgid "WLAN"
+msgstr ""
+
+msgid "Weight"
+msgstr ""
+
+msgid ""
+"When multiple links exist between hosts the weight of interface is used to "
+"determine the link to use. Normally the weight is automatically calculated "
+"by olsrd based on the characteristics of the interface, but here you can "
+"specify a fixed value. Olsrd will choose links with the lowest value.<br /"
+"><b>Note:</b> Interface weight is used only when LinkQualityLevel is set to "
+"0. For any other value of LinkQualityLevel, the interface ETX value is used "
+"instead."
+msgstr ""
+"Gibt es mehrere Links zwischen einzelnen Nodes dann wird ein Gewichtungswert "
+"verwendet um zu bestimmen, welches Interface bevorzugt wird. Dieses Gewicht "
+"wird in der Regel automatisch berechnet, kann hier jedoch mit einem festen "
+"Wert überschrieben werden. OLSRd wählt den Link mit dem niedrigsten Wert. "
+"<br /><b>Hinweis:</b> Diese Gewichtung ist nur möglich wenn "
+"LinkQualityLevel= 0 ist. Für alle anderen Werte von LinkQualityLevel wird "
+"stattdessen der ETX-Wert verwendet."
+
+msgid "Willingness"
+msgstr "Bereitschaft"

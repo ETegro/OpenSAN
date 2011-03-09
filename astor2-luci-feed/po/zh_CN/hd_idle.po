@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-04-14 10:33+0200\n"
+"PO-Revision-Date: 2009-06-25 16:39+0200\n"
+"Last-Translator: ruwen <zhaoruwen@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0\n"
+
+msgid ""
+"hd-idle is a utility program for spinning-down external disks after a period "
+"of idle time."
+msgstr ""
+
+msgid "Settings"
+msgstr "设置"
+
+#, fuzzy
+msgid "Enable"
+msgstr "启用debug"
+
+msgid "Disk"
+msgstr ""
+
+#, fuzzy
+msgid "Idle-time"
+msgstr "Idle-Time"
+
+#, fuzzy
+msgid "Idle-time unit"
+msgstr "Idle-Time 单元"
+
+# Minutes (not minimum)
+msgid "min"
+msgstr ""
+
+# Hours
+msgid "h"
+msgstr ""
+
+msgid "Enable debug"
+msgstr "启用debug"
+
+#~ msgid "hd-idle"
+#~ msgstr "hd-idle"

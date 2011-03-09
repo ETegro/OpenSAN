@@ -1,0 +1,57 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-22 15:23+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Network Shares"
+msgstr "Network Shares"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Workgroup"
+msgstr "Workgroup"
+
+msgid "Share home-directories"
+msgstr "Share home-directories"
+
+msgid "Allow system users to reach their home directories via network shares"
+msgstr "Allow system users to reach their home directories via network shares"
+
+msgid "Shared Directories"
+msgstr "Shared Directories"
+
+msgid "Path"
+msgstr "Path"
+
+msgid "Allowed users"
+msgstr "Allowed users"
+
+msgid "Read-only"
+msgstr "Read-only"
+
+msgid "Allow guests"
+msgstr "Allow guests"
+
+msgid "Create mask"
+msgstr "Create mask"
+
+msgid "Mask for new files"
+msgstr "Mask for new files"
+
+msgid "Directory mask"
+msgstr "Directory mask"
+
+msgid "Mask for new directories"
+msgstr "Mask for new directories"

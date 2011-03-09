@@ -1,0 +1,56 @@
+<%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008 Jo-Philipp Wich <xm@leipzig.freifunk.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: routes.htm 6619 2010-12-05 15:02:44Z soma $
+
+-%>
+<%+header%>
+<h2><a id="content" name="content"><%:Known OLSR routes%></a></h2>
+<p><%:Overview of currently known routes to other OLSR nodes%></p>
+<br />
+<table class="smalltext" cellspacing="0" cellpadding="6">
+<tr>
+<th><%:Announced network%></th>
+<th><%:OLSR gateway%></th>
+<th><%:Interface%></th>
+<th><%:Metric%></th>
+<th>ETX</th>
+</tr>
+<% for k, route in ipairs(routes) do
+	local color = "#bb3333"
+
+	route.ETX = tonumber(route.ETX)
+	if route.ETX == 0 then
+		color = "#bb3333"
+	elseif route.ETX < 4 then
+		color = "#00cc00"
+	elseif route.ETX < 10 then
+		color = "#ffcb05"
+	elseif route.ETX < 100 then
+		color = "#ff6600"
+	end
+%>
+<tr>
+<td><%=route.Destination%></td>
+<td>
+<a href="http://<%=route["Gateway IP"]%>/cgi-bin-status.html"><%=route["Gateway IP"]%></a>
+<% if route.Hostname then %>
+	/ <a href="http://<%=route.Hostname%>/cgi-bin-status.html"><%=route.Hostname%></a>  
+<% end %>
+</td>
+<td><%=route.Interface%></td>
+<td><%=route.Metric%></td>
+<td style="background-color:<%=color%>"><%=string.format("%.3f", tonumber(route.ETX) or 0)%></td>
+</tr>
+<% end %>
+</table>
+<br />
+<%+footer%>

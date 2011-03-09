@@ -1,0 +1,141 @@
+# Diagnostics (Device Info).
+# Copyright (C) 2009 Daniel Dickinson
+# Daniel Dickinson <crazycshore@gmail.com>, 2009.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: 2009-07-17 04:22-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Invalid"
+msgstr "Invalid"
+
+msgid "No SIP devices"
+msgstr "No SIP devices"
+
+msgid "No devices detected"
+msgstr "No devices detected"
+
+msgid "check other networks"
+msgstr "check other networks"
+
+msgid "IP Address"
+msgstr "IP Address"
+
+msgid "MAC Address"
+msgstr "MAC Address"
+
+msgid "Link to Device"
+msgstr "Link to Device"
+
+msgid "Raw"
+msgstr "Raw"
+
+msgid "Enable"
+msgstr "Enable"
+
+msgid "Interface"
+msgstr "Interface"
+
+msgid "Subnet"
+msgstr "Subnet"
+
+msgid "Timeout"
+msgstr "Timeout"
+
+msgid "Time to wait for responses in seconds (default 10)"
+msgstr "Time to wait for responses in seconds (default 10)"
+
+msgid "Repeat Count"
+msgstr "Repeat Count"
+
+msgid "Number of times to send requests (default 1)"
+msgstr "Number of times to send requests (default 1)"
+
+msgid "Sleep Between Requests"
+msgstr "Sleep Between Requests"
+
+msgid "Milliseconds to sleep between requests (default 100)"
+msgstr "Milliseconds to sleep between requests (default 100)"
+
+msgid "Phones"
+msgstr "Phones"
+
+msgid "Configure"
+msgstr "Configure"
+
+msgid "SIP Devices on Network"
+msgstr "SIP Devices on Network"
+
+msgid "SIP Device Scan"
+msgstr "SIP Device Scan"
+
+msgid "Devices on Network"
+msgstr "Devices on Network"
+
+msgid "Phone Scan"
+msgstr "Phone Scan"
+
+msgid "Config Phone Scan"
+msgstr "Config Phone Scan"
+
+msgid "Device Scan Config"
+msgstr "Device Scan Config"
+
+msgid "SIP Device Scanning Configuration"
+msgstr "SIP Device Scanning Configuration"
+
+msgid "SIP Device Information"
+msgstr "SIP Device Information"
+
+msgid "Phone Information"
+msgstr "Phone Information"
+
+msgid ""
+"Override the information returned by the MAC to Device Info Script (mac-to-"
+"devinfo) for a specified range of MAC Addresses"
+msgstr ""
+"Override the information returned by the MAC to Device Info Script (mac-to-"
+"devinfo) for a specified range of MAC Addresses"
+
+msgid "MAC Device Override"
+msgstr "MAC Device Override"
+
+msgid "MAC range and information used to override system and IEEE databases"
+msgstr "MAC range and information used to override system and IEEE databases"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Beginning of MAC address range"
+msgstr "Beginning of MAC address range"
+
+msgid "End of MAC address range"
+msgstr "End of MAC address range"
+
+msgid "OUI Owner"
+msgstr "OUI Owner"
+
+msgid "Scan for devices on specified networks."
+msgstr "Scan for devices on specified networks."
+
+msgid "Phone Scanning Configuration"
+msgstr "Phone Scanning Configuration"
+
+msgid "l_d_d_nd_netdiscover_to_devinfo_descr"
+msgstr "Scans for devices on specified networks."

@@ -1,0 +1,9 @@
+#  mmc_over_gpio.pot
+#  generated from ./applications/luci-mmc_over_gpio/luasrc/i18n/mmc_over_gpio.en.lua
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#. Settings
+#: applications/luci-mmc_over_gpio/luasrc/i18n/mmc_over_gpio.en.lua:3
+msgid "Settings"
+msgstr ""
