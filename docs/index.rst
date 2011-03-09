@@ -7,7 +7,8 @@
 
    documentation_adding
    github/index
-   luci/index
    coding/index
+   openwrt/index
+   luci/index
 
 * :ref:`search`
