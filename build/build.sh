@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 
-WORK_DIR=`echo $0 | sed "s/build.sh$//"`
+WORK_DIR=`echo $0 | sed "s/\/build.sh$//"`
+pushd $WORK_DIR; WORK_DIR=`pwd`; popd
 TARGET_DIR="$WORK_DIR"/openwrt/trunk
 
 . "$WORK_DIR"/build.conf
@@ -29,14 +30,10 @@ update_feeds_configuration()
 		echo "Feed: $feed"
 		feed_type=`echo "$feed" | awk '{print $1}'`
 		feed_name=`echo "$feed" | awk '{print $2}'`
-		if [ `echo "$feed" | wc -w` = "3" ]; then
-			revision=""
-			true
-		else
-			revision=`echo "$feed" | awk '{print $NF}'`
-			feed=`echo "$feed" | awk '{print $1,$2,$3}'`
-		fi
-		echo "$feed" >> "$feeds_conf"
+		feed_path=`echo "$feed" | awk '{print $3}'`
+		revision=`echo "$feed" | awk '{print $4}'`
+		[ "$feed_type" != "src-link" ] || feed_path="$WORK_DIR"/"$feed_path"
+		echo "$feed_type $feed_name $feed_path" >> "$feeds_conf"
 		./scripts/feeds update $feed_name
 		if [ "$revision" = "" ]; then
 			true
