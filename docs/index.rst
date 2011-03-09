@@ -4,6 +4,7 @@ Welcome to astor2's documentation!
 .. toctree::
    :maxdepth: 1
 
+   documentation_adding
    github/index
    luci/index
    coding/index
