@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-# aStor2 -- network attached storage configurable via Web-interface
+# aStor2 -- storage area network configurable via Web-interface
 # Copyright (C) 2009-2011 ETegro Technologies, PLC
 #                         Sergey Matveev <sergey.matveev@etegro.com>
 #
@@ -25,7 +25,7 @@ BIN_DIR="$TARGET_DIR"/bin/x86
 
 mmake()
 {
-	$MAKE -C "$TARGET_DIR" $@
+	yes "" | $MAKE -C "$TARGET_DIR" $@
 }
 
 . "$WORK_DIR"/build.conf
