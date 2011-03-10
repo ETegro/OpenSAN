@@ -3,8 +3,13 @@
 WORK_DIR=`echo $0 | sed "s/\/build.sh$//"`
 pushd $WORK_DIR; WORK_DIR=`pwd`; popd
 TARGET_DIR="$WORK_DIR"/openwrt/trunk
-RESULT_DIR="$WORK_DIR"/output
+OUTPUT_DIR="$WORK_DIR"/output/`date "+%Y-%m-%dT%H:%M"`
 DL_DIR="$TARGET_DIR"/dl
+
+mmake()
+{
+	$MAKE -C "$TARGET_DIR" $@
+}
 
 . "$WORK_DIR"/build.conf
 
@@ -77,8 +82,16 @@ create_dl_directory()
 create_output_directory()
 {
 	[ -d "$OUTPUT_DIR" ] || mkdir -p "$OUTPUT_DIR"
-	ID=`date "+%Y-%m-%dT%H:%M"`
-	mkdir -p "$OUTPUT_DIR"/$ID
+}
+
+perform_cleaning()
+{
+	mmake clean
+}
+
+perform_building()
+{
+	mmake -j V=99 >"$OUTPUT_DIR"/output.log 2>&1
 }
 
 check_openwrt_existence
@@ -86,3 +99,5 @@ update_feeds_configuration
 update_openwrt_config
 create_dl_directory
 create_output_directory
+perform_cleaning
+perform_building
