@@ -12,3 +12,4 @@
    common
    log_messages
    commiting_rules
+   copyright_adding
