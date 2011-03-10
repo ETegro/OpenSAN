@@ -3,6 +3,8 @@
 WORK_DIR=`echo $0 | sed "s/\/build.sh$//"`
 pushd $WORK_DIR; WORK_DIR=`pwd`; popd
 TARGET_DIR="$WORK_DIR"/openwrt/trunk
+RESULT_DIR="$WORK_DIR"/output
+DL_DIR="$TARGET_DIR"/dl
 
 . "$WORK_DIR"/build.conf
 
@@ -61,6 +63,26 @@ update_openwrt_config()
 	ln -s "$WORK_DIR"/.config "$TARGET_DIR"/.config
 }
 
+create_dl_directory()
+{
+	[ -L "$DL_DIR" ] && [ `readlink "$DL_DIR"` = "$DL_PATH" ] && return 0
+	if [ -d "$DL_DIR" ]; then
+		rm -fr "$DL_DIR"
+	else
+		rm -f "$DL_DIR"
+	fi
+	ln -s "$DL_PATH" "$DL_DIR"
+}
+
+create_output_directory()
+{
+	[ -d "$OUTPUT_DIR" ] || mkdir -p "$OUTPUT_DIR"
+	ID=`date "+%Y-%m-%dT%H:%M"`
+	mkdir -p "$OUTPUT_DIR"/$ID
+}
+
 check_openwrt_existence
 update_feeds_configuration
 update_openwrt_config
+create_dl_directory
+create_output_directory
