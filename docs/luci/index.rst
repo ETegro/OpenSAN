@@ -9,3 +9,4 @@ LuCI
 
    local_environment
    modules
+   modules-feed
