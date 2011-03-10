@@ -55,5 +55,12 @@ update_feeds_configuration()
 	popd
 }
 
+update_openwrt_config()
+{
+	rm -f "$TARGET_DIR"/.config
+	ln -s "$WORK_DIR"/.config "$TARGET_DIR"/.config
+}
+
 check_openwrt_existence
 update_feeds_configuration
+update_openwrt_config
