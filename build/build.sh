@@ -73,6 +73,7 @@ update_feeds_configuration()
 				exit 1
 				;;
 			esac
+			./scripts/feeds update -i $feed_name
 		fi
 		./scripts/feeds install -a -p $feed_name
 	done
@@ -108,7 +109,7 @@ perform_cleaning()
 
 perform_building()
 {
-	mmake -j V=99 >"$OUTPUT_DIR"/output.log 2>&1
+	mmake V=99 >"$OUTPUT_DIR"/output.log 2>&1
 }
 
 copy_bins()
