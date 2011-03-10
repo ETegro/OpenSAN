@@ -321,6 +321,8 @@ define Package/luci-app-diag-devinfo/conffiles
 /etc/config/luci_devinfo
 endef
 
+### Hello World - luci application ###
+$(eval $(call application,helloworld,This is hello world application))
 
 $(eval $(call application,ffwizard,Freifunk configuration wizard,\
 	+luci-mod-freifunk))
@@ -427,6 +429,7 @@ $(eval $(call application,radvd,LuCI Support for Radvd,\
 
 $(eval $(call application,lqtapifoss,Lantiq voip))
 
+
 ### Server Gateway Interfaces ###
 define sgi
   define Package/luci-sgi-$(1)
@@ -495,6 +498,7 @@ $(eval $(call theme,freifunk-hannover,Freifunk Hannover Theme,\
 
 $(eval $(call theme,freifunk-generic,Freifunk Generic Theme,\
         Manuel Munz <freifunk-at-somakoma-dot-de>))
+
 
 ### Translations ###
 define translation
@@ -569,6 +573,21 @@ $(eval $(call collection,light,\
 	Minimum package set using only admin mini and the standard theme,\
 	+uhttpd +luci-mod-admin-mini +luci-theme-openwrt @BROKEN))
 
+### Hello World ###
+#define Package/astor2-luci-helloworld
+#    SECTION:=luci
+#    CATEGORY:=LuCI
+#    TITLE:=Hello World Title
+#    URL:=http://example.com
+#    SUBMENU:=Applications
+#    MAINTAINER:=Vladimir Petukhov <vladimir.petukhov@etegro.com>
+#endef
+
+#define Package/helloworld/install
+#	$(call Package/luci/install/template,$(1),application/helloworld)
+#endef
+
+#$(eval $(call BuildPackage,helloworld))
 
 ### Compile ###
 PKG_CONFIG_DEPENDS=$(patsubst %,CONFIG_PACKAGE_%,$(LUCI_BUILD_PACKAGES))
