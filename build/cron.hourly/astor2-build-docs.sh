@@ -1,5 +1,5 @@
 #!/bin/sh
 
-cd /home/crontab/astor2/build
+cd /home/build/astor2/build
 git pull
-./build-docs.sh
+su -c ./build-docs.sh build
