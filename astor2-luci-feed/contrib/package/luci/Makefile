@@ -322,7 +322,8 @@ define Package/luci-app-diag-devinfo/conffiles
 endef
 
 ### Hello World - luci application ###
-$(eval $(call application,helloworld,This is hello world application))
+$(eval $(call application,helloworld,This is hello world application,\
+	+PACKAGE_luci-app-helloworld:helloworld))
 
 $(eval $(call application,ffwizard,Freifunk configuration wizard,\
 	+luci-mod-freifunk))
