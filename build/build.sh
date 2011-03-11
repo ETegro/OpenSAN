@@ -104,9 +104,7 @@ create_output_directory()
 
 perform_cleaning()
 {
-	mmake clean
-	[ ! -d "$TARGET_DIR"/build_dir ] || rm -fr "$TARGET_DIR"/build_dir
-	[ ! -d "$TARGET_DIR"/staging_dir ] || rm -fr "$TARGET_DIR"/staging_dir
+	mmake distclean
 }
 
 perform_building()
