@@ -22,6 +22,7 @@ TARGET_DIR="$WORK_DIR"/openwrt/trunk
 OUTPUT_DIR="$WORK_DIR"/output/`date "+%Y-%m-%dT%H:%M"`
 DL_DIR="$TARGET_DIR"/dl
 BIN_DIR="$TARGET_DIR"/bin/x86
+[ -n "$JOBS" ] || JOBS=1
 
 mmake()
 {
@@ -104,12 +105,12 @@ create_output_directory()
 
 perform_cleaning()
 {
-	mmake distclean
+	[ "$MRPROPER" = "true" ] && mmake distclean || mmake clean
 }
 
 perform_building()
 {
-	mmake V=99 >"$OUTPUT_DIR"/output.log 2>&1
+	mmake -j$JOBS V=99 >"$OUTPUT_DIR"/output.log 2>&1
 }
 
 copy_bins()
