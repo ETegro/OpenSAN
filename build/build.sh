@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 WORK_DIR=`echo $0 | sed "s/\/build.sh$//"`
-pushd $WORK_DIR; WORK_DIR=`pwd`; popd
+pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 TARGET_DIR="$WORK_DIR"/openwrt/trunk
 OUTPUT_DIR="$WORK_DIR"/output/`date "+%Y-%m-%dT%H:%M"`
 DL_DIR="$TARGET_DIR"/dl
