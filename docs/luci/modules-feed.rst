@@ -10,8 +10,8 @@
 ==========================
 
 Непосредственно исходные тексты модуля (application) находятся в папке
-**~/astor2/astor2-luci-feed/applications/helloworld/** в корне с LuCI, где
-**helloworld/** -- директория модуля.
+**~/astor2/astor2-luci-feed/applications/luci-helloworld/** в корне с LuCI, где
+**luci-helloworld/** -- директория модуля.
 
 Структура модуля
 ----------------
@@ -20,15 +20,15 @@
 
 ::
 
-  helloworld +
-             | Makefile
-             |
-             | luasrc +
-                      | controller/helloapp/ hellomodule.lua
-                      |
-                      | model/cbi/helloapp-hellomodule/ helloworld.lua
-                      |
-                      | view/helloapp-hellomodule/ helloworld.htm
+  luci-helloworld +
+                  | Makefile
+                  |
+                  | luasrc +
+                           | controller/helloapp/ hellomodule.lua
+                           |
+                           | model/cbi/helloapp-hellomodule/ helloworld.lua
+                           |
+                           | view/helloapp-hellomodule/ helloworld.htm
 
 Содержание Makefile-а
 ---------------------
@@ -71,9 +71,9 @@ cbi()
 """""
 
 Данный модуль использует вызов **cbi()** из
-**helloworld/model/cbi/helloapp-hellomodule/helloworld.lua**
+**luci-helloworld/model/cbi/helloapp-hellomodule/helloworld.lua**
 
-Содержимое файла **helloworld/luasrc/controller/helloapp/hellomodule.lua**
+Содержимое файла **luci-helloworld/luasrc/controller/helloapp/hellomodule.lua**
 Hello World (c cbi)::
 
   module("luci.controller.helloapp.hellomodule", package.seeall)
@@ -187,9 +187,8 @@ Lua.
 Для добавления модуля (application) в виде feed-a для OpenWRT, необходимо
 добавить несколько строк в Makefile в папке с LuCI
 **contrib/package/luci/Makefile**. В котором уже есть все необходимые
-функции для основных типов модулей. Всё, что нужно, так это добавить строчку в
-нужный раздел. Для модуля Hello World требуется добавить после определения
-функции **Application**:
+функции для основных типов модулей. Для модуля Hello World требуется добавить
+после определения функции **Application**:
 
 ::
 
@@ -217,6 +216,7 @@ Lua.
   [...]
   
   ### Hello World ###
-  $(eval $(call application, helloworld, This is hello world application))
+  $(eval $(call application,helloworld,This is hello world application,\
+          +PACKAGE_luci-app-helloworld:helloworld))
 
   [...]
