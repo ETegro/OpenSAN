@@ -16,31 +16,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-WORK_DIR=`echo $0 | sed "s/\/build-docs.sh$//"`
+WORK_DIR=`echo $0 | sed "s/\/build-start.sh$//"`
 pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
-TARGET_DIR="$WORK_DIR"/docs
 
 . "$WORK_DIR"/build.conf
 
-update_source_code()
+BUILD_LOG=`mktemp`
+time_start=`date`
+
+send_email()
 {
-	[ -d "$TARGET_DIR" ] || mkdir -p "$TARGET_DIR"
-	if [ -d "$TARGET_DIR"/.git ]; then
-		pushd "$TARGET_DIR"
-		$GIT pull
-		popd
-	else
-		$GIT clone $ASTOR2_URL "$TARGET_DIR"
-	fi
+	time_finish=`date`
+	mailx -s "[`whoami`] failed astor2 build" $MAILTO <<__EOF__
+Started: $time_start
+Finished: $time_finish
+
+-----BEGIN LOG-----
+`cat $BUILD_LOG`
+-----END LOG-----
+
+-- 
+astor2-build-start.sh
+__EOF__
 }
 
-generate_html()
-{
-	pushd "$TARGET_DIR"/docs
-	make clean
-	make html
-	popd
-}
-
-update_source_code
-generate_html
+"$WORK_DIR"/build.sh > $BUILD_LOG 2>&1 || send_email
+rm -f $BUILD_LOG
