@@ -121,9 +121,9 @@ copy_bins()
 
 check_openwrt_existence
 update_feeds_configuration
+perform_cleaning
 update_openwrt_config
 create_dl_directory
 create_output_directory
-perform_cleaning
 perform_building
 copy_bins
