@@ -1,4 +1,4 @@
 * docs -- Документация для разработчика
-* build -- скрипты для сборки aStor2 образов
+* build -- Скрипты для сборки aStor2 образов
 * astor2-feed -- package feed для OpenWRT
 * astor2-luci-feed -- package feed для LuCI (собственный срез)
