@@ -27,7 +27,14 @@ local logger = common.logger
 local function run( args )
 	assert( args )
 	local result = common.system( EINARC_CMD .. args )
-	if result.return_code ~= 0 then return nil end
+	if result.return_code ~= 0 then
+		for _, line in ipairs( result.stderr ) do
+			if string.match( line, "NotImplementedError" ) then
+				error("NotImplementedError")
+			end
+		end
+		return nil
+	end
 	return result.stdout
 end
 
@@ -95,6 +102,12 @@ M.physical.list = function()
 		                            physicals[ id ].state ) )
 	end
 	return physicals
+end
+
+M.bbu = {}
+
+M.bbu.info = function()
+	local output = run( "bbu info" )
 end
 
 return M

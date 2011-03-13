@@ -45,6 +45,7 @@ function M.system( cmdline )
 	                                 .. script_path
 	                                 .. " >" .. stdout_path
 	                                 .. " 2>" .. stderr_path )
+	M.logger:debug( "common:system() return code " .. result.return_code )
 	os.remove( script_path )
 
 	-- Read it's stdout
