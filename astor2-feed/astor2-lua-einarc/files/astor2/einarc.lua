@@ -38,6 +38,16 @@ local function run( args )
 	return result.stdout
 end
 
+-- Taken from http://lua-users.org/wiki/SplitJoin
+local function split_by_comma( str )
+	local words = {}
+	local pattern = string.format( "([^%s]+)", "," )
+	string.gsub( str,
+	             pattern,
+	             function( word ) words[ #words + 1 ] = word end )
+        return words
+end
+
 M.logical = {}
 
 M.logical.list = function()
@@ -55,7 +65,7 @@ M.logical.list = function()
 		assert( id )
 		logicals[ id ] = {
 			level = string.match( line, "^[0-9]+\t([0-9]+)\t[0-9:,]\t.*\t.*\t.*$" ) or "",
-			drives = string.match( line, "^[0-9]+\t[0-9]+\t([0-9:,])\t.*\t.*\t.*$" ) or "",
+			drives = split_by_comma( string.match( line, "^[0-9]+\t[0-9]+\t([0-9:,])\t.*\t.*\t.*$" ) ) or {},
 			capacity = tonumber( string.match( line, "^[0-9]+\t[0-9]+\t[0-9:,]\t([0-9\.]+)\t.*\t.*$" ) ) or 0,
 			device = string.match( line, "^[0-9]+\t[0-9]+\t[0-9:,]\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^[0-9]+\t[0-9]+\t[0-9:,]\t.*\t.*\t(.*)$" ) or ""
@@ -63,7 +73,7 @@ M.logical.list = function()
 		logger:info( "einarc:logicals.list() ID " ..
 		             string.format( "%s [ %d, %s, %f, %q, %s ]", id,
 		                            logicals[ id ].level,
-		                            logicals[ id ].drives,
+		                            table.concat( logicals[ id ].drives, "," ),
 		                            logicals[ id ].capacity,
 		                            logicals[ id ].device,
 		                            logicals[ id ].state ) )
