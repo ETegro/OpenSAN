@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/astor2-einarc
 	SECTION:=astor2
 	CATEGORY:=aStor2
-	TITLE:=Inquisitor's Einarc for aStor
+	TITLE:=Inquisitor's Einarc
 	URL:=http://www.inquisitor.ru/doc/einarc/
 	DEPENDS:=+ruby +ruby-core +librt \
 		+udev +mdadm +smartmontools \
