@@ -17,21 +17,23 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-module( "astor2.einarc", package.seeall )
-require( "astor2.common" )
-local EINARC_CMD = "einarc -t software -a 0 "
-local logger = astor2.common.logger
+local M = {}
 
-function run( args )
+local common = require( "astor2.common" )
+
+local EINARC_CMD = "einarc -t software -a 0 "
+local logger = common.logger
+
+local function run( args )
 	assert( args )
-	local result = astor2.common.system( EINARC_CMD .. args )
+	local result = common.system( EINARC_CMD .. args )
 	if result.return_code ~= 0 then return nil end
 	return result.stdout
 end
 
-logical = {}
+M.logical = {}
 
-logical.list = function()
+M.logical.list = function()
 	-- TODO
 	-- #  RAID level  Physical drives  Capacity  Device  State
 	logger:debug( "einarc:logical.list() called" )
@@ -62,9 +64,9 @@ logical.list = function()
 	return logicals
 end
 
-physical = {}
+M.physical = {}
 
-physical.list = function()
+M.physical.list = function()
 	-- ID   Model       Revision  Serial        Size     State
 	-- 1:0  ST980310AS            5ST05LK2  76319.09 MB  free
 	logger:debug( "einarc:physical.list() called" )
@@ -94,3 +96,5 @@ physical.list = function()
 	end
 	return physicals
 end
+
+return M

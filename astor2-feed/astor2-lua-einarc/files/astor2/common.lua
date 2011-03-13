@@ -17,16 +17,16 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
-module( "astor2.common", package.seeall )
+local M = {}
 
 require "logging.console"
-logger = logging.console()
+M.logger = logging.console()
 
 local SHELL_PATH = "/bin/sh"
 
-function system( cmdline )
+function M.system( cmdline )
 	assert( cmdline )
-	logger:debug( "common:system() called with cmdline \"" .. cmdline .. "\"" )
+	M.logger:debug( "common:system() called with cmdline \"" .. cmdline .. "\"" )
 	local stdout_path = os.tmpname()
 	local stderr_path = os.tmpname()
 	local script_path = os.tmpname()
@@ -40,7 +40,7 @@ function system( cmdline )
 	local result = {}
 
 	-- Execute command and retreive return code
-	logger:debug( "common:system() executing script " .. script_path )
+	M.logger:debug( "common:system() executing script " .. script_path )
 	result.return_code = os.execute( SHELL_PATH .. " "
 	                                 .. script_path
 	                                 .. " >" .. stdout_path
@@ -49,7 +49,7 @@ function system( cmdline )
 
 	-- Read it's stdout
 	result.stdout = {}
-	logger:debug( "common:system() parsing stdout " .. stdout_path )
+	M.logger:debug( "common:system() parsing stdout " .. stdout_path )
 	local stdout_fd = io.open( stdout_path, "r" )
 	for line in stdout_fd:lines() do
 		result.stdout[ #result.stdout + 1 ] = line
@@ -59,7 +59,7 @@ function system( cmdline )
 
 	-- Read it's stderr
 	result.stderr = {}
-	logger:debug( "common:system() parsing stderr " .. stderr_path )
+	M.logger:debug( "common:system() parsing stderr " .. stderr_path )
 	local stderr_fd = io.open( stderr_path, "r" )
 	for line in stderr_fd:lines() do
 		result.stderr[ #result.stderr + 1 ] = line
@@ -69,3 +69,5 @@ function system( cmdline )
 
 	return result
 end
+
+return M
