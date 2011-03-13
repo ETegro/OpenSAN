@@ -24,7 +24,7 @@ local logger = astor2.common.logger
 
 function run( args )
 	assert( args )
-	result = astor2.common.system( EINARC_CMD .. args )
+	local result = astor2.common.system( EINARC_CMD .. args )
 	if result.return_code ~= 0 then return nil end
 	return result.stdout
 end
@@ -35,14 +35,14 @@ logical.list = function()
 	-- TODO
 	-- #  RAID level  Physical drives  Capacity  Device  State
 	logger:debug( "einarc:logical.list() called" )
-	output = run( "logical list" )
+	local output = run( "logical list" )
 	if not output or #output == 0 then
 		logger:warn( "einarc:logical.list() no logical disks" )
 		return {}
 	end
-	logicals = {}
-	for i, line in ipairs( output ) do
-		id = string.match( line, "^([0-9]+)" )
+	local logicals = {}
+	for _, line in ipairs( output ) do
+		local id = string.match( line, "^([0-9]+)" )
 		assert( id )
 		logicals[ id ] = {
 			level = string.match( line, "^[0-9]+\t([0-9]+)\t[0-9:,]\t.*\t.*\t.*$" ) or "",
@@ -68,14 +68,14 @@ physical.list = function()
 	-- ID   Model       Revision  Serial        Size     State
 	-- 1:0  ST980310AS            5ST05LK2  76319.09 MB  free
 	logger:debug( "einarc:physical.list() called" )
-	output = run( "physical list" )
+	local output = run( "physical list" )
 	if not output or #output == 0 then
 		logger:warn( "einarc:physical.list() no physical disks" )
 		return {}
 	end
-	physicals = {}
-	for i, line in ipairs( output ) do
-		id = string.match( line, "^([0-9:]+)" )
+	local physicals = {}
+	for _, line in ipairs( output ) do
+		local id = string.match( line, "^([0-9:]+)" )
 		assert( id )
 		physicals[ id ] = {
 			model = string.match( line, "^[0-9:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",

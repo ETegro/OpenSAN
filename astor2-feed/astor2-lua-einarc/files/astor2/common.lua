@@ -27,17 +27,17 @@ local SHELL_PATH = "/bin/sh"
 function system( cmdline )
 	assert( cmdline )
 	logger:debug( "common:system() called with cmdline \"" .. cmdline .. "\"" )
-	stdout_path = os.tmpname()
-	stderr_path = os.tmpname()
-	script_path = os.tmpname()
+	local stdout_path = os.tmpname()
+	local stderr_path = os.tmpname()
+	local script_path = os.tmpname()
 	assert( stdout_path and stderr_path and script_path )
 
 	-- Script to be executed itself
-	script_fd = io.open( script_path, "w" )
+	local script_fd = io.open( script_path, "w" )
 	script_fd:write( cmdline .. "\n" )
 	script_fd:close()
 
-	result = {}
+	local result = {}
 
 	-- Execute command and retreive return code
 	logger:debug( "common:system() executing script " .. script_path )
@@ -50,7 +50,7 @@ function system( cmdline )
 	-- Read it's stdout
 	result.stdout = {}
 	logger:debug( "common:system() parsing stdout " .. stdout_path )
-	stdout_fd = io.open( stdout_path, "r" )
+	local stdout_fd = io.open( stdout_path, "r" )
 	for line in stdout_fd:lines() do
 		result.stdout[ #result.stdout + 1 ] = line
 	end
@@ -60,7 +60,7 @@ function system( cmdline )
 	-- Read it's stderr
 	result.stderr = {}
 	logger:debug( "common:system() parsing stderr " .. stderr_path )
-	stderr_fd = io.open( stderr_path, "r" )
+	local stderr_fd = io.open( stderr_path, "r" )
 	for line in stderr_fd:lines() do
 		result.stderr[ #result.stderr + 1 ] = line
 	end
