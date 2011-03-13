@@ -5,11 +5,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=astor2-lua-einarc
-PKG_VERSION:=0.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,6 +24,9 @@ define Build/Prepare
 endef
 
 define Build/Configure
+endef
+
+define Build/Compile
 endef
 
 define Package/astor2-lua-einarc/install
