@@ -61,7 +61,7 @@ M.logical.list = function()
 	end
 	local logicals = {}
 	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([0-9]+)" )
+		local id = tonumber( string.match( line, "^([0-9]+)" ) )
 		assert( id )
 		logicals[ id ] = {
 			level = string.match( line, "^[0-9]+\t(.+)\t[0-9:,]+\t.*\t.*\t.*$" ) or "",
@@ -71,7 +71,7 @@ M.logical.list = function()
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
 		logger:info( "einarc:logicals.list() ID " ..
-		             string.format( "%s [ %s, %s, %f, %q, %s ]", id,
+		             string.format( "%d [ %s, %s, %f, %q, %s ]", tostring( id ),
 		                            logicals[ id ].level,
 		                            table.concat( logicals[ id ].drives, "," ),
 		                            logicals[ id ].capacity,
