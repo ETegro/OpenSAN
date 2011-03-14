@@ -99,6 +99,14 @@ M.logical.add = function( raid_level, drives, size, properties )
 	end
 end
 
+M.logical.delete = function( logical_id )
+	assert( logical_id )
+	local output = run( "logical delete " .. tostring( logical_id ) )
+	if output == nil then
+		error("Error in logical remove")
+	end
+end
+
 M.physical = {}
 
 M.physical.list = function()
