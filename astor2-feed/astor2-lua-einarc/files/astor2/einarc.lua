@@ -51,8 +51,8 @@ end
 M.logical = {}
 
 M.logical.list = function()
-	-- TODO
-	-- #  RAID level  Physical drives  Capacity  Device  State
+	-- #  RAID level  Physical drives  Capacity  Device   State
+	-- 0  linear      0:1              246.00 MB /dev/md0 normal
 	logger:debug( "einarc:logical.list() called" )
 	local output = run( "logical list" )
 	if not output or #output == 0 then
@@ -64,14 +64,14 @@ M.logical.list = function()
 		local id = string.match( line, "^([0-9]+)" )
 		assert( id )
 		logicals[ id ] = {
-			level = string.match( line, "^[0-9]+\t([0-9]+)\t[0-9:,]\t.*\t.*\t.*$" ) or "",
-			drives = split_by_comma( string.match( line, "^[0-9]+\t[0-9]+\t([0-9:,])\t.*\t.*\t.*$" ) ) or {},
-			capacity = tonumber( string.match( line, "^[0-9]+\t[0-9]+\t[0-9:,]\t([0-9\.]+)\t.*\t.*$" ) ) or 0,
-			device = string.match( line, "^[0-9]+\t[0-9]+\t[0-9:,]\t.*\t(.*)\t.*$" ) or "",
-			state = string.match( line, "^[0-9]+\t[0-9]+\t[0-9:,]\t.*\t.*\t(.*)$" ) or ""
+			level = string.match( line, "^[0-9]+\t(.+)\t[0-9:,]+\t.*\t.*\t.*$" ) or "",
+			drives = split_by_comma( string.match( line, "^[0-9]+\t.+\t([0-9:,]+)\t.*\t.*\t.*$" ) ) or {},
+			capacity = tonumber( string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t([0-9\.]+)\t.*\t.*$" ) ) or 0,
+			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
+			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
 		logger:info( "einarc:logicals.list() ID " ..
-		             string.format( "%s [ %d, %s, %f, %q, %s ]", id,
+		             string.format( "%s [ %s, %s, %f, %q, %s ]", id,
 		                            logicals[ id ].level,
 		                            table.concat( logicals[ id ].drives, "," ),
 		                            logicals[ id ].capacity,
@@ -79,6 +79,24 @@ M.logical.list = function()
 		                            logicals[ id ].state ) )
 	end
 	return logicals
+end
+
+M.logical.add = function( raid_level, drives, size, properties )
+	assert( raid_level, "raid_level argument is required" )
+	local cmd = "logical add " .. raid_level
+	if drives then
+		cmd = cmd .. " " .. table.concat( drives, "," )
+	end
+	if size then
+		cmd = cmd .. " " .. tostring( size )
+	end
+	if properties then
+		cmd = cmd .. " " .. properties
+	end
+	local output = run( cmd )
+	if output == nil then
+		error("Error in logical add")
+	end
 end
 
 M.physical = {}
