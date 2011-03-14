@@ -84,7 +84,7 @@ update_feeds_configuration()
 update_openwrt_config()
 {
 	rm -f "$TARGET_DIR"/.config
-	ln -s "$WORK_DIR"/.config "$TARGET_DIR"/.config
+	cp "$WORK_DIR"/.config "$TARGET_DIR"/.config
 }
 
 create_dl_directory()
