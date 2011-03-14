@@ -70,7 +70,7 @@ M.logical.list = function()
 			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
-		logger:info( "einarc:logicals.list() ID " ..
+		logger:info( "einarc:logical.list() ID " ..
 		             string.format( "%d [ %s, %s, %f, %q, %s ]", tostring( id ),
 		                            logicals[ id ].level,
 		                            table.concat( logicals[ id ].drives, "," ),
@@ -83,6 +83,7 @@ end
 
 M.logical.add = function( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
+	logger:debug( "einarc:logical.add() called" )
 	local cmd = "logical add " .. raid_level
 	if drives then
 		cmd = cmd .. " " .. table.concat( drives, "," )
@@ -91,11 +92,15 @@ M.logical.add = function( raid_level, drives, size, properties )
 		cmd = cmd .. " " .. tostring( size )
 	end
 	if properties then
-		cmd = cmd .. " " .. properties
+		local serialized = {}
+		for _, pair in ipairs( properties ) do
+			serialized[ #serialized + 1 ] = pair[1] .. "=" .. pair[2]
+		end
+		cmd = cmd .. " " .. table.concat( properties, "," )
 	end
 	local output = run( cmd )
 	if output == nil then
-		error("Error in logical add")
+		error("einarc:logical.add() failed")
 	end
 end
 
@@ -103,7 +108,7 @@ M.logical.delete = function( logical_id )
 	assert( logical_id )
 	local output = run( "logical delete " .. tostring( logical_id ) )
 	if output == nil then
-		error("Error in logical remove")
+		error("einarc:logical.delete() failed")
 	end
 end
 
