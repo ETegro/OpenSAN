@@ -24,6 +24,10 @@ local common = require( "astor2.common" )
 local EINARC_CMD = "einarc -t software -a 0 "
 local logger = common.logger
 
+--- Execute einarc and get it's results
+-- @param args "logical add 5 0 0:1,0:2"
+-- @return Either an array of output strings from einarc, or nil if
+--         einarc failed, or raise "NotImplementedError" if it is so
 local function run( args )
 	assert( args )
 	local result = common.system( EINARC_CMD .. args )
@@ -50,6 +54,8 @@ end
 
 M.logical = {}
 
+--- einarc logical list
+-- @return { 3 = { level = "1", drives = { "0:1", "0:2" }, capacity = 666.0, device = "/dev/md0", state = "normal" } }
 M.logical.list = function()
 	-- #  RAID level  Physical drives  Capacity  Device   State
 	-- 0  linear      0:1              246.00 MB /dev/md0 normal
@@ -86,6 +92,7 @@ end
 -- @param drives { "0:1", "0:2", "254:1" }
 -- @param size 666.0
 -- @param properties { "prop1" = "itsvalue", "prop2" = "itsvalue" }
+-- @return Raise error if it failed
 M.logical.add = function( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
 	logger:debug( "einarc:logical.add() called" )
@@ -109,6 +116,9 @@ M.logical.add = function( raid_level, drives, size, properties )
 	end
 end
 
+--- einarc logical delete
+-- @param logical_id 666
+-- @result Raise error if it failed
 M.logical.delete = function( logical_id )
 	assert( logical_id )
 	local output = run( "logical delete " .. tostring( logical_id ) )
@@ -119,6 +129,8 @@ end
 
 M.physical = {}
 
+--- einarc physical list
+-- @return { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 M.physical.list = function()
 	-- ID   Model       Revision  Serial        Size     State
 	-- 1:0  ST980310AS            5ST05LK2  76319.09 MB  free

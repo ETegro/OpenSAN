@@ -24,6 +24,12 @@ M.logger = logging.console()
 
 local SHELL_PATH = "/bin/sh"
 
+--- Call external command
+-- Lua's built-in methods are capable either only about getting
+-- return code from some external program, or only about getting it's
+-- stdout. This function can get all of them at once.
+-- @param cmdline "mdadm --examine /dev/sda"
+-- @return { return_code = 0, stderr = { "line1", "line2" }, stdout = { "line1", "line2" } }
 function M.system( cmdline )
 	assert( cmdline )
 	M.logger:debug( "common:system() called with cmdline \"" .. cmdline .. "\"" )
