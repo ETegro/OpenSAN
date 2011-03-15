@@ -14,3 +14,4 @@
    commiting_rules
    copyright_adding
    lua
+   luadoc
