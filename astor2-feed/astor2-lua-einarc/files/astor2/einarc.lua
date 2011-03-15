@@ -93,8 +93,8 @@ M.logical.add = function( raid_level, drives, size, properties )
 	end
 	if properties then
 		local serialized = {}
-		for _, pair in ipairs( properties ) do
-			serialized[ #serialized + 1 ] = pair[1] .. "=" .. pair[2]
+		for k, v in pairs( properties ) do
+			serialized[ #serialized + 1 ] = k .. "=" .. v
 		end
 		cmd = cmd .. " " .. table.concat( properties, "," )
 	end
