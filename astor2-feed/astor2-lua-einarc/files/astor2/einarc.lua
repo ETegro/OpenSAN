@@ -22,7 +22,29 @@ local M = {}
 local common = require( "astor2.common" )
 
 local EINARC_CMD = "einarc -t software -a 0 "
+local LOGICAL_STATES = { "normal",
+                         "degraded",
+                         "initializing",
+                         "rebuilding" }
+local PHYSICAL_STATES = { "hotspare",
+                          "failed",
+                          "free" }
 local logger = common.logger
+
+--- Check if value is in array
+-- @param what Value to be checked
+-- @param array Array to search in
+-- @return True if exists, false otherwise
+local function is_in_array( what, array )
+	logger:debug( "is_in_array( " .. tostring( what ) .. ", " .. tostring( PHYSICAL_STATES ) .. " )" )
+	local is_in_it = false
+	for _, v in ipairs( array ) do
+		if what == v then
+			is_in_it = true
+		end
+	end
+	return is_in_it
+end
 
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
@@ -76,6 +98,7 @@ M.logical.list = function()
 			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
+		assert( is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
 		logger:info( "einarc:logical.list() ID " ..
 		             string.format( "%d [ %s, %s, %f, %q, %s ]", tostring( id ),
 		                            logicals[ id ].level,
@@ -151,6 +174,7 @@ M.physical.list = function()
 			size = tonumber( string.match( line, "^[0-9:]+\t.*\t.*\t.*\t([0-9\.]+)\t.*$" ) ) or 0,
 			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
+		assert( is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
 		logger:info( "einarc:physical.list() ID " ..
 		             string.format( "%s [ %q, %q, %q, %f, %s ]", id,
 		                            physicals[ id ].model,
