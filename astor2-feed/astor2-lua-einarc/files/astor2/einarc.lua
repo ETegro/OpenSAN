@@ -81,6 +81,11 @@ M.logical.list = function()
 	return logicals
 end
 
+--- einarc logical add
+-- @param raid_level "passthrough" | "linear" | "0" | "1" | "5" | "6" | "10"
+-- @param drives { "0:1", "0:2", "254:1" }
+-- @param size 666.0
+-- @param properties { "prop1" = "itsvalue", "prop2" = "itsvalue" }
 M.logical.add = function( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
 	logger:debug( "einarc:logical.add() called" )
