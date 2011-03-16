@@ -16,10 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+[ -n "$1" ] && BRANCH="$1" || BRANCH="master"
+
 WORK_DIR=`echo $0 | sed "s/\/build.sh$//"`
 pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 TARGET_DIR="$WORK_DIR"/openwrt/trunk
-OUTPUT_DIR="$WORK_DIR"/output/`date "+%Y-%m-%dT%H:%M"`
+OUTPUT_DIR="$WORK_DIR"/output/$BRANCH-`date "+%Y-%m-%dT%H:%M"`
 DL_DIR="$TARGET_DIR"/dl
 BIN_DIR="$TARGET_DIR"/bin/x86
 [ -n "$JOBS" ] || JOBS=1
@@ -120,8 +122,8 @@ copy_bins()
 }
 
 check_openwrt_existence
-update_feeds_configuration
 perform_cleaning
+update_feeds_configuration
 update_openwrt_config
 create_dl_directory
 create_output_directory
