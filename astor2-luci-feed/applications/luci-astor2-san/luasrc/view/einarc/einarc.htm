@@ -1,0 +1,39 @@
+<%+header%>
+
+<h1><% write("The view of luci-astor2-san package.")%></h1>
+
+<form>
+	<table border="0" cellpadding="0" cellspacing="10px">	
+		<tbody>
+			<tr>
+				<td><%: Check %></td>
+				<td><%: ID %></td>
+				<td><%: State %></td>
+				<td><%: Size %></td>
+			</tr>
+			<% for id, des in pairs( phys_list_result ) do %>
+			<tr>
+				<td><input type="checkbox" name="id-drive" value="<%= id %>" /></td>
+				<td><%= id %></td>
+				<td><%= des.state %></td>
+				<td><%= des.size %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+  	<div>
+		<p><%: RAID level %>: 
+			<select name="raid-level" size="1">
+				<option value="0">0</option>
+				<option value="1">1</option>
+			</select>
+		</p>
+	</div>
+	<div>
+		<p>
+			<input type="submit" />
+		</p>
+	</div>
+</form>
+
+<%+footer%>
