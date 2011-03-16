@@ -1,7 +1,3 @@
-<%+header%>
-
-<h1><% write("The view of luci-astor2-san package.")%></h1>
-
 <form>
 	<table border="0" cellpadding="0" cellspacing="10px">	
 		<tbody>
@@ -11,7 +7,7 @@
 				<td><%: State %></td>
 				<td><%: Size %></td>
 			</tr>
-			<% for id, des in pairs( phys_list_result ) do %>
+			<% for id, des in pairs( physical_list ) do %>
 			<tr>
 				<td><input type="checkbox" name="id-drive" value="<%= id %>" /></td>
 				<td><%= id %></td>
@@ -35,5 +31,3 @@
 		</p>
 	</div>
 </form>
-
-<%+footer%>
