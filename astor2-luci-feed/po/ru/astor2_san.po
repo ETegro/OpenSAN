@@ -1,0 +1,17 @@
+msgid "Check"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "RAID level"
+msgstr ""
+
+msgid "SAN"
+msgstr ""
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "State"
+msgstr "Состояние"
