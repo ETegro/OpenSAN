@@ -20,10 +20,14 @@
 
 module( "luci.controller.san", package.seeall )
 
-einarc = require "astor2.einarc"
+einarc = require( "astor2.einarc" )
 
 function index()
-	entry( { "san" }, call( "einarc_lists" ), "San", 10 ) --transkate
+	require( "luci.i18n" )
+	luci.i18n.loadc("astor2_san")
+
+	local e = entry( { "san" }, call( "einarc_lists" ), luci.i18n.translate("SAN"), 10 )
+	e.i18n = true
 end
 
 local logical_list_result =
