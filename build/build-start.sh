@@ -16,13 +16,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+[ -n "$1" ] && BRANCH="$1" || BRANCH="master"
+
 WORK_DIR=`echo $0 | sed "s/\/build-start.sh$//"`
 pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 
-. "$WORK_DIR"/build.conf
-
 BUILD_LOG=`mktemp`
 time_start=`date`
+
+. "$WORK_DIR"/build.conf
+
+update_repository()
+{
+	pushd "$WORK_DIR"
+	$GIT checkout HEAD .
+	$GIT fetch -p
+	if `$GIT branch | grep -q "^..$BRANCH"`; then
+		$GIT checkout $BRANCH
+	else
+		$GIT checkout -b $BRANCH origin/$BRANCH
+	fi
+	$GIT merge origin/$BRANCH
+	popd
+}
 
 send_email()
 {
@@ -40,5 +56,16 @@ astor2-build-start.sh
 __EOF__
 }
 
-"$WORK_DIR"/build.sh > $BUILD_LOG 2>&1 || send_email
-rm -f $BUILD_LOG
+call_build()
+{
+	"$WORK_DIR"/build.sh $BRANCH > $BUILD_LOG 2>&1 || send_email
+}
+
+cleanup()
+{
+	rm -f $BUILD_LOG
+}
+
+update_repository
+call_build
+cleanup

@@ -186,6 +186,34 @@ M.physical.list = function()
 	return physicals
 end
 
+M.task = {}
+
+--- einarc task list
+-- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
+M.task.list = function()
+	logger:debug( "einarc:task.list() called" )
+	local output = run( "task list" )
+	if not output or #output == 0 then
+		return {}
+	end
+	local tasks = {}
+	for _, line in ipairs( output ) do
+		local id = string.match( line, "^([0-9]+)" )
+		assert( id )
+		tasks[ id ] = {
+			where = string.match( line, "^[0-9]+\t(.*)\t.*\t.*$" ) or "",
+			what = string.match( line, "^[0-9]+\t.*\t(.*)\t.*$" ) or "",
+			progress = tonumber( string.match( line, "^[0-9]+\t.*\t.*\t(.*)$" ) ) or 0,
+		}
+		logger:info( "einarc:tasks.list() ID " ..
+		             string.format( "%d [ %q, %q, %f ]", id,
+		                            tasks[ id ].where,
+		                            tasks[ id ].what,
+		                            tasks[ id ].progress ) )
+	end
+	return tasks
+end
+
 M.bbu = {}
 
 M.bbu.info = function()
