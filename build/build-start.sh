@@ -58,7 +58,7 @@ __EOF__
 
 call_build()
 {
-	"$WORK_DIR"/build.sh > $BUILD_LOG 2>&1 || send_email
+	"$WORK_DIR"/build.sh $BRANCH > $BUILD_LOG 2>&1 || send_email
 }
 
 cleanup()
