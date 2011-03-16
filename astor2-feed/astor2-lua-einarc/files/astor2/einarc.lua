@@ -29,14 +29,12 @@ local LOGICAL_STATES = { "normal",
 local PHYSICAL_STATES = { "hotspare",
                           "failed",
                           "free" }
-local logger = common.logger
 
 --- Check if value is in array
 -- @param what Value to be checked
 -- @param array Array to search in
 -- @return True if exists, false otherwise
 local function is_in_array( what, array )
-	logger:debug( "is_in_array( " .. tostring( what ) .. ", " .. tostring( PHYSICAL_STATES ) .. " )" )
 	local is_in_it = false
 	for _, v in ipairs( array ) do
 		if what == v then
@@ -81,12 +79,8 @@ M.logical = {}
 M.logical.list = function()
 	-- #  RAID level  Physical drives  Capacity  Device   State
 	-- 0  linear      0:1              246.00 MB /dev/md0 normal
-	logger:debug( "einarc:logical.list() called" )
 	local output = run( "logical list" )
-	if not output or #output == 0 then
-		logger:warn( "einarc:logical.list() no logical disks" )
-		return {}
-	end
+	if not output or #output == 0 then return {} end
 	local logicals = {}
 	for _, line in ipairs( output ) do
 		local id = tonumber( string.match( line, "^([0-9]+)" ) )
@@ -99,13 +93,6 @@ M.logical.list = function()
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
 		assert( is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
-		logger:info( "einarc:logical.list() ID " ..
-		             string.format( "%d [ %s, %s, %f, %q, %s ]", tostring( id ),
-		                            logicals[ id ].level,
-		                            table.concat( logicals[ id ].drives, "," ),
-		                            logicals[ id ].capacity,
-		                            logicals[ id ].device,
-		                            logicals[ id ].state ) )
 	end
 	return logicals
 end
@@ -118,7 +105,6 @@ end
 -- @return Raise error if it failed
 M.logical.add = function( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
-	logger:debug( "einarc:logical.add() called" )
 	local cmd = "logical add " .. raid_level
 	if drives then
 		cmd = cmd .. " " .. table.concat( drives, "," )
@@ -157,12 +143,8 @@ M.physical = {}
 M.physical.list = function()
 	-- ID   Model       Revision  Serial        Size     State
 	-- 1:0  ST980310AS            5ST05LK2  76319.09 MB  free
-	logger:debug( "einarc:physical.list() called" )
 	local output = run( "physical list" )
-	if not output or #output == 0 then
-		logger:warn( "einarc:physical.list() no physical disks" )
-		return {}
-	end
+	if not output or #output == 0 then return {} end
 	local physicals = {}
 	for _, line in ipairs( output ) do
 		local id = string.match( line, "^([0-9:]+)" )
@@ -175,13 +157,6 @@ M.physical.list = function()
 			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
 		assert( is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
-		logger:info( "einarc:physical.list() ID " ..
-		             string.format( "%s [ %q, %q, %q, %f, %s ]", id,
-		                            physicals[ id ].model,
-		                            physicals[ id ].revision,
-		                            physicals[ id ].serial,
-		                            physicals[ id ].size,
-		                            physicals[ id ].state ) )
 	end
 	return physicals
 end
@@ -191,7 +166,6 @@ M.task = {}
 --- einarc task list
 -- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
 M.task.list = function()
-	logger:debug( "einarc:task.list() called" )
 	local output = run( "task list" )
 	if not output or #output == 0 then
 		return {}
@@ -205,11 +179,6 @@ M.task.list = function()
 			what = string.match( line, "^[0-9]+\t.*\t(.*)\t.*$" ) or "",
 			progress = tonumber( string.match( line, "^[0-9]+\t.*\t.*\t(.*)$" ) ) or 0,
 		}
-		logger:info( "einarc:tasks.list() ID " ..
-		             string.format( "%d [ %q, %q, %f ]", id,
-		                            tasks[ id ].where,
-		                            tasks[ id ].what,
-		                            tasks[ id ].progress ) )
 	end
 	return tasks
 end
