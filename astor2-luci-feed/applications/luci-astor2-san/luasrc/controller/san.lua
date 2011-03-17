@@ -42,14 +42,18 @@ function einarc_lists()
 		message = message } )
 end
 
+local function is_odd( n )
+	return n % 2 == 0
+end
+
 local RAID_VALIDATORS = {
 	["linear"] = function( drives ) return #drives == 1 end,
 	["passthrough"] = function( drives ) return #drives == 1 end,
 	["0"] = function( drives ) return #drives >= 2 end,
-	["1"] = function( drives ) return #drives >= 2 and #drives % 2 == 0 end,
+	["1"] = function( drives ) return #drives >= 2 and is_odd( #drives ) end,
 	["5"] = function( drives ) return #drives >= 3 end
-	["6"] = function( drives ) return #drives >= 3 and #drives % 2 end
-	["10"] = function( drives ) return #drives >= 4 and #drives % 2 == 0 end,
+	["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end
+	["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end,
 }
 
 function logical_add()
