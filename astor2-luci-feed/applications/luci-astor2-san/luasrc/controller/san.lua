@@ -58,7 +58,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 		["0"] = { validator = function( drives ) return #drives >= 2 end,
 		          message = i18n("0 level requires two or more drives") },
 		["1"] = { validator = function( drives ) return #drives >= 2 and common.is_odd( #drives ) end,
-		          message = i18n("1 level requries odd number two or more drives") },
+		          message = i18n("1 level requries odd number of two or more drives") },
 		["5"] = { validator = function( drives ) return #drives >= 3 end,
 		          message = i18n("5 level requires three or more drives") },
 		["6"] = { validator = function( drives ) return #drives >= 3 and common.is_odd( #drives ) end,
@@ -93,7 +93,10 @@ function logical_add()
 		else
 			local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 			if is_valid then
-				einarc.logical.add( raid_level, drives )
+				local return_code, result = pcall( einarc.logical.add, raid_level, drives )
+				if not return_code then
+					message_error = result
+				end
 			else
 				message_error = message
 			end
