@@ -25,9 +25,9 @@
   	<div>
 		<p><%: RAID level %>: 
 			<select name="raid_level" size="1">
-				<option value="0">0</option>
-				<option value="1">1</option>
-				<option value="5">5</option>
+				<% for _, raidlevel in ipairs(raidlevels) do %>
+				<option value="<%= raidlevel %>"><%= raidlevel %></option>
+				<% end %>
 			</select>
 		</p>
 	</div>
