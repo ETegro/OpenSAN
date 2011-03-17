@@ -35,7 +35,7 @@
 
 :openwrt/trunk/:
  Собственно сама сборка происходит здесь
-:output/BRANCHNAME-YYYY-MM-DDTHH\:mm:
+:output/YYYY-MM-DDTHH\:mm-BRANCHNAME:
  Вывод всего процесса сборки и полученные образы
 
 *BRANCHNAME* -- название ветки которую необходимо checkout-ить из
