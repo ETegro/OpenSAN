@@ -70,7 +70,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 		["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end,
 		["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end
 	}
-	return RAID_VALIDATORS[ raid_level ]( drives )
+	return VALIDATORS[ raid_level ]( drives )
 end
 
 local function index_with_error( message_error )
