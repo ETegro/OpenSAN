@@ -42,6 +42,16 @@ function einarc_lists()
 		message = message } )
 end
 
+local RAID_VALIDATORS = {
+	["linear"] = function( drives ) return #drives == 1 end,
+	["passthrough"] = function( drives ) return #drives == 1 end,
+	["0"] = function( drives ) return #drives >= 2 end,
+	["1"] = function( drives ) return #drives >= 2 and #drives % 2 == 0 end,
+	["5"] = function( drives ) return #drives >= 3 end
+	["6"] = function( drives ) return #drives >= 3 and #drives % 2 end
+	["10"] = function( drives ) return #drives >= 4 and #drives % 2 == 0 end,
+}
+
 function logical_add()
 	local drives = luci.http.formvalue( "drives" )
 	local raid_level = luci.http.formvalue( "raid_level" )
@@ -50,12 +60,7 @@ function logical_add()
 	if not drives then
 		message = "drives not selected"
 	elseif type(drives) == type({}) then
-		local validators = {
-			["0"] = function( drives ) return #drives >= 2 end,
-			["1"] = function( drives ) return #drives >= 2 and #drives % 2 == 0 end,
-			["5"] = function( drives ) return #drives >= 3 end
-		}
-		if validators[ raid_level ]( drives ) then
+		if RAID_VALIDATORS[ raid_level ]( drives ) then
 			message = raid_level .. "-" ..table.concat(drives, ", ")
 			ok = true
 		else
