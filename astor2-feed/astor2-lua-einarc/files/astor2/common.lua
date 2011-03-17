@@ -69,4 +69,18 @@ function M.system( cmdline )
 	return result
 end
 
+--- Check if value is in array
+-- @param what Value to be checked
+-- @param array Array to search in
+-- @return True if exists, false otherwise
+function M.is_in_array( what, array )
+	local is_in_it = false
+	for _, v in ipairs( array ) do
+		if what == v then
+			is_in_it = true
+		end
+	end
+	return is_in_it
+end
+
 return M

@@ -2,6 +2,7 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Sergey Matveev <stargrave@stargrave.org>
+                          Vladimir Petukhov <vladimir.petukhov@etegro.com>
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -29,20 +30,6 @@ local LOGICAL_STATES = { "normal",
 local PHYSICAL_STATES = { "hotspare",
                           "failed",
                           "free" }
-
---- Check if value is in array
--- @param what Value to be checked
--- @param array Array to search in
--- @return True if exists, false otherwise
-local function is_in_array( what, array )
-	local is_in_it = false
-	for _, v in ipairs( array ) do
-		if what == v then
-			is_in_it = true
-		end
-	end
-	return is_in_it
-end
 
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
@@ -75,7 +62,7 @@ end
 M.adapter = {}
 
 --- einarc adapter get
--- @param property = "raidlevels"
+-- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
 M.adapter.get = function( property )
 	assert( property )
@@ -104,7 +91,7 @@ M.logical.list = function()
 			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
+		assert( common.is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
 	end
 	return logicals
 end
@@ -168,9 +155,21 @@ M.physical.list = function()
 			size = tonumber( string.match( line, "^[0-9:]+\t.*\t.*\t.*\t([0-9\.]+)\t.*$" ) ) or 0,
 			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
+		assert( common.is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
 	end
 	return physicals
+end
+
+--- einarc physical get 0:0 hotspare
+-- @param physical_id "0:1"
+-- @param property "hotspare"
+-- @return { "0" }
+M.physical.get = function( physical_id, property )
+	assert( physical_id )
+	assert( property )
+	local output = run( "physical get " .. physical_id .. " " .. property )
+	if not output then error( "einarc:physical.get() failed" ) end
+	return output
 end
 
 M.task = {}
