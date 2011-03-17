@@ -1,4 +1,6 @@
-<form>
+<form id="form_physical">
+<fieldset>
+<legend>physical_list</legend>
 	<table border="0" cellpadding="0" cellspacing="10px">	
 		<tbody>
 			<tr>
@@ -7,10 +9,10 @@
 				<td><%: State %></td>
 				<td><%: Size %></td>
 			</tr>
-			<% for id, des in pairs( physical_list ) do %>
+			<% for physical_id, des in pairs( physical_list ) do %>
 			<tr>
 				<td><input type="checkbox" name="id-drive" value="<%= id %>" /></td>
-				<td><%= id %></td>
+				<td><%= physical_id %></td>
 				<td><%= des.state %></td>
 				<td><%= des.size %></td>
 			</tr>
@@ -30,4 +32,5 @@
 			<input type="submit" />
 		</p>
 	</div>
+</fieldset>
 </form>
