@@ -44,10 +44,6 @@ function einarc_lists()
 		message_error = message_error } )
 end
 
-local function is_valid_raid_level( raid_level )
-	return common.is_in_array( raid_level, einarc.adapter.get( "raidlevels" ) )
-end
-
 local function is_valid_raid_configuration( raid_level, drives )
 	local i18n = luci.i18n.translate
 	local VALIDATORS = {
@@ -66,7 +62,11 @@ local function is_valid_raid_configuration( raid_level, drives )
 		["10"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
 		           message = i18n("10 level requires odd number or four or more drives") }
 	}
-	return VALIDATORS[ raid_level ].validator( drives ), VALIDATORS[ raid_level ].message
+	local succeeded, is_valid = pcall( VALIDATORS[ raid_level ].validator, drives )
+	if not succeeded then
+		return false, i18n("Incorrect RAID level")
+	end
+	return is_valid, VALIDATORS[ raid_level ].message
 end
 
 local function index_with_error( message_error )
@@ -88,18 +88,14 @@ function logical_add()
 	if not drives then
 		message_error = i18n("Drives not selected")
 	else
-		if not is_valid_raid_level( raid_level ) then
-			message_error = i18n("Incorrect RAID level")
-		else
-			local is_valid, message = is_valid_raid_configuration( raid_level, drives )
-			if is_valid then
-				local return_code, result = pcall( einarc.logical.add, raid_level, drives )
-				if not return_code then
-					message_error = i18n("Failed to create logical disk")
-				end
-			else
-				message_error = message
+		local is_valid, message = is_valid_raid_configuration( raid_level, drives )
+		if is_valid then
+			local return_code, result = pcall( einarc.logical.add, raid_level, drives )
+			if not return_code then
+				message_error = i18n("Failed to create logical disk")
 			end
+		else
+			message_error = message
 		end
 	end
 
