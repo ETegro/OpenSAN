@@ -102,7 +102,7 @@ end
 -- @param drives { "0:1", "0:2", "254:1" }
 -- @param size 666.0
 -- @param properties { "prop1" = "itsvalue", "prop2" = "itsvalue" }
--- @return Raise error if it failed
+-- @return Raise error if it fails
 M.logical.add = function( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
 	local cmd = "logical add " .. raid_level
@@ -130,13 +130,24 @@ end
 
 --- einarc logical delete
 -- @param logical_id 666
--- @result Raise error if it failed
+-- @result Raise error if it fails
 M.logical.delete = function( logical_id )
 	assert( logical_id and common.is_number( logical_id ) )
 	local output = run( "logical delete " .. tostring( logical_id ) )
 	if output == nil then
 		error("einarc:logical.delete() failed")
 	end
+end
+
+--- einarc logical hotspare_add
+-- @param logical_id 0
+-- @param physical_id "0:1"
+-- return Raise error if it fails
+M.logical.hotspare_add = function( logical_id, physical_id )
+	assert( logical_id and common.is_number( logical_id ) )
+	assert( physical_id and common.is_string( physical_id ) )
+	output = run( "logical hotspare_add " .. tostring( logical_id ) .. " " .. physical_id )
+	if not output then error( "einarc:logical.hotspare_add() failed" ) end
 end
 
 M.physical = {}
