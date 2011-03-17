@@ -21,15 +21,16 @@
 module( "luci.controller.san", package.seeall )
 
 einarc = require( "astor2.einarc" )
+local BASE_URL = "san"
 
 function index()
 	require( "luci.i18n" ).loadc( "astor2_san")
 	local i18n = luci.i18n.translate
 
-	local e = entry( { "san" }, call( "einarc_lists" ), i18n("SAN"), 10 )
+	local e = entry( { BASE_URL }, call( "einarc_lists" ), i18n("SAN"), 10 )
 	e.i18n = "astor2_san"
 
-	e = entry( { "san", "logical_add" }, call( "logical_add" ), nil, 10 )
+	e = entry( { BASE_URL, "logical_add" }, call( "logical_add" ), nil, 10 )
 	e.leaf = true
 end
 
@@ -67,6 +68,12 @@ local function is_valid_raid( raid_level, drives )
 	return RAID_VALIDATORS[ raid_level ]( drives )
 end
 
+local function index_with_error( message_error )
+	local http = luci.http
+	http.redirect( luci.dispatcher.build_url( BASE_URL ) .. "/" ..
+	               http.build_querystring( { message_error = message_error } ) )
+end
+
 function logical_add()
 	local drives = luci.http.formvalue( "drives" )
 	local raid_level = luci.http.formvalue( "raid_level" )
@@ -86,8 +93,7 @@ function logical_add()
 		end
 	end
 
-	luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message_error = message_error } ) )
-
+	index_with_error( message_error )
 end
 
 --	else type( drives ) == table then
