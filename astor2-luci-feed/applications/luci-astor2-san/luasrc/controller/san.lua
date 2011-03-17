@@ -95,7 +95,7 @@ function logical_add()
 			if is_valid then
 				local return_code, result = pcall( einarc.logical.add, raid_level, drives )
 				if not return_code then
-					message_error = result
+					message_error = i18n("Failed to create logical disk")
 				end
 			else
 				message_error = message
