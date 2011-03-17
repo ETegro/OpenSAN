@@ -69,17 +69,19 @@ function logical_add()
 	local raid_level = luci.http.formvalue( "raid_level" )
 	local ok = false
 
+	if is_string( drives ) then
+		drives = { drives }
+	end
+
 	if not drives then
 		message = "drives not selected"
-	elseif is_table( drives ) then
+	else
 		if RAID_VALIDATORS[ raid_level ]( drives ) then
 			message = raid_level .. "-" ..table.concat(drives, ", ")
 			ok = true
 		else
 			message = "error"
 		end
-	elseif is_string( drives ) then
-		message = drives
 	end
 
 	if ok then einarc.logical.add( raid_level, drives ) end
