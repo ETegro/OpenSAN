@@ -2,6 +2,7 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Sergey Matveev <stargrave@stargrave.org>
+                          Vladimir Petukhov <vladimir.petukhov@etegro.com>
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -75,7 +76,7 @@ end
 M.adapter = {}
 
 --- einarc adapter get
--- @param property = "raidlevels"
+-- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
 M.adapter.get = function( property )
 	assert( property )
@@ -171,6 +172,18 @@ M.physical.list = function()
 		assert( is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
 	end
 	return physicals
+end
+
+--- einarc physical get 0:0 hotspare
+-- @param physical_id "0:1"
+-- @param property "hotspare"
+-- @return { "0" }
+M.physical.get = function( physical_id, property )
+	assert( physical_id )
+	assert( property )
+	local output = run( "physical get " .. physical_id .. " " .. property )
+	if not output then error( "einarc:physical.get() failed" ) end
+	return output
 end
 
 M.task = {}
