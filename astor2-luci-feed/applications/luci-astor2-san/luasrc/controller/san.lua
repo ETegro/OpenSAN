@@ -34,12 +34,12 @@ function index()
 end
 
 function einarc_lists()
-	local message = luci.http.formvalue( "message" )
+	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
 		physical_list = einarc.physical.list(),
 		logical_list = einarc.logical.list(),
 		task_list = einarc.task.list(),
-		message = message } )
+		message_error = message_error } )
 end
 
 local function is_odd( n )
@@ -67,6 +67,7 @@ local RAID_VALIDATORS = {
 function logical_add()
 	local drives = luci.http.formvalue( "drives" )
 	local raid_level = luci.http.formvalue( "raid_level" )
+	local message_error = nil
 	local ok = false
 
 	if is_string( drives ) then
@@ -74,19 +75,19 @@ function logical_add()
 	end
 
 	if not drives then
-		message = "drives not selected"
+		message_error = "drives not selected"
 	else
 		if RAID_VALIDATORS[ raid_level ]( drives ) then
-			message = raid_level .. "-" ..table.concat(drives, ", ")
+			message_error = raid_level .. "-" ..table.concat(drives, ", ")
 			ok = true
 		else
-			message = "error"
+			message_error = "error"
 		end
 	end
 
 	if ok then einarc.logical.add( raid_level, drives ) end
 
-	luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message = message } ) )
+	luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message_error = message_error } ) )
 
 end
 
