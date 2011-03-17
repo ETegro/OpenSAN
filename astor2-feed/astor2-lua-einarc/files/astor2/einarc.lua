@@ -30,20 +30,6 @@ local PHYSICAL_STATES = { "hotspare",
                           "failed",
                           "free" }
 
---- Check if value is in array
--- @param what Value to be checked
--- @param array Array to search in
--- @return True if exists, false otherwise
-local function is_in_array( what, array )
-	local is_in_it = false
-	for _, v in ipairs( array ) do
-		if what == v then
-			is_in_it = true
-		end
-	end
-	return is_in_it
-end
-
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
 -- @return Either an array of output strings from einarc, or nil if
@@ -72,6 +58,18 @@ local function split_by_comma( str )
         return words
 end
 
+M.adapter = {}
+
+--- einarc adapter get
+-- @param property = "raidlevels"
+-- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
+M.adapter.get = function( property )
+	assert( property )
+	local output = run( "adapter get " .. property )
+	if not output then error( "einarc:adapter.get() failed" ) end
+	return output
+end
+
 M.logical = {}
 
 --- einarc logical list
@@ -92,7 +90,7 @@ M.logical.list = function()
 			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
+		assert( common.is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
 	end
 	return logicals
 end
@@ -156,7 +154,7 @@ M.physical.list = function()
 			size = tonumber( string.match( line, "^[0-9:]+\t.*\t.*\t.*\t([0-9\.]+)\t.*$" ) ) or 0,
 			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
+		assert( common.is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
 	end
 	return physicals
 end
