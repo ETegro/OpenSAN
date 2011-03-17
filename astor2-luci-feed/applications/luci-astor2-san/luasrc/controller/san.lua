@@ -20,6 +20,7 @@
 
 module( "luci.controller.san", package.seeall )
 
+common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 local BASE_URL = "san"
 
@@ -55,7 +56,11 @@ local function is_table( obj )
 	return type( obj ) == type( {} )
 end
 
-local function is_valid_raid( raid_level, drives )
+local function is_valid_raid_level( raid_level )
+	return common.is_in_array( raid_level, einarc.adapter.get( "raidlevels" ) )
+end
+
+local function is_valid_raid_configuration( raid_level, drives )
 	local VALIDATORS = {
 		["linear"] = function( drives ) return #drives == 1 end,
 		["passthrough"] = function( drives ) return #drives == 1 end,
@@ -86,10 +91,12 @@ function logical_add()
 	if not drives then
 		message_error = "drives not selected"
 	else
-		if is_valid_raid( raid_level, drives ) then
-			einarc.logical.add( raid_level, drives )
+		if not is_valid_raid_level( raid_level ) then
+			message_error = "Incorrect RAID level"
+		elseif not is_valid_raid_configuration ( raid_level, drives ) then
+			message_error = "Incorrect RAID configuration"
 		else
-			message_error = "error"
+			einarc.logical.add( raid_level, drives )
 		end
 	end
 
