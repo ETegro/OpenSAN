@@ -91,7 +91,7 @@ function logical_add()
 		if not is_valid_raid_level( raid_level ) then
 			message_error = i18n("Incorrect RAID level")
 		else
-			local is_valid, message = is_valid_raid_level( raid_level )
+			local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 			if is_valid then
 				einarc.logical.add( raid_level, drives )
 			else
