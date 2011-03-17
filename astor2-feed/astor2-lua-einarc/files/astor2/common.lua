@@ -73,7 +73,7 @@ end
 -- @param what Value to be checked
 -- @param array Array to search in
 -- @return True if exists, false otherwise
-function Mis_in_array( what, array )
+function M.is_in_array( what, array )
 	local is_in_it = false
 	for _, v in ipairs( array ) do
 		if what == v then
