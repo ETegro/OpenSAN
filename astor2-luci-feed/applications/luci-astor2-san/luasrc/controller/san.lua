@@ -44,18 +44,6 @@ function einarc_lists()
 		message_error = message_error } )
 end
 
-local function is_odd( n )
-	return n % 2 == 0
-end
-
-local function is_string( obj )
-	return type( obj ) == type( "" )
-end
-
-local function is_table( obj )
-	return type( obj ) == type( {} )
-end
-
 local function is_valid_raid_level( raid_level )
 	return common.is_in_array( raid_level, einarc.adapter.get( "raidlevels" ) )
 end
@@ -65,10 +53,10 @@ local function is_valid_raid_configuration( raid_level, drives )
 		["linear"] = function( drives ) return #drives == 1 end,
 		["passthrough"] = function( drives ) return #drives == 1 end,
 		["0"] = function( drives ) return #drives >= 2 end,
-		["1"] = function( drives ) return #drives >= 2 and is_odd( #drives ) end,
+		["1"] = function( drives ) return #drives >= 2 and common.is_odd( #drives ) end,
 		["5"] = function( drives ) return #drives >= 3 end,
-		["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end,
-		["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end
+		["6"] = function( drives ) return #drives >= 3 and common.is_odd( #drives ) end,
+		["10"] = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end
 	}
 	return VALIDATORS[ raid_level ]( drives )
 end
@@ -84,7 +72,7 @@ function logical_add()
 	local raid_level = luci.http.formvalue( "raid_level" )
 	local message_error = nil
 
-	if is_string( drives ) then
+	if common.is_string( drives ) then
 		drives = { drives }
 	end
 
