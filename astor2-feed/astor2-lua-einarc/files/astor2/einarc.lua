@@ -67,7 +67,7 @@ M.adapter = {}
 -- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
 M.adapter.get = function( property )
-	assert( property and common.is_string( str ) )
+	assert( property and common.is_string( property ) )
 	local output = run( "adapter get " .. property )
 	if not output then error( "einarc:adapter.get() failed" ) end
 	return output
