@@ -21,7 +21,7 @@
 WORK_DIR=`echo $0 | sed "s/\/build.sh$//"`
 pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 TARGET_DIR="$WORK_DIR"/openwrt/trunk
-OUTPUT_DIR="$WORK_DIR"/output/$BRANCH-`date "+%Y-%m-%dT%H:%M"`
+OUTPUT_DIR="$WORK_DIR"/output/`date "+%Y-%m-%dT%H:%M"`-$BRANCH
 DL_DIR="$TARGET_DIR"/dl
 BIN_DIR="$TARGET_DIR"/bin/x86
 [ -n "$JOBS" ] || JOBS=1
