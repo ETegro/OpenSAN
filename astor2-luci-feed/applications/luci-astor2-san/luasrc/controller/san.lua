@@ -39,6 +39,7 @@ function einarc_lists()
 	luci.template.render( "san", {
 		physical_list = einarc.physical.list(),
 		logical_list = einarc.logical.list(),
+		raidlevels = einarc.adapter.get( "raidlevels" ),
 		task_list = einarc.task.list(),
 		message_error = message_error } )
 end
