@@ -54,21 +54,23 @@ local function is_table( obj )
 	return type( obj ) == type( {} )
 end
 
-local RAID_VALIDATORS = {
-	["linear"] = function( drives ) return #drives == 1 end,
-	["passthrough"] = function( drives ) return #drives == 1 end,
-	["0"] = function( drives ) return #drives >= 2 end,
-	["1"] = function( drives ) return #drives >= 2 and is_odd( #drives ) end,
-	["5"] = function( drives ) return #drives >= 3 end
-	["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end
-	["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end,
-}
+local function is_valid_raid( raid_level, drives )
+	local VALIDATORS = {
+		["linear"] = function( drives ) return #drives == 1 end,
+		["passthrough"] = function( drives ) return #drives == 1 end,
+		["0"] = function( drives ) return #drives >= 2 end,
+		["1"] = function( drives ) return #drives >= 2 and is_odd( #drives ) end,
+		["5"] = function( drives ) return #drives >= 3 end
+		["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end
+		["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end,
+	}
+	return RAID_VALIDATORS[ raid_level ]( drives )
+end
 
 function logical_add()
 	local drives = luci.http.formvalue( "drives" )
 	local raid_level = luci.http.formvalue( "raid_level" )
 	local message_error = nil
-	local ok = false
 
 	if is_string( drives ) then
 		drives = { drives }
@@ -77,15 +79,12 @@ function logical_add()
 	if not drives then
 		message_error = "drives not selected"
 	else
-		if RAID_VALIDATORS[ raid_level ]( drives ) then
-			message_error = raid_level .. "-" ..table.concat(drives, ", ")
-			ok = true
+		if is_valid_raid( raid_level, drives ) then
+			einarc.logical.add( raid_level, drives )
 		else
 			message_error = "error"
 		end
 	end
-
-	if ok then einarc.logical.add( raid_level, drives ) end
 
 	luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message_error = message_error } ) )
 
