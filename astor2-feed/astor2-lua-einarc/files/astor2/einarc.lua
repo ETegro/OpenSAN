@@ -72,6 +72,18 @@ local function split_by_comma( str )
         return words
 end
 
+M.adapter = {}
+
+--- einarc adapter get
+-- @param property = "raidlevels"
+-- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
+M.adapter.get = function( property )
+	assert( property )
+	local output = run( "adapter get " .. property )
+	if not output then error( "einarc:adapter.get() failed" ) end
+	return output
+end
+
 M.logical = {}
 
 --- einarc logical list
