@@ -61,9 +61,9 @@ local function is_valid_raid( raid_level, drives )
 		["passthrough"] = function( drives ) return #drives == 1 end,
 		["0"] = function( drives ) return #drives >= 2 end,
 		["1"] = function( drives ) return #drives >= 2 and is_odd( #drives ) end,
-		["5"] = function( drives ) return #drives >= 3 end
-		["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end
-		["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end,
+		["5"] = function( drives ) return #drives >= 3 end,
+		["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end,
+		["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end
 	}
 	return RAID_VALIDATORS[ raid_level ]( drives )
 end
