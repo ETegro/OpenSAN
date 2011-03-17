@@ -22,13 +22,14 @@ local M = {}
 local common = require( "astor2.common" )
 
 local EINARC_CMD = "einarc -t software -a 0 "
-local LOGICAL_STATES = { "normal",
-                         "degraded",
-                         "initializing",
-                         "rebuilding" }
-local PHYSICAL_STATES = { "hotspare",
-                          "failed",
-                          "free" }
+
+M.LOGICAL_STATES = { "normal",
+                     "degraded",
+                     "initializing",
+                     "rebuilding" }
+M.PHYSICAL_STATES = { "hotspare",
+                      "failed",
+                      "free" }
 
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
@@ -90,7 +91,6 @@ M.logical.list = function()
 			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( common.is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
 	end
 	return logicals
 end
@@ -154,7 +154,6 @@ M.physical.list = function()
 			size = tonumber( string.match( line, "^[0-9:]+\t.*\t.*\t.*\t([0-9\.]+)\t.*$" ) ) or 0,
 			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( common.is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
 	end
 	return physicals
 end
