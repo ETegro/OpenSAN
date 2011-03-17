@@ -1,4 +1,5 @@
-<form id="form_physical">
+here: <% if message then write( message ) end %> end
+<form id="form_physical" method="get" action="<%=luci.dispatcher.build_url("san", "logical_add")%>">
 <fieldset>
 <legend>physical_list</legend>
 	<table border="0" cellpadding="0" cellspacing="10px">	
@@ -11,7 +12,7 @@
 			</tr>
 			<% for physical_id, des in pairs( physical_list ) do %>
 			<tr>
-				<td><input type="checkbox" name="id-drive" value="<%= id %>" /></td>
+				<td><input type="checkbox" name="drives" value="<%= physical_id %>" /></td>
 				<td><%= physical_id %></td>
 				<td><%= des.state %></td>
 				<td><%= des.size %></td>
@@ -21,9 +22,10 @@
 	</table>
   	<div>
 		<p><%: RAID level %>: 
-			<select name="raid-level" size="1">
+			<select name="raid_level" size="1">
 				<option value="0">0</option>
 				<option value="1">1</option>
+				<option value="5">5</option>
 			</select>
 		</p>
 	</div>

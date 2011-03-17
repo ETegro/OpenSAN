@@ -20,7 +20,7 @@
 
 module( "luci.controller.san", package.seeall )
 
-einarc = require( "astor2.einarc" )
+--einarc = require( "astor2.einarc" )
 
 function index()
 	require( "luci.i18n" ).loadc( "astor2_san")
@@ -28,6 +28,8 @@ function index()
 
 	local e = entry( { "san" }, call( "einarc_lists" ), i18n("SAN"), 10 )
 	e.i18n = "astor2_san"
+
+	entry( { "san", "logical_add" }, call( "logical_add" ), nil, 10 ).leaf=true
 end
 
 local logical_list_result =
@@ -55,8 +57,54 @@ local task_list_result =
 		progress = 22.2 } }
 
 function einarc_lists()
-	luci.template.render( "san",
-	                    { physical_list = einarc.physical.list(),
-		              logical_list = logical_list_result,
-		              task_list = task_list_result } )
+	local message = luci.http.formvalue("message")
+	luci.template.render( "san", {
+		physical_list = {
+			["0:1"] = {
+				model = "some",
+				revision = "rev",
+				serial = "some",
+				size = 666,
+				state = "free" },
+			["0:2"] = {
+				model = "some",
+				revision = "rev2",
+				serial = "som3e",
+				size = 555,
+				state = "free" } },
+		logical_list = logical_list_result,
+		task_list = task_list_result,
+		message = message } )
 end
+
+function logical_add()
+	local drives = luci.http.formvalue( "drives" )
+	local raid_level = luci.http.formvalue( "raid_level" )
+
+	if not drives then
+		message = "drives not selected"
+	elseif type(drives) == type({}) then
+		local validators = {
+			["0"] = function( drives ) return #drives >= 2 end,
+			["1"] = function( drives ) return #drives >= 2 and #drives % 2 == 0 end,
+			["5"] = function( drives ) return #drives >= 3 end
+		}
+		if not validators[ raid_level ]( drives ) then
+			message = "error"
+		else
+			message = raid_level .. "-" ..table.concat(drives, ", ")
+		end
+		
+	elseif type(drives) == type("") then
+		message = drives
+	end
+
+	luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message = message } ) )
+
+end
+
+--	else type( drives ) == table then
+--		luci.http.write( "Drives: " .. table.concat( drives ) .. " end" )
+--[[		luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message="Selected: " .. table.concat( drives ) } ) )
+	elseif type( drives ) == string then
+		luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message="please select minimum 2 drives" } ) )--]]
