@@ -175,6 +175,16 @@ M.physical.get = function( physical_id, property )
 	return output
 end
 
+--- Is physical disk a hotspare
+-- @param physical_id "0:1"
+-- @return true/false
+M.physical.is_hotspare = function( physical_id )
+        assert( physical_id )
+	local output = M.physical.get( physical_id, "hotspare" )
+	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
+	return output[1] == "1"
+end
+
 M.task = {}
 
 --- einarc task list
