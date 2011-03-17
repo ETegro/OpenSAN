@@ -61,7 +61,7 @@ end
 M.adapter = {}
 
 --- einarc adapter get
--- @param property = "raidlevels"
+-- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
 M.adapter.get = function( property )
 	assert( property )
