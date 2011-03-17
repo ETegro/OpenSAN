@@ -22,16 +22,15 @@ module( "luci.controller.san", package.seeall )
 
 common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
-local BASE_URL = "san"
 
 function index()
 	require( "luci.i18n" ).loadc( "astor2_san")
 	local i18n = luci.i18n.translate
 
-	local e = entry( { BASE_URL }, call( "einarc_lists" ), i18n("SAN"), 10 )
+	local e = entry( { "san" }, call( "einarc_lists" ), i18n("SAN"), 10 )
 	e.i18n = "astor2_san"
 
-	e = entry( { BASE_URL, "logical_add" }, call( "logical_add" ), nil, 10 )
+	e = entry( { "san", "logical_add" }, call( "logical_add" ), nil, 10 )
 	e.leaf = true
 end
 
@@ -76,7 +75,7 @@ end
 
 local function index_with_error( message_error )
 	local http = luci.http
-	http.redirect( luci.dispatcher.build_url( BASE_URL ) .. "/" ..
+	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
 	               http.build_querystring( { message_error = message_error } ) )
 end
 
