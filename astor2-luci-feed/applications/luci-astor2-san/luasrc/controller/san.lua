@@ -46,6 +46,14 @@ local function is_odd( n )
 	return n % 2 == 0
 end
 
+local function is_string( obj )
+	return type( obj ) == type( "" )
+end
+
+local function is_table( obj )
+	return type( obj ) == type( {} )
+end
+
 local RAID_VALIDATORS = {
 	["linear"] = function( drives ) return #drives == 1 end,
 	["passthrough"] = function( drives ) return #drives == 1 end,
@@ -63,14 +71,14 @@ function logical_add()
 
 	if not drives then
 		message = "drives not selected"
-	elseif type(drives) == type({}) then
+	elseif is_table( drives ) then
 		if RAID_VALIDATORS[ raid_level ]( drives ) then
 			message = raid_level .. "-" ..table.concat(drives, ", ")
 			ok = true
 		else
 			message = "error"
 		end
-	elseif type(drives) == type("") then
+	elseif is_string( drives ) then
 		message = drives
 	end
 
