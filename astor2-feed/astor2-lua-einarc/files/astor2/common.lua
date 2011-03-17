@@ -83,4 +83,33 @@ function M.is_in_array( what, array )
 	return is_in_it
 end
 
+--- Check if object is a string
+-- @param obj An object to check
+-- @return true or false
+function M.is_string( obj )
+	return type( obj ) == type( "" )
+end
+
+--- Check if object is a table
+-- @param obj An object to check
+-- @return true or false
+function M.is_table( obj )
+	return type( obj ) == type( {} )
+end
+
+--- Check if object is a number
+-- @param obj An object to check
+-- @return true or false
+function M.is_number( obj )
+	return type( obj ) == type( 1 )
+end
+
+--- Check if number is odd
+-- @param n Number to check
+-- @return true or false
+function M.is_odd( n )
+	assert( M.is_number( n ) )
+	return n % 2 == 0
+end
+
 return M

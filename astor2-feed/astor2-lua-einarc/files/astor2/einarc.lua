@@ -23,20 +23,21 @@ local M = {}
 local common = require( "astor2.common" )
 
 local EINARC_CMD = "einarc -t software -a 0 "
-local LOGICAL_STATES = { "normal",
-                         "degraded",
-                         "initializing",
-                         "rebuilding" }
-local PHYSICAL_STATES = { "hotspare",
-                          "failed",
-                          "free" }
+
+M.LOGICAL_STATES = { "normal",
+                     "degraded",
+                     "initializing",
+                     "rebuilding" }
+M.PHYSICAL_STATES = { "hotspare",
+                      "failed",
+                      "free" }
 
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
 -- @return Either an array of output strings from einarc, or nil if
 --         einarc failed, or raise "NotImplementedError" if it is so
 local function run( args )
-	assert( args )
+	assert( args and common.is_string( args ) )
 	local result = common.system( EINARC_CMD .. args )
 	if result.return_code ~= 0 then
 		for _, line in ipairs( result.stderr ) do
@@ -51,6 +52,7 @@ end
 
 -- Taken from http://lua-users.org/wiki/SplitJoin
 local function split_by_comma( str )
+	assert( str and common.is_string( str ) )
 	local words = {}
 	local pattern = string.format( "([^%s]+)", "," )
 	string.gsub( str,
@@ -65,7 +67,7 @@ M.adapter = {}
 -- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
 M.adapter.get = function( property )
-	assert( property )
+	assert( property and common.is_string( str ) )
 	local output = run( "adapter get " .. property )
 	if not output then error( "einarc:adapter.get() failed" ) end
 	return output
@@ -91,7 +93,6 @@ M.logical.list = function()
 			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( common.is_in_array( logicals[ id ].state, LOGICAL_STATES ) == true )
 	end
 	return logicals
 end
@@ -106,12 +107,15 @@ M.logical.add = function( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
 	local cmd = "logical add " .. raid_level
 	if drives then
+		assert( common.is_table( drives ), "drives have to be an array" )
 		cmd = cmd .. " " .. table.concat( drives, "," )
 	end
 	if size then
+		assert( common.is_number( size ), "size has to be a number" )
 		cmd = cmd .. " " .. tostring( size )
 	end
 	if properties then
+		assert( common.is_table( properties ), "properties have to be a table" )
 		local serialized = {}
 		for k, v in pairs( properties ) do
 			serialized[ #serialized + 1 ] = k .. "=" .. v
@@ -128,7 +132,7 @@ end
 -- @param logical_id 666
 -- @result Raise error if it failed
 M.logical.delete = function( logical_id )
-	assert( logical_id )
+	assert( logical_id and common.is_number( logical_id ) )
 	local output = run( "logical delete " .. tostring( logical_id ) )
 	if output == nil then
 		error("einarc:logical.delete() failed")
@@ -155,7 +159,6 @@ M.physical.list = function()
 			size = tonumber( string.match( line, "^[0-9:]+\t.*\t.*\t.*\t([0-9\.]+)\t.*$" ) ) or 0,
 			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
-		assert( common.is_in_array( physicals[ id ].state, PHYSICAL_STATES ) == true )
 	end
 	return physicals
 end
@@ -165,8 +168,8 @@ end
 -- @param property "hotspare"
 -- @return { "0" }
 M.physical.get = function( physical_id, property )
-	assert( physical_id )
-	assert( property )
+	assert( physical_id and common.is_string( physical_id ) )
+	assert( property and common.is_string( physical_id ) )
 	local output = run( "physical get " .. physical_id .. " " .. property )
 	if not output then error( "einarc:physical.get() failed" ) end
 	return output
