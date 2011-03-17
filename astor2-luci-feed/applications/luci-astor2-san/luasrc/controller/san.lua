@@ -20,87 +20,80 @@
 
 module( "luci.controller.san", package.seeall )
 
---einarc = require( "astor2.einarc" )
+einarc = require( "astor2.einarc" )
+local BASE_URL = "san"
 
 function index()
 	require( "luci.i18n" ).loadc( "astor2_san")
 	local i18n = luci.i18n.translate
 
-	local e = entry( { "san" }, call( "einarc_lists" ), i18n("SAN"), 10 )
+	local e = entry( { BASE_URL }, call( "einarc_lists" ), i18n("SAN"), 10 )
 	e.i18n = "astor2_san"
 
-	entry( { "san", "logical_add" }, call( "logical_add" ), nil, 10 ).leaf=true
+	e = entry( { BASE_URL, "logical_add" }, call( "logical_add" ), nil, 10 )
+	e.leaf = true
 end
 
-local logical_list_result =
-	{ [7] = {
-		level = "linear",
-		drives = { "0:1", "0:2" },
-		capacity = 320,
-		device = "/dev/md0",
-		state = "normal" },
-	[2] = {
-		level = "1",
-		drives = { "1:0", "1:1" },
-		capacity = 160,
-		device = "/dev/md1",
-		state = "normal" } }
-
-local task_list_result = 
-	{ [0] = {
-		what = "something",
-		where = "2",
-		progress = 11.1 },
-	[5] = {
-		what = "something",
-		where = "7",
-		progress = 22.2 } }
-
 function einarc_lists()
-	local message = luci.http.formvalue("message")
+	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
-		physical_list = {
-			["0:1"] = {
-				model = "some",
-				revision = "rev",
-				serial = "some",
-				size = 666,
-				state = "free" },
-			["0:2"] = {
-				model = "some",
-				revision = "rev2",
-				serial = "som3e",
-				size = 555,
-				state = "free" } },
-		logical_list = logical_list_result,
-		task_list = task_list_result,
-		message = message } )
+		physical_list = einarc.physical.list(),
+		logical_list = einarc.logical.list(),
+		task_list = einarc.task.list(),
+		message_error = message_error } )
+end
+
+local function is_odd( n )
+	return n % 2 == 0
+end
+
+local function is_string( obj )
+	return type( obj ) == type( "" )
+end
+
+local function is_table( obj )
+	return type( obj ) == type( {} )
+end
+
+local function is_valid_raid( raid_level, drives )
+	local VALIDATORS = {
+		["linear"] = function( drives ) return #drives == 1 end,
+		["passthrough"] = function( drives ) return #drives == 1 end,
+		["0"] = function( drives ) return #drives >= 2 end,
+		["1"] = function( drives ) return #drives >= 2 and is_odd( #drives ) end,
+		["5"] = function( drives ) return #drives >= 3 end,
+		["6"] = function( drives ) return #drives >= 3 and is_odd( #drives ) end,
+		["10"] = function( drives ) return #drives >= 4 and is_odd( #drives ) end
+	}
+	return RAID_VALIDATORS[ raid_level ]( drives )
+end
+
+local function index_with_error( message_error )
+	local http = luci.http
+	http.redirect( luci.dispatcher.build_url( BASE_URL ) .. "/" ..
+	               http.build_querystring( { message_error = message_error } ) )
 end
 
 function logical_add()
 	local drives = luci.http.formvalue( "drives" )
 	local raid_level = luci.http.formvalue( "raid_level" )
+	local message_error = nil
 
-	if not drives then
-		message = "drives not selected"
-	elseif type(drives) == type({}) then
-		local validators = {
-			["0"] = function( drives ) return #drives >= 2 end,
-			["1"] = function( drives ) return #drives >= 2 and #drives % 2 == 0 end,
-			["5"] = function( drives ) return #drives >= 3 end
-		}
-		if not validators[ raid_level ]( drives ) then
-			message = "error"
-		else
-			message = raid_level .. "-" ..table.concat(drives, ", ")
-		end
-		
-	elseif type(drives) == type("") then
-		message = drives
+	if is_string( drives ) then
+		drives = { drives }
 	end
 
-	luci.http.redirect( luci.dispatcher.build_url( "san" ) .. "/" .. luci.http.build_querystring( { message = message } ) )
+	if not drives then
+		message_error = "drives not selected"
+	else
+		if is_valid_raid( raid_level, drives ) then
+			einarc.logical.add( raid_level, drives )
+		else
+			message_error = "error"
+		end
+	end
 
+	index_with_error( message_error )
 end
 
 --	else type( drives ) == table then
