@@ -19,9 +19,6 @@
 
 local M = {}
 
-require "logging.console"
-M.logger = logging.console()
-
 local SHELL_PATH = "/bin/sh"
 
 --- Call external command
@@ -32,7 +29,6 @@ local SHELL_PATH = "/bin/sh"
 -- @return { return_code = 0, stderr = { "line1", "line2" }, stdout = { "line1", "line2" } }
 function M.system( cmdline )
 	assert( cmdline )
-	M.logger:debug( "common:system() called with cmdline \"" .. cmdline .. "\"" )
 	local stdout_path = os.tmpname()
 	local stderr_path = os.tmpname()
 	local script_path = os.tmpname()
@@ -46,17 +42,14 @@ function M.system( cmdline )
 	local result = {}
 
 	-- Execute command and retreive return code
-	M.logger:debug( "common:system() executing script " .. script_path )
 	result.return_code = os.execute( SHELL_PATH .. " "
 	                                 .. script_path
 	                                 .. " >" .. stdout_path
 	                                 .. " 2>" .. stderr_path )
-	M.logger:debug( "common:system() return code " .. result.return_code )
 	os.remove( script_path )
 
 	-- Read it's stdout
 	result.stdout = {}
-	M.logger:debug( "common:system() parsing stdout " .. stdout_path )
 	local stdout_fd = io.open( stdout_path, "r" )
 	for line in stdout_fd:lines() do
 		result.stdout[ #result.stdout + 1 ] = line
@@ -66,7 +59,6 @@ function M.system( cmdline )
 
 	-- Read it's stderr
 	result.stderr = {}
-	M.logger:debug( "common:system() parsing stderr " .. stderr_path )
 	local stderr_fd = io.open( stderr_path, "r" )
 	for line in stderr_fd:lines() do
 		result.stderr[ #result.stderr + 1 ] = line
