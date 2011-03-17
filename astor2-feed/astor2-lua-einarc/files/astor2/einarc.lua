@@ -150,6 +150,17 @@ M.logical.hotspare_add = function( logical_id, physical_id )
 	if not output then error( "einarc:logical.hotspare_add() failed" ) end
 end
 
+--- einarc logical hotspare_delete
+-- @param logical_id 0
+-- @param physical_id "0:1"
+-- return Raise error if it fails
+M.logical.hotspare_delete = function( logical_id, physical_id )
+	assert( logical_id and common.is_number( logical_id ) )
+	assert( physical_id and common.is_string( physical_id ) )
+	output = run( "logical hotspare_delete " .. tostring( logical_id ) .. " " .. physical_id )
+	if not output then error( "einarc:logical.hotspare_delete() failed" ) end
+end
+
 M.physical = {}
 
 --- einarc physical list
