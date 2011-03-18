@@ -41,9 +41,43 @@ function index()
 	e.leaf = true
 end
 
+local function foobar()
+	local physical_drives = {}
+	local logical_sizes = {}
+	local current_logical_pointer = 1
+	for logical_id, _ in pairs( einarc.logical.list() ) do
+		for physical_id, _ in pairs( einarc.logical.physical_list( logical_id ) ) do
+			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id,
+								    logical_id = logical_id,
+			                                            logical_size = 0 }
+			if not logical_sizes[ logical_id ] then
+				logical_sizes[ logical_id ] = 0
+			end
+			logical_sizes[ logical_id ] = logical_sizes[ logical_id ] + 1
+		end
+		physical_drives[ current_logical_pointer ].logical_size = logical_sizes[ logical_id ]
+		current_logical_pointer = current_logical_pointer + 1
+	end
+	for physical_id, _ in pairs( einarc.physical.list() ) do
+		local found = false
+		for _, pair in ipairs( physical_drives ) do
+			if physical_id == pair.physical_id then
+				found = true
+			end
+		end
+		if not found then
+			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id,
+								    logical_id = nil,
+			                                            logical_size = 0 }
+		end
+	end
+	return physical_drives
+end
+
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
+		foobar = foobar(),
 		physical_list = einarc.physical.list(),
 		logical_list = einarc.logical.list(),
 		raidlevels = einarc.adapter.get( "raidlevels" ),
@@ -111,3 +145,5 @@ einarc_logical_add = function()
 
 	index_with_error( message_error )
 end
+
+

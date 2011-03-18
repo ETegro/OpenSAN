@@ -1,0 +1,10 @@
+<table border="1">
+	<% for _, pair in ipairs( foobar ) do %>
+	<tr>
+		<td><%= pair.physical_id %></td>
+		<% if pair.logical_id then %>
+		<td rowspan="<%= pair.logical_size %>"><%= pair.logical_id %></td>
+		<% end %>
+	</tr>
+	<% end %>
+</table>
