@@ -41,7 +41,7 @@ function index()
 	e.leaf = true
 end
 
-local function foobar()
+local function physical_logical_matrix()
 	local physical_drives = {}
 	local current_logical_pointer = 1
 	for logical_id, _ in pairs( einarc.logical.list() ) do
@@ -68,14 +68,24 @@ local function foobar()
 	return physical_drives
 end
 
+local function logical_fillup_progress( logicals )
+	for task_id, task_data in pairs( einarc.task.list() ) do
+		for logical_id, logical_data in pairs( logicals ) do
+			if task_data.where == tostring( logical_id ) then
+				logicals[ logical_id ].progress = task_data.progress
+			end
+		end
+	end
+	return logicals
+end
+
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
-		foobar = foobar(),
-		physical_list = einarc.physical.list(),
-		logical_list = einarc.logical.list(),
+		physical_logical_matrix = physical_logical_matrix(),
+		physicals = einarc.physical.list(),
+		logicals = logical_fillup_progress( einarc.logical.list() ),
 		raidlevels = einarc.adapter.get( "raidlevels" ),
-		task_list = einarc.task.list(),
 		message_error = message_error } )
 end
 

@@ -1,0 +1,22 @@
+<table border="1">
+	<% for _, pair in ipairs( physical_logical_matrix ) do %>
+	<tr>
+		<td>
+			<%= pair.physical_id %> |
+			<%= physicals[ pair.physical_id ].state %> |
+			<%= physicals[ pair.physical_id ].size %>
+		</td>
+		<% if pair.logical_id then %>
+		<td rowspan="<%= pair.logical_size %>">
+			<%= pair.logical_id %>
+			<%= logicals[ pair.logical_id ].level %> |
+			<%= logicals[ pair.logical_id ].state %> |
+			<% if logicals[ pair.logical_id ].progress %>
+			<%= logicals[ pair.logical_id ].progress %> % |
+			<% end %>
+			<%= logicals[ pair.logical_id ].capacity %> MiB
+		</td>
+		<% end %>
+	</tr>
+	<% end %>
+</table>
