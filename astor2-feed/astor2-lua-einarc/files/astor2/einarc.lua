@@ -31,6 +31,10 @@ M.LOGICAL_STATES = { "normal",
 M.PHYSICAL_STATES = { "hotspare",
                       "failed",
                       "free" }
+M.RAIDLEVELS = { "linear",
+                 "passthrough",
+                 "0", "1", "5",
+                 "6", "10" }
 
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
@@ -68,6 +72,13 @@ M.adapter = {}
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
 M.adapter.get = function( property )
 	assert( property and common.is_string( property ) )
+
+	-- WARNING: This is performance related issue only for
+	-- software einarc module.
+	if property == "raidlevels" then
+		return M.RAIDLEVELS
+	end
+
 	local output = run( "adapter get " .. property )
 	if not output then error( "einarc:adapter.get() failed" ) end
 	return output
@@ -203,7 +214,7 @@ M.physical.list = function()
 	return physicals
 end
 
---- einarc physical get 0:0 hotspare
+--- einarc physical get
 -- @param physical_id "0:1"
 -- @param property "hotspare"
 -- @return { "0" }
