@@ -21,8 +21,7 @@
 module( "luci.controller.san", package.seeall )
 
 common = require( "astor2.common" )
-
-einarc = { api = require( "astor2.einarc" ) }
+einarc = require( "astor2.einarc" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -35,8 +34,8 @@ function index()
 	e.i18n = "astor2_san"
 
 	-- Einarc related
-	e = entry( { "san", "einarc", "logical_add" },
-	           call( "einarc.logical_add" ),
+	e = entry( { "san", "einarc_logical_add" },
+	           call( "einarc_logical_add" ),
 		   nil,
 		   10 )
 	e.leaf = true
@@ -45,10 +44,10 @@ end
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
-		physical_list = einarc.api.physical.list(),
-		logical_list = einarc.api.logical.list(),
-		raidlevels = einarc.api.adapter.get( "raidlevels" ),
-		task_list = einarc.api.task.list(),
+		physical_list = einarc.physical.list(),
+		logical_list = einarc.logical.list(),
+		raidlevels = einarc.adapter.get( "raidlevels" ),
+		task_list = einarc.task.list(),
 		message_error = message_error } )
 end
 
@@ -86,7 +85,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-einarc.logical_add = function()
+einarc_logical_add = function()
 	local drives = luci.http.formvalue( "drives" )
 	local raid_level = luci.http.formvalue( "raid_level" )
 	local message_error = nil
@@ -101,7 +100,7 @@ einarc.logical_add = function()
 	else
 		local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 		if is_valid then
-			local return_code, result = pcall( einarc.api.logical.add, raid_level, drives )
+			local return_code, result = pcall( einarc.logical.add, raid_level, drives )
 			if not return_code then
 				message_error = i18n("Failed to create logical disk")
 			end
