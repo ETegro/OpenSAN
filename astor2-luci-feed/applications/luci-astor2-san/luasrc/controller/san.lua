@@ -43,19 +43,15 @@ end
 
 local function foobar()
 	local physical_drives = {}
-	local logical_sizes = {}
 	local current_logical_pointer = 1
 	for logical_id, _ in pairs( einarc.logical.list() ) do
+		local logical_size = 0
 		for physical_id, _ in pairs( einarc.logical.physical_list( logical_id ) ) do
-			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id,
-								    logical_id = logical_id,
-			                                            logical_size = 0 }
-			if not logical_sizes[ logical_id ] then
-				logical_sizes[ logical_id ] = 0
-			end
-			logical_sizes[ logical_id ] = logical_sizes[ logical_id ] + 1
+			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id }
+			logical_size = logical_size + 1
 		end
-		physical_drives[ current_logical_pointer ].logical_size = logical_sizes[ logical_id ]
+		physical_drives[ current_logical_pointer ].logical_size = logical_size
+		physical_drives[ current_logical_pointer ].logical_id = logical_id
 		current_logical_pointer = current_logical_pointer + 1
 	end
 	for physical_id, _ in pairs( einarc.physical.list() ) do
@@ -66,9 +62,7 @@ local function foobar()
 			end
 		end
 		if not found then
-			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id,
-								    logical_id = nil,
-			                                            logical_size = 0 }
+			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id }
 		end
 	end
 	return physical_drives
