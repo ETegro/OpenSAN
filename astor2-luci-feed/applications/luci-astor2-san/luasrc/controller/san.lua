@@ -21,29 +21,46 @@
 module( "luci.controller.san", package.seeall )
 
 common = require( "astor2.common" )
-einarc = require( "astor2.einarc" )
+
+einarc = { api = require( "astor2.einarc" ) }
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
 	local i18n = luci.i18n.translate
-	local e = entry( { "san" }, call( "einarc_lists" ), i18n("SAN"), 10 )
+	local e = entry( { "san" },
+	                 call( "index_overall" ),
+			 i18n("SAN"),
+			 10 )
 	e.i18n = "astor2_san"
 
-	e = entry( { "san", "logical_add" }, call( "logical_add" ), nil, 10 )
+	-- Einarc related
+	e = entry( { "san", "einarc", "logical_add" },
+	           call( "einarc.logical_add" ),
+		   nil,
+		   10 )
 	e.leaf = true
 end
 
-function einarc_lists()
+function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
-		physical_list = einarc.physical.list(),
-		logical_list = einarc.logical.list(),
-		raidlevels = einarc.adapter.get( "raidlevels" ),
-		task_list = einarc.task.list(),
+		physical_list = einarc.api.physical.list(),
+		logical_list = einarc.api.logical.list(),
+		raidlevels = einarc.api.adapter.get( "raidlevels" ),
+		task_list = einarc.api.task.list(),
 		message_error = message_error } )
 end
 
+local function index_with_error( message_error )
+	local http = luci.http
+	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
+	               http.build_querystring( { message_error = message_error } ) )
+end
+
+------------------------------------------------------------------------
+-- Einarc related functions
+------------------------------------------------------------------------
 local function is_valid_raid_configuration( raid_level, drives )
 	local i18n = luci.i18n.translate
 	local VALIDATORS = {
@@ -69,13 +86,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-local function index_with_error( message_error )
-	local http = luci.http
-	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
-	               http.build_querystring( { message_error = message_error } ) )
-end
-
-function logical_add()
+einarc.logical_add = function()
 	local drives = luci.http.formvalue( "drives" )
 	local raid_level = luci.http.formvalue( "raid_level" )
 	local message_error = nil
@@ -90,7 +101,7 @@ function logical_add()
 	else
 		local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 		if is_valid then
-			local return_code, result = pcall( einarc.logical.add, raid_level, drives )
+			local return_code, result = pcall( einarc.api.logical.add, raid_level, drives )
 			if not return_code then
 				message_error = i18n("Failed to create logical disk")
 			end
