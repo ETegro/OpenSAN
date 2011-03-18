@@ -153,7 +153,7 @@ end
 --- einarc logical hotspare_add
 -- @param logical_id 0
 -- @param physical_id "0:1"
--- return Raise error if it fails
+-- @return Raise error if it fails
 M.logical.hotspare_add = function( logical_id, physical_id )
 	assert( logical_id and common.is_number( logical_id ) )
 	assert( physical_id and common.is_string( physical_id ) )
@@ -162,14 +162,32 @@ M.logical.hotspare_add = function( logical_id, physical_id )
 end
 
 --- einarc logical hotspare_delete
--- @param logical_id 0
+-- @param logical_id 777
 -- @param physical_id "0:1"
--- return Raise error if it fails
+-- @return Raise error if it fails
 M.logical.hotspare_delete = function( logical_id, physical_id )
 	assert( logical_id and common.is_number( logical_id ) )
 	assert( physical_id and common.is_string( physical_id ) )
 	output = run( "logical hotspare_delete " .. tostring( logical_id ) .. " " .. physical_id )
 	if not output then error( "einarc:logical.hotspare_delete() failed" ) end
+end
+
+--- einarc logical physical_list
+-- @param logical_id 0
+-- @return { “physical1_id” = “state”, “physical2_id” = “state” }
+M.logical.physical_list = function( logical_id )
+	-- 0:1	free
+	-- 0:2	hotspare
+	assert( logical_id and common.is_number( logical_id ) )
+	local output = run( "logical physical_list " .. tostring( logical_id ) )
+	if not output then error( "einarc:logical.physical_list() failed" ) end
+	local logical_physicals = {}
+	for _, line in ipairs( output ) do
+		local physical_id = string.match( line, "^([0-9:]+)" )
+		assert( physical_id )
+		logical_physicals[ physical_id ] = string.match( line, "^[0-9:]+\t(.*)$" ) or ""
+	end
+	return logical_physicals
 end
 
 M.physical = {}
