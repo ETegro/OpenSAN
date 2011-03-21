@@ -97,6 +97,7 @@ create_dl_directory()
 	else
 		rm -f "$DL_DIR"
 	fi
+	mkdir -p "$DL_DIR"
 	ln -s "$DL_PATH" "$DL_DIR"
 }
 
