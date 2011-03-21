@@ -19,4 +19,21 @@
 
 local M = {}
 
+local common = require( "astor2.common" )
+
+local function is_disk( disk )
+	assert( common.is_string( disk ) )
+	local dev_exists = string.match( disk, "^/dev/[^/]+$" )
+	if not dev_exists then return false end
+	return true
+end
+
+M.prepare_disk = function( disk )
+	assert( disk and is_disk( disk ) )
+	local result = common.system( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+	if result.return_code ~= 0 then error( "lvm:prepare_disk() failed" ) end
+	result = common.system( "pvcreate " .. disk )
+	if result.return_code ~= 0 then error( "lvm:prepare_disk() failed" ) end
+end
+
 return M
