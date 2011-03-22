@@ -41,4 +41,8 @@ M.physical_volume.remove = function( disk )
 	common.system_succeed( "pvremove " .. disk )
 end
 
+M.physical_volume.rescan = function()
+	common.system_succeed( "pvscan " )
+end
+
 return M
