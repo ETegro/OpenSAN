@@ -69,6 +69,12 @@ function M.system( cmdline )
 	return result
 end
 
+function M.system_succeed( cmdline )
+	local result = M.system( cmdline )
+	if result.return_code ~= 0 then error( "system() does not succeed" ) end
+	return result.stdout
+end
+
 --- Check if value is in array
 -- @param what Value to be checked
 -- @param array Array to search in
