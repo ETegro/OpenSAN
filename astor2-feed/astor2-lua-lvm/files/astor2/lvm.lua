@@ -99,4 +99,39 @@ M.VolumeGroup.remove = function( disk )
 	common.system_succeed( "vgremove " .. disk )
 end
 
+--------------------------------------------------------------------------
+-- Initialization
+--------------------------------------------------------------------------
+M.DM_MODULES = { "dm_mod", "dm_log", "dm_mirror", "dm_snapshot" }
+
+local function load_modules()
+	for _, dm_module in ipairs( M.DM_MODULES ) do
+		common.system_succeed( "modprobe " .. dm_module )
+	end
+end
+
+M.is_running = function()
+	-- TODO: replace with sysfs
+	for _, line in ipairs( common.system_succeed( "lsmod" ) ) do
+		if string.match( line, "dm_mod" ) then
+			return true
+		end
+	end
+	return false
+end
+
+local function restore_lvm()
+	common.system_succeed( "pvscan" )
+	common.system_succeed( "vgscan --mknodes" )
+	common.system_succeed( "vgchange -a y" )
+	common.system_succeed( "lvscan" )
+end
+
+M.start = function()
+	if M.is_running() then return end
+	local succeeded, result = pcall( load_modules )
+	if not succeeded then error( "lvm:start() failed" ) end
+	restore_lvm()
+end
+
 return M
