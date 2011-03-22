@@ -34,19 +34,45 @@ M.prepare_disk = function( disk )
 	common.system_succeed( "pvcreate " .. disk )
 end
 
-M.physical_volume = {}
+--------------------------------------------------------------------------
+-- PhysicalVolume
+--------------------------------------------------------------------------
+M.PhysicalVolume = {}
 
-M.physical_volume.remove = function( disk )
+M.PhysicalVolume.remove = function( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "pvremove " .. disk )
 end
 
-M.physical_volume.rescan = function()
+M.PhysicalVolume.rescan = function()
 	common.system_succeed( "pvscan" )
 end
 
-M.volume_group = {}
-M.physical_volume.remove = function( disk )
+M.PhysicalVolume.list = function()
+	local lines = common.system_succeed( "pvdisplay -c" )
+	for _, line in ipairs( lines ) do
+		if string.match( line, ":.*:.*:.*:" ) then
+		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
+		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^\s(%w+):%w+:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		extent = tonumber( extent )
+		if extent == 0 then extent = 4096 end
+		capacity = tonumber( capacity ) * 0.5
+		total = tonumber( total ) * extent / 1024
+		free = tonumber( free ) * extent / 1024
+		allocated = tonumber( allocated ) * extent / 1024
+		volumes = tonumber( volumes )
+		capacity = capacity / 1024
+		unusable = capacity % extent / 1024
+		end
+	end
+end
+
+--------------------------------------------------------------------------
+-- VolumeGroup
+--------------------------------------------------------------------------
+M.VolumeGroup = {}
+
+M.VolumeGroup.remove = function( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "vgremove " .. disk )
 end
