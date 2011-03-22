@@ -4,19 +4,19 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=astor2-lua-einarc
+PKG_NAME:=astor2-lua-lvm
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/astor2-lua-einarc
+define Package/astor2-lua-lvm
 	SECTION:=astor2
 	CATEGORY:=aStor2
-	TITLE:=Lua binding for Inquisitor's Einarc
-	URL:=http://www.inquisitor.ru/doc/einarc/
-	DEPENDS:=+lua +astor2-einarc +astor2-lua-common
+	TITLE:=Lua binding for LVM2
+	URL:=http://github.com/astor2-team/astor2
+	DEPENDS:=+lua +lvm2 +astor2-lua-common
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
@@ -29,9 +29,9 @@ endef
 define Build/Compile
 endef
 
-define Package/astor2-lua-einarc/install
+define Package/astor2-lua-lvm/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/astor2
 	$(INSTALL_DATA) ./files/astor2/*.lua $(1)/usr/lib/lua/astor2
 endef
 
-$(eval $(call BuildPackage,astor2-lua-einarc))
+$(eval $(call BuildPackage,astor2-lua-lvm))

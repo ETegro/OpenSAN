@@ -322,6 +322,7 @@ define Package/luci-app-diag-devinfo/conffiles
 endef
 
 $(eval $(call application,astor2-san,aStor2 SAN,\
+	+PACKAGE_luci-app-astor2-san:astor2-lua-common \
 	+PACKAGE_luci-app-astor2-san:astor2-lua-einarc))
 
 ### Hello World - luci application ###
