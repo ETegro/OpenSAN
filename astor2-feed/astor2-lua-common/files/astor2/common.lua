@@ -80,6 +80,7 @@ end
 -- @param array Array to search in
 -- @return True if exists, false otherwise
 function M.is_in_array( what, array )
+	assert( M.is_table( array ) )
 	local is_in_it = false
 	for _, v in ipairs( array ) do
 		if what == v then
