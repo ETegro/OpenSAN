@@ -2,6 +2,8 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Sergey Matveev <stargrave@stargrave.org>
+                          Vladimir Petukhov <vladimir.petukhov@etegro.com>
+
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -124,6 +126,17 @@ end
 function M.is_odd( n )
 	assert( M.is_number( n ) )
 	return n % 2 == 0
+end
+
+--- Get keys from hash
+-- @param { "key1" = { ... }, "key2" = { ... } }
+-- @return { "key1", "key2" }
+function M.keys( hash )
+	local keys_out = {}
+	for key,_ in pairs( hash ) do
+		keys_out[ #keys_out + 1 ] = key
+	end
+	return keys_out
 end
 
 return M
