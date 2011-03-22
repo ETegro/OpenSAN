@@ -65,6 +65,15 @@ M.PhysicalVolume.list = function()
 		capacity = capacity / 1024
 		unusable = capacity % extent / 1024
 
+		assert( common.is_number( total ) )
+		assert( common.is_number( free ) )
+		assert( common.is_number( allocated ) )
+		assert( common.is_number( volumes ) )
+		assert( common.is_number( capacity ) )
+		assert( common.is_number( unusable ) )
+		assert( common.is_number( extent ) )
+		assert( is_disk( device ) )
+
 		physical_volumes[ #physical_volumes + 1 ] = {
 			total = total,
 			free = free,
