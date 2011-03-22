@@ -49,12 +49,11 @@ M.PhysicalVolume.rescan = function()
 end
 
 M.PhysicalVolume.list = function()
-	local lines = common.system_succeed( "pvdisplay -c" )
 	local physical_volumes = {}
-	for _, line in ipairs( lines ) do
+	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
-		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s+([/%w]+):%w+:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s+([/%w]+):%w*:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
 		if extent == 0 then extent = 4096 end
 		capacity = tonumber( capacity ) * 0.5
@@ -97,6 +96,21 @@ M.VolumeGroup = {}
 M.VolumeGroup.remove = function( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "vgremove " .. disk )
+end
+
+M.VolumeGroup.list = function( disks )
+	assert( common.is_array( disks ) )
+	local physical_volumes = {}
+	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
+		if string.match( line, ":.*:.*:.*:" ) then
+			local disk, volume_group = string.match( line, "^%s+([/%w]+):(%w*):%d+:.*$" )
+			if volume_group and
+					not string.match( volume_group, "orphans_lvm2" ) and
+					common.is_in_array( disk, disks ) then
+				physical_volumes[ #physical_volumes + 1 ] = { disk = disk, volume_group = volume_group }
+			end
+		end
+	end
 end
 
 --------------------------------------------------------------------------
