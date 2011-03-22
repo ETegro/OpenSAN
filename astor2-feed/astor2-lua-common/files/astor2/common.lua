@@ -104,6 +104,13 @@ function M.is_table( obj )
 	return type( obj ) == type( {} )
 end
 
+--- Check if object is not empty array
+-- @param obj An object to check
+-- @return true or false
+function M.is_array( obj )
+	return M.is_table( obj ) and #obj ~= 0
+end
+
 --- Check if object is a number
 -- @param obj An object to check
 -- @return true or false
