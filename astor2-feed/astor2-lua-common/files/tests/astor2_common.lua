@@ -35,20 +35,29 @@ TestIsInArray = {}
 	end
 
 TestIsObj = {}
-	function TestIsInArray:test_number()
+	function TestIsObj:test_number()
 		assert( common.is_number( 13 ) )
 		assert( not common.is_number( "foo" ) )
 		assert( not common.is_number( {"foo"} ) )
 	end
-	function TestIsInArray:test_string()
+	function TestIsObj:test_string()
 		assert( common.is_string( "foo" ) )
 		assert( not common.is_string( 13 ) )
 		assert( not common.is_string( {"foo"} ) )
 	end
-	function TestIsInArray:test_table()
+	function TestIsObj:test_table()
 		assert( not common.is_table( "foo" ) )
 		assert( not common.is_table( 13 ) )
 		assert( common.is_table( {"foo"} ) )
+	end
+	function TestIsObj:test_odd()
+		assertError( common.is_odd, "13" )
+		assert( common.is_odd( 4 ) )
+		assert( not common.is_odd( 5 ) )
+	end
+	function TestIsObj:test_array()
+		assert( common.is_array( { 1,2,3,4,5 } ) )
+		assert( not common.is_array( { foo = "bar" } ) )
 	end
 
 LuaUnit:run()
