@@ -118,7 +118,7 @@ M.logical.add = function( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
 	local cmd = "logical add " .. raid_level
 	if drives then
-		assert( common.is_table( drives ), "drives have to be an array" )
+		assert( common.is_array( drives ), "drives have to be an array" )
 		cmd = cmd .. " " .. table.concat( drives, "," )
 	end
 	if size then
@@ -126,7 +126,7 @@ M.logical.add = function( raid_level, drives, size, properties )
 		cmd = cmd .. " " .. tostring( size )
 	end
 	if properties then
-		assert( common.is_table( properties ), "properties have to be a table" )
+		assert( common.is_array( properties ), "properties have to be a table" )
 		local serialized = {}
 		for k, v in pairs( properties ) do
 			serialized[ #serialized + 1 ] = k .. "=" .. v

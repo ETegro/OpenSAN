@@ -69,11 +69,18 @@ function M.system( cmdline )
 	return result
 end
 
+function M.system_succeed( cmdline )
+	local result = M.system( cmdline )
+	if result.return_code ~= 0 then error( "system() does not succeed" ) end
+	return result.stdout
+end
+
 --- Check if value is in array
 -- @param what Value to be checked
 -- @param array Array to search in
 -- @return True if exists, false otherwise
 function M.is_in_array( what, array )
+	assert( M.is_table( array ) )
 	local is_in_it = false
 	for _, v in ipairs( array ) do
 		if what == v then
@@ -95,6 +102,13 @@ end
 -- @return true or false
 function M.is_table( obj )
 	return type( obj ) == type( {} )
+end
+
+--- Check if object is not empty array
+-- @param obj An object to check
+-- @return true or false
+function M.is_array( obj )
+	return M.is_table( obj ) and #obj ~= 0
 end
 
 --- Check if object is a number

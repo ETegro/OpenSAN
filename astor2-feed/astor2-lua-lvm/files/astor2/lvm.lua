@@ -19,4 +19,133 @@
 
 local M = {}
 
+local common = require( "astor2.common" )
+
+local function is_disk( disk )
+	assert( disk and common.is_string( disk ) )
+	local dev_exists = string.match( disk, "^/dev/[^/]+$" )
+	if not dev_exists then return false end
+	return true
+end
+
+M.prepare_disk = function( disk )
+	assert( is_disk( disk ) )
+	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+	common.system_succeed( "pvcreate " .. disk )
+end
+
+--------------------------------------------------------------------------
+-- PhysicalVolume
+--------------------------------------------------------------------------
+M.PhysicalVolume = {}
+
+M.PhysicalVolume.remove = function( disk )
+	assert( is_disk( disk ) )
+	common.system_succeed( "pvremove " .. disk )
+end
+
+M.PhysicalVolume.rescan = function()
+	common.system_succeed( "pvscan" )
+end
+
+M.PhysicalVolume.list = function()
+	local physical_volumes = {}
+	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
+		if string.match( line, ":.*:.*:.*:" ) then
+		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
+		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s+([/%w]+):%w*:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		extent = tonumber( extent )
+		if extent == 0 then extent = 4096 end
+		capacity = tonumber( capacity ) * 0.5
+		total = tonumber( total ) * extent / 1024
+		free = tonumber( free ) * extent / 1024
+		allocated = tonumber( allocated ) * extent / 1024
+		volumes = tonumber( volumes )
+		capacity = capacity / 1024
+		unusable = capacity % extent / 1024
+
+		assert( common.is_number( total ) )
+		assert( common.is_number( free ) )
+		assert( common.is_number( allocated ) )
+		assert( common.is_number( volumes ) )
+		assert( common.is_number( capacity ) )
+		assert( common.is_number( unusable ) )
+		assert( common.is_number( extent ) )
+		assert( is_disk( device ) )
+
+		physical_volumes[ #physical_volumes + 1 ] = {
+			total = total,
+			free = free,
+			allocated = allocated,
+			volumes = volumes,
+			capacity = capacity,
+			unusable = unusable,
+			extent = extent,
+			device = device
+		}
+		end
+	end
+	return physical_volumes
+end
+
+--------------------------------------------------------------------------
+-- VolumeGroup
+--------------------------------------------------------------------------
+M.VolumeGroup = {}
+
+M.VolumeGroup.remove = function( disk )
+	assert( is_disk( disk ) )
+	common.system_succeed( "vgremove " .. disk )
+end
+
+M.VolumeGroup.list = function( disks )
+	assert( common.is_array( disks ) )
+	local physical_volumes = {}
+	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
+		if string.match( line, ":.*:.*:.*:" ) then
+			local disk, volume_group = string.match( line, "^%s+([/%w]+):(%w*):%d+:.*$" )
+			if volume_group and
+					not string.match( volume_group, "orphans_lvm2" ) and
+					common.is_in_array( disk, disks ) then
+				physical_volumes[ #physical_volumes + 1 ] = { disk = disk, volume_group = volume_group }
+			end
+		end
+	end
+end
+
+--------------------------------------------------------------------------
+-- Initialization
+--------------------------------------------------------------------------
+M.DM_MODULES = { "dm_mod", "dm_log", "dm_mirror", "dm_snapshot" }
+
+local function load_modules()
+	for _, dm_module in ipairs( M.DM_MODULES ) do
+		common.system_succeed( "modprobe " .. dm_module )
+	end
+end
+
+M.is_running = function()
+	-- TODO: replace with sysfs
+	for _, line in ipairs( common.system_succeed( "lsmod" ) ) do
+		if string.match( line, "dm_mod" ) then
+			return true
+		end
+	end
+	return false
+end
+
+local function restore_lvm()
+	common.system_succeed( "pvscan" )
+	common.system_succeed( "vgscan --mknodes" )
+	common.system_succeed( "vgchange -a y" )
+	common.system_succeed( "lvscan" )
+end
+
+M.start = function()
+	if M.is_running() then return end
+	local succeeded, result = pcall( load_modules )
+	if not succeeded then error( "lvm:start() failed" ) end
+	restore_lvm()
+end
+
 return M
