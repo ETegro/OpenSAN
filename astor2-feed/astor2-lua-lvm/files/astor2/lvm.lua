@@ -50,10 +50,11 @@ end
 
 M.PhysicalVolume.list = function()
 	local lines = common.system_succeed( "pvdisplay -c" )
+	local physical_volumes = {}
 	for _, line in ipairs( lines ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
-		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^\s(%w+):%w+:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s+([/%w]+):%w+:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
 		if extent == 0 then extent = 4096 end
 		capacity = tonumber( capacity ) * 0.5
@@ -63,8 +64,20 @@ M.PhysicalVolume.list = function()
 		volumes = tonumber( volumes )
 		capacity = capacity / 1024
 		unusable = capacity % extent / 1024
+
+		physical_volumes[ #physical_volumes + 1 ] = {
+			total = total,
+			free = free,
+			allocated = allocated,
+			volumes = volumes,
+			capacity = capacity,
+			unusable = unusable,
+			extent = extent,
+			device = device
+		}
 		end
 	end
+	return physical_volumes
 end
 
 --------------------------------------------------------------------------
