@@ -42,7 +42,13 @@ M.physical_volume.remove = function( disk )
 end
 
 M.physical_volume.rescan = function()
-	common.system_succeed( "pvscan " )
+	common.system_succeed( "pvscan" )
+end
+
+M.volume_group = {}
+M.physical_volume.remove = function( disk )
+	assert( is_disk( disk ) )
+	common.system_succeed( "vgremove " .. disk )
 end
 
 return M
