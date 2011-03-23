@@ -285,6 +285,29 @@ M.physical.unique_state_list = function ( physical_list )
 	return state_list
 end
 
+--- Sorted physical list
+-- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
+-- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free"} }
+M.physical.sorted_list = function( physical_list )
+	local state_list = M.physical.unique_state_list( physical_list )
+	local states = common.keys( state_list )
+	table.sort( states )
+	local sorted_ids = {}
+	local sorted_physical_list = {}
+	for _, state in ipairs( states ) do
+		local ids = state_list[ state ]
+		table.sort( ids, M.physical.sort_ids )
+		for _, id in ipairs( ids ) do
+			sorted_ids[ #sorted_ids + 1 ] = id
+		end
+	end
+	for _, id in ipairs( sorted_ids ) do
+		physical_list[ id ].id = id
+		sorted_physical_list[ #sorted_physical_list + 1 ] = physical_list[ id ]
+	end
+	return sorted_physical_list
+end
+
 M.task = {}
 
 --- einarc task list
