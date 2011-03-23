@@ -19,7 +19,8 @@
 ]]
 
 require( "luaunit" )
-common = require( "astor2.einarc" )
+common = require( "astor2.common" )
+einarc = require( "astor2.einarc" )
 
 TestSortPhysicals = {}
 
@@ -71,14 +72,14 @@ TestSortPhysicals = {}
 	end
 
 	function TestSortPhysicals:test_split_id()
-		local left, right = einarc.split_id( "0:1" )
+		local left, right = einarc.physical.split_id( "0:1" )
 		assertEquals( left, 0 )
 		assertEquals( right, 1 )
 	end
 
 	function TestSortPhysicals:test_sort_ids()
 		local ids = common.keys( self.physical_list )
-		table.sort( ids, einarc.physical.sort_physicals )
+		table.sort( ids, einarc.physical.sort_ids )
 		for i = 1, #ids do
 			assertEquals( ids[i], self.ids_sort[i] )
 		end
