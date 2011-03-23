@@ -141,6 +141,14 @@ M.VolumeGroup.list = function( disks )
 		}
 		end
 	end
+	for _, physical_volume in ipairs( physical_volumes ) do
+		for _, volume_group in ipairs( volume_groups ) do
+			if volume_group.name == physical_volume.volume_group then
+				volume_group.disks[ #volume_group.disks + 1 ] = physical_volume.disk
+			end
+		end
+	end
+	return volume_groups
 end
 
 --------------------------------------------------------------------------
