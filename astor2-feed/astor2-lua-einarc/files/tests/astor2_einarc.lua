@@ -159,5 +159,6 @@ TestSortPhysicals = {}
 					      table.concat( table_tspl, "---" ) )
 			end
 		end
+	end
 
 LuaUnit:run()
