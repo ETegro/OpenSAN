@@ -236,14 +236,38 @@ M.physical.is_hotspare = function( physical_id )
 	return output[1] == "1"
 end
 
--------- Sorting physicals
---
----Split physical ID
+-----------------------------------------------------------------------
+-- Sorting physicals
+-----------------------------------------------------------------------
+
+--- Split physical ID
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
-M.physical.split_id = function()
+M.physical.split_id = function( physical_id )
 	return tonumber( string.match( physical_id , "^([0-9]+):" ) ),
 	       tonumber( string.match( physical_id , ":([0-9]+)$" ) )
+end
+
+--- Sorting physical IDs
+-- @param two number from M.physical.split_id() 2, 3
+-- @return sort physicals ids
+M.physical.sort_ids = function( id1, id2 )
+	local left1, right1 = M.physical.split_id( id1 )
+	local left2, right2 = M.physical.split_id( id2 )
+	if left1 == left2 then
+		return right1 < right2
+	else
+		return left1 < left2
+	end
+end
+
+--- Sorting physicals
+-- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
+-- @return sorted physicals by ID
+M.physical.sort_physicals = function( physical_list )
+	local physical_ids = common.keys( physical_list )
+	table.sort( physical_ids, M.physical.sort_ids )
+	return physical_ids
 end
 
 M.task = {}
