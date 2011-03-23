@@ -236,6 +236,16 @@ M.physical.is_hotspare = function( physical_id )
 	return output[1] == "1"
 end
 
+-------- Sorting physicals
+--
+---Split physical ID
+-- @param physical_id "2:3"
+-- @return two number args 2, 3
+M.physical.split_id = function()
+	return tonumber( string.match( physical_id , "^([0-9]+):" ) ),
+	       tonumber( string.match( physical_id , ":([0-9]+)$" ) )
+end
+
 M.task = {}
 
 --- einarc task list
