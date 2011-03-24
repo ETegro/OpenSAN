@@ -236,6 +236,34 @@ M.physical.is_hotspare = function( physical_id )
 	return output[1] == "1"
 end
 
+M.task = {}
+
+--- einarc task list
+-- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
+M.task.list = function()
+	local output = run( "task list" )
+	if not output or #output == 0 then
+		return {}
+	end
+	local tasks = {}
+	for _, line in ipairs( output ) do
+		local id = string.match( line, "^([0-9]+)" )
+		assert( id )
+		tasks[ id ] = {
+			where = string.match( line, "^[0-9]+\t(.*)\t.*\t.*$" ) or "",
+			what = string.match( line, "^[0-9]+\t.*\t(.*)\t.*$" ) or "",
+			progress = tonumber( string.match( line, "^[0-9]+\t.*\t.*\t(.*)$" ) ) or 0,
+		}
+	end
+	return tasks
+end
+
+M.bbu = {}
+
+M.bbu.info = function()
+	local output = run( "bbu info" )
+end
+
 -----------------------------------------------------------------------
 -- Sorting physicals
 -----------------------------------------------------------------------
@@ -306,34 +334,6 @@ M.physical.sorted_list = function( physical_list )
 		sorted_physical_list[ #sorted_physical_list + 1 ] = physical_list[ id ]
 	end
 	return sorted_physical_list
-end
-
-M.task = {}
-
---- einarc task list
--- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
-M.task.list = function()
-	local output = run( "task list" )
-	if not output or #output == 0 then
-		return {}
-	end
-	local tasks = {}
-	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([0-9]+)" )
-		assert( id )
-		tasks[ id ] = {
-			where = string.match( line, "^[0-9]+\t(.*)\t.*\t.*$" ) or "",
-			what = string.match( line, "^[0-9]+\t.*\t(.*)\t.*$" ) or "",
-			progress = tonumber( string.match( line, "^[0-9]+\t.*\t.*\t(.*)$" ) ) or 0,
-		}
-	end
-	return tasks
-end
-
-M.bbu = {}
-
-M.bbu.info = function()
-	local output = run( "bbu info" )
 end
 
 return M
