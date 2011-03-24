@@ -66,6 +66,10 @@ local function split_by_comma( str )
 end
 
 M.adapter = {}
+M.physical = {}
+M.logical = {}
+M.task = {}
+M.bbu = {}
 
 --- einarc adapter get
 -- @param property "raidlevels"
@@ -84,7 +88,13 @@ M.adapter.get = function( property )
 	return output
 end
 
-M.logical = {}
+M.physical.is_id = function( id )
+	if string.match( id, "^%d+:%d+$" ) then
+		return true
+	else
+		return false
+	end
+end
 
 --- einarc logical list
 -- @return { 3 = { level = "1", drives = { "0:1", "0:2" }, capacity = 666.0, device = "/dev/md0", state = "normal" } }
@@ -183,14 +193,12 @@ M.logical.physical_list = function( logical_id )
 	if not output then error( "einarc:logical.physical_list() failed" ) end
 	local logical_physicals = {}
 	for _, line in ipairs( output ) do
-		local physical_id = string.match( line, "^([%d:]+)" ) -- TODO: replace to is_id
-		assert( physical_id )
+		local physical_id = string.match( line, "^([%d:]+)" )
+		assert( M.physical.is_id( physical_id ) )
 		logical_physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
 	end
 	return logical_physicals
 end
-
-M.physical = {}
 
 --- einarc physical list
 -- @return { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
@@ -201,8 +209,8 @@ M.physical.list = function()
 	if not output or #output == 0 then return {} end
 	local physicals = {}
 	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([%d:]+)" ) -- TODO
-		assert( id )
+		local id = string.match( line, "^([%d:]+)" )
+		assert( M.physical.is_id( id ) )
 		physicals[ id ] = {
 			model = string.match( line, "^[%d:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
 			revision = string.match( line, "^[%d:]+\t.*\t(.*)\t.*\t.*\t.*$" ) or "",
@@ -236,8 +244,6 @@ M.physical.is_hotspare = function( physical_id )
 	return output[1] == "1"
 end
 
-M.task = {}
-
 --- einarc task list
 -- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
 M.task.list = function()
@@ -258,8 +264,6 @@ M.task.list = function()
 	return tasks
 end
 
-M.bbu = {}
-
 M.bbu.info = function()
 	local output = run( "bbu info" )
 end
@@ -267,14 +271,6 @@ end
 -----------------------------------------------------------------------
 -- Sorting physicals
 -----------------------------------------------------------------------
-
-M.physical.is_id = function( id )
-	if string.match( id, "^%d+:%d+$" ) then
-		return true
-	else
-		return false
-	end
-end
 
 --- Split physical ID
 -- @param physical_id "2:3"
