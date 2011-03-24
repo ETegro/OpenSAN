@@ -307,6 +307,11 @@ end
 -- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 M.physical.sorted_list = function( physical_list )
 	assert( common.is_table( physical_list ) )
+	-- Validate that all keys are real physical IDs
+	for physical_id,_ in pairs( physical_list ) do
+		assert( M.physical.is_id( physical_id ) )
+	end
+
 	local state_list = common.unique_keys( "state", physical_list )
 	local states = common.keys( state_list )
 	table.sort( states )
