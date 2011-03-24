@@ -187,7 +187,7 @@ end
 
 --- einarc logical physical_list
 -- @param logical_id 0
--- @return { “physical1_id” = “state”, “physical2_id” = “state” }
+-- @return { "physical1_id" = "state", "physical2_id" = "state" }
 M.logical.physical_list = function( logical_id )
 	-- 0:1	free
 	-- 0:2	hotspare
