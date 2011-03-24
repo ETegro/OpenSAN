@@ -95,14 +95,14 @@ M.logical.list = function()
 	if not output or #output == 0 then return {} end
 	local logicals = {}
 	for _, line in ipairs( output ) do
-		local id = tonumber( string.match( line, "^([0-9]+)" ) )
+		local id = tonumber( string.match( line, "^(%d+)" ) )
 		assert( id )
 		logicals[ id ] = {
-			level = string.match( line, "^[0-9]+\t(.+)\t[0-9:,]+\t.*\t.*\t.*$" ) or "",
-			drives = split_by_comma( string.match( line, "^[0-9]+\t.+\t([0-9:,]+)\t.*\t.*\t.*$" ) ) or {},
-			capacity = tonumber( string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t([0-9\.]+)\t.*\t.*$" ) ) or 0,
-			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
-			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
+			level = string.match( line, "^%d+\t(.+)\t[%d:,]+\t.*\t.*\t.*$" ) or "",
+			drives = split_by_comma( string.match( line, "^%d+\t.+\t([%d:,]+)\t.*\t.*\t.*$" ) ) or {},
+			capacity = tonumber( string.match( line, "^%d+\t.+\t[%d:,]+\t([%d\.]+)\t.*\t.*$" ) ) or 0,
+			device = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t(.*)\t.*$" ) or "",
+			state = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
 	end
 	return logicals
@@ -183,9 +183,9 @@ M.logical.physical_list = function( logical_id )
 	if not output then error( "einarc:logical.physical_list() failed" ) end
 	local logical_physicals = {}
 	for _, line in ipairs( output ) do
-		local physical_id = string.match( line, "^([0-9:]+)" )
+		local physical_id = string.match( line, "^([%d:]+)" ) -- TODO: replace to is_id
 		assert( physical_id )
-		logical_physicals[ physical_id ] = string.match( line, "^[0-9:]+\t(.*)$" ) or ""
+		logical_physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
 	end
 	return logical_physicals
 end
@@ -201,14 +201,14 @@ M.physical.list = function()
 	if not output or #output == 0 then return {} end
 	local physicals = {}
 	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([0-9:]+)" )
+		local id = string.match( line, "^([%d:]+)" ) -- TODO
 		assert( id )
 		physicals[ id ] = {
-			model = string.match( line, "^[0-9:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
-			revision = string.match( line, "^[0-9:]+\t.*\t(.*)\t.*\t.*\t.*$" ) or "",
-			serial = string.match( line, "^[0-9:]+\t.*\t.*\t(.*)\t.*\t.*$" ) or "",
-			size = tonumber( string.match( line, "^[0-9:]+\t.*\t.*\t.*\t([0-9\.]+)\t.*$" ) ) or 0,
-			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
+			model = string.match( line, "^[%d:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
+			revision = string.match( line, "^[%d:]+\t.*\t(.*)\t.*\t.*\t.*$" ) or "",
+			serial = string.match( line, "^[%d:]+\t.*\t.*\t(.*)\t.*\t.*$" ) or "",
+			size = tonumber( string.match( line, "^[%d:]+\t.*\t.*\t.*\t([%d\.]+)\t.*$" ) ) or 0,
+			state = string.match( line, "^[%d:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
 	end
 	return physicals
@@ -247,12 +247,12 @@ M.task.list = function()
 	end
 	local tasks = {}
 	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([0-9]+)" )
+		local id = string.match( line, "^(%d+)" )
 		assert( id )
 		tasks[ id ] = {
-			where = string.match( line, "^[0-9]+\t(.*)\t.*\t.*$" ) or "",
-			what = string.match( line, "^[0-9]+\t.*\t(.*)\t.*$" ) or "",
-			progress = tonumber( string.match( line, "^[0-9]+\t.*\t.*\t(.*)$" ) ) or 0,
+			where = string.match( line, "^%d+\t(.*)\t.*\t.*$" ) or "",
+			what = string.match( line, "^%d+\t.*\t(.*)\t.*$" ) or "",
+			progress = tonumber( string.match( line, "^%d+\t.*\t.*\t(.*)$" ) ) or 0,
 		}
 	end
 	return tasks
@@ -280,8 +280,8 @@ end
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
 M.physical.split_id = function( physical_id )
-	return tonumber( string.match( physical_id , "^([0-9]+):" ) ),
-	       tonumber( string.match( physical_id , ":([0-9]+)$" ) )
+	return tonumber( string.match( physical_id , "^(%d+):" ) ),
+	       tonumber( string.match( physical_id , ":(%d+)$" ) )
 end
 
 --- Sorting physical IDs
