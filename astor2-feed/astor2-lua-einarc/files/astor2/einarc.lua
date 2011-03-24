@@ -272,7 +272,7 @@ M.bbu.info = function()
 end
 
 -----------------------------------------------------------------------
--- Sorting physicals
+-- Physicals sorting
 -----------------------------------------------------------------------
 
 --- Split physical ID
@@ -284,7 +284,8 @@ M.physical.split_id = function( physical_id )
 end
 
 --- Sorting physical IDs
--- @param two number from M.physical.split_id() 2, 3
+-- @param id1 Number to compare with
+-- @param id2 Number to compare with
 -- @return sort physicals ids
 M.physical.sort_ids = function( id1, id2 )
 	local left1, right1 = M.physical.split_id( id1 )
@@ -296,9 +297,9 @@ M.physical.sort_ids = function( id1, id2 )
 	end
 end
 
---- Sorting physicals
--- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
--- @return sorted physicals by ID
+--- Physical IDs sorting
+-- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
+-- @return Sorted physicals IDs
 M.physical.sort_physicals = function( physical_list )
 	local physical_ids = common.keys( physical_list )
 	table.sort( physical_ids, M.physical.sort_ids )
@@ -306,7 +307,7 @@ M.physical.sort_physicals = function( physical_list )
 end
 
 --- Sorted physical list
--- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
+-- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 -- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 M.physical.sorted_list = function( physical_list )
 	assert( common.is_table( physical_list ) )
