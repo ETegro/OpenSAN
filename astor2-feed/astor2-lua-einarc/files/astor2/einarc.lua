@@ -287,7 +287,7 @@ end
 
 --- Sorted physical list
 -- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
--- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free"} }
+-- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 M.physical.sorted_list = function( physical_list )
 	local state_list = M.physical.unique_state_list( physical_list )
 	local states = common.keys( state_list )

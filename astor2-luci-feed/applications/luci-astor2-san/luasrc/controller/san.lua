@@ -42,30 +42,34 @@ function index()
 end
 
 local function physical_logical_matrix()
-	local physical_drives = {}
+	local matrix = {}
 	local current_logical_pointer = 1
 	for logical_id, _ in pairs( einarc.logical.list() ) do
 		local logical_size = 0
-		for physical_id, _ in pairs( einarc.logical.physical_list( logical_id ) ) do
-			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id }
+		local physicals_to_sort = {}
+		for physical_id, state in pairs( einarc.logical.physical_list( logical_id ) ) do
+			physicals_to_sort[ physical_id ] = { state = state }
+		end
+		for _, physical_data in ipairs( einarc.physical.sorted_list( physicals_to_sort ) ) do
+			matrix[ #matrix + 1 ] = { physical_id = physical_data.id }
 			logical_size = logical_size + 1
 		end
-		physical_drives[ current_logical_pointer ].logical_size = logical_size
-		physical_drives[ current_logical_pointer ].logical_id = logical_id
+		matrix[ current_logical_pointer ].logical_size = logical_size
+		matrix[ current_logical_pointer ].logical_id = logical_id
 		current_logical_pointer = current_logical_pointer + 1
 	end
 	for physical_id, _ in pairs( einarc.physical.list() ) do
 		local found = false
-		for _, pair in ipairs( physical_drives ) do
+		for _, pair in ipairs( matrix ) do
 			if physical_id == pair.physical_id then
 				found = true
 			end
 		end
 		if not found then
-			physical_drives[ #physical_drives + 1 ] = { physical_id = physical_id }
+			matrix[ #matrix + 1 ] = { physical_id = physical_id }
 		end
 	end
-	return physical_drives
+	return matrix
 end
 
 local function logical_fillup_progress( logicals )
@@ -149,5 +153,3 @@ einarc_logical_add = function()
 
 	index_with_error( message_error )
 end
-
-
