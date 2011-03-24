@@ -88,6 +88,9 @@ M.adapter.get = function( property )
 	return output
 end
 
+--- Is this ID is physical id (having "666:13" kind of form)
+-- @param id "0:1"
+-- @return true/false
 M.physical.is_id = function( id )
 	if string.match( id, "^%d+:%d+$" ) then
 		return true
