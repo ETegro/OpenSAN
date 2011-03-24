@@ -11,7 +11,7 @@
 			<%= pair.logical_id %>
 			<%= logicals[ pair.logical_id ].level %> |
 			<%= logicals[ pair.logical_id ].state %> |
-			<% if logicals[ pair.logical_id ].progress %>
+			<% if logicals[ pair.logical_id ].progress then %>
 			<%= logicals[ pair.logical_id ].progress %> % |
 			<% end %>
 			<%= logicals[ pair.logical_id ].capacity %> MiB
