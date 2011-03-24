@@ -298,26 +298,11 @@ M.physical.sort_physicals = function( physical_list )
 	return physical_ids
 end
 
---- Created hash with unique state
--- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
--- @return { "free" = { "0:1" } }
-M.physical.unique_state_list = function ( physical_list )
-	local state_list = {}
-	for physical_id, physical_data in pairs( physical_list ) do
-		local state = physical_data.state
-		if not state_list[ state ] then
-			state_list[ state ] = {}
-		end
-		state_list[ state ][ #state_list[ state ] + 1 ] = physical_id
-	end
-	return state_list
-end
-
 --- Sorted physical list
 -- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
 -- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 M.physical.sorted_list = function( physical_list )
-	local state_list = M.physical.unique_state_list( physical_list )
+	local state_list = common.unique_keys( "state", physical_list )
 	local states = common.keys( state_list )
 	table.sort( states )
 	local sorted_ids = {}

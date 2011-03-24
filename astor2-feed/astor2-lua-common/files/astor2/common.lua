@@ -129,14 +129,30 @@ function M.is_odd( n )
 end
 
 --- Get keys from hash
--- @param { "key1" = { ... }, "key2" = { ... } }
+-- @param hash { "key1" = { ... }, "key2" = { ... } }
 -- @return { "key1", "key2" }
 function M.keys( hash )
-	local keys_out = {}
+	local keys = {}
 	for key,_ in pairs( hash ) do
-		keys_out[ #keys_out + 1 ] = key
+		keys[ #keys + 1 ] = key
 	end
-	return keys_out
+	return keys
+end
+
+--- Return unique-keyed hash
+-- @param key "state"
+-- @param hash { "0:1" = { state = "free", model = "some" }, "0:2" = { state = "failed", model = "some2" } }
+-- @return { free = { "0:1" }, failed = { "0:2" } }
+function M.unique_keys( key, hash )
+	assert( M.is_table( hash ) and not M.is_array( hash ) and key )
+	local uniques = {}
+	for obj_id, obj_data in pairs( hash ) do
+		if not uniques[ obj_data[ key ] ] then
+			uniques[ obj_data[ key ] ] = {}
+		end
+		uniques[ obj_data[ key ] ][ #uniques[ obj_data[ key ] ] + 1 ] = obj_id
+	end
+	return uniques
 end
 
 return M
