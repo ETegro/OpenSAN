@@ -268,6 +268,14 @@ end
 -- Sorting physicals
 -----------------------------------------------------------------------
 
+M.physical.is_id = function( id )
+	if string.match( id, "^%d+:%d+$" ) then
+		return true
+	else
+		return false
+	end
+end
+
 --- Split physical ID
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
@@ -302,6 +310,7 @@ end
 -- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
 -- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 M.physical.sorted_list = function( physical_list )
+	assert( common.is_table( physical_list ) )
 	local state_list = common.unique_keys( "state", physical_list )
 	local states = common.keys( state_list )
 	table.sort( states )
