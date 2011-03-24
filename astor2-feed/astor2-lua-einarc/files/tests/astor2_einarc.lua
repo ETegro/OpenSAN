@@ -139,25 +139,24 @@ TestSortPhysicals = {}
 
 	function TestSortPhysicals:test_sort_state_list()
 		local sorted_physical_list = einarc.physical.sorted_list( self.physical_list )
-		if #sorted_physical_list == #self.true_sorted_physical_list then
-			for i = 1, #sorted_physical_list do
-				local spl = sorted_physical_list
-				local tspl = self.true_sorted_physical_list
-				local table_spl = { spl[i].id,
-					            spl[i].model,
-					            spl[i].revision,
-					            spl[i].serial,
-					            spl[i].size,
-					            spl[i].state }
-				local table_tspl = { tspl[i].id,
-					             tspl[i].model,
-					             tspl[i].revision,
-					             tspl[i].serial,
-					             tspl[i].size,
-					             tspl[i].state }
-				assertEquals( table.concat( table_spl, "---" ),
-					      table.concat( table_tspl, "---" ) )
-			end
+		assertEquals( #sorted_physical_list, #self.true_sorted_physical_list )
+		for i = 1, #sorted_physical_list do
+			local spl = sorted_physical_list
+			local tspl = self.true_sorted_physical_list
+			local table_spl = { spl[i].id,
+				            spl[i].model,
+				            spl[i].revision,
+				            spl[i].serial,
+				            spl[i].size,
+				            spl[i].state }
+			local table_tspl = { tspl[i].id,
+				             tspl[i].model,
+				             tspl[i].revision,
+				             tspl[i].serial,
+				             tspl[i].size,
+				             tspl[i].state }
+			assertEquals( table.concat( table_spl, "---" ),
+				      table.concat( table_tspl, "---" ) )
 		end
 	end
 
