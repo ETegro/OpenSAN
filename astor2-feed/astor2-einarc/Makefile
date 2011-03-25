@@ -45,12 +45,14 @@ define Package/astor2-einarc/install
 	$(INSTALL_DIR) $(1)/usr/lib/ruby/site_ruby/1.9/raid/extensions
 	$(INSTALL_DIR) $(1)/usr/var/lib/einarc
 	$(INSTALL_DIR) $(1)/usr/var/lib/einarc/tools
+	$(INSTALL_DIR) $(1)/etc/init.d
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/einarc $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/einarc-install $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/raid-wizard-passthrough $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/raid-wizard-optimal $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/raid-wizard-clear $(1)/usr/bin
+	$(INSTALL_BIN) ./files/einarc.init $(1)/etc/init.d/einarc
 
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/raid/*.rb $(1)/usr/lib/ruby/site_ruby/1.9/raid
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/raid/extensions/hotspare.rb $(1)/usr/lib/ruby/site_ruby/1.9/raid/extensions
