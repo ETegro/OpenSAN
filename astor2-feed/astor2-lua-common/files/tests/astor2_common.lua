@@ -85,4 +85,34 @@ TestGetKeys = {}
 		end
 	end
 
+TestUniqueKeys = {}
+        function TestUniqueKeys:setUp()
+		self.hash = {
+			["0:1"] = { state = "free", model = "erste" },
+			["0:2"] = { state = "free", model = "zweite" },
+			["0:3"] = { state = "free", model = "dritte" },
+			["1:1"] = { state = "failed", model = "erste" },
+			["1:2"] = { state = "failed", model = "zweite" },
+			["1:3"] = { state = "failed", model = "dritte" }
+		}
+	end
+	function TestUniqueKeys:test_by_state()
+		local result = common.unique_keys( "state", self.hash )
+		assertEquals( #common.keys( result ), 2 )
+		assertEquals( #result["free"], 3 )
+		assertEquals( #result["failed"], 3 )
+		assert( common.is_in_array( "1:2", result["failed"] ) )
+		assert( common.is_in_array( "1:3", result["failed"] ) )
+		assert( not common.is_in_array( "0:3", result["failed"] ) )
+	end
+	function TestUniqueKeys:test_by_model()
+		local result = common.unique_keys( "model", self.hash )
+		assertEquals( #common.keys( result ), 3 )
+		assertEquals( #result["erste"], 2 )
+		assertEquals( #result["zweite"], 2 )
+		assertEquals( #result["dritte"], 2 )
+		assert( common.is_in_array( "1:2", result["zweite"] ) )
+		assert( common.is_in_array( "1:3", result["dritte"] ) )
+	end
+
 LuaUnit:run()

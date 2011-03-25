@@ -66,6 +66,10 @@ local function split_by_comma( str )
 end
 
 M.adapter = {}
+M.physical = {}
+M.logical = {}
+M.task = {}
+M.bbu = {}
 
 --- einarc adapter get
 -- @param property "raidlevels"
@@ -84,7 +88,16 @@ M.adapter.get = function( property )
 	return output
 end
 
-M.logical = {}
+--- Is this ID is physical id (having "666:13" kind of form)
+-- @param id "0:1"
+-- @return true/false
+M.physical.is_id = function( id )
+	if string.match( id, "^%d+:%d+$" ) then
+		return true
+	else
+		return false
+	end
+end
 
 --- einarc logical list
 -- @return { 3 = { level = "1", drives = { "0:1", "0:2" }, capacity = 666.0, device = "/dev/md0", state = "normal" } }
@@ -95,14 +108,14 @@ M.logical.list = function()
 	if not output or #output == 0 then return {} end
 	local logicals = {}
 	for _, line in ipairs( output ) do
-		local id = tonumber( string.match( line, "^([0-9]+)" ) )
+		local id = tonumber( string.match( line, "^(%d+)" ) )
 		assert( id )
 		logicals[ id ] = {
-			level = string.match( line, "^[0-9]+\t(.+)\t[0-9:,]+\t.*\t.*\t.*$" ) or "",
-			drives = split_by_comma( string.match( line, "^[0-9]+\t.+\t([0-9:,]+)\t.*\t.*\t.*$" ) ) or {},
-			capacity = tonumber( string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t([0-9\.]+)\t.*\t.*$" ) ) or 0,
-			device = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t(.*)\t.*$" ) or "",
-			state = string.match( line, "^[0-9]+\t.+\t[0-9:,]+\t.*\t.*\t(.*)$" ) or ""
+			level = string.match( line, "^%d+\t(.+)\t[%d:,]+\t.*\t.*\t.*$" ) or "",
+			drives = split_by_comma( string.match( line, "^%d+\t.+\t([%d:,]+)\t.*\t.*\t.*$" ) ) or {},
+			capacity = tonumber( string.match( line, "^%d+\t.+\t[%d:,]+\t([%d\.]+)\t.*\t.*$" ) ) or 0,
+			device = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t(.*)\t.*$" ) or "",
+			state = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t.*\t(.*)$" ) or ""
 		}
 	end
 	return logicals
@@ -174,7 +187,7 @@ end
 
 --- einarc logical physical_list
 -- @param logical_id 0
--- @return { “physical1_id” = “state”, “physical2_id” = “state” }
+-- @return { "physical1_id" = "state", "physical2_id" = "state" }
 M.logical.physical_list = function( logical_id )
 	-- 0:1	free
 	-- 0:2	hotspare
@@ -183,14 +196,12 @@ M.logical.physical_list = function( logical_id )
 	if not output then error( "einarc:logical.physical_list() failed" ) end
 	local logical_physicals = {}
 	for _, line in ipairs( output ) do
-		local physical_id = string.match( line, "^([0-9:]+)" )
-		assert( physical_id )
-		logical_physicals[ physical_id ] = string.match( line, "^[0-9:]+\t(.*)$" ) or ""
+		local physical_id = string.match( line, "^([%d:]+)" )
+		assert( M.physical.is_id( physical_id ) )
+		logical_physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
 	end
 	return logical_physicals
 end
-
-M.physical = {}
 
 --- einarc physical list
 -- @return { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
@@ -201,14 +212,14 @@ M.physical.list = function()
 	if not output or #output == 0 then return {} end
 	local physicals = {}
 	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([0-9:]+)" )
-		assert( id )
+		local id = string.match( line, "^([%d:]+)" )
+		assert( M.physical.is_id( id ) )
 		physicals[ id ] = {
-			model = string.match( line, "^[0-9:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
-			revision = string.match( line, "^[0-9:]+\t.*\t(.*)\t.*\t.*\t.*$" ) or "",
-			serial = string.match( line, "^[0-9:]+\t.*\t.*\t(.*)\t.*\t.*$" ) or "",
-			size = tonumber( string.match( line, "^[0-9:]+\t.*\t.*\t.*\t([0-9\.]+)\t.*$" ) ) or 0,
-			state = string.match( line, "^[0-9:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
+			model = string.match( line, "^[%d:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
+			revision = string.match( line, "^[%d:]+\t.*\t(.*)\t.*\t.*\t.*$" ) or "",
+			serial = string.match( line, "^[%d:]+\t.*\t.*\t(.*)\t.*\t.*$" ) or "",
+			size = tonumber( string.match( line, "^[%d:]+\t.*\t.*\t.*\t([%d\.]+)\t.*$" ) ) or 0,
+			state = string.match( line, "^[%d:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
 		}
 	end
 	return physicals
@@ -236,20 +247,45 @@ M.physical.is_hotspare = function( physical_id )
 	return output[1] == "1"
 end
 
+--- einarc task list
+-- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
+M.task.list = function()
+	local output = run( "task list" )
+	if not output or #output == 0 then
+		return {}
+	end
+	local tasks = {}
+	for _, line in ipairs( output ) do
+		local id = string.match( line, "^(%d+)" )
+		assert( id )
+		tasks[ id ] = {
+			where = string.match( line, "^%d+\t(.*)\t.*\t.*$" ) or "",
+			what = string.match( line, "^%d+\t.*\t(.*)\t.*$" ) or "",
+			progress = tonumber( string.match( line, "^%d+\t.*\t.*\t(.*)$" ) ) or 0,
+		}
+	end
+	return tasks
+end
+
+M.bbu.info = function()
+	local output = run( "bbu info" )
+end
+
 -----------------------------------------------------------------------
--- Sorting physicals
+-- Physicals sorting
 -----------------------------------------------------------------------
 
 --- Split physical ID
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
 M.physical.split_id = function( physical_id )
-	return tonumber( string.match( physical_id , "^([0-9]+):" ) ),
-	       tonumber( string.match( physical_id , ":([0-9]+)$" ) )
+	return tonumber( string.match( physical_id , "^(%d+):" ) ),
+	       tonumber( string.match( physical_id , ":(%d+)$" ) )
 end
 
 --- Sorting physical IDs
--- @param two number from M.physical.split_id() 2, 3
+-- @param id1 Number to compare with
+-- @param id2 Number to compare with
 -- @return sort physicals ids
 M.physical.sort_ids = function( id1, id2 )
 	local left1, right1 = M.physical.split_id( id1 )
@@ -261,35 +297,26 @@ M.physical.sort_ids = function( id1, id2 )
 	end
 end
 
---- Sorting physicals
--- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
--- @return sorted physicals by ID
+--- Physical IDs sorting
+-- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
+-- @return Sorted physicals IDs
 M.physical.sort_physicals = function( physical_list )
 	local physical_ids = common.keys( physical_list )
 	table.sort( physical_ids, M.physical.sort_ids )
 	return physical_ids
 end
 
---- Created hash with unique state
--- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
--- @return { "free" = { "0:1" } }
-M.physical.unique_state_list = function ( physical_list )
-	local state_list = {}
-	for physical_id, physical_data in pairs( physical_list ) do
-		local state = physical_data.state
-		if not state_list[ state ] then
-			state_list[ state ] = {}
-		end
-		state_list[ state ][ #state_list[ state ] + 1 ] = physical_id
-	end
-	return state_list
-end
-
 --- Sorted physical list
--- @param { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" }
--- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free"} }
+-- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
+-- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 M.physical.sorted_list = function( physical_list )
-	local state_list = M.physical.unique_state_list( physical_list )
+	assert( common.is_table( physical_list ) )
+	-- Validate that all keys are real physical IDs
+	for physical_id,_ in pairs( physical_list ) do
+		assert( M.physical.is_id( physical_id ) )
+	end
+
+	local state_list = common.unique_keys( "state", physical_list )
 	local states = common.keys( state_list )
 	table.sort( states )
 	local sorted_ids = {}
@@ -306,34 +333,6 @@ M.physical.sorted_list = function( physical_list )
 		sorted_physical_list[ #sorted_physical_list + 1 ] = physical_list[ id ]
 	end
 	return sorted_physical_list
-end
-
-M.task = {}
-
---- einarc task list
--- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
-M.task.list = function()
-	local output = run( "task list" )
-	if not output or #output == 0 then
-		return {}
-	end
-	local tasks = {}
-	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([0-9]+)" )
-		assert( id )
-		tasks[ id ] = {
-			where = string.match( line, "^[0-9]+\t(.*)\t.*\t.*$" ) or "",
-			what = string.match( line, "^[0-9]+\t.*\t(.*)\t.*$" ) or "",
-			progress = tonumber( string.match( line, "^[0-9]+\t.*\t.*\t(.*)$" ) ) or 0,
-		}
-	end
-	return tasks
-end
-
-M.bbu = {}
-
-M.bbu.info = function()
-	local output = run( "bbu info" )
 end
 
 return M

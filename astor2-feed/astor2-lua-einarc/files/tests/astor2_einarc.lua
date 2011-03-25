@@ -63,12 +63,6 @@ TestSortPhysicals = {}
 
 		self.ids_sort = { "0:1", "0:4", "1:3", "2:2", "10:1", "10:5", "10:11" }
 
-		self.unique_physical_list = {
-			["free"] = { "0:4", "10:11", "1:3" },
-			["0"] = { "2:2", "0:1" },
-			["hotspare"] = { "10:5" },
-			["failed"] = { "10:1" } }
-
 		self.true_sorted_physical_list = {
 			{ id = "0:1",
 			  model = "model4",
@@ -125,15 +119,6 @@ TestSortPhysicals = {}
 		table.sort( ids, einarc.physical.sort_ids )
 		for i = 1, #ids do
 			assertEquals( ids[i], self.ids_sort[i] )
-		end
-	end
-
-	function TestSortPhysicals:test_unique_state_list()
-		local state_list = einarc.physical.unique_state_list( self.physical_list )
-		local state_keys = common.keys( state_list )
-		for _, state in ipairs( state_keys ) do
-			assertEquals( table.concat( state_list[ tostring( state ) ], "---" ),
-			              table.concat( self.unique_physical_list[ tostring( state ) ], "---" ) )
 		end
 	end
 

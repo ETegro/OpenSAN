@@ -53,7 +53,7 @@ M.PhysicalVolume.list = function()
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
-		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s+([/%w]+):%w*:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([/%w]+):%w*:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
 		if extent == 0 then extent = 4096 end
 		capacity = tonumber( capacity ) * 0.5
@@ -103,7 +103,7 @@ M.VolumeGroup.list = function( disks )
 	local physical_volumes = {}
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
-			local disk, volume_group = string.match( line, "^%s+([/%w]+):(%w*):%d+:.*$" )
+			local disk, volume_group = string.match( line, "^%s*([/%w]+):(%w*):%d+:.*$" )
 			if volume_group and
 					not string.match( volume_group, "orphans_lvm2" ) and
 					common.is_in_array( disk, disks ) then
@@ -111,6 +111,44 @@ M.VolumeGroup.list = function( disks )
 			end
 		end
 	end
+	local volume_groups = {}
+	for _, line in ipairs( common.system_succeed( "vgdisplay -c" ) ) do
+		if string.match( line, ":.*:.*:.*:" ) then
+		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
+		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*(%w+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		extent = tonumber( extent )
+		max_volume = tonumber( max_volume )
+		total = tonumber( total ) * extent / 1024
+		allocated = tonumber( allocated ) * extent / 1024
+		free = tonumber( free ) * free / 1024
+		number = tonumber( string.match( name, "(%d+)$" ) )
+		assert( common.is_number( extent ) )
+		assert( common.is_number( max_volume ) )
+		assert( common.is_number( total ) )
+		assert( common.is_number( allocated ) )
+		assert( common.is_number( free ) )
+		assert( common.is_number( number ) )
+
+		volume_groups[ #volume_groups + 1 ] = {
+			name = name,
+			max_volume = max_volume,
+			extent = extent,
+			total = total,
+			allocated = allocated,
+			free = free,
+			number = number,
+			disks = {}
+		}
+		end
+	end
+	for _, physical_volume in ipairs( physical_volumes ) do
+		for _, volume_group in ipairs( volume_groups ) do
+			if volume_group.name == physical_volume.volume_group then
+				volume_group.disks[ #volume_group.disks + 1 ] = physical_volume.disk
+			end
+		end
+	end
+	return volume_groups
 end
 
 --------------------------------------------------------------------------
