@@ -3,7 +3,7 @@ START=50
 
 start()
 {
-	einarc adapter restart
+	einarc -t software -a 0 adapter restart
 }
 
 stop()
