@@ -18,8 +18,12 @@
 %>
 
 <%+header%>
+<script type="text/javascript" src="<%=resource%>/jquery.min.js"></script>
 
-<%+einarc/physical_list%>
-<%+einarc/logical_list%>
+<% if message_error then %>
+	<p class="error"><%= message_error %></p>
+<% end %>
+
+<%+san/overall_list%>
 
 <%+footer%>

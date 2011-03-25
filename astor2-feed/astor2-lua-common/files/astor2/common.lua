@@ -2,6 +2,8 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Sergey Matveev <stargrave@stargrave.org>
+                          Vladimir Petukhov <vladimir.petukhov@etegro.com>
+
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -124,6 +126,33 @@ end
 function M.is_odd( n )
 	assert( M.is_number( n ) )
 	return n % 2 == 0
+end
+
+--- Get keys from hash
+-- @param hash { "key1" = { ... }, "key2" = { ... } }
+-- @return { "key1", "key2" }
+function M.keys( hash )
+	local keys = {}
+	for key,_ in pairs( hash ) do
+		keys[ #keys + 1 ] = key
+	end
+	return keys
+end
+
+--- Return unique-keyed hash
+-- @param key "state"
+-- @param hash { "0:1" = { state = "free", model = "some" }, "0:2" = { state = "failed", model = "some2" } }
+-- @return { free = { "0:1" }, failed = { "0:2" } }
+function M.unique_keys( key, hash )
+	assert( M.is_table( hash ) and not M.is_array( hash ) and key )
+	local uniques = {}
+	for obj_id, obj_data in pairs( hash ) do
+		if not uniques[ obj_data[ key ] ] then
+			uniques[ obj_data[ key ] ] = {}
+		end
+		uniques[ obj_data[ key ] ][ #uniques[ obj_data[ key ] ] + 1 ] = obj_id
+	end
+	return uniques
 end
 
 return M
