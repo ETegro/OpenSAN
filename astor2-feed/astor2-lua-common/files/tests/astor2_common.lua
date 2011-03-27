@@ -151,34 +151,42 @@ TestTableComparing = {}
 	function TestTableComparing:test_compare_equal()
 		local copied = self.table
 		assertEquals( copied, self.table )
-		assert( common.table_compare( self.table, copied ) == true )
+		assert( common.compare_tables( self.table, copied ) == true )
 	end
 	function TestTableComparing:test_compare_equal_modified()
 		local copied = self.table
 		copied["foobar"] = 123
 		assertEquals( copied, self.table )
-		assert( common.table_compare( self.table, copied ) == true )
+		assert( common.compare_tables( self.table, copied ) == true )
 	end
 	function TestTableComparing:test_compare_array()
-		assertEquals( common.table_compare( {1,2,3}, {1,2,3} ), true )
-		assertEquals( common.table_compare( {"foo","bar"}, {"foo","bar"} ), true )
-		local a = { "foo", "bar" }
-		local b = common.deepcopy( a )
-		assertEquals( common.table_compare( a, b ), true )
-		b[3] = "baz"
-		assertEquals( common.table_compare( a, b ), false )
+		assertEquals( common.compare_tables( {1,2,3}, {1,2,3} ), true )
+		assertEquals( common.compare_tables( {"foo","bar"}, {"foo","bar"} ), true )
+		local a1 = { "foo", "bar" }
+		local a2 = common.deepcopy( a1 )
+		assertEquals( common.compare_tables( a1, a2 ), true )
+		a2[3] = "baz"
+		assertEquals( common.compare_tables( a1, a2 ), false )
 	end
+	function TestTableComparing:test_compare_hash_with_arrays()
+		local t1 = { foo = { 1,2,3 }, bar = "baz" }
+		local t2 = common.deepcopy( t1 )
+		assertEquals( common.compare_tables( t1, t2 ), true )
+		t2["baz"] = "foo"
+		assertEquals( common.compare_tables( t1, t2 ), false )
+	end
+
 	function TestTableComparing:test_compare()
 		local copied = common.deepcopy( self.table )
 		assert( self.table ~= copied )
-		assertEquals( common.table_compare( self.table, copied ), true )
+		assertEquals( common.compare_tables( self.table, copied ), true )
 	end
 	function TestTableComparing:test_compare_modified()
 		local copied = common.deepcopy( self.table )
 		assert( self.table ~= copied )
-		assertEquals( common.table_compare( self.table, copied ), true )
+		assertEquals( common.compare_tables( self.table, copied ), true )
 		copied["foobar"] = 123
-		assertEquals( common.table_compare( self.table, copied ), false )
+		assertEquals( common.compare_tables( self.table, copied ), false )
 	end
 
 LuaUnit:run()

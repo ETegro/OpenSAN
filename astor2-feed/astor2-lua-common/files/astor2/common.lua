@@ -176,17 +176,41 @@ function M.deepcopy( object )
 	return _copy( object )
 end
 
+local function compare_arrays( array1, array2 )
+	assert( M.is_array( array1 ) and M.is_array( array2 ) )
+	table.sort( array1 )
+	table.sort( array2 )
+	if array1 == array2 then return true end
+	if #array1 ~= #array2 then return false end
+	for i, v in ipairs( array1 ) do
+		if v ~= array2[ i ] then return false end
+	end
+	return true
+end
+
 --- Compare two tables together
 -- @param table1 First table to compare
 -- @param table2 Second table to compare
 -- @return true/false
-function M.table_compare( table1, table2 )
+function M.compare_tables( table1, table2 )
 	if table1 == table2 then return true end
-	for k, v in pairs( table1 ) do
-		if table1[ k ] ~= table2[ k ] then return false end
+	if M.is_array( table1 ) and M.is_array( table2 ) then
+		return compare_arrays( table1, table2 )
 	end
-	for k, v in pairs( table2 ) do
-		if table2[ k ] ~= table1[ k ] then return false end
+	if not compare_arrays( M.keys( table1 ), M.keys( table2 ) ) then
+		return false
+	end
+	for k, v in pairs( table1 ) do
+		if M.is_array( v ) then
+			if not M.is_array( table2[ k ] ) then
+				return false
+			end
+			if not compare_arrays( v, table2[ k ] ) then
+				return false
+			end
+		else
+			if v ~= table2[ k ] then return false end
+		end
 	end
 	return true
 end
