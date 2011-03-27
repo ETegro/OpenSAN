@@ -208,6 +208,13 @@ function M.compare_tables( table1, table2 )
 			if not compare_arrays( v, table2[ k ] ) then
 				return false
 			end
+		elseif M.is_table( v ) then
+			if not M.is_table( table2[ k ] ) then
+				return false
+			end
+			if not M.compare_tables( v, table2[ k ] ) then
+				return false
+			end
 		else
 			if v ~= table2[ k ] then return false end
 		end
