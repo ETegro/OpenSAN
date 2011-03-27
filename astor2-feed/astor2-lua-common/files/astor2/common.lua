@@ -3,7 +3,6 @@
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Sergey Matveev <stargrave@stargrave.org>
                           Vladimir Petukhov <vladimir.petukhov@etegro.com>
-
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -153,6 +152,28 @@ function M.unique_keys( key, hash )
 		uniques[ obj_data[ key ] ][ #uniques[ obj_data[ key ] ] + 1 ] = obj_id
 	end
 	return uniques
+end
+
+--- Deep copy table
+-- Taken from http://lua-users.org/wiki/CopyTable
+-- @param object Table to copy
+-- @return Copied table object
+function M.deepcopy( object )
+	local lookup_table = {}
+	local function _copy( object )
+		if type( object ) ~= "table" then
+			return object
+		elseif lookup_table[ object ] then
+			return lookup_table[ object ]
+		end
+		local new_table = {}
+		lookup_table[ object ] = new_table
+		for index, value in pairs( object ) do
+			new_table[ _copy( index ) ] = _copy( value )
+		end
+		return setmetatable( new_table, getmetatable( object ) )
+	end
+	return _copy( object )
 end
 
 return M

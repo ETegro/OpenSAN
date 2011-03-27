@@ -115,4 +115,38 @@ TestUniqueKeys = {}
 		assert( common.is_in_array( "1:3", result["dritte"] ) )
 	end
 
+TestTableComparing = {}
+	function TestTableComparing:setUp()
+		self.table = {
+			foo = { "foo", "bar", "baz" },
+			bar = { 1,2,3,4,5 },
+			baz = "foobar",
+			foobar = 666,
+			foobaz = { some = "value", another = "value2" }
+		}
+	end
+	function TestTableComparing:test_deepcopy()
+		local copied = common.deepcopy( self.table )
+		assert( common.is_table( copied ) )
+		assert( common.is_array( copied["foo"] ) )
+		assertEquals( #copied["foo"], 3 )
+		assertEquals( copied["foo"][1], "foo" )
+		assertEquals( copied["foo"][2], "bar" )
+		assertEquals( copied["foo"][3], "baz" )
+		assert( common.is_array( copied["bar"] ) )
+		assertEquals( #copied["bar"], 5 )
+		assertEquals( copied["bar"][1], 1 )
+		assertEquals( copied["bar"][2], 2 )
+		assertEquals( copied["bar"][3], 3 )
+		assertEquals( copied["bar"][4], 4 )
+		assertEquals( copied["bar"][5], 5 )
+		assert( common.is_string( copied["baz"] ) )
+		assertEquals( copied["baz"], "foobar" )
+		assert( common.is_number( copied["foobar"] ) )
+		assertEquals( copied["foobar"], 666 )
+		assert( common.is_table( copied["foobaz"] ) )
+		assertEquals( copied["foobaz"]["some"], "value" )
+		assertEquals( copied["foobaz"]["another"], "value2" )
+	end
+
 LuaUnit:run()
