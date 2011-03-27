@@ -159,17 +159,26 @@ TestTableComparing = {}
 		assertEquals( copied, self.table )
 		assert( common.table_compare( self.table, copied ) == true )
 	end
+	function TestTableComparing:test_compare_array()
+		assertEquals( common.table_compare( {1,2,3}, {1,2,3} ), true )
+		assertEquals( common.table_compare( {"foo","bar"}, {"foo","bar"} ), true )
+		local a = { "foo", "bar" }
+		local b = common.deepcopy( a )
+		assertEquals( common.table_compare( a, b ), true )
+		b[3] = "baz"
+		assertEquals( common.table_compare( a, b ), false )
+	end
 	function TestTableComparing:test_compare()
 		local copied = common.deepcopy( self.table )
 		assert( self.table ~= copied )
-		assert( common.table_compare( self.table, copied ) == true )
-		copied["foobar"] = 123
-		assert( common.table_compare( self.table, copied ) == false )
+		assertEquals( common.table_compare( self.table, copied ), true )
 	end
 	function TestTableComparing:test_compare_modified()
 		local copied = common.deepcopy( self.table )
+		assert( self.table ~= copied )
+		assertEquals( common.table_compare( self.table, copied ), true )
 		copied["foobar"] = 123
-		assert( common.table_compare( self.table, copied ) == false )
+		assertEquals( common.table_compare( self.table, copied ), false )
 	end
 
 LuaUnit:run()

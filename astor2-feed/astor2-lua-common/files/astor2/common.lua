@@ -182,6 +182,13 @@ end
 -- @return true/false
 function M.table_compare( table1, table2 )
 	if table1 == table2 then return true end
+	for k, v in pairs( table1 ) do
+		if table1[ k ] ~= table2[ k ] then return false end
+	end
+	for k, v in pairs( table2 ) do
+		if table2[ k ] ~= table1[ k ] then return false end
+	end
+	return true
 end
 
 return M
