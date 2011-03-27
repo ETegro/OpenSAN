@@ -199,21 +199,11 @@ end
 function M.compare_tables( table1, table2 )
 	assert( M.is_table( table1 ) and M.is_table( table2 ) )
 	if table1 == table2 then return true end
-	if M.is_array( table1 ) and M.is_array( table2 ) then
-		return M.compare_arrays( table1, table2 )
-	end
 	if not M.compare_arrays( M.keys( table1 ), M.keys( table2 ) ) then
 		return false
 	end
 	for k, v in pairs( table1 ) do
-		if M.is_array( v ) then
-			if not M.is_array( table2[ k ] ) then
-				return false
-			end
-			if not M.compare_arrays( v, table2[ k ] ) then
-				return false
-			end
-		elseif M.is_table( v ) then
+		if M.is_table( v ) then
 			if not M.is_table( table2[ k ] ) then
 				return false
 			end
