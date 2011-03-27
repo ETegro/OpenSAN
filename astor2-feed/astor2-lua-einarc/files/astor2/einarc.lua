@@ -279,6 +279,7 @@ end
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
 M.physical.split_id = function( physical_id )
+	assert( M.physical.is_id( physical_id ) )
 	return tonumber( string.match( physical_id , "^(%d+):" ) ),
 	       tonumber( string.match( physical_id , ":(%d+)$" ) )
 end
