@@ -2,6 +2,7 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Vladimir Petukhov <vladimir.petukhov@etegro.com>
+                          Sergey Matveev <stargrave@stargrave.org>
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -21,8 +22,15 @@ require( "luaunit" )
 common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 
-TestSortPhysicals = {}
+TestIsId = {}
+	function TestIsId:test_is_id()
+		assertEquals( einarc.physical.is_id( "foo:bar" ), false )
+		assertEquals( einarc.physical.is_id( "10:bar" ), false )
+		assertEquals( einarc.physical.is_id( "10:20" ), true )
+		assertEquals( einarc.physical.is_id( "10_20" ), false )
+	end
 
+TestSortPhysicals = {}
 	function TestSortPhysicals:setUp()
 		self.physical_list = {
 			[ "0:4" ] = { model = "model1",
