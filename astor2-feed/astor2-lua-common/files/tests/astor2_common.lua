@@ -148,5 +148,12 @@ TestTableComparing = {}
 		assertEquals( copied["foobaz"]["some"], "value" )
 		assertEquals( copied["foobaz"]["another"], "value2" )
 	end
+	function TestTableComparing:test_compare()
+		local copied = common.deepcopy( self.table )
+		assert( self.table ~= copied )
+		assert( common.table_compare( self.table, copied ) == true )
+		copied["foobar"] = 123
+		assert( common.table_compare( self.table, copied ) == false )
+	end
 
 LuaUnit:run()

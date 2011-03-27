@@ -176,4 +176,11 @@ function M.deepcopy( object )
 	return _copy( object )
 end
 
+--- Compare two tables together
+-- @param table1 First table to compare
+-- @param table2 Second table to compare
+-- @return true/false
+function M.table_compare( table1, table2 )
+end
+
 return M
