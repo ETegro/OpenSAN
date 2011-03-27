@@ -117,6 +117,8 @@ TestSortPhysicals = {}
 	end
 
 	function TestSortPhysicals:test_split_id()
+		assertError( einarc.physical.split_id, "foobar" )
+		assertError( einarc.physical.split_id, "foo:bar" )
 		local left, right = einarc.physical.split_id( "0:1" )
 		assertEquals( left, 0 )
 		assertEquals( right, 1 )
