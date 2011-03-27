@@ -181,6 +181,7 @@ end
 -- @param table2 Second table to compare
 -- @return true/false
 function M.table_compare( table1, table2 )
+	if table1 == table2 then return true end
 end
 
 return M
