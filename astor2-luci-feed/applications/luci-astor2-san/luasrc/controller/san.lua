@@ -105,8 +105,8 @@ end
 local function is_valid_raid_configuration( raid_level, drives )
 	local i18n = luci.i18n.translate
 	local VALIDATORS = {
-		["linear"] = { validator = function( drives ) return #drives == 1 end,
-		               message = i18n("Linear level requires exactly single drive") },
+		["linear"] = { validator = function( drives ) return #drives > 0 end,
+		               message = i18n("Linear level requires at least one drive") },
 		["passthrough"] = { validator = function( drives ) return #drives == 1 end,
 		                    message = i18n("Passthrough level requries exactly single drive") },
 		["0"] = { validator = function( drives ) return #drives >= 2 end,
