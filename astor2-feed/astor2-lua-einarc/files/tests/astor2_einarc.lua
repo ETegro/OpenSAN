@@ -127,7 +127,7 @@ TestSortPhysicals = {}
 	function TestSortPhysicals:test_sort_ids()
 		local ids = common.keys( self.physical_list )
 		table.sort( ids, einarc.physical.sort_ids )
-		assertEquals( common.compare_arrays( ids, self.ids_sort ), true )
+		assertEquals( common.compare_tables( ids, self.ids_sort ), true )
 	end
 
 	function TestSortPhysicals:test_sort_state_list()
