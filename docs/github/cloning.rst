@@ -11,7 +11,7 @@
 Измените автоматически прописанный удалённый репозиторий в
 **.git/config** с целью использования конкретно astor2-team аккаунта::
 
-  git remote set-url origin "git@github-astor2:astor2-team/astor2.git"::
+  git remote set-url origin "git@github-astor2:astor2-team/astor2.git"
 
 .. warning::
 
