@@ -54,15 +54,9 @@ local function run( args )
 	return result.stdout
 end
 
--- Taken from http://lua-users.org/wiki/SplitJoin
 local function split_by_comma( str )
 	assert( str and common.is_string( str ) )
-	local words = {}
-	local pattern = string.format( "([^%s]+)", "," )
-	string.gsub( str,
-	             pattern,
-	             function( word ) words[ #words + 1 ] = word end )
-        return words
+	return common.split_by( str, "," )
 end
 
 M.adapter = {}

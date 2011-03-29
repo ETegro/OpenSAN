@@ -115,6 +115,14 @@ TestUniqueKeys = {}
 		assert( common.is_in_array( "1:3", result["dritte"] ) )
 	end
 
+TestSplitting = {}
+	function TestSplitting:test_splitting_comma()
+		assert( common.compare_tables( common.split_by( "foo,bar,baz", "," ), { "foo", "bar", "baz" } ) )
+	end
+	function TestSplitting:test_splitting_whitespace()
+		assert( common.compare_tables( common.split_by( "foo bar   baz", " " ), { "foo", "bar", "baz" } ) )
+	end
+
 TestTableComparing = {}
 	function TestTableComparing:setUp()
 		self.table = {

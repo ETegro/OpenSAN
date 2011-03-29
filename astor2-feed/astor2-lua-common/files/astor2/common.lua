@@ -219,6 +219,22 @@ function M.ppt( table )
 	end
 end
 
+--- Split string by some separator
+-- Taken from http://lua-users.org/wiki/SplitJoin
+-- @param str String to separate
+-- @param separator Words separator
+-- @return An array of words
+function M.split_by( str, separator )
+	assert( str and common.is_string( str ) )
+	assert( separator and common.is_string( separator ) )
+	local words = {}
+	local pattern = string.format( "([^%s]+)", separator )
+	string.gsub( str,
+	             pattern,
+	             function( word ) words[ #words + 1 ] = word end )
+        return words
+end
+
 ------------------------------------------------------------------------
 -- OOP
 ------------------------------------------------------------------------
