@@ -213,12 +213,39 @@ function M.LogicalVolume:rescan()
 	common.system_succeed( "lvscan" )
 end
 
---[[
-function M.LogicalVolume:list( volume_groups )
-	for _, line in ipairs( common.system_succeed( "lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
-	end
+function M.LogicalVolume:new( attrs )
+	assert( common.is_string( attrs.name ) )
+	assert( is_disk( attrs.device ) )
+	assert( common.is_table( attrs.volume_group ) )
+	assert( common.is_number( attrs.size ) )
+	return setmetatable( attrs, LogicalVolume_mt )
 end
-]]
+
+function M.LogicalVolume:list( volume_groups )
+	assert( volume_groups and common.is_table( volume_groups ) )
+	local result = {}
+	for _, line in ipairs( common.system_succeed( "lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
+		local splitted = common.split_by( line, " " )
+		if splitted[4] then
+			-- TODO: snapshots
+			return true
+		else
+			local volume_group = nil
+			for _, volume_group in ipairs( volume_groups ) do
+				if volume_group.name == splitted[2] then
+					volume_group = splitted[2]
+				end
+			end
+			result[ splitted[1] ] = M.LogicalVolume:new({
+				name = splitted[1],
+				device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
+				volume_group = volume_group,
+				size = tonumber( splitted[3] )
+			})
+		end
+	end
+	return common.values( result )
+end
 
 --------------------------------------------------------------------------
 -- Initialization
