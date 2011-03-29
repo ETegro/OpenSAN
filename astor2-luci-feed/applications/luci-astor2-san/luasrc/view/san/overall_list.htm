@@ -1,6 +1,6 @@
 <form id="form_physical" method="post" action="<%=luci.dispatcher.build_url("san", "einarc_logical_add")%>">
 
-<table border="0px" bordercolor="#ccc" cellpadding="0" cellspacing="0">
+<table border="1px" bordercolor="#ccc" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>Physical list</td>
 		<td>Logical list</td>
@@ -30,7 +30,7 @@
 			</table>
 		</td>
 		<% if pair.logical_id then %>
-		<td rowspan="<%= pair.logical_size %>" class="border-top-right-bottom">
+		<td rowspan="<%= pair.logical_size %>" valign="top" class="border-top-right-bottom">
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td><input type="checkbox" name="name_logical" value="<%= pair.logical_id %>" /></td>
@@ -83,7 +83,7 @@
 
 <div id="submit_button" class="to_hide">
 	<p>
-		<input type="submit" />
+		<input type="submit" value="Create RAID" />
 	</p>
 </div>
 </form>
@@ -92,6 +92,7 @@
 
 //styles
 
+/*
 $( 'td.border' ).css( 'background-color', '#f0f' )
 $( 'td.border-top-left' ).css( {
 	'border-width': '10px 0 0 10px',
@@ -113,24 +114,27 @@ $( 'td.border-left' ).css( {
 	'border-width': '0 0 0 10px',
 	'border-style': 'solid',
 	'border-color': '#f0f' } )
+*/
 
 // effects
 
 $( '.to_hide' ).hide();
 $( '.to_hide2' ).hide();
 $( 'form input:checkbox[ name = "drives" ]' ).click( function() {
-	if ( $( 'form input:checkbox[ name = "drives" ]' ).is( ":checked" ) ) {
-		$( '.to_hide' ).fadeIn( 'slow' );
+	if ( $( this ).is( ':checked' ) ) {
+		var parent_selector_to_show = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr:hidden' ).css( 'background-color', 'yellow' )
+		$( parent_selector_to_show ).fadeIn( 'fast' );
 	} else {
-		$( '.to_hide' ).fadeOut( 'slow' );
+		var parent_selector_to_hide = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'red' )
+		$( parent_selector_to_hide ).fadeOut( 'fast' );
 	}
 } );
 
 $( ' form input:checkbox[ name = "name_logical" ]' ).click( function() {
-	if ( $( 'form input:checkbox[ name = "name_logical" ]' ).is( ":checked" ) ) {
-		$( '.to_hide2' ).fadeIn( 'slow' );
+	if ( $( 'form input:checkbox[ name = "name_logical" ]' ).is( ':checked' ) ) {
+		$( '.to_hide2' ).fadeIn( 'fast' );
 	} else {
-		$(".to_hide2").fadeOut('slow');
+		$( '.to_hide2' ).fadeOut( 'fast' );
 	}
 } );
 
