@@ -210,4 +210,13 @@ function M.compare_tables( table1, table2 )
 	return true
 end
 
+--- Pretty printing of table
+-- @param table Table to print
+function M.ppt( table )
+	assert( M.is_table( table ) )
+	for k, v in pairs( table ) do
+		print( k, v )
+	end
+end
+
 return M
