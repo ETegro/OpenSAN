@@ -54,17 +54,6 @@ local function run( args )
 	return result.stdout
 end
 
--- Taken from http://lua-users.org/wiki/SplitJoin
-local function split_by_comma( str )
-	assert( str and common.is_string( str ) )
-	local words = {}
-	local pattern = string.format( "([^%s]+)", "," )
-	string.gsub( str,
-	             pattern,
-	             function( word ) words[ #words + 1 ] = word end )
-        return words
-end
-
 M.adapter = {}
 M.physical = {}
 M.logical = {}
@@ -112,7 +101,7 @@ M.logical.list = function()
 		assert( id )
 		logicals[ id ] = {
 			level = string.match( line, "^%d+\t(.+)\t[%d:,]+\t.*\t.*\t.*$" ) or "",
-			drives = split_by_comma( string.match( line, "^%d+\t.+\t([%d:,]+)\t.*\t.*\t.*$" ) ) or {},
+			drives = common.split_by( string.match( line, "^%d+\t.+\t([%d:,]+)\t.*\t.*\t.*$" ), "," ) or {},
 			capacity = tonumber( string.match( line, "^%d+\t.+\t[%d:,]+\t([%d\.]+)\t.*\t.*$" ) ) or 0,
 			device = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t.*\t(.*)$" ) or ""

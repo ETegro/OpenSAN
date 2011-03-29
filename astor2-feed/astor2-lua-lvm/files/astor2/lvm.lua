@@ -28,61 +28,63 @@ local function is_disk( disk )
 	return true
 end
 
-M.prepare_disk = function( disk )
+--------------------------------------------------------------------------
+-- PhysicalVolume
+--------------------------------------------------------------------------
+M.PhysicalVolume = {}
+local PhysicalVolume_mt = common.Class( M.PhysicalVolume )
+
+function M.PhysicalVolume:new( attrs )
+	assert( common.is_number( attrs.total ) )
+	assert( common.is_number( attrs.free ) )
+	assert( common.is_number( attrs.allocated ) )
+	assert( common.is_number( attrs.volumes ) )
+	assert( common.is_number( attrs.capacity ) )
+	assert( common.is_number( attrs.unusable ) )
+	assert( common.is_number( attrs.extent ) )
+	assert( common.is_string( attrs.volume_group ) )
+	assert( is_disk( attrs.device ) )
+	return setmetatable( attrs, PhysicalVolume_mt )
+end
+
+function M.PhysicalVolume:create( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
 	common.system_succeed( "pvcreate " .. disk )
 end
 
---------------------------------------------------------------------------
--- PhysicalVolume
---------------------------------------------------------------------------
-M.PhysicalVolume = {}
-
-M.PhysicalVolume.remove = function( disk )
-	assert( is_disk( disk ) )
-	common.system_succeed( "pvremove " .. disk )
+function M.PhysicalVolume:remove()
+	assert( is_disk( self.device ) )
+	common.system_succeed( "pvremove " .. self.device )
 end
 
-M.PhysicalVolume.rescan = function()
+function M.PhysicalVolume:rescan()
 	common.system_succeed( "pvscan" )
 end
 
-M.PhysicalVolume.list = function()
+function M.PhysicalVolume:list()
 	local physical_volumes = {}
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
-		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([/%w]+):%w*:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		local device, volume_group, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([/%w]+):([^:]*):(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
 		if extent == 0 then extent = 4096 end
 		capacity = tonumber( capacity ) * 0.5
-		total = tonumber( total ) * extent / 1024
-		free = tonumber( free ) * extent / 1024
-		allocated = tonumber( allocated ) * extent / 1024
-		volumes = tonumber( volumes )
 		capacity = capacity / 1024
 		unusable = capacity % extent / 1024
 
-		assert( common.is_number( total ) )
-		assert( common.is_number( free ) )
-		assert( common.is_number( allocated ) )
-		assert( common.is_number( volumes ) )
-		assert( common.is_number( capacity ) )
-		assert( common.is_number( unusable ) )
-		assert( common.is_number( extent ) )
-		assert( is_disk( device ) )
-
-		physical_volumes[ #physical_volumes + 1 ] = {
-			total = total,
-			free = free,
-			allocated = allocated,
-			volumes = volumes,
+		physical_volumes[ #physical_volumes + 1 ] = M.PhysicalVolume:new( {
+			total = tonumber( total ) * extent / 1024,
+			free = tonumber( free ) * extent / 1024,
+			allocated = tonumber( allocated ) * extent / 1024,
+			volumes = tonumber( volumes ),
 			capacity = capacity,
 			unusable = unusable,
 			extent = extent,
-			device = device
-		}
+			device = device,
+			volume_group = volume_group
+		} )
 		end
 	end
 	return physical_volumes
@@ -92,63 +94,156 @@ end
 -- VolumeGroup
 --------------------------------------------------------------------------
 M.VolumeGroup = {}
+local VolumeGroup_mt = common.Class( M.VolumeGroup )
 
-M.VolumeGroup.remove = function( disk )
-	assert( is_disk( disk ) )
-	common.system_succeed( "vgremove " .. disk )
+function M.VolumeGroup:new( attrs )
+	assert( common.is_number( attrs.extent ) )
+	assert( common.is_number( attrs.max_volume ) )
+	assert( common.is_number( attrs.total ) )
+	assert( common.is_number( attrs.allocated ) )
+	assert( common.is_number( attrs.free ) )
+	--assert( common.is_number( attrs.number ) )
+	return setmetatable( attrs, VolumeGroup_mt )
 end
 
-M.VolumeGroup.list = function( disks )
-	assert( common.is_array( disks ) )
-	local physical_volumes = {}
-	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
-		if string.match( line, ":.*:.*:.*:" ) then
-			local disk, volume_group = string.match( line, "^%s*([/%w]+):(%w*):%d+:.*$" )
-			if volume_group and
-					not string.match( volume_group, "orphans_lvm2" ) and
-					common.is_in_array( disk, disks ) then
-				physical_volumes[ #physical_volumes + 1 ] = { disk = disk, volume_group = volume_group }
-			end
+-- TODO: next_vg_name
+function M.VolumeGroup:create( name, physical_volumes )
+	assert( name and common.is_string( name ) )
+	assert( physical_volumes and common.is_array( physical_volumes ) )
+
+	-- Sanity checks
+	for _, volume_group in ipairs( M.VolumeGroup:list() ) do
+		if name == volume_group.name then
+			error( "lvm:VolumeGroup.create(): such name already exists" )
 		end
 	end
+	for _, physical_volume in ipairs( physical_volumes ) do
+		if physical_volume.volume_group and
+		   not string.match( physical_volume.volume_group, "#orphans_" ) then
+			error( "lvm:VolumeGroup.create(): disk already is in VolumeGroup" )
+		end
+	end
+
+	common.system_succeed( "vgcreate " ..
+	                       name .. " " ..
+	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
+end
+
+function M.VolumeGroup:remove()
+	assert( self.name and common.is_string( self.name ) )
+	common.system_succeed( "vgremove " .. self.name )
+end
+
+function M.VolumeGroup:rescan()
+	common.system_succeed( "vgscan --mknodes" )
+	common.system_succeed( "vgchange -a y" )
+end
+
+function M.VolumeGroup:list( physical_volumes )
 	local volume_groups = {}
 	for _, line in ipairs( common.system_succeed( "vgdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
 		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*(%w+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
-		max_volume = tonumber( max_volume )
-		total = tonumber( total ) * extent / 1024
-		allocated = tonumber( allocated ) * extent / 1024
-		free = tonumber( free ) * free / 1024
-		number = tonumber( string.match( name, "(%d+)$" ) )
-		assert( common.is_number( extent ) )
-		assert( common.is_number( max_volume ) )
-		assert( common.is_number( total ) )
-		assert( common.is_number( allocated ) )
-		assert( common.is_number( free ) )
-		assert( common.is_number( number ) )
 
-		volume_groups[ #volume_groups + 1 ] = {
-			name = name,
-			max_volume = max_volume,
-			extent = extent,
-			total = total,
-			allocated = allocated,
-			free = free,
-			number = number,
-			disks = {}
-		}
-		end
-	end
-	for _, physical_volume in ipairs( physical_volumes ) do
-		for _, volume_group in ipairs( volume_groups ) do
-			if volume_group.name == physical_volume.volume_group then
-				volume_group.disks[ #volume_group.disks + 1 ] = physical_volume.disk
+		local physicals_volumes_in_group = {}
+		for _, physical_volume in ipairs( physical_volumes ) do
+			if physical_volume.volume_group == name then
+				physicals_volumes_in_group[ #physicals_volumes_in_group + 1 ] = physical_volume
 			end
+		end
+
+		if #physicals_volumes_in_group ~= 0 then
+		volume_groups[ #volume_groups + 1 ] = M.VolumeGroup:new({
+			name = name,
+			max_volume = tonumber( max_volume ),
+			extent = extent,
+			total = tonumber( total ) * extent / 1024,
+			allocated = tonumber( allocated ) * extent / 1024,
+			free = tonumber( free ) * free / 1024,
+			number = tonumber( string.match( name, "(%d+)$" ) ),
+			physical_volumes = physicals_volumes_in_group
+		})
+		end
 		end
 	end
 	return volume_groups
+end
+
+--------------------------------------------------------------------------
+-- LogicalVolume
+--------------------------------------------------------------------------
+M.LogicalVolume = {}
+local LogicalVolume_mt = common.Class( M.LogicalVolume )
+
+function M.LogicalVolume:new( attrs )
+	assert( common.is_string( attrs.name ) )
+	assert( common.is_string( attrs.device ) )
+	assert( common.is_table( attrs.volume_group ) )
+	assert( common.is_number( attrs.size ) )
+	return setmetatable( attrs, LogicalVolume_mt )
+end
+
+function M.LogicalVolume:create( name, volume_group, size )
+	assert( name and common.is_string( name ) )
+	assert( volume_group and common.is_table( volume_group ) )
+	assert( size and common.is_number( size ) )
+	local output = common.system( "lvcreate -n " ..
+	                              name ..
+	                              " -L " ..
+				      tonumber( size ) ..
+				      " " ..
+				      volume_group.name )
+	local passed = false
+	for _, line in ipairs( output.stdout ) do
+		if string.match( line, "Logical volume \"%w+\" created" ) then
+			passed = true
+		end
+	end
+	if not passed then
+		error("lvm:LogicalVolume:create() failed" )
+	end
+end
+
+function M.LogicalVolume:remove()
+	assert( self.volume_group )
+	assert( self.name )
+	common.system_succeed( "lvremove -f " ..
+	                       self.volume_group.name .. "/" ..
+	                       self.name )
+end
+
+function M.LogicalVolume:rescan()
+	common.system_succeed( "lvscan" )
+end
+
+function M.LogicalVolume:list( volume_groups )
+	assert( volume_groups and common.is_table( volume_groups ) )
+	local result = {}
+	for _, line in ipairs( common.system_succeed( "lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
+		local splitted = common.split_by( line, " " )
+		if splitted[1] == "LV" and splitted[2] == "VG" then
+			-- Do nothing
+		elseif splitted[4] then
+			-- TODO: snapshots
+			return true
+		else
+			local volume_group_to_add = nil
+			for _, volume_group in ipairs( volume_groups ) do
+				if volume_group.name == splitted[2] then
+					volume_group_to_add = volume_group
+				end
+			end
+			result[ splitted[1] ] = M.LogicalVolume:new({
+				name = splitted[1],
+				device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
+				volume_group = volume_group_to_add,
+				size = tonumber( string.sub( splitted[3], 1, -2 ) )
+			})
+		end
+	end
+	return common.values( result )
 end
 
 --------------------------------------------------------------------------
@@ -173,10 +268,9 @@ M.is_running = function()
 end
 
 local function restore_lvm()
-	common.system_succeed( "pvscan" )
-	common.system_succeed( "vgscan --mknodes" )
-	common.system_succeed( "vgchange -a y" )
-	common.system_succeed( "lvscan" )
+	M.PhysicalVolume.rescan()
+	M.VolumeGroup.rescan()
+	M.LogicalVolume.rescan()
 end
 
 M.start = function()

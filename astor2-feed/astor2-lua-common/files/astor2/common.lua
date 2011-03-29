@@ -137,13 +137,25 @@ function M.keys( hash )
 	end
 	return keys
 end
+--
+--- Get values from hash
+-- @param hash { "key1" = { ...1 }, "key2" = { ...2 } }
+-- @return { { ...1 }, { ...2 } }
+function M.values( hash )
+	local values = {}
+	for _, value in pairs( hash ) do
+		values[ #values + 1 ] = value
+	end
+	return values
+end
 
 --- Return unique-keyed hash
 -- @param key "state"
 -- @param hash { "0:1" = { state = "free", model = "some" }, "0:2" = { state = "failed", model = "some2" } }
 -- @return { free = { "0:1" }, failed = { "0:2" } }
 function M.unique_keys( key, hash )
-	assert( M.is_table( hash ) and not M.is_array( hash ) and key )
+	assert( key )
+	assert( M.is_table( hash ) )
 	local uniques = {}
 	for obj_id, obj_data in pairs( hash ) do
 		if not uniques[ obj_data[ key ] ] then
@@ -207,6 +219,50 @@ function M.compare_tables( table1, table2 )
 		end
 	end
 	return true
+end
+
+--- Pretty printing of table
+-- @param table Table to print
+function M.ppt( table )
+	assert( M.is_table( table ) )
+	for k, v in pairs( table ) do
+		print( k, v )
+	end
+end
+
+--- Split string by some separator
+-- Taken from http://lua-users.org/wiki/SplitJoin
+-- @param str String to separate
+-- @param separator Words separator
+-- @return An array of words
+function M.split_by( str, separator )
+	assert( str and common.is_string( str ) )
+	assert( separator and common.is_string( separator ) )
+	local words = {}
+	local pattern = string.format( "([^%s]+)", separator )
+	string.gsub( str,
+	             pattern,
+	             function( word ) words[ #words + 1 ] = word end )
+        return words
+end
+
+------------------------------------------------------------------------
+-- OOP
+------------------------------------------------------------------------
+
+--- Class constructor
+-- Taken from http://lua-users.org/wiki/LuaClassesWithMetatable
+function M.Class( members )
+	members = members or {}
+	local mt = {
+		__index = members,
+		__metatable = members
+	}
+	local function new( _, init )
+		return setmetatable( init or {}, mt )
+	end
+	members.new = members.new or new
+	return mt
 end
 
 return M
