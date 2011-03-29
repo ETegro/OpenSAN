@@ -143,7 +143,8 @@ end
 -- @param hash { "0:1" = { state = "free", model = "some" }, "0:2" = { state = "failed", model = "some2" } }
 -- @return { free = { "0:1" }, failed = { "0:2" } }
 function M.unique_keys( key, hash )
-	assert( M.is_table( hash ) and not M.is_array( hash ) and key )
+	assert( key )
+	assert( M.is_table( hash ) )
 	local uniques = {}
 	for obj_id, obj_data in pairs( hash ) do
 		if not uniques[ obj_data[ key ] ] then
