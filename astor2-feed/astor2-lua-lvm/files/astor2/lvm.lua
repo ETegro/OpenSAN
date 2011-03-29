@@ -94,8 +94,12 @@ end
 M.VolumeGroup = {}
 
 M.VolumeGroup.remove = function( disk )
-	assert( is_disk( disk ) )
 	common.system_succeed( "vgremove " .. disk )
+end
+
+M.VolumeGroup.rescan = function()
+	common.system_succeed( "vgscan --mknodes" )
+	common.system_succeed( "vgchange -a y" )
 end
 
 M.VolumeGroup.list = function( disks )
@@ -173,9 +177,8 @@ M.is_running = function()
 end
 
 local function restore_lvm()
-	common.system_succeed( "pvscan" )
-	common.system_succeed( "vgscan --mknodes" )
-	common.system_succeed( "vgchange -a y" )
+	M.PhysicalVolume.rescan()
+	M.VolumeGroup.rescan()
 	common.system_succeed( "lvscan" )
 end
 
