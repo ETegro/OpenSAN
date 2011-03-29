@@ -28,16 +28,16 @@ local function is_disk( disk )
 	return true
 end
 
-M.prepare_disk = function( disk )
-	assert( is_disk( disk ) )
-	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
-	common.system_succeed( "pvcreate " .. disk )
-end
-
 --------------------------------------------------------------------------
 -- PhysicalVolume
 --------------------------------------------------------------------------
 M.PhysicalVolume = {}
+
+M.PhysicalVolume.create = function( disk )
+	assert( is_disk( disk ) )
+	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+	common.system_succeed( "pvcreate " .. disk )
+end
 
 M.PhysicalVolume.remove = function( disk )
 	assert( is_disk( disk ) )
