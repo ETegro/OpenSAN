@@ -53,7 +53,7 @@ M.PhysicalVolume.list = function()
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
-		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([/%w]+):%w*:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		local device, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([/%w]+):[^:]*:(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
 		if extent == 0 then extent = 4096 end
 		capacity = tonumber( capacity ) * 0.5
