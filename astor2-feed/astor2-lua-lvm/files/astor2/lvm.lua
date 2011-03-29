@@ -32,23 +32,36 @@ end
 -- PhysicalVolume
 --------------------------------------------------------------------------
 M.PhysicalVolume = {}
+local PhysicalVolume_mt = common.Class( M.PhysicalVolume )
 
-M.PhysicalVolume.create = function( disk )
+function M.PhysicalVolume:new( attrs )
+	assert( common.is_number( attrs.total ) )
+	assert( common.is_number( attrs.free ) )
+	assert( common.is_number( attrs.allocated ) )
+	assert( common.is_number( attrs.volumes ) )
+	assert( common.is_number( attrs.capacity ) )
+	assert( common.is_number( attrs.unusable ) )
+	assert( common.is_number( attrs.extent ) )
+	assert( is_disk( attrs.device ) )
+	return setmetatable( attrs, PhysicalVolume_mt )
+end
+
+function M.PhysicalVolume:create( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
 	common.system_succeed( "pvcreate " .. disk )
 end
 
-M.PhysicalVolume.remove = function( disk )
-	assert( is_disk( disk ) )
-	common.system_succeed( "pvremove " .. disk )
+function M.PhysicalVolume:remove()
+	assert( is_disk( self.device ) )
+	common.system_succeed( "pvremove " .. self.device )
 end
 
-M.PhysicalVolume.rescan = function()
+function M.PhysicalVolume:rescan()
 	common.system_succeed( "pvscan" )
 end
 
-M.PhysicalVolume.list = function()
+function M.PhysicalVolume:list()
 	local physical_volumes = {}
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
@@ -64,16 +77,7 @@ M.PhysicalVolume.list = function()
 		capacity = capacity / 1024
 		unusable = capacity % extent / 1024
 
-		assert( common.is_number( total ) )
-		assert( common.is_number( free ) )
-		assert( common.is_number( allocated ) )
-		assert( common.is_number( volumes ) )
-		assert( common.is_number( capacity ) )
-		assert( common.is_number( unusable ) )
-		assert( common.is_number( extent ) )
-		assert( is_disk( device ) )
-
-		physical_volumes[ #physical_volumes + 1 ] = {
+		physical_volumes[ #physical_volumes + 1 ] = M.PhysicalVolume:new( {
 			total = total,
 			free = free,
 			allocated = allocated,
@@ -82,15 +86,17 @@ M.PhysicalVolume.list = function()
 			unusable = unusable,
 			extent = extent,
 			device = device
-		}
+		} )
 		end
 	end
 	return physical_volumes
 end
 
+--[[
 M.PhysicalVolume.list2disks = function( physical_volumes )
 	return common.keys( common.unique_keys( "device", physical_volumes ) )
 end
+]]
 
 --------------------------------------------------------------------------
 -- VolumeGroup
@@ -184,6 +190,8 @@ end
 --------------------------------------------------------------------------
 -- LogicalVolume
 --------------------------------------------------------------------------
+M.LogicalVolume = {}
+
 M.LogicalVolume.remove = function( volume_group, name )
 	assert( volume_group and common.is_table( volume_group ) )
 	assert( name and common.is_string( name ) )
