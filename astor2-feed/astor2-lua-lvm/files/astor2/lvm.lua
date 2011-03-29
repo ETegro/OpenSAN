@@ -118,8 +118,9 @@ M.VolumeGroup.create = function( name, disks )
 			       table.concat( disks, " " ) )
 end
 
-M.VolumeGroup.remove = function( disk )
-	common.system_succeed( "vgremove " .. disk )
+M.VolumeGroup.remove = function( name )
+	assert( common.is_string( name ) )
+	common.system_succeed( "vgremove " .. name )
 end
 
 M.VolumeGroup.rescan = function()
