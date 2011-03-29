@@ -219,4 +219,23 @@ function M.ppt( table )
 	end
 end
 
+------------------------------------------------------------------------
+-- OOP
+------------------------------------------------------------------------
+
+--- Class constructor
+-- Taken from http://lua-users.org/wiki/LuaClassesWithMetatable
+function M.Class( members )
+	members = members or {}
+	local mt = {
+		__index = members,
+		__metatable = members
+	}
+	local function new( _, init )
+		return setmetatable( init or {}, mt )
+	end
+	members.new = members.new or new
+	return mt
+end
+
 return M
