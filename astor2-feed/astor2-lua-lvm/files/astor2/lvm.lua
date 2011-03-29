@@ -177,6 +177,14 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
+function M.LogicalVolume:new( attrs )
+	assert( common.is_string( attrs.name ) )
+	assert( common.is_string( attrs.device ) )
+	assert( common.is_table( attrs.volume_group ) )
+	assert( common.is_number( attrs.size ) )
+	return setmetatable( attrs, LogicalVolume_mt )
+end
+
 function M.LogicalVolume:create( name, volume_group, size )
 	assert( name and common.is_string( name ) )
 	assert( volume_group and common.is_table( volume_group ) )
@@ -188,7 +196,7 @@ function M.LogicalVolume:create( name, volume_group, size )
 				      " " ..
 				      volume_group.name )
 	local passed = false
-	for _, line in ipairs( output ) do
+	for _, line in ipairs( output.stdout ) do
 		if string.match( line, "Logical volume \"%w+\" created" ) then
 			passed = true
 		end
@@ -198,7 +206,7 @@ function M.LogicalVolume:create( name, volume_group, size )
 	end
 end
 
-function M.LogicalVolume:remove( volume_group, name )
+function M.LogicalVolume:remove()
 	assert( self.volume_group )
 	assert( self.name )
 	common.system_succeed( "lvremove -f " ..
@@ -210,34 +218,28 @@ function M.LogicalVolume:rescan()
 	common.system_succeed( "lvscan" )
 end
 
-function M.LogicalVolume:new( attrs )
-	assert( common.is_string( attrs.name ) )
-	assert( is_disk( attrs.device ) )
-	assert( common.is_table( attrs.volume_group ) )
-	assert( common.is_number( attrs.size ) )
-	return setmetatable( attrs, LogicalVolume_mt )
-end
-
 function M.LogicalVolume:list( volume_groups )
 	assert( volume_groups and common.is_table( volume_groups ) )
 	local result = {}
 	for _, line in ipairs( common.system_succeed( "lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
 		local splitted = common.split_by( line, " " )
-		if splitted[4] then
+		if splitted[1] == "LV" and splitted[2] == "VG" then
+			-- Do nothing
+		elseif splitted[4] then
 			-- TODO: snapshots
 			return true
 		else
-			local volume_group = nil
+			local volume_group_to_add = nil
 			for _, volume_group in ipairs( volume_groups ) do
 				if volume_group.name == splitted[2] then
-					volume_group = splitted[2]
+					volume_group_to_add = volume_group
 				end
 			end
 			result[ splitted[1] ] = M.LogicalVolume:new({
 				name = splitted[1],
 				device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-				volume_group = volume_group,
-				size = tonumber( splitted[3] )
+				volume_group = volume_group_to_add,
+				size = tonumber( string.sub( splitted[3], 1, -2 ) )
 			})
 		end
 	end
