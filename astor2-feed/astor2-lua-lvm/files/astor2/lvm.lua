@@ -149,15 +149,12 @@ function M.VolumeGroup:list( physical_volumes )
 
 		local physicals_volumes_in_group = {}
 		for _, physical_volume in ipairs( physical_volumes ) do
-			print "HERE"
 			if physical_volume.volume_group == name then
-				print "GOT"
 				physicals_volumes_in_group[ #physicals_volumes_in_group + 1 ] = physical_volume
 			end
 		end
 
 		if #physicals_volumes_in_group ~= 0 then
-		print "PASS"
 		volume_groups[ #volume_groups + 1 ] = M.VolumeGroup:new({
 			name = name,
 			max_volume = tonumber( max_volume ),
