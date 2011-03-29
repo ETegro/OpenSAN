@@ -137,6 +137,17 @@ function M.keys( hash )
 	end
 	return keys
 end
+--
+--- Get values from hash
+-- @param hash { "key1" = { ...1 }, "key2" = { ...2 } }
+-- @return { { ...1 }, { ...2 } }
+function M.values( hash )
+	local values = {}
+	for _, value in pairs( hash ) do
+		values[ #values + 1 ] = value
+	end
+	return values
+end
 
 --- Return unique-keyed hash
 -- @param key "state"
