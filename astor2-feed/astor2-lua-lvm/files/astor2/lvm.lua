@@ -180,11 +180,25 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
-function M.LogicalVolume:create( name, volume_group, size, comment )
+function M.LogicalVolume:create( name, volume_group, size )
 	assert( name and common.is_string( name ) )
 	assert( volume_group and common.is_table( volume_group ) )
 	assert( size and common.is_number( size ) )
-	if not comment then comment = "" end
+	local output = common.system( "lvcreate -n " ..
+	                              name ..
+	                              " -L " ..
+				      tonumber( size ) ..
+				      " " ..
+				      volume_group.name )
+	local passed = false
+	for _, line in ipairs( output ) do
+		if string.match( line, "Logical volume \"%w+\" created" ) then
+			passed = true
+		end
+	end
+	if not passed then
+		error("lvm:LogicalVolume:create() failed" )
+	end
 end
 
 function M.LogicalVolume:remove( volume_group, name )
@@ -198,6 +212,13 @@ end
 function M.LogicalVolume:rescan()
 	common.system_succeed( "lvscan" )
 end
+
+--[[
+function M.LogicalVolume:list( volume_groups )
+	for _, line in ipairs( common.system_succeed( "lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
+	end
+end
+]]
 
 --------------------------------------------------------------------------
 -- Initialization
