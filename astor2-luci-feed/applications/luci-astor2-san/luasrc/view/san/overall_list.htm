@@ -1,6 +1,6 @@
 <form id="form_physical" method="post" action="<%=luci.dispatcher.build_url("san", "einarc_logical_add")%>">
 
-<table border="1px" cellpadding="0" cellspacing="0">
+<table border="0px" bordercolor="#ccc" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>Physical list</td>
 		<td>Logical list</td>
@@ -8,31 +8,62 @@
 	<% for _, pair in ipairs( physical_logical_matrix ) do %>
 	<tr>
 		<td>
-			<table border="1px" width="100%">
+			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td><input type="checkbox" name="drives" value="<%= pair.physical_id %>" /></td>
-					<td><%= pair.physical_id %></td>
-					<td><%= physicals[ pair.physical_id ].model %></td>
-					<td><%= physicals[ pair.physical_id ].size %> MiB</td>
+					<td class="border-top-left"><input type="checkbox" name="drives" value="<%= pair.physical_id %>" /></td>
+					<td class="border-top"><%= pair.physical_id %></td>
+					<td class="border-top"><%= physicals[ pair.physical_id ].model %></td>
+					<td class="border-top"><%= physicals[ pair.physical_id ].size %> MiB</td>
 				</tr>
 				<tr class="to_hide">
-					<td colspan="4"><tt>Physical info</tt></td>
+					<td colspan="4" class="border-left">
+						<ul>
+							<li><tt><%:ID%>: <%= pair.physical_id %></tt></li>
+							<li><tt><%:Model%>: <%= physicals[ pair.physical_id ].model %></tt></li>
+							<li><tt><%:Serial%>: <%= physicals[ pair.physical_id ].serial %></tt></li>
+							<li><tt><%:Revision%>: <%= physicals[ pair.physical_id ].revision %></tt></li>
+							<li><tt><%:State%>: <%= physicals[ pair.physical_id ].state %></tt></li>
+							<li><tt><%:Size%>: <%= physicals[ pair.physical_id ].size %>MiB</tt></li>
+						</ul>
+					</td>
 				</tr>
 			</table>
 		</td>
 		<% if pair.logical_id then %>
-		<td rowspan="<%= pair.logical_size %>">
-			<table border="1px" width="100%">
+		<td rowspan="<%= pair.logical_size %>" class="border-top-right-bottom">
+			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td><input type="checkbox" name="name_logical" value="<%= pair.logical_id %>" /></td>
 					<td><%= pair.logical_id %></td>
-					<td>RAID <%= logicals[ pair.logical_id ].level %></td>
+					<td><%:RAID%>: <%= logicals[ pair.logical_id ].level %></td>
 					<td><%= logicals[ pair.logical_id ].state %></td>
 					<% if logicals[ pair.logical_id ].progress then %>
 						<td><%= logicals[ pair.logical_id ].progress %> % </td>
 					<% end %>
 					<td><%= logicals[ pair.logical_id ].capacity %> MiB </td>
 				</tr>
+				<tr class="to_hide2">
+					<% local colspan_logical
+					if logicals[ pair.logical_id ].progress then
+						colspan_logical = 6
+					else
+						colspan_logical = 5
+					end %>
+					<td colspan="<%= colspan_logical %>">
+						<ul>
+							<li><tt><%:ID%>: <%= pair.logical_id %></tt</li>
+							<li><tt><%:RAID level%>: <%= logicals[ pair.logical_id ].level %></tt</li>
+							<li><tt><%:State%>: <%= logicals[ pair.logical_id ].state %></tt</li>
+							<li><tt><%:Drives%>: <%= table.concat( logicals[ pair.logical_id ].drives, ", " ) %></tt</li>
+							<% if logicals[ pair.logical_id ].progress then %>
+								<li><tt><%= logicals[ pair.logical_id ].progress %> % </tt></li>
+							<% end %>
+							<li><tt><%:Devise%>: <%= logicals[ pair.logical_id ].device %></tt</li>
+							<li><tt><%:Size%>: <%= logicals[ pair.logical_id ].capacity %> MiB</tt</li>
+						</ul>
+					</td>
+				</tr>
+
 			</table>
 		</td>
 		<% end %>
@@ -50,45 +81,57 @@
 	</p>
 </div>
 
-
 <div id="submit_button" class="to_hide">
 	<p>
 		<input type="submit" />
 	</p>
 </div>
-<div id="logical_info" class="to_hide2">Logical info</div>
 </form>
 
 <script type="text/javascript">
 
-$('.to_hide').hide();
-$('.to_hide2').hide();
+//styles
 
-//$("#object").attr("checked")
+$( 'td.border' ).css( 'background-color', '#f0f' )
+$( 'td.border-top-left' ).css( {
+	'border-width': '10px 0 0 10px',
+	'border-style': 'solid',
+	'border-color': '#f0f' } )
+$( 'td.border-top' ).css( {
+	'border-width': '10px 0 0 0',
+	'border-style': 'solid',
+	'border-color': '#f0f' } )
+$( 'td.border-top-right' ).css( {
+	'border-width': '10px 10px 0 0',
+	'border-style': 'solid',
+	'border-color': '#f0f' } )
+$( 'td.border-top-right-bottom' ).css( {
+	'border-width': '10px 10px 10px 0',
+	'border-style': 'solid',
+	'border-color': '#f0f' } )
+$( 'td.border-left' ).css( {
+	'border-width': '0 0 0 10px',
+	'border-style': 'solid',
+	'border-color': '#f0f' } )
 
-$('form input:checkbox[name="drives"]').click( function() {
-	if ($('form input:checkbox[name="drives"]').is(":checked")) {
-		$('.to_hide').fadeIn('slow', function() {
-			// complete.
-		});
+// effects
+
+$( '.to_hide' ).hide();
+$( '.to_hide2' ).hide();
+$( 'form input:checkbox[ name = "drives" ]' ).click( function() {
+	if ( $( 'form input:checkbox[ name = "drives" ]' ).is( ":checked" ) ) {
+		$( '.to_hide' ).fadeIn( 'slow' );
 	} else {
-		$('.to_hide').fadeOut('slow');
+		$( '.to_hide' ).fadeOut( 'slow' );
 	}
-});
+} );
 
-$('form input:checkbox[name="name_logical"]').click( function() {
-	if ($('form input:checkbox[name="name_logical"]').is(":checked")) {
-		$('.to_hide2').fadeIn('slow', function() {
-			// complete.
-		});
+$( ' form input:checkbox[ name = "name_logical" ]' ).click( function() {
+	if ( $( 'form input:checkbox[ name = "name_logical" ]' ).is( ":checked" ) ) {
+		$( '.to_hide2' ).fadeIn( 'slow' );
 	} else {
 		$(".to_hide2").fadeOut('slow');
 	}
-});
-
-/*prot
-$$(".to_hide").each(function( element ) {
-	element.hide() } );
-*/
+} );
 
 </script>
