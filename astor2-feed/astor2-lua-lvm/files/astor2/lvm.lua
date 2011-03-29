@@ -93,6 +93,27 @@ end
 --------------------------------------------------------------------------
 M.VolumeGroup = {}
 
+M.VolumeGroup.create = function( name, disks )
+	assert( common.is_string( name ) )
+	assert( common.is_array( disks ) )
+
+	-- Sanity checks
+	for _, volume_group in M.VolumeGroup.list() do
+		if common.is_in_array( name, volume_group.name ) then
+			error( "lvm:VolumeGroup.create(): such name already exists" )
+		end
+		for _, disk in disks do
+			assert( is_disk( disk ) )
+			if common.is_in_array( disk, volume_group.disks ) then
+				error( "lvm:VolumeGroup.create(): disk already is in VolumeGroup" )
+			end
+		end
+	end
+	common.system_succeed( "vgcreate " ..
+	                       name .. " " ..
+			       table.concat( disks, " " ) )
+end
+
 M.VolumeGroup.remove = function( disk )
 	common.system_succeed( "vgremove " .. disk )
 end
