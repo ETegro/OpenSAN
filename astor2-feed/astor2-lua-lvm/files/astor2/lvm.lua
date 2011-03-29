@@ -139,7 +139,7 @@ function M.VolumeGroup:rescan()
 	common.system_succeed( "vgchange -a y" )
 end
 
-function M.VolumeGroup:list()
+function M.VolumeGroup:list( physical_volumes )
 	local volume_groups = {}
 	for _, line in ipairs( common.system_succeed( "vgdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
@@ -147,6 +147,17 @@ function M.VolumeGroup:list()
 		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*(%w+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
 
+		local physicals_volumes_in_group = {}
+		for _, physical_volume in ipairs( physical_volumes ) do
+			print "HERE"
+			if physical_volume.volume_group == name then
+				print "GOT"
+				physicals_volumes_in_group[ #physicals_volumes_in_group + 1 ] = physical_volume
+			end
+		end
+
+		if #physicals_volumes_in_group ~= 0 then
+		print "PASS"
 		volume_groups[ #volume_groups + 1 ] = M.VolumeGroup:new({
 			name = name,
 			max_volume = tonumber( max_volume ),
@@ -154,22 +165,13 @@ function M.VolumeGroup:list()
 			total = tonumber( total ) * extent / 1024,
 			allocated = tonumber( allocated ) * extent / 1024,
 			free = tonumber( free ) * free / 1024,
-			number = tonumber( string.match( name, "(%d+)$" ) )
+			number = tonumber( string.match( name, "(%d+)$" ) ),
+			physical_volumes = physicals_volumes_in_group
 		})
+		end
 		end
 	end
 	return volume_groups
-end
-
-function M.VolumeGroup:physical_volumes()
-	assert( self.name )
-	local physical_volumes = {}
-	for _, physical_volume in ipairs( M.PhysicalVolume:list() ) do
-		if physical_volume.volume_group == self.name then
-			physical_volumes[ #physical_volumes + 1 ] = physical_volume
-		end
-	end
-	return physical_volumes 
 end
 
 --------------------------------------------------------------------------
