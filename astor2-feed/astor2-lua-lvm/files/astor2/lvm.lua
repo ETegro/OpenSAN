@@ -71,18 +71,14 @@ function M.PhysicalVolume:list()
 		extent = tonumber( extent )
 		if extent == 0 then extent = 4096 end
 		capacity = tonumber( capacity ) * 0.5
-		total = tonumber( total ) * extent / 1024
-		free = tonumber( free ) * extent / 1024
-		allocated = tonumber( allocated ) * extent / 1024
-		volumes = tonumber( volumes )
 		capacity = capacity / 1024
 		unusable = capacity % extent / 1024
 
 		physical_volumes[ #physical_volumes + 1 ] = M.PhysicalVolume:new( {
-			total = total,
-			free = free,
-			allocated = allocated,
-			volumes = volumes,
+			total = tonumber( total ) * extent / 1024,
+			free = tonumber( free ) * extent / 1024,
+			allocated = tonumber( allocated ) * extent / 1024,
+			volumes = tonumber( volumes ),
 			capacity = capacity,
 			unusable = unusable,
 			extent = extent,
@@ -148,20 +144,15 @@ function M.VolumeGroup:list()
 		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
 		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*(%w+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
-		max_volume = tonumber( max_volume )
-		total = tonumber( total ) * extent / 1024
-		allocated = tonumber( allocated ) * extent / 1024
-		free = tonumber( free ) * free / 1024
-		number = tonumber( string.match( name, "(%d+)$" ) )
 
 		volume_groups[ #volume_groups + 1 ] = M.PhysicalVolume:new({
 			name = name,
-			max_volume = max_volume,
+			max_volume = tonumber( max_volume ),
 			extent = extent,
-			total = total,
-			allocated = allocated,
-			free = free,
-			number = number,
+			total = tonumber( total ) * extent / 1024,
+			allocated = tonumber( allocated ) * extent / 1024,
+			free = tonumber( free ) * free / 1024,
+			number = tonumber( string.match( name, "(%d+)$" ) )
 		})
 		end
 	end
