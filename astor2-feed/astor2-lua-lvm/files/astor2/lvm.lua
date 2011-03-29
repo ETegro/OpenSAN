@@ -88,6 +88,10 @@ M.PhysicalVolume.list = function()
 	return physical_volumes
 end
 
+M.PhysicalVolume.list2disks = function( physical_volumes )
+	return common.keys( common.unique_keys( "device", physical_volumes ) )
+end
+
 --------------------------------------------------------------------------
 -- VolumeGroup
 --------------------------------------------------------------------------
@@ -98,11 +102,11 @@ M.VolumeGroup.create = function( name, disks )
 	assert( common.is_array( disks ) )
 
 	-- Sanity checks
-	for _, volume_group in M.VolumeGroup.list() do
-		if common.is_in_array( name, volume_group.name ) then
+	for _, volume_group in ipairs( M.VolumeGroup.list( M.PhysicalVolume.list2disks( M.PhysicalVolume.list() ) ) ) do
+		if name == volume_group.name then
 			error( "lvm:VolumeGroup.create(): such name already exists" )
 		end
-		for _, disk in disks do
+		for _, disk in ipairs( disks ) do
 			assert( is_disk( disk ) )
 			if common.is_in_array( disk, volume_group.disks ) then
 				error( "lvm:VolumeGroup.create(): disk already is in VolumeGroup" )
@@ -128,7 +132,7 @@ M.VolumeGroup.list = function( disks )
 	local physical_volumes = {}
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
-			local disk, volume_group = string.match( line, "^%s*([/%w]+):(%w*):%d+:.*$" )
+			local disk, volume_group = string.match( line, "^%s*([/%w]+):([^:]*):%d+:.*$" )
 			if volume_group and
 					not string.match( volume_group, "orphans_lvm2" ) and
 					common.is_in_array( disk, disks ) then
@@ -152,7 +156,7 @@ M.VolumeGroup.list = function( disks )
 		assert( common.is_number( total ) )
 		assert( common.is_number( allocated ) )
 		assert( common.is_number( free ) )
-		assert( common.is_number( number ) )
+		--assert( common.is_number( number ) )
 
 		volume_groups[ #volume_groups + 1 ] = {
 			name = name,
