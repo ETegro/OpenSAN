@@ -42,7 +42,7 @@ function M.PhysicalVolume:new( attrs )
 	assert( common.is_number( attrs.capacity ) )
 	assert( common.is_number( attrs.unusable ) )
 	assert( common.is_number( attrs.extent ) )
-	assert( is_string( attrs.volume_group ) )
+	assert( common.is_string( attrs.volume_group ) )
 	assert( is_disk( attrs.device ) )
 	return setmetatable( attrs, PhysicalVolume_mt )
 end
@@ -108,7 +108,7 @@ end
 
 function M.VolumeGroup:create( name, physical_volumes )
 	assert( name and common.is_string( name ) )
-	assert( disks and common.is_array( disks ) )
+	assert( physical_volumes and common.is_array( physical_volumes ) )
 
 	-- Sanity checks
 	for _, volume_group in ipairs( M.VolumeGroup:list() ) do
@@ -117,14 +117,15 @@ function M.VolumeGroup:create( name, physical_volumes )
 		end
 	end
 	for _, physical_volume in ipairs( physical_volumes ) do
-		if physical_volume.volume_group then
+		if physical_volume.volume_group and
+		   not string.match( physical_volume.volume_group, "#orphans_" ) then
 			error( "lvm:VolumeGroup.create(): disk already is in VolumeGroup" )
 		end
 	end
 
 	common.system_succeed( "vgcreate " ..
 	                       name .. " " ..
-	                       table.concat( common.keys( common.unique_keys( "device", physical_volume ) ), " " ) )
+	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
 end
 
 function M.VolumeGroup:remove()
@@ -145,7 +146,7 @@ function M.VolumeGroup:list()
 		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*(%w+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 		extent = tonumber( extent )
 
-		volume_groups[ #volume_groups + 1 ] = M.PhysicalVolume:new({
+		volume_groups[ #volume_groups + 1 ] = M.VolumeGroup:new({
 			name = name,
 			max_volume = tonumber( max_volume ),
 			extent = extent,
@@ -163,7 +164,7 @@ function M.VolumeGroup:physical_volumes()
 	assert( self.name )
 	local physical_volumes = {}
 	for _, physical_volume in ipairs( M.PhysicalVolume:list() ) do
-		if physical_volume.volume_name == self.name then
+		if physical_volume.volume_group == self.name then
 			physical_volumes[ #physical_volumes + 1 ] = physical_volume
 		end
 	end
