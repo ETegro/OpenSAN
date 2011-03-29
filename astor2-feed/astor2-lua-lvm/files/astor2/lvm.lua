@@ -106,6 +106,7 @@ function M.VolumeGroup:new( attrs )
 	return setmetatable( attrs, VolumeGroup_mt )
 end
 
+-- TODO: next_vg_name
 function M.VolumeGroup:create( name, physical_volumes )
 	assert( name and common.is_string( name ) )
 	assert( physical_volumes and common.is_array( physical_volumes ) )
@@ -175,16 +176,24 @@ end
 -- LogicalVolume
 --------------------------------------------------------------------------
 M.LogicalVolume = {}
+local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
-M.LogicalVolume.remove = function( volume_group, name )
-	assert( volume_group and common.is_table( volume_group ) )
+function M.LogicalVolume:create( name, volume_group, size, comment )
 	assert( name and common.is_string( name ) )
-	common.system_succeed( "lvremove -f " ..
-	                       volume_group.name .. "/" ..
-	                       name )
+	assert( volume_group and common.is_table( volume_group ) )
+	assert( size and common.is_number( size ) )
+	if not comment then comment = "" end
 end
 
-M.LogicalVolume.rescan = function()
+function M.LogicalVolume:remove( volume_group, name )
+	assert( self.volume_group )
+	assert( self.name )
+	common.system_succeed( "lvremove -f " ..
+	                       self.volume_group.name .. "/" ..
+	                       self.name )
+end
+
+function M.LogicalVolume:rescan()
 	common.system_succeed( "lvscan" )
 end
 
