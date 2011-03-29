@@ -159,6 +159,17 @@ function M.VolumeGroup:list()
 	return volume_groups
 end
 
+function M.VolumeGroup:physical_volumes()
+	assert( self.name )
+	local physical_volumes = {}
+	for _, physical_volume in ipairs( M.PhysicalVolume:list() ) do
+		if physical_volume.volume_name == self.name then
+			physical_volumes[ #physical_volumes + 1 ] = physical_volume
+		end
+	end
+	return physical_volumes 
+end
+
 --------------------------------------------------------------------------
 -- LogicalVolume
 --------------------------------------------------------------------------
