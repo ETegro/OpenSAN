@@ -98,8 +98,8 @@ end
 M.VolumeGroup = {}
 
 M.VolumeGroup.create = function( name, disks )
-	assert( common.is_string( name ) )
-	assert( common.is_array( disks ) )
+	assert( name and common.is_string( name ) )
+	assert( disks and common.is_array( disks ) )
 
 	-- Sanity checks
 	for _, volume_group in ipairs( M.VolumeGroup.list( M.PhysicalVolume.list2disks( M.PhysicalVolume.list() ) ) ) do
@@ -115,11 +115,11 @@ M.VolumeGroup.create = function( name, disks )
 	end
 	common.system_succeed( "vgcreate " ..
 	                       name .. " " ..
-			       table.concat( disks, " " ) )
+	                       table.concat( disks, " " ) )
 end
 
 M.VolumeGroup.remove = function( name )
-	assert( common.is_string( name ) )
+	assert( name and common.is_string( name ) )
 	common.system_succeed( "vgremove " .. name )
 end
 
@@ -129,7 +129,7 @@ M.VolumeGroup.rescan = function()
 end
 
 M.VolumeGroup.list = function( disks )
-	assert( common.is_array( disks ) )
+	assert( disks and common.is_array( disks ) )
 	local physical_volumes = {}
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
@@ -182,6 +182,21 @@ M.VolumeGroup.list = function( disks )
 end
 
 --------------------------------------------------------------------------
+-- LogicalVolume
+--------------------------------------------------------------------------
+M.LogicalVolume.remove = function( volume_group, name )
+	assert( volume_group and common.is_table( volume_group ) )
+	assert( name and common.is_string( name ) )
+	common.system_succeed( "lvremove -f " ..
+	                       volume_group.name .. "/" ..
+	                       name )
+end
+
+M.LogicalVolume.rescan = function()
+	common.system_succeed( "lvscan" )
+end
+
+--------------------------------------------------------------------------
 -- Initialization
 --------------------------------------------------------------------------
 M.DM_MODULES = { "dm_mod", "dm_log", "dm_mirror", "dm_snapshot" }
@@ -205,7 +220,7 @@ end
 local function restore_lvm()
 	M.PhysicalVolume.rescan()
 	M.VolumeGroup.rescan()
-	common.system_succeed( "lvscan" )
+	M.LogicalVolume.rescan()
 end
 
 M.start = function()
