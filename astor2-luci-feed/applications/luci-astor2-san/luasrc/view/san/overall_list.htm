@@ -10,7 +10,7 @@
 	</tr>
 	<% for _, pair in ipairs( physical_logical_matrix ) do %>
 	<tr>
-		<td>
+		<td valign="top">
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td class="border-top-left"><input type="checkbox" name="checkbox_drive" value="<%= pair.physical_id %>" /></td>
@@ -66,7 +66,7 @@
 							<li><tt><%:Device%>: <%= logicals[ pair.logical_id ].device %></tt</li>
 							<li><tt><%:Size%>: <%= logicals[ pair.logical_id ].capacity %> MiB</tt</li>
 						</ul>
-						<ul>
+						<ul class="to_hide2">
 							<li><input type="submit" name="submit_einarc" value="Logical Delete" /></li>
 						</ul>
 					</td>
@@ -98,21 +98,19 @@ jQuery.noConflict();
 
 // effects
 
+// Hide all elements with class "to_hide*".
 $( '[ class ^= "to_hide" ]' ).hide();
-//$( '.to_hide2' ).hide();
 
+// Hide all on click button "Hide all".
 $( 'input[ name = "hide_all" ]' ).click( function() {
 	$( 'table [ class ^= "to_hide" ]' ).fadeOut();
 } );
 
+// Hide/show form for "Create RAID".
 $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 	if ( $( this ).is( ':checked' ) ) {
-//		var parent_selector_to_show = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr:hidden' ).css( 'background-color', 'yellow' )
-//		$( parent_selector_to_show ).fadeIn( 'fast' );
 		$( '#div_raid_create' ).fadeIn( 'fast' );
 	} else {
-//		var parent_selector_to_hide = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'red' )
-//		$( parent_selector_to_hide ).fadeOut( 'fast' );
 		if ( $( 'form input:checkbox[ name = "checkbox_drive" ]' ).is( ':checked' ) ) {
 		} else {
 			$( '#div_raid_create' ).fadeOut( 'fast' );
@@ -120,27 +118,25 @@ $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 	}
 } );
 
+// Hide/show button "Logical delete".
 $( 'form input:checkbox[ name = "checkbox_logical" ]' ).click( function() {
+	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).find( 'ul.to_hide2' ).css( 'background-color', 'green' );
 	if ( $( this ).is( ':checked' ) ) {
-		var parent_selector_to_show = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr:hidden' ).css( 'background-color', 'yellow' )
-		$( parent_selector_to_show ).fadeIn( 'fast' );
+		$( parent_selector ).fadeIn( 'fast' );
 	} else {
-		var parent_selector_to_hide = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'red' )
-		$( parent_selector_to_hide ).fadeOut( 'fast' );
+		$( parent_selector ).fadeOut( 'fast' );
 	}
 } );
 
+// Hide/show information of physicals and logicals.
 $( 'form a[ id $=_id_info ]' ).click( function() {
 	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'yellow' );
 	if ( $( parent_selector ).is( ':hidden' ) ) {
 		$( parent_selector ).fadeIn( 'fast' );
 	} else {
 		$( parent_selector ).fadeOut( 'fast' );
-		}
 	}
-);
-
-
+} );
 
 //styles
 
