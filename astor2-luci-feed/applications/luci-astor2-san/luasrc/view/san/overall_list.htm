@@ -121,10 +121,13 @@ $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 // Hide/show button "Logical delete".
 $( 'form input:checkbox[ name = "checkbox_logical" ]' ).click( function() {
 	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).find( 'ul.to_hide2' ).css( 'background-color', 'green' );
+	var checkbox_to_disable = $( 'form input:checkbox[ name = "checkbox_logical" ]' ).not( this );
 	if ( $( this ).is( ':checked' ) ) {
 		$( parent_selector ).fadeIn( 'fast' );
+		$( checkbox_to_disable ).attr( 'disabled', 'disabled' );
 	} else {
 		$( parent_selector ).fadeOut( 'fast' );
+		$( checkbox_to_disable ).removeAttr( 'disabled' );
 	}
 } );
 
