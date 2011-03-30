@@ -16,18 +16,18 @@
 					<td class="border-top-left"><input type="checkbox" name="checkbox_drive" value="<%= pair.physical_id %>" /></td>
 					<td class="border-top"><%= pair.physical_id %></td>
 					<td class="border-top"><%= physicals[ pair.physical_id ].model %></td>
-					<td class="border-top"><%= physicals[ pair.physical_id ].size %> MiB</td>
+					<td class="border-top"><%= physicals[ pair.physical_id ].size %> <%: MiB %></td>
 					<td class="border-top"><a id="physical_id_info" href="#">(info)</a></td>
 				</tr>
 				<tr class="to_hide">
 					<td colspan="4" class="border-left">
 						<ul>
-							<li><tt><%:ID%>: <%= pair.physical_id %></tt></li>
-							<li><tt><%:Model%>: <%= physicals[ pair.physical_id ].model %></tt></li>
-							<li><tt><%:Serial%>: <%= physicals[ pair.physical_id ].serial %></tt></li>
-							<li><tt><%:Revision%>: <%= physicals[ pair.physical_id ].revision %></tt></li>
-							<li><tt><%:State%>: <%= physicals[ pair.physical_id ].state %></tt></li>
-							<li><tt><%:Size%>: <%= physicals[ pair.physical_id ].size %>MiB</tt></li>
+							<li><tt><%: ID %>: <%= pair.physical_id %></tt></li>
+							<li><tt><%: Model %>: <%= physicals[ pair.physical_id ].model %></tt></li>
+							<li><tt><%: Serial %>: <%= physicals[ pair.physical_id ].serial %></tt></li>
+							<li><tt><%: Revision %>: <%= physicals[ pair.physical_id ].revision %></tt></li>
+							<li><tt><%: State %>: <%= physicals[ pair.physical_id ].state %></tt></li>
+							<li><tt><%: Size %>: <%= physicals[ pair.physical_id ].size %> <%: MiB %></tt></li>
 						</ul>
 					</td>
 				</tr>
@@ -39,12 +39,12 @@
 				<tr>
 					<td><input type="checkbox" name="checkbox_logical" value="<%= pair.logical_id %>" /></td>
 					<td><%= pair.logical_id %></td>
-					<td><%:RAID%>: <%= logicals[ pair.logical_id ].level %></td>
+					<td><%: RAID %>: <%= logicals[ pair.logical_id ].level %></td>
 					<td><%= logicals[ pair.logical_id ].state %></td>
 					<% if logicals[ pair.logical_id ].progress then %>
 						<td><%= logicals[ pair.logical_id ].progress %> % </td>
 					<% end %>
-					<td><%= logicals[ pair.logical_id ].capacity %> MiB </td>
+					<td><%= logicals[ pair.logical_id ].capacity %> <%: MiB %></td>
 					<td><a id="logical_id_info" href="#">(info)</a></td>
 				</tr>
 				<tr class="to_hide2">
@@ -56,15 +56,15 @@
 					end %>
 					<td colspan="<%= colspan_logical %>">
 						<ul>
-							<li><tt><%:ID%>: <%= pair.logical_id %></tt</li>
-							<li><tt><%:RAID level%>: <%= logicals[ pair.logical_id ].level %></tt</li>
-							<li><tt><%:State%>: <%= logicals[ pair.logical_id ].state %></tt</li>
-							<li><tt><%:Drives%>: <%= table.concat( logicals[ pair.logical_id ].drives, ", " ) %></tt</li>
+							<li><tt><%: ID %>: <%= pair.logical_id %></tt</li>
+							<li><tt><%: RAID level %>: <%= logicals[ pair.logical_id ].level %></tt</li>
+							<li><tt><%: State %>: <%= logicals[ pair.logical_id ].state %></tt</li>
+							<li><tt><%: Drives %>: <%= table.concat( logicals[ pair.logical_id ].drives, ", " ) %></tt</li>
 							<% if logicals[ pair.logical_id ].progress then %>
 								<li><tt><%= logicals[ pair.logical_id ].progress %> % </tt></li>
 							<% end %>
-							<li><tt><%:Device%>: <%= logicals[ pair.logical_id ].device %></tt</li>
-							<li><tt><%:Size%>: <%= logicals[ pair.logical_id ].capacity %> MiB</tt</li>
+							<li><tt><%: Device %>: <%= logicals[ pair.logical_id ].device %></tt</li>
+							<li><tt><%: Size %>: <%= logicals[ pair.logical_id ].capacity %> <%: MiB %></tt</li>
 						</ul>
 						<ul class="to_hide2">
 							<li><input type="submit" name="submit_einarc" value="Logical Delete" /></li>
@@ -79,6 +79,9 @@
 </table>
 
 <div id="div_raid_create" class="to_hide">
+	<p><%: Drives to RAID %>:
+		<input type="text" name="drives_to_raid_list" disabled="disabled" value="<%: Please, selected drives %>" />
+	</p>
 	<p><%: RAID level %>:
 		<select name="raid_level" size="1">
 			<% for _, raidlevel in ipairs( raidlevels ) do %>
@@ -116,6 +119,11 @@ $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 			$( '#div_raid_create' ).fadeOut( 'fast' );
 		}
 	}
+	var drives_list_to_raid = '';
+	var array_drives_to_raid = $( 'form input:checkbox[ name = "checkbox_drive" ]:checked' ).each( function() {
+		drives_list_to_raid += $( this ).attr( 'value' ) + ', ';
+	} );
+	$( 'form input:text[ name = "drives_to_raid_list" ]' ).val( drives_list_to_raid );
 } );
 
 // Hide/show button "Logical delete".
