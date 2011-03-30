@@ -1,5 +1,8 @@
 <form method="post" action="<%=luci.dispatcher.build_url("san", "san_functions")%>">
 
+<input type="button" name="hide_all" value="Hide all information" /> 
+<input type="reset" name="reset_form" value="Reset all form" /> 
+
 <table border="1px" bordercolor="#ccc" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>Physical list</td>
@@ -95,8 +98,12 @@ jQuery.noConflict();
 
 // effects
 
-$( '.to_hide' ).hide();
-$( '.to_hide2' ).hide();
+$( '[ class ^= "to_hide" ]' ).hide();
+//$( '.to_hide2' ).hide();
+
+$( 'input[ name = "hide_all" ]' ).click( function() {
+	$( 'table [ class ^= "to_hide" ]' ).fadeOut();
+} );
 
 $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 	if ( $( this ).is( ':checked' ) ) {
@@ -123,7 +130,7 @@ $( 'form input:checkbox[ name = "checkbox_logical" ]' ).click( function() {
 	}
 } );
 
-$( 'form a[id$=_id_info]' ).click( function() {
+$( 'form a[ id $=_id_info ]' ).click( function() {
 	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'yellow' );
 	if ( $( parent_selector ).is( ':hidden' ) ) {
 		$( parent_selector ).fadeIn( 'fast' );
@@ -132,6 +139,8 @@ $( 'form a[id$=_id_info]' ).click( function() {
 		}
 	}
 );
+
+
 
 //styles
 
