@@ -138,9 +138,13 @@ san_functions = function()
 		if input_value == "Logical Delete" then
 			local logical_id = luci.http.formvalue( "checkbox_logical" )
 			logical_id = tonumber( logical_id )
-			local return_code, result = pcall( einarc.logical.delete, logical_id )
-			if not return_code then
-				message_error = i18n("Failed to delete logical disk")
+			if not logical_id then
+				message_error = i18n("Logical disk not selected")
+			else
+				local return_code, result = pcall( einarc.logical.delete, logical_id )
+				if not return_code then
+					message_error = i18n("Failed to delete logical disk")
+				end
 			end
 
 		elseif input_value == "Create RAID" then
@@ -149,7 +153,6 @@ san_functions = function()
 			if common.is_string( drives ) then
 				drives = { drives }
 			end
-
 			if not drives then
 				message_error = i18n("Drives not selected")
 			else
