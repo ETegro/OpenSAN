@@ -1,4 +1,4 @@
-<form id="form_physical" method="post" action="<%=luci.dispatcher.build_url("san", "einarc_logical_add")%>">
+<form method="post" action="<%=luci.dispatcher.build_url("san", "san_functions")%>">
 
 <table border="1px" bordercolor="#ccc" cellpadding="0" cellspacing="0">
 	<tr>
@@ -10,7 +10,7 @@
 		<td>
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td class="border-top-left"><input type="checkbox" name="drives" value="<%= pair.physical_id %>" /></td>
+					<td class="border-top-left"><input type="checkbox" name="checkbox_drive" value="<%= pair.physical_id %>" /></td>
 					<td class="border-top"><%= pair.physical_id %></td>
 					<td class="border-top"><%= physicals[ pair.physical_id ].model %></td>
 					<td class="border-top"><%= physicals[ pair.physical_id ].size %> MiB</td>
@@ -33,7 +33,7 @@
 		<td rowspan="<%= pair.logical_size %>" valign="top" class="border-top-right-bottom">
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td><input type="checkbox" name="name_logical" value="<%= pair.logical_id %>" /></td>
+					<td><input type="checkbox" name="checkbox_logical" value="<%= pair.logical_id %>" /></td>
 					<td><%= pair.logical_id %></td>
 					<td><%:RAID%>: <%= logicals[ pair.logical_id ].level %></td>
 					<td><%= logicals[ pair.logical_id ].state %></td>
@@ -63,7 +63,6 @@
 						</ul>
 					</td>
 				</tr>
-
 			</table>
 		</td>
 		<% end %>
@@ -71,7 +70,7 @@
 	<% end %>
 </table>
 
-<div id="div_raid_level" class="to_hide">
+<div id="div_raid_create" class="to_hide">
 	<p><%: RAID level %>:
 		<select name="raid_level" size="1">
 			<% for _, raidlevel in ipairs( raidlevels ) do %>
@@ -79,16 +78,54 @@
 			<% end %>
 		</select>
 	</p>
-</div>
-
-<div id="submit_button" class="to_hide">
 	<p>
-		<input type="submit" value="Create RAID" />
+		<input type="submit" name="submit_einarc" value="Create RAID" />
 	</p>
 </div>
+<div id="div_logical_delete" class="to_hide">
+	<p>
+		<input type="submit" name="submit_einarc" Value="Logical Delete" />
+	</p>
+</div>
+
 </form>
 
 <script type="text/javascript">
+
+// effects
+
+$( '.to_hide' ).hide();
+$( '.to_hide2' ).hide();
+
+$( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
+	if ( $( this ).is( ':checked' ) ) {
+		var parent_selector_to_show = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr:hidden' ).css( 'background-color', 'yellow' )
+		$( parent_selector_to_show ).fadeIn( 'fast' );
+		$( '#div_raid_create' ).fadeIn( 'fast' );
+	} else {
+		var parent_selector_to_hide = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'red' )
+		$( parent_selector_to_hide ).fadeOut( 'fast' );
+		if ( $( 'form input:checkbox[ name = "checkbox_drive" ]' ).is( ':checked' ) ) {
+		} else {
+			$( '#div_raid_create' ).fadeOut( 'fast' );
+		}
+	}
+} );
+
+$( 'form input:checkbox[ name = "checkbox_logical" ]' ).click( function() {
+	if ( $( this ).is( ':checked' ) ) {
+		var parent_selector_to_show = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr:hidden' ).css( 'background-color', 'yellow' )
+		$( parent_selector_to_show ).fadeIn( 'fast' );
+		$( '#div_logical_delete' ).fadeIn( 'fast' );
+	} else {
+		var parent_selector_to_hide = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'red' )
+		$( parent_selector_to_hide ).fadeOut( 'fast' );
+		if ( $( 'form input:checkbox[ name = "checkbox_logical" ]' ).is( ':checked' ) ) {
+		} else {
+			$( '#div_logical_delete' ).fadeOut( 'fast' );
+		}
+	}
+} );
 
 //styles
 
@@ -116,26 +153,5 @@ $( 'td.border-left' ).css( {
 	'border-color': '#f0f' } )
 */
 
-// effects
-
-$( '.to_hide' ).hide();
-$( '.to_hide2' ).hide();
-$( 'form input:checkbox[ name = "drives" ]' ).click( function() {
-	if ( $( this ).is( ':checked' ) ) {
-		var parent_selector_to_show = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr:hidden' ).css( 'background-color', 'yellow' )
-		$( parent_selector_to_show ).fadeIn( 'fast' );
-	} else {
-		var parent_selector_to_hide = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'red' )
-		$( parent_selector_to_hide ).fadeOut( 'fast' );
-	}
-} );
-
-$( ' form input:checkbox[ name = "name_logical" ]' ).click( function() {
-	if ( $( 'form input:checkbox[ name = "name_logical" ]' ).is( ':checked' ) ) {
-		$( '.to_hide2' ).fadeIn( 'fast' );
-	} else {
-		$( '.to_hide2' ).fadeOut( 'fast' );
-	}
-} );
 
 </script>
