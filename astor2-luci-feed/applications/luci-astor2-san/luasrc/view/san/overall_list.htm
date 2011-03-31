@@ -199,6 +199,16 @@ $( 'input[ name = "show_all" ]' ).click( function() {
 	$( '[ class ^= "to_hide" ]' ).fadeIn();
 } );
 
+/*
+$.makeArray(
+	checked.parents( '.viewport' ).map(
+		function() {
+			return $(this).find("input[name=address]").val();
+		}
+	)
+).join( "," )
+*/
+
 // Hide/show form for "Create RAID".
 $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 	if ( $( this ).is( ':checked' ) ) {
@@ -209,10 +219,12 @@ $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 			$( '#div_raid_create' ).fadeOut( 'fast' );
 		}
 	}
-	var drives_list_to_raid = '';
-	var array_drives_to_raid = $( 'form input:checkbox[ name = "checkbox_drive" ]:checked' ).each( function() {
-		drives_list_to_raid += $( this ).attr( 'value' ) + ', ';
-	} );
+
+	// Physicals drives to RAID.
+	var drives_list_to_raid = $.makeArray(
+		$( 'form input:checkbox[ name = "checkbox_drive" ]:checked:' )
+			.map( function() { return $( this ).attr( 'value' ); } 	)
+		).join( ', ' );
 	$( 'form input:text[ name = "drives_to_raid_list" ]' ).val( drives_list_to_raid );
 } );
 
