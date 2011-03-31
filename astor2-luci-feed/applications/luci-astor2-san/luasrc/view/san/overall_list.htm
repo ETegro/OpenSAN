@@ -199,16 +199,6 @@ $( 'input[ name = "show_all" ]' ).click( function() {
 	$( '[ class ^= "to_hide" ]' ).fadeIn();
 } );
 
-/*
-$.makeArray(
-	checked.parents( '.viewport' ).map(
-		function() {
-			return $(this).find("input[name=address]").val();
-		}
-	)
-).join( "," )
-*/
-
 // Hide/show form for "Create RAID".
 $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 	if ( $( this ).is( ':checked' ) ) {
