@@ -15,15 +15,16 @@
 		<td valign="top">
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td class="border-top-left"><input type="checkbox" name="checkbox_drive" value="<%= pair.physical_id %>" /></td>
-					<td class="border-top"><%= pair.physical_id %></td>
-					<td class="border-top"><%= physicals[ pair.physical_id ].model %></td>
-					<td class="border-top"><%= physicals[ pair.physical_id ].size %> <%: MiB %></td>
-					<td class="border-top"><a id="physical_info-<%= pair.physical_id %>" href="#">(info)</a></td>
+					<td><input name="checkbox_drive"
+						   type="checkbox"
+						   value="<%= pair.physical_id %>" /></td>
+					<td><%= pair.physical_id %></td>
+					<td><%= physicals[ pair.physical_id ].model %></td>
+					<td><%= physicals[ pair.physical_id ].size %> <%: MiB %></td>
+					<td><a id="physical_info-<%= pair.physical_id %>" href="#">(info)</a></td>
 				</tr>
 				<tr class="to_hide">
 					<td colspan="4" class="border-left">
-
 						<p><input id="physical_id-<%= pair.physical_id %>"
 						       name="physical_id-<%= pair.physical_id %>"
 						       readonly="readonly"
@@ -72,12 +73,14 @@
 		<td rowspan="<%= pair.logical_size %>" valign="top" class="border-top-right-bottom">
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td><input type="checkbox" name="checkbox_logical" value="<%= pair.logical_id %>" /></td>
+					<td><input name="checkbox_logical"
+						   type="checkbox"
+						   value="<%= pair.logical_id %>" /></td>
 					<td><%= pair.logical_id %></td>
 					<td><%: RAID %>: <%= logicals[ pair.logical_id ].level %></td>
 					<td><%= logicals[ pair.logical_id ].state %></td>
 					<% if logicals[ pair.logical_id ].progress then %>
-						<td><%= logicals[ pair.logical_id ].progress %> % </td>
+						<td><%= logicals[ pair.logical_id ].progress %> %</td>
 					<% end %>
 					<td><%= logicals[ pair.logical_id ].capacity %> <%: MiB %></td>
 					<td><a id="logical_info-<%= pair.logical_id %>" href="#">(info)</a></td>
@@ -102,7 +105,10 @@
 							<li><tt><%: Size %>: <%= logicals[ pair.logical_id ].capacity %> <%: MiB %></tt</li>
 						</ul>
 						<ul class="to_hide2">
-							<li><input type="submit" name="submit_einarc" value="Logical Delete" /></li>
+							<li><input name="submit_einarc"
+								   type="submit"
+								   value="Logical Delete" />
+							</li>
 						</ul>
 					</td>
 				</tr>
@@ -115,17 +121,22 @@
 
 <div id="div_raid_create" class="to_hide">
 	<p><%: Drives to RAID %>:
-		<input type="text" name="drives_to_raid_list" disabled="disabled" value="<%: Please, selected drives %>" />
+		<input name="drives_to_raid_list"
+		       readonly="readonly"
+		       type="text"
+		       value="<%: Please, selected drives %>" />
 	</p>
 	<p><%: RAID level %>:
 		<select name="raid_level" size="1">
 			<% for _, raidlevel in ipairs( raidlevels ) do %>
-			<option value="<%= raidlevel %>"><%= raidlevel %></option>
+				<option value="<%= raidlevel %>"><%= raidlevel %></option>
 			<% end %>
 		</select>
 	</p>
 	<p>
-		<input type="submit" name="submit_einarc" value="Create RAID" />
+		<input name="submit_einarc"
+		       type="submit"
+		       value="Create RAID" />
 	</p>
 </div>
 </form>
