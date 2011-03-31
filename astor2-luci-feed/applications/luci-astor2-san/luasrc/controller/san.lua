@@ -22,6 +22,7 @@ module( "luci.controller.san", package.seeall )
 
 common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
+matrix = require( "matrix" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -41,37 +42,9 @@ function index()
 	e.leaf = true
 end
 
-local function physical_logical_matrix()
-	local matrix = {}
-	local current_logical_pointer = 1
-	for logical_id, _ in pairs( einarc.logical.list() ) do
-		local logical_size = 0
-		local physicals_to_sort = {}
-		for physical_id, state in pairs( einarc.logical.physical_list( logical_id ) ) do
-			physicals_to_sort[ physical_id ] = { state = state }
-		end
-		for _, physical_data in ipairs( einarc.physical.sorted_list( physicals_to_sort ) ) do
-			matrix[ #matrix + 1 ] = { physical_id = physical_data.id }
-			logical_size = logical_size + 1
-		end
-		matrix[ current_logical_pointer ].logical_size = logical_size
-		matrix[ current_logical_pointer ].logical_id = logical_id
-		current_logical_pointer = current_logical_pointer + 1
-	end
-	for physical_id, _ in pairs( einarc.physical.list() ) do
-		local found = false
-		for _, pair in ipairs( matrix ) do
-			if physical_id == pair.physical_id then
-				found = true
-			end
-		end
-		if not found then
-			matrix[ #matrix + 1 ] = { physical_id = physical_id }
-		end
-	end
-	return matrix
-end
-
+------------------------------------------------------------------------
+-- Different common functions
+------------------------------------------------------------------------
 local function drives_in_logicals()
 	local physicals_list = {}
 	for logical_id, _ in pairs( einarc.logical.list() ) do
@@ -96,9 +69,7 @@ end
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
-		physical_logical_matrix = physical_logical_matrix(),
-		physicals = einarc.physical.list(),
-		logicals = logical_fillup_progress( einarc.logical.list() ),
+		overall_matrix = matrix.overall(),
 		raidlevels = einarc.adapter.get( "raidlevels" ),
 		drives_in_logicals = drives_in_logicals(),
 		message_error = message_error } )
