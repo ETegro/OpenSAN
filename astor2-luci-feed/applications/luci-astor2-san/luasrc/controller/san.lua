@@ -29,15 +29,15 @@ function index()
 	local i18n = luci.i18n.translate
 	local e = entry( { "san" },
 	                 call( "index_overall" ),
-			 i18n("SAN"),
-			 10 )
+	                 i18n("SAN"),
+	                 10 )
 	e.i18n = "astor2_san"
 
 	-- Einarc related
-	e = entry( { "san", "einarc_logical_add" },
-	           call( "einarc_logical_add" ),
-		   nil,
-		   10 )
+	e = entry( { "san", "san_functions" },
+	           call( "san_functions" ),
+	           nil,
+	           10 )
 	e.leaf = true
 end
 
@@ -127,29 +127,49 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-einarc_logical_add = function()
-	local drives = luci.http.formvalue( "drives" )
-	local raid_level = luci.http.formvalue( "raid_level" )
-	local message_error = nil
+san_functions = function()
+	local input_value = luci.http.formvalue( "submit_einarc" )
 	local i18n = luci.i18n.translate
+	local message_error = nil
 
-	if common.is_string( drives ) then
-		drives = { drives }
-	end
-
-	if not drives then
-		message_error = i18n("Drives not selected")
+	if not input_value then
+		message_error = i18n("No input value")
 	else
-		local is_valid, message = is_valid_raid_configuration( raid_level, drives )
-		if is_valid then
-			local return_code, result = pcall( einarc.logical.add, raid_level, drives )
-			if not return_code then
-				message_error = i18n("Failed to create logical disk")
+		if input_value == "Logical Delete" then
+			local logical_id = luci.http.formvalue( "logical_id" )
+			logical_id = tonumber( logical_id )
+			if not logical_id then
+				message_error = i18n("Logical disk not selected")
+			else
+				local return_code, result = pcall( einarc.logical.delete, logical_id )
+				if not return_code then
+					message_error = i18n("Failed to delete logical disk")
+				end
 			end
-		else
-			message_error = message
+
+		elseif input_value == "Create RAID" then
+			local drives = luci.http.formvalue( "checkbox_drive" )
+			local raid_level = luci.http.formvalue( "raid_level" )
+			if common.is_string( drives ) then
+				drives = { drives }
+			end
+			if not drives then
+				message_error = i18n("Drives not selected")
+			else
+				local is_valid, message = is_valid_raid_configuration( raid_level, drives )
+				if is_valid then
+					local return_code, result = pcall( einarc.logical.add, raid_level, drives )
+					if not return_code then
+						message_error = i18n("Failed to create logical disk")
+					end
+				else
+					message_error = message
+				end
+			end
+
 		end
 	end
 
 	index_with_error( message_error )
+
 end
