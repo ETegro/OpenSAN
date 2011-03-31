@@ -136,7 +136,7 @@ san_functions = function()
 		message_error = i18n("No input value")
 	else
 		if input_value == "Logical Delete" then
-			local logical_id = luci.http.formvalue( "checkbox_logical" )
+			local logical_id = luci.http.formvalue( "logical_id" )
 			logical_id = tonumber( logical_id )
 			if not logical_id then
 				message_error = i18n("Logical disk not selected")

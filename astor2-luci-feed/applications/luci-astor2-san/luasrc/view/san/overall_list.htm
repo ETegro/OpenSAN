@@ -73,9 +73,6 @@
 		<td rowspan="<%= pair.logical_size %>" valign="top" class="border-top-right-bottom">
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td><input name="checkbox_logical"
-						   type="checkbox"
-						   value="<%= pair.logical_id %>" /></td>
 					<td><%= pair.logical_id %></td>
 					<td><%: RAID %>: <%= logicals[ pair.logical_id ].level %></td>
 					<td><%= logicals[ pair.logical_id ].state %></td>
@@ -95,7 +92,7 @@
 					<td colspan="<%= colspan_logical %>">
 
 						<p><input id="logical_id-<%= pair.logical_id %>"
-						       name="logical_id-<%= pair.logical_id %>"
+						       name="logical_id"
 						       readonly="readonly"
 						       type="hidden"
 						       value="<%= pair.logical_id %>" /></p>
@@ -144,7 +141,7 @@
 						       type="text"
 						       value="<%= logicals[ pair.logical_id ].capacity %>" /></p>
 
-						<p class="to_hide2">
+						<p>
 							<input name="submit_einarc"
 							       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
 									 return false;
@@ -219,19 +216,6 @@ $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 			.map( function() { return $( this ).attr( 'value' ); } 	)
 		).join( ', ' );
 	$( 'form input:text[ name = "drives_to_raid_list" ]' ).val( drives_list_to_raid );
-} );
-
-// Hide/show button "Logical delete".
-$( 'form input:checkbox[ name = "checkbox_logical" ]' ).click( function() {
-	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).find( 'p.to_hide2' ).css( 'background-color', 'green' );
-	var checkbox_to_disable = $( 'form input:checkbox[ name = "checkbox_logical" ]' ).not( this );
-	if ( $( this ).is( ':checked' ) ) {
-		$( parent_selector ).fadeIn( 'fast' );
-		$( checkbox_to_disable ).attr( 'disabled', 'disabled' );
-	} else {
-		$( parent_selector ).fadeOut( 'fast' );
-		$( checkbox_to_disable ).removeAttr( 'disabled' );
-	}
 } );
 
 // Hide/show information of physicals and logicals.
