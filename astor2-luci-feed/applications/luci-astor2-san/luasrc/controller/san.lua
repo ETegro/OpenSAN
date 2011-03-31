@@ -72,6 +72,16 @@ local function physical_logical_matrix()
 	return matrix
 end
 
+local function drives_in_logicals()
+	local physicals_list = {}
+	for logical_id, _ in pairs( einarc.logical.list() ) do
+		for physical_id, des in pairs( einarc.logical.physical_list( logical_id ) ) do
+			physicals_list[ #physicals_list + 1 ] = physical_id
+		end
+	end
+	return table.concat( physicals_list, ', ' )
+end
+
 local function logical_fillup_progress( logicals )
 	for task_id, task_data in pairs( einarc.task.list() ) do
 		for logical_id, logical_data in pairs( logicals ) do
@@ -90,6 +100,7 @@ function index_overall()
 		physicals = einarc.physical.list(),
 		logicals = logical_fillup_progress( einarc.logical.list() ),
 		raidlevels = einarc.adapter.get( "raidlevels" ),
+		drives_in_logicals = drives_in_logicals(),
 		message_error = message_error } )
 end
 
