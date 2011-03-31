@@ -146,8 +146,11 @@
 
 						<p class="to_hide2">
 							<input name="submit_einarc"
-								   type="submit"
-								   value="Logical Delete" />
+							       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
+									 return false;
+								         return true;"
+							       type="submit"
+							       value="Logical Delete" />
 						</p>
 					</td>
 				</tr>
