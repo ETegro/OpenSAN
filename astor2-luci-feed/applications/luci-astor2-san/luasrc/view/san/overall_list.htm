@@ -1,9 +1,11 @@
 <form method="post" action="<%=luci.dispatcher.build_url("san", "san_functions")%>">
+<p>
+	<input type="button" name="hide_all" value="Hide all information" />
+	<input type="button" name="show_all" value="Show all information" />
+	<input type="reset" name="reset_form" value="Reset all form" /> 
+</p>
 
-<input type="button" name="hide_all" value="Hide all information" /> 
-<input type="reset" name="reset_form" value="Reset all form" /> 
-
-<table border="1px" bordercolor="#ccc" cellpadding="0" cellspacing="0">
+<table border="1px" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>Physical list</td>
 		<td>Logical list</td>
@@ -17,18 +19,51 @@
 					<td class="border-top"><%= pair.physical_id %></td>
 					<td class="border-top"><%= physicals[ pair.physical_id ].model %></td>
 					<td class="border-top"><%= physicals[ pair.physical_id ].size %> <%: MiB %></td>
-					<td class="border-top"><a id="physical_id_info" href="#">(info)</a></td>
+					<td class="border-top"><a id="physical_info-<%= pair.physical_id %>" href="#">(info)</a></td>
 				</tr>
 				<tr class="to_hide">
 					<td colspan="4" class="border-left">
-						<ul>
-							<li><tt><%: ID %>: <%= pair.physical_id %></tt></li>
-							<li><tt><%: Model %>: <%= physicals[ pair.physical_id ].model %></tt></li>
-							<li><tt><%: Serial %>: <%= physicals[ pair.physical_id ].serial %></tt></li>
-							<li><tt><%: Revision %>: <%= physicals[ pair.physical_id ].revision %></tt></li>
-							<li><tt><%: State %>: <%= physicals[ pair.physical_id ].state %></tt></li>
-							<li><tt><%: Size %>: <%= physicals[ pair.physical_id ].size %> <%: MiB %></tt></li>
-						</ul>
+
+						<p><input id="physical_id-<%= pair.physical_id %>"
+						       name="physical_id-<%= pair.physical_id %>"
+						       readonly="readonly"
+						       type="hidden"
+						       value="<%= pair.physical_id %>" /></p>
+
+						<p><label for="physical_model-<%= pair.physical_id %>"><%: Model %></label>
+						<input id="physical_model-<%= pair.physical_id %>"
+						       name="physical_model-<%= pair.physical_id %>"
+						       readonly="readonly"
+						       type="text"
+						       value="<%= physicals[ pair.physical_id ].model %>" /></p>
+
+						<p><label for="physical_serial-<%= pair.physical_id %>"><%: S/N %></label>
+						<input id="physical_serial-<%= pair.physical_id %>"
+						       name="physical_serial-<%= pair.physical_id %>"
+						       readonly="readonly"
+						       type="text"
+						       value="<%= physicals[ pair.physical_id ].serial %>" /></p>
+
+						<p><label for="physical_revision-<%= pair.physical_id %>"><%: Revision %></label>
+						<input id="physical_revision-<%= pair.physical_id %>"
+						       name="physical_revision-<%= pair.physical_id %>"
+						       readonly="readonly"
+						       type="text"
+						       value="<%= physicals[ pair.physical_id ].revision %>" /></p>
+
+						<p><label for="physical_state-<%= pair.physical_id %>"><%: State %></label>
+						<input id="physical_state-<%= pair.physical_id %>"
+						       name="physical_state-<%= pair.physical_id %>"
+						       readonly="readonly"
+						       type="text"
+						       value="<%= physicals[ pair.physical_id ].state %>" /></p>
+
+						<p><label for="physical_size-<%= pair.physical_id %>"><%: Size %> (<%: MiB %>)</label>
+						<input id="physical_size-<%= pair.physical_id %>"
+						       name="physical_size-<%= pair.physical_id %>"
+						       readonly="readonly"
+						       type="text"
+						       value="<%= physicals[ pair.physical_id ].size %>" /></p>
 					</td>
 				</tr>
 			</table>
@@ -45,7 +80,7 @@
 						<td><%= logicals[ pair.logical_id ].progress %> % </td>
 					<% end %>
 					<td><%= logicals[ pair.logical_id ].capacity %> <%: MiB %></td>
-					<td><a id="logical_id_info" href="#">(info)</a></td>
+					<td><a id="logical_info-<%= pair.logical_id %>" href="#">(info)</a></td>
 				</tr>
 				<tr class="to_hide2">
 					<% local colspan_logical
@@ -106,7 +141,12 @@ $( '[ class ^= "to_hide" ]' ).hide();
 
 // Hide all on click button "Hide all".
 $( 'input[ name = "hide_all" ]' ).click( function() {
-	$( 'table [ class ^= "to_hide" ]' ).fadeOut();
+	$( '[ class ^= "to_hide" ]' ).fadeOut();
+} );
+
+// Show all on click button "Show all".
+$( 'input[ name = "show_all" ]' ).click( function() {
+	$( '[ class ^= "to_hide" ]' ).fadeIn();
 } );
 
 // Hide/show form for "Create RAID".
@@ -140,7 +180,7 @@ $( 'form input:checkbox[ name = "checkbox_logical" ]' ).click( function() {
 } );
 
 // Hide/show information of physicals and logicals.
-$( 'form a[ id $=_id_info ]' ).click( function() {
+$( 'form a[ id *= "ical_info-" ]' ).click( function() {
 	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).css( 'background-color', 'yellow' );
 	if ( $( parent_selector ).is( ':hidden' ) ) {
 		$( parent_selector ).fadeIn( 'fast' );
