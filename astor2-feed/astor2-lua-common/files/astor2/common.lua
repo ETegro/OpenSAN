@@ -236,8 +236,8 @@ end
 -- @param separator Words separator
 -- @return An array of words
 function M.split_by( str, separator )
-	assert( str and common.is_string( str ) )
-	assert( separator and common.is_string( separator ) )
+	assert( str and M.is_string( str ) )
+	assert( separator and M.is_string( separator ) )
 	local words = {}
 	local pattern = string.format( "([^%s]+)", separator )
 	string.gsub( str,
