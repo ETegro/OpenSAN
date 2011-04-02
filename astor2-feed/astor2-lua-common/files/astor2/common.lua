@@ -223,10 +223,24 @@ end
 
 --- Pretty printing of table
 -- @param table Table to print
-function M.ppt( table )
+function M.ppt( table, offset )
 	assert( M.is_table( table ) )
+
+	if not offset then offset = 0 end
+	local prefix = ""
+	for i=1,offset do
+		prefix = prefix .. "...."
+	end
+
 	for k, v in pairs( table ) do
-		print( k, v )
+		if M.is_string( k ) then k = "\"" .. k .. "\"" end
+		if M.is_string( v ) then v = "\"" .. v .. "\"" end
+		if M.is_table( v ) then
+			print( prefix .. k .. " --> " )
+			M.ppt( v, offset + 1 )
+		else
+			print( prefix .. k .. " -> " .. tostring( v ) )
+		end
 	end
 end
 
