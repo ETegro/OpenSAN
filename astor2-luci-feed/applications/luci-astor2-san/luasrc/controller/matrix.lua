@@ -30,6 +30,7 @@ function M.gcd( x, y )
 end
 
 function M.lcm( x, y )
+	if x == 0 and y == 0 then return 0 end
 	return math.abs( x * y ) / M.gcd( x, y )
 end
 
