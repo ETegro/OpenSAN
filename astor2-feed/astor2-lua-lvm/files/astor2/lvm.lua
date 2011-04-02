@@ -21,6 +21,10 @@ local M = {}
 
 local common = require( "astor2.common" )
 
+--- Check if specified string is a disk device
+-- It performs simple matching by ^/dev/ regular expression
+-- @param disk Disk path to check
+-- @return true/false
 local function is_disk( disk )
 	assert( disk and common.is_string( disk ) )
 	local dev_exists = string.match( disk, "^/dev/[^/]+$" )
@@ -47,21 +51,27 @@ function M.PhysicalVolume:new( attrs )
 	return setmetatable( attrs, PhysicalVolume_mt )
 end
 
+--- Create PhysicalVolume on a disk
+-- @param disk Disk on which volume must be created
 function M.PhysicalVolume:create( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
 	common.system_succeed( "pvcreate " .. disk )
 end
 
+--- Remove PhysicalVolume
 function M.PhysicalVolume:remove()
 	assert( is_disk( self.device ) )
 	common.system_succeed( "pvremove " .. self.device )
 end
 
+--- Rescan all PhysicalVolumes on a system
 function M.PhysicalVolume:rescan()
 	common.system_succeed( "pvscan" )
 end
 
+--- List all PhysicalVolumes
+-- @return { PhysicalVolume, PhysicalVolume }
 function M.PhysicalVolume:list()
 	local physical_volumes = {}
 	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
@@ -106,6 +116,9 @@ function M.VolumeGroup:new( attrs )
 	return setmetatable( attrs, VolumeGroup_mt )
 end
 
+--- Create VolumeGroup
+-- @param name Name of VolumeGroup
+-- @param physical_volumes List of PhysicalVolumes to create group on
 -- TODO: next_vg_name
 function M.VolumeGroup:create( name, physical_volumes )
 	assert( name and common.is_string( name ) )
@@ -129,16 +142,21 @@ function M.VolumeGroup:create( name, physical_volumes )
 	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
 end
 
+--- Remove VolumeGroup
 function M.VolumeGroup:remove()
 	assert( self.name and common.is_string( self.name ) )
 	common.system_succeed( "vgremove " .. self.name )
 end
 
+--- Rescan all VolumeGroups on a system
 function M.VolumeGroup:rescan()
 	common.system_succeed( "vgscan --mknodes" )
 	common.system_succeed( "vgchange -a y" )
 end
 
+--- List all VolumeGroups that are on specified PhysicalVolumes
+-- @param physical_volumes PhysicalVolumes to check
+-- @return { "foo" = VolumeGroup, "bar" = VolumeGroup }
 function M.VolumeGroup:list( physical_volumes )
 	local volume_groups = {}
 	for _, line in ipairs( common.system_succeed( "vgdisplay -c" ) ) do
@@ -155,7 +173,7 @@ function M.VolumeGroup:list( physical_volumes )
 		end
 
 		if #physicals_volumes_in_group ~= 0 then
-		volume_groups[ #volume_groups + 1 ] = M.VolumeGroup:new({
+		volume_groups[ name ] = M.VolumeGroup:new({
 			name = name,
 			max_volume = tonumber( max_volume ),
 			extent = extent,
@@ -185,6 +203,10 @@ function M.LogicalVolume:new( attrs )
 	return setmetatable( attrs, LogicalVolume_mt )
 end
 
+--- Create LogicalVolume on a VolumeGroup
+-- @param name Name of LogicalVolume
+-- @param volume_group VolumeGroup to create LogicalVolume on
+-- @param size Size of LogicalVolume
 function M.LogicalVolume:create( name, volume_group, size )
 	assert( name and common.is_string( name ) )
 	assert( volume_group and common.is_table( volume_group ) )
@@ -206,6 +228,7 @@ function M.LogicalVolume:create( name, volume_group, size )
 	end
 end
 
+--- Remove LogicalVolume
 function M.LogicalVolume:remove()
 	assert( self.volume_group )
 	assert( self.name )
@@ -214,10 +237,14 @@ function M.LogicalVolume:remove()
 	                       self.name )
 end
 
+--- Rescan all LogicalVolumes on a system
 function M.LogicalVolume:rescan()
 	common.system_succeed( "lvscan" )
 end
 
+--- List all LogicalVolumes on specified VolumeGroups
+-- @param volume_groups List of VolumeGroups to check
+-- @return { LogicalVolume, LogicalVolume }
 function M.LogicalVolume:list( volume_groups )
 	assert( volume_groups and common.is_table( volume_groups ) )
 	local result = {}
@@ -251,12 +278,15 @@ end
 --------------------------------------------------------------------------
 M.DM_MODULES = { "dm_mod", "dm_log", "dm_mirror", "dm_snapshot" }
 
+--- Load all LVM-related kernel modules
 local function load_modules()
 	for _, dm_module in ipairs( M.DM_MODULES ) do
 		common.system_succeed( "modprobe " .. dm_module )
 	end
 end
 
+--- Check if LVM is running and ready for actions
+-- @return true/false
 M.is_running = function()
 	-- TODO: replace with sysfs
 	for _, line in ipairs( common.system_succeed( "lsmod" ) ) do
@@ -267,12 +297,14 @@ M.is_running = function()
 	return false
 end
 
+--- Perform rescan of all LVM-related objects
 local function restore_lvm()
 	M.PhysicalVolume.rescan()
 	M.VolumeGroup.rescan()
 	M.LogicalVolume.rescan()
 end
 
+--- Start LVM subsystem if it is not running and rescan all related objects
 M.start = function()
 	if M.is_running() then return end
 	local succeeded, result = pcall( load_modules )

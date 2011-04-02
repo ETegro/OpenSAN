@@ -37,7 +37,7 @@ local function device_lvms( device )
 			physical_volumes[ #physical_volumes + 1 ] = physical
 		end
 	end
-	return lvm.LogicalVolume:list( lvm.VolumeGroup:list( physical_volumes ) )
+	return lvm.LogicalVolume:list( common.values( lvm.VolumeGroup:list( physical_volumes ) ) )
 end
 
 function caller()
