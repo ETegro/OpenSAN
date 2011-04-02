@@ -110,6 +110,17 @@ M.logical.list = function()
 	return logicals
 end
 
+--- einarc logical list with logical physical_list
+-- @return { 3 = { level = "1", physicals = { { ... }, { ... } }, capacity = 666.0, device = "/dev/md0", state = "normal" } }
+M.logical.list_full = function()
+	local logicals = M.logical.list()
+	for logical_id, _ in pairs( logicals ) do
+		logicals.physicals = M.logical.physical_list( logical_id )
+		logicals.drives = nil
+	end
+	return logicals
+end
+
 --- einarc logical add
 -- @param raid_level "passthrough" | "linear" | "0" | "1" | "5" | "6" | "10"
 -- @param drives { "0:1", "0:2", "254:1" }
