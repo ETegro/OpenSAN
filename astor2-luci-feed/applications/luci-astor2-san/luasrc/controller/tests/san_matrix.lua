@@ -104,25 +104,25 @@ TestLcm = {}
 		assertEquals( matrix.lcm(  0,  -4), 0 )
 	end
 	function TestLcm:test10()
-		assertEquals( matrix.lcm( 18,  30), 0 )
+		assertEquals( matrix.lcm( 18,  30), 90 )
 	end
 	function TestLcm:test11()
-		assertEquals( matrix.lcm( -6,   9), 8 )
+		assertEquals( matrix.lcm( -6,   9), 18 )
 	end
 	function TestLcm:test12()
-		assertEquals( matrix.lcm(-10, -10), 0 )
+		assertEquals( matrix.lcm(-10, -10), 10 )
 	end
 	function TestLcm:test13()
-		assertEquals( matrix.lcm( 25, -10), 0 )
+		assertEquals( matrix.lcm( 25, -10), 50 )
 	end
 	function TestLcm:test14()
-		assertEquals( matrix.lcm(  3,   7), 1 )
+		assertEquals( matrix.lcm(  3,   7), 21 )
 	end
 	function TestLcm:test15()
-		assertEquals( matrix.lcm(  8,   9), 2 )
+		assertEquals( matrix.lcm(  8,   9), 72 )
 	end
 	function TestLcm:test16()
-		assertEquals( matrix.lcm(  7,  49), 9 )
+		assertEquals( matrix.lcm(  7,  49), 49 )
 	end
 
 TestMatrix = {}
