@@ -121,14 +121,127 @@ TestMatrix = {}
 			}
 		}
 	end
-	function TestMatrix:test_matrix()
+	function TestMatrix:test_matrix_double()
 		assert( common.compare_tables(
 			matrix.overall( {
 				physicals = self.physicals, -- Actually should be astor2.einarc.etc
-				logicals = self.logicals, -- Actually should be astor2.einarc.etc
-				tasks = self.tasks -- Actually should be astor2.einarc.etc
+				logicals = self.logicals,   -- Actually should be astor2.einarc.etc
+				tasks = self.tasks          -- Actually should be astor2.einarc.etc
 			} ), {
-				something = "needed"
+				{
+					physical = {
+						rowspan = 1,
+						highlight = { "left", "top" },
+						id = "3:1",
+						model = "model1",
+						revision = "qwerty",
+						serial = "010001111",
+						size = 666,
+						state = "3"
+					},
+					logical = {
+						rowspan = 2,
+						highlight = { "top", "right", "bottom" },
+						id = 3,
+						level = "1",
+						physicals = {
+							["3:1"] = "3",
+							["3:2"] = "3"
+						},
+						capacity = 666.0,
+						device = "/dev/md3",
+						state = "normal"
+					}
+				},
+				{
+					physical = {
+						rowspan = 1,
+						highlight = { "bottom", "left" },
+						id = "3:2",
+						model = "model1",
+						revision = "qwerty",
+						serial = "010001112",
+						size = 666,
+						state = "3"
+					}
+				},
+				{
+					physical = {
+						rowspan = 1,
+						highlight = { "left", "top" },
+						id = "13:1",
+						model = "model2",
+						revision = "asdfgh",
+						serial = "010001121",
+						size = 333,
+						state = "13"
+					},
+					logical = {
+						rowspan = 5,
+						highlight = { "top", "right", "bottom" },
+						id = 13,
+						level = "5",
+						physicals = {
+							["13:1"] = "13",
+							["13:2"] = "13",
+							["13:3"] = "13",
+							["13:4"] = "failed",
+							["13:5"] = "hotspare"
+						},
+						capacity = 666.0,
+						device = "/dev/md13",
+						state = "degraded",
+						progress = 66.6
+					}
+				},
+				{
+					physical = {
+						rowspan = 1,
+						highlight = { "left" },
+						id = "13:2",
+						model = "model2",
+						revision = "asdfgh",
+						serial = "010001122",
+						size = 333,
+						state = "13"
+					},
+				},
+				{
+					physical = {
+						rowspan = 1,
+						highlight = { "left" },
+						id = "13:3",
+						model = "model2",
+						revision = "asdfgh",
+						serial = "010001123",
+						size = 333,
+						state = "13"
+					},
+				},
+				{
+					physical = {
+						rowspan = 1,
+						highlight = { "left" },
+						id = "13:4",
+						model = "model2",
+						revision = "asdfgh",
+						serial = "010001124",
+						size = 333,
+						state = "failed"
+					},
+				},
+				{
+					physical = {
+						rowspan = 1,
+						highlight = { "bottom", "left" },
+						id = "13:5",
+						model = "model2",
+						revision = "asdfgh",
+						serial = "010001125",
+						size = 333,
+						state = "hotspare"
+					},
+				},
 			}
 		) )
 	end
