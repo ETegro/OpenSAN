@@ -38,14 +38,55 @@ function M.overall( data )
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
 	local matrix = {}
+	local current_line = 1
 
 	for logical_id, logical in pairs( logicals ) do
-		local tr = {}
-		-- Find maximal value of lines
-		local physicals_quantity = #logical.physicals
-		local logical_volumes_quantity = #common.keys( logical.logical_volumes )
+		local physicals_quantity = #common.keys( logical.physicals or {} )
+		local logical_volumes_quantity = #common.keys( logical.logical_volumes or {} )
 
-		local physicals_sorted = M.Physical:sort( logical.physicals )
+		local lines_quantity = M.lcm(
+			physicals_quantity,
+			logical_volumes_quantity
+		)
+		local future_line = current_line + lines_quantity
+
+		-- Fillup an empty lines
+		for i = current_line, future_line do
+			matrix[ i ] = {}
+		end
+
+		-- Fillup logical
+		matrix[ current_line ].logical = logical
+		matrix[ current_line ].logical.rowspan = lines_quantity
+
+		-- Fillup physicals
+		for physical_id, physical in pairs( logical.physicals ) do
+			logical.physicals[ physical_id ] = physicals[ physical_id ]
+		end
+		local physicals_sorted = einarc.Physical:sort( logical.physicals )
+		print("ROWSPAN", lines_quantity, physicals_quantity )
+		local physical_rowspan = lines_quantity / physicals_quantity
+		for i, physical in ipairs( physicals_sorted ) do
+			local offset = current_line
+			if i ~= 1 then offset = offset + physical_rowspan end
+			common.ppt( matrix )
+			print("IS", offset, current_line, physical_rowspan )
+			matrix[ offset ].physical = physical
+			matrix[ offset ].physical.rowspan = physical_rowspan
+		end
+
+		-- Fillup logical volumes
+		local logical_volume_names = common.keys( logical.logical_volumes or {} )
+		table.sort( logical_volume_names )
+		local logical_volume_rowspan = lines_quantity / logical_volumes_quantity
+		for i, logical_volume_name in ipairs( logical_volume_names ) do
+			local offset = current_line
+			if i ~= 1 then offset = offset + logical_volume_rowspan end
+			matrix[ offset ].logical_volume = logical.logical_volumes[ logical_volume_name ]
+			matrix[ offset ].logical_volume.rowspan = logical_volume_name
+		end
+
+		current_line = future_line
 	end
 
 	return matrix
@@ -68,7 +109,7 @@ function caller()
 		logicals[ logical_id ]:progress_get()
 		logicals[ logical_id ].logical_volumes = device_lvms( logical.device )
 	end
-	return overall( {
+	return M.overall( {
 		physicals = einarc.Physical:list(),
 		logicals = logicals
 	} )
