@@ -23,6 +23,56 @@ lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
 matrix = require( "matrix" )
 
+TestGcd = {}
+	function TestGcd:test1()
+		assertEquals( matrix.gcd(  1, -1), 1 )
+	end
+	function TestGcd:test2()
+		assertEquals( matrix.gcd( -1,  1), 1 )
+	end
+	function TestGcd:test3()
+		assertEquals( matrix.gcd(  1,  1), 1 )
+	end
+	function TestGcd:test4()
+		assertEquals( matrix.gcd( -1, -1), 1 )
+	end
+	function TestGcd:test5()
+		assertEquals( matrix.gcd(  0,  0), 0 )
+	end
+	function TestGcd:test6()
+		assertEquals( matrix.gcd(  7,  0), 7 )
+	end
+	function TestGcd:test7()
+		assertEquals( matrix.gcd(  0,  9), 9 )
+	end
+	function TestGcd:test8()
+		assertEquals( matrix.gcd( -7,  0), 7 )
+	end
+	function TestGcd:test9()
+		assertEquals( matrix.gcd(  0, -9), 9 )
+	end
+	function TestGcd:test10()
+		assertEquals( matrix.gcd( 42, 30), 6 )
+	end
+	function TestGcd:test11()
+		assertEquals( matrix.gcd(  6, -9), 3 )
+	end
+	function TestGcd:test12()
+		assertEquals( matrix.gcd(-10,-10), 10 )
+	end
+	function TestGcd:test13()
+		assertEquals( matrix.gcd(-25,-10), 5 )
+	end
+	function TestGcd:test14()
+		assertEquals( matrix.gcd(  3,  7), 1 )
+	end
+	function TestGcd:test15()
+		assertEquals( matrix.gcd(  8,  9), 1 )
+	end
+	function TestGcd:test16()
+		assertEquals( matrix.gcd(  7, 49), 7 )
+	end
+
 TestMatrix = {}
 	function TestMatrix:setUp()
 		self.physicals = {
@@ -126,19 +176,19 @@ TestMatrix = {}
 				device = "/dev/md3",
 				state = "normal",
 				logical_volumes = {
-					lvm.LogicalVolume:new( {
+					["foo"] = lvm.LogicalVolume:new( {
 						name = "foo",
 						device = "foobar1",
 						volume_group = {}, -- It is dummy
 						size = 12
 					} ),
-					lvm.LogicalVolume:new( {
+					["bar"] = lvm.LogicalVolume:new( {
 						name = "bar",
 						device = "foobar2",
 						volume_group = {}, -- It is dummy
 						size = 23
 					} ),
-					lvm.LogicalVolume:new( {
+					["baz"] = lvm.LogicalVolume:new( {
 						name = "baz",
 						device = "foobar3",
 						volume_group = {}, -- It is dummy
