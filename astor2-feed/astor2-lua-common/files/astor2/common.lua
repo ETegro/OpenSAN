@@ -223,8 +223,9 @@ end
 
 --- Pretty printing of table
 -- @param table Table to print
-function M.ppt( table, offset )
+function M.ppt( table, offset, message )
 	assert( M.is_table( table ) )
+	local line72 = "------------------------------------------------------------------------"
 
 	if not offset then offset = 0 end
 	local prefix = ""
@@ -232,7 +233,15 @@ function M.ppt( table, offset )
 		prefix = prefix .. "...."
 	end
 
+	if message then
+		print( line72 )
+		print( "-- BEGIN: " .. message )
+		print( line72 )
+	end
+
 	for k, v in pairs( table ) do
+		local k = k
+		local v = v
 		if M.is_string( k ) then k = "\"" .. k .. "\"" end
 		if M.is_string( v ) then v = "\"" .. v .. "\"" end
 		if M.is_table( v ) then
@@ -241,6 +250,12 @@ function M.ppt( table, offset )
 		else
 			print( prefix .. k .. " -> " .. tostring( v ) )
 		end
+	end
+
+	if message then
+		print( line72 )
+		print( "-- END: " .. message )
+		print( line72 )
 	end
 end
 
