@@ -223,7 +223,8 @@ TestMatrix = {}
 				},
 				capacity = 666.0,
 				device = "/dev/md13",
-				state = "degraded"
+				state = "degraded",
+				progress = 66.6
 			}
 		}
 		self.logicals_with_lvm = {
@@ -395,7 +396,7 @@ TestMatrix = {}
 					capacity = 666.0,
 					device = "/dev/md13",
 					state = "degraded",
-				--	progress = 66.6
+					progress = 66.6
 				}
 			},
 			{
