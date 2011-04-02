@@ -58,12 +58,12 @@ end
 -- Adapter
 ------------------------------------------------------------------------
 M.Adapter = {}
-local Adapter_mt = common.class( M.Adapter )
+local Adapter_mt = common.Class( M.Adapter )
 
 --- einarc adapter get
 -- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
-function M.adapter:get( property )
+function M.Adapter:get( property )
 	assert( property and common.is_string( property ) )
 
 	-- WARNING: This is performance related issue only for
@@ -81,7 +81,7 @@ end
 -- Logical
 ------------------------------------------------------------------------
 M.Logical = {}
-local Logical_mt = common.class( M.Logical )
+local Logical_mt = common.Class( M.Logical )
 
 function M.Logical:new( attrs )
 	assert( common.is_number( attrs.id ) )
@@ -211,7 +211,7 @@ end
 -- Physical
 ------------------------------------------------------------------------
 M.Physical = {}
-local Physical_mt = common.class( M.Physical )
+local Physical_mt = common.Class( M.Physical )
 
 --- Is this ID is physical id (having "666:13" kind of form)
 -- @param id "0:1"
@@ -272,7 +272,7 @@ end
 -- @return true/false
 function M.Physical:is_hotspare()
         assert( self.id )
-	local output = M.physical.get( self.id, "hotspare" )
+	local output = M.Physical:get( self.id, "hotspare" )
 	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
 	return output[1] == "1"
 end
@@ -281,7 +281,7 @@ end
 -- Task
 ------------------------------------------------------------------------
 M.Task = {}
-local Task_mt = common.class( M.Task )
+local Task_mt = common.Class( M.Task )
 
 function M.Task:new( attrs )
 	assert( common.is_number( attrs.id ) )
@@ -319,8 +319,8 @@ end
 --- Split physical ID
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
-M.physical.split_id = function( physical_id )
-	assert( M.physical.is_id( physical_id ) )
+function M.Physical:split_id( physical_id )
+	assert( M.Physical:is_id( physical_id ) )
 	return tonumber( string.match( physical_id , "^(%d+):" ) ),
 	       tonumber( string.match( physical_id , ":(%d+)$" ) )
 end
@@ -329,9 +329,9 @@ end
 -- @param id1 Number to compare with
 -- @param id2 Number to compare with
 -- @return sort physicals ids
-M.physical.sort_ids = function( id1, id2 )
-	local left1, right1 = M.physical.split_id( id1 )
-	local left2, right2 = M.physical.split_id( id2 )
+function M.sort_physical_ids( id1, id2 )
+	local left1, right1 = M.Physical:split_id( id1 )
+	local left2, right2 = M.Physical:split_id( id2 )
 	if left1 == left2 then
 		return right1 < right2
 	else
@@ -339,23 +339,14 @@ M.physical.sort_ids = function( id1, id2 )
 	end
 end
 
---- Physical IDs sorting
--- @param physicals { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
--- @return Sorted physicals IDs
-M.physical.sort_physicals = function( physicals )
-	local physical_ids = common.keys( physicals )
-	table.sort( physical_ids, M.physical.sort_ids )
-	return physical_ids
-end
-
 --- Sorted physical list
--- @param physicals { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
--- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
-M.physical.sorted_list = function( physicals )
+-- @param physicals { "0:1" = Physical }
+-- @return { Physical, Physical }
+function M.Physical:sort( physicals )
 	assert( common.is_table( physicals ) )
 	-- Validate that all keys are real physical IDs
 	for physical_id,_ in pairs( physicals ) do
-		assert( M.physical.is_id( physical_id ) )
+		assert( M.Physical:is_id( physical_id ) )
 	end
 
 	local state_list = common.unique_keys( "state", physicals )
@@ -365,13 +356,12 @@ M.physical.sorted_list = function( physicals )
 	local sorted_physicals = {}
 	for _, state in ipairs( states ) do
 		local ids = state_list[ state ]
-		table.sort( ids, M.physical.sort_ids )
+		table.sort( ids, M.sort_physical_ids )
 		for _, id in ipairs( ids ) do
 			sorted_ids[ #sorted_ids + 1 ] = id
 		end
 	end
 	for _, id in ipairs( sorted_ids ) do
-		physicals[ id ].id = id
 		sorted_physicals[ #sorted_physicals + 1 ] = physicals[ id ]
 	end
 	return sorted_physicals
