@@ -22,6 +22,15 @@ common = require( "astor2.common" )
 lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
 
+local function gcd( x, y )
+	if y == 0 then return x end
+	return gcd( y, x % y )
+end
+
+local function lcm( x, y )
+	return math.abs( x * y ) / gcd( x, y )
+end
+
 function overall( data )
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
