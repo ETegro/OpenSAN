@@ -18,20 +18,22 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
+local M = {}
+
 common = require( "astor2.common" )
 lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
 
-local function gcd( x, y )
+function M.gcd( x, y )
 	if y == 0 then return x end
-	return gcd( y, x % y )
+	return M.gcd( y, x % y )
 end
 
-local function lcm( x, y )
-	return math.abs( x * y ) / gcd( x, y )
+function M.lcm( x, y )
+	return math.abs( x * y ) / M.gcd( x, y )
 end
 
-function overall( data )
+function M.overall( data )
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
 	local matrix = {}
@@ -70,3 +72,5 @@ function caller()
 		logicals = logicals
 	} )
 end
+
+return M
