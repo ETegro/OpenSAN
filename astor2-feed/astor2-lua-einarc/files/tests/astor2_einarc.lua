@@ -130,7 +130,7 @@ TestSortPhysicals = {}
 		assertEquals( common.compare_tables( ids, self.ids_sort ), true )
 	end
 
-	function TestSortPhysicals:test_sort_state_list()
+	function TestSortPhysicals:test_sorted_list()
 		assertEquals( true, common.compare_tables(
 					einarc.physical.sorted_list( self.physicals ),
 					self.true_sorted_physicals ) )
