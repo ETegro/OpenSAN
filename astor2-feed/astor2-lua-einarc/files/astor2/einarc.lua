@@ -117,15 +117,6 @@ function M.Logical:list()
 	return logicals
 end
 
---- einarc logical list with logical physical_list
-function M.Logical:list_full()
-	local logicals = M.Logical:list()
-	for logical_id, _ in pairs( logicals ) do
-		logicals[ id ]:physical_list()
-	end
-	return logicals
-end
-
 --- einarc logical add
 -- @param raid_level "passthrough" | "linear" | "0" | "1" | "5" | "6" | "10"
 -- @param drives { "0:1", "0:2", "254:1" }
@@ -205,6 +196,22 @@ function M.Logical:physical_list()
 		self.physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
 	end
 	return self.physicals
+end
+
+--- Retreive logical progress, if it exists
+-- @return self.progress = 66.6
+function M.Logical:progress_get()
+	if common.is_number( self.progress ) then
+		return self.progress
+	end
+	assert( self.id )
+	for task_id, task in pairs( einarc.Task:list() ) do
+		if task.where == tostring( self.id ) then
+			self.progress = task.progress
+			return self.progress
+		end
+	end
+	return self.progress
 end
 
 ------------------------------------------------------------------------
