@@ -18,8 +18,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-function overall()
+common = require( "astor2.common" )
+lvm = require( "astor2.lvm" )
+einarc = require( "astor2.einarc" )
+
+function overall( data )
+	local physicals = data.physicals or {}
+	local logicals = data.logicals or {}
 	local matrix = {}
+
 	return matrix
 end
 
@@ -31,4 +38,17 @@ local function device_lvms( device )
 		end
 	end
 	return lvm.LogicalVolume:list( lvm.VolumeGroup:list( physical_volumes ) )
+end
+
+function caller()
+	local logicals = einarc.Logical:list_full()
+	for logical_id, logical in pairs( logicals ) do
+		logicals[ logical_id ]:physical_list()
+		logicals[ logical_id ]:progress_get()
+		logicals[ logical_id ].logical_volumes = device_lvms( logical.device )
+	end
+	return overall( {
+		physicals = einarc.Physical:list(),
+		logicals = logicals
+	} )
 end
