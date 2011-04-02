@@ -18,6 +18,7 @@
 ]]
 
 require( "luaunit" )
+common = require( "astor2.common" )
 matrix = require( "matrix" )
 
 TestMatrix = {}
@@ -119,6 +120,17 @@ TestMatrix = {}
 				progress = 66.6
 			}
 		}
+	end
+	function TestMatrix:test_matrix()
+		assert( common.compare_tables(
+			matrix.overall( {
+				physicals = self.physicals, -- Actually should be astor2.einarc.etc
+				logicals = self.logicals, -- Actually should be astor2.einarc.etc
+				tasks = self.tasks -- Actually should be astor2.einarc.etc
+			} ), {
+				something = "needed"
+			}
+		) )
 	end
 
 LuaUnit:run()
