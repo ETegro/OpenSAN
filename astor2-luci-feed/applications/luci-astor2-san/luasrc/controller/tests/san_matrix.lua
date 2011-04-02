@@ -129,6 +129,7 @@ TestMatrix = {}
 	function TestMatrix:setUp()
 		self.physicals = {
 			["3:1"] = {
+				id = "3:1",
 				model = "model1",
 				revision = "qwerty",
 				serial = "010001111",
@@ -136,6 +137,7 @@ TestMatrix = {}
 				state = "3"
 			},
 			["3:2"] = {
+				id = "3:2",
 				model = "model1",
 				revision = "qwerty",
 				serial = "010001112",
@@ -143,6 +145,7 @@ TestMatrix = {}
 				state = "3"
 			},
 			["13:1"] = {
+				id = "13:1",
 				model = "model2",
 				revision = "asdfgh",
 				serial = "010001121",
@@ -150,6 +153,7 @@ TestMatrix = {}
 				state = "13"
 			},
 			["13:2"] = {
+				id = "13:2",
 				model = "model2",
 				revision = "asdfgh",
 				serial = "010001122",
@@ -157,6 +161,7 @@ TestMatrix = {}
 				state = "13"
 			},
 			["13:3"] = {
+				id = "13:3",
 				model = "model2",
 				revision = "asdfgh",
 				serial = "010001123",
@@ -164,6 +169,7 @@ TestMatrix = {}
 				state = "13"
 			},
 			["13:4"] = {
+				id = "13:4",
 				model = "model2",
 				revision = "asdfgh",
 				serial = "010001124",
@@ -171,6 +177,7 @@ TestMatrix = {}
 				state = "failed"
 			},
 			["13:5"] = {
+				id = "13:5",
 				model = "model2",
 				revision = "asdfgh",
 				serial = "010001125",
@@ -194,6 +201,7 @@ TestMatrix = {}
 		}
 		self.logicals = {
 			[3] = {
+				id = 3,
 				level = "1",
 				physicals = {
 					["3:1"] = "3",
@@ -204,6 +212,7 @@ TestMatrix = {}
 				state = "normal"
 			},
 			[13] = {
+				id = 13,
 				level = "5",
 				physicals = {
 					["13:1"] = "13",
@@ -219,10 +228,11 @@ TestMatrix = {}
 		}
 		self.logicals_with_lvm = {
 			[9] = {
+				id = 9,
 				level = "1",
 				physicals = {
-					["3:1"] = "3",
-					["3:2"] = "3"
+					["3:1"] = "9",
+					["3:2"] = "9"
 				},
 				capacity = 666.0,
 				device = "/dev/md3",
@@ -258,210 +268,275 @@ TestMatrix = {}
 		}
 	end
 	function TestMatrix:test_matrix_double()
+		local needed = {
+			{
+				physical = {
+					rowspan = 1,
+--						highlight = { "left", "top" },
+					id = "3:1",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001111",
+					size = 666,
+					state = "3"
+				},
+				logical = {
+					rowspan = 2,
+--						highlight = { "top", "right", "bottom" },
+					id = 3,
+					level = "1",
+					physicals = {
+						["3:1"] = {
+							rowspan = 1,
+		--						highlight = { "left", "top" },
+							id = "3:1",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001111",
+							size = 666,
+							state = "3"
+						},
+						["3:2"] = {
+							rowspan = 1,
+						--	highlight = { "bottom", "left" },
+							id = "3:2",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001112",
+							size = 666,
+							state = "3"
+						}
+					},
+					capacity = 666.0,
+					device = "/dev/md3",
+					state = "normal"
+				}
+			},
+			{
+				physical = {
+					rowspan = 1,
+				--	highlight = { "bottom", "left" },
+					id = "3:2",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001112",
+					size = 666,
+					state = "3"
+				}
+			},
+			{
+				physical = {
+					rowspan = 1,
+				--	highlight = { "left", "top" },
+					id = "13:1",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001121",
+					size = 333,
+					state = "13"
+				},
+				logical = {
+					rowspan = 5,
+				--	highlight = { "top", "right", "bottom" },
+					id = 13,
+					level = "5",
+					physicals = {
+						["13:1"] = {
+							rowspan = 1,
+						--	highlight = { "left", "top" },
+							id = "13:1",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001121",
+							size = 333,
+							state = "13"
+						},
+						["13:2"] = {
+							rowspan = 1,
+						--	highlight = { "left" },
+							id = "13:2",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001122",
+							size = 333,
+							state = "13"
+						},
+						["13:3"] = {
+							rowspan = 1,
+					--		highlight = { "left" },
+							id = "13:3",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001123",
+							size = 333,
+							state = "13"
+						},
+						["13:4"] = {
+							rowspan = 1,
+					--		highlight = { "left" },
+							id = "13:4",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001124",
+							size = 333,
+							state = "failed"
+						},
+						["13:5"] = {
+							rowspan = 1,
+					--		highlight = { "bottom", "left" },
+							id = "13:5",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001125",
+							size = 333,
+							state = "hotspare"
+						}
+					},
+					capacity = 666.0,
+					device = "/dev/md13",
+					state = "degraded",
+				--	progress = 66.6
+				}
+			},
+			{
+				physical = {
+					rowspan = 1,
+				--	highlight = { "left" },
+					id = "13:2",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001122",
+					size = 333,
+					state = "13"
+				},
+			},
+			{
+				physical = {
+					rowspan = 1,
+			--		highlight = { "left" },
+					id = "13:3",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001123",
+					size = 333,
+					state = "13"
+				},
+			},
+			{
+				physical = {
+					rowspan = 1,
+			--		highlight = { "left" },
+					id = "13:4",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001124",
+					size = 333,
+					state = "failed"
+				},
+			},
+			{
+				physical = {
+					rowspan = 1,
+			--		highlight = { "bottom", "left" },
+					id = "13:5",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001125",
+					size = 333,
+					state = "hotspare"
+				}
+			}
+		}
+
 		assert( common.compare_tables(
 			matrix.overall( {
 				physicals = self.physicals, -- Actually should be astor2.einarc.etc
 				logicals = self.logicals,   -- Actually should be astor2.einarc.etc
 				tasks = self.tasks          -- Actually should be astor2.einarc.etc
-			} ), {
-				{
-					physical = {
-						rowspan = 1,
-						highlight = { "left", "top" },
-						id = "3:1",
-						model = "model1",
-						revision = "qwerty",
-						serial = "010001111",
-						size = 666,
-						state = "3"
-					},
-					logical = {
-						rowspan = 2,
-						highlight = { "top", "right", "bottom" },
-						id = 3,
-						level = "1",
-						physicals = {
-							["3:1"] = "3",
-							["3:2"] = "3"
-						},
-						capacity = 666.0,
-						device = "/dev/md3",
-						state = "normal"
-					}
-				},
-				{
-					physical = {
-						rowspan = 1,
-						highlight = { "bottom", "left" },
-						id = "3:2",
-						model = "model1",
-						revision = "qwerty",
-						serial = "010001112",
-						size = 666,
-						state = "3"
-					}
-				},
-				{
-					physical = {
-						rowspan = 1,
-						highlight = { "left", "top" },
-						id = "13:1",
-						model = "model2",
-						revision = "asdfgh",
-						serial = "010001121",
-						size = 333,
-						state = "13"
-					},
-					logical = {
-						rowspan = 5,
-						highlight = { "top", "right", "bottom" },
-						id = 13,
-						level = "5",
-						physicals = {
-							["13:1"] = "13",
-							["13:2"] = "13",
-							["13:3"] = "13",
-							["13:4"] = "failed",
-							["13:5"] = "hotspare"
-						},
-						capacity = 666.0,
-						device = "/dev/md13",
-						state = "degraded",
-						progress = 66.6
-					}
-				},
-				{
-					physical = {
-						rowspan = 1,
-						highlight = { "left" },
-						id = "13:2",
-						model = "model2",
-						revision = "asdfgh",
-						serial = "010001122",
-						size = 333,
-						state = "13"
-					},
-				},
-				{
-					physical = {
-						rowspan = 1,
-						highlight = { "left" },
-						id = "13:3",
-						model = "model2",
-						revision = "asdfgh",
-						serial = "010001123",
-						size = 333,
-						state = "13"
-					},
-				},
-				{
-					physical = {
-						rowspan = 1,
-						highlight = { "left" },
-						id = "13:4",
-						model = "model2",
-						revision = "asdfgh",
-						serial = "010001124",
-						size = 333,
-						state = "failed"
-					},
-				},
-				{
-					physical = {
-						rowspan = 1,
-						highlight = { "bottom", "left" },
-						id = "13:5",
-						model = "model2",
-						revision = "asdfgh",
-						serial = "010001125",
-						size = 333,
-						state = "hotspare"
-					}
-				}
-			}
-		) )
+			} ), needed ) )
 	end
 	function TestMatrix:test_matrix_triple()
+		local needed = {
+			-- 1
+			{
+				physical = {
+					rowspan = 3,
+					highlight = { "left", "top" },
+					id = "3:1",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001111",
+					size = 666,
+					state = "3"
+				},
+				logical = {
+					rowspan = 6,
+					highlight = { "top", "bottom" },
+					id = 3,
+					level = "1",
+					physicals = {
+						["3:1"] = "3",
+						["3:2"] = "3"
+					},
+					capacity = 666.0,
+					device = "/dev/md3",
+					state = "normal"
+				},
+				logical_volume = {
+					rowspan = 2,
+					highlight = { "top", "right" },
+					name = "foo",
+					volume_group = {},
+					size = 12
+				}
+			},
+			-- 2
+			{
+			},
+			-- 3
+			{
+				logical_volume = {
+					rowspan = 2,
+					highlight = { "right" },
+					name = "bar",
+					volume_group = {},
+					size = 23
+				}
+			},
+			-- 4
+			{
+				physical = {
+					rowspan = 3,
+					highlight = { "bottom", "left" },
+					id = "3:2",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001112",
+					size = 666,
+					state = "3"
+				}
+			},
+			-- 5
+			{
+				logical_volume = {
+					rowspan = 2,
+					highlight = { "bottom", "left" },
+					name = "baz",
+					volume_group = {},
+					size = 34
+				}
+
+			},
+			-- 6
+			{
+			}
+		}
+
 		assert( common.compare_tables(
 			matrix.overall( {
 				physicals = self.physicals,
 				logicals = self.logicals_with_lvm
-			} ), {
-				-- 1
-				{
-					physical = {
-						rowspan = 3,
-						highlight = { "left", "top" },
-						id = "3:1",
-						model = "model1",
-						revision = "qwerty",
-						serial = "010001111",
-						size = 666,
-						state = "3"
-					},
-					logical = {
-						rowspan = 6,
-						highlight = { "top", "bottom" },
-						id = 3,
-						level = "1",
-						physicals = {
-							["3:1"] = "3",
-							["3:2"] = "3"
-						},
-						capacity = 666.0,
-						device = "/dev/md3",
-						state = "normal"
-					},
-					logical_volume = {
-						rowspan = 2,
-						highlight = { "top", "right" },
-						name = "foo",
-						volume_group = {},
-						size = 12
-					}
-				},
-				-- 2
-				{
-				},
-				-- 3
-				{
-					logical_volume = {
-						rowspan = 2,
-						highlight = { "right" },
-						name = "bar",
-						volume_group = {},
-						size = 23
-					}
-				},
-				-- 4
-				{
-					physical = {
-						rowspan = 3,
-						highlight = { "bottom", "left" },
-						id = "3:2",
-						model = "model1",
-						revision = "qwerty",
-						serial = "010001112",
-						size = 666,
-						state = "3"
-					}
-				},
-				-- 5
-				{
-					logical_volume = {
-						rowspan = 2,
-						highlight = { "bottom", "left" },
-						name = "baz",
-						volume_group = {},
-						size = 34
-					}
-
-				},
-				-- 6
-				{
-				}
-			}
-		) )
+			} ), needed ) )
 	end
 
 LuaUnit:run()

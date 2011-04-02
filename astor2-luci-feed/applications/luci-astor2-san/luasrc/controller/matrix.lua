@@ -41,17 +41,19 @@ function M.overall( data )
 	local current_line = 1
 
 	for logical_id, logical in pairs( logicals ) do
-		local physicals_quantity = #common.keys( logical.physicals or {} )
+		local physicals_quantity = #common.keys( logical.physicals )
 		local logical_volumes_quantity = #common.keys( logical.logical_volumes or {} )
-
-		local lines_quantity = M.lcm(
-			physicals_quantity,
-			logical_volumes_quantity
-		)
+		local lines_quantity = physicals_quantity
+		if logical_volumes_quantity ~= 0 then
+			lines_quantity = M.lcm(
+				physicals_quantity,
+				logical_volumes_quantity
+			)
+		end
 		local future_line = current_line + lines_quantity
 
 		-- Fillup an empty lines
-		for i = current_line, future_line do
+		for i = current_line, future_line - 1 do
 			matrix[ i ] = {}
 		end
 
@@ -64,13 +66,9 @@ function M.overall( data )
 			logical.physicals[ physical_id ] = physicals[ physical_id ]
 		end
 		local physicals_sorted = einarc.Physical:sort( logical.physicals )
-		print("ROWSPAN", lines_quantity, physicals_quantity )
 		local physical_rowspan = lines_quantity / physicals_quantity
 		for i, physical in ipairs( physicals_sorted ) do
-			local offset = current_line
-			if i ~= 1 then offset = offset + physical_rowspan end
-			common.ppt( matrix )
-			print("IS", offset, current_line, physical_rowspan )
+			local offset = current_line + ( i - 1 ) * physical_rowspan
 			matrix[ offset ].physical = physical
 			matrix[ offset ].physical.rowspan = physical_rowspan
 		end
@@ -80,10 +78,9 @@ function M.overall( data )
 		table.sort( logical_volume_names )
 		local logical_volume_rowspan = lines_quantity / logical_volumes_quantity
 		for i, logical_volume_name in ipairs( logical_volume_names ) do
-			local offset = current_line
-			if i ~= 1 then offset = offset + logical_volume_rowspan end
+			local offset = current_line + ( i - 1 ) * logical_volume_rowspan
 			matrix[ offset ].logical_volume = logical.logical_volumes[ logical_volume_name ]
-			matrix[ offset ].logical_volume.rowspan = logical_volume_name
+			matrix[ offset ].logical_volume.rowspan = logical_volume_rowspan
 		end
 
 		current_line = future_line
