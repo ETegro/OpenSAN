@@ -19,6 +19,8 @@
 
 require( "luaunit" )
 common = require( "astor2.common" )
+lvm = require( "astor2.lvm" )
+einarc = require( "astor2.einarc" )
 matrix = require( "matrix" )
 
 TestMatrix = {}
@@ -111,6 +113,38 @@ TestMatrix = {}
 				capacity = 666.0,
 				device = "/dev/md13",
 				state = "degraded"
+			}
+		}
+		self.logicals_with_lvm = {
+			[9] = {
+				level = "1",
+				physicals = {
+					["3:1"] = "3",
+					["3:2"] = "3"
+				},
+				capacity = 666.0,
+				device = "/dev/md3",
+				state = "normal",
+				logical_volumes = {
+					lvm.LogicalVolume:new( {
+						name = "foo",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12
+					} ),
+					lvm.LogicalVolume:new( {
+						name = "bar",
+						device = "foobar2",
+						volume_group = {}, -- It is dummy
+						size = 23
+					} ),
+					lvm.LogicalVolume:new( {
+						name = "baz",
+						device = "foobar3",
+						volume_group = {}, -- It is dummy
+						size = 34
+					} )
+				}
 			}
 		}
 		self.tasks = {
@@ -240,8 +274,90 @@ TestMatrix = {}
 						serial = "010001125",
 						size = 333,
 						state = "hotspare"
+					}
+				}
+			}
+		) )
+	end
+	function TestMatrix:test_matrix_triple()
+		assert( common.compare_tables(
+			matrix.overall( {
+				physicals = self.physicals,
+				logicals = self.logicals_with_lvm
+			} ), {
+				-- 1
+				{
+					physical = {
+						rowspan = 3,
+						highlight = { "left", "top" },
+						id = "3:1",
+						model = "model1",
+						revision = "qwerty",
+						serial = "010001111",
+						size = 666,
+						state = "3"
 					},
+					logical = {
+						rowspan = 6,
+						highlight = { "top", "bottom" },
+						id = 3,
+						level = "1",
+						physicals = {
+							["3:1"] = "3",
+							["3:2"] = "3"
+						},
+						capacity = 666.0,
+						device = "/dev/md3",
+						state = "normal"
+					},
+					logical_volume = {
+						rowspan = 2,
+						highlight = { "top", "right" },
+						name = "foo",
+						volume_group = {},
+						size = 12
+					}
 				},
+				-- 2
+				{
+				},
+				-- 3
+				{
+					logical_volume = {
+						rowspan = 2,
+						highlight = { "right" },
+						name = "bar",
+						volume_group = {},
+						size = 23
+					}
+				},
+				-- 4
+				{
+					physical = {
+						rowspan = 3,
+						highlight = { "bottom", "left" },
+						id = "3:2",
+						model = "model1",
+						revision = "qwerty",
+						serial = "010001112",
+						size = 666,
+						state = "3"
+					}
+				},
+				-- 5
+				{
+					logical_volume = {
+						rowspan = 2,
+						highlight = { "bottom", "left" },
+						name = "baz",
+						volume_group = {},
+						size = 34
+					}
+
+				},
+				-- 6
+				{
+				}
 			}
 		) )
 	end
