@@ -32,7 +32,7 @@ TestIsId = {}
 
 TestSortPhysicals = {}
 	function TestSortPhysicals:setUp()
-		self.physical_list = {
+		self.physicals = {
 			[ "0:4" ] = { model = "model1",
 				      revision = "rev1",
 				      serial = "serial1",
@@ -71,7 +71,7 @@ TestSortPhysicals = {}
 
 		self.ids_sort = { "0:1", "0:4", "1:3", "2:2", "10:1", "10:5", "10:11" }
 
-		self.true_sorted_physical_list = {
+		self.true_sorted_physicals = {
 			{ id = "0:1",
 			  model = "model4",
 			  revision = "rev4",
@@ -125,15 +125,15 @@ TestSortPhysicals = {}
 	end
 
 	function TestSortPhysicals:test_sort_ids()
-		local ids = common.keys( self.physical_list )
+		local ids = common.keys( self.physicals )
 		table.sort( ids, einarc.physical.sort_ids )
 		assertEquals( common.compare_tables( ids, self.ids_sort ), true )
 	end
 
 	function TestSortPhysicals:test_sort_state_list()
 		assertEquals( true, common.compare_tables(
-					einarc.physical.sorted_list( self.physical_list ),
-					self.true_sorted_physical_list ) )
+					einarc.physical.sorted_list( self.physicals ),
+					self.true_sorted_physicals ) )
 	end
 
 LuaUnit:run()

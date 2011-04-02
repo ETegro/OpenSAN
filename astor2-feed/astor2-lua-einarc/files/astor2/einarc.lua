@@ -288,29 +288,29 @@ M.physical.sort_ids = function( id1, id2 )
 end
 
 --- Physical IDs sorting
--- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
+-- @param physicals { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 -- @return Sorted physicals IDs
-M.physical.sort_physicals = function( physical_list )
-	local physical_ids = common.keys( physical_list )
+M.physical.sort_physicals = function( physicals )
+	local physical_ids = common.keys( physicals )
 	table.sort( physical_ids, M.physical.sort_ids )
 	return physical_ids
 end
 
 --- Sorted physical list
--- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
+-- @param physicals { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
 -- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
-M.physical.sorted_list = function( physical_list )
-	assert( common.is_table( physical_list ) )
+M.physical.sorted_list = function( physicals )
+	assert( common.is_table( physicals ) )
 	-- Validate that all keys are real physical IDs
-	for physical_id,_ in pairs( physical_list ) do
+	for physical_id,_ in pairs( physicals ) do
 		assert( M.physical.is_id( physical_id ) )
 	end
 
-	local state_list = common.unique_keys( "state", physical_list )
+	local state_list = common.unique_keys( "state", physicals )
 	local states = common.keys( state_list )
 	table.sort( states )
 	local sorted_ids = {}
-	local sorted_physical_list = {}
+	local sorted_physicals = {}
 	for _, state in ipairs( states ) do
 		local ids = state_list[ state ]
 		table.sort( ids, M.physical.sort_ids )
@@ -319,10 +319,10 @@ M.physical.sorted_list = function( physical_list )
 		end
 	end
 	for _, id in ipairs( sorted_ids ) do
-		physical_list[ id ].id = id
-		sorted_physical_list[ #sorted_physical_list + 1 ] = physical_list[ id ]
+		physicals[ id ].id = id
+		sorted_physicals[ #sorted_physicals + 1 ] = physicals[ id ]
 	end
-	return sorted_physical_list
+	return sorted_physicals
 end
 
 return M
