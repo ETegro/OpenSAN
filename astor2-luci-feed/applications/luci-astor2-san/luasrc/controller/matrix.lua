@@ -27,6 +27,15 @@ function overall( data )
 	local logicals = data.logicals or {}
 	local matrix = {}
 
+	for logical_id, logical in pairs( logicals ) do
+		local tr = {}
+		-- Find maximal value of lines
+		local physicals_quantity = #logical.physicals
+		local logical_volumes_quantity = #common.keys( logical.logical_volumes )
+
+		local physicals_sorted = M.Physical:sort( logical.physicals )
+	end
+
 	return matrix
 end
 
