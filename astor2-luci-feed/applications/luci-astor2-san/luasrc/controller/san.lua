@@ -55,17 +55,6 @@ local function drives_in_logicals()
 	return table.concat( physicals_list, ', ' )
 end
 
-local function logical_fillup_progress( logicals )
-	for task_id, task_data in pairs( einarc.task.list() ) do
-		for logical_id, logical_data in pairs( logicals ) do
-			if task_data.where == tostring( logical_id ) then
-				logicals[ logical_id ].progress = task_data.progress
-			end
-		end
-	end
-	return logicals
-end
-
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
