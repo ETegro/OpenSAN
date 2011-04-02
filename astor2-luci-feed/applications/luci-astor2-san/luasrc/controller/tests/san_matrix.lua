@@ -20,4 +20,105 @@
 require( "luaunit" )
 matrix = require( "matrix" )
 
+TestMatrix = {}
+	function TestMatrix:setUp()
+		self.physicals = {
+			["3:1"] = {
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001111",
+				size = 666,
+				state = "3"
+			},
+			["3:2"] = {
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001112",
+				size = 666,
+				state = "3"
+			},
+			["13:1"] = {
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001121",
+				size = 333,
+				state = "13"
+			},
+			["13:2"] = {
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001122",
+				size = 333,
+				state = "13"
+			},
+			["13:3"] = {
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001123",
+				size = 333,
+				state = "13"
+			},
+			["13:4"] = {
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001124",
+				size = 333,
+				state = "failed"
+			},
+			["13:5"] = {
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001125",
+				size = 333,
+				state = "hotspare"
+			},
+			["9:2"] = {
+				model = "model3",
+				revision = "zxcvbn",
+				serial = "010001131",
+				size = 123,
+				state = "free"
+			},
+			["9:4"] = {
+				model = "model3",
+				revision = "zxcvbn",
+				serial = "010001132",
+				size = 246,
+				state = "free"
+			}
+		}
+		self.logicals = {
+			[3] = {
+				level = "1",
+				physicals = {
+					["3:1"] = "3",
+					["3:2"] = "3"
+				},
+				capacity = 666.0,
+				device = "/dev/md3",
+				state = "normal"
+			},
+			[13] = {
+				level = "5",
+				physicals = {
+					["13:1"] = "13",
+					["13:2"] = "13",
+					["13:3"] = "13",
+					["13:4"] = "failed",
+					["13:5"] = "hotspare"
+				},
+				capacity = 666.0,
+				device = "/dev/md13",
+				state = "degraded"
+			}
+		}
+		self.tasks = {
+			[0] = {
+				what = "rebuilding",
+				where = "13",
+				progress = 66.6
+			}
+		}
+	end
+
 LuaUnit:run()
