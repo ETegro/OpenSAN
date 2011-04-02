@@ -23,6 +23,7 @@ lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
 matrix = require( "matrix" )
 
+-- Those tests are taken from boot library
 TestGcd = {}
 	function TestGcd:test1()
 		assertEquals( matrix.gcd(  1, -1), 1 )
@@ -71,6 +72,57 @@ TestGcd = {}
 	end
 	function TestGcd:test16()
 		assertEquals( matrix.gcd(  7, 49), 7 )
+	end
+
+-- Those tests are taken from boot library
+TestLcm = {}
+	function TestLcm:test1()
+		assertEquals( matrix.lcm(  1,  -1), 1 )
+	end
+	function TestLcm:test2()
+		assertEquals( matrix.lcm( -1,   1), 1 )
+	end
+	function TestLcm:test3()
+		assertEquals( matrix.lcm(  1,   1), 1 )
+	end
+	function TestLcm:test4()
+		assertEquals( matrix.lcm( -1,  -1), 1 )
+	end
+	function TestLcm:test5()
+		assertEquals( matrix.lcm(  0,   0), 0 )
+	end
+	function TestLcm:test6()
+		assertEquals( matrix.lcm(  6,   0), 0 )
+	end
+	function TestLcm:test7()
+		assertEquals( matrix.lcm(  0,   7), 0 )
+	end
+	function TestLcm:test8()
+		assertEquals( matrix.lcm( -5,   0), 0 )
+	end
+	function TestLcm:test9()
+		assertEquals( matrix.lcm(  0,  -4), 0 )
+	end
+	function TestLcm:test10()
+		assertEquals( matrix.lcm( 18,  30), 0 )
+	end
+	function TestLcm:test11()
+		assertEquals( matrix.lcm( -6,   9), 8 )
+	end
+	function TestLcm:test12()
+		assertEquals( matrix.lcm(-10, -10), 0 )
+	end
+	function TestLcm:test13()
+		assertEquals( matrix.lcm( 25, -10), 0 )
+	end
+	function TestLcm:test14()
+		assertEquals( matrix.lcm(  3,   7), 1 )
+	end
+	function TestLcm:test15()
+		assertEquals( matrix.lcm(  8,   9), 2 )
+	end
+	function TestLcm:test16()
+		assertEquals( matrix.lcm(  7,  49), 9 )
 	end
 
 TestMatrix = {}
