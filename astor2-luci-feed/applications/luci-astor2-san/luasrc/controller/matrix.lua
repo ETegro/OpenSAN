@@ -25,7 +25,7 @@ lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
 
 function M.gcd( x, y )
-	if y == 0 then return x end
+	if y == 0 then return math.abs( x ) end
 	return M.gcd( y, x % y )
 end
 
