@@ -126,8 +126,8 @@ TestLcm = {}
 	end
 
 TestMatrix = {}
-	function TestMatrix:setUp()
-		self.physicals = {
+	function TestMatrix:test_matrix_double()
+		local physicals = {
 			["3:1"] = {
 				id = "3:1",
 				model = "model1",
@@ -183,23 +183,9 @@ TestMatrix = {}
 				serial = "010001125",
 				size = 333,
 				state = "hotspare"
-			},
-			["9:2"] = {
-				model = "model3",
-				revision = "zxcvbn",
-				serial = "010001131",
-				size = 123,
-				state = "free"
-			},
-			["9:4"] = {
-				model = "model3",
-				revision = "zxcvbn",
-				serial = "010001132",
-				size = 246,
-				state = "free"
 			}
 		}
-		self.logicals = {
+		local logicals = {
 			[3] = {
 				id = 3,
 				level = "1",
@@ -227,48 +213,6 @@ TestMatrix = {}
 				progress = 66.6
 			}
 		}
-		self.logicals_with_lvm = {
-			[9] = {
-				id = 9,
-				level = "1",
-				physicals = {
-					["3:1"] = "9",
-					["3:2"] = "9"
-				},
-				capacity = 666.0,
-				device = "/dev/md3",
-				state = "normal",
-				logical_volumes = {
-					["foo"] = lvm.LogicalVolume:new( {
-						name = "foo",
-						device = "foobar1",
-						volume_group = {}, -- It is dummy
-						size = 12
-					} ),
-					["bar"] = lvm.LogicalVolume:new( {
-						name = "bar",
-						device = "foobar2",
-						volume_group = {}, -- It is dummy
-						size = 23
-					} ),
-					["baz"] = lvm.LogicalVolume:new( {
-						name = "baz",
-						device = "foobar3",
-						volume_group = {}, -- It is dummy
-						size = 34
-					} )
-				}
-			}
-		}
-		self.tasks = {
-			[0] = {
-				what = "rebuilding",
-				where = "13",
-				progress = 66.6
-			}
-		}
-	end
-	function TestMatrix:test_matrix_double()
 		local needed = {
 			{
 				physical = {
@@ -532,12 +476,62 @@ TestMatrix = {}
 
 		assert( common.compare_tables(
 			matrix.overall( {
-				physicals = self.physicals, -- Actually should be astor2.einarc.etc
-				logicals = self.logicals,   -- Actually should be astor2.einarc.etc
-				tasks = self.tasks          -- Actually should be astor2.einarc.etc
+				physicals = physicals, -- Actually should be astor2.einarc.etc
+				logicals = logicals,   -- Actually should be astor2.einarc.etc
 			} ), needed ) )
 	end
 	function TestMatrix:test_matrix_triple()
+		local physicals = {
+			["3:1"] = {
+				id = "3:1",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001111",
+				size = 666,
+				state = "3"
+			},
+			["3:2"] = {
+				id = "3:2",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001112",
+				size = 666,
+				state = "3"
+			}
+		}
+		local logicals = {
+			[9] = {
+				id = 9,
+				level = "1",
+				physicals = {
+					["3:1"] = "9",
+					["3:2"] = "9"
+				},
+				capacity = 666.0,
+				device = "/dev/md3",
+				state = "normal",
+				logical_volumes = {
+					["foo"] = lvm.LogicalVolume:new( {
+						name = "foo",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12
+					} ),
+					["bar"] = lvm.LogicalVolume:new( {
+						name = "bar",
+						device = "foobar2",
+						volume_group = {}, -- It is dummy
+						size = 23
+					} ),
+					["baz"] = lvm.LogicalVolume:new( {
+						name = "baz",
+						device = "foobar3",
+						volume_group = {}, -- It is dummy
+						size = 34
+					} )
+				}
+			}
+		}
 		local needed = {
 			-- 1
 			{
@@ -718,9 +712,114 @@ TestMatrix = {}
 
 		assert( common.compare_tables(
 			matrix.overall( {
-				physicals = self.physicals,
-				logicals = self.logicals_with_lvm
+				physicals = physicals,
+				logicals = logicals
 			} ), needed ) )
+	end
+	function TestMatrix:test_matrix_with_free_drives()
+		local physicals = {
+			["3:1"] = {
+				id = "3:1",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001111",
+				size = 666,
+				state = "0"
+			},
+			["3:2"] = {
+				id = "3:2",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001112",
+				size = 666,
+				state = "free"
+			}
+		}
+		local logicals = {
+			[0] = {
+				id = 0,
+				level = "passthrough",
+				physicals = {
+					["3:1"] = "0",
+				},
+				capacity = 666.0,
+				device = "/dev/md0",
+				state = "normal"
+			}
+		}
+		local needed = {
+			{
+				physical = {
+					rowspan = 1,
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = true
+					},
+					id = "3:1",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001111",
+					size = 666,
+					state = "0"
+				},
+				logical = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = true
+					},
+					id = 0,
+					level = "passthrough",
+					physicals = {
+						["3:1"] = {
+							rowspan = 1,
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = true
+							},
+							id = "3:1",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001111",
+							size = 666,
+							state = "0"
+						}
+					},
+					capacity = 666.0,
+					device = "/dev/md0",
+					state = "normal"
+				}
+			},
+			{
+				physical = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = false,
+						right = false,
+						bottom = false
+					},
+					id = "3:2",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001112",
+					size = 666,
+					state = "free"
+				}
+			}
+		}
+		assert( common.compare_tables(
+			matrix.overall( {
+				physicals = physicals,
+				logicals = logicals
+			} ), needed ) )
+
 	end
 
 LuaUnit:run()

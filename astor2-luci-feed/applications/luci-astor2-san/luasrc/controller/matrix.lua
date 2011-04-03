@@ -43,6 +43,7 @@ function M.overall( data )
 	}
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
+	local physicals_free = common.deepcopy( physicals )
 	local matrix = {}
 	local current_line = 1
 
@@ -71,6 +72,7 @@ function M.overall( data )
 		-- Fillup physicals
 		for physical_id, physical in pairs( logical.physicals ) do
 			logical.physicals[ physical_id ] = physicals[ physical_id ]
+			physicals_free[ physical_id ] = nil
 		end
 		local physicals_sorted = einarc.Physical:sort( logical.physicals )
 		local physical_rowspan = lines_quantity / physicals_quantity
@@ -118,6 +120,13 @@ function M.overall( data )
 		end
 
 		current_line = future_line
+	end
+
+	for physical_id, physical in pairs( physicals_free ) do
+		matrix[ current_line ] = { physical = physical }
+		matrix[ current_line ].physical.rowspan = 1
+		matrix[ current_line ].physical.highlight = common.deepcopy( highlights )
+		current_line = current_line + 1
 	end
 
 	return matrix
