@@ -12,15 +12,19 @@
 		<td><%: Logical drives %></td>
 		<td><%: Logical volumes %></td>
 	</tr>
-	<% for _, line in ipairs( matrix_overall ) do %>
+	<% for _, line_local in ipairs( matrix_overall ) do %>
+
+	<%# Our templates must be able to access locally scoped line_local %>
+	<% line = line_local %>
+
 	<tr>
-		<% if line.physical %>
+		<% if line.physical then %>
 			<%+san/matrix_physical%>
 		<% end %>
-		<% if line.logical %>
+		<% if line.logical then %>
 			<%+san/matrix_logical%>
 		<% end %>
-		<% if line.logical_volume %>
+		<% if line.logical_volume then %>
 			<%+san/matrix_logical_volume%>
 		<% end %>
 	</tr>

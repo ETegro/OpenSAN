@@ -13,7 +13,7 @@
 		<td><%= line.logical.capacity %> <%: MiB %></td>
 	</tr>
 	<tr class="to_hide">
-		<td colspan="<% if line.logical.progress then write("6") else write("5") end %>">
+		<td colspan="<% if line.logical.progress then %>6<% else %>5<% end %>">
 			<p>
 			<label for="logical_level-<%= line.logical.id %>"><%: Level %></label>
 			<input id="logical_level-<%= line.logical.id %>"
