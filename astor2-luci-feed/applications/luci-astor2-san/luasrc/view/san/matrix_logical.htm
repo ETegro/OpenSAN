@@ -1,0 +1,76 @@
+<td rowspan="<%= line.logical.rowspan %>" valign="top">
+
+<table border="0px" width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<a id="logical_info-<%= line.logical.id %>" href="#"><%= line.logical.id %></a>
+		</td>
+		<td><%: Level %>: <%= line.logical.level %></td>
+		<td><%= line.logical.state %></td>
+		<% if line.logical.progress then %>
+			<td><%= line.logical.progress %> %</td>
+		<% end %>
+		<td><%= line.logical.capacity %> <%: MiB %></td>
+	</tr>
+	<tr class="to_hide">
+		<td colspan="<% if line.logical.progress then write("6") else write("5") end %>">
+			<p>
+			<label for="logical_level-<%= line.logical.id %>"><%: Level %></label>
+			<input id="logical_level-<%= line.logical.id %>"
+			       name="logical_level-<%= line.logical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.logical.level %>" />
+			</p>
+
+			<p>
+			<label for="logical_state-<%= line.logical.id %>"><%: State %></label>
+			<input id="logical_state-<%= line.logical.id %>"
+			       name="logical_state-<%= line.logical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.logical.state %>" />
+			</p>
+
+			<p>
+			<label for="logical_drives-<%= line.logical.id %>"><%: Drives %></label>
+			<input id="logical_drives-<%= line.logical.id %>"
+			       name="logical_drives-<%= line.logical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= table.concat( common.keys( line.logical.physicals ), "," ) %>" />
+			</p>
+
+			<% if line.logical.progress then %>
+			<p>
+			<label for="logical_progress-<%= line.logical.id %>"><%: Progress %> (%)</label>
+			<input id="logical_progress-<%= line.logical.id %>"
+			       name="logical_progress-<%= line.logical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.logical.progress %>" />
+			 </p>
+			<% end %>
+
+			<p>
+			<label for="logical_capacity-<%= line.logical.id %>"><%: Size %> (<%: MiB %>)</label>
+			<input id="logical_capacity-<%= line.logical.id %>"
+			       name="logical_capacity-<%= line.logical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.logical.capacity %>" />
+			</p>
+
+			<p>
+			<input name="submit_einarc"
+			       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
+					 return false;
+					 return true;"
+			       type="submit"
+			       value="<%: Remove %>" />
+			</p>
+		</td>
+	</tr>
+</table>
+
+</td>

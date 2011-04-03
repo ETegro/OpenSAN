@@ -35,8 +35,8 @@ function index()
 	e.i18n = "astor2_san"
 
 	-- Einarc related
-	e = entry( { "san", "san_functions" },
-	           call( "san_functions" ),
+	e = entry( { "san", "perform" },
+	           call( "perform" ),
 	           nil,
 	           10 )
 	e.leaf = true
@@ -48,7 +48,7 @@ end
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
-		overall_matrix = matrix.caller(),
+		matrix_overall = matrix.caller(),
 		raidlevels = einarc.Adapter:get( "raidlevels" ),
 		message_error = message_error } )
 end
@@ -87,7 +87,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-san_functions = function()
+function perform()
 	local input_value = luci.http.formvalue( "submit_einarc" )
 	local i18n = luci.i18n.translate
 	local message_error = nil
