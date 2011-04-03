@@ -153,7 +153,7 @@ function perform()
 		logical_remove = einarc_logical_remove,
 	}
 
-	for _, submit in ipairs( common.keys( submits ) ) do
+	for _, submit in ipairs( common.keys( inputs ) ) do
 		for submit_part, function_to_call in pairs( SUBMIT_MAP ) do
 			if string.match( submit, "^submit_" .. submit_part ) then
 				function_to_call( inputs )
