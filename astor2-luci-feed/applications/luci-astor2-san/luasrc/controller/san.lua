@@ -145,8 +145,7 @@ local function index_with_error( message_error )
 end
 
 function perform()
-	local inputs = luci.http.formvaluetable()
-	local submits = luci.http.formvaluetable( "submit_" )
+	local inputs = luci.http.formvaluetable( "san" )
 	local i18n = luci.i18n.translate
 
 	local SUBMIT_MAP = {
