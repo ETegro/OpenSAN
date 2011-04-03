@@ -45,22 +45,11 @@ end
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
-local function drives_in_logicals()
-	local physicals_list = {}
-	for logical_id, _ in pairs( einarc.logical.list() ) do
-		for physical_id, des in pairs( einarc.logical.physical_list( logical_id ) ) do
-			physicals_list[ #physicals_list + 1 ] = physical_id
-		end
-	end
-	return table.concat( physicals_list, ', ' )
-end
-
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
 		overall_matrix = matrix.caller(),
-		raidlevels = einarc.adapter.get( "raidlevels" ),
-		drives_in_logicals = drives_in_logicals(),
+		raidlevels = einarc.Adapter:get( "raidlevels" ),
 		message_error = message_error } )
 end
 
