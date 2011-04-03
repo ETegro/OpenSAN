@@ -71,6 +71,9 @@ function M.overall( data )
 
 		-- Fillup physicals
 		for physical_id, physical in pairs( logical.physicals ) do
+			if physicals[ physical_id ].state == tostring( logical_id ) then
+				physicals[ physical_id ].state = "allocated"
+			end
 			logical.physicals[ physical_id ] = physicals[ physical_id ]
 			physicals_free[ physical_id ] = nil
 		end

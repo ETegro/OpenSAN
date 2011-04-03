@@ -228,7 +228,7 @@ TestMatrix = {}
 					revision = "qwerty",
 					serial = "010001111",
 					size = 666,
-					state = "3"
+					state = "allocated"
 				},
 				logical = {
 					rowspan = 2,
@@ -254,7 +254,7 @@ TestMatrix = {}
 							revision = "qwerty",
 							serial = "010001111",
 							size = 666,
-							state = "3"
+							state = "allocated"
 						},
 						["3:2"] = {
 							rowspan = 1,
@@ -269,7 +269,7 @@ TestMatrix = {}
 							revision = "qwerty",
 							serial = "010001112",
 							size = 666,
-							state = "3"
+							state = "allocated"
 						}
 					},
 					capacity = 666.0,
@@ -291,7 +291,7 @@ TestMatrix = {}
 					revision = "qwerty",
 					serial = "010001112",
 					size = 666,
-					state = "3"
+					state = "allocated"
 				}
 			},
 			{
@@ -308,7 +308,7 @@ TestMatrix = {}
 					revision = "asdfgh",
 					serial = "010001121",
 					size = 333,
-					state = "13"
+					state = "allocated"
 				},
 				logical = {
 					rowspan = 5,
@@ -334,7 +334,7 @@ TestMatrix = {}
 							revision = "asdfgh",
 							serial = "010001121",
 							size = 333,
-							state = "13"
+							state = "allocated"
 						},
 						["13:2"] = {
 							rowspan = 1,
@@ -349,7 +349,7 @@ TestMatrix = {}
 							revision = "asdfgh",
 							serial = "010001122",
 							size = 333,
-							state = "13"
+							state = "allocated"
 						},
 						["13:3"] = {
 							rowspan = 1,
@@ -364,7 +364,7 @@ TestMatrix = {}
 							revision = "asdfgh",
 							serial = "010001123",
 							size = 333,
-							state = "13"
+							state = "allocated"
 						},
 						["13:4"] = {
 							rowspan = 1,
@@ -418,7 +418,7 @@ TestMatrix = {}
 					revision = "asdfgh",
 					serial = "010001122",
 					size = 333,
-					state = "13"
+					state = "allocated"
 				},
 			},
 			{
@@ -435,7 +435,7 @@ TestMatrix = {}
 					revision = "asdfgh",
 					serial = "010001123",
 					size = 333,
-					state = "13"
+					state = "allocated"
 				},
 			},
 			{
@@ -488,7 +488,7 @@ TestMatrix = {}
 				revision = "qwerty",
 				serial = "010001111",
 				size = 666,
-				state = "3"
+				state = "9"
 			},
 			["3:2"] = {
 				id = "3:2",
@@ -496,7 +496,7 @@ TestMatrix = {}
 				revision = "qwerty",
 				serial = "010001112",
 				size = 666,
-				state = "3"
+				state = "9"
 			}
 		}
 		local logicals = {
@@ -548,7 +548,7 @@ TestMatrix = {}
 					revision = "qwerty",
 					serial = "010001111",
 					size = 666,
-					state = "3"
+					state = "allocated"
 				},
 				logical = {
 					rowspan = 6,
@@ -574,7 +574,7 @@ TestMatrix = {}
 							revision = "qwerty",
 							serial = "010001111",
 							size = 666,
-							state = "3"
+							state = "allocated"
 						},
 						["3:2"] = {
 							rowspan = 3,
@@ -589,7 +589,7 @@ TestMatrix = {}
 							revision = "qwerty",
 							serial = "010001112",
 							size = 666,
-							state = "3"
+							state = "allocated"
 						}
 					},
 					logical_volumes = {
@@ -685,7 +685,7 @@ TestMatrix = {}
 					revision = "qwerty",
 					serial = "010001112",
 					size = 666,
-					state = "3"
+					state = "allocated"
 				}
 			},
 			-- 5
@@ -762,7 +762,7 @@ TestMatrix = {}
 					revision = "qwerty",
 					serial = "010001111",
 					size = 666,
-					state = "0"
+					state = "allocated"
 				},
 				logical = {
 					rowspan = 1,
@@ -788,7 +788,7 @@ TestMatrix = {}
 							revision = "qwerty",
 							serial = "010001111",
 							size = 666,
-							state = "0"
+							state = "allocated"
 						}
 					},
 					capacity = 666.0,
