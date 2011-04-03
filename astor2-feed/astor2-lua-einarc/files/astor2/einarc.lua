@@ -232,7 +232,7 @@ function M.Physical:is_id( id )
 end
 
 function M.Physical:new( attrs )
-	assert( M.Physical.is_id( attrs.id ) )
+	assert( M.Physical:is_id( attrs.id ) )
 	assert( common.is_string( attrs.model ) )
 	assert( common.is_string( attrs.revision ) )
 	assert( common.is_string( attrs.serial ) )
