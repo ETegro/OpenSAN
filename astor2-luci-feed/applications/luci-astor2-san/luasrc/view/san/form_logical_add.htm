@@ -1,4 +1,4 @@
-<div id="div_raid_create" class="to_hide">
+<div id="div_raid_create">
 	<p>
 	<label for="drives_to_add"><%: Drives to add %></label>
 	<input name="drives_to_add"
@@ -10,7 +10,7 @@
 
 	<p>
 	<label for="logical_level"><%: Logical RAID level %></label>
-	<!-- TODO: must be checkbox -->
+	<!-- TODO: checkboxes -->
 	<select name="logical_level" size="1">
 		<% for _, raidlevel in ipairs( raidlevels ) do %>
 			<option value="<%= raidlevel %>"><%= raidlevel %></option>
@@ -19,7 +19,7 @@
 	</p>
 
 	<p>
-	<input name="submit_einarc"
+	<input name="submit_logical_add"
 	       type="submit"
 	       value="<%: Add logical %>" />
 	</p>

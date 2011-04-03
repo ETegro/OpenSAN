@@ -43,23 +43,6 @@ function index()
 end
 
 ------------------------------------------------------------------------
--- Different common functions
-------------------------------------------------------------------------
-function index_overall()
-	local message_error = luci.http.formvalue( "message_error" )
-	luci.template.render( "san", {
-		matrix_overall = matrix.caller(),
-		raidlevels = einarc.Adapter:get( "raidlevels" ),
-		message_error = message_error } )
-end
-
-local function index_with_error( message_error )
-	local http = luci.http
-	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
-	               http.build_querystring( { message_error = message_error } ) )
-end
-
-------------------------------------------------------------------------
 -- Einarc related functions
 ------------------------------------------------------------------------
 local function is_valid_raid_configuration( raid_level, drives )
@@ -87,49 +70,97 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-function perform()
-	local input_value = luci.http.formvalue( "submit_einarc" )
+local function einarc_logical_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	if not input_value then
-		message_error = i18n("No input value")
-	else
-		if input_value == "Logical Delete" then
-			local logical_id = luci.http.formvalue( "logical_id" )
-			logical_id = tonumber( logical_id )
-			if not logical_id then
-				message_error = i18n("Logical disk not selected")
-			else
-				local return_code, result = pcall( einarc.logical.delete, logical_id )
-				if not return_code then
-					message_error = i18n("Failed to delete logical disk")
-				end
-			end
-
-		elseif input_value == "Create RAID" then
-			local drives = luci.http.formvalue( "checkbox_drive" )
-			local raid_level = luci.http.formvalue( "raid_level" )
-			if common.is_string( drives ) then
-				drives = { drives }
-			end
-			if not drives then
-				message_error = i18n("Drives not selected")
-			else
-				local is_valid, message = is_valid_raid_configuration( raid_level, drives )
-				if is_valid then
-					local return_code, result = pcall( einarc.logical.add, raid_level, drives )
-					if not return_code then
-						message_error = i18n("Failed to create logical disk")
-					end
-				else
-					message_error = message
-				end
-			end
-
+	local drives = nil
+	local level = nil
+	for k, v in pairs( inputs ) do
+		if k == "physical_id" then
+			drives = v
+		end
+		if k == "logical_level" then
+			level = v
 		end
 	end
 
-	index_with_error( message_error )
+	if common.is_string( drives ) then
+		drives = { drives }
+	end
 
+	if not drives then
+		index_with_error( i18n("Drives not selected") )
+	end
+
+	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
+	if is_valid then
+		local return_code, result = pcall( einarc.logical.add, raid_level, drives )
+		if not return_code then
+			message_error = i18n("Failed to create logical disk")
+		end
+	else
+		message_error = message
+	end
+
+	index_with_error( message_error )
+end
+
+local function einarc_logical_remove( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local logical_id = nil
+	for k, v in pairs( inputs ) do
+		if not logical_id then
+			logical_id = string.match( k, "^submit_logical_remove-(%d+)$" )
+		end
+	end
+	assert( logical_id )
+	logical_id = tonumber( logical_id )
+
+	local return_code, result = pcall( einarc.logical.delete, logical_id )
+	if not return_code then
+		message_error = i18n("Failed to delete logical disk")
+	end
+
+	index_with_error( message_error )
+end
+
+------------------------------------------------------------------------
+-- Different common functions
+------------------------------------------------------------------------
+function index_overall()
+	local message_error = luci.http.formvalue( "message_error" )
+	luci.template.render( "san", {
+		matrix_overall = matrix.caller(),
+		raidlevels = einarc.Adapter:get( "raidlevels" ),
+		message_error = message_error } )
+end
+
+local function index_with_error( message_error )
+	local http = luci.http
+	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
+	               http.build_querystring( { message_error = message_error } ) )
+end
+
+function perform()
+	local inputs = luci.http.formvaluetable()
+	local submits = luci.http.formvaluetable( "submit_" )
+	local i18n = luci.i18n.translate
+
+	local SUBMIT_MAP = {
+		logical_add = [einarc_logical_add],
+		logical_remove = [einarc_logical_remove],
+	}
+
+	for _, submit in common.keys( submits ) do
+		for submit_part, function_to_call in pairs( SUBMIT_MAP ) do
+			if string.match( submit, "^submit_" .. submit_part ) then
+				function_to_call( inputs )
+			end
+		end
+	end
+
+	index_with_error( i18n("Unknown action specified") )
 end
