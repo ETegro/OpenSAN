@@ -56,25 +56,25 @@ end
 function M.PhysicalVolume:create( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
-	common.system_succeed( "pvcreate " .. disk )
+	common.system_succeed( "lvm pvcreate " .. disk )
 end
 
 --- Remove PhysicalVolume
 function M.PhysicalVolume:remove()
 	assert( is_disk( self.device ) )
-	common.system_succeed( "pvremove " .. self.device )
+	common.system_succeed( "lvm pvremove " .. self.device )
 end
 
 --- Rescan all PhysicalVolumes on a system
 function M.PhysicalVolume:rescan()
-	common.system_succeed( "pvscan" )
+	common.system_succeed( "lvm pvscan" )
 end
 
 --- List all PhysicalVolumes
 -- @return { PhysicalVolume, PhysicalVolume }
 function M.PhysicalVolume:list()
 	local physical_volumes = {}
-	for _, line in ipairs( common.system_succeed( "pvdisplay -c" ) ) do
+	for _, line in ipairs( common.system_succeed( "lvm pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
 		local device, volume_group, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([/%w]+):([^:]*):(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
@@ -137,7 +137,7 @@ function M.VolumeGroup:create( name, physical_volumes )
 		end
 	end
 
-	common.system_succeed( "vgcreate " ..
+	common.system_succeed( "lvm vgcreate " ..
 	                       name .. " " ..
 	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
 end
@@ -145,13 +145,13 @@ end
 --- Remove VolumeGroup
 function M.VolumeGroup:remove()
 	assert( self.name and common.is_string( self.name ) )
-	common.system_succeed( "vgremove " .. self.name )
+	common.system_succeed( "lvm vgremove " .. self.name )
 end
 
 --- Rescan all VolumeGroups on a system
 function M.VolumeGroup:rescan()
-	common.system_succeed( "vgscan --mknodes" )
-	common.system_succeed( "vgchange -a y" )
+	common.system_succeed( "lvm vgscan --mknodes" )
+	common.system_succeed( "lvm vgchange -a y" )
 end
 
 --- List all VolumeGroups that are on specified PhysicalVolumes
@@ -159,7 +159,7 @@ end
 -- @return { "foo" = VolumeGroup, "bar" = VolumeGroup }
 function M.VolumeGroup:list( physical_volumes )
 	local volume_groups = {}
-	for _, line in ipairs( common.system_succeed( "vgdisplay -c" ) ) do
+	for _, line in ipairs( common.system_succeed( "lvm vgdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
 		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*(%w+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
@@ -211,7 +211,7 @@ function M.LogicalVolume:create( name, volume_group, size )
 	assert( name and common.is_string( name ) )
 	assert( volume_group and common.is_table( volume_group ) )
 	assert( size and common.is_number( size ) )
-	local output = common.system( "lvcreate -n " ..
+	local output = common.system( "lvm lvcreate -n " ..
 	                              name ..
 	                              " -L " ..
 				      tonumber( size ) ..
@@ -232,14 +232,14 @@ end
 function M.LogicalVolume:remove()
 	assert( self.volume_group )
 	assert( self.name )
-	common.system_succeed( "lvremove -f " ..
+	common.system_succeed( "lvm lvremove -f " ..
 	                       self.volume_group.name .. "/" ..
 	                       self.name )
 end
 
 --- Rescan all LogicalVolumes on a system
 function M.LogicalVolume:rescan()
-	common.system_succeed( "lvscan" )
+	common.system_succeed( "lvm lvscan" )
 end
 
 --- List all LogicalVolumes on specified VolumeGroups
@@ -248,7 +248,7 @@ end
 function M.LogicalVolume:list( volume_groups )
 	assert( volume_groups and common.is_table( volume_groups ) )
 	local result = {}
-	for _, line in ipairs( common.system_succeed( "lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
+	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
 		local splitted = common.split_by( line, " " )
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
