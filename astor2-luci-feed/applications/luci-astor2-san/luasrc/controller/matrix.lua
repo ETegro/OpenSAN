@@ -35,6 +35,12 @@ function M.lcm( x, y )
 end
 
 function M.overall( data )
+	local highlights = {
+		left = false,
+		top = false,
+		right = false,
+		bottom = false
+	}
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
 	local matrix = {}
@@ -60,6 +66,7 @@ function M.overall( data )
 		-- Fillup logical
 		matrix[ current_line ].logical = logical
 		matrix[ current_line ].logical.rowspan = lines_quantity
+		matrix[ current_line ].logical.highlight = common.deepcopy( highlights )
 
 		-- Fillup physicals
 		for physical_id, physical in pairs( logical.physicals ) do
@@ -71,6 +78,7 @@ function M.overall( data )
 			local offset = current_line + ( i - 1 ) * physical_rowspan
 			matrix[ offset ].physical = physical
 			matrix[ offset ].physical.rowspan = physical_rowspan
+			matrix[ offset ].physical.highlight = common.deepcopy( highlights )
 		end
 
 		-- Fillup logical volumes
@@ -81,6 +89,32 @@ function M.overall( data )
 			local offset = current_line + ( i - 1 ) * logical_volume_rowspan
 			matrix[ offset ].logical_volume = logical.logical_volumes[ logical_volume_name ]
 			matrix[ offset ].logical_volume.rowspan = logical_volume_rowspan
+			matrix[ offset ].logical_volume.highlight = common.deepcopy( highlights )
+		end
+
+		-- Perform needed borders highlighting
+		matrix[ current_line ].physical.highlight.top = true
+		matrix[ current_line ].physical.highlight.left = true
+		matrix[ current_line ].logical.highlight.top = true
+		if logical_volumes_quantity == 0 then
+			matrix[ current_line ].logical.highlight.right = true
+		else
+			matrix[ current_line ].logical_volume.highlight.top = true
+			matrix[ current_line ].logical_volume.highlight.right = true
+		end
+
+		for i = current_line, future_line - 1, physical_rowspan do
+			matrix[ i ].physical.highlight.left = true
+		end
+		if logical_volumes_quantity ~= 0 then
+			for i = current_line, future_line - 1, logical_volume_rowspan do
+				matrix[ i ].logical_volume.highlight.right = true
+			end
+		end
+		matrix[ future_line - physical_rowspan ].physical.highlight.bottom = true
+		matrix[ current_line ].logical.highlight.bottom = true
+		if logical_volumes_quantity ~= 0 then
+			matrix[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
 		end
 
 		current_line = future_line

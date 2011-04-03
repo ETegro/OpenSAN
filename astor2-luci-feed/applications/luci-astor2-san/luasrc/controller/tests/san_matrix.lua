@@ -273,7 +273,12 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
---						highlight = { "left", "top" },
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = false
+					},
 					id = "3:1",
 					model = "model1",
 					revision = "qwerty",
@@ -283,13 +288,23 @@ TestMatrix = {}
 				},
 				logical = {
 					rowspan = 2,
---						highlight = { "top", "right", "bottom" },
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = true
+					},
 					id = 3,
 					level = "1",
 					physicals = {
 						["3:1"] = {
 							rowspan = 1,
-		--						highlight = { "left", "top" },
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = false
+							},
 							id = "3:1",
 							model = "model1",
 							revision = "qwerty",
@@ -299,7 +314,12 @@ TestMatrix = {}
 						},
 						["3:2"] = {
 							rowspan = 1,
-						--	highlight = { "bottom", "left" },
+							highlight = {
+								left = true,
+								top = false,
+								right = false,
+								bottom = true
+							},
 							id = "3:2",
 							model = "model1",
 							revision = "qwerty",
@@ -316,7 +336,12 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-				--	highlight = { "bottom", "left" },
+					highlight = {
+						left = true,
+						top = false,
+						right = false,
+						bottom = true
+					},
 					id = "3:2",
 					model = "model1",
 					revision = "qwerty",
@@ -328,7 +353,12 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-				--	highlight = { "left", "top" },
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = false
+					},
 					id = "13:1",
 					model = "model2",
 					revision = "asdfgh",
@@ -338,13 +368,23 @@ TestMatrix = {}
 				},
 				logical = {
 					rowspan = 5,
-				--	highlight = { "top", "right", "bottom" },
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = true
+					},
 					id = 13,
 					level = "5",
 					physicals = {
 						["13:1"] = {
 							rowspan = 1,
-						--	highlight = { "left", "top" },
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = false
+							},
 							id = "13:1",
 							model = "model2",
 							revision = "asdfgh",
@@ -354,7 +394,12 @@ TestMatrix = {}
 						},
 						["13:2"] = {
 							rowspan = 1,
-						--	highlight = { "left" },
+							highlight = {
+								left = true,
+								top = false,
+								right = false,
+								bottom = false
+							},
 							id = "13:2",
 							model = "model2",
 							revision = "asdfgh",
@@ -364,7 +409,12 @@ TestMatrix = {}
 						},
 						["13:3"] = {
 							rowspan = 1,
-					--		highlight = { "left" },
+							highlight = {
+								left = true,
+								top = false,
+								right = false,
+								bottom = false
+							},
 							id = "13:3",
 							model = "model2",
 							revision = "asdfgh",
@@ -374,7 +424,12 @@ TestMatrix = {}
 						},
 						["13:4"] = {
 							rowspan = 1,
-					--		highlight = { "left" },
+							highlight = {
+								left = true,
+								top = false,
+								right = false,
+								bottom = false
+							},
 							id = "13:4",
 							model = "model2",
 							revision = "asdfgh",
@@ -384,7 +439,12 @@ TestMatrix = {}
 						},
 						["13:5"] = {
 							rowspan = 1,
-					--		highlight = { "bottom", "left" },
+							highlight = {
+								left = true,
+								top = false,
+								right = false,
+								bottom = true
+							},
 							id = "13:5",
 							model = "model2",
 							revision = "asdfgh",
@@ -402,7 +462,13 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-				--	highlight = { "left" },
+					highlight = {
+						left = true,
+						top = false,
+						right = false,
+						bottom = false
+					},
+
 					id = "13:2",
 					model = "model2",
 					revision = "asdfgh",
@@ -414,7 +480,12 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-			--		highlight = { "left" },
+					highlight = {
+						left = true,
+						top = false,
+						right = false,
+						bottom = false
+					},
 					id = "13:3",
 					model = "model2",
 					revision = "asdfgh",
@@ -426,7 +497,12 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-			--		highlight = { "left" },
+					highlight = {
+						left = true,
+						top = false,
+						right = false,
+						bottom = false
+					},
 					id = "13:4",
 					model = "model2",
 					revision = "asdfgh",
@@ -438,7 +514,12 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-			--		highlight = { "bottom", "left" },
+					highlight = {
+						left = true,
+						top = false,
+						right = false,
+						bottom = true
+					},
 					id = "13:5",
 					model = "model2",
 					revision = "asdfgh",
