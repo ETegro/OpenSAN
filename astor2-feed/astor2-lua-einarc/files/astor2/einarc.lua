@@ -103,7 +103,7 @@ function M.Logical:list()
 	if not output or #output == 0 then return {} end
 	local logicals = {}
 	for _, line in ipairs( output ) do
-		local id = tonumber( string.match( line, "^(%d+)" ) ),
+		local id = tonumber( string.match( line, "^(%d+)" ) )
 		assert( id )
 		logicals[ id ] = M.Logical:new( {
 			id = id,
@@ -250,7 +250,7 @@ function M.Physical:list()
 	if not output or #output == 0 then return {} end
 	local physicals = {}
 	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([%d:]+)" ),
+		local id = string.match( line, "^([%d:]+)" )
 		assert( id )
 		physicals[ id ] = M.Physical:new( {
 			id = id,

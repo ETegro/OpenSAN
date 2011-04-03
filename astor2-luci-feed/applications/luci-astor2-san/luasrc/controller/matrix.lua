@@ -141,7 +141,7 @@ local function device_lvms( device )
 	return lvm.LogicalVolume:list( common.values( lvm.VolumeGroup:list( physical_volumes ) ) )
 end
 
-function caller()
+function M.caller()
 	local logicals = einarc.Logical:list_full()
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()

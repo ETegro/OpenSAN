@@ -22,7 +22,7 @@ module( "luci.controller.san", package.seeall )
 
 common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
-matrix = require( "matrix" )
+matrix = require( "luci.controller.matrix" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -58,7 +58,7 @@ end
 function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
-		overall_matrix = matrix.overall(),
+		overall_matrix = matrix.caller(),
 		raidlevels = einarc.adapter.get( "raidlevels" ),
 		drives_in_logicals = drives_in_logicals(),
 		message_error = message_error } )
