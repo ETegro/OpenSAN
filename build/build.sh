@@ -129,6 +129,7 @@ copy_bins()
 }
 
 check_openwrt_existence
+update_openwrt_config
 remove_dl_directory
 perform_cleaning
 update_feeds_configuration
