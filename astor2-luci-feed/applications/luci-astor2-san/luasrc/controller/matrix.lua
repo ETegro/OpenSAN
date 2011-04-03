@@ -142,7 +142,7 @@ local function device_lvms( device )
 end
 
 function M.caller()
-	local logicals = einarc.Logical:list_full()
+	local logicals = einarc.Logical:list()
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
