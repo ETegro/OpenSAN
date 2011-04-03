@@ -543,7 +543,12 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 3,
-					highlight = { "left", "top" },
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = false
+					},
 					id = "3:1",
 					model = "model1",
 					revision = "qwerty",
@@ -553,12 +558,86 @@ TestMatrix = {}
 				},
 				logical = {
 					rowspan = 6,
-					highlight = { "top", "bottom" },
-					id = 3,
+					highlight = {
+						left = false,
+						top = true,
+						right = false,
+						bottom = true
+					},
+					id = 9,
 					level = "1",
 					physicals = {
-						["3:1"] = "3",
-						["3:2"] = "3"
+						["3:1"] = {
+							rowspan = 3,
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = false
+							},
+							id = "3:1",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001111",
+							size = 666,
+							state = "3"
+						},
+						["3:2"] = {
+							rowspan = 3,
+							highlight = {
+								left = true,
+								top = false,
+								right = false,
+								bottom = true
+							},
+							id = "3:2",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001112",
+							size = 666,
+							state = "3"
+						}
+					},
+					logical_volumes = {
+						["foo"] = {
+							rowspan = 2,
+							highlight = {
+								left = false,
+								top = false,
+								right = true,
+								bottom = true
+							},
+							name = "foo",
+							device = "foobar1",
+							volume_group = {},
+							size = 12
+						},
+						["bar"] = {
+							rowspan = 2,
+							highlight = {
+								left = false,
+								top = true,
+								right = true,
+								bottom = false
+							},
+							name = "bar",
+							device = "foobar2",
+							volume_group = {},
+							size = 23
+						},
+						["baz"] = {
+							rowspan = 2,
+							highlight = {
+								left = false,
+								top = false,
+								right = true,
+								bottom = false
+							},
+							name = "baz",
+							device = "foobar3",
+							volume_group = {},
+							size = 34
+						}
 					},
 					capacity = 666.0,
 					device = "/dev/md3",
@@ -566,10 +645,16 @@ TestMatrix = {}
 				},
 				logical_volume = {
 					rowspan = 2,
-					highlight = { "top", "right" },
-					name = "foo",
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = false
+					},
+					name = "bar",
+					device = "foobar2",
 					volume_group = {},
-					size = 12
+					size = 23
 				}
 			},
 			-- 2
@@ -579,17 +664,28 @@ TestMatrix = {}
 			{
 				logical_volume = {
 					rowspan = 2,
-					highlight = { "right" },
-					name = "bar",
+					highlight = {
+						left = false,
+						top = false,
+						right = true,
+						bottom = false
+					},
+					name = "baz",
+					device = "foobar3",
 					volume_group = {},
-					size = 23
+					size = 34
 				}
 			},
 			-- 4
 			{
 				physical = {
 					rowspan = 3,
-					highlight = { "bottom", "left" },
+					highlight = {
+						left = true,
+						top = false,
+						right = false,
+						bottom = true
+					},
 					id = "3:2",
 					model = "model1",
 					revision = "qwerty",
@@ -602,10 +698,16 @@ TestMatrix = {}
 			{
 				logical_volume = {
 					rowspan = 2,
-					highlight = { "bottom", "left" },
-					name = "baz",
+					highlight = {
+						left = false,
+						top = false,
+						right = true,
+						bottom = true
+					},
+					name = "foo",
+					device = "foobar1",
 					volume_group = {},
-					size = 34
+					size = 12
 				}
 
 			},
