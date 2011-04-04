@@ -310,7 +310,7 @@ function M.Task:list()
 		local id = string.match( line, "^(%d+)" )
 		assert( id )
 		tasks[ id ] = M.Task:new( {
-			id = id,
+			id = tonumber( id ),
 			where = string.match( line, "^%d+\t(.*)\t.*\t.*$" ) or "",
 			what = string.match( line, "^%d+\t.*\t(.*)\t.*$" ) or "",
 			progress = tonumber( string.match( line, "^%d+\t.*\t.*\t(.*)$" ) ) or 0,
