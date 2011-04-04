@@ -89,6 +89,12 @@ update_openwrt_config()
 	ln -s "$WORK_DIR"/.config "$TARGET_DIR"/.config
 }
 
+remove_dl_directory()
+{
+	[ -e "$DL_DIR" ] || return 0
+	[ -L "$DL_DIR" ] && rm -f "$DL_DIR" || rm -fr "$DL_DIR"
+}
+
 create_dl_directory()
 {
 	[ -L "$DL_DIR" ] && [ `readlink "$DL_DIR"` = "$DL_PATH" ] && return 0 || true
@@ -123,6 +129,7 @@ copy_bins()
 }
 
 check_openwrt_existence
+remove_dl_directory
 perform_cleaning
 update_feeds_configuration
 update_openwrt_config
