@@ -8,15 +8,18 @@
 	       value="" />
 	</p>
 
-	<p>
+	<div>
 	<label for="logical_level"><%: Logical RAID level %></label>
-	<!-- TODO: checkboxes -->
-	<select name="san.logical_level" size="1">
-		<% for _, raidlevel in ipairs( raidlevels ) do %>
-			<option value="<%= raidlevel %>"><%= raidlevel %></option>
-		<% end %>
-	</select>
-	</p>
+	<ul>
+	<% for _, raidlevel in ipairs( raidlevels ) do %>
+		<li><p><input name="raid_level"
+				       type ="radio"
+		       value="<%= raidlevel %>" />
+			<%= raidlevel %>
+		</p></li>
+	<% end %>
+	</ul>
+	</div>
 
 	<p>
 	<input name="san.submit_logical_add"
