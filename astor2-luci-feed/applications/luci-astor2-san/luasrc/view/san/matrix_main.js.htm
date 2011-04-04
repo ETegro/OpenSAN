@@ -47,6 +47,32 @@ $( 'form a[ id *= "ical_info-" ]' ).click( function() {
 	}
 } );
 
+//Raid validator
+/*
+$( 'input:checkbox[ name = "san.physical_id" ]' ).click( function() {
+
+	var drives_array = $.makeArray(
+		$( 'form input:checkbox[ name = "san.physical_id" ]:checked:' )
+			.map( function() { return $( this ).attr( 'value' ); } )
+		);
+	var drives_list_to_raid = drives_array.join( ', ' );
+
+	$( 'input[ name = "drives_for_raid_list" ]' ).val( drives_list_to_raid );
+
+//	alert( drives_array.length );
+	var dal = drives_array.length;
+
+	if ( dal == 0 ) {
+		alert( dal + " = 0" )
+//		$( 'input:radio[ name = "raid_level" ]' ).attr( 'disabled', 'disabled' );
+	} else if ( dal == 1 ) {
+		alert ( dal + " = 1" )
+	} else if ( dal >= 2) {
+		alert( dal + " >= 2" )
+		}
+} );
+*/
+
 //styles
 
 /*
