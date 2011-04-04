@@ -19,11 +19,11 @@ $( 'input[ name = "show_all" ]' ).click( function() {
 } );
 
 // Hide/show form for "Create RAID".
-$( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
+$( 'form input:checkbox[ name = "san.physical_id" ]' ).click( function() {
 	if ( $( this ).is( ':checked' ) ) {
 		$( '#div_raid_create' ).fadeIn( 'fast' );
 	} else {
-		if ( $( 'form input:checkbox[ name = "checkbox_drive" ]' ).is( ':checked' ) ) {
+		if ( $( 'form input:checkbox[ name = "san.physical_id" ]' ).is( ':checked' ) ) {
 		} else {
 			$( '#div_raid_create' ).fadeOut( 'fast' );
 		}
@@ -31,10 +31,10 @@ $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 
 	// Physicals drives to RAID.
 	var drives_list_to_raid = $.makeArray(
-		$( 'form input:checkbox[ name = "checkbox_drive" ]:checked:' )
+		$( 'form input:checkbox[ name = "san.physical_id" ]:checked:' )
 			.map( function() { return $( this ).attr( 'value' ); } 	)
 		).join( ', ' );
-	$( 'form input:text[ name = "drives_to_raid_list" ]' ).val( drives_list_to_raid );
+	$( 'form input[ name = "drives_to_add" ]' ).val( drives_list_to_raid );
 } );
 
 // Hide/show information of physicals and logicals.
