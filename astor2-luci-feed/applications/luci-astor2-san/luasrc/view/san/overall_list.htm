@@ -3,7 +3,7 @@
 	<input type="button" name="hide_all" value="Hide all information" />
 	<input type="button" name="show_all" value="Show all information" />
 	<input type="reset" name="reset_form" value="Reset all form" /> 
-</p>
+</>
 
 <table border="1px" cellpadding="0" cellspacing="0">
 	<tr>
@@ -15,7 +15,7 @@
 		<td valign="top">
 			<table border="0px" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td><input name="checkbox_drive"
+					<td><input name="physical_id"
 						   type="checkbox"
 						   value="<%= pair.physical_id %>" /></td>
 					<td><%= pair.physical_id %></td>
@@ -159,19 +159,25 @@
 </table>
 
 <div id="div_raid_create" class="to_hide">
-	<p><%: Drives to RAID %>:
-		<input name="drives_to_raid_list"
-		       readonly="readonly"
-		       type="text"
-		       value="<%: Please, selected drives %>" />
-	</p>
-	<p><%: RAID level %>:
-		<select name="raid_level" size="1">
-			<% for _, raidlevel in ipairs( raidlevels ) do %>
-				<option value="<%= raidlevel %>"><%= raidlevel %></option>
-			<% end %>
-		</select>
-	</p>
+	<div>
+		<p><%: Drives to RAID %>:
+			<input name="drives_for_raid_list"
+			       readonly="readonly"
+			       type="text"
+			       value="<%: Please, select drives %>" />
+		</p>
+	<div>
+	</div>
+		<p><%: RAID level %>:</p>
+		<% for _, raidlevel in ipairs( raidlevels ) do %>
+			<p><input name="raid_level"
+			       type ="radio"
+			       value="<%= raidlevel %>" />
+				<%= raidlevel %>
+			</p>
+		<% end %>
+		</p>
+	</div>
 	<p>
 		<input name="submit_einarc"
 		       type="submit"
@@ -207,11 +213,11 @@ $( 'input[ name = "show_all" ]' ).click( function() {
 } );
 
 // Hide/show form for "Create RAID".
-$( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
+$( 'form input:checkbox[ name = "physical_id" ]' ).click( function() {
 	if ( $( this ).is( ':checked' ) ) {
 		$( '#div_raid_create' ).fadeIn( 'fast' );
 	} else {
-		if ( $( 'form input:checkbox[ name = "checkbox_drive" ]' ).is( ':checked' ) ) {
+		if ( $( 'form input:checkbox[ name = "physical_id" ]' ).is( ':checked' ) ) {
 		} else {
 			$( '#div_raid_create' ).fadeOut( 'fast' );
 		}
@@ -219,7 +225,7 @@ $( 'form input:checkbox[ name = "checkbox_drive" ]' ).click( function() {
 
 	// Physicals drives to RAID.
 	var drives_list_to_raid = $.makeArray(
-		$( 'form input:checkbox[ name = "checkbox_drive" ]:checked:' )
+		$( 'form input:checkbox[ name = "physical_id" ]:checked:' )
 			.map( function() { return $( this ).attr( 'value' ); } 	)
 		).join( ', ' );
 	$( 'form input:text[ name = "drives_to_raid_list" ]' ).val( drives_list_to_raid );

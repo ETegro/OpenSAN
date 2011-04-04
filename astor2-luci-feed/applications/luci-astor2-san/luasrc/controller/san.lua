@@ -159,7 +159,7 @@ san_functions = function()
 			end
 
 		elseif input_value == "Create RAID" then
-			local drives = luci.http.formvalue( "checkbox_drive" )
+			local drives = luci.http.formvalue( "physical_id" )
 			local raid_level = luci.http.formvalue( "raid_level" )
 			if common.is_string( drives ) then
 				drives = { drives }
