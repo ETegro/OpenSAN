@@ -84,29 +84,26 @@ $( 'form a[ id *= "ical_info-" ]' ).click( function() {
 
 //styles
 
-/*
-$( 'td.border' ).css( 'background-color', '#f0f' )
-$( 'td.border-top-left' ).css( {
-	'border-width': '10px 0 0 10px',
-	'border-style': 'solid',
-	'border-color': '#f0f' } )
-$( 'td.border-top' ).css( {
-	'border-width': '10px 0 0 0',
-	'border-style': 'solid',
-	'border-color': '#f0f' } )
-$( 'td.border-top-right' ).css( {
-	'border-width': '10px 10px 0 0',
-	'border-style': 'solid',
-	'border-color': '#f0f' } )
-$( 'td.border-top-right-bottom' ).css( {
-	'border-width': '10px 10px 10px 0',
-	'border-style': 'solid',
-	'border-color': '#f0f' } )
-$( 'td.border-left' ).css( {
-	'border-width': '0 0 0 10px',
-	'border-style': 'solid',
-	'border-color': '#f0f' } )
-*/
+// Physical border
+$( '.physical-highlight-top' ).css( { 'border-top' : '5px solid #f0f' } );
+$( '.physical-highlight-right' ).css( { 'border-right' : '5px solid #f0f' } );
+$( '.physical-highlight-bottom' ).css( { 'border-bottom' : '5px solid #f0f' } );
+$( '.physical-highlight-left' ).css( { 'border-left' : '5px solid #f0f' } );
+// Physical background
+$( '.physical-background-state-allocated' ).css( { 'background-color' : '#0ff' } );
+$( '.physical-background-state-free' ).css( { 'background-color' : '#ccc' } );
+
+//Logical border
+$( '.logical-highlight-top' ).css( { 'border-top' : '5px solid #f0f' } );
+$( '.logical-highlight-right' ).css( { 'border-right' : '5px solid #f0f' } );
+$( '.logical-highlight-bottom' ).css( { 'border-bottom' : '5px solid #f0f' } );
+$( '.logical-highlight-left' ).css( { 'border-left' : '5px solid #f0f' } );
+
+// Logical-volume border
+$( '.logical_volume-highlight-top' ).css( { 'border-top' : '5px solid #f0f' } );
+$( '.logical_volume-highlight-right' ).css( { 'border-right' : '5px solid #f0f' } );
+$( '.logical_volume-highlight-bottom' ).css( { 'border-bottom' : '5px solid #f0f' } );
+$( '.logical_volume-highlight-left' ).css( { 'border-left' : '5px solid #f0f' } );
 
 })(jQuery);
 
