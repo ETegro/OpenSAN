@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+/* Matrix */
+
+/* Physical border */
+.physical-highlight-top  {  border-top:  5px solid #00CC00;  }
+.physical-highlight-right  {  border-right:  5px solid #00CC00;  }
+.physical-highlight-bottom  {  border-bottom:  5px solid #00CC00;  }
+.physical-highlight-left  {  border-left:  5px solid #00CC00;  }
+
+/* Physical background */
+.physical-background-state-allocated  {  background-color: #99FF99;  }
+.physical-background-state-free {  background-color: #CCCCCC;  }
+
+/* Logical border */
+.logical-highlight-top { border-top: 5px solid #00CC00;  }
+.logical-highlight-right { border-right: 5px solid #00CC00; }
+.logical-highlight-bottom { border-bottom: 5px solid #00CC00; }
+.logical-highlight-left { border-left: 5px solid #00CC00; }
+
+/* Logical-volume border */
+.logical_volume-highlight-top { border-top: 5px solid #00CC00; }
+.logical_volume-highlight-right { border-right: 5px solid #00CC00; }
+.logical_volume-highlight-bottom { border-bottom: 5px solid #00CC00; }
+.logical_volume-highlight-left { border-left: 5px solid #00CC00; }
