@@ -18,12 +18,15 @@
 %>
 
 <%+header%>
-<script type="text/javascript" src="<%=resource%>/jquery.min.js"></script>
+<!--<link rel="stylesheet" href="<%=resource%>/san/css/san.css" type="text/css" media="screen" />-->
+
+<script type="text/javascript" src="<%=resource%>/san/js/jquery-1.5.2.js"></script>
+<script type="text/javascript" src="<%=resource%>/san/js/san.js"></script>
 
 <% if message_error then %>
 	<p class="error"><%= message_error %></p>
 <% end %>
 
-<%+san/overall_list%>
+<%+san/matrix%>
 
 <%+footer%>

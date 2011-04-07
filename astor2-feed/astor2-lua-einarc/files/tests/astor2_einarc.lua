@@ -24,46 +24,53 @@ einarc = require( "astor2.einarc" )
 
 TestIsId = {}
 	function TestIsId:test_is_id()
-		assertEquals( einarc.physical.is_id( "foo:bar" ), false )
-		assertEquals( einarc.physical.is_id( "10:bar" ), false )
-		assertEquals( einarc.physical.is_id( "10:20" ), true )
-		assertEquals( einarc.physical.is_id( "10_20" ), false )
+		assertEquals( einarc.Physical.is_id( "foo:bar" ), false )
+		assertEquals( einarc.Physical.is_id( "10:bar" ), false )
+		assertEquals( einarc.Physical.is_id( "10:20" ), true )
+		assertEquals( einarc.Physical.is_id( "10_20" ), false )
 	end
 
 TestSortPhysicals = {}
 	function TestSortPhysicals:setUp()
-		self.physical_list = {
+		self.physicals = {
 			[ "0:4" ] = { model = "model1",
+				      id = "0:4",
 				      revision = "rev1",
 				      serial = "serial1",
 				      size = 100,
 				      state = "free" },
 			[ "2:2" ] = { model = "model2",
+				      id = "2:2",
 				      revision = "rev2",
 				      serial = "serial2",
 				      size = 200,
 				      state = "0" },
 			[ "1:3" ] = { model = "model3",
+				      id = "1:3",
 				      revision = "rev3",
 				      serial = "serial3",
 				      size = 300,
 				      state = "free" },
 			[ "0:1" ] = { model = "model4",
+				      id = "0:1",
 				      revision = "rev4",
 				      serial = "serial4",
 				      size = 400,
 				      state = "0" },
 			[ "10:5" ] = { model = "model5",
+				       id = "10:5",
 				       revision = "rev5",
 				       serial = "serial5",
 				       size = 500,
 				       state = "hotspare" },
 			[ "10:11" ] = { model = "model6",
+					id = "10:11",
 				        revision = "rev6",
 				        serial = "serial6",
 				        size = 600,
 				        state = "free" },
 			[ "10:1" ] = { model = "model7",
+				       id = "10:1",
 				       revision = "rev7",
 				       serial = "serial7",
 				       size = 700,
@@ -71,7 +78,7 @@ TestSortPhysicals = {}
 
 		self.ids_sort = { "0:1", "0:4", "1:3", "2:2", "10:1", "10:5", "10:11" }
 
-		self.true_sorted_physical_list = {
+		self.true_sorted_physicals = {
 			{ id = "0:1",
 			  model = "model4",
 			  revision = "rev4",
@@ -117,23 +124,24 @@ TestSortPhysicals = {}
 	end
 
 	function TestSortPhysicals:test_split_id()
-		assertError( einarc.physical.split_id, "foobar" )
-		assertError( einarc.physical.split_id, "foo:bar" )
-		local left, right = einarc.physical.split_id( "0:1" )
+		assertError( einarc.Physical.split_id, "foobar" )
+		assertError( einarc.Physical.split_id, "foo:bar" )
+		local left, right = einarc.Physical.split_id( "0:1" )
 		assertEquals( left, 0 )
 		assertEquals( right, 1 )
 	end
 
 	function TestSortPhysicals:test_sort_ids()
-		local ids = common.keys( self.physical_list )
-		table.sort( ids, einarc.physical.sort_ids )
+		local ids = common.keys( self.physicals )
+		table.sort( ids, einarc.sort_physical_ids )
 		assertEquals( common.compare_tables( ids, self.ids_sort ), true )
 	end
 
-	function TestSortPhysicals:test_sort_state_list()
+	function TestSortPhysicals:test_sorted_list()
 		assertEquals( true, common.compare_tables(
-					einarc.physical.sorted_list( self.physical_list ),
-					self.true_sorted_physical_list ) )
+			einarc.Physical.sort( self.physicals ),
+			self.true_sorted_physicals
+		) )
 	end
 
 LuaUnit:run()

@@ -137,13 +137,25 @@ function M.keys( hash )
 	end
 	return keys
 end
+--
+--- Get values from hash
+-- @param hash { "key1" = { ...1 }, "key2" = { ...2 } }
+-- @return { { ...1 }, { ...2 } }
+function M.values( hash )
+	local values = {}
+	for _, value in pairs( hash ) do
+		values[ #values + 1 ] = value
+	end
+	return values
+end
 
 --- Return unique-keyed hash
 -- @param key "state"
 -- @param hash { "0:1" = { state = "free", model = "some" }, "0:2" = { state = "failed", model = "some2" } }
 -- @return { free = { "0:1" }, failed = { "0:2" } }
 function M.unique_keys( key, hash )
-	assert( M.is_table( hash ) and not M.is_array( hash ) and key )
+	assert( key )
+	assert( M.is_table( hash ) )
 	local uniques = {}
 	for obj_id, obj_data in pairs( hash ) do
 		if not uniques[ obj_data[ key ] ] then
@@ -207,6 +219,79 @@ function M.compare_tables( table1, table2 )
 		end
 	end
 	return true
+end
+
+--- Pretty printing of table
+-- @param table Table to print
+function M.ppt( table, offset, message )
+	assert( M.is_table( table ) )
+	local line72 = "------------------------------------------------------------------------"
+
+	if not offset then offset = 0 end
+	local prefix = ""
+	for i=1,offset do
+		prefix = prefix .. "...."
+	end
+
+	if message then
+		print( line72 )
+		print( "-- BEGIN: " .. message )
+		print( line72 )
+	end
+
+	for k, v in pairs( table ) do
+		local k = k
+		local v = v
+		if M.is_string( k ) then k = "\"" .. k .. "\"" end
+		if M.is_string( v ) then v = "\"" .. v .. "\"" end
+		if M.is_table( v ) then
+			print( prefix .. k .. " --> " )
+			M.ppt( v, offset + 1 )
+		else
+			print( prefix .. k .. " -> " .. tostring( v ) )
+		end
+	end
+
+	if message then
+		print( line72 )
+		print( "-- END: " .. message )
+		print( line72 )
+	end
+end
+
+--- Split string by some separator
+-- Taken from http://lua-users.org/wiki/SplitJoin
+-- @param str String to separate
+-- @param separator Words separator
+-- @return An array of words
+function M.split_by( str, separator )
+	assert( str and M.is_string( str ) )
+	assert( separator and M.is_string( separator ) )
+	local words = {}
+	local pattern = string.format( "([^%s]+)", separator )
+	string.gsub( str,
+	             pattern,
+	             function( word ) words[ #words + 1 ] = word end )
+        return words
+end
+
+------------------------------------------------------------------------
+-- OOP
+------------------------------------------------------------------------
+
+--- Class constructor
+-- Taken from http://lua-users.org/wiki/LuaClassesWithMetatable
+function M.Class( members )
+	members = members or {}
+	local mt = {
+		__index = members,
+		__metatable = members
+	}
+	local function new( _, init )
+		return setmetatable( init or {}, mt )
+	end
+	members.new = members.new or new
+	return mt
 end
 
 return M

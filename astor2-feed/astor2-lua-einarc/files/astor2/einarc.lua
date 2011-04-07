@@ -54,27 +54,16 @@ local function run( args )
 	return result.stdout
 end
 
--- Taken from http://lua-users.org/wiki/SplitJoin
-local function split_by_comma( str )
-	assert( str and common.is_string( str ) )
-	local words = {}
-	local pattern = string.format( "([^%s]+)", "," )
-	string.gsub( str,
-	             pattern,
-	             function( word ) words[ #words + 1 ] = word end )
-        return words
-end
-
-M.adapter = {}
-M.physical = {}
-M.logical = {}
-M.task = {}
-M.bbu = {}
+------------------------------------------------------------------------
+-- Adapter
+------------------------------------------------------------------------
+M.Adapter = {}
+local Adapter_mt = common.Class( M.Adapter )
 
 --- einarc adapter get
 -- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
-M.adapter.get = function( property )
+function M.Adapter:get( property )
 	assert( property and common.is_string( property ) )
 
 	-- WARNING: This is performance related issue only for
@@ -88,20 +77,26 @@ M.adapter.get = function( property )
 	return output
 end
 
---- Is this ID is physical id (having "666:13" kind of form)
--- @param id "0:1"
--- @return true/false
-M.physical.is_id = function( id )
-	if string.match( id, "^%d+:%d+$" ) then
-		return true
-	else
-		return false
-	end
+------------------------------------------------------------------------
+-- Logical
+------------------------------------------------------------------------
+M.Logical = {}
+local Logical_mt = common.Class( M.Logical )
+
+function M.Logical:new( attrs )
+	assert( common.is_number( attrs.id ) )
+	assert( common.is_string( attrs.level ) )
+	assert( common.is_array( attrs.drives ) )
+	assert( common.is_number( attrs.capacity ) )
+	assert( common.is_string( attrs.device ) )
+	assert( common.is_string( attrs.state ) )
+	return setmetatable( attrs, Logical_mt )
+
 end
 
 --- einarc logical list
--- @return { 3 = { level = "1", drives = { "0:1", "0:2" }, capacity = 666.0, device = "/dev/md0", state = "normal" } }
-M.logical.list = function()
+-- @return { 0 = Logical, 1 = Logical }
+function M.Logical.list()
 	-- #  RAID level  Physical drives  Capacity  Device   State
 	-- 0  linear      0:1              246.00 MB /dev/md0 normal
 	local output = run( "logical list" )
@@ -110,13 +105,14 @@ M.logical.list = function()
 	for _, line in ipairs( output ) do
 		local id = tonumber( string.match( line, "^(%d+)" ) )
 		assert( id )
-		logicals[ id ] = {
+		logicals[ id ] = M.Logical:new( {
+			id = id,
 			level = string.match( line, "^%d+\t(.+)\t[%d:,]+\t.*\t.*\t.*$" ) or "",
-			drives = split_by_comma( string.match( line, "^%d+\t.+\t([%d:,]+)\t.*\t.*\t.*$" ) ) or {},
+			drives = common.split_by( string.match( line, "^%d+\t.+\t([%d:,]+)\t.*\t.*\t.*$" ), "," ) or {},
 			capacity = tonumber( string.match( line, "^%d+\t.+\t[%d:,]+\t([%d\.]+)\t.*\t.*$" ) ) or 0,
 			device = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t(.*)\t.*$" ) or "",
 			state = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t.*\t(.*)$" ) or ""
-		}
+		} )
 	end
 	return logicals
 end
@@ -127,7 +123,7 @@ end
 -- @param size 666.0
 -- @param properties { "prop1" = "itsvalue", "prop2" = "itsvalue" }
 -- @return Raise error if it fails
-M.logical.add = function( raid_level, drives, size, properties )
+function M.Logical.add( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
 	local cmd = "logical add " .. raid_level
 	if drives then
@@ -153,59 +149,101 @@ M.logical.add = function( raid_level, drives, size, properties )
 end
 
 --- einarc logical delete
--- @param logical_id 666
 -- @result Raise error if it fails
-M.logical.delete = function( logical_id )
-	assert( logical_id and common.is_number( logical_id ) )
-	local output = run( "logical delete " .. tostring( logical_id ) )
+function M.Logical:delete()
+	assert( self.id )
+	local output = run( "logical delete " .. tostring( self.id ) )
 	if output == nil then
 		error("einarc:logical.delete() failed")
 	end
 end
 
 --- einarc logical hotspare_add
--- @param logical_id 0
 -- @param physical_id "0:1"
 -- @return Raise error if it fails
-M.logical.hotspare_add = function( logical_id, physical_id )
-	assert( logical_id and common.is_number( logical_id ) )
+function M.Logical:hotspare_add( physical_id )
+	assert( self.id )
 	assert( physical_id and common.is_string( physical_id ) )
-	output = run( "logical hotspare_add " .. tostring( logical_id ) .. " " .. physical_id )
+	output = run( "logical hotspare_add " .. tostring( self.id ) .. " " .. physical_id )
 	if not output then error( "einarc:logical.hotspare_add() failed" ) end
 end
 
 --- einarc logical hotspare_delete
--- @param logical_id 777
 -- @param physical_id "0:1"
 -- @return Raise error if it fails
-M.logical.hotspare_delete = function( logical_id, physical_id )
-	assert( logical_id and common.is_number( logical_id ) )
+function M.Logical:hotspare_delete( physical_id )
+	assert( self.id )
 	assert( physical_id and common.is_string( physical_id ) )
-	output = run( "logical hotspare_delete " .. tostring( logical_id ) .. " " .. physical_id )
+	output = run( "logical hotspare_delete " .. tostring( self.id ) .. " " .. physical_id )
 	if not output then error( "einarc:logical.hotspare_delete() failed" ) end
 end
 
 --- einarc logical physical_list
--- @param logical_id 0
--- @return { "physical1_id" = "state", "physical2_id" = "state" }
-M.logical.physical_list = function( logical_id )
+-- @return self.physicals = { "physical1_id" = "state", "physical2_id" = "state" }
+function M.Logical:physical_list()
+	if common.is_table( self.physicals ) then
+		return self.physicals
+	end
+	assert( self.id )
 	-- 0:1	free
 	-- 0:2	hotspare
-	assert( logical_id and common.is_number( logical_id ) )
-	local output = run( "logical physical_list " .. tostring( logical_id ) )
+	local output = run( "logical physical_list " .. tostring( self.id ) )
 	if not output then error( "einarc:logical.physical_list() failed" ) end
-	local logical_physicals = {}
+	self.physicals = {}
 	for _, line in ipairs( output ) do
 		local physical_id = string.match( line, "^([%d:]+)" )
-		assert( M.physical.is_id( physical_id ) )
-		logical_physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
+		assert( M.Physical.is_id( physical_id ) )
+		self.physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
 	end
-	return logical_physicals
+	return self.physicals
+end
+
+--- Retreive logical progress, if it exists
+-- @return self.progress = 66.6
+function M.Logical:progress_get()
+	if common.is_number( self.progress ) then
+		return self.progress
+	end
+	assert( self.id )
+	for task_id, task in pairs( einarc.Task.list() ) do
+		if task.where == tostring( self.id ) then
+			self.progress = task.progress
+			return self.progress
+		end
+	end
+	return self.progress
+end
+
+------------------------------------------------------------------------
+-- Physical
+------------------------------------------------------------------------
+M.Physical = {}
+local Physical_mt = common.Class( M.Physical )
+
+--- Is this ID is physical id (having "666:13" kind of form)
+-- @param id "0:1"
+-- @return true/false
+function M.Physical.is_id( id )
+	if string.match( id, "^%d+:%d+$" ) then
+		return true
+	else
+		return false
+	end
+end
+
+function M.Physical:new( attrs )
+	assert( M.Physical.is_id( attrs.id ) )
+	assert( common.is_string( attrs.model ) )
+	assert( common.is_string( attrs.revision ) )
+	assert( common.is_string( attrs.serial ) )
+	assert( common.is_number( attrs.size ) )
+	assert( common.is_string( attrs.state ) )
+	return setmetatable( attrs, Physical_mt )
 end
 
 --- einarc physical list
--- @return { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
-M.physical.list = function()
+-- @return { "0:1" = Physical, "0:2" = Physical }
+function M.Physical.list()
 	-- ID   Model       Revision  Serial        Size     State
 	-- 1:0  ST980310AS            5ST05LK2  76319.09 MB  free
 	local output = run( "physical list" )
@@ -213,43 +251,56 @@ M.physical.list = function()
 	local physicals = {}
 	for _, line in ipairs( output ) do
 		local id = string.match( line, "^([%d:]+)" )
-		assert( M.physical.is_id( id ) )
-		physicals[ id ] = {
+		assert( id )
+		physicals[ id ] = M.Physical:new( {
+			id = id,
 			model = string.match( line, "^[%d:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
 			revision = string.match( line, "^[%d:]+\t.*\t(.*)\t.*\t.*\t.*$" ) or "",
 			serial = string.match( line, "^[%d:]+\t.*\t.*\t(.*)\t.*\t.*$" ) or "",
 			size = tonumber( string.match( line, "^[%d:]+\t.*\t.*\t.*\t([%d\.]+)\t.*$" ) ) or 0,
 			state = string.match( line, "^[%d:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
-		}
+		} )
 	end
 	return physicals
 end
 
 --- einarc physical get
--- @param physical_id "0:1"
 -- @param property "hotspare"
 -- @return { "0" }
-M.physical.get = function( physical_id, property )
-	assert( physical_id and common.is_string( physical_id ) )
+function M.Physical:get( property )
+	assert( self.id and common.is_string( id ) )
 	assert( property and common.is_string( physical_id ) )
-	local output = run( "physical get " .. physical_id .. " " .. property )
+	local output = run( "physical get " .. self.id .. " " .. property )
 	if not output then error( "einarc:physical.get() failed" ) end
 	return output
 end
 
 --- Is physical disk a hotspare
--- @param physical_id "0:1"
 -- @return true/false
-M.physical.is_hotspare = function( physical_id )
-        assert( physical_id )
-	local output = M.physical.get( physical_id, "hotspare" )
+function M.Physical:is_hotspare()
+        assert( self.id )
+	local output = M.Physical:get( self.id, "hotspare" )
 	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
 	return output[1] == "1"
 end
 
+------------------------------------------------------------------------
+-- Task
+------------------------------------------------------------------------
+M.Task = {}
+local Task_mt = common.Class( M.Task )
+
+function M.Task:new( attrs )
+	assert( common.is_number( attrs.id ) )
+	assert( common.is_string( attrs.what ) )
+	assert( common.is_string( attrs.where ) )
+	assert( common.is_number( attrs.progress ) )
+	return setmetatable( attrs, Task_mt )
+end
+
 --- einarc task list
--- @return { 0 = { what = "something", where = "somewhere", progress = 66.6 } }
-M.task.list = function()
+-- @return { 0 = Task, 1 = Task }
+function M.Task.list()
 	local output = run( "task list" )
 	if not output or #output == 0 then
 		return {}
@@ -258,17 +309,14 @@ M.task.list = function()
 	for _, line in ipairs( output ) do
 		local id = string.match( line, "^(%d+)" )
 		assert( id )
-		tasks[ id ] = {
+		tasks[ id ] = M.Task:new( {
+			id = tonumber( id ),
 			where = string.match( line, "^%d+\t(.*)\t.*\t.*$" ) or "",
 			what = string.match( line, "^%d+\t.*\t(.*)\t.*$" ) or "",
 			progress = tonumber( string.match( line, "^%d+\t.*\t.*\t(.*)$" ) ) or 0,
-		}
+		} )
 	end
 	return tasks
-end
-
-M.bbu.info = function()
-	local output = run( "bbu info" )
 end
 
 -----------------------------------------------------------------------
@@ -278,8 +326,8 @@ end
 --- Split physical ID
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
-M.physical.split_id = function( physical_id )
-	assert( M.physical.is_id( physical_id ) )
+function M.Physical.split_id( physical_id )
+	assert( M.Physical.is_id( physical_id ) )
 	return tonumber( string.match( physical_id , "^(%d+):" ) ),
 	       tonumber( string.match( physical_id , ":(%d+)$" ) )
 end
@@ -288,9 +336,9 @@ end
 -- @param id1 Number to compare with
 -- @param id2 Number to compare with
 -- @return sort physicals ids
-M.physical.sort_ids = function( id1, id2 )
-	local left1, right1 = M.physical.split_id( id1 )
-	local left2, right2 = M.physical.split_id( id2 )
+function M.sort_physical_ids( id1, id2 )
+	local left1, right1 = M.Physical.split_id( id1 )
+	local left2, right2 = M.Physical.split_id( id2 )
 	if left1 == left2 then
 		return right1 < right2
 	else
@@ -298,42 +346,32 @@ M.physical.sort_ids = function( id1, id2 )
 	end
 end
 
---- Physical IDs sorting
--- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
--- @return Sorted physicals IDs
-M.physical.sort_physicals = function( physical_list )
-	local physical_ids = common.keys( physical_list )
-	table.sort( physical_ids, M.physical.sort_ids )
-	return physical_ids
-end
-
 --- Sorted physical list
--- @param physical_list { "0:1" = { model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
--- @return { { id = "0:1", model = "some", revision = "rev", serial = "some", size = 666, state = "free" } }
-M.physical.sorted_list = function( physical_list )
-	assert( common.is_table( physical_list ) )
+-- @param physicals { "0:1" = Physical }
+-- @return { Physical, Physical }
+function M.Physical.sort( physicals )
+	assert( common.is_table( physicals ) )
 	-- Validate that all keys are real physical IDs
-	for physical_id,_ in pairs( physical_list ) do
-		assert( M.physical.is_id( physical_id ) )
+	for physical_id,_ in pairs( physicals ) do
+		assert( M.Physical.is_id( physical_id ) )
 	end
 
-	local state_list = common.unique_keys( "state", physical_list )
+	local state_list = common.unique_keys( "state", physicals )
 	local states = common.keys( state_list )
 	table.sort( states )
 	local sorted_ids = {}
-	local sorted_physical_list = {}
+	local sorted_physicals = {}
 	for _, state in ipairs( states ) do
 		local ids = state_list[ state ]
-		table.sort( ids, M.physical.sort_ids )
+		table.sort( ids, M.sort_physical_ids )
 		for _, id in ipairs( ids ) do
 			sorted_ids[ #sorted_ids + 1 ] = id
 		end
 	end
 	for _, id in ipairs( sorted_ids ) do
-		physical_list[ id ].id = id
-		sorted_physical_list[ #sorted_physical_list + 1 ] = physical_list[ id ]
+		sorted_physicals[ #sorted_physicals + 1 ] = physicals[ id ]
 	end
-	return sorted_physical_list
+	return sorted_physicals
 end
 
 return M

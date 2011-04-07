@@ -1,0 +1,69 @@
+<td valign="top"
+    rowspan="<%= line.physical.rowspan %>"
+    class="<%+san/matrix_physical_class%>">
+
+<table border="0px" width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<% if not line.physical.highlight.left then %>
+			<input name="san.physical_id"
+			       type="checkbox"
+			       value="<%= line.physical.id %>" />
+			<% end %>
+			<%= line.physical.id %>
+		</td>
+		<td><%= line.physical.model %></td>
+		<td><%= line.physical.size %> <%: MiB %></td>
+		<td><a id="physical_info-<%= line.physical.id %>" href="#">[<%: Info %>]</a></td>
+	</tr>
+	<tr class="to_hide">
+		<td colspan="4">
+			<p>
+			<label for="physical_model-<%= line.physical.id %>"><%: Model %></label>
+			<input id="physical_model-<%= line.physical.id %>"
+			       name="physical_model-<%= line.physical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.physical.model %>" />
+			</p>
+
+			<p>
+			<label for="physical_serial-<%= line.physical.id %>"><%: S/N %></label>
+			<input id="physical_serial-<%= line.physical.id %>"
+			       name="physical_serial-<%= line.physical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.physical.serial %>" />
+			</p>
+
+			<p>
+			<label for="physical_revision-<%= line.physical.id %>"><%: Revision %></label>
+			<input id="physical_revision-<%= line.physical.id %>"
+			       name="physical_revision-<%= line.physical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.physical.revision %>" />
+			</p>
+
+			<p>
+			<label for="physical_state-<%= line.physical.id %>"><%: State %></label>
+			<input id="physical_state-<%= line.physical.id %>"
+			       name="physical_state-<%= line.physical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.physical.state %>" />
+			</p>
+
+			<p>
+			<label for="physical_size-<%= line.physical.id %>"><%: Size %> (<%: MiB %>)</label>
+			<input id="physical_size-<%= line.physical.id %>"
+			       name="physical_size-<%= line.physical.id %>"
+			       readonly="readonly"
+			       type="text"
+			       value="<%= line.physical.size %>" />
+			</p>
+		</td>
+	</tr>
+</table>
+
+</td>
