@@ -93,7 +93,7 @@ local function einarc_logical_add( inputs, drives )
 
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 	if is_valid then
-		local return_code, result = pcall( einarc.logical.add, raid_level, drives )
+		local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
 		if not return_code then
 			message_error = i18n("Failed to create logical disk")
 		end
@@ -117,7 +117,7 @@ local function einarc_logical_remove( inputs )
 	assert( logical_id )
 	logical_id = tonumber( logical_id )
 
-	local return_code, result = pcall( einarc.logical.delete, { id = logical_id } )
+	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk")
 	end
