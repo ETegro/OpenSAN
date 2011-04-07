@@ -86,7 +86,7 @@ local function einarc_logical_add( inputs )
 		if k == "physical_id" then
 			drives = v
 		end
-		if k == "logical_level" then
+		if k == "raid_level" then
 			raid_level = v
 		end
 	end
