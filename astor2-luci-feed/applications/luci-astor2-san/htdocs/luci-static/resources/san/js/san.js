@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 $.noConflict();
 jQuery(document).ready( function($) {
 
@@ -101,4 +99,3 @@ $( '.logical_volume-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00C
 $( '.logical_volume-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
 
 });
-</script>
