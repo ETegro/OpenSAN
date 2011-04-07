@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
-jQuery.noConflict();
-(function($) {
+$.noConflict();
+jQuery(document).ready( function($) {
 
 // effects
 
@@ -33,20 +33,9 @@ $( physicals_select ).click( function() {
 		}
 	}
 
-	// Physicals drives to RAID.
-	var drives_array = $.makeArray(
-		$( 'form input:checkbox[ name = "san.physical_id" ]:checked:' )
-			.map( function() {
-				output = $( this ).attr( 'value' );
-				return output;
-				}
-			)
-		);
-	var drives_list_to_raid = drives_array.join( ', ' );
-	$( 'form input[ name = "drives_to_add" ]' ).val( drives_list_to_raid );
-
 	// RAID validator
-	var num = drives_array.length;
+	var num = $( 'form input:checkbox[ name = "san.physical_id" ]:checked:' ).length;
+//	var num = drives_array.length;
 	var raidlevels = $( '#div_raid_create input:radio[ name = "raid_level" ]' );
 	var restrictions = { min : { 'passthrough' : 1,
 				     'linear' : 1,
@@ -65,7 +54,6 @@ $( physicals_select ).click( function() {
 		if ( num >= min && num <= max ) {
 			$( this ).removeAttr( 'disabled' );
 		} else {
-//			$( this ).attr( 'checked', false );
 			$( this ).attr( 'disabled', 'disabled' );
 		}
 	} );
@@ -73,8 +61,7 @@ $( physicals_select ).click( function() {
 
 // Hide/show information of physicals and logicals.
 $( 'form a[ id *= "ical_info-" ]' ).click( function() {
-	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' )
-		.css( 'background-color', 'yellow' ); //delete this .css()
+	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 	if ( $( parent_selector ).is( ':hidden' ) ) {
 		$( parent_selector ).fadeIn( 'fast' );
 	} else {
@@ -91,7 +78,9 @@ $( '.physical-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00CC00' }
 $( '.physical-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
 // Physical background
 $( '.physical-background-state-allocated' ).css( { 'background-color' : '#99FF99' } );
+$( '.physical-background-state-failed' ).css( { 'background-color' : '#FF2211' } );
 $( '.physical-background-state-free' ).css( { 'background-color' : '#CCCCCC' } );
+$( '.physical-background-state-hotspare' ).css( { 'background-color' : '#FFCC22' } );
 
 //Logical border
 $( '.logical-highlight-top' ).css( { 'border-top' : '5px solid #00CC00' } );
@@ -99,12 +88,17 @@ $( '.logical-highlight-right' ).css( { 'border-right' : '5px solid #00CC00' } );
 $( '.logical-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00CC00' } );
 $( '.logical-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
 
+// Physical background
+$( '.logical-background-state-normal' ).css( { 'background-color' : '#99FF99' } );
+$( '.logical-background-state-degraded' ).css( { 'background-color' : '#FF2211' } );
+$( '.logical-background-state-initializing' ).css( { 'background-colo' : '#EEFF44' } );
+$( '.logical-background-state-rebuilding' ).css( { 'background-colo' : '#FFCC22' } );
+
 // Logical-volume border
 $( '.logical_volume-highlight-top' ).css( { 'border-top' : '5px solid #00CC00' } );
 $( '.logical_volume-highlight-right' ).css( { 'border-right' : '5px solid #00CC00' } );
 $( '.logical_volume-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00CC00' } );
 $( '.logical_volume-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
 
-})(jQuery);
-
+});
 </script>
