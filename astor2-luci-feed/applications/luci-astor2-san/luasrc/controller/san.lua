@@ -119,7 +119,7 @@ local function einarc_logical_remove( inputs )
 	local logical_id = nil
 	for k, v in pairs( inputs ) do
 		if not logical_id then
-			logical_id = string.match( k, "^submit_logical_remove-(%d+)$" )
+			logical_id = string.match( k, "^submit_logical_remove.(%d+)$" )
 		end
 	end
 	assert( logical_id )
