@@ -42,6 +42,12 @@ function index()
 	e.leaf = true
 end
 
+local function index_with_error( message_error )
+	local http = luci.http
+	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
+	               http.build_querystring( { message_error = message_error } ) )
+end
+
 ------------------------------------------------------------------------
 -- Einarc related functions
 ------------------------------------------------------------------------
@@ -136,12 +142,6 @@ function index_overall()
 		matrix_overall = matrix.caller(),
 		raidlevels = einarc.Adapter:get( "raidlevels" ),
 		message_error = message_error } )
-end
-
-local function index_with_error( message_error )
-	local http = luci.http
-	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
-	               http.build_querystring( { message_error = message_error } ) )
 end
 
 function perform()
