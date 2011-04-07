@@ -82,17 +82,17 @@ $( '.physical-background-state-failed' ).css( { 'background-color' : '#FF2211' }
 $( '.physical-background-state-free' ).css( { 'background-color' : '#CCCCCC' } );
 $( '.physical-background-state-hotspare' ).css( { 'background-color' : '#FFCC22' } );
 
-//Logical border
+// Logical border
 $( '.logical-highlight-top' ).css( { 'border-top' : '5px solid #00CC00' } );
 $( '.logical-highlight-right' ).css( { 'border-right' : '5px solid #00CC00' } );
 $( '.logical-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00CC00' } );
 $( '.logical-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
 
-// Physical background
+// Logical background
 $( '.logical-background-state-normal' ).css( { 'background-color' : '#99FF99' } );
 $( '.logical-background-state-degraded' ).css( { 'background-color' : '#FF2211' } );
-$( '.logical-background-state-initializing' ).css( { 'background-colo' : '#EEFF44' } );
-$( '.logical-background-state-rebuilding' ).css( { 'background-colo' : '#FFCC22' } );
+$( '.logical-background-state-initializing' ).css( { 'background-color' : '#EEFF44' } );
+$( '.logical-background-state-rebuilding' ).css( { 'background-color' : '#FFCC22' } );
 
 // Logical-volume border
 $( '.logical_volume-highlight-top' ).css( { 'border-top' : '5px solid #00CC00' } );
