@@ -2,23 +2,29 @@
 
 /* Matrix */
 
-/* Physical border */
-.physical-highlight-top  {  border-top:  5px solid #00CC00;  }
-.physical-highlight-right  {  border-right:  5px solid #00CC00;  }
-.physical-highlight-bottom  {  border-bottom:  5px solid #00CC00;  }
-.physical-highlight-left  {  border-left:  5px solid #00CC00;  }
+/* Physicals */
+.physical-highlight-top { border-top: 5px solid #00CC00; }
+.physical-highlight-right { border-right: 5px solid #00CC00; }
+.physical-highlight-bottom { border-bottom: 5px solid #00CC00; }
+.physical-highlight-left { border-left: 5px solid #00CC00; }
 
-/* Physical background */
-.physical-background-state-allocated  {  background-color: #99FF99;  }
-.physical-background-state-free {  background-color: #CCCCCC;  }
+.physical-background-state-allocated { background-color: #99FF99; }
+.physical-background-state-failed { background-color: #FF2211; }
+.physical-background-state-free { background-color: #CCCCCC; }
+.physical-background-state-hotspare { background-color: #FFCC22; }
 
-/* Logical border */
-.logical-highlight-top { border-top: 5px solid #00CC00;  }
+/* Logicals */
+.logical-highlight-top { border-top: 5px solid #00CC00; }
 .logical-highlight-right { border-right: 5px solid #00CC00; }
 .logical-highlight-bottom { border-bottom: 5px solid #00CC00; }
 .logical-highlight-left { border-left: 5px solid #00CC00; }
 
-/* Logical-volume border */
+.logical-background-state-normal { border-left: 5px solid #00CC00; }
+.logical-background-state-degraded { border-left: 5px solid #FF2211; }
+.logical-background-state-initializing { border-left: 5px solid #EEFF44; }
+.logical-background-state-rebuilding { border-left: 5px solid #FFCC22; }
+
+/* Logicals volumes */
 .logical_volume-highlight-top { border-top: 5px solid #00CC00; }
 .logical_volume-highlight-right { border-right: 5px solid #00CC00; }
 .logical_volume-highlight-bottom { border-bottom: 5px solid #00CC00; }
