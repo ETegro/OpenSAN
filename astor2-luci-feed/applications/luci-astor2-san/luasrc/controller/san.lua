@@ -42,6 +42,12 @@ function index()
 	e.leaf = true
 end
 
+local function index_with_error( message_error )
+	local http = luci.http
+	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
+	               http.build_querystring( { message_error = message_error } ) )
+end
+
 ------------------------------------------------------------------------
 -- Einarc related functions
 ------------------------------------------------------------------------
@@ -113,13 +119,13 @@ local function einarc_logical_remove( inputs )
 	local logical_id = nil
 	for k, v in pairs( inputs ) do
 		if not logical_id then
-			logical_id = string.match( k, "^submit_logical_remove-(%d+)$" )
+			logical_id = string.match( k, "^submit_logical_remove.(%d+)$" )
 		end
 	end
 	assert( logical_id )
 	logical_id = tonumber( logical_id )
 
-	local return_code, result = pcall( einarc.logical.delete, logical_id )
+	local return_code, result = pcall( einarc.logical.delete, { id = logical_id } )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk")
 	end
@@ -136,12 +142,6 @@ function index_overall()
 		matrix_overall = matrix.caller(),
 		raidlevels = einarc.Adapter:get( "raidlevels" ),
 		message_error = message_error } )
-end
-
-local function index_with_error( message_error )
-	local http = luci.http
-	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
-	               http.build_querystring( { message_error = message_error } ) )
 end
 
 function perform()
