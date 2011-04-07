@@ -136,12 +136,12 @@ end
 
 local function device_lvms( device )
 	local physical_volumes = {}
-	for _, physical_volume in ipairs( lvm.PhysicalVolume:list() ) do
+	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
 		if physical_volume.device == device then
 			physical_volumes[ #physical_volumes + 1 ] = physical
 		end
 	end
-	return lvm.LogicalVolume:list( common.values( lvm.VolumeGroup:list( physical_volumes ) ) )
+	return lvm.LogicalVolume.list( common.values( lvm.VolumeGroup.list( physical_volumes ) ) )
 end
 
 function M.caller()
