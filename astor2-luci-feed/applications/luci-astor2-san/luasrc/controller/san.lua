@@ -76,20 +76,12 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-local function einarc_logical_add( inputs )
+local function einarc_logical_add( inputs, drives )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local drives = nil
-	local raid_level = nil
-	for k, v in pairs( inputs ) do
-		if k == "physical_id" then
-			drives = v
-		end
-		if k == "raid_level" then
-			raid_level = v
-		end
-	end
+	assert( inputs[ "raid_level"] )
+	local raid_level = inputs.raid_level
 
 	if common.is_string( drives ) then
 		drives = { drives }
@@ -147,10 +139,11 @@ end
 function perform()
 	local inputs = luci.http.formvaluetable( "san" )
 	local i18n = luci.i18n.translate
+	local get = luci.http.formvalue
 
 	local SUBMIT_MAP = {
-		logical_add = einarc_logical_add,
-		logical_remove = einarc_logical_remove,
+		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
+		logical_remove = function() einarc_logical_remove( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
