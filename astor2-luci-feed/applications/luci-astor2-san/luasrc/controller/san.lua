@@ -81,13 +81,13 @@ local function einarc_logical_add( inputs )
 	local message_error = nil
 
 	local drives = nil
-	local level = nil
+	local raid_level = nil
 	for k, v in pairs( inputs ) do
 		if k == "physical_id" then
 			drives = v
 		end
 		if k == "logical_level" then
-			level = v
+			raid_level = v
 		end
 	end
 

@@ -9,10 +9,10 @@
 	</p>
 
 	<div>
-	<label for="logical_level"><%: Logical RAID level %></label>
+	<label for="san.raid_level"><%: Logical RAID level %></label>
 	<ul>
 	<% for _, raidlevel in ipairs( raidlevels ) do %>
-		<li><p><input name="raid_level"
+		<li><p><input name="san.raid_level"
 			      type ="radio"
 			      value="<%= raidlevel %>" />
 			<%= raidlevel %>
