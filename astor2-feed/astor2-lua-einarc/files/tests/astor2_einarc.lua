@@ -24,10 +24,10 @@ einarc = require( "astor2.einarc" )
 
 TestIsId = {}
 	function TestIsId:test_is_id()
-		assertEquals( einarc.Physical:is_id( "foo:bar" ), false )
-		assertEquals( einarc.Physical:is_id( "10:bar" ), false )
-		assertEquals( einarc.Physical:is_id( "10:20" ), true )
-		assertEquals( einarc.Physical:is_id( "10_20" ), false )
+		assertEquals( einarc.Physical.is_id( "foo:bar" ), false )
+		assertEquals( einarc.Physical.is_id( "10:bar" ), false )
+		assertEquals( einarc.Physical.is_id( "10:20" ), true )
+		assertEquals( einarc.Physical.is_id( "10_20" ), false )
 	end
 
 TestSortPhysicals = {}
@@ -126,7 +126,7 @@ TestSortPhysicals = {}
 	function TestSortPhysicals:test_split_id()
 		assertError( einarc.Physical.split_id, "foobar" )
 		assertError( einarc.Physical.split_id, "foo:bar" )
-		local left, right = einarc.Physical:split_id( "0:1" )
+		local left, right = einarc.Physical.split_id( "0:1" )
 		assertEquals( left, 0 )
 		assertEquals( right, 1 )
 	end
@@ -139,7 +139,7 @@ TestSortPhysicals = {}
 
 	function TestSortPhysicals:test_sorted_list()
 		assertEquals( true, common.compare_tables(
-			einarc.Physical:sort( self.physicals ),
+			einarc.Physical.sort( self.physicals ),
 			self.true_sorted_physicals
 		) )
 	end
