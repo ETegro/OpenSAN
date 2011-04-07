@@ -1,26 +1,16 @@
 <div id="div_raid_create" class="to_hide">
-	<p>
-	<label for="drives_to_add"><%: Drives to add %></label>
-	<input name="drives_to_add"
-	       id="drives_to_add"
-	       readonly="readonly"
-	       type="text"
-	       value="" />
-	</p>
-
-	<div>
 	<label for="san.raid_level"><%: Logical RAID level %></label>
 	<ul>
 	<% for _, raidlevel in ipairs( raidlevels ) do %>
-		<li><p><input name="san.raid_level"
-			      type ="radio"
-			      value="<%= raidlevel %>" />
-			<%= raidlevel %>
-		</p></li>
+		<li>
+			<p><input name="san.raid_level"
+				      type ="radio"
+				      value="<%= raidlevel %>" />
+					<%= raidlevel %>
+			</p>
+		</li>
 	<% end %>
 	</ul>
-	</div>
-
 	<p>
 	<input name="san.submit_logical_add"
 	       type="submit"
