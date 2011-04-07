@@ -78,7 +78,7 @@ function M.overall( data )
 			physicals_free[ physical_id ] = nil
 		end
 		local physical_rowspan = lines_quantity / physicals_quantity
-		for i, physical in ipairs( einarc.Physical:sort( logical.physicals ) ) do
+		for i, physical in ipairs( einarc.Physical.sort( logical.physicals ) ) do
 			local offset = current_line + ( i - 1 ) * physical_rowspan
 			matrix[ offset ].physical = physical
 			matrix[ offset ].physical.rowspan = physical_rowspan
@@ -124,7 +124,7 @@ function M.overall( data )
 		current_line = future_line
 	end
 
-	for _, physical in pairs( einarc.Physical:sort( physicals_free ) ) do
+	for _, physical in pairs( einarc.Physical.sort( physicals_free ) ) do
 		matrix[ current_line ] = { physical = physical }
 		matrix[ current_line ].physical.rowspan = 1
 		matrix[ current_line ].physical.highlight = common.deepcopy( highlights )
@@ -136,23 +136,23 @@ end
 
 local function device_lvms( device )
 	local physical_volumes = {}
-	for _, physical_volume in ipairs( lvm.PhysicalVolume:list() ) do
+	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
 		if physical_volume.device == device then
 			physical_volumes[ #physical_volumes + 1 ] = physical
 		end
 	end
-	return lvm.LogicalVolume:list( common.values( lvm.VolumeGroup:list( physical_volumes ) ) )
+	return lvm.LogicalVolume.list( common.values( lvm.VolumeGroup.list( physical_volumes ) ) )
 end
 
 function M.caller()
-	local logicals = einarc.Logical:list()
+	local logicals = einarc.Logical.list()
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
 		logicals[ logical_id ].logical_volumes = device_lvms( logical.device )
 	end
 	return M.overall( {
-		physicals = einarc.Physical:list(),
+		physicals = einarc.Physical.list(),
 		logicals = logicals
 	} )
 end

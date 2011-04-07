@@ -53,7 +53,7 @@ end
 
 --- Create PhysicalVolume on a disk
 -- @param disk Disk on which volume must be created
-function M.PhysicalVolume:create( disk )
+function M.PhysicalVolume.create( disk )
 	assert( is_disk( disk ) )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
 	common.system_succeed( "lvm pvcreate " .. disk )
@@ -66,13 +66,13 @@ function M.PhysicalVolume:remove()
 end
 
 --- Rescan all PhysicalVolumes on a system
-function M.PhysicalVolume:rescan()
+function M.PhysicalVolume.rescan()
 	common.system_succeed( "lvm pvscan" )
 end
 
 --- List all PhysicalVolumes
 -- @return { PhysicalVolume, PhysicalVolume }
-function M.PhysicalVolume:list()
+function M.PhysicalVolume.list()
 	local physical_volumes = {}
 	for _, line in ipairs( common.system_succeed( "lvm pvdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
@@ -120,12 +120,12 @@ end
 -- @param name Name of VolumeGroup
 -- @param physical_volumes List of PhysicalVolumes to create group on
 -- TODO: next_vg_name
-function M.VolumeGroup:create( name, physical_volumes )
+function M.VolumeGroup.create( name, physical_volumes )
 	assert( name and common.is_string( name ) )
 	assert( physical_volumes and common.is_array( physical_volumes ) )
 
 	-- Sanity checks
-	for _, volume_group in ipairs( M.VolumeGroup:list() ) do
+	for _, volume_group in ipairs( M.VolumeGroup.list() ) do
 		if name == volume_group.name then
 			error( "lvm:VolumeGroup.create(): such name already exists" )
 		end
@@ -149,7 +149,7 @@ function M.VolumeGroup:remove()
 end
 
 --- Rescan all VolumeGroups on a system
-function M.VolumeGroup:rescan()
+function M.VolumeGroup.rescan()
 	common.system_succeed( "lvm vgscan --mknodes" )
 	common.system_succeed( "lvm vgchange -a y" )
 end
@@ -157,7 +157,7 @@ end
 --- List all VolumeGroups that are on specified PhysicalVolumes
 -- @param physical_volumes PhysicalVolumes to check
 -- @return { "foo" = VolumeGroup, "bar" = VolumeGroup }
-function M.VolumeGroup:list( physical_volumes )
+function M.VolumeGroup.list( physical_volumes )
 	local volume_groups = {}
 	for _, line in ipairs( common.system_succeed( "lvm vgdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
@@ -207,7 +207,7 @@ end
 -- @param name Name of LogicalVolume
 -- @param volume_group VolumeGroup to create LogicalVolume on
 -- @param size Size of LogicalVolume
-function M.LogicalVolume:create( name, volume_group, size )
+function M.LogicalVolume.create( name, volume_group, size )
 	assert( name and common.is_string( name ) )
 	assert( volume_group and common.is_table( volume_group ) )
 	assert( size and common.is_number( size ) )
@@ -238,14 +238,14 @@ function M.LogicalVolume:remove()
 end
 
 --- Rescan all LogicalVolumes on a system
-function M.LogicalVolume:rescan()
+function M.LogicalVolume.rescan()
 	common.system_succeed( "lvm lvscan" )
 end
 
 --- List all LogicalVolumes on specified VolumeGroups
 -- @param volume_groups List of VolumeGroups to check
 -- @return { LogicalVolume, LogicalVolume }
-function M.LogicalVolume:list( volume_groups )
+function M.LogicalVolume.list( volume_groups )
 	assert( volume_groups and common.is_table( volume_groups ) )
 	local result = {}
 	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do

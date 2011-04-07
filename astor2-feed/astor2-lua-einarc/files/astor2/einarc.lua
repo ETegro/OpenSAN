@@ -96,7 +96,7 @@ end
 
 --- einarc logical list
 -- @return { 0 = Logical, 1 = Logical }
-function M.Logical:list()
+function M.Logical.list()
 	-- #  RAID level  Physical drives  Capacity  Device   State
 	-- 0  linear      0:1              246.00 MB /dev/md0 normal
 	local output = run( "logical list" )
@@ -123,7 +123,7 @@ end
 -- @param size 666.0
 -- @param properties { "prop1" = "itsvalue", "prop2" = "itsvalue" }
 -- @return Raise error if it fails
-function M.Logical:add( raid_level, drives, size, properties )
+function M.Logical.add( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
 	local cmd = "logical add " .. raid_level
 	if drives then
@@ -192,7 +192,7 @@ function M.Logical:physical_list()
 	self.physicals = {}
 	for _, line in ipairs( output ) do
 		local physical_id = string.match( line, "^([%d:]+)" )
-		assert( M.Physical:is_id( physical_id ) )
+		assert( M.Physical.is_id( physical_id ) )
 		self.physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
 	end
 	return self.physicals
@@ -205,7 +205,7 @@ function M.Logical:progress_get()
 		return self.progress
 	end
 	assert( self.id )
-	for task_id, task in pairs( einarc.Task:list() ) do
+	for task_id, task in pairs( einarc.Task.list() ) do
 		if task.where == tostring( self.id ) then
 			self.progress = task.progress
 			return self.progress
@@ -223,7 +223,7 @@ local Physical_mt = common.Class( M.Physical )
 --- Is this ID is physical id (having "666:13" kind of form)
 -- @param id "0:1"
 -- @return true/false
-function M.Physical:is_id( id )
+function M.Physical.is_id( id )
 	if string.match( id, "^%d+:%d+$" ) then
 		return true
 	else
@@ -232,7 +232,7 @@ function M.Physical:is_id( id )
 end
 
 function M.Physical:new( attrs )
-	assert( M.Physical:is_id( attrs.id ) )
+	assert( M.Physical.is_id( attrs.id ) )
 	assert( common.is_string( attrs.model ) )
 	assert( common.is_string( attrs.revision ) )
 	assert( common.is_string( attrs.serial ) )
@@ -243,7 +243,7 @@ end
 
 --- einarc physical list
 -- @return { "0:1" = Physical, "0:2" = Physical }
-function M.Physical:list()
+function M.Physical.list()
 	-- ID   Model       Revision  Serial        Size     State
 	-- 1:0  ST980310AS            5ST05LK2  76319.09 MB  free
 	local output = run( "physical list" )
@@ -300,7 +300,7 @@ end
 
 --- einarc task list
 -- @return { 0 = Task, 1 = Task }
-function M.Task:list()
+function M.Task.list()
 	local output = run( "task list" )
 	if not output or #output == 0 then
 		return {}
@@ -326,8 +326,8 @@ end
 --- Split physical ID
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
-function M.Physical:split_id( physical_id )
-	assert( M.Physical:is_id( physical_id ) )
+function M.Physical.split_id( physical_id )
+	assert( M.Physical.is_id( physical_id ) )
 	return tonumber( string.match( physical_id , "^(%d+):" ) ),
 	       tonumber( string.match( physical_id , ":(%d+)$" ) )
 end
@@ -337,8 +337,8 @@ end
 -- @param id2 Number to compare with
 -- @return sort physicals ids
 function M.sort_physical_ids( id1, id2 )
-	local left1, right1 = M.Physical:split_id( id1 )
-	local left2, right2 = M.Physical:split_id( id2 )
+	local left1, right1 = M.Physical.split_id( id1 )
+	local left2, right2 = M.Physical.split_id( id2 )
 	if left1 == left2 then
 		return right1 < right2
 	else
@@ -349,11 +349,11 @@ end
 --- Sorted physical list
 -- @param physicals { "0:1" = Physical }
 -- @return { Physical, Physical }
-function M.Physical:sort( physicals )
+function M.Physical.sort( physicals )
 	assert( common.is_table( physicals ) )
 	-- Validate that all keys are real physical IDs
 	for physical_id,_ in pairs( physicals ) do
-		assert( M.Physical:is_id( physical_id ) )
+		assert( M.Physical.is_id( physical_id ) )
 	end
 
 	local state_list = common.unique_keys( "state", physicals )
