@@ -265,7 +265,7 @@ function M.LogicalVolume:list( volume_groups )
 			result[ splitted[1] ] = M.LogicalVolume:new({
 				name = splitted[1],
 				device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-				volume_group = { volume_group_to_add },
+				volume_group = volume_group_to_add,
 				size = tonumber( string.sub( splitted[3], 1, -2 ) )
 			})
 		end
