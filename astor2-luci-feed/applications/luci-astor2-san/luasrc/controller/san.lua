@@ -125,7 +125,7 @@ local function einarc_logical_remove( inputs )
 	assert( logical_id )
 	logical_id = tonumber( logical_id )
 
-	local return_code, result = pcall( einarc.logical.delete, logical_id )
+	local return_code, result = pcall( einarc.logical.delete, { id = logical_id } )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk")
 	end
