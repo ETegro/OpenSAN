@@ -12,7 +12,7 @@
 		<% if line.logical.progress then %>
 			<td><%= line.logical.progress %> %</td>
 		<% end %>
-		<td><%= line.logical.capacity %> <%: MiB %></td>
+		<td><%= line.logical.capacity %> <%: TiB %></td>
 	</tr>
 	<tr class="to_hide">
 		<td colspan="<% if line.logical.progress then %>6<% else %>5<% end %>">
@@ -55,7 +55,7 @@
 			<% end %>
 
 			<p>
-			<label for="logical_capacity-<%= line.logical.id %>"><%: Size %> (<%: MiB %>)</label>
+			<label for="logical_capacity-<%= line.logical.id %>"><%: Size %> (<%: TiB %>)</label>
 			<input id="logical_capacity-<%= line.logical.id %>"
 			       name="logical_capacity-<%= line.logical.id %>"
 			       readonly="readonly"
