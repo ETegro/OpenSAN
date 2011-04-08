@@ -63,6 +63,7 @@
 			       value="<%= line.logical.capacity %>" />
 			</p>
 
+			<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
 			<p>
 			<input name="san.submit_logical_remove-<%= line.logical.id %>"
 			       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
@@ -71,6 +72,7 @@
 			       type="submit"
 			       value="<%: Remove %>" />
 			</p>
+			<% end %>
 		</td>
 	</tr>
 </table>
