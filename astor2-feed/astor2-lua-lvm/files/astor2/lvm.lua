@@ -116,13 +116,16 @@ function M.VolumeGroup:new( attrs )
 	return setmetatable( attrs, VolumeGroup_mt )
 end
 
+function M.VolumeGroup.next_vg_name()
+	return "vg" .. tostring( os.time() )
+end
+
 --- Create VolumeGroup
--- @param name Name of VolumeGroup
 -- @param physical_volumes List of PhysicalVolumes to create group on
 -- TODO: next_vg_name
-function M.VolumeGroup.create( name, physical_volumes )
-	assert( name and common.is_string( name ) )
+function M.VolumeGroup.create( physical_volumes )
 	assert( physical_volumes and common.is_array( physical_volumes ) )
+	local name = M.VolumeGroup.next_vg_name()
 
 	-- Sanity checks
 	for _, volume_group in ipairs( M.VolumeGroup.list() ) do
