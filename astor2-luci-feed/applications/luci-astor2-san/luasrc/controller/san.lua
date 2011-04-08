@@ -93,9 +93,21 @@ local function einarc_logical_add( inputs, drives )
 
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 	if is_valid then
-		local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
-		if not return_code then
-			message_error = i18n("Failed to create logical disk")
+		-- Check that there are no different models of hard drives for adding
+		local found_models = {}
+		for _, physical in pairs( einarc.Physical.list() ) do
+			if common.is_in_array( physical.id, drives ) then
+				found_models[ physical.model ] = 1
+			end
+		end
+		if #common.keys( found_models ) ~= 1 then
+			message_error = i18n("Only single model hard drives can be used")
+		else
+			-- Let's call einarc at last
+			local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+			if not return_code then
+				message_error = i18n("Failed to create logical disk")
+			end
 		end
 	else
 		message_error = message
