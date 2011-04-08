@@ -135,7 +135,6 @@ function M.overall( data )
 end
 
 function M.mib2tib( size )
-	assert( common.is_number( size ) )
 	return string.sub( string.format( "%0.3f", size / 2^20 ), 1, -2 )
 end
 
