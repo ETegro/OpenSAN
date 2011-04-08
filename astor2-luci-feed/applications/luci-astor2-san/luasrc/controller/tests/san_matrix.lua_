@@ -821,5 +821,57 @@ TestMatrix = {}
 			} ), needed ) )
 
 	end
+TestMibToTib = {}
+	function TestMibToTib:test_values_160gb()
+		print( assertEquals( matrix.mib2tib( 160E6 ), "152.58" ) )
+	end
+	function TestMibToTib:test_values_320gb()
+		assertEquals( matrix.mib2tib( 320E6 ), "305.17" )
+	end
+	function TestMibToTib:test_values_640gb()
+		assertEquals( matrix.mib2tib( 640E6 ), "610.35" )
+	end
+	function TestMibToTib:test_values_750gb()
+		assertEquals( matrix.mib2tib( 750E6 ), "715.25" )
+	end
+	function TestMibToTib:test_values_1tb()
+		assertEquals( matrix.mib2tib( 1E9 ), "953.67" )
+	end
+	function TestMibToTib:test_values_1500gb()
+		assertEquals( matrix.mib2tib( 15E8 ), "1430.51" )
+	end
+	function TestMibToTib:test_values_2tb()
+		assertEquals( matrix.mib2tib( 2E9 ), "1907.34" )
+	end
+	function TestMibToTib:test_values_3tb()
+		assertEquals( matrix.mib2tib( 3E9 ), "2861.02" )
+	end
+	function TestMibToTib:test_values_4tb()
+		assertEquals( matrix.mib2tib( 4E9 ), "3814.69" )
+	end
+	function TestMibToTib:test_values_10tb()
+		assertEquals( matrix.mib2tib( 10E9 ), "9536.74" )
+	end
+	function TestMibToTib:test_values_20tb()
+		assertEquals( matrix.mib2tib( 20E9 ), "19073.48" )
+	end
+	function TestMibToTib:test_values_40tb()
+		assertEquals( matrix.mib2tib( 40E9 ), "38146.97" )
+	end
+	function TestMibToTib:test_values_50tb()
+		assertEquals( matrix.mib2tib( 50E9 ), "47683.71" )
+	end
+	function TestMibToTib:test_values_75tb()
+		assertEquals( matrix.mib2tib( 75E9 ), "71525.57" )
+	end
+	function TestMibToTib:test_values_100tb()
+		assertEquals( matrix.mib2tib( 100E9 ), "95367.43" )
+	end
+	function TestMibToTib:test_values_1pb()
+		assertEquals( matrix.mib2tib( 1E12 ), "953674.31" )
+	end
+	function TestMibToTib:test_values_zero()
+		assertEquals( matrix.mib2tib( 0 ), "0.00" )
+	end
 
 LuaUnit:run()

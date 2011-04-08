@@ -127,6 +127,14 @@ function M.is_odd( n )
 	return n % 2 == 0
 end
 
+--- Check if number is positive
+-- @param n Number to check
+-- @return true or false
+function M.is_positive( n )
+	assert( M.is_number( n ) )
+	return n > 0
+end
+
 --- Get keys from hash
 -- @param hash { "key1" = { ... }, "key2" = { ... } }
 -- @return { "key1", "key2" }

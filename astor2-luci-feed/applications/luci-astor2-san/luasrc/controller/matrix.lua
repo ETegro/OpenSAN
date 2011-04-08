@@ -134,6 +134,25 @@ function M.overall( data )
 	return matrix
 end
 
+function M.mib2tib( size )
+	return string.sub( string.format( "%0.3f", size / 2^20 ), 1, -2 )
+end
+
+local function filter_mib2tib( matrix )
+	for _, line in ipairs( matrix ) do
+		if line.physical then
+			line.physical.size = M.mib2tib( line.physical.size )
+		end
+		if line.logical then
+			line.logical.capacity = M.mib2tib( line.logical.capacity )
+		end
+		if line.logical_volume then
+			line.logical_volume.size = M.mib2tib( line.logical_volume.size )
+		end
+	end
+	return matrix
+end
+
 local function device_lvms( device, physical_volumes )
 	local physical_volumes = {}
 	if not physical_volumes then
@@ -155,10 +174,17 @@ function M.caller()
 		logicals[ logical_id ]:progress_get()
 		logicals[ logical_id ].logical_volumes = device_lvms( logical.device, physical_volumes )
 	end
-	return M.overall( {
+	local matrix = M.overall( {
 		physicals = einarc.Physical.list(),
 		logicals = logicals
 	} )
+	local FILTERS = {
+		filter_mib2tib
+	}
+	for _,filter in ipairs( FILTERS ) do
+		matrix = filter( matrix )
+	end
+	return matrix
 end
 
 return M
