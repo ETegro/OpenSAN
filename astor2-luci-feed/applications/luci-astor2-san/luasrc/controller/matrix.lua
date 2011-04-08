@@ -134,22 +134,26 @@ function M.overall( data )
 	return matrix
 end
 
-local function device_lvms( device )
+local function device_lvms( device, physical_volumes )
 	local physical_volumes = {}
-	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+	if not physical_volumes then
+		physical_volumes = lvm.PhysicalVolume.list()
+	end
+	for _, physical_volume in ipairs( physical_volumes ) do
 		if physical_volume.device == device then
 			physical_volumes[ #physical_volumes + 1 ] = physical_volume
 		end
 	end
-	return lvm.LogicalVolume.list( common.values( lvm.VolumeGroup.list( physical_volumes ) ) )
+	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes ) )
 end
 
 function M.caller()
 	local logicals = einarc.Logical.list()
+	local physical_volumes = lvm.PhysicalVolume.list()
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
-		logicals[ logical_id ].logical_volumes = device_lvms( logical.device )
+		logicals[ logical_id ].logical_volumes = device_lvms( logical.device, physical_volumes )
 	end
 	return M.overall( {
 		physicals = einarc.Physical.list(),
