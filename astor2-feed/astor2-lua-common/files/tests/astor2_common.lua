@@ -56,6 +56,14 @@ TestIsObj = {}
 		assert( common.is_odd( 4 ) )
 		assert( not common.is_odd( 5 ) )
 	end
+	function TestIsObj:test_positive()
+		assertError( common.is_positive, "foo" )
+		assert( common.is_positive( 100 ) )
+		assert( common.is_positive( 1E12 ) )
+		assert( not common.is_positive( -17 ) )
+		assert( not common.is_positive( 0 ) )
+		assert( not common.is_positive( -1E12 ) )
+	end
 	function TestIsObj:test_array()
 		assert( common.is_array( { 1,2,3,4,5 } ) )
 		assert( not common.is_array( { foo = "bar" } ) )
