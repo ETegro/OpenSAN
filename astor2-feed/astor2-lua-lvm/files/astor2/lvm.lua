@@ -156,7 +156,7 @@ end
 
 --- List all VolumeGroups that are on specified PhysicalVolumes
 -- @param physical_volumes PhysicalVolumes to check
--- @return { "foo" = VolumeGroup, "bar" = VolumeGroup }
+-- @return { VolumeGroup, VolumeGroup }
 function M.VolumeGroup.list( physical_volumes )
 	local volume_groups = {}
 	for _, line in ipairs( common.system_succeed( "lvm vgdisplay -c" ) ) do
@@ -186,7 +186,7 @@ function M.VolumeGroup.list( physical_volumes )
 		end
 		end
 	end
-	return volume_groups
+	return common.values( volume_groups )
 end
 
 --------------------------------------------------------------------------
