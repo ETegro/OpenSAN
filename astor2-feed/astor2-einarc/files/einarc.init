@@ -1,9 +1,12 @@
 #!/bin/sh /etc/rc.common
 START=50
 
+EINARC_STARTED_FLAG="/tmp/einarc-started"
+
 start()
 {
 	einarc -t software -a 0 adapter restart
+	touch $EINARC_STARTED_FLAG
 }
 
 stop()
