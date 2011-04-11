@@ -166,6 +166,37 @@ local function einarc_logical_remove( inputs )
 	assert( logical_id )
 	logical_id = tonumber( logical_id )
 
+	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
+
+	-- Retreive corresponding logical drive object
+	local logical = nil
+	for _, logical_obj in pairs( einarc.Logical.list() ) do
+		if logical_obj.id == logical_id then
+			logical = logical_obj
+		end
+	end
+	assert( logical )
+
+	-- Find out corresponding PhysicalVolume
+	local physical_volumes = nil
+	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+		if physical_volume.device == logical.device then
+			physical_volumes = { physical_volume }
+		end
+	end
+	assert( physical_volumes[1] )
+
+	-- Let's clean out VolumeGroup on it at first
+	local volume_group = lvm.VolumeGroup.list( physical_volumes )[1]
+	assert( volume_group )
+	volume_group:remove()
+
+	-- And clean out PhysicalVolume
+	physical_volumes[1]:remove()
+
+	lvm.PhysicalVolume.rescan()
+	lvm.VolumeGroup.rescan()
+
 	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk")
