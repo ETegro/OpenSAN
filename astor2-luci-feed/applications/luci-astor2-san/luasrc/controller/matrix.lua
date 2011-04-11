@@ -180,6 +180,10 @@ function M.caller()
 	} )
 	local FILTERS = {
 		filter_mib2tib
+		-- filter_usage_percentage
+		-- filter_highlight_snapshots
+		-- filter_rainbow_logical_highlights
+		-- filter_overall_fields_counter (for hiding)
 	}
 	for _,filter in ipairs( FILTERS ) do
 		matrix = filter( matrix )
