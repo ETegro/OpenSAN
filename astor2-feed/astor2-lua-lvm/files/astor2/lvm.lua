@@ -197,11 +197,13 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
+-- TODO: name should pass /^[A-Za-z0-9!@\#$%^*()_+=;:,.\/?{}\-][A-Za-z0-9!@\#$%^*()_+=;:,.\/?{}\ -]*$/
 function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.name ) )
 	assert( common.is_string( attrs.device ) )
 	assert( common.is_table( attrs.volume_group ) )
 	assert( common.is_positive( attrs.size ) )
+	attrs["snapshots"] = {}
 	return setmetatable( attrs, LogicalVolume_mt )
 end
 
@@ -212,20 +214,20 @@ end
 function M.LogicalVolume.create( name, volume_group, size )
 	assert( name and common.is_string( name ) )
 	assert( volume_group and common.is_table( volume_group ) )
-	assert( size and common.is_number( size ) )
+	assert( size and common.is_positive( size ) )
 	local output = common.system( "lvm lvcreate -n " ..
 	                              name ..
 	                              " -L " ..
-				      tonumber( size ) ..
+				      tostring( size ) ..
 				      " " ..
 				      volume_group.name )
-	local passed = false
+	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
 		if string.match( line, "Logical volume \"%w+\" created" ) then
-			passed = true
+			succeeded = true
 		end
 	end
-	if not passed then
+	if not succeeded then
 		error("lvm:LogicalVolume:create() failed" )
 	end
 end
@@ -244,6 +246,39 @@ function M.LogicalVolume.rescan()
 	common.system_succeed( "lvm lvscan" )
 end
 
+--- Create snapshot of logical volume
+-- @param size Snapshot size
+-- @return Raise error if it fails
+function M.LogicalVolume:snapshot( size )
+	assert( self.name )
+	assert( common.is_positive( size ) )
+	assert( common.is_string( self.device ) )
+	local name = "TODO"
+	local output = common.system( "lvm lvcreate -s -n " ..
+	                              name ..
+	                              " -L " ..
+				      tostring( size ) ..
+				      " " ..
+				      self.device )
+	local succeeded = false
+	for _, line in ipairs( output.stdout ) do
+		if string.match( line, "Logical volume \"%w+\" created" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then
+		error("lvm:LogicalVolume:snapshot() failed" )
+	end
+end
+
+local function volume_group_get_by_name( volume_groups, name )
+	for _, volume_group in ipairs( volume_groups ) do
+		if volume_group.name == name then
+			return volume_group
+		end
+	end
+end
+
 --- List all LogicalVolumes on specified VolumeGroups
 -- @param volume_groups List of VolumeGroups to check
 -- @return { LogicalVolume, LogicalVolume }
@@ -255,15 +290,22 @@ function M.LogicalVolume.list( volume_groups )
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
 		elseif splitted[4] then
-			-- TODO: snapshots
-			return true
-		else
-			local volume_group_to_add = nil
-			for _, volume_group in ipairs( volume_groups ) do
-				if volume_group.name == splitted[2] then
-					volume_group_to_add = volume_group
-				end
+			if result[ splitted[4] ] then
+				local volume_group_to_add = volume_group_get_by_name( volume_groups, splitted[2] )
+				assert( volume_group_to_add )
+				local snapshot = M.Snapshot:new({
+					name = splitted[1],
+					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
+					volume_group = volume_group_to_add,
+					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
+					logical_volume = result[ splitted[4] ],
+					allocated = tonumber( splitted[5] )
+				})
+				result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
 			end
+		else
+			local volume_group_to_add = volume_group_get_by_name( volume_groups, splitted[2] )
+			assert( volume_group_to_add )
 			result[ splitted[1] ] = M.LogicalVolume:new({
 				name = splitted[1],
 				device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
@@ -275,27 +317,74 @@ function M.LogicalVolume.list( volume_groups )
 	return common.values( result )
 end
 
+--- lvresize command frontend
+-- @param size Size argument for lvresize command
+-- @param what Target path to be resized
+-- @return true/false
+local function lvresize( size, logical_volume )
+	local succeeded = false
+	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. logical_volume.volume_group.name .. "/" .. logical_volume.name ) ) do
+		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
+			succeeded = true
+		end
+	end
+	return succeeded
+end
+
 --- LogicalVolume resize
 -- @param size New wished size
 -- @return Raise error if it fails
 function M.LogicalVolume:resize( size )
 	assert( self.name )
-	assert( common.is_number( size ) )
+	assert( common.is_positive( size ) )
 	assert( size > 0 )
 	if size == self.size then return end
-	local succeeded = false
-	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. self.volume_group.name .. "/" .. self.name ) ) do
-		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
-			succeeded = true
-		end
+	if not lvresize( size, self ) then
+		error( "lvm:LogicalVolume:resize() failed" )
 	end
-	if not succeeded then error( "lvm:LogicalVolume:resize() failed" ) end
+end
+
+--------------------------------------------------------------------------
+-- Snapshot
+--------------------------------------------------------------------------
+M.Snapshot = {}
+local Snapshot_mt = common.Class( M.Snapshot )
+
+function M.Snapshot:new( attrs )
+	assert( common.is_string( attrs.name ) )
+	assert( common.is_string( attrs.device ) )
+	assert( common.is_table( attrs.volume_group ) )
+	assert( common.is_positive( attrs.size ) )
+	assert( common.is_number( attrs.allocated ) )
+	assert( common.is_table( attrs.logical_volume ) )
+	return setmetatable( attrs, Snapshot_mt )
+end
+
+--- Remove Snapshot
+function M.Snapshot:remove()
+	assert( self.volume_group )
+	assert( self.name )
+	common.system_succeed( "lvm lvremove -f /dev/" ..
+	                       self.volume_group.name .. "/" ..
+	                       self.name )
+end
+
+--- Snapshot resize
+-- @param size New wished size
+-- @return Raise error if it fails
+function M.Snapshot:resize( size )
+	assert( self.name )
+	assert( common.is_positive( size ) )
+	if size <= self.size then return end
+	if not lvresize( size, self ) then
+		error( "lvm:Snapshot:resize() failed" )
+	end
 end
 
 --------------------------------------------------------------------------
 -- Initialization
 --------------------------------------------------------------------------
-M.DM_MODULES = { "dm_mod", "dm_log", "dm_mirror", "dm_snapshot" }
+M.DM_MODULES = { "dm-mod", "dm-log", "dm-mirror", "dm-snapshot" }
 
 --- Load all LVM-related kernel modules
 local function load_modules()
