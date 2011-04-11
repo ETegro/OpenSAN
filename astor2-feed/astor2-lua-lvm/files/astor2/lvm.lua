@@ -275,6 +275,20 @@ function M.LogicalVolume.list( volume_groups )
 	return common.values( result )
 end
 
+--- lvresize command frontend
+-- @param size Size argument for lvresize command
+-- @param what Target path to be resized
+-- @return true/false
+local function lvresize( size, logical_volume )
+	local succeeded = false
+	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. logical_volume.volume_group.name .. "/" .. logical_volume.name ) ) do
+		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
+			succeeded = true
+		end
+	end
+	return succeeded
+end
+
 --- LogicalVolume resize
 -- @param size New wished size
 -- @return Raise error if it fails
@@ -283,13 +297,9 @@ function M.LogicalVolume:resize( size )
 	assert( common.is_number( size ) )
 	assert( size > 0 )
 	if size == self.size then return end
-	local succeeded = false
-	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. self.volume_group.name .. "/" .. self.name ) ) do
-		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
-			succeeded = true
-		end
+	if not lvresize( size, self ) then
+		error( "lvm:LogicalVolume:resize() failed" )
 	end
-	if not succeeded then error( "lvm:LogicalVolume:resize() failed" ) end
 end
 
 --------------------------------------------------------------------------
@@ -325,13 +335,9 @@ function M.Snapshot:resize( size )
 	assert( common.is_number( size ) )
 	assert( size > 0 )
 	if size <= self.size then return end
-	local succeeded = false
-	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. self.volume_group.name .. "/" .. self.name ) ) do
-		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
-			succeeded = true
-		end
+	if not lvresize( size, self ) then
+		error( "lvm:Snapshot:resize() failed" )
 	end
-	if not succeeded then error( "lvm:Snapshot:resize() failed" ) end
 end
 
 --------------------------------------------------------------------------
