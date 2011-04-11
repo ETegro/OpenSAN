@@ -74,7 +74,7 @@ TestGcd = {}
 		assertEquals( matrix.gcd(  7, 49), 7 )
 	end
 
--- Those tests are taken from boot library
+-- Those tests are taken from boost library
 TestLcm = {}
 	function TestLcm:test1()
 		assertEquals( matrix.lcm(  1,  -1), 1 )
