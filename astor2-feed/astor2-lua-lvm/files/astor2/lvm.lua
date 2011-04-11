@@ -276,6 +276,19 @@ function M.LogicalVolume.list( volume_groups )
 	return common.values( result )
 end
 
+function M.LogicalVolume:resize( size )
+	assert( self.name )
+	assert( common.is_number( size ) )
+	if size == self.size then return end
+	local succeeded = false
+	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. self.volume_group.name .. "/" .. self.name ) ) do
+		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then error( "lvm:LogicalVolume:resize() failed" ) end
+end
+
 --------------------------------------------------------------------------
 -- Initialization
 --------------------------------------------------------------------------
