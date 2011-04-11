@@ -62,6 +62,18 @@
 			       type="text"
 			       value="<%= line.physical.size %>" />
 			</p>
+			<% if line.physical.state == "free" then %>
+				<p>
+				add to hotspare
+				<input name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+					type="submit"
+					value="<%: Add hotspare %>" />
+				</p>
+			<% else %>
+				<p>
+					else
+				</p>
+			<% end %>
 		</td>
 	</tr>
 </table>
