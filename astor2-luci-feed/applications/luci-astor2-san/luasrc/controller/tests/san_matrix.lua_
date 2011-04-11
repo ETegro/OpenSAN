@@ -604,6 +604,7 @@ TestMatrix = {}
 							name = "foo",
 							device = "foobar1",
 							volume_group = {},
+							snapshots = {},
 							size = 12
 						},
 						["bar"] = {
@@ -617,6 +618,7 @@ TestMatrix = {}
 							name = "bar",
 							device = "foobar2",
 							volume_group = {},
+							snapshots = {},
 							size = 23
 						},
 						["baz"] = {
@@ -630,6 +632,7 @@ TestMatrix = {}
 							name = "baz",
 							device = "foobar3",
 							volume_group = {},
+							snapshots = {},
 							size = 34
 						}
 					},
@@ -648,6 +651,7 @@ TestMatrix = {}
 					name = "bar",
 					device = "foobar2",
 					volume_group = {},
+					snapshots = {},
 					size = 23
 				}
 			},
@@ -667,6 +671,7 @@ TestMatrix = {}
 					name = "baz",
 					device = "foobar3",
 					volume_group = {},
+					snapshots = {},
 					size = 34
 				}
 			},
@@ -701,6 +706,7 @@ TestMatrix = {}
 					name = "foo",
 					device = "foobar1",
 					volume_group = {},
+					snapshots = {},
 					size = 12
 				}
 
