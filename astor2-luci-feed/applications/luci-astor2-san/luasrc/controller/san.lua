@@ -137,6 +137,53 @@ local function einarc_logical_remove( inputs )
 	index_with_error( message_error )
 end
 
+--[[
+local function einarc_logical_hotspare_add( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	assert( inputs[ "raid_level"] )
+	local raid_level = inputs.raid_level
+	local logical_id = nil
+	for k, v in pairs( inputs ) do
+		if not logical_id then
+			logical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
+		end
+	end
+
+	if common.is_string( drives ) then
+		drives = { drives }
+	end
+
+	if not drives then
+		index_with_error( i18n("Drives not selected") )
+	end
+
+	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
+	if is_valid then
+		-- Check that there are no different models of hard drives for adding
+		local found_models = {}
+		for _, physical in pairs( einarc.Physical.list() ) do
+			if common.is_in_array( physical.id, drives ) then
+				found_models[ physical.model ] = 1
+			end
+		end
+		if #common.keys( found_models ) ~= 1 then
+			message_error = i18n("Only single model hard drives can be used")
+		else
+			-- Let's call einarc at last
+			local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+			if not return_code then
+				message_error = i18n("Failed to create logical disk")
+			end
+		end
+	else
+		message_error = message
+	end
+
+	index_with_error( message_error )
+end
+]]--
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
@@ -155,7 +202,8 @@ function perform()
 
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
-		logical_remove = function() einarc_logical_remove( inputs ) end
+		logical_remove = function() einarc_logical_remove( inputs ) end,
+		hotspare_add = function() einarc_logical_hotspare_add( inputs, get("san.physical_id") ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
