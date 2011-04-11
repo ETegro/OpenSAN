@@ -152,8 +152,8 @@ end
 
 --- Rescan all VolumeGroups on a system
 function M.VolumeGroup.rescan()
-	common.system_succeed( "lvm vgscan --mknodes" )
-	common.system_succeed( "lvm vgchange -a y" )
+	common.system_succeed( "lvm vgscan --ignorelockingfailure --mknodes" )
+	common.system_succeed( "lvm vgchange -aly --ignorelockingfailure" )
 end
 
 --- List all VolumeGroups that are on specified PhysicalVolumes
