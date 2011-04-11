@@ -22,6 +22,7 @@ module( "luci.controller.san", package.seeall )
 
 common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
+lvm = require( "astor2.lvm" )
 matrix = require( "luci.controller.matrix" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
@@ -106,10 +107,44 @@ local function einarc_logical_add( inputs, drives )
 			message_error = i18n("Only single model hard drives can be used")
 		else
 			-- Let's call einarc at last
-			local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+			local return_code = nil
+			local result = nil
+			local logicals_were = einarc.Logical.list()
+			return_code, result = pcall( einarc.Logical.add, raid_level, drives )
 			if not return_code then
 				message_error = i18n("Failed to create logical disk")
 			end
+
+			-- And let's create PV and VG on it
+			-- At first, find out newly created device
+			local device = nil
+			for logical_id, logical in pairs( einarc.Logical.list() ) do
+				if not logicals_were[ logical_id ] then
+					device = logical.device
+				end
+			end
+			assert( device )
+			-- Then, create PV on it
+			return_code, result = pcall( lvm.PhysicalVolume.create, device )
+			if not return_code then
+				message_error = i18n("Failed to create PhysicalVolume on logical disk")
+			end
+			lvm.PhysicalVolume.rescan()
+			-- Find out newly created PhysicalVolume
+			local physical_volumes = nil
+			for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+				if physical_volume.device == device then
+					physical_volumes = { physical_volume }
+				end
+			end
+			assert( physical_volumes )
+			-- And then, create VG on it
+			return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
+			if not return_code then
+				message_error = i18n("Failed to create VolumeGroup on logical disk")
+			end
+			lvm.PhysicalVolume.rescan()
+			lvm.VolumeGroup.rescan()
 		end
 	else
 		message_error = message
@@ -130,6 +165,37 @@ local function einarc_logical_remove( inputs )
 	end
 	assert( logical_id )
 	logical_id = tonumber( logical_id )
+
+	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
+
+	-- Retreive corresponding logical drive object
+	local logical = nil
+	for _, logical_obj in pairs( einarc.Logical.list() ) do
+		if logical_obj.id == logical_id then
+			logical = logical_obj
+		end
+	end
+	assert( logical )
+
+	-- Find out corresponding PhysicalVolume
+	local physical_volume = nil
+	for _, physical_volume_obj in ipairs( lvm.PhysicalVolume.list() ) do
+		if physical_volume_obj.device == logical.device then
+			physical_volume = physical_volume_obj
+		end
+	end
+	assert( physical_volume )
+
+	-- Let's clean out VolumeGroup on it at first
+	local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
+	assert( volume_group )
+	volume_group:remove()
+
+	-- And clean out PhysicalVolume
+	physical_volume:remove()
+
+	lvm.VolumeGroup.rescan()
+	lvm.PhysicalVolume.rescan()
 
 	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
