@@ -827,6 +827,32 @@ TestMatrix = {}
 			} ), needed ) )
 
 	end
+	function TestMatrix:test_matrix_with_snapshots()
+		local physicals = {
+			["3:1"] = {
+				id = "3:1",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001111",
+				size = 666,
+				state = "9"
+			}
+		}
+		local logicals = {
+			[0] = {
+				id = 0,
+				level = "passthrough",
+				physicals = {
+					["3:1"] = "0",
+				},
+				capacity = 666.0,
+				device = "/dev/md0",
+				state = "normal"
+			}
+		}
+		local needed = {}
+	end
+
 TestMibToTib = {}
 	function TestMibToTib:test_values_160gb()
 		print( assertEquals( matrix.mib2tib( 160E6 ), "0.14" ) )
