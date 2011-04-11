@@ -80,15 +80,17 @@ local function einarc_logical_add( inputs, drives )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	assert( inputs[ "raid_level"] )
-	local raid_level = inputs.raid_level
+	local raid_level = inputs["raid_level"]
+	if not raid_level then
+		index_with_error( i18n("RAID level is not selected") )
+	end
 
 	if common.is_string( drives ) then
 		drives = { drives }
 	end
 
 	if not drives then
-		index_with_error( i18n("Drives not selected") )
+		index_with_error( i18n("Drives are not selected") )
 	end
 
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
