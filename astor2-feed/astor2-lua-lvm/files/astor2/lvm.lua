@@ -122,7 +122,6 @@ end
 
 --- Create VolumeGroup
 -- @param physical_volumes List of PhysicalVolumes to create group on
--- TODO: next_vg_name
 function M.VolumeGroup.create( physical_volumes )
 	assert( physical_volumes and common.is_array( physical_volumes ) )
 	local name = M.VolumeGroup.next_vg_name()
@@ -153,8 +152,8 @@ end
 
 --- Rescan all VolumeGroups on a system
 function M.VolumeGroup.rescan()
-	common.system_succeed( "lvm vgscan --mknodes" )
-	common.system_succeed( "lvm vgchange -a y" )
+	common.system_succeed( "lvm vgscan --ignorelockingfailure --mknodes" )
+	common.system_succeed( "lvm vgchange -aly --ignorelockingfailure" )
 end
 
 --- List all VolumeGroups that are on specified PhysicalVolumes
@@ -274,6 +273,23 @@ function M.LogicalVolume.list( volume_groups )
 		end
 	end
 	return common.values( result )
+end
+
+--- LogicalVolume resize
+-- @param size New wished size
+-- @return Raise error if it fails
+function M.LogicalVolume:resize( size )
+	assert( self.name )
+	assert( common.is_number( size ) )
+	assert( size > 0 )
+	if size == self.size then return end
+	local succeeded = false
+	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. self.volume_group.name .. "/" .. self.name ) ) do
+		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then error( "lvm:LogicalVolume:resize() failed" ) end
 end
 
 --------------------------------------------------------------------------
