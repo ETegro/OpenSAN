@@ -1,0 +1,21 @@
+#!/bin/sh /etc/rc.common
+START=50
+
+start()
+{
+	echo 'lvm = require "astor2.lvm";
+	      lvm.PhysicalVolume.rescan();
+	      lvm.VolumeGroup.rescan();
+	      lvm.LogicalVolume.rescan()' | lua -
+}
+
+stop()
+{
+	true
+}
+
+restart()
+{
+	stop
+	start
+}
