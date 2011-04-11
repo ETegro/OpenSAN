@@ -213,20 +213,20 @@ end
 function M.LogicalVolume.create( name, volume_group, size )
 	assert( name and common.is_string( name ) )
 	assert( volume_group and common.is_table( volume_group ) )
-	assert( size and common.is_number( size ) )
+	assert( size and common.is_positive( size ) )
 	local output = common.system( "lvm lvcreate -n " ..
 	                              name ..
 	                              " -L " ..
-				      tonumber( size ) ..
+				      tostring( size ) ..
 				      " " ..
 				      volume_group.name )
-	local passed = false
+	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
 		if string.match( line, "Logical volume \"%w+\" created" ) then
-			passed = true
+			succeeded = true
 		end
 	end
-	if not passed then
+	if not succeeded then
 		error("lvm:LogicalVolume:create() failed" )
 	end
 end
@@ -243,6 +243,31 @@ end
 --- Rescan all LogicalVolumes on a system
 function M.LogicalVolume.rescan()
 	common.system_succeed( "lvm lvscan" )
+end
+
+--- Create snapshot of logical volume
+-- @param size Snapshot size
+-- @return Raise error if it fails
+function M.LogicalVolume:snapshot( size )
+	assert( self.name )
+	assert( common.is_positive( size ) )
+	assert( common.is_string( self.device ) )
+	local name = "TODO"
+	local output = common.system( "lvm lvcreate -s -n " ..
+	                              name ..
+	                              " -L " ..
+				      tostring( size ) ..
+				      " " ..
+				      self.device )
+	local succeeded = false
+	for _, line in ipairs( output.stdout ) do
+		if string.match( line, "Logical volume \"%w+\" created" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then
+		error("lvm:LogicalVolume:snapshot() failed" )
+	end
 end
 
 local function volume_group_get_by_name( volume_groups, name )
@@ -310,7 +335,7 @@ end
 -- @return Raise error if it fails
 function M.LogicalVolume:resize( size )
 	assert( self.name )
-	assert( common.is_number( size ) )
+	assert( common.is_positive( size ) )
 	assert( size > 0 )
 	if size == self.size then return end
 	if not lvresize( size, self ) then
@@ -348,8 +373,7 @@ end
 -- @return Raise error if it fails
 function M.Snapshot:resize( size )
 	assert( self.name )
-	assert( common.is_number( size ) )
-	assert( size > 0 )
+	assert( common.is_positive( size ) )
 	if size <= self.size then return end
 	if not lvresize( size, self ) then
 		error( "lvm:Snapshot:resize() failed" )
