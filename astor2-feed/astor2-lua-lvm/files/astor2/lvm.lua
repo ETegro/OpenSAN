@@ -293,6 +293,48 @@ function M.LogicalVolume:resize( size )
 end
 
 --------------------------------------------------------------------------
+-- Snapshot
+--------------------------------------------------------------------------
+M.Snapshot = {}
+local Snapshot_mt = common.Class( M.Snapshot )
+
+function M.Snapshot:new( attrs )
+	assert( common.is_string( attrs.name ) )
+	assert( common.is_string( attrs.device ) )
+	assert( common.is_table( attrs.volume_group ) )
+	assert( common.is_positive( attrs.size ) )
+	assert( common.is_number( attrs.allocated ) )
+	assert( common.is_table( attrs.logical_volume ) )
+	return setmetatable( attrs, Snapshot_mt )
+end
+
+--- Remove Snapshot
+function M.Snapshot:remove()
+	assert( self.volume_group )
+	assert( self.name )
+	common.system_succeed( "lvm lvremove -f /dev/" ..
+	                       self.volume_group.name .. "/" ..
+	                       self.name )
+end
+
+--- Snapshot resize
+-- @param size New wished size
+-- @return Raise error if it fails
+function M.Snapshot:resize( size )
+	assert( self.name )
+	assert( common.is_number( size ) )
+	assert( size > 0 )
+	if size <= self.size then return end
+	local succeeded = false
+	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. self.volume_group.name .. "/" .. self.name ) ) do
+		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then error( "lvm:Snapshot:resize() failed" ) end
+end
+
+--------------------------------------------------------------------------
 -- Initialization
 --------------------------------------------------------------------------
 M.DM_MODULES = { "dm_mod", "dm_log", "dm_mirror", "dm_snapshot" }
