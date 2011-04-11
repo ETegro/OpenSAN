@@ -279,6 +279,7 @@ end
 function M.LogicalVolume:resize( size )
 	assert( self.name )
 	assert( common.is_number( size ) )
+	assert( size > 0 )
 	if size == self.size then return end
 	local succeeded = false
 	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. self.volume_group.name .. "/" .. self.name ) ) do
