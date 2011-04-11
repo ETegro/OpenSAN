@@ -125,7 +125,7 @@ local function einarc_logical_add( inputs, drives )
 			end
 			assert( device )
 			-- Then, create PV on it
-			return_code, result = pcall( lvm.PhysicalVolume.create( device ) )
+			return_code, result = pcall( lvm.PhysicalVolume.create, device )
 			if not return_code then
 				message_error = i18n("Failed to create PhysicalVolume on logical disk")
 			end
@@ -139,7 +139,7 @@ local function einarc_logical_add( inputs, drives )
 			end
 			assert( physical_volumes )
 			-- And then, create VG on it
-			return_code, result = pcall( lvm.VolumeGroup.create( physical_volumes ) )
+			return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
 			if not return_code then
 				message_error = i18n("Failed to create VolumeGroup on logical disk")
 			end
