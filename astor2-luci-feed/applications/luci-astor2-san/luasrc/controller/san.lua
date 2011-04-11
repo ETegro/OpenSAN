@@ -178,24 +178,24 @@ local function einarc_logical_remove( inputs )
 	assert( logical )
 
 	-- Find out corresponding PhysicalVolume
-	local physical_volumes = nil
-	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
-		if physical_volume.device == logical.device then
-			physical_volumes = { physical_volume }
+	local physical_volume = nil
+	for _, physical_volume_obj in ipairs( lvm.PhysicalVolume.list() ) do
+		if physical_volume_obj.device == logical.device then
+			physical_volume = physical_volume_obj
 		end
 	end
-	assert( physical_volumes[1] )
+	assert( physical_volume )
 
 	-- Let's clean out VolumeGroup on it at first
-	local volume_group = lvm.VolumeGroup.list( physical_volumes )[1]
+	local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
 	assert( volume_group )
 	volume_group:remove()
 
 	-- And clean out PhysicalVolume
-	physical_volumes[1]:remove()
+	physical_volume:remove()
 
-	lvm.PhysicalVolume.rescan()
 	lvm.VolumeGroup.rescan()
+	lvm.PhysicalVolume.rescan()
 
 	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
