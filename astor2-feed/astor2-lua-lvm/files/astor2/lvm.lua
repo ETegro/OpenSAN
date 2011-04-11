@@ -122,7 +122,6 @@ end
 
 --- Create VolumeGroup
 -- @param physical_volumes List of PhysicalVolumes to create group on
--- TODO: next_vg_name
 function M.VolumeGroup.create( physical_volumes )
 	assert( physical_volumes and common.is_array( physical_volumes ) )
 	local name = M.VolumeGroup.next_vg_name()
@@ -276,6 +275,9 @@ function M.LogicalVolume.list( volume_groups )
 	return common.values( result )
 end
 
+--- LogicalVolume resize
+-- @param size New wished size
+-- @return Raise error if it fails
 function M.LogicalVolume:resize( size )
 	assert( self.name )
 	assert( common.is_number( size ) )
