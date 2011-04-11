@@ -197,6 +197,7 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
+-- TODO: name should pass /^[A-Za-z0-9!@\#$%^*()_+=;:,.\/?{}\-][A-Za-z0-9!@\#$%^*()_+=;:,.\/?{}\ -]*$/
 function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.name ) )
 	assert( common.is_string( attrs.device ) )
@@ -383,7 +384,7 @@ end
 --------------------------------------------------------------------------
 -- Initialization
 --------------------------------------------------------------------------
-M.DM_MODULES = { "dm_mod", "dm_log", "dm_mirror", "dm_snapshot" }
+M.DM_MODULES = { "dm-mod", "dm-log", "dm-mirror", "dm-snapshot" }
 
 --- Load all LVM-related kernel modules
 local function load_modules()
