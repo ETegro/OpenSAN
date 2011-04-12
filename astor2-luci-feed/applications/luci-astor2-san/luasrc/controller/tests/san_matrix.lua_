@@ -480,6 +480,220 @@ TestMatrix = {}
 				logicals = logicals,   -- Actually should be astor2.einarc.etc
 			} ), needed ) )
 	end
+	function TestMatrix:test_matrix_double_sorted()
+		local physicals = {
+			["0:1"] = {
+				id = "0:1",
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001121",
+				size = 333,
+				state = "0"
+			},
+			["0:2"] = {
+				id = "0:2",
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001122",
+				size = 333,
+				state = "1"
+			},
+			["0:3"] = {
+				id = "0:3",
+				model = "model2",
+				revision = "asdfgh",
+				serial = "010001123",
+				size = 333,
+				state = "2"
+			}
+		}
+		local logicals = {
+			[0] = {
+				id = 0,
+				level = "linear",
+				physicals = {
+					["0:1"] = "0",
+				},
+				capacity = 333.0,
+				device = "/dev/md0",
+				state = "normal"
+			},
+			[1] = {
+				id = 1,
+				level = "linear",
+				physicals = {
+					["0:2"] = "1",
+				},
+				capacity = 333.0,
+				device = "/dev/md1",
+				state = "normal"
+			},
+			[2] = {
+				id = 2,
+				level = "linear",
+				physicals = {
+					["0:3"] = "2",
+				},
+				capacity = 333.0,
+				device = "/dev/md2",
+				state = "normal"
+			}
+		}
+		local needed = {
+			{
+				physical = {
+					rowspan = 1,
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = true
+					},
+					id = "0:1",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001121",
+					size = 333,
+					state = "allocated"
+				},
+				logical = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = true
+					},
+					id = 0,
+					level = "linear",
+					physicals = {
+						["0:1"] = {
+							rowspan = 1,
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = true
+							},
+							id = "0:1",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001121",
+							size = 333,
+							state = "allocated"
+						}
+					},
+					capacity = 333.0,
+					device = "/dev/md0",
+					state = "normal"
+				}
+			},
+			{
+				physical = {
+					rowspan = 1,
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = true
+					},
+					id = "0:2",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001122",
+					size = 333,
+					state = "allocated"
+				},
+				logical = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = true
+					},
+					id = 1,
+					level = "linear",
+					physicals = {
+						["0:2"] = {
+							rowspan = 1,
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = true
+							},
+							id = "0:2",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001122",
+							size = 333,
+							state = "allocated"
+						}
+					},
+					capacity = 333.0,
+					device = "/dev/md1",
+					state = "normal"
+				}
+			},
+			{
+				physical = {
+					rowspan = 1,
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = true
+					},
+					id = "0:3",
+					model = "model2",
+					revision = "asdfgh",
+					serial = "010001123",
+					size = 333,
+					state = "allocated"
+				},
+				logical = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = true
+					},
+					id = 2,
+					level = "linear",
+					physicals = {
+						["0:3"] = {
+							rowspan = 1,
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = true
+							},
+							id = "0:3",
+							model = "model2",
+							revision = "asdfgh",
+							serial = "010001123",
+							size = 333,
+							state = "allocated"
+						}
+					},
+					capacity = 333.0,
+					device = "/dev/md2",
+					state = "normal"
+				}
+			},
+
+		}
+
+		assert( common.compare_tables(
+			matrix.overall( {
+				physicals = physicals,
+				logicals = logicals,
+			} ), needed ) )
+	end
+
 	function TestMatrix:test_matrix_triple()
 		local physicals = {
 			["3:1"] = {
@@ -604,6 +818,7 @@ TestMatrix = {}
 							name = "foo",
 							device = "foobar1",
 							volume_group = {},
+							snapshots = {},
 							size = 12
 						},
 						["bar"] = {
@@ -617,6 +832,7 @@ TestMatrix = {}
 							name = "bar",
 							device = "foobar2",
 							volume_group = {},
+							snapshots = {},
 							size = 23
 						},
 						["baz"] = {
@@ -630,6 +846,7 @@ TestMatrix = {}
 							name = "baz",
 							device = "foobar3",
 							volume_group = {},
+							snapshots = {},
 							size = 34
 						}
 					},
@@ -648,6 +865,7 @@ TestMatrix = {}
 					name = "bar",
 					device = "foobar2",
 					volume_group = {},
+					snapshots = {},
 					size = 23
 				}
 			},
@@ -667,6 +885,7 @@ TestMatrix = {}
 					name = "baz",
 					device = "foobar3",
 					volume_group = {},
+					snapshots = {},
 					size = 34
 				}
 			},
@@ -701,6 +920,7 @@ TestMatrix = {}
 					name = "foo",
 					device = "foobar1",
 					volume_group = {},
+					snapshots = {},
 					size = 12
 				}
 

@@ -184,15 +184,16 @@ local function einarc_logical_remove( inputs )
 			physical_volume = physical_volume_obj
 		end
 	end
-	assert( physical_volume )
 
-	-- Let's clean out VolumeGroup on it at first
-	local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
-	assert( volume_group )
-	volume_group:remove()
+	if physical_volume then
+		-- Let's clean out VolumeGroup on it at first
+		local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
+		assert( volume_group )
+		volume_group:remove()
 
-	-- And clean out PhysicalVolume
-	physical_volume:remove()
+		-- And clean out PhysicalVolume
+		physical_volume:remove()
+	end
 
 	lvm.VolumeGroup.rescan()
 	lvm.PhysicalVolume.rescan()

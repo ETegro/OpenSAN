@@ -191,6 +191,30 @@ function M.VolumeGroup.list( physical_volumes )
 	return common.values( volume_groups )
 end
 
+--- Create LogicalVolume on a VolumeGroup
+-- @param name Name of LogicalVolume
+-- @param size Size of LogicalVolume
+function M.VolumeGroup:logical_volume( name, size )
+	assert( self.name )
+	assert( name and common.is_string( name ) )
+	assert( size and common.is_positive( size ) )
+	local output = common.system( "lvm lvcreate -n " ..
+	                              name ..
+	                              " -L " ..
+				      tostring( size ) ..
+				      " " ..
+				      self.name )
+	local succeeded = false
+	for _, line in ipairs( output.stdout ) do
+		if string.match( line, "Logical volume \"%w+\" created" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then
+		error("lvm:VolumeGroup:logical_volume() failed" )
+	end
+end
+
 --------------------------------------------------------------------------
 -- LogicalVolume
 --------------------------------------------------------------------------
@@ -207,30 +231,6 @@ function M.LogicalVolume:new( attrs )
 	return setmetatable( attrs, LogicalVolume_mt )
 end
 
---- Create LogicalVolume on a VolumeGroup
--- @param name Name of LogicalVolume
--- @param volume_group VolumeGroup to create LogicalVolume on
--- @param size Size of LogicalVolume
-function M.LogicalVolume.create( name, volume_group, size )
-	assert( name and common.is_string( name ) )
-	assert( volume_group and common.is_table( volume_group ) )
-	assert( size and common.is_positive( size ) )
-	local output = common.system( "lvm lvcreate -n " ..
-	                              name ..
-	                              " -L " ..
-				      tostring( size ) ..
-				      " " ..
-				      volume_group.name )
-	local succeeded = false
-	for _, line in ipairs( output.stdout ) do
-		if string.match( line, "Logical volume \"%w+\" created" ) then
-			succeeded = true
-		end
-	end
-	if not succeeded then
-		error("lvm:LogicalVolume:create() failed" )
-	end
-end
 
 --- Remove LogicalVolume
 function M.LogicalVolume:remove()
