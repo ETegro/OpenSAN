@@ -47,7 +47,12 @@ function M.overall( data )
 	local matrix = {}
 	local current_line = 1
 
-	for logical_id, logical in pairs( logicals ) do
+	-- Sort logicals
+	local logical_ids = common.keys( logicals )
+	table.sort( logical_ids )
+
+	for _,logical_id in ipairs( logical_ids ) do
+		local logical = logicals[ logical_id ]
 		local physicals_quantity = #common.keys( logical.physicals )
 		local logical_volumes_quantity = #common.keys( logical.logical_volumes or {} )
 		local lines_quantity = physicals_quantity
