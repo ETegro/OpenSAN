@@ -475,10 +475,15 @@ TestMatrix = {}
 		}
 
 		assert( common.compare_tables(
-			matrix.overall( {
-				physicals = physicals, -- Actually should be astor2.einarc.etc
-				logicals = logicals,   -- Actually should be astor2.einarc.etc
-			} ), needed ) )
+				matrix.filter_borders_highlight(
+					matrix.overall( {
+						physicals = physicals, -- Actually should be astor2.einarc.etc
+						logicals = logicals,   -- Actually should be astor2.einarc.etc
+					} )
+				),
+				needed
+			)
+		)
 	end
 	function TestMatrix:test_matrix_double_sorted()
 		local physicals = {
@@ -688,10 +693,15 @@ TestMatrix = {}
 		}
 
 		assert( common.compare_tables(
-			matrix.overall( {
-				physicals = physicals,
-				logicals = logicals,
-			} ), needed ) )
+				matrix.filter_borders_highlight(
+					matrix.overall( {
+						physicals = physicals,
+						logicals = logicals,
+					} )
+				),
+				needed
+			)
+		)
 	end
 
 	function TestMatrix:test_matrix_triple()
@@ -931,10 +941,15 @@ TestMatrix = {}
 		}
 
 		assert( common.compare_tables(
-			matrix.overall( {
-				physicals = physicals,
-				logicals = logicals
-			} ), needed ) )
+				matrix.filter_borders_highlight(
+					matrix.overall( {
+						physicals = physicals,
+						logicals = logicals
+					} )
+				),
+				needed
+			)
+		)
 	end
 	function TestMatrix:test_matrix_with_free_drives()
 		local physicals = {
@@ -1035,10 +1050,15 @@ TestMatrix = {}
 			}
 		}
 		assert( common.compare_tables(
-			matrix.overall( {
-				physicals = physicals,
-				logicals = logicals
-			} ), needed ) )
+				matrix.filter_borders_highlight(
+					matrix.overall( {
+						physicals = physicals,
+						logicals = logicals
+					} )
+				),
+				needed
+			)
+		)
 	end
 	function TestMatrix:test_matrix_with_snapshots()
 		local physicals = {
@@ -1285,10 +1305,15 @@ TestMatrix = {}
 			}
 		}
 		assert( common.compare_tables(
-			matrix.overall( {
-				physicals = physicals,
-				logicals = logicals
-			} ), needed ) )
+				matrix.filter_borders_highlight(
+					matrix.overall( {
+						physicals = physicals,
+						logicals = logicals
+					} )
+				),
+				needed
+			)
+		)
 	end
 
 TestMibToTib = {}
