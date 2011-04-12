@@ -127,7 +127,7 @@ function M.VolumeGroup.create( physical_volumes )
 	local name = M.VolumeGroup.next_vg_name()
 
 	-- Sanity checks
-	for _, volume_group in ipairs( M.VolumeGroup.list() ) do
+	for _, volume_group in ipairs( M.VolumeGroup.list( physical_volumes ) ) do
 		if name == volume_group.name then
 			error( "lvm:VolumeGroup.create(): such name already exists" )
 		end
