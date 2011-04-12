@@ -227,10 +227,15 @@ function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.device ) )
 	assert( common.is_table( attrs.volume_group ) )
 	assert( common.is_positive( attrs.size ) )
-	attrs["snapshots"] = {}
+	if not attrs.snapshots then
+		attrs["snapshots"] = {}
+	end
 	return setmetatable( attrs, LogicalVolume_mt )
 end
 
+function M.LogicalVolume:is_snapshot()
+	return false
+end
 
 --- Remove LogicalVolume
 function M.LogicalVolume:remove()
@@ -271,19 +276,11 @@ function M.LogicalVolume:snapshot( size )
 	end
 end
 
-local function volume_group_get_by_name( volume_groups, name )
-	for _, volume_group in ipairs( volume_groups ) do
-		if volume_group.name == name then
-			return volume_group
-		end
-	end
-end
-
---- List all LogicalVolumes on specified VolumeGroups
--- @param volume_groups List of VolumeGroups to check
+--- List all LogicalVolumes on specified VolumeGroup
+-- @param volume_group VolumeGroup to check
 -- @return { LogicalVolume, LogicalVolume }
-function M.LogicalVolume.list( volume_groups )
-	assert( volume_groups and common.is_table( volume_groups ) )
+function M.LogicalVolume.list( volume_group )
+	assert( volume_group and common.is_table( volume_group ) )
 	local result = {}
 	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
 		local splitted = common.split_by( line, " " )
@@ -291,27 +288,29 @@ function M.LogicalVolume.list( volume_groups )
 			-- Do nothing
 		elseif splitted[4] then
 			if result[ splitted[4] ] then
-				local volume_group_to_add = volume_group_get_by_name( volume_groups, splitted[2] )
-				assert( volume_group_to_add )
-				local snapshot = M.Snapshot:new({
-					name = splitted[1],
-					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_group_to_add,
-					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
-					logical_volume = result[ splitted[4] ],
-					allocated = tonumber( splitted[5] )
-				})
-				result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
+				-- Skip if it is not needed VolumeGroup
+				if splitted[2] == volume_group.name then
+					local snapshot = M.Snapshot:new({
+						name = splitted[1],
+						device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
+						volume_group = volume_group,
+						size = tonumber( string.sub( splitted[3], 1, -2 ) ),
+						logical_volume = result[ splitted[4] ],
+						allocated = tonumber( splitted[5] )
+					})
+					result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
+				end
 			end
 		else
-			local volume_group_to_add = volume_group_get_by_name( volume_groups, splitted[2] )
-			assert( volume_group_to_add )
-			result[ splitted[1] ] = M.LogicalVolume:new({
-				name = splitted[1],
-				device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-				volume_group = volume_group_to_add,
-				size = tonumber( string.sub( splitted[3], 1, -2 ) )
-			})
+			-- Skip if it is not needed VolumeGroup
+			if splitted[2] == volume_group.name then
+				result[ splitted[1] ] = M.LogicalVolume:new({
+					name = splitted[1],
+					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
+					volume_group = volume_group,
+					size = tonumber( string.sub( splitted[3], 1, -2 ) )
+				})
+			end
 		end
 	end
 	return common.values( result )
@@ -356,8 +355,12 @@ function M.Snapshot:new( attrs )
 	assert( common.is_table( attrs.volume_group ) )
 	assert( common.is_positive( attrs.size ) )
 	assert( common.is_number( attrs.allocated ) )
-	assert( common.is_table( attrs.logical_volume ) )
+	assert( common.is_string( attrs.logical_volume ) )
 	return setmetatable( attrs, Snapshot_mt )
+end
+
+function M.Snapshot:is_snapshot()
+	return true
 end
 
 --- Remove Snapshot
