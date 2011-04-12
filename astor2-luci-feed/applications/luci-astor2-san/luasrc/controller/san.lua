@@ -197,7 +197,7 @@ local function einarc_logical_remove( inputs )
 	lvm.VolumeGroup.rescan()
 	lvm.PhysicalVolume.rescan()
 
-	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
+	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id }, physical_id )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk")
 	end
@@ -205,52 +205,35 @@ local function einarc_logical_remove( inputs )
 	index_with_error( message_error )
 end
 
---[[
-local function einarc_logical_hotspare_add( inputs )
+local function einarc_logical_hotspare_add( inputs, logical_id )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	assert( inputs[ "raid_level"] )
-	local raid_level = inputs.raid_level
-	local logical_id = nil
-	for k, v in pairs( inputs ) do
-		if not logical_id then
-			logical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
-		end
+
+	local physical_id = nil
+
+	local physical_id = "0:2"
+-- regexp don't work
+--	for k, v in pairs( inputs ) do
+--		if not physical_id then
+--			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
+--		end
+--	end
+	assert( physical_id )
+	if common.is_string( logical_id ) then
+		drives = tonumber( logical_id )
 	end
 
-	if common.is_string( drives ) then
-		drives = { drives }
+	if not logical_id then
+		index_with_error( i18n("Logical not selected") )
 	end
-
-	if not drives then
-		index_with_error( i18n("Drives not selected") )
+	-- Let's call einarc at last
+	-- don't work
+	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id, physical_id } )
+	if not return_code then
+		message_error = i18n("Failed to add hotspare disk")
 	end
-
-	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
-	if is_valid then
-		-- Check that there are no different models of hard drives for adding
-		local found_models = {}
-		for _, physical in pairs( einarc.Physical.list() ) do
-			if common.is_in_array( physical.id, drives ) then
-				found_models[ physical.model ] = 1
-			end
-		end
-		if #common.keys( found_models ) ~= 1 then
-			message_error = i18n("Only single model hard drives can be used")
-		else
-			-- Let's call einarc at last
-			local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
-			if not return_code then
-				message_error = i18n("Failed to create logical disk")
-			end
-		end
-	else
-		message_error = message
-	end
-
 	index_with_error( message_error )
 end
-]]--
 
 ------------------------------------------------------------------------
 -- Different common functions
@@ -271,7 +254,7 @@ function perform()
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
 		logical_remove = function() einarc_logical_remove( inputs ) end,
-		hotspare_add = function() einarc_logical_hotspare_add( inputs, get("san.physical_id") ) end
+		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs, get("san.hotspare_logical_id" ) ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
