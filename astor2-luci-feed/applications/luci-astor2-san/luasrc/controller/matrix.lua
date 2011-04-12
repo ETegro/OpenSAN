@@ -163,6 +163,7 @@ local function device_lvms( device, physical_volumes )
 			physical_volumes[ #physical_volumes + 1 ] = physical_volume
 		end
 	end
+	-- TODO: sort LVs by name
 	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes ) )
 end
 
