@@ -1039,7 +1039,6 @@ TestMatrix = {}
 				physicals = physicals,
 				logicals = logicals
 			} ), needed ) )
-
 	end
 	function TestMatrix:test_matrix_with_snapshots()
 		local physicals = {
@@ -1106,8 +1105,220 @@ TestMatrix = {}
 				state = "normal"
 			}
 		}
-		local needed = {}
-		print( common.ppt( matrix.overall( {physicals = physicals,logicals = logicals } ) ) )
+		local needed = {
+			-- 1
+			{
+				physical = {
+					rowspan = 3,
+					highlight = {
+						left = true,
+						top = true,
+						right = false,
+						bottom = true
+					},
+					id = "3:1",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001111",
+					size = 666,
+					state = "allocated"
+				},
+				logical = {
+					rowspan = 3,
+					highlight = {
+						left = false,
+						top = true,
+						right = false,
+						bottom = true
+					},
+					id = 0,
+					level = "passthrough",
+					physicals = {
+						["3:1"] = {
+							rowspan = 3,
+							highlight = {
+								left = true,
+								top = true,
+								right = false,
+								bottom = true
+							},
+							id = "3:1",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001111",
+							size = 666,
+							state = "allocated"
+						}
+					},
+					logical_volumes = {
+						["foo"] = {
+							rowspan = 1,
+							highlight = {
+								left = false,
+								top = true,
+								right = true,
+								bottom = false
+							},
+							name = "foo",
+							device = "foobar1",
+							volume_group = {},
+							snapshots = {
+								["foo_2011-06-13_13-13-13"] = {
+									rowspan = 1,
+									highlight = {
+										left = false,
+										top = false,
+										right = true,
+										bottom = false
+									},
+									name = "foo_2011-06-13_13-13-13",
+									device = "foobar1",
+									volume_group = {},
+									size = 12,
+									allocated = 6,
+									logical_volume = "foo"
+								},
+								["foo_2011-02-26_13-13-26"] = {
+									rowspan = 1,
+									highlight = {
+										left = false,
+										top = false,
+										right = true,
+										bottom = true
+									},
+									name = "foo_2011-02-26_13-13-26",
+									device = "foobar1",
+									volume_group = {},
+									size = 12,
+									allocated = 6,
+									logical_volume = "foo"
+								}
+							},
+							size = 12
+						},
+						["foo_2011-06-13_13-13-13"] = {
+							rowspan = 1,
+							highlight = {
+								left = false,
+								top = false,
+								right = true,
+								bottom = false
+							},
+							name = "foo_2011-06-13_13-13-13",
+							device = "foobar1",
+							volume_group = {},
+							size = 12,
+							allocated = 6,
+							logical_volume = "foo"
+						},
+						["foo_2011-02-26_13-13-26"] = {
+							rowspan = 1,
+							highlight = {
+								left = false,
+								top = false,
+								right = true,
+								bottom = true
+							},
+							name = "foo_2011-02-26_13-13-26",
+							device = "foobar1",
+							volume_group = {},
+							size = 12,
+							allocated = 6,
+							logical_volume = "foo"
+						}
+					},
+					capacity = 666.0,
+					device = "/dev/md0",
+					state = "normal"
+				},
+				logical_volume = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = true,
+						right = true,
+						bottom = false
+					},
+					name = "foo",
+					device = "foobar1",
+					volume_group = {},
+					snapshots = {
+						["foo_2011-06-13_13-13-13"] = {
+							rowspan = 1,
+							highlight = {
+								left = false,
+								top = false,
+								right = true,
+								bottom = false
+							},
+							name = "foo_2011-06-13_13-13-13",
+							device = "foobar1",
+							volume_group = {},
+							size = 12,
+							allocated = 6,
+							logical_volume = "foo"
+						},
+						["foo_2011-02-26_13-13-26"] = {
+							rowspan = 1,
+							highlight = {
+								left = false,
+								top = false,
+								right = true,
+								bottom = true
+							},
+							name = "foo_2011-02-26_13-13-26",
+							device = "foobar1",
+							volume_group = {},
+							size = 12,
+							allocated = 6,
+							logical_volume = "foo"
+						}
+					},
+					size = 12
+				}
+			},
+			{
+				logical_volume = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = false,
+						right = true,
+						bottom = false
+					},
+					name = "foo_2011-06-13_13-13-13",
+					device = "foobar1",
+					volume_group = {},
+					size = 12,
+					allocated = 6,
+					logical_volume = "foo"
+				}
+			},
+			{
+				logical_volume = {
+					rowspan = 1,
+					highlight = {
+						left = false,
+						top = false,
+						right = true,
+						bottom = true
+					},
+					name = "foo_2011-02-26_13-13-26",
+					device = "foobar1",
+					volume_group = {},
+					size = 12,
+					allocated = 6,
+					logical_volume = "foo"
+				}
+			}
+		}
+		print( common.ppt( matrix.overall( {physicals = physicals,logicals = logicals } ), 0, "GOT" ) )
+		print( common.ppt( needed, 0, "NEEDED" ) )
+		assert( common.compare_tables(
+			matrix.overall( {
+				physicals = physicals,
+				logicals = logicals
+			} ), needed ) )
 	end
 
 TestMibToTib = {}
