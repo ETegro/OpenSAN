@@ -1074,8 +1074,8 @@ TestMatrix = {}
 								allocated = 6,
 								logical_volume = "foo"
 							} ),
-							["foo_2011-06-13_13-13-26"] = lvm.Snapshot:new( {
-								name = "foo_2011-06-13_13-13-26",
+							["foo_2011-02-26_13-13-26"] = lvm.Snapshot:new( {
+								name = "foo_2011-02-26_13-13-26",
 								device = "foobar1",
 								volume_group = {}, -- It is dummy
 								size = 12,
@@ -1092,8 +1092,8 @@ TestMatrix = {}
 						allocated = 6,
 						logical_volume = "foo"
 					} ),
-					["foo_2011-06-13_13-13-26"] = lvm.Snapshot:new( {
-						name = "foo_2011-06-13_13-13-26",
+					["foo_2011-02-26_13-13-26"] = lvm.Snapshot:new( {
+						name = "foo_2011-02-26_13-13-26",
 						device = "foobar1",
 						volume_group = {}, -- It is dummy
 						size = 12,
@@ -1107,6 +1107,7 @@ TestMatrix = {}
 			}
 		}
 		local needed = {}
+		print( common.ppt( matrix.overall( {physicals = physicals,logicals = logicals } ) ) )
 	end
 
 TestMibToTib = {}
