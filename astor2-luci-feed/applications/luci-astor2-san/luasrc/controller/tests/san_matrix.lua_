@@ -1059,6 +1059,48 @@ TestMatrix = {}
 				physicals = {
 					["3:1"] = "0",
 				},
+				logical_volumes = {
+					["foo"] = lvm.LogicalVolume:new( {
+						name = "foo",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12,
+						snapshots = {
+							["foo_2011-06-13_13-13-13"] = lvm.Snapshot:new( {
+								name = "foo_2011-06-13_13-13-13",
+								device = "foobar1",
+								volume_group = {}, -- It is dummy
+								size = 12,
+								allocated = 6,
+								logical_volume = "foo"
+							} ),
+							["foo_2011-06-13_13-13-26"] = lvm.Snapshot:new( {
+								name = "foo_2011-06-13_13-13-26",
+								device = "foobar1",
+								volume_group = {}, -- It is dummy
+								size = 12,
+								allocated = 6,
+								logical_volume = "foo"
+							} )
+						}
+					} ),
+					["foo_2011-06-13_13-13-13"] = lvm.Snapshot:new( {
+						name = "foo_2011-06-13_13-13-13",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12,
+						allocated = 6,
+						logical_volume = "foo"
+					} ),
+					["foo_2011-06-13_13-13-26"] = lvm.Snapshot:new( {
+						name = "foo_2011-06-13_13-13-26",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12,
+						allocated = 6,
+						logical_volume = "foo"
+					} )
+				},
 				capacity = 666.0,
 				device = "/dev/md0",
 				state = "normal"
