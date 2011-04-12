@@ -612,7 +612,7 @@ TestMatrix = {}
 						right = true,
 						bottom = true
 					},
-					id = 0,
+					id = 1,
 					level = "linear",
 					physicals = {
 						["0:2"] = {
@@ -660,7 +660,7 @@ TestMatrix = {}
 						right = true,
 						bottom = true
 					},
-					id = 0,
+					id = 2,
 					level = "linear",
 					physicals = {
 						["0:3"] = {
@@ -687,7 +687,6 @@ TestMatrix = {}
 
 		}
 
-		print( common.ppt( matrix.overall( { physicals = physicals, logicals = logicals, } ) ) )
 		assert( common.compare_tables(
 			matrix.overall( {
 				physicals = physicals,
