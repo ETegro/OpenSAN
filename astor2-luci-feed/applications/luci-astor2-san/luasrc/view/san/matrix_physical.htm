@@ -63,16 +63,30 @@
 			       value="<%= line.physical.size %>" />
 			</p>
 			<% if line.physical.state == "free" then %>
-				<p>
-				add to hotspare
-				<input name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
-					type="submit"
-					value="<%: Add hotspare %>" />
-				</p>
-			<% else %>
-				<p>
-					else
-				</p>
+			<p>
+			<label for="physical_size-<%= line.physical.id %>"><%: Logical hotspare %></label>
+			<select size="1" name="san.hotspare_logical">
+				<option disabled>Select logical</option>
+				<% for _, this_line in ipairs( matrix_overall ) do %>
+					<% if this_line.logical then %>
+					<option value="<%= this_line.logical.id %>"><%= this_line.logical.id %></option>
+					<% end %>
+				<% end %>
+			</select>
+			</p>
+			<p>
+			<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+			       name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+			       type="submit"
+			       value="<%: Add hotspare %>" />
+			</p>
+
+			<% elseif line.physical.state == "hotspare" then %>
+			<p>
+			<input name="san.submit_logical_hotspare_remove-<%= line.physical.id %>"
+			       type="submit"
+			       value="<%: Remove hotspare %>" />
+			</p>
 			<% end %>
 		</td>
 	</tr>
