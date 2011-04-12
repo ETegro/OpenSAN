@@ -1284,8 +1284,6 @@ TestMatrix = {}
 				}
 			}
 		}
-		print( common.ppt( matrix.overall( {physicals = physicals,logicals = logicals } ), 0, "GOT" ) )
-		print( common.ppt( needed, 0, "NEEDED" ) )
 		assert( common.compare_tables(
 			matrix.overall( {
 				physicals = physicals,
