@@ -231,6 +231,9 @@ function M.LogicalVolume:new( attrs )
 	return setmetatable( attrs, LogicalVolume_mt )
 end
 
+function M.LogicalVolume:is_snapshot()
+	return false
+end
 
 --- Remove LogicalVolume
 function M.LogicalVolume:remove()
@@ -358,6 +361,10 @@ function M.Snapshot:new( attrs )
 	assert( common.is_number( attrs.allocated ) )
 	assert( common.is_table( attrs.logical_volume ) )
 	return setmetatable( attrs, Snapshot_mt )
+end
+
+function M.Snapshot:is_snapshot()
+	return true
 end
 
 --- Remove Snapshot
