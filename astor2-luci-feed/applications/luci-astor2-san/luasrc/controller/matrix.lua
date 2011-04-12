@@ -168,6 +168,15 @@ function M.filter_borders_highlight( matrix )
 	return matrix
 end
 
+function M.filter_volume_group_percentage( matrix )
+	for _, line in ipairs( matrix ) do
+		if line.logical_volume then
+			line.logical_volume.percentage = math.ceil( 100 * line.logical_volume.allocated / line.logical_volume.total )
+		end
+	end
+	return matrix
+end
+
 local function filter_mib2tib( matrix )
 	for _, line in ipairs( matrix ) do
 		if line.physical then
@@ -211,7 +220,7 @@ function M.caller()
 	local FILTERS = {
 		filter_mib2tib,
 		filter_borders_highlight,
-		-- filter_usage_percentage
+		M.filter_volume_group_percentage
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)

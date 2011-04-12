@@ -126,6 +126,80 @@ TestLcm = {}
 	end
 
 TestMatrix = {}
+	function TestMatrix:setUp()
+		self.physicals_triple = {
+			["3:1"] = {
+				id = "3:1",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001111",
+				size = 666,
+				state = "9"
+			},
+			["3:2"] = {
+				id = "3:2",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001112",
+				size = 666,
+				state = "9"
+			}
+		}
+		self.logicals_triple = {
+			[9] = {
+				id = 9,
+				level = "1",
+				physicals = {
+					["3:1"] = "9",
+					["3:2"] = "9"
+				},
+				capacity = 666.0,
+				device = "/dev/md3",
+				state = "normal",
+				logical_volumes = {
+					["foo"] = lvm.LogicalVolume:new( {
+						name = "foo",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12
+					} ),
+					["bar"] = lvm.LogicalVolume:new( {
+						name = "bar",
+						device = "foobar2",
+						volume_group = {}, -- It is dummy
+						size = 23
+					} ),
+					["baz"] = lvm.LogicalVolume:new( {
+						name = "baz",
+						device = "foobar3",
+						volume_group = {}, -- It is dummy
+						size = 34
+					} )
+				}
+			}
+		}
+
+	end
+	function TestMatrix:test_volume_group_percentage()
+		local logicals = self.logicals_triple
+		logicals[9].logical_volumes["foo"].total = 666
+		logicals[9].logical_volumes["foo"].allocated = 123
+
+		logicals[9].logical_volumes["bar"].total = 100
+		logicals[9].logical_volumes["bar"].allocated = 12
+
+		logicals[9].logical_volumes["baz"].total = 213456
+		logicals[9].logical_volumes["baz"].allocated = 213056
+		local matrix = matrix.filter_volume_group_percentage(
+			matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple
+			} )
+		)
+		assertEquals( matrix[1].logical_volume.percentage, 12 )
+		assertEquals( matrix[3].logical_volume.percentage, 100 )
+		assertEquals( matrix[5].logical_volume.percentage, 19 )
+	end
 	function TestMatrix:test_matrix_double()
 		local physicals = {
 			["3:1"] = {
@@ -477,8 +551,8 @@ TestMatrix = {}
 		assert( common.compare_tables(
 				matrix.filter_borders_highlight(
 					matrix.overall( {
-						physicals = physicals, -- Actually should be astor2.einarc.etc
-						logicals = logicals,   -- Actually should be astor2.einarc.etc
+						physicals = physicals, -- actually should be astor2.einarc.etc
+						logicals = logicals,   -- actually should be astor2.einarc.etc
 					} )
 				),
 				needed
@@ -649,57 +723,6 @@ TestMatrix = {}
 	end
 
 	function TestMatrix:test_matrix_triple()
-		local physicals = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "9"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "9"
-			}
-		}
-		local logicals = {
-			[9] = {
-				id = 9,
-				level = "1",
-				physicals = {
-					["3:1"] = "9",
-					["3:2"] = "9"
-				},
-				capacity = 666.0,
-				device = "/dev/md3",
-				state = "normal",
-				logical_volumes = {
-					["foo"] = lvm.LogicalVolume:new( {
-						name = "foo",
-						device = "foobar1",
-						volume_group = {}, -- It is dummy
-						size = 12
-					} ),
-					["bar"] = lvm.LogicalVolume:new( {
-						name = "bar",
-						device = "foobar2",
-						volume_group = {}, -- It is dummy
-						size = 23
-					} ),
-					["baz"] = lvm.LogicalVolume:new( {
-						name = "baz",
-						device = "foobar3",
-						volume_group = {}, -- It is dummy
-						size = 34
-					} )
-				}
-			}
-		}
 		local needed = {
 			-- 1
 			{
@@ -887,8 +910,8 @@ TestMatrix = {}
 		assert( common.compare_tables(
 				matrix.filter_borders_highlight(
 					matrix.overall( {
-						physicals = physicals,
-						logicals = logicals
+						physicals = self.physicals_triple,
+						logicals = self.logicals_triple
 					} )
 				),
 				needed
