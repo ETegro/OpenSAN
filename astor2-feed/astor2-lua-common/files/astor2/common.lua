@@ -231,6 +231,7 @@ end
 
 --- Pretty printing of table
 -- @param table Table to print
+-- @return Pretty table printing
 function M.ppt( table, offset, message )
 	assert( M.is_table( table ) )
 	local output = ""
