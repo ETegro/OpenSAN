@@ -359,7 +359,7 @@ function M.Snapshot:new( attrs )
 	assert( common.is_table( attrs.volume_group ) )
 	assert( common.is_positive( attrs.size ) )
 	assert( common.is_number( attrs.allocated ) )
-	assert( common.is_table( attrs.logical_volume ) )
+	assert( common.is_string( attrs.logical_volume ) )
 	return setmetatable( attrs, Snapshot_mt )
 end
 
