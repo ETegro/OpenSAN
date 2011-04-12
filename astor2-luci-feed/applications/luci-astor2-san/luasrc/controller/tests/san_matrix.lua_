@@ -1126,16 +1126,9 @@ TestMatrix = {}
 			}
 		}
 		local needed = {
-			-- 1
 			{
 				physical = {
 					rowspan = 3,
-					highlight = {
-						left = true,
-						top = true,
-						right = false,
-						bottom = true
-					},
 					id = "3:1",
 					model = "model1",
 					revision = "qwerty",
@@ -1145,23 +1138,11 @@ TestMatrix = {}
 				},
 				logical = {
 					rowspan = 3,
-					highlight = {
-						left = false,
-						top = true,
-						right = false,
-						bottom = true
-					},
 					id = 0,
 					level = "passthrough",
 					physicals = {
 						["3:1"] = {
 							rowspan = 3,
-							highlight = {
-								left = true,
-								top = true,
-								right = false,
-								bottom = true
-							},
 							id = "3:1",
 							model = "model1",
 							revision = "qwerty",
@@ -1173,12 +1154,6 @@ TestMatrix = {}
 					logical_volumes = {
 						["foo"] = {
 							rowspan = 1,
-							highlight = {
-								left = false,
-								top = true,
-								right = true,
-								bottom = false
-							},
 							name = "foo",
 							device = "foobar1",
 							volume_group = {},
@@ -1204,12 +1179,6 @@ TestMatrix = {}
 						},
 						["foo_2011-06-13_13-13-13"] = {
 							rowspan = 1,
-							highlight = {
-								left = false,
-								top = false,
-								right = true,
-								bottom = true
-							},
 							name = "foo_2011-06-13_13-13-13",
 							device = "foobar1",
 							volume_group = {},
@@ -1219,12 +1188,6 @@ TestMatrix = {}
 						},
 						["foo_2011-02-26_13-13-26"] = {
 							rowspan = 1,
-							highlight = {
-								left = false,
-								top = false,
-								right = true,
-								bottom = false
-							},
 							name = "foo_2011-02-26_13-13-26",
 							device = "foobar1",
 							volume_group = {},
@@ -1239,12 +1202,6 @@ TestMatrix = {}
 				},
 				logical_volume = {
 					rowspan = 1,
-					highlight = {
-						left = false,
-						top = true,
-						right = true,
-						bottom = false
-					},
 					name = "foo",
 					device = "foobar1",
 					volume_group = {},
@@ -1272,12 +1229,6 @@ TestMatrix = {}
 			{
 				logical_volume = {
 					rowspan = 1,
-					highlight = {
-						left = false,
-						top = false,
-						right = true,
-						bottom = false
-					},
 					name = "foo_2011-02-26_13-13-26",
 					device = "foobar1",
 					volume_group = {},
@@ -1289,12 +1240,6 @@ TestMatrix = {}
 			{
 				logical_volume = {
 					rowspan = 1,
-					highlight = {
-						left = false,
-						top = false,
-						right = true,
-						bottom = true
-					},
 					name = "foo_2011-06-13_13-13-13",
 					device = "foobar1",
 					volume_group = {},
@@ -1305,12 +1250,10 @@ TestMatrix = {}
 			}
 		}
 		assert( common.compare_tables(
-				matrix.filter_borders_highlight(
-					matrix.overall( {
-						physicals = physicals,
-						logicals = logicals
-					} )
-				),
+				matrix.overall( {
+					physicals = physicals,
+					logicals = logicals
+				} ),
 				needed
 			)
 		)
