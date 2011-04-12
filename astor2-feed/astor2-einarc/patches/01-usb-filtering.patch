@@ -1,0 +1,12 @@
+diff -urN astor2-einarc-svn1882/src/raid/software.rb astor2-einarc-svn1882-usb-filtering/src/raid/software.rb
+--- astor2-einarc-svn1882/src/raid/software.rb	2011-03-25 14:28:07.000000000 +0300
++++ astor2-einarc-svn1882-usb-filtering/src/raid/software.rb	2011-04-11 16:04:41.000000000 +0400
+@@ -293,7 +293,7 @@
+ 
+ 			for device in devices
+ 				# Possibility to skip USB mass storage devices
+-				# next if usb_device?(device)
++				next if usb_device?(device)
+ 				target = phys_to_scsi(device.gsub(/^\/dev\//, ''))
+ 				d = { :state => 'unknown' }
+ 				d[:vendor] = physical_read_file(device, "device/vendor") or ""
