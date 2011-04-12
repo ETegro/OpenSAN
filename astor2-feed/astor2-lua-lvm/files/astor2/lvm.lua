@@ -227,7 +227,9 @@ function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.device ) )
 	assert( common.is_table( attrs.volume_group ) )
 	assert( common.is_positive( attrs.size ) )
-	attrs["snapshots"] = {}
+	if not attrs.snapshots then
+		attrs["snapshots"] = {}
+	end
 	return setmetatable( attrs, LogicalVolume_mt )
 end
 
