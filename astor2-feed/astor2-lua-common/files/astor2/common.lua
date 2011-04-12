@@ -231,8 +231,10 @@ end
 
 --- Pretty printing of table
 -- @param table Table to print
+-- @return Pretty table printing
 function M.ppt( table, offset, message )
 	assert( M.is_table( table ) )
+	local output = ""
 	local line72 = "------------------------------------------------------------------------"
 
 	if not offset then offset = 0 end
@@ -242,9 +244,9 @@ function M.ppt( table, offset, message )
 	end
 
 	if message then
-		print( line72 )
-		print( "-- BEGIN: " .. message )
-		print( line72 )
+		output = output .. line72 .. "\n"
+		output = output .. "-- BEGIN: " .. message .. "\n"
+		output = output .. line72 .. "\n"
 	end
 
 	for k, v in pairs( table ) do
@@ -253,18 +255,20 @@ function M.ppt( table, offset, message )
 		if M.is_string( k ) then k = "\"" .. k .. "\"" end
 		if M.is_string( v ) then v = "\"" .. v .. "\"" end
 		if M.is_table( v ) then
-			print( prefix .. k .. " --> " )
-			M.ppt( v, offset + 1 )
+			output = output .. prefix .. k .. " --> " .. "\n"
+			output = output .. M.ppt( v, offset + 1 )
 		else
-			print( prefix .. k .. " -> " .. tostring( v ) )
+			output = output .. prefix .. k .. " -> " .. tostring( v ) .. "\n"
 		end
 	end
 
 	if message then
-		print( line72 )
-		print( "-- END: " .. message )
-		print( line72 )
+		output = output .. line72 .. "\n"
+		output = output .. "-- END: " .. message .. "\n"
+		output = output .. line72 .. "\n"
 	end
+
+	return output
 end
 
 --- Split string by some separator
