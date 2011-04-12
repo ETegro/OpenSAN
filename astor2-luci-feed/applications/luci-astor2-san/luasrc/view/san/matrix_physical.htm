@@ -65,7 +65,7 @@
 			<% if line.physical.state == "free" then %>
 			<p>
 			<label><%: Logical hotspare %></label>
-			<select name="san.hotspare_logical_id"
+			<select name="san.logical_id_hotspare"
 			        size="1" >
 				<option disabled><%: Select logical disk %></option>
 				<% for _, this_line in ipairs( matrix_overall ) do %>

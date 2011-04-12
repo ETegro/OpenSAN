@@ -197,7 +197,7 @@ local function einarc_logical_remove( inputs )
 	lvm.VolumeGroup.rescan()
 	lvm.PhysicalVolume.rescan()
 
-	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id }, physical_id )
+	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk")
 	end
@@ -205,7 +205,7 @@ local function einarc_logical_remove( inputs )
 	index_with_error( message_error )
 end
 
-local function einarc_logical_hotspare_add( inputs, logical_id )
+local function einarc_logical_hotspare_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
@@ -219,6 +219,10 @@ local function einarc_logical_hotspare_add( inputs, logical_id )
 --		end
 --	end
 	assert( physical_id )
+
+--	local logical_id = "0"
+	local logical_id = inputs["logical_id_hotspare"]
+
 	if common.is_string( logical_id ) then
 		drives = tonumber( logical_id )
 	end
@@ -228,7 +232,7 @@ local function einarc_logical_hotspare_add( inputs, logical_id )
 	end
 	-- Let's call einarc at last
 	-- don't work
-	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id, physical_id } )
+	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
 	if not return_code then
 		message_error = i18n("Failed to add hotspare disk")
 	end
@@ -254,7 +258,7 @@ function perform()
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
 		logical_remove = function() einarc_logical_remove( inputs ) end,
-		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs, get("san.hotspare_logical_id" ) ) end
+		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
