@@ -1048,7 +1048,7 @@ TestMatrix = {}
 				revision = "qwerty",
 				serial = "010001111",
 				size = 666,
-				state = "9"
+				state = "0"
 			}
 		}
 		local logicals = {
@@ -1188,7 +1188,7 @@ TestMatrix = {}
 								left = false,
 								top = false,
 								right = true,
-								bottom = false
+								bottom = true
 							},
 							name = "foo_2011-06-13_13-13-13",
 							device = "foobar1",
@@ -1203,7 +1203,7 @@ TestMatrix = {}
 								left = false,
 								top = false,
 								right = true,
-								bottom = true
+								bottom = false
 							},
 							name = "foo_2011-02-26_13-13-26",
 							device = "foobar1",
@@ -1258,7 +1258,7 @@ TestMatrix = {}
 						right = true,
 						bottom = false
 					},
-					name = "foo_2011-06-13_13-13-13",
+					name = "foo_2011-02-26_13-13-26",
 					device = "foobar1",
 					volume_group = {},
 					size = 12,
@@ -1275,7 +1275,7 @@ TestMatrix = {}
 						right = true,
 						bottom = true
 					},
-					name = "foo_2011-02-26_13-13-26",
+					name = "foo_2011-06-13_13-13-13",
 					device = "foobar1",
 					volume_group = {},
 					size = 12,
