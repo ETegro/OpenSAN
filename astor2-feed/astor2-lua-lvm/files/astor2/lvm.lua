@@ -258,7 +258,7 @@ function M.LogicalVolume:snapshot( size )
 	assert( self.name )
 	assert( common.is_positive( size ) )
 	assert( common.is_string( self.device ) )
-	local name = "TODO"
+	local name = self.name .. os.date("_%Y-%m-%d_%H-%M-%S")
 	local output = common.system( "lvm lvcreate -s -n " ..
 	                              name ..
 	                              " -L " ..
