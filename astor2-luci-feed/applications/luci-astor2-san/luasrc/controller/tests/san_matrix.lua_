@@ -548,12 +548,6 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-					highlight = {
-						left = true,
-						top = true,
-						right = false,
-						bottom = true
-					},
 					id = "0:1",
 					model = "model2",
 					revision = "asdfgh",
@@ -563,23 +557,11 @@ TestMatrix = {}
 				},
 				logical = {
 					rowspan = 1,
-					highlight = {
-						left = false,
-						top = true,
-						right = true,
-						bottom = true
-					},
 					id = 0,
 					level = "linear",
 					physicals = {
 						["0:1"] = {
 							rowspan = 1,
-							highlight = {
-								left = true,
-								top = true,
-								right = false,
-								bottom = true
-							},
 							id = "0:1",
 							model = "model2",
 							revision = "asdfgh",
@@ -596,12 +578,6 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-					highlight = {
-						left = true,
-						top = true,
-						right = false,
-						bottom = true
-					},
 					id = "0:2",
 					model = "model2",
 					revision = "asdfgh",
@@ -611,23 +587,11 @@ TestMatrix = {}
 				},
 				logical = {
 					rowspan = 1,
-					highlight = {
-						left = false,
-						top = true,
-						right = true,
-						bottom = true
-					},
 					id = 1,
 					level = "linear",
 					physicals = {
 						["0:2"] = {
 							rowspan = 1,
-							highlight = {
-								left = true,
-								top = true,
-								right = false,
-								bottom = true
-							},
 							id = "0:2",
 							model = "model2",
 							revision = "asdfgh",
@@ -644,12 +608,6 @@ TestMatrix = {}
 			{
 				physical = {
 					rowspan = 1,
-					highlight = {
-						left = true,
-						top = true,
-						right = false,
-						bottom = true
-					},
 					id = "0:3",
 					model = "model2",
 					revision = "asdfgh",
@@ -659,23 +617,11 @@ TestMatrix = {}
 				},
 				logical = {
 					rowspan = 1,
-					highlight = {
-						left = false,
-						top = true,
-						right = true,
-						bottom = true
-					},
 					id = 2,
 					level = "linear",
 					physicals = {
 						["0:3"] = {
 							rowspan = 1,
-							highlight = {
-								left = true,
-								top = true,
-								right = false,
-								bottom = true
-							},
 							id = "0:3",
 							model = "model2",
 							revision = "asdfgh",
@@ -693,12 +639,10 @@ TestMatrix = {}
 		}
 
 		assert( common.compare_tables(
-				matrix.filter_borders_highlight(
-					matrix.overall( {
-						physicals = physicals,
-						logicals = logicals,
-					} )
-				),
+				matrix.overall( {
+					physicals = physicals,
+					logicals = logicals,
+				} ),
 				needed
 			)
 		)
