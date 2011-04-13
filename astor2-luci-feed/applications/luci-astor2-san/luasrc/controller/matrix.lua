@@ -35,12 +35,6 @@ function M.lcm( x, y )
 end
 
 function M.overall( data )
-	local highlights = {
-		left = false,
-		top = false,
-		right = false,
-		bottom = false
-	}
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
 	local physicals_free = common.deepcopy( physicals )
@@ -72,7 +66,6 @@ function M.overall( data )
 		-- Fillup logical
 		matrix[ current_line ].logical = logical
 		matrix[ current_line ].logical.rowspan = lines_quantity
-		matrix[ current_line ].logical.highlight = common.deepcopy( highlights )
 
 		-- Fillup physicals
 		for physical_id, physical in pairs( logical.physicals ) do
@@ -87,7 +80,6 @@ function M.overall( data )
 			local offset = current_line + ( i - 1 ) * physical_rowspan
 			matrix[ offset ].physical = physical
 			matrix[ offset ].physical.rowspan = physical_rowspan
-			matrix[ offset ].physical.highlight = common.deepcopy( highlights )
 		end
 
 		-- Fillup logical volumes
@@ -98,32 +90,6 @@ function M.overall( data )
 			local offset = current_line + ( i - 1 ) * logical_volume_rowspan
 			matrix[ offset ].logical_volume = logical.logical_volumes[ logical_volume_name ]
 			matrix[ offset ].logical_volume.rowspan = logical_volume_rowspan
-			matrix[ offset ].logical_volume.highlight = common.deepcopy( highlights )
-		end
-
-		-- Perform needed borders highlighting
-		matrix[ current_line ].physical.highlight.top = true
-		matrix[ current_line ].physical.highlight.left = true
-		matrix[ current_line ].logical.highlight.top = true
-		if logical_volumes_quantity == 0 then
-			matrix[ current_line ].logical.highlight.right = true
-		else
-			matrix[ current_line ].logical_volume.highlight.top = true
-			matrix[ current_line ].logical_volume.highlight.right = true
-		end
-
-		for i = current_line, future_line - 1, physical_rowspan do
-			matrix[ i ].physical.highlight.left = true
-		end
-		if logical_volumes_quantity ~= 0 then
-			for i = current_line, future_line - 1, logical_volume_rowspan do
-				matrix[ i ].logical_volume.highlight.right = true
-			end
-		end
-		matrix[ future_line - physical_rowspan ].physical.highlight.bottom = true
-		matrix[ current_line ].logical.highlight.bottom = true
-		if logical_volumes_quantity ~= 0 then
-			matrix[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
 		end
 
 		current_line = future_line
@@ -132,7 +98,6 @@ function M.overall( data )
 	for _, physical in pairs( einarc.Physical.sort( physicals_free ) ) do
 		matrix[ current_line ] = { physical = physical }
 		matrix[ current_line ].physical.rowspan = 1
-		matrix[ current_line ].physical.highlight = common.deepcopy( highlights )
 		current_line = current_line + 1
 	end
 
@@ -141,6 +106,75 @@ end
 
 function M.mib2tib( size )
 	return string.sub( string.format( "%0.3f", size / 2^30 ), 1, -2 )
+end
+
+local function check_highlights_attribute( obj )
+	local highlights = {
+		left = false,
+		top = false,
+		right = false,
+		bottom = false
+	}
+	if not obj.highlight then
+		obj.highlight = common.deepcopy( highlights )
+	end
+	return obj
+end
+
+function M.filter_borders_highlight( matrix )
+	for current_line, line in ipairs( matrix ) do
+		if line.physical then
+			matrix[ current_line ].physical = check_highlights_attribute( matrix[ current_line ].physical )
+		end
+		if line.logical then
+			matrix[ current_line ].logical = check_highlights_attribute( matrix[ current_line ].logical )
+
+			matrix[ current_line ].physical.highlight.top = true
+			matrix[ current_line ].physical.highlight.left = true
+			matrix[ current_line ].logical.highlight.top = true
+
+			local logical_volumes_quantity = #common.keys( line.logical.logical_volumes or {} )
+			local logical_volume_rowspan = 0
+			if logical_volumes_quantity ~= 0 then
+				logical_volume_rowspan = line.logical_volume.rowspan
+			end
+			local physical_rowspan = line.physical.rowspan
+			if logical_volumes_quantity == 0 then
+				matrix[ current_line ].logical.highlight.right = true
+			else
+				matrix[ current_line ].logical_volume = check_highlights_attribute( matrix[ current_line ].logical_volume )
+				matrix[ current_line ].logical_volume.highlight.top = true
+				matrix[ current_line ].logical_volume.highlight.right = true
+			end
+
+			local future_line = current_line + line.logical.rowspan
+			for i = current_line, future_line - 1, physical_rowspan do
+				matrix[ i ].physical = check_highlights_attribute( matrix[ i ].physical )
+				matrix[ i ].physical.highlight.left = true
+			end
+			if logical_volumes_quantity ~= 0 then
+				for i = current_line, future_line - 1, logical_volume_rowspan do
+					matrix[ i ].logical_volume = check_highlights_attribute( matrix[ i ].logical_volume )
+					matrix[ i ].logical_volume.highlight.right = true
+				end
+			end
+			matrix[ future_line - physical_rowspan ].physical.highlight.bottom = true
+			matrix[ current_line ].logical.highlight.bottom = true
+			if logical_volumes_quantity ~= 0 then
+				matrix[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
+			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_volume_group_percentage( matrix )
+	for _, line in ipairs( matrix ) do
+		if line.logical_volume then
+			line.logical_volume.percentage = math.ceil( 100 * line.logical_volume.allocated / line.logical_volume.total )
+		end
+	end
+	return matrix
 end
 
 local function filter_mib2tib( matrix )
@@ -184,7 +218,12 @@ function M.caller()
 		logicals = logicals
 	} )
 	local FILTERS = {
+		M.filter_borders_highlight,
+		M.filter_volume_group_percentage,
 		filter_mib2tib
+		-- filter_highlight_snapshots
+		-- filter_rainbow_logical_highlights
+		-- filter_overall_fields_counter (for hiding)
 	}
 	for _,filter in ipairs( FILTERS ) do
 		matrix = filter( matrix )

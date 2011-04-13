@@ -10,14 +10,13 @@
 			       type="checkbox"
 			       value="<%= line.physical.id %>" />
 			<% end %>
-			<%= line.physical.id %>
+			<a href="#" id="physical_info-<%= line.physical.id %>"><%= line.physical.id %></a>
 		</td>
 		<td><%= line.physical.model %></td>
 		<td><%= line.physical.size %> <%: TiB %></td>
-		<td><a id="physical_info-<%= line.physical.id %>" href="#">[<%: Info %>]</a></td>
 	</tr>
 	<tr class="to_hide">
-		<td colspan="4">
+		<td colspan="3">
 			<p>
 			<label for="physical_model-<%= line.physical.id %>"><%: Model %></label>
 			<input id="physical_model-<%= line.physical.id %>"
