@@ -10,7 +10,7 @@
 		<td><%: RAID %> <%= line.logical.level %></td>
 		<td><%= line.logical.state %></td>
 		<% if line.logical.progress then %>
-			<td><%= line.logical.progress %> %</td>
+			<td>(<%= line.logical.progress %> %)</td>
 		<% end %>
 		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
 			<td>
