@@ -218,9 +218,9 @@ function M.caller()
 		logicals = logicals
 	} )
 	local FILTERS = {
-		filter_mib2tib,
-		filter_borders_highlight,
-		M.filter_volume_group_percentage
+		M.filter_borders_highlight,
+		M.filter_volume_group_percentage,
+		filter_mib2tib
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
