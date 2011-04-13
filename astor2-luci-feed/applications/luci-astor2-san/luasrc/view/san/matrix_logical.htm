@@ -18,7 +18,8 @@
 			       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
 					 return false;
 					 return true;"
-			       type="submit"
+			       type="image"
+			       src="<%=resource%>/cbi/remove.gif"
 			       value="<%: Remove %>" />
 			</td>
 		<% end %>
@@ -47,7 +48,7 @@
 			<p>
 				xxx /<%= line.logical.capacity %> <%: TiB %>
 			</p>
-
+			<p>
 			<label for="new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
 			<input id="new_volume_name-<%= line.logical.id %>"
 			       name="new_volume_name-<%= line.logical.id %>"
