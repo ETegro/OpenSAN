@@ -209,21 +209,18 @@ end
 local function einarc_logical_hotspare_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-
 	local physical_id = nil
 
---	local physical_id = "0:2"
-	-- regexp don't work
---	for k, v in pairs( inputs ) do
---		if not physical_id then
---		physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
---		end
---	end
+	for k, v in pairs( inputs ) do
+		if not physical_id then
+		local physical_id_part1 = string.match( k, "add.(%d)%%..%d" )
+		local physical_id_part2 = string.match( k, "add.%d%%..(%d)" )
+		physical_id = physical_id_part1 .. ":" .. physical_id_part2
+		end
+	end
 	assert( physical_id )
 
---	local logical_id = "0"
 	local logical_id = inputs["logical_id_hotspare"]
-
 	if common.is_string( logical_id ) then
 		drives = tonumber( logical_id )
 	end
@@ -239,38 +236,8 @@ local function einarc_logical_hotspare_add( inputs )
 	index_with_error( message_error )
 end
 
---[[local function einarc_logical_hotspare_remove( inputs )
-	local i18n = luci.i18n.translate
-	local message_error = nil
-
-	local physical_id = nil
-
---	local physical_id = "0:2"
-	-- regexp don't work
---	for k, v in pairs( inputs ) do
---		if not physical_id then
---		physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
---		end
---	end
-	assert( physical_id )
-
---	local logical_id = "0"
-	local logical_id = inputs["logical_id_hotspare"]
-
-	if common.is_string( logical_id ) then
-		drives = tonumber( logical_id )
-	end
-
-	if not logical_id then
-		index_with_error( i18n("Logical not selected") )
-	end
-	-- Let's call einarc at last
-	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
-	if not return_code then
-		message_error = i18n("Failed to add hotspare disk")
-	end
-	index_with_error( message_error )
-end]]
+--local function einarc_logical_hotspare_remove( inputs )
+--end
 
 ------------------------------------------------------------------------
 -- Different common functions
@@ -291,8 +258,8 @@ function perform()
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
 		logical_remove = function() einarc_logical_remove( inputs ) end,
-		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
-		logical_hotspare_add = function() einarc_logical_hotspare_remove( inputs ) end
+		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end--,
+--		logical_hotspare_add = function() einarc_logical_hotspare_remove( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
