@@ -153,14 +153,14 @@ local function einarc_logical_add( inputs, drives )
 	index_with_error( message_error )
 end
 
-local function einarc_logical_remove( inputs )
+local function einarc_logical_delete( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
 	local logical_id = nil
 	for k, v in pairs( inputs ) do
 		if not logical_id then
-			logical_id = string.match( k, "^submit_logical_remove.(%d+)$" )
+			logical_id = string.match( k, "^submit_logical_delete.(%d+)$" )
 		end
 	end
 	assert( logical_id )
@@ -286,7 +286,7 @@ function perform()
 
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
-		logical_remove = function() einarc_logical_remove( inputs ) end,
+		logical_delete = function() einarc_logical_delete( inputs ) end,
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end--,
 --		logical_hotspare_add = function() einarc_logical_hotspare_remove( inputs ) end
 	}
