@@ -3,17 +3,18 @@
 	<ul>
 	<% for _, raidlevel in ipairs( raidlevels ) do %>
 		<li>
-			<p><input name="san.raid_level"
+			<input name="san.raid_level"
 				      type ="radio"
 				      value="<%= raidlevel %>" />
 					<%= raidlevel %>
-			</p>
 		</li>
 	<% end %>
 	</ul>
 	<p>
 	<input name="san.submit_logical_add"
-	       type="submit"
+	       src="<%=resource%>/cbi/add.gif"
+	       title="<%: Add logical %>"
+	       type="image"
 	       value="<%: Add logical %>" />
 	</p>
 </div>
