@@ -19,7 +19,7 @@ define Package/libiwinfo
   CATEGORY:=LuCI
   SUBMENU:=Libraries
   TITLE:=Generalized Wireless Information Library (iwinfo)
-  DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny +liblua +lua
+  DEPENDS:=+PACKAGE_kmod-mac80211 +libnl-tiny +liblua +lua
   DEFAULT:=PACKAGE_luci-lib-sys
 endef
 
