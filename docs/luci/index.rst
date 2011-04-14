@@ -10,3 +10,4 @@ LuCI касающиеся вещи
    local_environment
    modules
    modules-feed
+   updating
