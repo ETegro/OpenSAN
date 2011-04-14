@@ -192,6 +192,17 @@ local function filter_mib2tib( matrix )
 	return matrix
 end
 
+local function filter_add_logical_id_to_physical( matrix )
+	for _, line in ipairs( matrix ) do
+		if line.logical then
+			for _, physical in pairs( line.logical.physicals ) do
+				physical.logical_id = line.logical.id
+			end
+		end
+	end
+	return matrix
+end
+
 local function device_lvms( device, physical_volumes )
 	local physical_volumes = {}
 	if not physical_volumes then
@@ -220,7 +231,8 @@ function M.caller()
 	local FILTERS = {
 		M.filter_borders_highlight,
 		M.filter_volume_group_percentage,
-		filter_mib2tib
+		filter_mib2tib,
+		filter_add_logical_id_to_physical
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
