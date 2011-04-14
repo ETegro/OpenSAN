@@ -64,9 +64,9 @@
 			<% if line.physical.state == "free" then %>
 			<p>
 			<label><%: Logical hotspare %></label>
-			<select name="san.logical_id_hotspare"
+			<select name="san.logical_id_hotspare-<%= line.physical.id %>"
 			        size="1" >
-				<option disabled><%: Select logical disk %></option>
+				<option value=""></option>
 				<% for _, this_line in ipairs( matrix_overall ) do %>
 					<% if this_line.logical then %>
 					<option value="<%= this_line.logical.id %>"><%= this_line.logical.id %></option>
@@ -77,14 +77,18 @@
 			<p>
 			<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>"
 			       name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
-			       type="submit"
+			       src="<%=resource%>/cbi/add.gif"
+			       title="<%: Add hotspare %>"
+			       type="image"
 			       value="<%: Add hotspare %>" />
 			</p>
 
 			<% elseif line.physical.state == "hotspare" then %>
 			<p>
 			<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
-			       type="submit"
+			       src="<%=resource%>/cbi/remove.gif"
+			       title="<%: Remove hotspare %>"
+			       type="image"
 			       value="<%: Remove hotspare %>" />
 			</p>
 			<% end %>
