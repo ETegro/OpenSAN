@@ -83,7 +83,7 @@
 
 			<% elseif line.physical.state == "hotspare" then %>
 			<p>
-			<input name="san.submit_logical_hotspare_delete-<%= line.physical.id %>"
+			<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
 			       type="submit"
 			       value="<%: Remove hotspare %>" />
 			</p>
