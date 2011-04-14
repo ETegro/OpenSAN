@@ -1,20 +1,18 @@
 <div id="div_raid_create" class="to_hide">
 	<label for="san.raid_level"><%: Logical RAID level %></label>
-	<ul>
 	<% for _, raidlevel in ipairs( raidlevels ) do %>
-		<li>
-			<input name="san.raid_level"
-				      type ="radio"
-				      value="<%= raidlevel %>" />
-					<%= raidlevel %>
-		</li>
-	<% end %>
-	</ul>
 	<p>
-	<input name="san.submit_logical_add"
-	       src="<%=resource%>/cbi/add.gif"
-	       title="<%: Add logical %>"
-	       type="image"
-	       value="<%: Add logical %>" />
+		<input name="san.raid_level"
+		       type ="radio"
+		       value="<%= raidlevel %>" />
+		<%= raidlevel %>
+	</p>
+	<% end %>
+	<p>
+		<input name="san.submit_logical_add"
+		       src="<%=resource%>/cbi/add.gif"
+		       title="<%: Add logical %>"
+		       type="image"
+		       value="<%: Add logical %>" />
 	</p>
 </div>
