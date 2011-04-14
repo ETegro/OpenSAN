@@ -1,4 +1,8 @@
-* docs -- Документация для разработчика
-* build -- Скрипты для сборки aStor2 образов
-* astor2-feed -- package feed для OpenWRT
-* astor2-luci-feed -- package feed для LuCI (собственный срез)
+                    SVN checkouts and their versions
++----------------+------------------------------------------+----------+
+| Path           | Subversion path                          | Revision |
++----------------+------------------------------------------+----------+
+| openwrt        | svn://svn.openwrt.org/openwrt/trunk      | 25809    |
+| feeds/packages | svn://svn.openwrt.org/openwrt/packages   | 25804    |
+| feeds/luci     | http://svn.luci.subsignal.org/luci/trunk | 6936     |
++----------------+------------------------------------------+----------+

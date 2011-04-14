@@ -1,0 +1,3 @@
+src-link packages ../../feeds/packages
+src-link luci ../../feeds/luci
+src-link astor2 ../../feeds/astor2
