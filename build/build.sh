@@ -77,11 +77,20 @@ copy_bins()
 	cp -a "$BIN_DIR"/* "$OUTPUT_DIR"/
 }
 
+update_feeds()
+{
+	pushd "$TARGET_DIR"
+	./scripts/feeds update
+	./scripts/feeds install -a
+	popd
+}
+
 update_openwrt_config
 remove_dl_directory
 perform_cleaning
 update_openwrt_config
 create_dl_directory
 create_output_directory
+update_feeds
 perform_building
 copy_bins
