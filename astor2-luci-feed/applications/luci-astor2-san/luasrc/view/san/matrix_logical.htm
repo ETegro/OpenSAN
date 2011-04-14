@@ -10,7 +10,7 @@
 		<td><%: RAID %> <%= line.logical.level %></td>
 		<td><%= line.logical.state %></td>
 		<% if line.logical.progress then %>
-			<td><%= line.logical.progress %> %</td>
+			<td>(<%= line.logical.progress %> %)</td>
 		<% end %>
 		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
 			<td>
@@ -18,7 +18,9 @@
 			       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
 					 return false;
 					 return true;"
-			       type="submit"
+			       src="<%=resource%>/cbi/remove.gif"
+			       type="image"
+			       title="<%: Remove %>"
 			       value="<%: Remove %>" />
 			</td>
 		<% end %>
@@ -47,7 +49,7 @@
 			<p>
 				xxx /<%= line.logical.capacity %> <%: TiB %>
 			</p>
-
+			<p>
 			<label for="new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
 			<input id="new_volume_name-<%= line.logical.id %>"
 			       name="new_volume_name-<%= line.logical.id %>"
