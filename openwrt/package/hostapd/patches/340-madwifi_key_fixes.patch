@@ -1,0 +1,34 @@
+--- a/src/drivers/driver_madwifi.c
++++ b/src/drivers/driver_madwifi.c
+@@ -463,15 +463,30 @@ madwifi_set_key(const char *ifname, void
+ 		memset(wk.ik_macaddr, 0xff, IEEE80211_ADDR_LEN);
+ 		wk.ik_keyix = key_idx;
+ 		wk.ik_flags |= IEEE80211_KEY_DEFAULT;
++		wk.ik_flags |= IEEE80211_KEY_GROUP;
+ 	} else if (!memcmp(addr, "\xff\xff\xff\xff\xff\xff", ETH_ALEN)) {
++		wk.ik_keyix = key_idx;
+ 		wk.ik_flags |= IEEE80211_KEY_GROUP;
+-		memcpy(wk.ik_macaddr, addr, IEEE80211_ADDR_LEN);
++		memset(wk.ik_macaddr, 0, IEEE80211_ADDR_LEN);
+ 	} else {
+ 		memcpy(wk.ik_macaddr, addr, IEEE80211_ADDR_LEN);
+ 		wk.ik_keyix = IEEE80211_KEYIX_NONE;
+ 	}
+ 	wk.ik_keylen = key_len;
+ 	memcpy(wk.ik_keydata, key, key_len);
++#ifdef WORDS_BIGENDIAN
++#define WPA_KEY_RSC_LEN 8
++	{
++		size_t i;
++		u8 tmp[WPA_KEY_RSC_LEN];
++		os_memset(tmp, 0, sizeof(tmp));
++		for (i = 0; i < seq_len; i++)
++			tmp[WPA_KEY_RSC_LEN - i - 1] = seq[i];
++		os_memcpy(&wk.ik_keyrsc, tmp, WPA_KEY_RSC_LEN);
++	}
++#else /* WORDS_BIGENDIAN */
++	os_memcpy(&wk.ik_keyrsc, seq, seq_len);
++#endif /* WORDS_BIGENDIAN */
+ 
+ 	ret = set80211priv(drv, IEEE80211_IOCTL_SETKEY, &wk, sizeof(wk));
+ 	if (ret < 0) {
