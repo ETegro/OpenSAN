@@ -213,9 +213,7 @@ local function einarc_logical_hotspare_add( inputs )
 
 	for k, v in pairs( inputs ) do
 		if not physical_id then
-		local physical_id_part1 = string.match( k, "^submit_logical_hotspare_add.(%d)%%..%d$" )
-		local physical_id_part2 = string.match( k, "^submit_logical_hotspare_add.%d%%..(%d)$" )
-		physical_id = physical_id_part1 .. ":" .. physical_id_part2
+			physical_id = table.concat( { string.match( k, "^submit_logical_hotspare_add.(%d)%%%d%d(%d)$" ) }, ":" )
 		end
 	end
 	assert( physical_id )
@@ -243,10 +241,8 @@ local function einarc_logical_hotspare_delete( inputs )
 
 	for k, v in pairs( inputs ) do
 		if not physical_id then
-		local physical_id_part1 = string.match( k, "^submit_logical_hotspare_delete.[%d].(%d)%%..%d$" )
-		local physical_id_part2 = string.match( k, "^submit_logical_hotspare_delete.[%d].%d%%..(%d)$" )
-		physical_id = physical_id_part1 .. ":" .. physical_id_part2
-		logical_id = string.match( k, "^submit_logical_hotspare_delete.([%d]).%d%%..%d$" )
+			local logical_id, physical_id_part1, physical_id_part2 = string.match( k, "^submit_logical_hotspare_delete.[(%d)].(%d)%%%d%d(%d)$" )
+			local physical_id = physical_id_part1 .. ":" .. physical_id_part2
 		end
 	end
 	assert( physical_id )
