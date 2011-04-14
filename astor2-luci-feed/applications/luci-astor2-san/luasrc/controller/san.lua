@@ -213,18 +213,17 @@ local function einarc_logical_hotspare_add( inputs )
 
 	for k, v in pairs( inputs ) do
 		if not physical_id then
-			physical_id = table.concat( { string.match( k, "^submit_logical_hotspare_add.(%d)%%%d%d(%d)$" ) }, ":" )
+			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
 		end
 	end
-	assert( physical_id )
 
-	local logical_id = inputs["logical_id_hotspare"]
-	if common.is_string( logical_id ) then
-		drives = tonumber( logical_id )
-	end
+	assert( physical_id )
+	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id ]
+	logical_id = tonumber( logical_id )
 	if not logical_id then
 		index_with_error( i18n("Logical not selected") )
 	end
+
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
 	if not return_code then
@@ -241,15 +240,14 @@ local function einarc_logical_hotspare_delete( inputs )
 
 	for k, v in pairs( inputs ) do
 		if not physical_id then
-			local logical_id, physical_id_part1, physical_id_part2 = string.match( k, "^submit_logical_hotspare_delete.[(%d)].(%d)%%%d%d(%d)$" )
-			local physical_id = physical_id_part1 .. ":" .. physical_id_part2
+			logical_id, physical_id = string.match( k, "^submit_logical_hotspare_delete.([%d+]).([%d:]+)$" )
 		end
 	end
-	assert( physical_id )
+
 	assert( logical_id )
-	if common.is_string( logical_id ) then
-		drives = tonumber( logical_id )
-	end
+	assert( physical_id )
+	logical_id = tonumber( logical_id )
+
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
 	if not return_code then
@@ -269,13 +267,21 @@ function index_overall()
 		message_error = message_error } )
 end
 
+local function decoded_inputs( inputs )
+	local new_inputs = {}
+	for k, v in pairs( inputs ) do
+		new_inputs[ luci.http.protocol.urldecode( k ) ] = v
+	end
+	return new_inputs
+end
+
 function perform()
-	local inputs = luci.http.formvaluetable( "san" )
+	local inputs = decoded_inputs( luci.http.formvaluetable( "san" ) )
 	local i18n = luci.i18n.translate
 	local get = luci.http.formvalue
 
 	local SUBMIT_MAP = {
-		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
+		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
 		logical_delete = function() einarc_logical_delete( inputs ) end,
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end
