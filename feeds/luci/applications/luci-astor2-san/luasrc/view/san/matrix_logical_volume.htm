@@ -4,4 +4,113 @@
 
 <b><%= line.logical_volume.name %></b>
 
+<table border="0px" width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<%= line.logical_volume.name %>
+		</td>
+		<td>
+			<input name="san.submit_logical_volume_delete-<%= line.logical_volume.name %>"
+			       onclick=" if ( !confirm( '<%: Really delete logical volume drive? %>' ) )
+					 return false;
+					 return true;"
+			       src="<%=resource%>/cbi/remove.gif"
+			       type="image"
+			       title="<%: Remove logical volume %>"
+			       value="<%: Remove logical volume %>" />
+			<p>
+				xxx /<%= line.logical_volume.size %> <%: TiB %> (<%= line.logical_volume.size_mib %> <%: MiB %> )
+			</p>
+			<p>
+				<input id="new_logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
+				       style="font-weight:bold;"
+				       type="text"
+				       value="0" />
+			</p>
+
+			<script type="text/javascript">
+			jQuery.noConflict();
+			(function($){
+				$( '#new_logical_volume_resize_slider-<%= line.logical_volume.name %>' ).slider({
+					orientation: 'horizontal',
+					min: 1,
+					max: <%= line.logical_volume.size_mib %>,
+					range: 'min',
+					value: <%= line.logical_volume.size_mib %> / 2,
+					slide: function( event, ui ) {
+						$( "#new_logical_volume_resize_slider_size-<%= line.logical_volume.name %>" ).val( ui.value );
+					}
+				});
+
+				$( '#new_logical_volume_resize_slider_size-<%= line.logical_volume.name %>' )
+					.val( $( '#new_volume_resize_slider-<%= line.logical_volume.name %>' )
+					.slider( 'value' ) );
+			})(jQuery);
+			</script>
+
+			<p>
+				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.name %>"
+				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
+						 return false;
+						 return true;"
+				       src="<%=resource%>/cbi/reload.gif"
+				       type="image"
+				       title="<%: Resize logical volume %>"
+				       value="<%: Resize logical volume %>" />
+			</p>
+			<p>
+				<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
+					<img src="<%=resource%>/cbi/fieldadd.gif"
+					     alt="<%: Snapshot %>"
+					     title="<%: Snapshot %>" />
+				</a>
+			</p>
+		</td>
+	</tr>
+	<tr class="to_hide">
+		<td colspan="2">
+			<p>
+				<%: Take new snapshot %>
+			</p>
+			<p>
+				<div id="new_logical_volume_snapshot_slider-<%= line.logical_volume.name %>"></div>
+			</p>
+			<p>
+				<input id="new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>"
+				       style="font-weight:bold;"
+				       type="text"
+				       value="0" />
+			</p>
+
+			<script type="text/javascript">
+			jQuery.noConflict();
+			(function($){
+				$( '#new_logical_volume_snapshot_slider-<%= line.logical_volume.name %>' ).slider({
+					orientation: 'horizontal',
+					min: 1,
+					max: <%= line.logical_volume.size_mib %>,
+					range: 'min',
+					value: <%= line.logical_volume.size_mib %> / 2,
+					slide: function( event, ui ) {
+						$( "#new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>" ).val( ui.value );
+					}
+				});
+
+				$( '#new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>' )
+					.val( $( '#new_volumei_snapshot_slider-<%= line.logical_volume.name %>' )
+					.slider( 'value' ) );
+			})(jQuery);
+			</script>
+
+			<p>
+				<input name="san.submit_logical_volume_snapshot_add-<%= line.logical_volume.name %>"
+				       src="<%=resource%>/cbi/add.gif"
+				       title="<%: Add snapshot %>"
+				       type="image"
+				       value="<%: Add snapshot %>" />
+			</p>
+		</td>
+	</tr>
+</table>
+
 </td>
