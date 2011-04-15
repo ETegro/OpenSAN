@@ -206,7 +206,7 @@ function M.VolumeGroup:logical_volume( name, size )
 				      self.name )
 	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
-		if string.match( line, "Logical volume \"%w+\" created" ) then
+		if string.match( line, "Logical volume \".+\" created" ) then
 			succeeded = true
 		end
 	end
