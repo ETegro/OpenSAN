@@ -206,7 +206,7 @@ function M.VolumeGroup:logical_volume( name, size )
 				      self.name )
 	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
-		if string.match( line, "Logical volume \"%w+\" created" ) then
+		if string.match( line, "Logical volume \".+\" created" ) then
 			succeeded = true
 		end
 	end
@@ -267,7 +267,7 @@ function M.LogicalVolume:snapshot( size )
 				      self.device )
 	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
-		if string.match( line, "Logical volume \"%w+\" created" ) then
+		if string.match( line, "Logical volume \".+\" created" ) then
 			succeeded = true
 		end
 	end
@@ -286,20 +286,18 @@ function M.LogicalVolume.list( volume_group )
 		local splitted = common.split_by( line, " " )
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
-		elseif splitted[4] then
-			if result[ splitted[4] ] then
-				-- Skip if it is not needed VolumeGroup
-				if splitted[2] == volume_group.name then
-					local snapshot = M.Snapshot:new({
-						name = splitted[1],
-						device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-						volume_group = volume_group,
-						size = tonumber( string.sub( splitted[3], 1, -2 ) ),
-						logical_volume = result[ splitted[4] ],
-						allocated = tonumber( splitted[5] )
-					})
-					result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
-				end
+		elseif splitted[4] and result[ splitted[4] ] then
+			-- Skip if it is not needed VolumeGroup
+			if splitted[2] == volume_group.name then
+				local snapshot = M.Snapshot:new({
+					name = splitted[1],
+					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
+					volume_group = volume_group,
+					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
+					logical_volume = splitted[4],
+					allocated = tonumber( splitted[5] )
+				})
+				result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
 			end
 		else
 			-- Skip if it is not needed VolumeGroup
