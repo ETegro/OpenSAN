@@ -180,12 +180,15 @@ end
 local function filter_mib2tib( matrix )
 	for _, line in ipairs( matrix ) do
 		if line.physical then
+			line.physical.size_mib = line.physical.size
 			line.physical.size = M.mib2tib( line.physical.size )
 		end
 		if line.logical then
+			line.logical.capacity_mib = line.logical.capacity
 			line.logical.capacity = M.mib2tib( line.logical.capacity )
 		end
 		if line.logical_volume then
+			line.logical_volume.size_mib = line.logical_volume.size
 			line.logical_volume.size = M.mib2tib( line.logical_volume.size )
 		end
 	end
