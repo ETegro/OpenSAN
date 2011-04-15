@@ -206,6 +206,7 @@ local function filter_add_logical_id_to_physical( matrix )
 	return matrix
 end
 
+-- TODO: perform single VolumeGroup and PhysicalVolume call for performance reasons
 local function device_lvms( device, physical_volumes )
 	local physical_volumes = {}
 	if not physical_volumes then
@@ -216,7 +217,7 @@ local function device_lvms( device, physical_volumes )
 			physical_volumes[ #physical_volumes + 1 ] = physical_volume
 		end
 	end
-	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes ) )
+	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes )[1] )
 end
 
 function M.caller()
