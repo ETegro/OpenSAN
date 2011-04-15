@@ -116,6 +116,11 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
+<!--aStor2-theme-insert-->
+<link rel="stylesheet" href="<%=resource%>/san/css/san.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<%=resource%>/san/js/jquery-1.5.2.js"></script>
+<script type="text/javascript" src="<%=resource%>/san/js/san.js"></script>
+<!--end-of-aStor2-theme-insert-->
 <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">
