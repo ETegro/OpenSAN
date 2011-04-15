@@ -196,7 +196,7 @@ define KernelPackage/dm
 	CONFIG_DM_CRYPT \
 	CONFIG_DM_MIRROR
   FILES:=$(LINUX_DIR)/drivers/md/dm-*.ko
-  AUTOLOAD:=$(call AutoLoad,30,dm-mod dm-log dm-region-hash dm-mirror dm-crypt)
+  AUTOLOAD:=$(call AutoLoad,30,dm-mod dm-log dm-region-hash dm-mirror dm-crypt dm-snapshot)
 endef
 
 define KernelPackage/dm/description
