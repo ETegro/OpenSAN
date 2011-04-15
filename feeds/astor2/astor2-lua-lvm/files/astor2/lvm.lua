@@ -294,7 +294,7 @@ function M.LogicalVolume.list( volume_group )
 					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
 					volume_group = volume_group,
 					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
-					logical_volume = result[ splitted[4] ],
+					logical_volume = splitted[4],
 					allocated = tonumber( splitted[5] )
 				})
 				result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
