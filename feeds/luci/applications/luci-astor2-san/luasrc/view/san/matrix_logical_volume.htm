@@ -2,12 +2,13 @@
     rowspan="<%= line.logical_volume.rowspan %>"
     class="<%+san/matrix_logical_volume_class%>">
 
-<b><%= line.logical_volume.name %></b>
-
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
 			<%= line.logical_volume.name %>
+		</td>
+		<td>
+			<%= line.logical_volume.size %>
 		</td>
 		<td>
 			<input name="san.submit_logical_volume_delete-<%= line.logical_volume.name %>"
@@ -18,8 +19,18 @@
 			       type="image"
 			       title="<%: Remove logical volume %>"
 			       value="<%: Remove logical volume %>" />
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
 			<p>
 				xxx /<%= line.logical_volume.size %> <%: TiB %> (<%= line.logical_volume.size_mib %> <%: MiB %> )
+			</p>
+			<p>
+				<%: Resize logical volume %>
+			</p>
+			<p>
+				<div id="new_logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
 			</p>
 			<p>
 				<input id="new_logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
@@ -43,10 +54,12 @@
 				});
 
 				$( '#new_logical_volume_resize_slider_size-<%= line.logical_volume.name %>' )
-					.val( $( '#new_volume_resize_slider-<%= line.logical_volume.name %>' )
+					.val( $( '#new_logical_volume_resize_slider-<%= line.logical_volume.name %>' )
 					.slider( 'value' ) );
 			})(jQuery);
 			</script>
+
+
 
 			<p>
 				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.name %>"
@@ -68,7 +81,7 @@
 		</td>
 	</tr>
 	<tr class="to_hide">
-		<td colspan="2">
+		<td colspan="3">
 			<p>
 				<%: Take new snapshot %>
 			</p>
@@ -97,7 +110,7 @@
 				});
 
 				$( '#new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>' )
-					.val( $( '#new_volumei_snapshot_slider-<%= line.logical_volume.name %>' )
+					.val( $( '#new_logical_volume_snapshot_slider-<%= line.logical_volume.name %>' )
 					.slider( 'value' ) );
 			})(jQuery);
 			</script>
