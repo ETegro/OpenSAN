@@ -18,6 +18,10 @@
 */
 @charset "UTF-8";
 
+/* Main table */
+
+form table tbody tr td { width: 25%; }
+
 /* Matrix */
 
 /* Physicals */
