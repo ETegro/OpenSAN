@@ -46,7 +46,7 @@
 			</p>
 			<% end %>
 			<p>
-				xxx /<%= line.logical.capacity %> <%: TiB %>
+				xxx /<%= line.logical.capacity %> <%: TiB %> (<%= line.logical.capacity_mib %> <%: MiB %> )
 			</p>
 			<p>
 			<label for="new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
@@ -70,9 +70,9 @@
 				$( '#new_volume_slider-<%= line.logical.id %>' ).slider({
 					orientation: 'horizontal',
 					min: 1,
-					max: 1000,
+					max: <%= line.logical.capacity_mib %>,
 					range: 'min',
-					value: 100,
+					value: <%= line.logical.capacity_mib %> / 2,
 					slide: function( event, ui ) {
 						$( "#new_volume_slider_size-<%= line.logical.id %>" ).val( ui.value );
 					}
