@@ -182,23 +182,23 @@ TestMatrix = {}
 	end
 	function TestMatrix:test_volume_group_percentage()
 		local logicals = self.logicals_triple
-		logicals[9].logical_volumes["foo"].total = 666
-		logicals[9].logical_volumes["foo"].allocated = 123
+		logicals[9].logical_volumes["foo"].volume_group.total = 666
+		logicals[9].logical_volumes["foo"].volume_group.allocated = 123
 
-		logicals[9].logical_volumes["bar"].total = 100
-		logicals[9].logical_volumes["bar"].allocated = 12
+		logicals[9].logical_volumes["bar"].volume_group.total = 100
+		logicals[9].logical_volumes["bar"].volume_group.allocated = 12
 
-		logicals[9].logical_volumes["baz"].total = 213456
-		logicals[9].logical_volumes["baz"].allocated = 213056
+		logicals[9].logical_volumes["baz"].volume_group.total = 213456
+		logicals[9].logical_volumes["baz"].volume_group.allocated = 213056
 		local matrix = matrix.filter_volume_group_percentage(
 			matrix.overall( {
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple
 			} )
 		)
-		assertEquals( matrix[1].logical_volume.percentage, 12 )
-		assertEquals( matrix[3].logical_volume.percentage, 100 )
-		assertEquals( matrix[5].logical_volume.percentage, 19 )
+		assertEquals( matrix[1].logical_volume.volume_group.percentage, 12 )
+		assertEquals( matrix[3].logical_volume.volume_group.percentage, 100 )
+		assertEquals( matrix[5].logical_volume.volume_group.percentage, 19 )
 	end
 	function TestMatrix:test_matrix_double()
 		local physicals = {

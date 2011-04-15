@@ -171,7 +171,7 @@ end
 function M.filter_volume_group_percentage( matrix )
 	for _, line in ipairs( matrix ) do
 		if line.logical_volume then
-			line.logical_volume.percentage = math.ceil( 100 * line.logical_volume.allocated / line.logical_volume.total )
+			line.logical_volume.volume_group.percentage = math.ceil( 100 * line.logical_volume.volume_group.allocated / line.logical_volume.volume_group.total )
 		end
 	end
 	return matrix
@@ -206,17 +206,18 @@ local function filter_add_logical_id_to_physical( matrix )
 	return matrix
 end
 
+-- TODO: perform single VolumeGroup and PhysicalVolume call for performance reasons
 local function device_lvms( device, physical_volumes )
-	local physical_volumes = {}
+	local physical_volumes_filtered = {}
 	if not physical_volumes then
 		physical_volumes = lvm.PhysicalVolume.list()
 	end
 	for _, physical_volume in ipairs( physical_volumes ) do
 		if physical_volume.device == device then
-			physical_volumes[ #physical_volumes + 1 ] = physical_volume
+			physical_volumes_filtered[ #physical_volumes_filtered + 1 ] = physical_volume
 		end
 	end
-	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes ) )
+	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes_filtered )[1] )
 end
 
 function M.caller()
