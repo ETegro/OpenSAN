@@ -59,8 +59,6 @@
 			})(jQuery);
 			</script>
 
-
-
 			<p>
 				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.name %>"
 				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
@@ -71,13 +69,11 @@
 				       title="<%: Resize logical volume %>"
 				       value="<%: Resize logical volume %>" />
 			</p>
-			<p>
-				<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
-					<img src="<%=resource%>/cbi/fieldadd.gif"
-					     alt="<%: Snapshot %>"
-					     title="<%: Snapshot %>" />
-				</a>
-			</p>
+			<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
+				<img src="<%=resource%>/cbi/fieldadd.gif"
+				     alt="<%: Snapshot %>"
+				     title="<%: Snapshot %>" />
+			</a>
 		</td>
 	</tr>
 	<tr class="to_hide">
