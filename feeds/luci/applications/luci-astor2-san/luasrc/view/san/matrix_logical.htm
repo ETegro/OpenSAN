@@ -45,7 +45,6 @@
 			       value="<%= line.logical.progress %>" />
 			</p>
 			<% end %>
-
 			<p>
 				xxx /<%= line.logical.capacity %> <%: TiB %>
 			</p>
@@ -56,6 +55,32 @@
 			       type="text"
 			       value="" />
 			</p>
+
+			<div id="new_volume_slider-<%= line.logical.id %>"></div>
+
+			<input id="new_volume_size_text-<%= line.logical.id %>"
+			       style="font-weight:bold;"
+			       type="text"
+			       value="0" />
+
+			<script type="text/javascript">
+			jQuery.noConflict();
+			(function($){
+
+				$( '#new_volume_slider-<%= line.logical.id %>' ).slider({
+					orientation: 'horizontal',
+					max: 1000,
+					value: 100,
+					slide: function( event, ui ) {
+						$( "#new_volume_slider_size-<%= line.logical.id %>" ).val( ui.value );
+					}
+				});
+
+				$( '#new_volume_slider_size-<%= line.logical.id %>' ).val( $( '#new_volume_slider-<%= line.logical.id %>' ).slider( 'value' ) );
+
+				/*alert( 'js-work' );*/
+			})(jQuery);
+			</script>
 		</td>
 	</tr>
 </table>
