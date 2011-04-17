@@ -24,7 +24,6 @@
 			       value="<%: Remove %>" />
 			</td>
 		<% end %>
-
 	</tr>
 	<tr class="to_hide">
 		<% local local_colspan = 4
@@ -49,8 +48,8 @@
 				xxx /<%= line.logical.capacity %> <%: TiB %> (<%= line.logical.capacity_mib %> <%: MiB %> )
 			</p>
 			<p>
-				<label for="new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
-				<input id="new_volume_name-<%= line.logical.id %>"
+				<label for="san.new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
+				<input id="san.new_volume_name-<%= line.logical.id %>"
 				       name="new_volume_name-<%= line.logical.id %>"
 				       type="text"
 				       value="" />
@@ -59,7 +58,7 @@
 				<div id="new_volume_slider-<%= line.logical.id %>"></div>
 			</p>
 			<p>
-				<input id="new_volume_slider_size-<%= line.logical.id %>"
+				<input id="san.new_volume_slider_size-<%= line.logical.id %>"
 				       readonly="readonly"
 				       type="text"
 				       value="0" />
