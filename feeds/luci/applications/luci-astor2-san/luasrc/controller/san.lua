@@ -237,17 +237,14 @@ local function einarc_logical_hotspare_delete( inputs )
 	local message_error = nil
 	local physical_id = nil
 	local logical_id = nil
-
 	for k, v in pairs( inputs ) do
 		if not physical_id then
 			logical_id, physical_id = string.match( k, "^submit_logical_hotspare_delete.([%d+]).([%d:]+)$" )
 		end
 	end
-
 	assert( logical_id )
 	assert( physical_id )
 	logical_id = tonumber( logical_id )
-
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
 	if not return_code then
@@ -255,6 +252,40 @@ local function einarc_logical_hotspare_delete( inputs )
 	end
 	index_with_error( message_error )
 end
+
+--[[
+local function lvm_logical_volume_add( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local volume_groups_name = nil --no
+
+	local logical_id = nil
+	for k, v in pairs( inputs ) do
+		if not logical_id then
+			logical_id = string.match( k, "^submit_logical_volume_add-([%d+])$" )
+		end
+	end
+	assert( logical_id )
+
+	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
+	if not logical_volume_name  then
+		index_with_error( i18n("Logical name is not set") )
+	end
+
+	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
+	assert( common.is_positive( logical_volume_size ) )
+
+	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
+		                           { name =  volume_groups_name },
+		                           logical_volume_name,
+	                                   logical_volume_size )
+	if not return_code then
+		message_error = i18n("Failed to add logical volume")
+	end
+	index_with_error( message_error )
+end
+]]
 
 ------------------------------------------------------------------------
 -- Different common functions
