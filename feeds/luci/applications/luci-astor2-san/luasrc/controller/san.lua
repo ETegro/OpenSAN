@@ -274,12 +274,13 @@ local function lvm_logical_volume_add( inputs )
 	end
 
 	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
+	logical_volume_size = tonumber( logical_volume_size )
 	assert( common.is_positive( logical_volume_size ) )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
 		                           { name =  volume_groups_name },
 		                           logical_volume_name,
-	                                   logical_volume_size )
+		                           logical_volume_size )
 	if not return_code then
 		message_error = i18n("Failed to add logical volume")
 	end
