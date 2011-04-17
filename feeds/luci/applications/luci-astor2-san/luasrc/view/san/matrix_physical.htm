@@ -63,9 +63,10 @@
 			</p>
 			<% if line.physical.state == "free" then %>
 			<p>
-			<label><%: Logical hotspare %></label>
-			<select name="san.logical_id_hotspare-<%= line.physical.id %>"
-			        size="1" >
+			<label for="san.logical_id_hotspare-<%= line.physical.id %>"><%: Logical hotspare %></label>
+			<select id="san.logical_id_hotspare-<%= line.physical.id %>"
+				name="san.logical_id_hotspare-<%= line.physical.id %>"
+				size="1" >
 				<option value=""></option>
 				<% for _, this_line in ipairs( matrix_overall ) do %>
 					<% if this_line.logical then %>
