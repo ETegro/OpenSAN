@@ -1228,52 +1228,34 @@ TestMatrix = {}
 
 TestMibToTib = {}
 	function TestMibToTib:test_values_160gb()
-		print( assertEquals( matrix.mib2tib( 160E6 ), "0.14" ) )
+		print( assertEquals( matrix.mib2tib( 160E3 ), "0.15" ) )
 	end
 	function TestMibToTib:test_values_320gb()
-		assertEquals( matrix.mib2tib( 320E6 ), "0.29" )
+		assertEquals( matrix.mib2tib( 320E3 ), "0.30" )
 	end
 	function TestMibToTib:test_values_640gb()
-		assertEquals( matrix.mib2tib( 640E6 ), "0.59" )
+		assertEquals( matrix.mib2tib( 640E3 ), "0.61" )
 	end
 	function TestMibToTib:test_values_750gb()
-		assertEquals( matrix.mib2tib( 750E6 ), "0.69" )
+		assertEquals( matrix.mib2tib( 750E3 ), "0.71" )
 	end
 	function TestMibToTib:test_values_1tb()
-		assertEquals( matrix.mib2tib( 1E9 ), "0.93" )
+		assertEquals( matrix.mib2tib( 1E6 ), "0.95" )
 	end
 	function TestMibToTib:test_values_1500gb()
-		assertEquals( matrix.mib2tib( 15E8 ), "1.39" )
+		assertEquals( matrix.mib2tib( 15E5 ), "1.43" )
 	end
 	function TestMibToTib:test_values_2tb()
-		assertEquals( matrix.mib2tib( 2E9 ), "1.86" )
-	end
-	function TestMibToTib:test_values_3tb()
-		assertEquals( matrix.mib2tib( 3E9 ), "2.79" )
-	end
-	function TestMibToTib:test_values_4tb()
-		assertEquals( matrix.mib2tib( 4E9 ), "3.72" )
+		assertEquals( matrix.mib2tib( 2E6 ), "1.90" )
 	end
 	function TestMibToTib:test_values_10tb()
-		assertEquals( matrix.mib2tib( 10E9 ), "9.31" )
-	end
-	function TestMibToTib:test_values_20tb()
-		assertEquals( matrix.mib2tib( 20E9 ), "18.62" )
-	end
-	function TestMibToTib:test_values_40tb()
-		assertEquals( matrix.mib2tib( 40E9 ), "37.25" )
-	end
-	function TestMibToTib:test_values_50tb()
-		assertEquals( matrix.mib2tib( 50E9 ), "46.56" )
-	end
-	function TestMibToTib:test_values_75tb()
-		assertEquals( matrix.mib2tib( 75E9 ), "69.84" )
+		assertEquals( matrix.mib2tib( 10E6 ), "9.53" )
 	end
 	function TestMibToTib:test_values_100tb()
-		assertEquals( matrix.mib2tib( 100E9 ), "93.13" )
+		assertEquals( matrix.mib2tib( 100E6 ), "95.36" )
 	end
 	function TestMibToTib:test_values_1pb()
-		assertEquals( matrix.mib2tib( 1E12 ), "931.32" )
+		assertEquals( matrix.mib2tib( 1E9 ), "953.67" )
 	end
 	function TestMibToTib:test_values_zero()
 		assertEquals( matrix.mib2tib( 0 ), "0.00" )
