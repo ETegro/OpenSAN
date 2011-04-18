@@ -272,11 +272,10 @@ local function lvm_logical_volume_add( inputs )
 	assert( volume_group_name )
 
 	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
-	assert( logical_volume_name )
-	if not logical_volume_name  then
+	if not logical_volume_name then
 		index_with_error( i18n("Volume name is not set") )
 	end
-
+	--TODO filter for logical_volume_name
 	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
 	logical_volume_size = tonumber( logical_volume_size )
 	assert( common.is_positive( logical_volume_size ) )
