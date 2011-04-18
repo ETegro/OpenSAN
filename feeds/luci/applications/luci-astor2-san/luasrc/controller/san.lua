@@ -258,7 +258,7 @@ local function lvm_logical_volume_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local veolume_group_name = nil --no
+	local volume_group_name = nil --no
 	local logical_id = nil
 	for k, v in pairs( inputs ) do
 		if not logical_id then
