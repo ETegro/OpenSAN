@@ -13,7 +13,7 @@
 			<a href="#" id="physical_info-<%= line.physical.id %>"><%= line.physical.id %></a>
 		</td>
 		<td><%= line.physical.model %></td>
-		<td><%= line.physical.size %> <%: TiB %></td>
+		<td><p title="<%= line.physical.size_mib %> <%: MiB %>"><%= line.physical.size %> <%: TiB %></p></td>
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
@@ -58,6 +58,7 @@
 			<input id="physical_size-<%= line.physical.id %>"
 			       name="physical_size-<%= line.physical.id %>"
 			       readonly="readonly"
+			       title="<%= line.physical.size_mib %> <%: MiB %>"
 			       type="text"
 			       value="<%= line.physical.size %>" />
 			</p>
