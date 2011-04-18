@@ -34,16 +34,6 @@
 			local_colspan = local_colspan + 1
 		end %>
 		<td colspan="<%= local_colspan %>">
-			<% if line.logical.progress then %>
-			<div>
-				<label for="logical_progress-<%= line.logical.id %>"><%: Progress %> (%)</label>
-				<input id="logical_progress-<%= line.logical.id %>"
-				       name="logical_progress-<%= line.logical.id %>"
-				       readonly="readonly"
-				       type="text"
-				       value="<%= line.logical.progress %>" />
-			</div>
-			<% end %>
 			<div>
 				<!-- TODO: TiBs and MiBs -->
 				<%= line.logical.volume_group.allocated %>
