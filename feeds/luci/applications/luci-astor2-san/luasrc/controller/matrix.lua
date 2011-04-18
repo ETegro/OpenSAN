@@ -220,6 +220,15 @@ local function device_lvms( device, physical_volumes )
 	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes_filtered )[1] )
 end
 
+local function filter_logical_physical_list( matrix )
+	for _, line in ipairs( matrix ) do
+		if line.logical then
+			line.logical:physical_list()
+		end
+	end
+	return matrix
+end
+
 function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list(),
@@ -229,7 +238,6 @@ function M.caller()
 
 	-- Fill up physicals and progresses
 	for logical_id, logical in pairs( logicals ) do
-		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
 		logicals[ logical_id ].logical_volumes = device_lvms( logical.device, physical_volumes )
 	end
@@ -238,6 +246,7 @@ function M.caller()
 		logicals = logicals
 	} )
 	local FILTERS = {
+		filter_logical_physical_list,
 		M.filter_borders_highlight,
 		M.filter_volume_group_percentage,
 		filter_mib2tib,
