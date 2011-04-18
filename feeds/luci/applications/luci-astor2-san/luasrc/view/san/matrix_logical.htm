@@ -35,62 +35,68 @@
 		end %>
 		<td colspan="<%= local_colspan %>">
 			<% if line.logical.progress then %>
-			<p>
+			<div>
 				<label for="logical_progress-<%= line.logical.id %>"><%: Progress %> (%)</label>
 				<input id="logical_progress-<%= line.logical.id %>"
 				       name="logical_progress-<%= line.logical.id %>"
 				       readonly="readonly"
 				       type="text"
 				       value="<%= line.logical.progress %>" />
-			</p>
+			</div>
 			<% end %>
-			<p>
-				xxx /<%= line.logical.capacity %> <%: TiB %> (<%= line.logical.capacity_mib %> <%: MiB %> )
-			</p>
-			<p>
+			<div>
+				xxx / <%= line.logical.capacity %> <%: TiB %> (<%= line.logical.capacity_mib %> <%: MiB %> )
+			</div>
+			<div>
 				<label for="san.new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
 				<input id="san.new_volume_name-<%= line.logical.id %>"
 				       name="new_volume_name-<%= line.logical.id %>"
 				       type="text"
 				       value="" />
-			</p>
-			<p>
-				<div id="new_volume_slider-<%= line.logical.id %>"></div>
-			</p>
-			<p>
+			</div>
+
+			<div id="new_volume_slider-<%= line.logical.id %>"></div>
+
+			<div>
+				<!-- san. -->
 				<input id="san.new_volume_slider_size-<%= line.logical.id %>"
+				       class="new_volume_slider_size-<%= line.logical.id %>"
 				       readonly="readonly"
 				       type="text"
 				       value="0" />
-			</p>
+			</div>
 
 			<script type="text/javascript">
 			jQuery.noConflict();
 			(function($){
-				$( '#new_volume_slider-<%= line.logical.id %>' ).slider({
+
+				var slider_name = '#new_volume_slider-<%= line.logical.id %>';
+				var slider_input_name = '.new_volume_slider_size-<%= line.logical.id %>';
+
+				$( slider_name ).slider({
 					orientation: 'horizontal',
 					min: 1,
 					max: <%= line.logical.capacity_mib %>,
 					range: 'min',
 					value: <%= line.logical.capacity_mib %> / 2,
 					slide: function( event, ui ) {
-						$( "#new_volume_slider_size-<%= line.logical.id %>" ).val( ui.value );
+						$( slider_input_name ).val( ui.value );
 					}
 				});
 
-				$( '#new_volume_slider_size-<%= line.logical.id %>' )
-					.val( $( '#new_volume_slider-<%= line.logical.id %>' )
+				$( slider_input_name )
+					.val( $( slider_name )
 					.slider( 'value' ) );
 			})(jQuery);
 			</script>
 
-			<p>
+			<div>
 				<input name="san.submit_logical_volume_add-<%= line.logical.id %>"
 				       src="<%=resource%>/cbi/add.gif"
 				       title="<%: Add logical volume %>"
 				       type="image"
 				       value="<%: Add logical volume %>" />
-			</p>
+			</div>
 		</td>
 	</tr>
 </table>
