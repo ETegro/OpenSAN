@@ -293,7 +293,7 @@ function M.LogicalVolume.list( volume_groups )
 				local snapshot = M.Snapshot:new({
 					name = splitted[1],
 					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_groups_by_name[ splitted[2] ],
+					volume_group = volume_groups[ volume_groups_by_name[ splitted[2] ][1] ],
 					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
 					logical_volume = splitted[4],
 					allocated = tonumber( splitted[5] )
@@ -306,7 +306,7 @@ function M.LogicalVolume.list( volume_groups )
 				result[ splitted[1] ] = M.LogicalVolume:new({
 					name = splitted[1],
 					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_groups_by_name[ splitted[2] ],
+					volume_group = volume_group[ volume_groups_by_name[ splitted[2] ][1] ],
 					size = tonumber( string.sub( splitted[3], 1, -2 ) )
 				})
 			end
