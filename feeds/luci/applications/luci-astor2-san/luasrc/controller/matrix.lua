@@ -206,30 +206,39 @@ local function filter_add_logical_id_to_physical( matrix )
 	return matrix
 end
 
--- TODO: perform single VolumeGroup and PhysicalVolume call for performance reasons
-local function device_lvms( device, physical_volumes )
-	local physical_volumes_filtered = {}
-	if not physical_volumes then
-		physical_volumes = lvm.PhysicalVolume.list()
-	end
-	for _, physical_volume in ipairs( physical_volumes ) do
-		if physical_volume.device == device then
-			physical_volumes_filtered[ #physical_volumes_filtered + 1 ] = physical_volume
+local function logical_volume_group( logical, volume_groups )
+	for _, volume_group in ipairs( volume_groups ) do
+		if volume_group.physical_volumes[1].device == logical.device then
+			return volume_group
 		end
 	end
-	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes_filtered )[1] )
+end
+
+local function logical_logical_volumes( logical, logical_volumes )
+	local logical_volumes_needed = {}
+	for _, logical_volume in ipairs( logical_volumes ) do
+		if logical_volume.volume_group.physical_volumes[1].device == logical.device then
+			logical_volumes_needed[ #logical_volumes_needed + 1 ] = logical_volume
+		end
+	end
+	return logical_volumes_needed
 end
 
 function M.caller()
 	local logicals = einarc.Logical.list()
+	local physicals = einarc.Physical.list()
 	local physical_volumes = lvm.PhysicalVolume.list()
+	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
+	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
+
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
-		logicals[ logical_id ].logical_volumes = device_lvms( logical.device, physical_volumes )
+		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
+		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
 	end
 	local matrix = M.overall( {
-		physicals = einarc.Physical.list(),
+		physicals = physicals,
 		logicals = logicals
 	} )
 	local FILTERS = {
