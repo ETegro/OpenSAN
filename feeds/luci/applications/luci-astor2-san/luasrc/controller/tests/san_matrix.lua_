@@ -180,6 +180,25 @@ TestMatrix = {}
 		}
 
 	end
+	function TestMatrix:test_volume_group_percentage_zero()
+		local logicals = self.logicals_triple
+		logicals[9].logical_volumes["bar"].volume_group.total = 0
+		logicals[9].logical_volumes["bar"].volume_group.allocated = 100
+
+		-- Dummy values
+		logicals[9].logical_volumes["foo"].volume_group.total = 0
+		logicals[9].logical_volumes["foo"].volume_group.allocated = 0
+		logicals[9].logical_volumes["baz"].volume_group.total = 0
+		logicals[9].logical_volumes["baz"].volume_group.allocated = 0
+
+		local matrix = matrix.filter_volume_group_percentage(
+			matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple
+			} )
+		)
+		assertEquals( matrix[1].logical_volume.volume_group.percentage, 0 )
+	end
 	function TestMatrix:test_volume_group_percentage()
 		local logicals = self.logicals_triple
 		logicals[9].logical_volumes["foo"].volume_group.total = 666
