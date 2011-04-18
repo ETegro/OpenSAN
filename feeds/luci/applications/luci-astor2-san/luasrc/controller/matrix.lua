@@ -171,7 +171,11 @@ end
 function M.filter_volume_group_percentage( matrix )
 	for _, line in ipairs( matrix ) do
 		if line.logical_volume then
-			line.logical_volume.volume_group.percentage = math.ceil( 100 * line.logical_volume.volume_group.allocated / line.logical_volume.volume_group.total )
+			local percentage = math.ceil( 100 * line.logical_volume.volume_group.allocated /
+			                                    line.logical_volume.volume_group.total )
+			-- Check for zero devision returning infinity
+			if percentage == math.huge then percentage = 0 end
+			line.logical_volume.volume_group.percentage = percentage
 		end
 	end
 	return matrix
