@@ -221,12 +221,16 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
--- TODO: name should pass /^[A-Za-z0-9!@\#$%^*()_+=;:,.\/?{}\-][A-Za-z0-9!@\#$%^*()_+=;:,.\/?{}\ -]*$/
+M.LogicalVolume.name_valid_re = "^[A-Za-z0-9\-_#%%:]+$"
+
 function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.name ) )
 	assert( common.is_string( attrs.device ) )
 	assert( common.is_table( attrs.volume_group ) )
 	assert( common.is_positive( attrs.size ) )
+	if not string.match( attrs.name, M.LogicalVolume.name_valid_re ) then
+		error("lvm:LogicalVolume:new() incorrect name supplied")
+	end
 	if not attrs.snapshots then
 		attrs["snapshots"] = {}
 	end
@@ -277,22 +281,23 @@ function M.LogicalVolume:snapshot( size )
 end
 
 --- List all LogicalVolumes on specified VolumeGroup
--- @param volume_group VolumeGroup to check
+-- @param volume_groups VolumeGroups to check
 -- @return { LogicalVolume, LogicalVolume }
-function M.LogicalVolume.list( volume_group )
-	assert( volume_group and common.is_table( volume_group ) )
+function M.LogicalVolume.list( volume_groups )
+	assert( volume_groups and common.is_array( volume_groups ) )
 	local result = {}
+	local volume_groups_by_name = common.unique_keys( "name", volume_groups )
 	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
 		local splitted = common.split_by( line, " " )
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
 		elseif splitted[4] and result[ splitted[4] ] then
 			-- Skip if it is not needed VolumeGroup
-			if splitted[2] == volume_group.name then
+			if common.is_in_array( splitted[2], common.keys( volume_groups_by_name ) ) then
 				local snapshot = M.Snapshot:new({
 					name = splitted[1],
 					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_group,
+					volume_group = volume_groups[ volume_groups_by_name[ splitted[2] ][1] ],
 					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
 					logical_volume = splitted[4],
 					allocated = tonumber( splitted[5] )
@@ -301,11 +306,11 @@ function M.LogicalVolume.list( volume_group )
 			end
 		else
 			-- Skip if it is not needed VolumeGroup
-			if splitted[2] == volume_group.name then
+			if common.is_in_array( splitted[2], common.keys( volume_groups_by_name ) ) then
 				result[ splitted[1] ] = M.LogicalVolume:new({
 					name = splitted[1],
 					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_group,
+					volume_group = volume_groups[ volume_groups_by_name[ splitted[2] ][1] ],
 					size = tonumber( string.sub( splitted[3], 1, -2 ) )
 				})
 			end
@@ -334,7 +339,6 @@ end
 function M.LogicalVolume:resize( size )
 	assert( self.name )
 	assert( common.is_positive( size ) )
-	assert( size > 0 )
 	if size == self.size then return end
 	if not lvresize( size, self ) then
 		error( "lvm:LogicalVolume:resize() failed" )
