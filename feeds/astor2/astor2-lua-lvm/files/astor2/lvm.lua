@@ -282,7 +282,7 @@ end
 function M.LogicalVolume.list( volume_groups )
 	assert( volume_groups and common.is_array( volume_groups ) )
 	local result = {}
-	local volume_groups_by_name = common.unique_keys( volume_groups, "name" )
+	local volume_groups_by_name = common.unique_keys( "name", volume_groups )
 	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
 		local splitted = common.split_by( line, " " )
 		if splitted[1] == "LV" and splitted[2] == "VG" then
