@@ -258,15 +258,16 @@ local function lvm_logical_volume_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local volume_groups_name = nil --no
-
+	local vmeolume_group_name = nil --no
 	local logical_id = nil
 	for k, v in pairs( inputs ) do
 		if not logical_id then
 			logical_id = string.match( k, "^submit_logical_volume_add-([%d+])$" )
+			--added volume_group_name
 		end
 	end
 	assert( logical_id )
+	assert( volume_group_name )
 
 	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
 	if not logical_volume_name  then
@@ -278,7 +279,7 @@ local function lvm_logical_volume_add( inputs )
 	assert( common.is_positive( logical_volume_size ) )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-		                           { name =  volume_groups_name },
+		                           { name =  volume_group_name },
 		                           logical_volume_name,
 		                           logical_volume_size )
 	if not return_code then
@@ -287,6 +288,28 @@ local function lvm_logical_volume_add( inputs )
 	index_with_error( message_error )
 end
 ]]
+
+local function lvm_logical_volume_remove( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local volume_group_name = nil
+	local logical_volume_name = nil
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then -- edit
+			-- san.submit_logical_volume_remove-vg1302871899-lvname_new
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg[%d]+).lv([A-Za-z0-9\-_#%:]+)$" )
+		end
+	end
+	assert( volume_group_name )
+	assert( logical_volume_name )
+	local return_code, result = pcall( lvm.LogicalVolume.remove,
+		                           { volume_group = { name = volume_group_name },
+		                             name = logical_volume_name } )
+	if not return_code then
+		message_error = i18n("Failed to remove logical volume")
+	end
+	index_with_error( message_error )
+end
 
 ------------------------------------------------------------------------
 -- Different common functions
@@ -316,7 +339,8 @@ function perform()
 		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
 		logical_delete = function() einarc_logical_delete( inputs ) end,
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
-		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end
+		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
+		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
