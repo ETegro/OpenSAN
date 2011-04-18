@@ -339,7 +339,6 @@ end
 function M.LogicalVolume:resize( size )
 	assert( self.name )
 	assert( common.is_positive( size ) )
-	assert( size > 0 )
 	if size == self.size then return end
 	if not lvresize( size, self ) then
 		error( "lvm:LogicalVolume:resize() failed" )
