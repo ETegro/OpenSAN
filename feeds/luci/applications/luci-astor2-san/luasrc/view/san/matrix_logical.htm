@@ -46,15 +46,11 @@
 			</p>
 			<% end %>
 			<p>
-				<% if line.logical_volume then %>
-					<%= line.logical_volume.volume_group.allocated %>
-					/
-					<%= line.logical_volume.volume_group.total %>
-					(<%= line.logical_volume.volume_group.percentage %> %)
-				<% else %>
-					<%= line.logical.capacity %>
-				<% end %>
-				<%: TiB %> (<%= line.logical.capacity_mib %> <%: MiB %> )
+				<!-- TODO: TiBs and MiBs -->
+				<%= line.volume_group.allocated %>
+				/
+				<%= line.volume_group.total %>
+				(<%= line.volume_group.percentage %> %)
 			</p>
 			<p>
 				<label for="new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
