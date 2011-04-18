@@ -206,6 +206,19 @@ local function filter_add_logical_id_to_physical( matrix )
 	return matrix
 end
 
+local function filter_add_volume_group_to_logical( matrix, volume_groups )
+	for _, line in ipairs( matrix ) do
+		if line.logical then
+			for _, volume_group in ipairs( volume_groups ) do
+				if volume_group.physical_volumes[1].device == line.logical.device then
+					line.logical.volume_group = volume_group
+				end
+			end
+		end
+	end
+	return matrix
+end
+
 local function device_lvms( logical, logical_volumes )
 	local logical_volumes_needed = {}
 	for _, logical_volume in ipairs( logical_volumes ) do
@@ -223,7 +236,6 @@ function M.caller()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
 
-	-- Fill up physicals and progresses
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
@@ -237,7 +249,8 @@ function M.caller()
 		M.filter_borders_highlight,
 		M.filter_volume_group_percentage,
 		filter_mib2tib,
-		filter_add_logical_id_to_physical
+		filter_add_logical_id_to_physical,
+		function( matrix ) filter_add_volume_group_to_logical( matrix, volume_groups ) end
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
