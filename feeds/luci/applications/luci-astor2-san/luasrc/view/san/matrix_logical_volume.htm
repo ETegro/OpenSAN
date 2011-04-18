@@ -23,21 +23,21 @@
 	</tr>
 	<tr>
 		<td colspan="3">
-			<p>
+			<div>
 				xxx /<%= line.logical_volume.size %> <%: TiB %> (<%= line.logical_volume.size_mib %> <%: MiB %> )
-			</p>
-			<p>
+			</div>
+			<div>
 				<%: Resize logical volume %>
-			</p>
-			<p>
+			</div>
+			<div>
 				<div id="new_logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
-			</p>
-			<p>
+			</div>
+			<div>
 				<input id="new_logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
 				       style="font-weight:bold;"
 				       type="text"
 				       value="0" />
-			</p>
+			</div>
 
 			<script type="text/javascript">
 			jQuery.noConflict();
@@ -59,7 +59,7 @@
 			})(jQuery);
 			</script>
 
-			<p>
+			<div>
 				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.name %>"
 				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
 						 return false;
@@ -68,7 +68,7 @@
 				       type="image"
 				       title="<%: Resize logical volume %>"
 				       value="<%: Resize logical volume %>" />
-			</p>
+			</div>
 			<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
 				<img src="<%=resource%>/cbi/fieldadd.gif"
 				     alt="<%: Snapshot %>"
@@ -78,18 +78,18 @@
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
-			<p>
+			<div>
 				<%: Take new snapshot %>
-			</p>
-			<p>
+			</div>
+			<div>
 				<div id="new_logical_volume_snapshot_slider-<%= line.logical_volume.name %>"></div>
-			</p>
-			<p>
+			</div>
+			<div>
 				<input id="new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>"
 				       style="font-weight:bold;"
 				       type="text"
 				       value="0" />
-			</p>
+			</div>
 
 			<script type="text/javascript">
 			jQuery.noConflict();
@@ -111,13 +111,13 @@
 			})(jQuery);
 			</script>
 
-			<p>
+			<div>
 				<input name="san.submit_logical_volume_snapshot_add-<%= line.logical_volume.name %>"
 				       src="<%=resource%>/cbi/add.gif"
 				       title="<%: Add snapshot %>"
 				       type="image"
 				       value="<%: Add snapshot %>" />
-			</p>
+			</div>
 		</td>
 	</tr>
 </table>
