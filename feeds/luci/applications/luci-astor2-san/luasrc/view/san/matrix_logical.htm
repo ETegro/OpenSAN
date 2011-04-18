@@ -47,10 +47,10 @@
 			<% end %>
 			<p>
 				<!-- TODO: TiBs and MiBs -->
-				<%= line.volume_group.allocated %>
+				<%= line.logical.volume_group.allocated %>
 				/
-				<%= line.volume_group.total %>
-				(<%= line.volume_group.percentage %> %)
+				<%= line.logical.volume_group.total %>
+				(<%= line.logical.volume_group.percentage %> %)
 			</p>
 			<p>
 				<label for="new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
