@@ -222,14 +222,19 @@ end
 
 function M.caller()
 	local logicals = einarc.Logical.list()
+	local physicals = einarc.Physical.list(),
 	local physical_volumes = lvm.PhysicalVolume.list()
+	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
+	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
+
+	-- Fill up physicals and progresses
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
 		logicals[ logical_id ].logical_volumes = device_lvms( logical.device, physical_volumes )
 	end
 	local matrix = M.overall( {
-		physicals = einarc.Physical.list(),
+		physicals = physicals,
 		logicals = logicals
 	} )
 	local FILTERS = {
