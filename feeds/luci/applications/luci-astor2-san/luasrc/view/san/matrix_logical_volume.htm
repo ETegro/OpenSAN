@@ -11,8 +11,8 @@
 			<%= line.logical_volume.size %>
 		</td>
 		<td>
-			<input name="san.submit_logical_volume_delete-<%= line.logical_volume.name %>"
-			       onclick=" if ( !confirm( '<%: Really delete logical volume drive? %>' ) )
+			<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
+			       onclick=" if ( !confirm( '<%: Really remove logical volume? %>' ) )
 					 return false;
 					 return true;"
 			       src="<%=resource%>/cbi/remove.gif"
