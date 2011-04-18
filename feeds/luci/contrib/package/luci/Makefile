@@ -323,7 +323,8 @@ endef
 
 $(eval $(call application,astor2-san,aStor2 SAN,\
 	+PACKAGE_luci-app-astor2-san:astor2-lua-common \
-	+PACKAGE_luci-app-astor2-san:astor2-lua-einarc))
+	+PACKAGE_luci-app-astor2-san:astor2-lua-einarc \
+	+PACKAGE_luci-app-astor2-san:astor2-lua-lvm))
 
 ### Hello World - luci application ###
 $(eval $(call application,helloworld,This is hello world application,\
