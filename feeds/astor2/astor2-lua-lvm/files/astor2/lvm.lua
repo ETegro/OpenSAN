@@ -188,7 +188,7 @@ function M.VolumeGroup.list( physical_volumes )
 		end
 		end
 	end
-	return common.values( volume_groups )
+	return common.values( volume_groups ) or {}
 end
 
 --- Create LogicalVolume on a VolumeGroup
@@ -284,7 +284,6 @@ end
 -- @param volume_groups VolumeGroups to check
 -- @return { LogicalVolume, LogicalVolume }
 function M.LogicalVolume.list( volume_groups )
-	assert( volume_groups and common.is_array( volume_groups ) )
 	local result = {}
 	local volume_groups_by_name = common.unique_keys( "name", volume_groups )
 	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
@@ -316,7 +315,7 @@ function M.LogicalVolume.list( volume_groups )
 			end
 		end
 	end
-	return common.values( result )
+	return common.values( result ) or {}
 end
 
 --- lvresize command frontend
