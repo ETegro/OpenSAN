@@ -274,6 +274,7 @@ $(eval $(call BuildPackage,perlbase-charnames))
 define Package/perlbase-class
 $(call Package/perlbase-template)
 TITLE:=Class perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-class/install
