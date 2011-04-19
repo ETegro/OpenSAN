@@ -30,8 +30,7 @@ define Package/iscsi-scst-userspace
 	         +perlbase-io \
 	         +perlbase-posix \
 	         +perlbase-selectsaver \
-	         +perlbase-xsloader \
-	         +perlbase-endef
+	         +perlbase-xsloader
 endef
 
 define Build/Compile
