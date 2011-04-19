@@ -19,7 +19,19 @@ define Package/iscsi-scst-userspace
 	CATEGORY:=Administration
 	TITLE:=SCST iSCSI target userspace programs
 	URL:=http://scst.sourceforge.net/
-	DEPENDS:=+kmod-iscsi-scst
+	DEPENDS:=+kmod-iscsi-scst \
+	         +perlbase-essential \
+	         +perlbase-symbol \
+	         +perlbase-autoloader \
+	         +perlbase-class \
+	         +perlbase-fcntl \
+	         +perlbase-file \
+	         +perlbase-getopt \
+	         +perlbase-io \
+	         +perlbase-posix \
+	         +perlbase-selectsaver \
+	         +perlbase-xsloader \
+	         +perlbase-endef
 endef
 
 define Build/Compile
@@ -38,4 +50,3 @@ define Package/iscsi-scst-userspace/install
 endef
 
 $(eval $(call BuildPackage,iscsi-scst-userspace))
-
