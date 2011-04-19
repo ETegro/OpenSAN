@@ -505,6 +505,9 @@ $(eval $(call theme,freifunk-hannover,Freifunk Hannover Theme,\
 $(eval $(call theme,freifunk-generic,Freifunk Generic Theme,\
         Manuel Munz <freifunk-at-somakoma-dot-de>))
 
+$(eval $(call theme,astor2-san, Theme for luci-astor2-san application,\
+	Vladimir Petukhov <vladimir-dot-petukhov-at-etegro-dot-com>))
+
 
 ### Translations ###
 define translation
