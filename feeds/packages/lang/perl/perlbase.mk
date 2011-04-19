@@ -1395,6 +1395,7 @@ $(eval $(call BuildPackage,perlbase-switch))
 define Package/perlbase-symbol
 $(call Package/perlbase-template)
 TITLE:=Symbol perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-symbol/install
