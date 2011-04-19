@@ -675,6 +675,21 @@ $(eval $(call BuildPackage,perlbase-fields))
 define Package/perlbase-file
 $(call Package/perlbase-template)
 TITLE:=File perl module
+DEPENDS+= +perlbase-essential \
+          +perlbase-class \
+          +perlbase-fcntl \
+          +perlbase-symbol \
+          +perlbase-posix \
+          +perlbase-config \
+          +perlbase-text \
+          +perlbase-cwd \
+          +perlbase-xsloader \
+          +perlbase-errno \
+          +perlbase-ipc \
+          +perlbase-locale \
+          +perlbase-module \
+          +perlbase-params \
+          +perlbase-filehandle
 endef
 
 define Package/perlbase-file/install
