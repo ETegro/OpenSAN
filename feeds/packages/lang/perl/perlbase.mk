@@ -823,6 +823,7 @@ $(eval $(call BuildPackage,perlbase-getcwd))
 define Package/perlbase-getopt
 $(call Package/perlbase-template)
 TITLE:=Getopt perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-getopt/install
