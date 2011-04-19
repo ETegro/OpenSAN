@@ -1,0 +1,6 @@
+#!/bin/sh
+uci batch <<-EOF
+	set luci.themes.astor2-san=/luci-static/astor2-san
+        commit luci
+EOF
+
