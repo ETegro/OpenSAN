@@ -636,6 +636,7 @@ $(eval $(call BuildPackage,perlbase-fatal))
 define Package/perlbase-fcntl
 $(call Package/perlbase-template)
 TITLE:=Fcntl perl module
+DEPENDS+= +perlbase-essential +perlbase-xsloader
 endef
 
 define Package/perlbase-fcntl/install
