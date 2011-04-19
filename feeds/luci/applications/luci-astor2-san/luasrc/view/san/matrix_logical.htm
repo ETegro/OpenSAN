@@ -39,7 +39,7 @@
 				<%= line.logical.volume_group.allocated %>
 				/
 				<%= line.logical.volume_group.total %>
-				(<%= line.logical.volume_group.percentage %> %)
+				(<%= line.logical.volume_group.percentage or "0" %> %)
 			</div>
 			<div>
 				<label for="san.new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
