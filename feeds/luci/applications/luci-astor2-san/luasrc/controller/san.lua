@@ -272,7 +272,7 @@ local function lvm_logical_volume_add( inputs )
 	assert( volume_group_name )
 
 	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
-	if not logical_volume_name then
+	if logical_volume_name == "" then
 		index_with_error( i18n("Volume name is not set") )
 	end
 	--TODO filter for logical_volume_name
