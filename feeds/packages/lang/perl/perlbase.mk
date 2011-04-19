@@ -1305,6 +1305,7 @@ $(eval $(call BuildPackage,perlbase-search))
 define Package/perlbase-selectsaver
 $(call Package/perlbase-template)
 TITLE:=SelectSaver perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-selectsaver/install
