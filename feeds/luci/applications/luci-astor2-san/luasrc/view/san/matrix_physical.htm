@@ -13,91 +13,51 @@
 			<a href="#" id="physical_info-<%= line.physical.id %>"><%= line.physical.id %></a>
 		</td>
 		<td><%= line.physical.model %></td>
-		<td><p title="<%= line.physical.size_mib %> <%: MiB %>"><%= line.physical.size %> <%: TiB %></div></td>
+		<td><span title="<%= line.physical.size_mib %> <%: MiB %>"><%= line.physical.size %> <%: TiB %></span></td>
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
-			<div>
-			<label for="physical_model-<%= line.physical.id %>"><%: Model %></label>
-			<input id="physical_model-<%= line.physical.id %>"
-			       name="physical_model-<%= line.physical.id %>"
-			       readonly="readonly"
-			       type="text"
-			       value="<%= line.physical.model %>" />
-			</div>
+			<ul>
+				<li><%: Model %>: <%= line.physical.model %></li>
+				<li><%: S/N %>: <%= line.physical.serial %></li>
+				<li><%: Revision %>: <%= line.physical.revision %></li>
+				<li><%: State %>: <%= line.physical.state %></li>
+				<li><%: Size %>: <%= line.physical.size %> (<%: TiB %>)</li>
 
-			<div>
-			<label for="physical_serial-<%= line.physical.id %>"><%: S/N %></label>
-			<input id="physical_serial-<%= line.physical.id %>"
-			       name="physical_serial-<%= line.physical.id %>"
-			       readonly="readonly"
-			       type="text"
-			       value="<%= line.physical.serial %>" />
-			</div>
-
-			<div>
-			<label for="physical_revision-<%= line.physical.id %>"><%: Revision %></label>
-			<input id="physical_revision-<%= line.physical.id %>"
-			       name="physical_revision-<%= line.physical.id %>"
-			       readonly="readonly"
-			       type="text"
-			       value="<%= line.physical.revision %>" />
-			</div>
-
-			<div>
-			<label for="physical_state-<%= line.physical.id %>"><%: State %></label>
-			<input id="physical_state-<%= line.physical.id %>"
-			       name="physical_state-<%= line.physical.id %>"
-			       readonly="readonly"
-			       type="text"
-			       value="<%= line.physical.state %>" />
-			</div>
-
-			<div>
-			<label for="physical_size-<%= line.physical.id %>"><%: Size %> (<%: TiB %>)</label>
-			<input id="physical_size-<%= line.physical.id %>"
-			       name="physical_size-<%= line.physical.id %>"
-			       readonly="readonly"
-			       title="<%= line.physical.size_mib %> <%: MiB %>"
-			       type="text"
-			       value="<%= line.physical.size %>" />
-			</div>
-			<% for _, this_line in ipairs( matrix_overall ) do %>
-				<% if this_line.logical then %>
-					<% if line.physical.state == "free" then %>
-					<div>
-					<label for="san.logical_id_hotspare-<%= line.physical.id %>"><%: Logical hotspare %></label>
-					<select id="san.logical_id_hotspare-<%= line.physical.id %>"
-						name="san.logical_id_hotspare-<%= line.physical.id %>"
-						size="1" >
-						<option value=""></option>
-						<% for _, option in ipairs( matrix_overall ) do %>
-							<% if option.logical then %>
-							<option value="<%= option.logical.id %>"><%= option.logical.id %></option>
-							<% end %>
+				<% for _, this_line in ipairs( matrix_overall ) do %>
+					<% if this_line.logical then %>
+						<% if line.physical.state == "free" then %>
+						<li><%: Logical hotspare %>: 
+							<select id="san.logical_id_hotspare-<%= line.physical.id %>"
+								name="san.logical_id_hotspare-<%= line.physical.id %>"
+								size="1" >
+								<option value=""></option>
+								<% for _, option in ipairs( matrix_overall ) do %>
+									<% if option.logical then %>
+									<option value="<%= option.logical.id %>"><%= option.logical.id %></option>
+									<% end %>
+								<% end %>
+							</select>
+							<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+							       name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+							       src="<%=resource%>/cbi/add.gif"
+							       title="<%: Add hotspare %>"
+							       type="image"
+							       value="<%: Add hotspare %>" />
+						</li>
 						<% end %>
-					</select>
-					</div>
-					<div>
-					<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>"
-					       name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
-					       src="<%=resource%>/cbi/add.gif"
-					       title="<%: Add hotspare %>"
-					       type="image"
-					       value="<%: Add hotspare %>" />
-					</div>
-
-					<% elseif line.physical.state == "hotspare" then %>
-					<div>
-					<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
-					       src="<%=resource%>/cbi/remove.gif"
-					       title="<%: Remove hotspare %>"
-					       type="image"
-					       value="<%: Remove hotspare %>" />
-					</div>
+						<% if line.physical.state == "hotspare" then %>
+						<li>
+							<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
+							       src="<%=resource%>/cbi/remove.gif"
+							       title="<%: Remove hotspare %>"
+							       type="image"
+							       value="<%: Remove hotspare %>" />
+						</li>
+						<% end %>
 					<% end %>
 				<% end %>
-			<% end %>
+			</ul>
 		</td>
 	</tr>
 </table>
