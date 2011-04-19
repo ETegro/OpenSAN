@@ -920,6 +920,15 @@ $(eval $(call BuildPackage,perlbase-integer))
 define Package/perlbase-io
 $(call Package/perlbase-template)
 TITLE:=IO perl module
+DEPENDS+= +perlbase-essential \
+          +perlbase-xsloader \
+          +perlbase-file \
+          +perlbase-tie \
+          +perlbase-selectsaver \
+          +perlbase-symbol \
+          +perlbase-fcntl \
+          +perlbase-errno \
+          +perlbase-socket
 endef
 
 define Package/perlbase-io/install
