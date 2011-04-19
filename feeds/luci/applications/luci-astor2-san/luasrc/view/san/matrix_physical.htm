@@ -62,37 +62,41 @@
 			       type="text"
 			       value="<%= line.physical.size %>" />
 			</div>
-			<% if line.physical.state == "free" then %>
-			<div>
-			<label for="san.logical_id_hotspare-<%= line.physical.id %>"><%: Logical hotspare %></label>
-			<select id="san.logical_id_hotspare-<%= line.physical.id %>"
-				name="san.logical_id_hotspare-<%= line.physical.id %>"
-				size="1" >
-				<option value=""></option>
-				<% for _, this_line in ipairs( matrix_overall ) do %>
-					<% if this_line.logical then %>
-					<option value="<%= this_line.logical.id %>"><%= this_line.logical.id %></option>
+			<% for _, this_line in ipairs( matrix_overall ) do %>
+				<% if this_line.logical then %>
+					<% if line.physical.state == "free" then %>
+					<div>
+					<label for="san.logical_id_hotspare-<%= line.physical.id %>"><%: Logical hotspare %></label>
+					<select id="san.logical_id_hotspare-<%= line.physical.id %>"
+						name="san.logical_id_hotspare-<%= line.physical.id %>"
+						size="1" >
+						<option value=""></option>
+						<% for _, option in ipairs( matrix_overall ) do %>
+							<% if option.logical then %>
+							<option value="<%= option.logical.id %>"><%= option.logical.id %></option>
+							<% end %>
+						<% end %>
+					</select>
+					</div>
+					<div>
+					<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+					       name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+					       src="<%=resource%>/cbi/add.gif"
+					       title="<%: Add hotspare %>"
+					       type="image"
+					       value="<%: Add hotspare %>" />
+					</div>
+
+					<% elseif line.physical.state == "hotspare" then %>
+					<div>
+					<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
+					       src="<%=resource%>/cbi/remove.gif"
+					       title="<%: Remove hotspare %>"
+					       type="image"
+					       value="<%: Remove hotspare %>" />
+					</div>
 					<% end %>
 				<% end %>
-			</select>
-			</div>
-			<div>
-			<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>"
-			       name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
-			       src="<%=resource%>/cbi/add.gif"
-			       title="<%: Add hotspare %>"
-			       type="image"
-			       value="<%: Add hotspare %>" />
-			</div>
-
-			<% elseif line.physical.state == "hotspare" then %>
-			<div>
-			<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
-			       src="<%=resource%>/cbi/remove.gif"
-			       title="<%: Remove hotspare %>"
-			       type="image"
-			       value="<%: Remove hotspare %>" />
-			</div>
 			<% end %>
 		</td>
 	</tr>
