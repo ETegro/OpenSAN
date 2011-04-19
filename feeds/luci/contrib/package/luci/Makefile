@@ -324,7 +324,8 @@ endef
 $(eval $(call application,astor2-san,aStor2 SAN,\
 	+PACKAGE_luci-app-astor2-san:astor2-lua-common \
 	+PACKAGE_luci-app-astor2-san:astor2-lua-einarc \
-	+PACKAGE_luci-app-astor2-san:astor2-lua-lvm))
+	+PACKAGE_luci-app-astor2-san:astor2-lua-lvm \
+	+PACKAGE_luci-theme-astor2))
 
 ### Hello World - luci application ###
 $(eval $(call application,helloworld,This is hello world application,\
@@ -505,7 +506,7 @@ $(eval $(call theme,freifunk-hannover,Freifunk Hannover Theme,\
 $(eval $(call theme,freifunk-generic,Freifunk Generic Theme,\
         Manuel Munz <freifunk-at-somakoma-dot-de>))
 
-$(eval $(call theme,astor2-san, Theme for luci-astor2-san application,\
+$(eval $(call theme,astor2, Theme for luci-astor2-san application,\
 	Vladimir Petukhov <vladimir-dot-petukhov-at-etegro-dot-com>))
 
 
