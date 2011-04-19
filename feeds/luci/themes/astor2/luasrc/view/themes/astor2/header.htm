@@ -118,11 +118,11 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
 <!--aStor2-theme-insert--> 
-<link rel="stylesheet" href="<%=media%>/css/san.css" type="text/css" media="screen" /> 
-<link rel="stylesheet" href="<%=media%>/css/jquery-ui/jquery.ui.all.css" type="text/css" media="screen" /> 
-<script type="text/javascript" src="<%=media%>/san/js/jquery-1.5.2.js"></script> 
-<script type="text/javascript" src="<%=media%>/san/js/jquery-ui-1.8.11.js"></script> 
-<script type="text/javascript" src="<%=media%>/san/js/san.js"></script> 
+<link rel="stylesheet" href="<%=media%>/css/jquery-ui/jquery.ui.all.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="<%=media%>/css/san.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<%=media%>/js/jquery-1.5.2.js"></script>
+<script type="text/javascript" src="<%=media%>/js/jquery-ui-1.8.11.js"></script>
+<script type="text/javascript" src="<%=media%>/js/san.js"></script>
 <!--end-of-aStor2-theme-insert-->
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
