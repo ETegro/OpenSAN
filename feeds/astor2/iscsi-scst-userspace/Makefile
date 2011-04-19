@@ -20,6 +20,7 @@ define Package/iscsi-scst-userspace
 	TITLE:=SCST iSCSI target userspace programs
 	URL:=http://scst.sourceforge.net/
 	DEPENDS:=+kmod-iscsi-scst \
+		 +perl \
 	         +perlbase-essential \
 	         +perlbase-symbol \
 	         +perlbase-autoloader \
