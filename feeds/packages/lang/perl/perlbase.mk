@@ -1206,6 +1206,11 @@ $(eval $(call BuildPackage,perlbase-pod))
 define Package/perlbase-posix
 $(call Package/perlbase-template)
 TITLE:=POSIX perl module
+DEPENDS+= +perlbase-essential \
+          +perlbase-xsloader \
+          +perlbase-autoloader \
+          +perlbase-fcntl \
+          +perlbase-tie
 endef
 
 define Package/perlbase-posix/install
