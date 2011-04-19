@@ -94,6 +94,7 @@ $(eval $(call BuildPackage,perlbase-attrs))
 define Package/perlbase-autoloader
 $(call Package/perlbase-template)
 TITLE:=AutoLoader perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-autoloader/install
