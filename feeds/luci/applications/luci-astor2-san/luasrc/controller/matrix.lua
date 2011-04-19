@@ -105,7 +105,7 @@ function M.overall( data )
 end
 
 function M.mib2tib( size )
-	return string.sub( string.format( "%0.3f", size / 2^30 ), 1, -2 )
+	return string.sub( string.format( "%0.3f", size / 2^20 ), 1, -2 )
 end
 
 local function check_highlights_attribute( obj )
@@ -171,7 +171,11 @@ end
 function M.filter_volume_group_percentage( matrix )
 	for _, line in ipairs( matrix ) do
 		if line.logical_volume then
-			line.logical_volume.percentage = math.ceil( 100 * line.logical_volume.allocated / line.logical_volume.total )
+			local percentage = math.ceil( 100 * line.logical_volume.volume_group.allocated /
+			                                    line.logical_volume.volume_group.total )
+			-- Check for zero devision returning infinity
+			if percentage == math.huge then percentage = 0 end
+			line.logical_volume.volume_group.percentage = percentage
 		end
 	end
 	return matrix
@@ -180,47 +184,72 @@ end
 local function filter_mib2tib( matrix )
 	for _, line in ipairs( matrix ) do
 		if line.physical then
+			line.physical.size_mib = line.physical.size
 			line.physical.size = M.mib2tib( line.physical.size )
 		end
 		if line.logical then
+			line.logical.capacity_mib = line.logical.capacity
 			line.logical.capacity = M.mib2tib( line.logical.capacity )
 		end
 		if line.logical_volume then
+			line.logical_volume.size_mib = line.logical_volume.size
 			line.logical_volume.size = M.mib2tib( line.logical_volume.size )
 		end
 	end
 	return matrix
 end
 
-local function device_lvms( device, physical_volumes )
-	local physical_volumes = {}
-	if not physical_volumes then
-		physical_volumes = lvm.PhysicalVolume.list()
-	end
-	for _, physical_volume in ipairs( physical_volumes ) do
-		if physical_volume.device == device then
-			physical_volumes[ #physical_volumes + 1 ] = physical_volume
+local function filter_add_logical_id_to_physical( matrix )
+	for _, line in ipairs( matrix ) do
+		if line.logical then
+			for _, physical in pairs( line.logical.physicals ) do
+				physical.logical_id = line.logical.id
+			end
 		end
 	end
-	return lvm.LogicalVolume.list( lvm.VolumeGroup.list( physical_volumes ) )
+	return matrix
+end
+
+local function logical_volume_group( logical, volume_groups )
+	for _, volume_group in ipairs( volume_groups ) do
+		if volume_group.physical_volumes[1].device == logical.device then
+			return volume_group
+		end
+	end
+end
+
+local function logical_logical_volumes( logical, logical_volumes )
+	local logical_volumes_needed = {}
+	for _, logical_volume in ipairs( logical_volumes ) do
+		if logical_volume.volume_group.physical_volumes[1].device == logical.device then
+			logical_volumes_needed[ #logical_volumes_needed + 1 ] = logical_volume
+		end
+	end
+	return logical_volumes_needed
 end
 
 function M.caller()
 	local logicals = einarc.Logical.list()
+	local physicals = einarc.Physical.list()
 	local physical_volumes = lvm.PhysicalVolume.list()
+	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
+	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
+
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
-		logicals[ logical_id ].logical_volumes = device_lvms( logical.device, physical_volumes )
+		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
+		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
 	end
 	local matrix = M.overall( {
-		physicals = einarc.Physical.list(),
+		physicals = physicals,
 		logicals = logicals
 	} )
 	local FILTERS = {
 		M.filter_borders_highlight,
 		M.filter_volume_group_percentage,
-		filter_mib2tib
+		filter_mib2tib,
+		filter_add_logical_id_to_physical
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)

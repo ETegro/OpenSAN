@@ -10,19 +10,20 @@
 		<td><%: RAID %> <%= line.logical.level %></td>
 		<td><%= line.logical.state %></td>
 		<% if line.logical.progress then %>
-			<td><%= line.logical.progress %> %</td>
+			<td>(<%= line.logical.progress %> %)</td>
 		<% end %>
 		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
 			<td>
-			<input name="san.submit_logical_remove-<%= line.logical.id %>"
+			<input name="san.submit_logical_delete-<%= line.logical.id %>"
 			       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
 					 return false;
 					 return true;"
-			       type="submit"
+			       src="<%=resource%>/cbi/remove.gif"
+			       type="image"
+			       title="<%: Remove %>"
 			       value="<%: Remove %>" />
 			</td>
 		<% end %>
-
 	</tr>
 	<tr class="to_hide">
 		<% local local_colspan = 4
@@ -33,27 +34,63 @@
 			local_colspan = local_colspan + 1
 		end %>
 		<td colspan="<%= local_colspan %>">
-			<% if line.logical.progress then %>
-			<p>
-			<label for="logical_progress-<%= line.logical.id %>"><%: Progress %> (%)</label>
-			<input id="logical_progress-<%= line.logical.id %>"
-			       name="logical_progress-<%= line.logical.id %>"
-			       readonly="readonly"
-			       type="text"
-			       value="<%= line.logical.progress %>" />
-			</p>
-			<% end %>
+			<div>
+				<!-- TODO: TiBs and MiBs -->
+				<%= line.logical.volume_group.allocated %>
+				/
+				<%= line.logical.volume_group.total %>
+				(<%= line.logical.volume_group.percentage or "0" %> %)
+			</div>
+			<div>
+				<label for="san.new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
+				<input id="san.new_volume_name-<%= line.logical.id %>"
+				       name="san.new_volume_name-<%= line.logical.id %>"
+				       type="text"
+				       value="" />
+			</div>
 
-			<p>
-				xxx /<%= line.logical.capacity %> <%: TiB %>
-			</p>
+			<div id="new_volume_slider-<%= line.logical.id %>"></div>
 
-			<label for="new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
-			<input id="new_volume_name-<%= line.logical.id %>"
-			       name="new_volume_name-<%= line.logical.id %>"
-			       type="text"
-			       value="" />
-			</p>
+			<div>
+				<input id="san.new_volume_slider_size-<%= line.logical.id %>"
+				       class="new_volume_slider_size-<%= line.logical.id %>"
+				       name="san.new_volume_slider_size-<%= line.logical.id %>"
+				       readonly="readonly"
+				       type="text"
+				       value="0" />
+			</div>
+
+			<script type="text/javascript">
+			jQuery.noConflict();
+			(function($){
+
+				var slider_name = '#new_volume_slider-<%= line.logical.id %>';
+				var slider_input_name = '.new_volume_slider_size-<%= line.logical.id %>';
+
+				$( slider_name ).slider({
+					orientation: 'horizontal',
+					min: 1,
+					max: <%= line.logical.capacity_mib %>,
+					range: 'min',
+					value: <%= line.logical.capacity_mib %> / 2,
+					slide: function( event, ui ) {
+						$( slider_input_name ).val( ui.value );
+					}
+				});
+
+				$( slider_input_name )
+					.val( $( slider_name )
+					.slider( 'value' ) );
+			})(jQuery);
+			</script>
+
+			<div>
+				<input name="san.submit_logical_volume_add-<%= line.logical.id %>-<%= line.logical.volume_group.name %>"
+				       src="<%=resource%>/cbi/add.gif"
+				       title="<%: Add logical volume %>"
+				       type="image"
+				       value="<%: Add logical volume %>" />
+			</div>
 		</td>
 	</tr>
 </table>

@@ -1,8 +1,6 @@
 $.noConflict();
 jQuery(document).ready( function($) {
 
-// effects
-
 // Hide all elements with class "to_hide*".
 $( '[ class ^= "to_hide" ]' ).hide();
 
@@ -66,36 +64,5 @@ $( 'form a[ id *= "ical_info-" ]' ).click( function() {
 		$( parent_selector ).fadeOut( 'fast' );
 	}
 } );
-
-//styles
-
-// Physical border
-$( '.physical-highlight-top' ).css( { 'border-top' : '5px solid #00CC00' } );
-$( '.physical-highlight-right' ).css( { 'border-right' : '5px solid #00CC00' } );
-$( '.physical-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00CC00' } );
-$( '.physical-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
-// Physical background
-$( '.physical-background-state-allocated' ).css( { 'background-color' : '#99FF99' } );
-$( '.physical-background-state-failed' ).css( { 'background-color' : '#FF2211' } );
-$( '.physical-background-state-free' ).css( { 'background-color' : '#CCCCCC' } );
-$( '.physical-background-state-hotspare' ).css( { 'background-color' : '#FFCC22' } );
-
-// Logical border
-$( '.logical-highlight-top' ).css( { 'border-top' : '5px solid #00CC00' } );
-$( '.logical-highlight-right' ).css( { 'border-right' : '5px solid #00CC00' } );
-$( '.logical-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00CC00' } );
-$( '.logical-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
-
-// Logical background
-$( '.logical-background-state-normal' ).css( { 'background-color' : '#99FF99' } );
-$( '.logical-background-state-degraded' ).css( { 'background-color' : '#FF2211' } );
-$( '.logical-background-state-initializing' ).css( { 'background-color' : '#EEFF44' } );
-$( '.logical-background-state-rebuilding' ).css( { 'background-color' : '#FFCC22' } );
-
-// Logical-volume border
-$( '.logical_volume-highlight-top' ).css( { 'border-top' : '5px solid #00CC00' } );
-$( '.logical_volume-highlight-right' ).css( { 'border-right' : '5px solid #00CC00' } );
-$( '.logical_volume-highlight-bottom' ).css( { 'border-bottom' : '5px solid #00CC00' } );
-$( '.logical_volume-highlight-left' ).css( { 'border-left' : '5px solid #00CC00' } );
 
 });

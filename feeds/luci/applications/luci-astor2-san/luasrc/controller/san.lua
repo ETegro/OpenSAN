@@ -153,14 +153,14 @@ local function einarc_logical_add( inputs, drives )
 	index_with_error( message_error )
 end
 
-local function einarc_logical_remove( inputs )
+local function einarc_logical_delete( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
 	local logical_id = nil
 	for k, v in pairs( inputs ) do
 		if not logical_id then
-			logical_id = string.match( k, "^submit_logical_remove.(%d+)$" )
+			logical_id = string.match( k, "^submit_logical_delete.(%d+)$" )
 		end
 	end
 	assert( logical_id )
@@ -206,6 +206,114 @@ local function einarc_logical_remove( inputs )
 	index_with_error( message_error )
 end
 
+local function einarc_logical_hotspare_add( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local physical_id = nil
+
+	for k, v in pairs( inputs ) do
+		if not physical_id then
+			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
+		end
+	end
+
+	assert( physical_id )
+	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id ]
+
+	logical_id = tonumber( logical_id )
+	if not logical_id then
+		index_with_error( i18n("Logical not selected") )
+	end
+
+	-- Let's call einarc at last
+	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
+	if not return_code then
+		message_error = i18n("Failed to add hotspare disk")
+	end
+	index_with_error( message_error )
+end
+
+local function einarc_logical_hotspare_delete( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local physical_id = nil
+	local logical_id = nil
+
+	for k, v in pairs( inputs ) do
+		if not physical_id then
+			logical_id, physical_id = string.match( k, "^submit_logical_hotspare_delete.(%d+).([%d:]+)$" )
+		end
+	end
+	assert( logical_id )
+	assert( physical_id )
+	logical_id = tonumber( logical_id )
+
+	-- Let's call einarc at last
+	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
+	if not return_code then
+		message_error = i18n("Failed to delete hotspare disk")
+	end
+	index_with_error( message_error )
+end
+
+local function lvm_logical_volume_add( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local volume_group_name = nil
+	local logical_id = nil
+
+	for k, v in pairs( inputs ) do
+		if not volume_group_name then
+			-- san.submit_logical_volume_add-450-vg1302871899
+			logical_id, volume_group_name = string.match( k, "^submit_logical_volume_add.(%d+).(vg%d+)$" )
+		end
+	end
+	assert( logical_id )
+	assert( volume_group_name )
+
+	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
+	if logical_volume_name == "" then
+		index_with_error( i18n("Volume name is not set") )
+	end
+	--TODO filter for logical_volume_name
+	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
+	logical_volume_size = tonumber( logical_volume_size )
+	assert( common.is_positive( logical_volume_size ) )
+
+	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
+		                           { name =  volume_group_name },
+		                           logical_volume_name,
+		                           logical_volume_size )
+	if not return_code then
+		message_error = i18n("Failed to add logical volume")
+	end
+	index_with_error( message_error )
+end
+
+local function lvm_logical_volume_remove( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local volume_group_name = nil
+	local logical_volume_name = nil
+
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then -- edit
+			-- san.submit_logical_volume_remove-vg1302871899-lvname_new
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv([A-Za-z0-9\-_#%:]+)$" )
+		end
+	end
+	assert( volume_group_name )
+	assert( logical_volume_name )
+
+	local return_code, result = pcall( lvm.LogicalVolume.remove,
+		                           { volume_group = { name = volume_group_name },
+		                             name = logical_volume_name } )
+	if not return_code then
+		message_error = i18n("Failed to remove logical volume")
+	end
+	index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
@@ -217,14 +325,26 @@ function index_overall()
 		message_error = message_error } )
 end
 
+local function decoded_inputs( inputs )
+	local new_inputs = {}
+	for k, v in pairs( inputs ) do
+		new_inputs[ luci.http.protocol.urldecode( k ) ] = v
+	end
+	return new_inputs
+end
+
 function perform()
-	local inputs = luci.http.formvaluetable( "san" )
+	local inputs = decoded_inputs( luci.http.formvaluetable( "san" ) )
 	local i18n = luci.i18n.translate
 	local get = luci.http.formvalue
 
 	local SUBMIT_MAP = {
-		logical_add = function() einarc_logical_add( inputs, get("san.physical_id") ) end,
-		logical_remove = function() einarc_logical_remove( inputs ) end
+		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
+		logical_delete = function() einarc_logical_delete( inputs ) end,
+		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
+		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
+		logical_volume_add = function() lvm_logical_volume_add( inputs ) end,
+		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do

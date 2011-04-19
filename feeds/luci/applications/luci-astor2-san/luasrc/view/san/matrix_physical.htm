@@ -13,54 +13,87 @@
 			<a href="#" id="physical_info-<%= line.physical.id %>"><%= line.physical.id %></a>
 		</td>
 		<td><%= line.physical.model %></td>
-		<td><%= line.physical.size %> <%: TiB %></td>
+		<td><p title="<%= line.physical.size_mib %> <%: MiB %>"><%= line.physical.size %> <%: TiB %></div></td>
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
-			<p>
+			<div>
 			<label for="physical_model-<%= line.physical.id %>"><%: Model %></label>
 			<input id="physical_model-<%= line.physical.id %>"
 			       name="physical_model-<%= line.physical.id %>"
 			       readonly="readonly"
 			       type="text"
 			       value="<%= line.physical.model %>" />
-			</p>
+			</div>
 
-			<p>
+			<div>
 			<label for="physical_serial-<%= line.physical.id %>"><%: S/N %></label>
 			<input id="physical_serial-<%= line.physical.id %>"
 			       name="physical_serial-<%= line.physical.id %>"
 			       readonly="readonly"
 			       type="text"
 			       value="<%= line.physical.serial %>" />
-			</p>
+			</div>
 
-			<p>
+			<div>
 			<label for="physical_revision-<%= line.physical.id %>"><%: Revision %></label>
 			<input id="physical_revision-<%= line.physical.id %>"
 			       name="physical_revision-<%= line.physical.id %>"
 			       readonly="readonly"
 			       type="text"
 			       value="<%= line.physical.revision %>" />
-			</p>
+			</div>
 
-			<p>
+			<div>
 			<label for="physical_state-<%= line.physical.id %>"><%: State %></label>
 			<input id="physical_state-<%= line.physical.id %>"
 			       name="physical_state-<%= line.physical.id %>"
 			       readonly="readonly"
 			       type="text"
 			       value="<%= line.physical.state %>" />
-			</p>
+			</div>
 
-			<p>
+			<div>
 			<label for="physical_size-<%= line.physical.id %>"><%: Size %> (<%: TiB %>)</label>
 			<input id="physical_size-<%= line.physical.id %>"
 			       name="physical_size-<%= line.physical.id %>"
 			       readonly="readonly"
+			       title="<%= line.physical.size_mib %> <%: MiB %>"
 			       type="text"
 			       value="<%= line.physical.size %>" />
-			</p>
+			</div>
+			<% if line.physical.state == "free" then %>
+			<div>
+			<label for="san.logical_id_hotspare-<%= line.physical.id %>"><%: Logical hotspare %></label>
+			<select id="san.logical_id_hotspare-<%= line.physical.id %>"
+				name="san.logical_id_hotspare-<%= line.physical.id %>"
+				size="1" >
+				<option value=""></option>
+				<% for _, this_line in ipairs( matrix_overall ) do %>
+					<% if this_line.logical then %>
+					<option value="<%= this_line.logical.id %>"><%= this_line.logical.id %></option>
+					<% end %>
+				<% end %>
+			</select>
+			</div>
+			<div>
+			<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+			       name="san.submit_logical_hotspare_add-<%= line.physical.id %>"
+			       src="<%=resource%>/cbi/add.gif"
+			       title="<%: Add hotspare %>"
+			       type="image"
+			       value="<%: Add hotspare %>" />
+			</div>
+
+			<% elseif line.physical.state == "hotspare" then %>
+			<div>
+			<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
+			       src="<%=resource%>/cbi/remove.gif"
+			       title="<%: Remove hotspare %>"
+			       type="image"
+			       value="<%: Remove hotspare %>" />
+			</div>
+			<% end %>
 		</td>
 	</tr>
 </table>
