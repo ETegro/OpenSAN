@@ -18,6 +18,10 @@
 */
 @charset "UTF-8";
 
+/* Body elemets */
+
+ul, li { list-style: none; }
+
 /* Body classes */
 
 .inline { display: inline-block; }
