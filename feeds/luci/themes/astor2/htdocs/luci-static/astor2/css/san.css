@@ -18,11 +18,20 @@
 */
 @charset "UTF-8";
 
+/* Body elemets */
+
+ul, li { list-style: none; }
+
+/* Body classes */
+
+.inline { display: inline-block; }
+
 /* Main table */
 
 form table tbody tr td { width: 25%; }
 
 /* Matrix */
+
 
 /* Physicals */
 .physical-highlight-top { border-top: 5px solid #00CC00; }

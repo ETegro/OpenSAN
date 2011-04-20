@@ -7,6 +7,7 @@
 
    documentation_adding
    github/index
+   git/index
    coding/index
    openwrt/index
    luci/index
