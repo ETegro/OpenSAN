@@ -21,17 +21,9 @@ define Package/iscsi-scst-userspace
 	URL:=http://scst.sourceforge.net/
 	DEPENDS:=+kmod-iscsi-scst \
 		 +perl \
-	         +perlbase-essential \
-	         +perlbase-symbol \
-	         +perlbase-autoloader \
-	         +perlbase-class \
-	         +perlbase-fcntl \
 	         +perlbase-file \
 	         +perlbase-getopt \
-	         +perlbase-io \
-	         +perlbase-posix \
-	         +perlbase-selectsaver \
-	         +perlbase-xsloader
+	         +perlbase-io
 endef
 
 define Build/Compile
