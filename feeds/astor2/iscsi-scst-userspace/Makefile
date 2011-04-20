@@ -37,12 +37,12 @@ endef
 
 define Package/iscsi-scst-userspace/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_DIR) $(1)/usr/lib/perl5/5.10/
+	$(INSTALL_DIR) $(1)/usr/lib/perl5/5.10/SCST
 	
 	$(CP) $(PKG_BUILD_DIR)/iscsi-scst/usr/iscsi-scst-adm $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/iscsi-scst/usr/iscsi-scstd $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/scstadmin/scstadmin/scstadmin $(1)/usr/sbin/
-	$(CP) $(PKG_BUILD_DIR)/scstadmin/scstadmin/scst-0.9.00/lib/SCST/SCST.pm $(1)/usr/lib/perl5/5.10/
+	$(CP) $(PKG_BUILD_DIR)/scstadmin/scstadmin/scst-0.9.00/lib/SCST/SCST.pm $(1)/usr/lib/perl5/5.10/SCST
 endef
 
 $(eval $(call BuildPackage,iscsi-scst-userspace))
