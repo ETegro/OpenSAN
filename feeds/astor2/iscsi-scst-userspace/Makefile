@@ -1,5 +1,5 @@
-
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=iscsi-scst-userspace
 PKG_REV:=3263
@@ -35,14 +35,18 @@ define Package/iscsi-scst-userspace
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		scstadm \
+	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+		KDIR="$(LINUX_DIR)" \
+-               CC="$(TARGET_CC)" \
+-               scstadm \
+		scst \
 		iscsi
 endef
 
 define Package/iscsi-scst-userspace/install
 	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/lib/perl5/5.10/
+	
 	$(CP) $(PKG_BUILD_DIR)/iscsi-scst/usr/iscsi-scst-adm $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/iscsi-scst/usr/iscsi-scstd $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/scstadmin/scstadmin/scstadmin $(1)/usr/sbin/
