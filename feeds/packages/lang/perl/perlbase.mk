@@ -94,6 +94,7 @@ $(eval $(call BuildPackage,perlbase-attrs))
 define Package/perlbase-autoloader
 $(call Package/perlbase-template)
 TITLE:=AutoLoader perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-autoloader/install
@@ -274,6 +275,7 @@ $(eval $(call BuildPackage,perlbase-charnames))
 define Package/perlbase-class
 $(call Package/perlbase-template)
 TITLE:=Class perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-class/install
@@ -636,6 +638,7 @@ $(eval $(call BuildPackage,perlbase-fatal))
 define Package/perlbase-fcntl
 $(call Package/perlbase-template)
 TITLE:=Fcntl perl module
+DEPENDS+= +perlbase-essential +perlbase-xsloader
 endef
 
 define Package/perlbase-fcntl/install
@@ -672,6 +675,21 @@ $(eval $(call BuildPackage,perlbase-fields))
 define Package/perlbase-file
 $(call Package/perlbase-template)
 TITLE:=File perl module
+DEPENDS+= +perlbase-essential \
+          +perlbase-class \
+          +perlbase-fcntl \
+          +perlbase-symbol \
+          +perlbase-posix \
+          +perlbase-config \
+          +perlbase-text \
+          +perlbase-cwd \
+          +perlbase-xsloader \
+          +perlbase-errno \
+          +perlbase-ipc \
+          +perlbase-locale \
+          +perlbase-module \
+          +perlbase-params \
+          +perlbase-filehandle
 endef
 
 define Package/perlbase-file/install
@@ -805,6 +823,7 @@ $(eval $(call BuildPackage,perlbase-getcwd))
 define Package/perlbase-getopt
 $(call Package/perlbase-template)
 TITLE:=Getopt perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-getopt/install
@@ -901,6 +920,15 @@ $(eval $(call BuildPackage,perlbase-integer))
 define Package/perlbase-io
 $(call Package/perlbase-template)
 TITLE:=IO perl module
+DEPENDS+= +perlbase-essential \
+          +perlbase-xsloader \
+          +perlbase-file \
+          +perlbase-tie \
+          +perlbase-selectsaver \
+          +perlbase-symbol \
+          +perlbase-fcntl \
+          +perlbase-errno \
+          +perlbase-socket
 endef
 
 define Package/perlbase-io/install
@@ -1188,6 +1216,11 @@ $(eval $(call BuildPackage,perlbase-pod))
 define Package/perlbase-posix
 $(call Package/perlbase-template)
 TITLE:=POSIX perl module
+DEPENDS+= +perlbase-essential \
+          +perlbase-xsloader \
+          +perlbase-autoloader \
+          +perlbase-fcntl \
+          +perlbase-tie
 endef
 
 define Package/perlbase-posix/install
@@ -1272,6 +1305,7 @@ $(eval $(call BuildPackage,perlbase-search))
 define Package/perlbase-selectsaver
 $(call Package/perlbase-template)
 TITLE:=SelectSaver perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-selectsaver/install
@@ -1392,6 +1426,7 @@ $(eval $(call BuildPackage,perlbase-switch))
 define Package/perlbase-symbol
 $(call Package/perlbase-template)
 TITLE:=Symbol perl module
+DEPENDS+= +perlbase-essential
 endef
 
 define Package/perlbase-symbol/install

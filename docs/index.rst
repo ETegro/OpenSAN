@@ -11,5 +11,6 @@
    coding/index
    openwrt/index
    luci/index
+   scst/index
 
 * :ref:`search`
