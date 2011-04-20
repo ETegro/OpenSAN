@@ -29,8 +29,8 @@ endef
 define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		KDIR="$(LINUX_DIR)" \
--               CC="$(TARGET_CC)" \
--               scstadm \
+		CC="$(TARGET_CC)" \
+		scstadm \
 		scst \
 		iscsi
 endef
