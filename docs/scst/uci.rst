@@ -10,8 +10,8 @@ UCI SCST подсистемы
     option "name" "foobar pattern name"
     option "targetdriver" "iscsi"
     option "lun" "2"
-    option "enabled" "1"
-    option "readonly" "0"
+    option "enabled" "true"
+    option "readonly" "false"
     option "filename" "/dev/vg1303136641/volname"
 
 Также имеется ряд тезисов:
