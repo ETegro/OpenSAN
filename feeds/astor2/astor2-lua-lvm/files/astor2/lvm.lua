@@ -364,14 +364,7 @@ function M.Snapshot:is_snapshot()
 	return true
 end
 
---- Remove Snapshot
-function M.Snapshot:remove()
-	assert( self.volume_group )
-	assert( self.name )
-	common.system_succeed( "lvm lvremove -f /dev/" ..
-	                       self.volume_group.name .. "/" ..
-	                       self.name )
-end
+M.Snapshot.remove = M.LogicalVolume.remove
 
 --- Snapshot resize
 -- @param size New wished size
