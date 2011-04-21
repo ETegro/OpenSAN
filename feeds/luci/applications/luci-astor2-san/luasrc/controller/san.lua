@@ -343,6 +343,24 @@ local function lvm_logical_volume_resize( inputs )
 	index_with_error( message_error )
 end
 
+local function lvm_logical_volume_snapshot_add( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local logical_volume_name = nil
+	local snapshot_size = nil
+	local logical_volume_device = nil
+
+	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
+		                           { name = logical_volume_name,
+		                             device = logical_volume_device },
+		                           snapshot_size )
+	if not return_code then
+		message_error = i18n("Failed to create snapshot." .. " Code:" .. result)
+	end
+	index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
