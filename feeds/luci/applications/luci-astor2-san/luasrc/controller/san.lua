@@ -343,6 +343,36 @@ local function lvm_logical_volume_resize( inputs )
 	index_with_error( message_error )
 end
 
+local function lvm_logical_volume_snapshot_add( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local volume_group_name = nil
+	local logical_volume_name = nil
+
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then
+			-- TODO regexp from astor2.lvm
+			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).([A-Za-z0-9\-_#%:]+)$" )
+		end
+	end
+	assert( volume_group_name )
+	assert( logical_volume_name )
+
+	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
+	snapshot_size = tonumber( snapshot_size )
+	assert( common.is_positive( snapshot_size ) )
+
+	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
+		                           { name = logical_volume_name,
+		                             device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name },
+		                           snapshot_size )
+	if not return_code then
+		message_error = i18n("Failed to create snapshot." .. " Code: " .. result)
+	end
+	index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
@@ -374,7 +404,8 @@ function perform()
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
-		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end
+		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
+		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do

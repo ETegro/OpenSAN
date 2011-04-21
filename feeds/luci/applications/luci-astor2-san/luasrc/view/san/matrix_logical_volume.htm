@@ -8,7 +8,7 @@
 			<%= line.logical_volume.name %>
 		</td>
 		<td>
-			<p title="<%= line.logical_volume.size_mib %> <%: MiB %>"><%= line.logical_volume.size %> <%: TiB %></p>
+			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>"><%= line.logical_volume.size %> <%: TiB %></span>
 		</td>
 		<td>
 			<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
@@ -26,9 +26,7 @@
 			<div>
 				<%: Resize logical volume %>
 			</div>
-			<div>
-				<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
-			</div>
+			<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
 			<div>
 				<input id="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
 				       class="logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
@@ -36,6 +34,17 @@
 				       readonly="readonly"
 				       type="text"
 				       value="0" />
+			</div>
+
+			<div>
+				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
+				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
+						 return false;
+						 return true;"
+				       src="<%=resource%>/cbi/reload.gif"
+				       type="image"
+				       title="<%: Resize logical volume %>"
+				       value="<%: Resize logical volume %>" />
 			</div>
 
 			<script type="text/javascript">
@@ -62,16 +71,6 @@
 			})(jQuery);
 			</script>
 
-			<div>
-				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
-				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
-						 return false;
-						 return true;"
-				       src="<%=resource%>/cbi/reload.gif"
-				       type="image"
-				       title="<%: Resize logical volume %>"
-				       value="<%: Resize logical volume %>" />
-			</div>
 			<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
 				<img src="<%=resource%>/cbi/fieldadd.gif"
 				     alt="<%: Snapshot %>"
@@ -81,51 +80,7 @@
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
-			<div>
-				<%: Take new snapshot %>
-			</div>
-			<div>
-				<div id="new_logical_volume_snapshot_slider-<%= line.logical_volume.name %>"></div>
-			</div>
-			<div>
-				<input id="san.new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>"
-				       class="new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>"
-				       readonly="readonly"
-				       type="text"
-				       value="0" />
-			</div>
-
-			<script type="text/javascript">
-			jQuery.noConflict();
-			(function($){
-
-				var slider_name = '#new_logical_volume_snapshot_slider-<%= line.logical_volume.name %>';
-				var slider_input_name = '.new_logical_volume_snapshot_slider_size-<%= line.logical_volume.name %>';
-
-				$( slider_name ).slider({
-					orientation: 'horizontal',
-					min: 1,
-					max: <%= line.logical_volume.size_mib %>,
-					range: 'min',
-					value: <%= line.logical_volume.size_mib %> / 2,
-					slide: function( event, ui ) {
-						$( slider_input_name ).val( ui.value );
-					}
-				});
-
-				$( slider_input_name )
-					.val( $( slider_name )
-					.slider( 'value' ) );
-			})(jQuery);
-			</script>
-
-			<div>
-				<input name="san.submit_logical_volume_snapshot_add-<%= line.logical_volume.name %>"
-				       src="<%=resource%>/cbi/add.gif"
-				       title="<%: Add snapshot %>"
-				       type="image"
-				       value="<%: Add snapshot %>" />
-			</div>
+			<%+san/matrix_logical_volume_snapshot%>
 		</td>
 	</tr>
 </table>
