@@ -36,6 +36,17 @@
 				       value="0" />
 			</div>
 
+			<div>
+				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
+				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
+						 return false;
+						 return true;"
+				       src="<%=resource%>/cbi/reload.gif"
+				       type="image"
+				       title="<%: Resize logical volume %>"
+				       value="<%: Resize logical volume %>" />
+			</div>
+
 			<script type="text/javascript">
 			jQuery.noConflict();
 			(function($){
@@ -60,16 +71,6 @@
 			})(jQuery);
 			</script>
 
-			<div>
-				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
-				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
-						 return false;
-						 return true;"
-				       src="<%=resource%>/cbi/reload.gif"
-				       type="image"
-				       title="<%: Resize logical volume %>"
-				       value="<%: Resize logical volume %>" />
-			</div>
 			<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
 				<img src="<%=resource%>/cbi/fieldadd.gif"
 				     alt="<%: Snapshot %>"
