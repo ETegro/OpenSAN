@@ -281,7 +281,7 @@ local function lvm_logical_volume_add( inputs )
 	assert( common.is_positive( logical_volume_size ) )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-		                           { name =  volume_group_name },
+		                           { name = volume_group_name },
 		                           logical_volume_name,
 		                           logical_volume_size )
 	if not return_code then
@@ -297,7 +297,7 @@ local function lvm_logical_volume_remove( inputs )
 	local logical_volume_name = nil
 
 	for k, v in pairs( inputs ) do
-		if not logical_volume_name then -- edit
+		if not logical_volume_name then
 			-- san.submit_logical_volume_remove-vg1302871899-lvname_new
 			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv([A-Za-z0-9\-_#%:]+)$" )
 		end
@@ -310,6 +310,35 @@ local function lvm_logical_volume_remove( inputs )
 		                             name = logical_volume_name } )
 	if not return_code then
 		message_error = i18n("Failed to remove logical volume")
+	end
+	index_with_error( message_error )
+end
+
+local function lvm_logical_volume_resize( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local volume_group_name = nil
+	local logical_volume_name = nil
+
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then
+			-- san.submit_logical_volume_resize-vg1302871899-lvname_new
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv([A-Za-z0-9\-_#%:]+)$" )
+		end
+	end
+	assert( volume_group_name )
+	assert( logical_volume_name )
+
+	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" .. logical_volume_name ]
+	logical_volume_size = tonumber( logical_volume_size )
+	assert( common.is_positive( logical_volume_size ) )
+
+	local return_code, result = pcall( lvm.LogicalVolume.resize,
+		                           { volume_group = { name = volume_group_name },
+		                             name = logical_volume_name },
+		                           logical_volume_size )
+	if not return_code then
+		message_error = i18n("Failed to resize logical volume")
 	end
 	index_with_error( message_error )
 end
@@ -344,7 +373,8 @@ function perform()
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs ) end,
-		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end
+		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
+		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
