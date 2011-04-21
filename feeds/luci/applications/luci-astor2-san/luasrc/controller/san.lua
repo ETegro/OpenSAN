@@ -347,9 +347,22 @@ local function lvm_logical_volume_snapshot_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local logical_volume_name = nil
-	local snapshot_size = nil
 	local logical_volume_device = nil
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then
+			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
+			logical_volume_device = string.match( k, "^submit_snapshot_add.lvd([/]dev[/]vg%d+[/][A-Za-z0-9\-_#%:]+)$" )
+		end
+	end
+	assert( logical_volume_device )
+
+	-- /dev/vg1303136641/name_new
+	local logical_volume_name = string.match( logical_volume_device, "^[/]dev[/]vg%d+[/]([A-Za-z0-9\-_#%:]+)$" )
+	assert( logical_volume_name )
+
+	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
+	snapshot_size = tonumber( snapshot_size )
+	assert( common.is_positive( snapshot_size ) )
 
 	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
 		                           { name = logical_volume_name,
