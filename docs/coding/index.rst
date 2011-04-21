@@ -12,6 +12,7 @@
    common
    log_messages
    commiting_rules
+   merging_rules
    copyright_adding
    lua
    luadoc
