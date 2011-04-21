@@ -1,4 +1,4 @@
-.. _luci-uci-scst:
+.. _scst-uci:
 
 ===================
 UCI SCST подсистемы

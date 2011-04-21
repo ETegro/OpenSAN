@@ -11,4 +11,3 @@ LuCI касающиеся вещи
    modules
    modules-feed
    updating
-   uci-scst
