@@ -222,6 +222,15 @@ local function logical_volume_group( logical, volume_groups )
 	end
 end
 
+local function snapshots_to_outer( logical_volumes )
+	for _, logical_volume in ipairs( logical_volumes ) do
+		for _, snapshot in ipairs( logical_volume.snapshots ) do
+			logical_volumes[ #logical_volumes + 1 ] = snapshot
+		end
+	end
+	return logical_volumes
+end
+
 local function logical_logical_volumes( logical, logical_volumes )
 	local logical_volumes_needed = {}
 	for _, logical_volume in ipairs( logical_volumes ) do
@@ -229,7 +238,7 @@ local function logical_logical_volumes( logical, logical_volumes )
 			logical_volumes_needed[ #logical_volumes_needed + 1 ] = logical_volume
 		end
 	end
-	return logical_volumes_needed
+	return snapshots_to_outer( logical_volumes_needed )
 end
 
 function M.caller()
