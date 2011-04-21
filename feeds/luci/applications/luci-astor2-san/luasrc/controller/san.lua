@@ -346,18 +346,17 @@ end
 local function lvm_logical_volume_snapshot_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
+	local volume_group_name = nil
+	local logical_volume_name = nil
 
-	local logical_volume_device = nil
 	for k, v in pairs( inputs ) do
-		if not logical_volume_device then
+		if not logical_volume_name then
+			-- TODO regexp from astor2.lvm
 			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
-			logical_volume_device = string.match( k, "^submit_snapshot_add.lvd([/]dev[/]vg%d+[/][A-Za-z0-9\-_#%:]+)$" )
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).([A-Za-z0-9\-_#%:]+)$" )
 		end
 	end
-	assert( logical_volume_device )
-
-	-- /dev/vg1303136641/name_new
-	local logical_volume_name = string.match( logical_volume_device, "^[/]dev[/]vg%d+[/]([A-Za-z0-9\-_#%:]+)$" )
+	assert( volume_group_name )
 	assert( logical_volume_name )
 
 	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
@@ -366,10 +365,10 @@ local function lvm_logical_volume_snapshot_add( inputs )
 
 	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
 		                           { name = logical_volume_name,
-		                             device = logical_volume_device },
+		                             device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name },
 		                           snapshot_size )
 	if not return_code then
-		message_error = i18n("Failed to create snapshot." .. " Code:" .. result)
+		message_error = i18n("Failed to create snapshot." .. " Code: " .. result)
 	end
 	index_with_error( message_error )
 end
@@ -406,7 +405,7 @@ function perform()
 		logical_volume_add = function() lvm_logical_volume_add( inputs ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
-		logical_volume_snapshot_add = function lvm_logical_volume_snapshot_add( inputs ) end
+		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
