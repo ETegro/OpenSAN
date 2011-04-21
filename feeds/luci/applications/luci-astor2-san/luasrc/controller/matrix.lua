@@ -224,8 +224,10 @@ end
 
 local function snapshots_to_outer( logical_volumes )
 	for _, logical_volume in ipairs( logical_volumes ) do
-		for _, snapshot in ipairs( logical_volume.snapshots ) do
-			logical_volumes[ #logical_volumes + 1 ] = snapshot
+		if logical_volume.snapshots then
+			for _, snapshot in ipairs( logical_volume.snapshots ) do
+				logical_volumes[ #logical_volumes + 1 ] = snapshot
+			end
 		end
 	end
 	return logical_volumes
