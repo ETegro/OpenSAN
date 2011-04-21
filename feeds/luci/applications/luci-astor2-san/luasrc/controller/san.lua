@@ -349,7 +349,7 @@ local function lvm_logical_volume_snapshot_add( inputs )
 
 	local logical_volume_device = nil
 	for k, v in pairs( inputs ) do
-		if not logical_volume_name then
+		if not logical_volume_device then
 			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
 			logical_volume_device = string.match( k, "^submit_snapshot_add.lvd([/]dev[/]vg%d+[/][A-Za-z0-9\-_#%:]+)$" )
 		end
@@ -405,7 +405,8 @@ function perform()
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
-		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end
+		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
+		logical_volume_snapshot_add = function lvm_logical_volume_snapshot_add( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
