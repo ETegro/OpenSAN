@@ -8,3 +8,4 @@
    :maxdepth: 1
 
    useful_documentation
+   empty_directories
