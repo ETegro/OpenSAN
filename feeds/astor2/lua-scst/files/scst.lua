@@ -56,4 +56,21 @@ function M.AccessPattern.list()
 	return access_patterns
 end
 
+function M.AccessPattern.add( access_pattern )
+	assert( access_pattern )
+	local ucicur = uci.cursor()
+	local section_name = ucicur:add( "scst", "access-pattern" )
+	ucicur:set( "scst", section_name, "name", access_pattern.name )
+	ucicur:set( "scst", section_name, "targetdriver", access_pattern.targetdriver )
+	ucicur:set( "scst", section_name, "lun", tonumber( access_pattern.lun ) )
+	ucicur:set( "scst", section_name, "filename", access_pattern.filename )
+	if access_pattern.enabled == true then
+		ucicur:set( "scst", section_name, "enabled", "true" )
+	end
+	if access_pattern.readonly == true then
+		ucicur:set( "scst", section_name, "readonly", "true" )
+	end
+	ucicur:commit( "scst" )
+end
+
 return M
