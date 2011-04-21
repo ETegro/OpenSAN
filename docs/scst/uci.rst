@@ -6,7 +6,7 @@ UCI SCST подсистемы
 
 Вариант схемы UCI для SCST подсистемы::
 
-  config "scst-access-pattern" "erste_pattern"
+  config "access-pattern" "erste_pattern"
     option "name" "foobar pattern name"
     option "targetdriver" "iscsi"
     option "lun" "2"
