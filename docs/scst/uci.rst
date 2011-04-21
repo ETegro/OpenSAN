@@ -8,11 +8,11 @@ UCI SCST подсистемы
 
   config "scst-access-pattern" "erste_pattern"
     option "name" "foobar pattern name"
-    option "transport" "iscsi"
+    option "targetdriver" "iscsi"
     option "lun" "2"
     option "enabled" "1"
     option "readonly" "0"
-    option "device" "/dev/vg1303136641/volname"
+    option "filename" "/dev/vg1303136641/volname"
 
 Также имеется ряд тезисов:
 
