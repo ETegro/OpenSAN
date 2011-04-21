@@ -8,7 +8,7 @@
 			<%= line.logical_volume.name %>
 		</td>
 		<td>
-			<p title="<%= line.logical_volume.size_mib %> <%: MiB %>"><%= line.logical_volume.size %> <%: TiB %></p>
+			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>"><%= line.logical_volume.size %> <%: TiB %></span>
 		</td>
 		<td>
 			<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
@@ -80,7 +80,7 @@
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
-    			<%+san/snapshot%>
+			<%+san/matrix_logical_volume_snapshot%>
 		</td>
 	</tr>
 </table>
