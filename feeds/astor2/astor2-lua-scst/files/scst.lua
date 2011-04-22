@@ -42,7 +42,7 @@ function M.AccessPattern.list()
 		assert( access_pattern.name )
 		assert( common.is_in_array( access_pattern.targetdriver,
 		                            M.ALLOWED_TARGETDRIVERS ) )
-		assert( access_pattern.lun )
+		assert( common.is_number( access_pattern.lun ) )
 		if section.enabled == "1" then
 			access_pattern.enabled = true
 		else
