@@ -120,7 +120,7 @@
 					$( slider_name ).slider({
 						orientation: 'horizontal',
 						min: 1,
-						max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
+						max:<%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
 						range: 'min',
 						value: 1,
 						slide: function( event, ui ) {
