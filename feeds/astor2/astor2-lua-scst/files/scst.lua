@@ -22,7 +22,7 @@ local M = {}
 require( "uci" )
 
 M.UCI_CONFIG_NAME = "scst"
-M.UCI_TYPE_NAME = "access-pattern"
+M.UCI_TYPE_NAME = "astor2-access-pattern"
 
 M.AccessPattern = {}
 
