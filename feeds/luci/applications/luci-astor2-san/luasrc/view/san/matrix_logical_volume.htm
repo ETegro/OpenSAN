@@ -55,9 +55,9 @@
 					$( slider_name ).slider({
 						orientation: 'horizontal',
 						min: 1,
-						max: <%= line.logical_volume.size_mib %>,
+						max: <%=  line.logical_volume.size_mib + line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib %>,
 						range: 'min',
-						value: <%= line.logical_volume.size_mib %> / 2,
+						value: <%= line.logical_volume.size_mib %>,
 						slide: function( event, ui ) {
 							$( slider_input_name ).val( ui.value );
 						}
