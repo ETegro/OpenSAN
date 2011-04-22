@@ -11,4 +11,5 @@
    empty_directories
    name_and_email
    signed-off
+   signing-key
    color_highlighting
