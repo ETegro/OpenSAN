@@ -325,7 +325,7 @@ end
 local function lvresize( size, logical_volume )
 	local succeeded = false
 	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. logical_volume.volume_group.name .. "/" .. logical_volume.name ) ) do
-		if string.match( line, "Logical volume.*" .. logical_volume.name .. ".*successfully resized" ) then
+		if string.match( line, "successfully resized" ) then
 			succeeded = true
 		end
 	end

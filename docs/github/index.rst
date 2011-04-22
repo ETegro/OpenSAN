@@ -7,11 +7,8 @@
 .. toctree::
    :maxdepth: 1
 
-   name_and_email
-   color_highlighting
    overview
    ssh-keys
    cloning
    pushing
    etegros
-   signed-off
