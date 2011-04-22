@@ -16,7 +16,7 @@ define Package/astor2-lua-scst
 	CATEGORY:=aStor2
 	TITLE:=SCST Lua bindings for aStor2 project
 	URL:=http://github.com/astor2-team/astor2
-	DEPENDS:=+lua +iscsi-scst-userspace
+	DEPENDS:=+lua +iscsi-scst-userspace +astor2-lua-common
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 

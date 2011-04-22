@@ -20,9 +20,11 @@
 local M = {}
 
 require( "uci" )
+local common = require( "astor2.common" )
 
 M.UCI_CONFIG_NAME = "scst"
 M.UCI_TYPE_NAME = "astor2-access-pattern"
+M.ALLOWED_TARGETDRIVERS = { "iscsi" }
 
 M.AccessPattern = {}
 
@@ -38,7 +40,8 @@ function M.AccessPattern.list()
 			filename = section.filename
 		}
 		assert( access_pattern.name )
-		assert( access_pattern.targetdriver )
+		assert( common.is_in_array( access_pattern.targetdriver,
+		                            M.ALLOWED_TARGETDRIVERS ) )
 		assert( access_pattern.lun )
 		if section.enabled == "1" then
 			access_pattern.enabled = true
