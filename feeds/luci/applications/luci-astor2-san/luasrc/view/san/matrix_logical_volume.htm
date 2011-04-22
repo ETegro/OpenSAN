@@ -104,7 +104,7 @@
 						min: 1,
 						max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
 						range: 'min',
-						value: <%= line.logical_volume.size_mib %>,
+						value: 1,
 						slide: function( event, ui ) {
 							$( slider_input_name ).val( ui.value );
 						}
