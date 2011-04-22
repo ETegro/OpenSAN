@@ -10,3 +10,4 @@ OpenWRT касающиеся вещи
    building
    package_adding
    updating
+   emulating
