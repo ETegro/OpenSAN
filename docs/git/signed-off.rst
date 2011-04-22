@@ -1,4 +1,4 @@
-.. _github-signed-off:
+.. _git-signed-off:
 
 =============================
 Добавление Signed-off-by поля
