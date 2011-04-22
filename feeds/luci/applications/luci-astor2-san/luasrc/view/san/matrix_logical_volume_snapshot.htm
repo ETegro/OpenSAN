@@ -1,64 +1,72 @@
-<tr>
-	<td>
-		<%= line.logical_volume.name %>
-	</td>
-	<td>
-		<span title="<%= line.logical_volume.size_mib %> <%: MiB %>"><%= line.logical_volume.size %> <%: TiB %></span>
-	</td>
-	<td>
-		<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
-		       onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
-				 return false;
-				 return true;"
-		       src="<%=resource%>/cbi/remove.gif"
-		       type="image"
-		       title="<%: Remove snapshot %>"
-		       value="<%: Remove snapshot %>" />
-	</td>
-</tr>
-<tr>
-	<td colspan="3">
-		<div>
-			<%: Resize snapshot %>
-		</div>
-		<div id="logical_volume_snapshot_resize_slider-<%= line.logical_volume.name %>"></div>
-		<div>
-			<input id="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
-			       class="logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
-			       name="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
-			       type="text"
-			       value="0" />
-		</div>
-		<div>
-			<input name="san.submit_logical_volume_snapshot_resize-<%= line.logical_volume.volume_group.name %>-s<%= line.logical_volume.size_mib %>-lv<%= line.logical_volume.name %>"
-			       onclick=" if ( !confirm( '<%: Really resize snapshot? %>' ) )
+<td valign="top"
+    rowspan="<%= line.logical_volume.rowspan %>"
+    class="<%+san/matrix_logical_volume_class%>">
+
+<table border="0px" width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<%= line.logical_volume.name %>
+		</td>
+		<td>
+			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>"><%= line.logical_volume.size %> <%: TiB %></span>
+		</td>
+		<td>
+			<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
+			       onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
 					 return false;
 					 return true;"
-			       readonly="readonly"
-			       src="<%=resource%>/cbi/reload.gif"
+			       src="<%=resource%>/cbi/remove.gif"
 			       type="image"
-			       title="<%: Resize snapshot %>"
-			       value="<%: Resize snapshot %>" />
-		</div>
-		<script type="text/javascript">
-			jQuery.noConflict();
-			(function($){
-				var slider_name = '#logical_volume_snapshot_resize_slider-<%= line.logical_volume.name %>';
-				var slider_input_name = '.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>';
-				$( slider_name ).slider({
-					orientation: 'horizontal',
-					min: 1,
-					max: <%= line.logical_volume.size_mib %>,
-					range: 'min',
-					value: <%= line.logical_volume.size_mib %> / 2,
-					slide: function( event, ui ) {
-						$( slider_input_name ).val( ui.value );
-					}
-				});
-				$( slider_input_name )
-					.val( $( slider_name )
-					.slider( 'value' ) );
-			})(jQuery);
-		</script>
-	</td>
-</tr>
+			       title="<%: Remove snapshot %>"
+			       value="<%: Remove snapshot %>" />
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<div>
+				<%: Resize snapshot %>
+			</div>
+			<div id="logical_volume_snapshot_resize_slider-<%= line.logical_volume.name %>"></div>
+			<div>
+				<input id="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
+				       class="logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
+				       name="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
+				       type="text"
+				       value="0" />
+			</div>
+			<div>
+				<input name="san.submit_logical_volume_snapshot_resize-<%= line.logical_volume.volume_group.name %>-s<%= line.logical_volume.size_mib %>-lv<%= line.logical_volume.name %>"
+				       onclick=" if ( !confirm( '<%: Really resize snapshot? %>' ) )
+						 return false;
+						 return true;"
+				       readonly="readonly"
+				       src="<%=resource%>/cbi/reload.gif"
+				       type="image"
+				       title="<%: Resize snapshot %>"
+				       value="<%: Resize snapshot %>" />
+			</div>
+			<script type="text/javascript">
+				jQuery.noConflict();
+				(function($){
+					var slider_name = '#logical_volume_snapshot_resize_slider-<%= line.logical_volume.name %>';
+					var slider_input_name = '.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>';
+					$( slider_name ).slider({
+						orientation: 'horizontal',
+						min: 1,
+						max: <%= line.logical_volume.size_mib %>,
+						range: 'min',
+						value: <%= line.logical_volume.size_mib %> / 2,
+						slide: function( event, ui ) {
+							$( slider_input_name ).val( ui.value );
+						}
+					});
+					$( slider_input_name )
+						.val( $( slider_name )
+						.slider( 'value' ) );
+				})(jQuery);
+			</script>
+		</td>
+	</tr>
+</table>
+
+</td>
