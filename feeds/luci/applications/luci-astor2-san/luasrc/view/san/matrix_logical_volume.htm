@@ -3,6 +3,7 @@
     class="<%+san/matrix_logical_volume_class%>">
 
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
+	<% if line.logical_volume.is_snapshot() == false then %>
 	<tr>
 		<td>
 			<%= line.logical_volume.name %>
@@ -117,6 +118,10 @@
 			</script>
 		</td>
 	</tr>
+	<% elseif line.logical_volume.is_snapshot() == true then %>
+		<%+san/matrix_logical_volume_snapshot%>
+	<% else %>
+	<% end %>
 </table>
 
 </td>
