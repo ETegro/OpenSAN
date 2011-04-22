@@ -47,10 +47,10 @@
 				var slider_input_name = '.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>';
 				$( slider_name ).slider({
 					orientation: 'horizontal',
-					min: 1,
-					max: <%= line.logical_volume.size_mib %>,
+					min: <%= line.logical_volume.size_mib %>,
+					max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
 					range: 'min',
-					value: <%= line.logical_volume.size_mib %> / 2,
+					value: <%= line.logical_volume.size_mib %>,
 					slide: function( event, ui ) {
 						$( slider_input_name ).val( ui.value );
 					}
