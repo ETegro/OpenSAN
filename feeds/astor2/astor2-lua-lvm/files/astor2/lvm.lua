@@ -325,7 +325,7 @@ end
 local function lvresize( size, logical_volume )
 	local succeeded = false
 	for _, line in ipairs( common.system_succeed( "echo y | lvm lvresize -L " .. tostring( size ) .. " " .. logical_volume.volume_group.name .. "/" .. logical_volume.name ) ) do
-		if string.match( line, "Logical volume " .. self.name .. " successfully resized" ) then
+		if string.match( line, "successfully resized" ) then
 			succeeded = true
 		end
 	end
@@ -364,14 +364,7 @@ function M.Snapshot:is_snapshot()
 	return true
 end
 
---- Remove Snapshot
-function M.Snapshot:remove()
-	assert( self.volume_group )
-	assert( self.name )
-	common.system_succeed( "lvm lvremove -f /dev/" ..
-	                       self.volume_group.name .. "/" ..
-	                       self.name )
-end
+M.Snapshot.remove = M.LogicalVolume.remove
 
 --- Snapshot resize
 -- @param size New wished size

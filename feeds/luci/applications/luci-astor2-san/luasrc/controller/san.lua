@@ -281,7 +281,7 @@ local function lvm_logical_volume_add( inputs )
 	assert( common.is_positive( logical_volume_size ) )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-		                           { name =  volume_group_name },
+		                           { name = volume_group_name },
 		                           logical_volume_name,
 		                           logical_volume_size )
 	if not return_code then
@@ -297,9 +297,9 @@ local function lvm_logical_volume_remove( inputs )
 	local logical_volume_name = nil
 
 	for k, v in pairs( inputs ) do
-		if not logical_volume_name then -- edit
+		if not logical_volume_name then
 			-- san.submit_logical_volume_remove-vg1302871899-lvname_new
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv([A-Za-z0-9\-_#%:]+)$" )
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv([A-Za-z0-9\-_#%%:]+)$" )
 		end
 	end
 	assert( volume_group_name )
@@ -313,6 +313,105 @@ local function lvm_logical_volume_remove( inputs )
 	end
 	index_with_error( message_error )
 end
+
+local function lvm_logical_volume_resize( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local volume_group_name = nil
+	local logical_volume_name = nil
+
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then
+			-- san.submit_logical_volume_resize-vg1302871899-lvname_new
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv([A-Za-z0-9\-_#%%:]+)$" )
+		end
+	end
+	assert( volume_group_name )
+	assert( logical_volume_name )
+
+	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" .. logical_volume_name ]
+	logical_volume_size = tonumber( logical_volume_size )
+	assert( common.is_positive( logical_volume_size ) )
+
+	local return_code, result = pcall( lvm.LogicalVolume.resize,
+		                           { volume_group = { name = volume_group_name },
+		                             name = logical_volume_name },
+		                           logical_volume_size )
+	if not return_code then
+		message_error = i18n("Failed to resize logical volume")
+	end
+	index_with_error( message_error )
+end
+
+local function lvm_logical_volume_snapshot_add( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+	local volume_group_name = nil
+	local logical_volume_name = nil
+
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then
+			-- TODO regexp from astor2.lvm
+			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).([A-Za-z0-9\-_#%%:]+)$" )
+		end
+	end
+	assert( volume_group_name )
+	assert( logical_volume_name )
+
+	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
+	snapshot_size = tonumber( snapshot_size )
+	assert( common.is_positive( snapshot_size ) )
+
+	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
+		                           { name = logical_volume_name,
+		                             device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name },
+		                           snapshot_size )
+	if not return_code then
+		message_error = i18n("Failed to create snapshot." .. " Code: " .. result)
+	end
+	index_with_error( message_error )
+end
+
+local function lvm_logical_volume_snapshot_resize( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local volume_group_name = nil
+	local snapshot_size = nil
+	local logical_volume_name = nil
+
+	for k, v in pairs( inputs ) do
+		if not logical_volume_name then
+			-- san.submit_logical_volume_snapshot_resize-vg1302871899-s1923-lvname_new
+			volume_group_name, snapshot_size, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_resize.(vg%d+).s(%d+).lv([A-Za-z0-9\-_#%%:]+)$" )
+		end
+	end
+	assert( volume_group_name )
+	assert( logical_volume_name )
+	assert( snapshot_size )
+
+	snapshot_size = tonumber( snapshot_size )
+
+	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" .. logical_volume_name ]
+	snapshot_size_new = tonumber( snapshot_size_new )
+	assert( common.is_positive( snapshot_size_new ) )
+
+	if  snapshot_size_new < snapshot_size then
+		message_error = i18n(" Failed to resize snapshot: new snapshot size < current size")
+	else
+		local return_code, result = pcall( lvm.Snapshot.resize,
+						   { volume_group = { name = volume_group_name },
+						     size = snapshot_size,
+						     name = logical_volume_name },
+						   snapshot_size_new )
+		if not return_code then
+			message_error = i18n("Failed to resize snapshot" .. " Code: " .. result )
+		end
+	end
+	index_with_error( message_error )
+end
+
 
 ------------------------------------------------------------------------
 -- Different common functions
@@ -344,7 +443,10 @@ function perform()
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs ) end,
-		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end
+		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
+		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
+		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end,
+		logical_volume_snapshot_resize = function() lvm_logical_volume_snapshot_resize( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do

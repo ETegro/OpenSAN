@@ -5,7 +5,7 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<a id="logical_info-<%= line.logical.id %>" href="#"><%= line.logical.id %></a>
+			<%= line.logical.id %>
 		</td>
 		<td><%: RAID %> <%= line.logical.level %></td>
 		<td><%= line.logical.state %></td>
@@ -25,7 +25,7 @@
 			</td>
 		<% end %>
 	</tr>
-	<tr class="to_hide">
+	<tr>
 		<% local local_colspan = 4
 		   if line.logical.progress then
 			local_colspan = local_colspan + 1
@@ -35,11 +35,9 @@
 		end %>
 		<td colspan="<%= local_colspan %>">
 			<div>
-				<!-- TODO: TiBs and MiBs -->
-				<%= line.logical.volume_group.allocated %>
-				/
-				<%= line.logical.volume_group.total %>
-				(<%= line.logical.volume_group.percentage or "0" %> %)
+				<span title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
+					<%= line.logical.volume_group.allocated %> <%: TiB %> / <%= line.logical.volume_group.total %> <%: TiB %> (<%= line.logical.volume_group.percentage or "0" %> %)
+				</span>
 			</div>
 			<div>
 				<label for="san.new_volume_name-<%= line.logical.id %>"><%: New volume %></label>

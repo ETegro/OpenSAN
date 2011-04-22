@@ -190,6 +190,10 @@ local function filter_mib2tib( matrix )
 		if line.logical then
 			line.logical.capacity_mib = line.logical.capacity
 			line.logical.capacity = M.mib2tib( line.logical.capacity )
+			line.logical.volume_group.allocated_mib = line.logical.volume_group.allocated
+			line.logical.volume_group.allocated = M.mib2tib( line.logical.volume_group.allocated )
+			line.logical.volume_group.total_mib = line.logical.volume_group.total
+			line.logical.volume_group.total = M.mib2tib( line.logical.volume_group.total )
 		end
 		if line.logical_volume then
 			line.logical_volume.size_mib = line.logical_volume.size
@@ -218,6 +222,17 @@ local function logical_volume_group( logical, volume_groups )
 	end
 end
 
+local function snapshots_to_outer( logical_volumes )
+	for _, logical_volume in ipairs( logical_volumes ) do
+		if logical_volume.snapshots then
+			for _, snapshot in ipairs( logical_volume.snapshots ) do
+				logical_volumes[ #logical_volumes + 1 ] = snapshot
+			end
+		end
+	end
+	return logical_volumes
+end
+
 local function logical_logical_volumes( logical, logical_volumes )
 	local logical_volumes_needed = {}
 	for _, logical_volume in ipairs( logical_volumes ) do
@@ -225,7 +240,7 @@ local function logical_logical_volumes( logical, logical_volumes )
 			logical_volumes_needed[ #logical_volumes_needed + 1 ] = logical_volume
 		end
 	end
-	return logical_volumes_needed
+	return snapshots_to_outer( logical_volumes_needed )
 end
 
 function M.caller()
