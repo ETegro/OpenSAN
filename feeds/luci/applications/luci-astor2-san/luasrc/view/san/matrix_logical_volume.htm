@@ -35,7 +35,6 @@
 				       type="text"
 				       value="0" />
 			</div>
-
 			<div>
 				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
 				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
@@ -46,7 +45,6 @@
 				       title="<%: Resize logical volume %>"
 				       value="<%: Resize logical volume %>" />
 			</div>
-
 			<script type="text/javascript">
 				jQuery.noConflict();
 				(function($){
@@ -55,9 +53,9 @@
 					$( slider_name ).slider({
 						orientation: 'horizontal',
 						min: 1,
-						max: <%= line.logical_volume.size_mib %>,
+						max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
 						range: 'min',
-						value: <%= line.logical_volume.size_mib %> / 2,
+						value: <%= line.logical_volume.size_mib %>,
 						slide: function( event, ui ) {
 							$( slider_input_name ).val( ui.value );
 						}
@@ -103,9 +101,9 @@
 					$( slider_name ).slider({
 						orientation: 'horizontal',
 						min: 1,
-						max: <%= line.logical_volume.size_mib %>,
+						max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
 						range: 'min',
-						value: <%= line.logical_volume.size_mib %> / 2,
+						value: 1,
 						slide: function( event, ui ) {
 							$( slider_input_name ).val( ui.value );
 						}

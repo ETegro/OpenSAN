@@ -46,9 +46,7 @@
 				       type="text"
 				       value="" />
 			</div>
-
 			<div id="new_volume_slider-<%= line.logical.id %>"></div>
-
 			<div>
 				<input id="san.new_volume_slider_size-<%= line.logical.id %>"
 				       class="new_volume_slider_size-<%= line.logical.id %>"
@@ -57,31 +55,26 @@
 				       type="text"
 				       value="0" />
 			</div>
-
 			<script type="text/javascript">
-			jQuery.noConflict();
-			(function($){
-
-				var slider_name = '#new_volume_slider-<%= line.logical.id %>';
-				var slider_input_name = '.new_volume_slider_size-<%= line.logical.id %>';
-
-				$( slider_name ).slider({
-					orientation: 'horizontal',
-					min: 1,
-					max: <%= line.logical.capacity_mib %>,
-					range: 'min',
-					value: <%= line.logical.capacity_mib %> / 2,
-					slide: function( event, ui ) {
-						$( slider_input_name ).val( ui.value );
-					}
-				});
-
-				$( slider_input_name )
-					.val( $( slider_name )
-					.slider( 'value' ) );
-			})(jQuery);
+				jQuery.noConflict();
+				(function($){
+					var slider_name = '#new_volume_slider-<%= line.logical.id %>';
+					var slider_input_name = '.new_volume_slider_size-<%= line.logical.id %>';
+					$( slider_name ).slider({
+						orientation: 'horizontal',
+						min: 1,
+						max: <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %>,
+						range: 'min',
+						value: ( <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %> ) / 2,
+						slide: function( event, ui ) {
+							$( slider_input_name ).val( ui.value );
+						}
+					});
+					$( slider_input_name )
+						.val( $( slider_name )
+						.slider( 'value' ) );
+				})(jQuery);
 			</script>
-
 			<div>
 				<input name="san.submit_logical_volume_add-<%= line.logical.id %>-<%= line.logical.volume_group.name %>"
 				       src="<%=resource%>/cbi/add.gif"

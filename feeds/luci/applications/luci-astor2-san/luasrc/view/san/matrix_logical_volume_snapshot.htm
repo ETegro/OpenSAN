@@ -31,6 +31,7 @@
 				<input id="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
 				       class="logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
 				       name="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
+				       readonly="readonly"
 				       type="text"
 				       value="0" />
 			</div>
@@ -39,7 +40,6 @@
 				       onclick=" if ( !confirm( '<%: Really resize snapshot? %>' ) )
 						 return false;
 						 return true;"
-				       readonly="readonly"
 				       src="<%=resource%>/cbi/reload.gif"
 				       type="image"
 				       title="<%: Resize snapshot %>"
@@ -52,10 +52,10 @@
 					var slider_input_name = '.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>';
 					$( slider_name ).slider({
 						orientation: 'horizontal',
-						min: 1,
-						max: <%= line.logical_volume.size_mib %>,
+						min: <%= line.logical_volume.size_mib %>,
+						max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
 						range: 'min',
-						value: <%= line.logical_volume.size_mib %> / 2,
+						value: <%= line.logical_volume.size_mib %>,
 						slide: function( event, ui ) {
 							$( slider_input_name ).val( ui.value );
 						}
