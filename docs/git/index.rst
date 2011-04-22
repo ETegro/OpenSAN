@@ -9,3 +9,6 @@
 
    useful_documentation
    empty_directories
+   name_and_email
+   signed-off
+   color_highlighting
