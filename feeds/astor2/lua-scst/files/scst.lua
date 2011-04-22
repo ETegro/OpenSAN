@@ -41,7 +41,6 @@ function M.AccessPattern.list()
 		assert( access_pattern.name )
 		assert( access_pattern.targetdriver )
 		assert( access_pattern.lun )
-		assert( access_pattern.filename )
 		if section.enabled == "1" then
 			access_pattern.enabled = true
 		else
