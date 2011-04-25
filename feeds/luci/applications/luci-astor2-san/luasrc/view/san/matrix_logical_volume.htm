@@ -56,6 +56,11 @@
 				       title="<%: Resize logical volume %>"
 				       value="<%: Resize logical volume %>" />
 			</div>
+			<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
+				<img src="<%=resource%>/cbi/fieldadd.gif"
+				     alt="<%: Snapshot %>"
+				     title="<%: Snapshot %>" />
+			</a>
 			<div>
 				<input id="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
 				       class="logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
@@ -84,11 +89,6 @@
 						.slider( 'value' ) );
 				})(jQuery);
 			</script>
-			<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
-				<img src="<%=resource%>/cbi/fieldadd.gif"
-				     alt="<%: Snapshot %>"
-				     title="<%: Snapshot %>" />
-			</a>
 		</td>
 	</tr>
 	<tr class="to_hide">
