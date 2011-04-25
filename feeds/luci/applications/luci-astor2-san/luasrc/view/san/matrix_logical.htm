@@ -62,10 +62,11 @@
 					var slider_input_name = '.new_volume_slider_size-<%= line.logical.id %>';
 					$( slider_name ).slider({
 						orientation: 'horizontal',
-						min: 1,
+						min: <%= line.logical.volume_group.extent / 1024 %>,
 						max: <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %>,
 						range: 'min',
 						value: ( <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %> ) / 2,
+						step: <%= line.logical.volume_group.extent / 1024 %>,
 						slide: function( event, ui ) {
 							$( slider_input_name ).val( ui.value );
 						}
@@ -81,6 +82,9 @@
 				       title="<%: Add logical volume %>"
 				       type="image"
 				       value="<%: Add logical volume %>" />
+			</div>
+			<div>
+				Extent: <%= line.logical.volume_group.extent / 1024 %>
 			</div>
 		</td>
 	</tr>
