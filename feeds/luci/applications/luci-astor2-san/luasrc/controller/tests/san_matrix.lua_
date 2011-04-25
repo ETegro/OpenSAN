@@ -1247,7 +1247,7 @@ TestMatrix = {}
 	function TestMatrix:test_access_pattern_adding()
 		local access_patterns = {
 			{
-				name = "foobar1",
+				name = "foobaz1",
 				section_name = "foobar1",
 				targetdriver = "iscsi",
 				enabled = true,
@@ -1255,7 +1255,7 @@ TestMatrix = {}
 				lun = 1
 			},
 			{
-				name = "foobar2",
+				name = "foobaz2",
 				section_name = "foobar2",
 				targetdriver = "iscsi",
 				enabled = true,
@@ -1294,6 +1294,14 @@ TestMatrix = {}
 				access_patterns = access_patterns
 			} )
 		)
+		assertEquals( matrix[1].access_pattern, "foobar3" )
+		assertEquals( matrix[2].access_pattern, "foobar4" )
+		assertEquals( matrix[3].access_pattern, "foobar5" )
+		assertEquals( matrix[4].access_pattern, "foobaz1" )
+		assertEquals( matrix[5].access_pattern, "foobaz2" )
+		assertEquals( matrix[4].physical, nil )
+		assertEquals( matrix[4].logical, nil )
+		assertEquals( matrix[4].volume_group, nil )
 	end
 
 
