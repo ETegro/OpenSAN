@@ -1256,7 +1256,7 @@ TestMatrix = {}
 			},
 			{
 				name = "foobar2",
-				section_name = "foobar1",
+				section_name = "foobar2",
 				targetdriver = "iscsi",
 				enabled = true,
 				readonly = false,
@@ -1264,7 +1264,7 @@ TestMatrix = {}
 			},
 			{
 				name = "foobar3",
-				section_name = "foobar1",
+				section_name = "foobar3",
 				targetdriver = "iscsi",
 				enabled = true,
 				readonly = false,
@@ -1272,7 +1272,7 @@ TestMatrix = {}
 			},
 			{
 				name = "foobar4",
-				section_name = "foobar1",
+				section_name = "foobar4",
 				targetdriver = "iscsi",
 				enabled = true,
 				readonly = false,
@@ -1280,7 +1280,7 @@ TestMatrix = {}
 			},
 			{
 				name = "foobar5",
-				section_name = "foobar1",
+				section_name = "foobar5",
 				targetdriver = "iscsi",
 				enabled = true,
 				readonly = false,
