@@ -44,13 +44,11 @@
 		<% if line.logical then %>
 			<%+san/matrix_logical%>
 		<% end %>
-		<% if line.logical_volume then %>
-			<% if line.logical_volume.is_snapshot() == true then %>
-				<%+san/matrix_logical_volume_snapshot%>
-			<% end %>
-			<% if line.logical_volume.is_snapshot() == false then %>
-				<%+san/matrix_logical_volume%>
-			<% end %>
+		<% if line.logical_volume and line.logical_volume.is_snapshot() == true then %>
+			<%+san/matrix_logical_volume_snapshot%>
+		<% end %>
+		<% if line.logical_volume and line.logical_volume.is_snapshot() == false then %>
+			<%+san/matrix_logical_volume%>
 		<% end %>
 		<% if line.access_pattern then %>
 			<%+san/matrix_access_pattern%>
