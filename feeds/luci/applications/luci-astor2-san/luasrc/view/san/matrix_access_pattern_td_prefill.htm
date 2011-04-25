@@ -19,9 +19,9 @@
 
 <%
   local colspan = 0
-  if not line.logical_volume then colspan = colspan + 1
-  if not line.logical then colspan = colspan + 1
-  if not line.physical then colspan = colspan + 1
+  if not line.logical_volume then colspan = colspan + 1 end
+  if not line.logical then colspan = colspan + 1 end
+  if not line.physical then colspan = colspan + 1 end
 %>
 <% if colspan > 0 then %>
 	<td colspan="<%= colspan %>">&nbsp;</td>
