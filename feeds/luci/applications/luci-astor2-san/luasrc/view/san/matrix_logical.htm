@@ -58,14 +58,23 @@
 					<%= line.logical.volume_group.allocated %> <%: TiB %> / <%= line.logical.volume_group.total %> <%: TiB %> (<%= line.logical.volume_group.percentage or "0" %> %)
 				</span>
 			</div>
-			<div>
-				<label for="san.new_volume_name-<%= line.logical.id %>"><%: New volume %></label>
+			<div id="new_volume_slider-<%= line.logical.id %>"></div>
+			<div class="inline">
+				<%: New volume name %>
+			</div>
+			<div class="inline">
 				<input id="san.new_volume_name-<%= line.logical.id %>"
 				       name="san.new_volume_name-<%= line.logical.id %>"
 				       type="text"
 				       value="" />
 			</div>
-			<div id="new_volume_slider-<%= line.logical.id %>"></div>
+			<div class="inline">
+				<input name="san.submit_logical_volume_add-<%= line.logical.id %>-<%= line.logical.volume_group.name %>"
+				       src="<%=resource%>/cbi/add.gif"
+				       title="<%: Add logical volume %>"
+				       type="image"
+				       value="<%: Add logical volume %>" />
+			</div>
 			<div>
 				<input id="san.new_volume_slider_size-<%= line.logical.id %>"
 				       class="new_volume_slider_size-<%= line.logical.id %>"
@@ -81,10 +90,11 @@
 					var slider_input_name = '.new_volume_slider_size-<%= line.logical.id %>';
 					$( slider_name ).slider({
 						orientation: 'horizontal',
-						min: 1,
+						min: <%= line.logical.volume_group.extent / 1024 %>,
 						max: <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %>,
 						range: 'min',
 						value: ( <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %> ) / 2,
+						step: <%= line.logical.volume_group.extent / 1024 %>,
 						slide: function( event, ui ) {
 							$( slider_input_name ).val( ui.value );
 						}
@@ -95,11 +105,7 @@
 				})(jQuery);
 			</script>
 			<div>
-				<input name="san.submit_logical_volume_add-<%= line.logical.id %>-<%= line.logical.volume_group.name %>"
-				       src="<%=resource%>/cbi/add.gif"
-				       title="<%: Add logical volume %>"
-				       type="image"
-				       value="<%: Add logical volume %>" />
+				Extent: <%= line.logical.volume_group.extent / 1024 %>
 			</div>
 		</td>
 	</tr>
