@@ -107,6 +107,7 @@ function M.AccessPattern:save()
 	end
 	ucicur:save( M.UCI_CONFIG_NAME )
 	ucicur:commit( M.UCI_CONFIG_NAME )
+	return self
 end
 
 return M
