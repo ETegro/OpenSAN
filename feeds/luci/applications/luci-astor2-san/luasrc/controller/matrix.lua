@@ -216,6 +216,7 @@ local function filter_add_logical_id_to_physical( matrix )
 end
 
 function M.filter_add_access_patterns( matrix, access_patterns )
+	access_patterns = access_patterns or scst.AccessPattern.list()
 	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
 	local access_patterns_names = common.keys( access_patterns_named_hash  )
 	table.sort( access_patterns_names )
@@ -280,7 +281,7 @@ function M.caller()
 		M.filter_volume_group_percentage,
 		filter_mib2tib,
 		filter_add_logical_id_to_physical,
-		function( matrix ) M.filter_add_access_patterns( matrix, scst.AccessPattern.list() ) end
+		M.filter_add_access_patterns
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
