@@ -53,16 +53,16 @@ function M.AccessPattern.list()
 	local access_patterns = {}
 	ucicur:foreach( M.UCI_CONFIG_NAME,
 	                M.AccessPattern.UCI_TYPE_NAME,
-			function( section )
-	                	access_patterns[ access_pattern.name ] = M.AccessPattern:new( {
-					section_name = section[ ".name" ],
+	                function( section )
+	                	access_patterns[ #access_patterns + 1 ] = M.AccessPattern:new( {
+	                		section_name = section[ ".name" ],
 	                		name = section.name,
 	                		targetdriver = section.targetdriver,
 	                		lun = tonumber( section.lun ),
 	                		filename = section.filename,
 	                		enabled = section.enabled,
 	                		readonly = section.readonly
-				} )
+	                        } )
 			end )
 	return access_patterns
 end
