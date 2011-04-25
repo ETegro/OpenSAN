@@ -140,13 +140,13 @@ local function einarc_logical_add( inputs, drives )
 					lvm.PhysicalVolume.rescan()
 					lvm.VolumeGroup.rescan()
 				else
-					message_error = i18n("Failed to create VolumeGroup on logical disk")
+					message_error = i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result
 				end
 			else
-				message_error = i18n("Failed to create PhysicalVolume on logical disk")
+				message_error = i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result
 			end
 		else
-			message_error = i18n("Failed to create logical disk")
+			message_error = i18n("Failed to create logical disk") .. ": " .. result
 		end
 	else
 		message_error = message
@@ -202,7 +202,7 @@ local function einarc_logical_delete( inputs )
 
 	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
-		message_error = i18n("Failed to delete logical disk")
+		message_error = i18n("Failed to delete logical disk") .. ": " .. result
 	end
 
 	index_with_error( message_error )
@@ -230,7 +230,7 @@ local function einarc_logical_hotspare_add( inputs )
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
 	if not return_code then
-		message_error = i18n("Failed to add hotspare disk")
+		message_error = i18n("Failed to add hotspare disk") .. ": " .. result
 	end
 	index_with_error( message_error )
 end
@@ -253,7 +253,7 @@ local function einarc_logical_hotspare_delete( inputs )
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
 	if not return_code then
-		message_error = i18n("Failed to delete hotspare disk")
+		message_error = i18n("Failed to delete hotspare disk") .. ": " .. result
 	end
 	index_with_error( message_error )
 end
@@ -287,7 +287,7 @@ local function lvm_logical_volume_add( inputs )
 		                           logical_volume_name,
 		                           logical_volume_size )
 	if not return_code then
-		message_error = i18n("Failed to add logical volume")
+		message_error = i18n("Failed to add logical volume") .. ": " .. result
 	end
 	index_with_error( message_error )
 end
@@ -311,7 +311,7 @@ local function lvm_logical_volume_remove( inputs )
 		                           { volume_group = { name = volume_group_name },
 		                             name = logical_volume_name } )
 	if not return_code then
-		message_error = i18n("Failed to remove logical volume")
+		message_error = i18n("Failed to remove logical volume") .. ": " .. result
 	end
 	index_with_error( message_error )
 end
@@ -340,7 +340,7 @@ local function lvm_logical_volume_resize( inputs )
 		                             name = logical_volume_name },
 		                           logical_volume_size )
 	if not return_code then
-		message_error = i18n("Failed to resize logical volume")
+		message_error = i18n("Failed to resize logical volume") .. ": " .. result
 	end
 	index_with_error( message_error )
 end
@@ -408,7 +408,7 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 						     name = logical_volume_name },
 						   snapshot_size_new )
 		if not return_code then
-			message_error = i18n("Failed to resize snapshot" .. " Code: " .. result )
+			message_error = i18n("Failed to resize snapshot") .. ": " .. result
 		end
 	end
 	index_with_error( message_error )
