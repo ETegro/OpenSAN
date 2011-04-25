@@ -1244,6 +1244,18 @@ TestMatrix = {}
 			)
 		)
 	end
+	function TestMatrix:test_access_pattern_adding()
+		local access_patterns = {
+		}
+		local matrix = matrix.filter_access_patterns_add(
+			matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple,
+				access_patterns = access_patterns
+			} )
+		)
+	end
+
 
 TestMibToTib = {}
 	function TestMibToTib:test_values_160gb()
