@@ -1,7 +1,6 @@
 <%#
  aStor2 -- storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
-                         Vladimir Petukhov (vladimir.petukhov@etegro.com)
                          Sergey Matveev (stargrave@stargrave.org)
  
  This program is free software: you can redistribute it and/or modify
@@ -18,15 +17,5 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<td valign="top"
-    class="<%+san/matrix_access_pattern_class%>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			AccessPattern	
-		</td>
-	</tr>
-</table>
-
-</td>
+<% if not line.access_pattern.enabled then %>access_pattern-disabled<% end %>
+<% if not line.access_pattern.readonly then %>access_pattern-readonly<% end %>
