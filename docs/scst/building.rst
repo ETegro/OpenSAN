@@ -14,7 +14,6 @@ http://scst.svn.sourceforge.net/viewvc/scst/branches/
 
 На момент написания это 2.0.0.x
 
-
 Непосредственная сборка
 =======================
 
