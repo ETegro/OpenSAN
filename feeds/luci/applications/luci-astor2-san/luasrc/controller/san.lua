@@ -370,7 +370,7 @@ local function lvm_logical_volume_snapshot_add( inputs )
 		                             device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name },
 		                           snapshot_size )
 	if not return_code then
-		message_error = i18n("Failed to create snapshot." .. " Code: " .. result)
+		message_error = i18n("Failed to create snapshot") .. ": " .. result
 	end
 	index_with_error( message_error )
 end
