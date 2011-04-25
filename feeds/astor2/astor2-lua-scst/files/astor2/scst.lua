@@ -91,7 +91,7 @@ function M.AccessPattern:save()
 	ucicur:set( M.UCI_CONFIG_NAME,
 		    self.section_name,
 		    "filename",
-		    self.filename )
+		    self.filename or "" )
 	if self.enabled == true then
 		ucicur:set( M.UCI_CONFIG_NAME,
 			    self.section_name,
