@@ -91,7 +91,6 @@ function M.Logical:new( attrs )
 	assert( common.is_string( attrs.device ) )
 	assert( common.is_string( attrs.state ) )
 	return setmetatable( attrs, Logical_mt )
-
 end
 
 --- einarc logical list
