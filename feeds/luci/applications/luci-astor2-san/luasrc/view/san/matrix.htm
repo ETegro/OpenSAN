@@ -52,7 +52,9 @@
 			<% else %>
 			<% end %>
 		<% end %>
-		<%+san/matrix_access_pattern%>
+		<% if line.access_pattern then %>
+			<%+san/matrix_access_pattern%>
+		<% end %>
 	</tr>
 	<% end %>
 </table>
