@@ -104,49 +104,49 @@ local function einarc_logical_add( inputs, drives )
 			end
 		end
 		if #common.keys( found_models ) ~= 1 then
-			message_error = i18n("Only single model hard drives can be used")
-		else
-			-- Let's call einarc at last
-			local return_code = nil
-			local result = nil
-			local logicals_were = einarc.Logical.list()
-			return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+			message_error = i18n("Only single model hard drives should be used")
+		end
+
+		-- Let's call einarc at last
+		local return_code = nil
+		local result = nil
+		local logicals_were = einarc.Logical.list()
+		return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+		if return_code then
+			-- And let's create PV and VG on it
+			-- At first, find out newly created device
+			local device = nil
+			for logical_id, logical in pairs( einarc.Logical.list() ) do
+				if not logicals_were[ logical_id ] then
+					device = logical.device
+				end
+			end
+			assert( device )
+			-- Then, create PV on it
+			return_code, result = pcall( lvm.PhysicalVolume.create, device )
 			if return_code then
-				-- And let's create PV and VG on it
-				-- At first, find out newly created device
-				local device = nil
-				for logical_id, logical in pairs( einarc.Logical.list() ) do
-					if not logicals_were[ logical_id ] then
-						device = logical.device
+				lvm.PhysicalVolume.rescan()
+				-- Find out newly created PhysicalVolume
+				local physical_volumes = nil
+				for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+					if physical_volume.device == device then
+						physical_volumes = { physical_volume }
 					end
 				end
-				assert( device )
-				-- Then, create PV on it
-				return_code, result = pcall( lvm.PhysicalVolume.create, device )
+				assert( physical_volumes )
+				-- And then, create VG on it
+				return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
 				if return_code then
 					lvm.PhysicalVolume.rescan()
-					-- Find out newly created PhysicalVolume
-					local physical_volumes = nil
-					for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
-						if physical_volume.device == device then
-							physical_volumes = { physical_volume }
-						end
-					end
-					assert( physical_volumes )
-					-- And then, create VG on it
-					return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
-					if return_code then
-						lvm.PhysicalVolume.rescan()
-						lvm.VolumeGroup.rescan()
-					else
-						message_error = i18n("Failed to create VolumeGroup on logical disk")
-					end
+					lvm.VolumeGroup.rescan()
 				else
-					message_error = i18n("Failed to create PhysicalVolume on logical disk")
+					message_error = i18n("Failed to create VolumeGroup on logical disk")
 				end
 			else
-				message_error = i18n("Failed to create logical disk")
+				message_error = i18n("Failed to create PhysicalVolume on logical disk")
 			end
+		else
+			message_error = i18n("Failed to create logical disk")
 		end
 	else
 		message_error = message
