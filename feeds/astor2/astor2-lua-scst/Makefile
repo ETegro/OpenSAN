@@ -29,7 +29,7 @@ endef
 define Build/Compile
 endef
 
-define Package/astor2-lua-common/install
+define Package/astor2-lua-scst/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/astor2
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/astor2/*.lua $(1)/usr/lib/lua/astor2
