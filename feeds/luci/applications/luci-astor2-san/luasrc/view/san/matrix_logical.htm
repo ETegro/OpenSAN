@@ -41,16 +41,16 @@
 			</div>
 
 			<div id="new_volume_slider-<%= line.logical.id %>"></div>
-			<div>
+			<div class="inline">
 				<%: New volume name %>
 			</div>
-			<div>
+			<div class="inline">
 				<input id="san.new_volume_name-<%= line.logical.id %>"
 				       name="san.new_volume_name-<%= line.logical.id %>"
 				       type="text"
 				       value="" />
 			</div>
-			<div>
+			<div class="inline">
 				<input name="san.submit_logical_volume_add-<%= line.logical.id %>-<%= line.logical.volume_group.name %>"
 				       src="<%=resource%>/cbi/add.gif"
 				       title="<%: Add logical volume %>"
