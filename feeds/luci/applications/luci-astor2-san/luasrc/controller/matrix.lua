@@ -21,8 +21,9 @@
 local M = {}
 
 common = require( "astor2.common" )
-lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
+lvm = require( "astor2.lvm" )
+scst = require( "astor2.scst" )
 
 function M.gcd( x, y )
 	if y == 0 then return math.abs( x ) end
@@ -214,6 +215,21 @@ local function filter_add_logical_id_to_physical( matrix )
 	return matrix
 end
 
+function M.filter_add_access_patterns( matrix, access_patterns )
+	access_patterns = access_patterns or scst.AccessPattern.list()
+	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
+	local access_patterns_names = common.keys( access_patterns_named_hash  )
+	table.sort( access_patterns_names )
+	for current_line, access_pattern_name in ipairs( access_patterns_names ) do
+		access_pattern = access_patterns[ access_patterns_named_hash[ access_pattern_name ][1] ]
+		if not matrix[ current_line ] then
+			matrix[ current_line ] = {}
+		end
+		matrix[ current_line ][ "access_pattern" ] = access_pattern
+	end
+	return matrix
+end
+
 local function logical_volume_group( logical, volume_groups )
 	for _, volume_group in ipairs( volume_groups ) do
 		if volume_group.physical_volumes[1].device == logical.device then
@@ -264,7 +280,8 @@ function M.caller()
 		M.filter_borders_highlight,
 		M.filter_volume_group_percentage,
 		filter_mib2tib,
-		filter_add_logical_id_to_physical
+		filter_add_logical_id_to_physical,
+		M.filter_add_access_patterns
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
