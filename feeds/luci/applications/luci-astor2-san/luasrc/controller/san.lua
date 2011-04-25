@@ -400,7 +400,7 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	assert( common.is_positive( snapshot_size_new ) )
 
 	if  snapshot_size_new < snapshot_size then
-		message_error = i18n(" Failed to resize snapshot: new snapshot size < current size")
+		message_error = i18n("Snapshot size should be bigger that it's current size")
 	else
 		local return_code, result = pcall( lvm.Snapshot.resize,
 						   { volume_group = { name = volume_group_name },
