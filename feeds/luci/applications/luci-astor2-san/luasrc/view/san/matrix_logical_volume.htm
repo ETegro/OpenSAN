@@ -42,17 +42,9 @@
 	</tr>
 	<tr>
 		<td colspan="3">
-			<div>
-				<%: Resize logical volume %>
-			</div>
 			<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
 			<div>
-				<input id="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-				       class="logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-				       name="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-				       readonly="readonly"
-				       type="text"
-				       value="0" />
+				<%: Resize logical volume %>: <%= line.logical_volume.name %>
 			</div>
 			<div>
 				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
@@ -63,6 +55,14 @@
 				       type="image"
 				       title="<%: Resize logical volume %>"
 				       value="<%: Resize logical volume %>" />
+			</div>
+			<div>
+				<input id="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
+				       class="logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
+				       name="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
+				       readonly="readonly"
+				       type="text"
+				       value="0" />
 			</div>
 			<script type="text/javascript">
 				jQuery.noConflict();
