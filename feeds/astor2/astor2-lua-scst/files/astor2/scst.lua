@@ -32,7 +32,6 @@ M.AccessPattern.UCI_TYPE_NAME = "astor2-access-pattern"
 
 function M.AccessPattern:new( attrs )
 	assert( attrs.name )
-	assert( attrs.name )
 	assert( common.is_in_array( attrs.targetdriver,
 				    M.AccessPattern.ALLOWED_TARGETDRIVERS ) )
 	assert( common.is_number( attrs.lun ) )
