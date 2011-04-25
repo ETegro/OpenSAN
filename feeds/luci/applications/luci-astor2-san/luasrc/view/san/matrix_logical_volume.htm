@@ -99,6 +99,13 @@
 			<div>
 				<%: Take new snapshot %>
 			</div>
+			<div>
+				<input name="san.submit_logical_volume_snapshot_add-lvd<%= line.logical_volume.device %>"
+				       src="<%=resource%>/cbi/add.gif"
+				       title="<%: Add snapshot %>"
+				       type="image"
+				       value="<%: Add snapshot %>" />
+			</div>
 			<div id="new_snapshot_slider-<%= line.logical_volume.name %>"></div>
 			<div>
 				<input id="san.new_snapshot_slider_size-<%= line.logical_volume.name %>"
@@ -107,13 +114,6 @@
 				       readonly="readonly"
 				       type="text"
 				       value="0" />
-			</div>
-			<div>
-				<input name="san.submit_logical_volume_snapshot_add-lvd<%= line.logical_volume.device %>"
-				       src="<%=resource%>/cbi/add.gif"
-				       title="<%: Add snapshot %>"
-				       type="image"
-				       value="<%: Add snapshot %>" />
 			</div>
 			<script type="text/javascript">
 				jQuery.noConflict();
