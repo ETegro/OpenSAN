@@ -71,10 +71,12 @@ end
 function M.AccessPattern:save()
 	assert( self )
 	local ucicur = uci.cursor()
-	if not self.section_name then
-		self.section_name = ucicur:add( M.UCI_CONFIG_NAME,
-		                                M.AccessPattern.UCI_TYPE_NAME )
+	if self.section_name then
+		ucicur:delete( M.UCI_CONFIG_NAME,
+		               self.section_name )
 	end
+	self.section_name = ucicur:add( M.UCI_CONFIG_NAME,
+					M.AccessPattern.UCI_TYPE_NAME )
 	ucicur:set( M.UCI_CONFIG_NAME,
 		    self.section_name,
 		    "name",
@@ -96,23 +98,14 @@ function M.AccessPattern:save()
 			    self.section_name,
 			    "enabled",
 			    "1" )
-	else
-		ucicur:set( M.UCI_CONFIG_NAME,
-			    self.section_name,
-			    "enabled",
-			    "0" )
 	end
 	if self.readonly == true then
 		ucicur:set( M.UCI_CONFIG_NAME,
 			    self.section_name,
 			    "readonly",
 			    "1" )
-	else
-		ucicur:set( M.UCI_CONFIG_NAME,
-			    self.section_name,
-			    "readonly",
-			    "0" )
 	end
+	ucicur:save( M.UCI_CONFIG_NAME )
 	ucicur:commit( M.UCI_CONFIG_NAME )
 end
 
