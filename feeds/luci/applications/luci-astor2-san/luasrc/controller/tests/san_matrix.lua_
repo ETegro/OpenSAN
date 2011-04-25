@@ -1246,6 +1246,46 @@ TestMatrix = {}
 	end
 	function TestMatrix:test_access_pattern_adding()
 		local access_patterns = {
+			{
+				name = "foobar1",
+				section_name = "foobar1",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 1
+			},
+			{
+				name = "foobar2",
+				section_name = "foobar1",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 2
+			},
+			{
+				name = "foobar3",
+				section_name = "foobar1",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 3
+			},
+			{
+				name = "foobar4",
+				section_name = "foobar1",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 4
+			},
+			{
+				name = "foobar5",
+				section_name = "foobar1",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 5
+			}
 		}
 		local matrix = matrix.filter_access_patterns_add(
 			matrix.overall( {
