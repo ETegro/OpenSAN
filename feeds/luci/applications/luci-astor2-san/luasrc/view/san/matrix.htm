@@ -30,7 +30,7 @@
 		<td><%: Physical drives %></td>
 		<td><%: Logical drives %></td>
 		<td><%: Logical volumes %></td>
-		<td><%: Fourth column %></td>
+		<td><%: AccessPattern %></td>
 	</tr>
 	<% for _, line_local in ipairs( matrix_overall ) do %>
 
@@ -52,6 +52,7 @@
 			<% else %>
 			<% end %>
 		<% end %>
+		<%+san/matrix_access_pattern%>
 	</tr>
 	<% end %>
 </table>
