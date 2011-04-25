@@ -24,39 +24,46 @@ local common = require( "astor2.common" )
 
 M.UCI_CONFIG_NAME = "scst"
 M.UCI_TYPE_NAME = "astor2-access-pattern"
-M.ALLOWED_TARGETDRIVERS = { "iscsi" }
 
 M.AccessPattern = {}
+local AccessPattern_mt = common.Class( M.AccessPattern )
+
+M.AccessPattern.ALLOWED_TARGETDRIVERS = { "iscsi" }
+
+function M.AccessPattern:new( attrs )
+	assert( attrs.name )
+	assert( attrs.name )
+	assert( common.is_in_array( attrs.targetdriver,
+				    M.AccessPattern.ALLOWED_TARGETDRIVERS ) )
+	assert( common.is_number( attrs.lun ) )
+	if attrs.enabled == "1" then
+		attrs.enabled = true
+	else
+		attrs.enabled = false
+	end
+	if attrs.readonly == "1" then
+		attrs.readonly = true
+	else
+		attrs.readonly = false
+	end
+	return setmetatable( attrs, AccessPattern_mt )
+end
 
 function M.AccessPattern.list()
 	local ucicur = uci.cursor()
 	local access_patterns = {}
-
-	local function access_pattern_parse( section )
-		local access_pattern = {
-			name = section.name,
-			targetdriver = section.targetdriver,
-			lun = tonumber( section.lun ),
-			filename = section.filename
-		}
-		assert( access_pattern.name )
-		assert( common.is_in_array( access_pattern.targetdriver,
-		                            M.ALLOWED_TARGETDRIVERS ) )
-		assert( common.is_number( access_pattern.lun ) )
-		if section.enabled == "1" then
-			access_pattern.enabled = true
-		else
-			access_pattern.enabled = false
-		end
-		if section.readonly == "1" then
-			access_pattern.readonly = true
-		else
-			access_pattern.readonly = false
-		end
-		access_patterns[ access_pattern.name ] = access_pattern
-	end
-
-	ucicur:foreach( M.UCI_CONFIG_NAME, M.UCI_TYPE_NAME, access_pattern_parse )
+	ucicur:foreach( M.UCI_CONFIG_NAME,
+	                M.UCI_TYPE_NAME,
+			function( section )
+	                	access_patterns[ access_pattern.name ] = M.AccessPattern:new( {
+	                		name = section.name,
+	                		targetdriver = section.targetdriver,
+	                		lun = tonumber( section.lun ),
+	                		filename = section.filename,
+	                		enabled = section.enabled,
+	                		readonly = section.readonly
+				} )
+			end )
 	return access_patterns
 end
 
