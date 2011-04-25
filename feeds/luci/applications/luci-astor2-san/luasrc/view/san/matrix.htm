@@ -2,6 +2,7 @@
  aStor2 -- storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                         Sergey Matveev (stargrave@stargrave.org)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
@@ -44,15 +45,15 @@
 		<% if line.logical then %>
 			<%+san/matrix_logical%>
 		<% end %>
-		<% if line.logical_volume then %>
-			<% if line.logical_volume.is_snapshot() == false then %>
-				<%+san/matrix_logical_volume%>
-			<% elseif line.logical_volume.is_snapshot() == true then %>
-				<%+san/matrix_logical_volume_snapshot%>
-			<% else %>
-			<% end %>
+		<% if line.logical_volume and line.logical_volume.is_snapshot() == true then %>
+			<%+san/matrix_logical_volume_snapshot%>
 		<% end %>
-		<%+san/matrix_access_pattern%>
+		<% if line.logical_volume and line.logical_volume.is_snapshot() == false then %>
+			<%+san/matrix_logical_volume%>
+		<% end %>
+		<% if line.access_pattern then %>
+			<%+san/matrix_access_pattern%>
+		<% end %>
 	</tr>
 	<% end %>
 </table>

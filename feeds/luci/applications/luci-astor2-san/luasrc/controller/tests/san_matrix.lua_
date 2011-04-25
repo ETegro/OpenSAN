@@ -1244,6 +1244,65 @@ TestMatrix = {}
 			)
 		)
 	end
+	function TestMatrix:test_access_pattern_adding()
+		local access_patterns = {
+			{
+				name = "foobaz1",
+				section_name = "foobar1",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 1
+			},
+			{
+				name = "foobaz2",
+				section_name = "foobar2",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 2
+			},
+			{
+				name = "foobar3",
+				section_name = "foobar3",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 3
+			},
+			{
+				name = "foobar4",
+				section_name = "foobar4",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 4
+			},
+			{
+				name = "foobar5",
+				section_name = "foobar5",
+				targetdriver = "iscsi",
+				enabled = true,
+				readonly = false,
+				lun = 5
+			}
+		}
+		local matrix = matrix.filter_add_access_patterns(
+			matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple,
+			} ),
+			access_patterns
+		)
+		assertEquals( matrix[1].access_pattern.name, "foobar3" )
+		assertEquals( matrix[2].access_pattern.name, "foobar4" )
+		assertEquals( matrix[3].access_pattern.name, "foobar5" )
+		assertEquals( matrix[4].access_pattern.name, "foobaz1" )
+		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
+		assertEquals( matrix[5].physical, nil )
+		assertEquals( matrix[5].logical, nil )
+	end
+
 
 TestMibToTib = {}
 	function TestMibToTib:test_values_160gb()
