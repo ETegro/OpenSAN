@@ -10,5 +10,6 @@ LuCI касающиеся вещи
    local_environment
    modules
    modules-feed
+   sliders-boundaries
    updating
    theming
