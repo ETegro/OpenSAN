@@ -216,7 +216,7 @@ function M.VolumeGroup:logical_volume( name, size )
 		end
 	end
 	if not succeeded then
-		error("lvm:VolumeGroup:logical_volume() failed" )
+		error("lvm:VolumeGroup:logical_volume() failed: " .. table.concat( output.stdout, "\n" ) )
 	end
 end
 
@@ -281,7 +281,7 @@ function M.LogicalVolume:snapshot( size )
 		end
 	end
 	if not succeeded then
-		error("lvm:LogicalVolume:snapshot() failed" )
+		error("lvm:LogicalVolume:snapshot() failed: " .. table.concat( output.stdout, "\n" ) )
 	end
 end
 
@@ -418,7 +418,7 @@ end
 M.start = function()
 	if M.is_running() then return end
 	local succeeded, result = pcall( load_modules )
-	if not succeeded then error( "lvm:start() failed" ) end
+	if not succeeded then error( "lvm:start() failed: " .. result ) end
 	restore_lvm()
 end
 
