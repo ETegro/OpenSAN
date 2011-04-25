@@ -23,12 +23,12 @@ require( "uci" )
 local common = require( "astor2.common" )
 
 M.UCI_CONFIG_NAME = "scst"
-M.UCI_TYPE_NAME = "astor2-access-pattern"
 
 M.AccessPattern = {}
 local AccessPattern_mt = common.Class( M.AccessPattern )
 
 M.AccessPattern.ALLOWED_TARGETDRIVERS = { "iscsi" }
+M.AccessPattern.UCI_TYPE_NAME = "astor2-access-pattern"
 
 function M.AccessPattern:new( attrs )
 	assert( attrs.name )
@@ -53,9 +53,10 @@ function M.AccessPattern.list()
 	local ucicur = uci.cursor()
 	local access_patterns = {}
 	ucicur:foreach( M.UCI_CONFIG_NAME,
-	                M.UCI_TYPE_NAME,
+	                M.AccessPattern.UCI_TYPE_NAME,
 			function( section )
 	                	access_patterns[ access_pattern.name ] = M.AccessPattern:new( {
+					section_name = section[ ".name" ],
 	                		name = section.name,
 	                		targetdriver = section.targetdriver,
 	                		lun = tonumber( section.lun ),
@@ -67,19 +68,50 @@ function M.AccessPattern.list()
 	return access_patterns
 end
 
-function M.AccessPattern.add( access_pattern )
-	assert( access_pattern )
+function M.AccessPattern:save()
+	assert( self )
 	local ucicur = uci.cursor()
-	local section_name = ucicur:add( M.UCI_CONFIG_NAME, M.UCI_TYPE_NAME )
-	ucicur:set( M.UCI_CONFIG_NAME, section_name, "name", access_pattern.name )
-	ucicur:set( M.UCI_CONFIG_NAME, section_name, "targetdriver", access_pattern.targetdriver )
-	ucicur:set( M.UCI_CONFIG_NAME, section_name, "lun", tostring( access_pattern.lun ) )
-	ucicur:set( M.UCI_CONFIG_NAME, section_name, "filename", access_pattern.filename )
-	if access_pattern.enabled == true then
-		ucicur:set( M.UCI_CONFIG_NAME, section_name, "enabled", "true" )
+	if not self.section_name then
+		self.section_name = ucicur:add( M.UCI_CONFIG_NAME,
+		                                M.AccessPattern.UCI_TYPE_NAME )
 	end
-	if access_pattern.readonly == true then
-		ucicur:set( M.UCI_CONFIG_NAME, section_name, "readonly", "true" )
+	ucicur:set( M.UCI_CONFIG_NAME,
+		    self.section_name,
+		    "name",
+		    self.name )
+	ucicur:set( M.UCI_CONFIG_NAME,
+		    self.section_name,
+		    "targetdriver",
+		    self.targetdriver )
+	ucicur:set( M.UCI_CONFIG_NAME,
+		    self.section_name,
+		    "lun",
+		    tostring( self.lun ) )
+	ucicur:set( M.UCI_CONFIG_NAME,
+		    self.section_name,
+		    "filename",
+		    self.filename )
+	if self.enabled == true then
+		ucicur:set( M.UCI_CONFIG_NAME,
+			    self.section_name,
+			    "enabled",
+			    "1" )
+	else
+		ucicur:set( M.UCI_CONFIG_NAME,
+			    self.section_name,
+			    "enabled",
+			    "0" )
+	end
+	if self.readonly == true then
+		ucicur:set( M.UCI_CONFIG_NAME,
+			    self.section_name,
+			    "readonly",
+			    "1" )
+	else
+		ucicur:set( M.UCI_CONFIG_NAME,
+			    self.section_name,
+			    "readonly",
+			    "0" )
 	end
 	ucicur:commit( M.UCI_CONFIG_NAME )
 end
