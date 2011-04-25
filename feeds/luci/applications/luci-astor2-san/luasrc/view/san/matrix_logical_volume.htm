@@ -43,10 +43,11 @@
 	<tr>
 		<td colspan="3">
 			<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
-			<div>
+			</div>
+			<div class="inline">
 				<%: Resize logical volume %>: <%= line.logical_volume.name %>
 			</div>
-			<div>
+			<div class="inline">
 				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
 				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
 						 return false;
@@ -56,7 +57,9 @@
 				       title="<%: Resize logical volume %>"
 				       value="<%: Resize logical volume %>" />
 			</div>
-			<a id="volume_logical_info-<%= line.logical_volume.name %>" href="#">
+			<a id="volume_logical_info-<%= line.logical_volume.name %>"
+			   href="#"
+			   class="inline">
 				<img src="<%=resource%>/cbi/fieldadd.gif"
 				     alt="<%: Snapshot %>"
 				     title="<%: Snapshot %>" />
