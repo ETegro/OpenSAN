@@ -116,4 +116,10 @@ function M.AccessPattern:bind( filename )
 	self:save()
 end
 
+function M.AccessPattern:unbind()
+	assert( self )
+	self.filename = ""
+	self:save()
+end
+
 return M
