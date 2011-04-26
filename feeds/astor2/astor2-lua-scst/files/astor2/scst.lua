@@ -140,6 +140,8 @@ end
 M.Configuration = {}
 local Configuration_mt = common.Class( M.Configuration )
 
+M.Configuration.SCSTADMIN_CONFIG_PATH = "/var/etc/scstadmin.conf"
+
 function M.Configuration.dump()
 	-- Collect only enabled and binded patterns
 	local access_patterns_enabled = {}
@@ -195,6 +197,54 @@ function M.Configuration.dump()
 	end
 
 	return configuration
+end
+
+function M.Configuration.write( configuration, where )
+	local configuration_fd = io.open( where, "w" )
+	configuration_fd:write( configuration )
+	configuration_fd:close()
+end
+
+------------------------------------------------------------------------
+-- Daemon
+------------------------------------------------------------------------
+M.Daemon = {}
+local Daemon_mt = common.Class( M.Daemon )
+
+M.Daemon.SCSTADMIN_PATH = "/usr/sbin/scstadmin"
+
+function M.Daemon.check( configuration )
+	local configuration_path = os.tmpname()
+	M.Configuration.write( configuration,
+	                       configuration_path )
+	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
+	                              " -check_config " ..
+				      configuration_path )
+	if result.return_code ~= 0 then
+		os.remove( configuration_path )
+		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
+	end
+	local succeeded = false
+	for _, line in ipairs( result.stdout ) do
+		if string.match( line, "0 warnings" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then
+		os.remove( configuration_path )
+		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
+	end
+	os.remove( configuration_path )
+end
+
+function M.Daemon.apply()
+	local configuration = M.Configuration.dump()
+	M.Daemon.check( configuration )
+	M.Configuration.write( configuration,
+	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
+	common.system_succeed( M.Daemon.SCSTADMIN_PATH ..
+	                       " -config " ..
+	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 end
 
 return M
