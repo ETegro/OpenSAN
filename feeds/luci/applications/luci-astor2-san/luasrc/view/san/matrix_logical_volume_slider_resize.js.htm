@@ -1,0 +1,41 @@
+<%#
+ aStor2 -- storage area network configurable via Web-interface
+ Copyright (C) 2009-2011 ETegro Technologies, PLC
+                         Vladimir Petukhov (vladimir.petukhov@etegro.com)
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+ 
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+%>
+
+<script type="text/javascript">
+
+jQuery.noConflict();
+(function($){
+	var slider_name = '#logical_volume_resize_slider-<%= line.logical_volume.name %>';
+	var slider_input_name = '.logical_volume_resize_slider_size-<%= line.logical_volume.name %>';
+	$( slider_name ).slider({
+		orientation: 'horizontal',
+		min: 1,
+		max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
+		range: 'min',
+		value: <%= line.logical_volume.size_mib %>,
+		slide: function( event, ui ) {
+			$( slider_input_name ).val( ui.value );
+		}
+	});
+	$( slider_input_name )
+		.val( $( slider_name )
+		.slider( 'value' ) );
+})(jQuery);
+
+</script>

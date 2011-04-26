@@ -74,26 +74,7 @@
 				       type="text"
 				       value="0" />
 			</div>
-			<script type="text/javascript">
-				jQuery.noConflict();
-				(function($){
-					var slider_name = '#logical_volume_resize_slider-<%= line.logical_volume.name %>';
-					var slider_input_name = '.logical_volume_resize_slider_size-<%= line.logical_volume.name %>';
-					$( slider_name ).slider({
-						orientation: 'horizontal',
-						min: 1,
-						max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
-						range: 'min',
-						value: <%= line.logical_volume.size_mib %>,
-						slide: function( event, ui ) {
-							$( slider_input_name ).val( ui.value );
-						}
-					});
-					$( slider_input_name )
-						.val( $( slider_name )
-						.slider( 'value' ) );
-				})(jQuery);
-			</script>
+			<%+san/matrix_logical_volume_slider_resize.js%>
 		</td>
 	</tr>
 	<tr class="to_hide">
