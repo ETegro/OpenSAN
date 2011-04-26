@@ -242,9 +242,9 @@ function M.Daemon.apply()
 	M.Daemon.check( configuration )
 	M.Configuration.write( configuration,
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
-	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
-	                              " -check_config " ..
-				      M.Configuration.SCSTADMIN_CONFIG_PATH )
+	common.system_succeed( M.Daemon.SCSTADMIN_PATH ..
+	                       " -config " ..
+	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 end
 
 return M
