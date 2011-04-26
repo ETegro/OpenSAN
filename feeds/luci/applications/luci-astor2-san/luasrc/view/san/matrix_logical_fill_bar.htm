@@ -18,7 +18,13 @@
 %>
 
 <div>
-	<span title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
-		<%= line.logical.volume_group.allocated %> <%: TiB %> / <%= line.logical.volume_group.total %> <%: TiB %> (<%= line.logical.volume_group.percentage or "0" %> %)
+	<span title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %>
+	             /
+		     <%= line.logical.volume_group.total_mib %> <%: MiB %>
+		     (<%= line.logical.volume_group.percentage or "0" %> %)">
+		<%= line.logical.volume_group.allocated %> <%: TiB %>
+		/
+		<%= line.logical.volume_group.total %> <%: TiB %>
+		(<%= line.logical.volume_group.percentage or "0" %> %)
 	</span>
 </div>
