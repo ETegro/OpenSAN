@@ -27,6 +27,35 @@
 	<tr>
 		<td>
 			<%= line.access_pattern.name %>
+			<div class="inline">
+				<%: Name %>: 
+			</div>
+			<div class="inline">
+				<input type="text" />
+			</div>
+			<div class="inline">
+				<%: LUN %>: 
+			</div>
+			<div class="inline">
+				<input type="text" />
+			</div>
+			<div class="inline">
+				<lable for="san.ap"><%: State %>:</lable>
+				<input name="san.ap"
+				       id="san.ap_enable"
+				       type ="radio"
+				       value="1" />
+				enable
+				<input name="san.ap"
+				       id="san.ap_disable"
+				       type ="radio"
+				       value="0" />
+				disable
+			</div>
+			<div>
+				<input type="submit"
+				       value="<%: Add AcessPattern %>" />
+			</div>
 		</td>
 	</tr>
 </table>
