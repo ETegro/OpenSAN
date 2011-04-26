@@ -225,7 +225,7 @@ function M.Daemon.check( configuration )
 		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
 	end
 	local succeeded = false
-	for _, line in ipairs( result.output ) do
+	for _, line in ipairs( result.stdout ) do
 		if string.match( line, "0 warnings" ) then
 			succeeded = true
 		end
