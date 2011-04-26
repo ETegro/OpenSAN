@@ -51,7 +51,7 @@
 			</div>
 			<div class="inline">
 				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
-				       onclick=" if ( !confirm( '<%: Really resize logical volume drive? %>' ) )
+				       onclick=" if ( !confirm( '<%: Really resize logical volume? %>' ) )
 						 return false;
 						 return true;"
 				       src="<%=resource%>/cbi/reload.gif"
