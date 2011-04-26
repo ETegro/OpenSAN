@@ -24,6 +24,9 @@ local common = require( "astor2.common" )
 
 M.UCI_CONFIG_NAME = "scst"
 
+------------------------------------------------------------------------
+-- AccessPattern
+------------------------------------------------------------------------
 M.AccessPattern = {}
 local AccessPattern_mt = common.Class( M.AccessPattern )
 
