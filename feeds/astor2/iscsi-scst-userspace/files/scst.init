@@ -2,10 +2,12 @@
 START=50
 
 VAR_PR=/var/lib/scst/pr
+SCSTD=/usr/sbin/iscsi-scstd
 
 start()
 {
 	mkdir -p $VAR_PR
+	$SCSTD
 }
 
 stop()
