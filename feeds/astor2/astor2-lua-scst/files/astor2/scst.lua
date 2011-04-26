@@ -199,8 +199,8 @@ function M.Configuration.dump()
 	return configuration
 end
 
-function M.Configuration.write( configuration )
-	local configuration_fd = io.open( M.Configuration.SCSTADMIN_CONFIG_PATH, "w" )
+function M.Configuration.write( configuration, where )
+	local configuration_fd = io.open( where, "w" )
 	configuration_fd:write( configuration )
 	configuration_fd:close()
 end
@@ -214,7 +214,8 @@ local Daemon_mt = common.Class( M.Daemon )
 M.Daemon.SCSTADMIN_PATH = "/usr/sbin/scstadmin"
 
 function M.Daemon.apply()
-	M.Configuration.write( M.Configuration.dump() )
+	M.Configuration.write( M.Configuration.dump(),
+	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
 	                              " -check_config " ..
 				      M.Configuration.SCSTADMIN_CONFIG_PATH )
