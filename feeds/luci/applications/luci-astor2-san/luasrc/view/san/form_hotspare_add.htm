@@ -19,7 +19,7 @@
 
 <% if line.physical.state == "free" then %>
 	<li>
-		<div class="inline"><%: Logical hotspare %>: </div>
+		<div class="inline"><%: RAID %> #: </div>
 		<div class="inline">
 			<select id="san.logical_id_hotspare-<%= line.physical.id %>"
 				name="san.logical_id_hotspare-<%= line.physical.id %>"
