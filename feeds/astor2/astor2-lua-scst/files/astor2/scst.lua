@@ -143,7 +143,7 @@ function M.Configuration.dump()
 	-- Collect only enabled and binded patterns
 	local access_patterns_enabled = {}
 	for _, access_pattern in ipairs( M.AccessPattern.list() ) do
-		if access_pattern.enabled and access_pattern.is_binded() then
+		if access_pattern.enabled and access_pattern:is_binded() then
 			access_patterns_enabled[ #access_patterns_enabled + 1 ] = access_pattern
 		end
 	end
