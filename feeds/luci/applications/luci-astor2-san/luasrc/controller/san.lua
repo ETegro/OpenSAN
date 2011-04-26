@@ -425,12 +425,31 @@ local function scst_access_pattern_new( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_name = nil --string
-	local access_pattern_targetdriver = nil --string
-	local access_pattern_lun = nil --number
-	local access_pattern_enabled = nil --boolean
-	local access_pattern_readonly = nil --boolean
-	local access_pattern_filename = nil --string
+	local access_pattern_name = inputs[ "access_pattern_create-name" ]
+	assert( access_pattern_name )
+
+	local access_pattern_targetdriver = inputs[ "access_pattern_create-targetdriver" ]
+	assert( access_pattern_targetdriver )
+
+	local access_pattern_lun = inputs[ "access_pattern_create-lun" ]
+	assert( access_pattern_lun )
+
+	local access_pattern_enabled = inputs[ "access_pattern_create-enabled" ]
+	if tonumber( access_pattern_enabled ) == 1 then
+		access_pattern_enabled = true
+	else
+		access_pattern_enabled = false
+	end
+
+	local access_pattern_readonly = inputs[ "access_pattern_create-readonly" ]
+	if tonumber( access_pattern_readonly ) == 1 then
+		access_pattern_readonly = true
+	else
+		access_pattern_readonly = false
+	end
+
+	local access_pattern_filename = inputs[ "access_pattern_create-filename" ]
+	assert( access_pattern_filename )
 
 	local access_pattern_attributes = { name = access_pattern_name,
 		                            targetdriver = access_pattern_targetdriver,
