@@ -2,7 +2,7 @@
  aStor2 -- storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
- 
+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
  published by the Free Software Foundation, either version 3 of the
@@ -17,34 +17,46 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<div id="div_access_patter_create">
-	<div class="inline">
-		<%: Name %>: 
+<div id="div_access_pattern_create">
+	<div>
+		Create AccessPattern
 	</div>
-	<div class="inline">
-		<input type="text" />
+	<div>
+		<%: Name %>: 
+		<input name="san.access_pattern_create-name"
+		       type="text" />
+	</div>
+	<div>
+		<%: Transport %>: 
+		<input name="san.access_pattern_create-targetdriver"
+		       type="text"
+		       readonly="readonly"
+		       value="iscsi" />
 	</div>
 	<div>
 		<%: LUN %>: 
-	</div>
-	<div class="inline">
-		<input type="text" />
-	</div>
-	<div class="inline">
-		<lable for="san.access_pattern"><%: State %>:</lable>
-		<input name="san.access_pattern"
-		       id="san.access_pattern_enable"
-		       type ="radio"
-		       value="1" />
-		enable
-		<input name="san.access_pattern"
-		       id="san.access_pattern_disable"
-		       type ="radio"
-		       value="0" />
-		disable
+		<input name="san.access_pattern_create-lun"
+		       id="san.access_pattern_create-lun"
+		       type="text" />
 	</div>
 	<div>
-		<input type="submit"
+		<%: Enabled %>
+		<input name="san.access_pattern_create-enabled"
+		       id="san.access_pattern_create-enabled"
+		       type="checkbox"
+		       value="1" />
+	</div>
+	<div>
+		<%: Readonly %>
+		<input name="san.access_pattern_create-readonly"
+		       id="san.access_pattern_create-readonly"
+		       type="checkbox"
+		       value="1" />
+	</div>
+
+	<div>
+		<input name="san.submit_access_pattern_create"
+		       type="submit"
 		       value="<%: Add AcessPattern %>" />
 	</div>
 </div>
