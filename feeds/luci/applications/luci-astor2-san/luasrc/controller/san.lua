@@ -426,13 +426,16 @@ local function scst_access_pattern_new( inputs )
 	local message_error = nil
 
 	local access_pattern_name = inputs[ "access_pattern_create-name" ]
-	assert( access_pattern_name )
+	if access_pattern_name == "" then
+		index_with_error( i18n("AccessPattern name is not set") )
+	end
 
 	local access_pattern_targetdriver = inputs[ "access_pattern_create-targetdriver" ]
 	assert( access_pattern_targetdriver )
 
 	local access_pattern_lun = inputs[ "access_pattern_create-lun" ]
-	assert( access_pattern_lun )
+	access_pattern_lun = tonumber( access_pattern_lun )
+	assert( common.is_positive( access_pattern_lun ) )
 
 	local access_pattern_enabled = inputs[ "access_pattern_create-enabled" ]
 	if tonumber( access_pattern_enabled ) == 1 then
@@ -454,17 +457,16 @@ local function scst_access_pattern_new( inputs )
 		                            targetdriver = access_pattern_targetdriver,
 		                            lun = access_pattern_lun,
 		                            enabled = access_pattern_enabled,
-		                            readonly = access_pattern_readonly,
-		                            filename = access_pattern_filename }
+		                            readonly = access_pattern_readonly }
 
-	local return_code, result = pcall( scst.AccessPattern.new, access_pattern_attributes )
-	if not return_code then
+	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
+	if return_code then
+		return_code, result = pcall( scst.AccessPattern.save, result )
+		if not return_code then
+			message_error = i18n("Failed to save config") .. ": " .. result
+		end
+	else
 		message_error = i18n("Failed to create AccessPattern") .. ": " .. result
-	end
-
-	local return_code, result = pcall( scst.AccessPattern.save, access_pattern_attributes )
-	if not return_code then
-		message_error = i18n("Failed to save AccessPattern") .. ": " .. result
 	end
 
 	index_with_error( message_error )
