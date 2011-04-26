@@ -206,4 +206,14 @@ function M.Configuration.write()
 	configuration_fd:close()
 end
 
+------------------------------------------------------------------------
+-- Daemon
+------------------------------------------------------------------------
+M.Daemon = {}
+local Daemon_mt = common.Class( M.Daemon )
+
+function M.Daemon.apply()
+	M.Configuration.write()
+end
+
 return M
