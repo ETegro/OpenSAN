@@ -419,6 +419,40 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 end
 
 ------------------------------------------------------------------------
+-- SCST related functions
+------------------------------------------------------------------------
+local function scst_access_pattern_new( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local access_pattern_name = nil --string
+	local access_pattern_targetdriver = nil --string
+	local access_pattern_lun = nil --number
+	local access_pattern_enabled = nil --boolean
+	local access_pattern_readonly = nil --boolean
+	local access_pattern_filename = nil --string
+
+	local access_pattern_attributes = { name = access_pattern_name,
+		                            targetdriver = access_pattern_targetdriver,
+		                            lun = access_pattern_lun,
+		                            enabled = access_pattern_enabled,
+		                            readonly = access_pattern_readonly,
+		                            filename = access_pattern_filename }
+
+	local return_code, result = pcall( scst.AccessPattern.new, access_pattern_attributes )
+	if not return_code then
+		message_error = i18n("Failed to create AccessPattern") .. ": " .. result
+	end
+
+	local return_code, result = pcall( scst.AccessPattern.save, access_pattern_attributes )
+	if not return_code then
+		message_error = i18n("Failed to save AccessPattern") .. ": " .. result
+	end
+
+	index_with_error( message_error )
+end
+
+------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
 function index_overall()
