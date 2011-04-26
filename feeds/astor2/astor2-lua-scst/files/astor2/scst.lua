@@ -149,6 +149,8 @@ function M.Configuration.dump()
 		end
 	end
 
+	if #access_patterns_enabled == 0 then return "" end
+
 	local configuration = ""
 
 	-- Create HANDLERs
