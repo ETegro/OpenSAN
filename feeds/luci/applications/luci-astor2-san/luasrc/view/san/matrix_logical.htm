@@ -53,11 +53,7 @@
 			local_colspan = local_colspan + 1
 		end %>
 		<td colspan="<%= local_colspan %>">
-			<div>
-				<span title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
-					<%= line.logical.volume_group.allocated %> <%: TiB %> / <%= line.logical.volume_group.total %> <%: TiB %> (<%= line.logical.volume_group.percentage or "0" %> %)
-				</span>
-			</div>
+			<%+san/matrix_logical_fill_bar%>
 			<div id="new_volume_slider-<%= line.logical.id %>"></div>
 			<div class="inline">
 				<%: New logical volume name %>
