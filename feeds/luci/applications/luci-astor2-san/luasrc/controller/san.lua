@@ -225,7 +225,7 @@ local function einarc_logical_hotspare_add( inputs )
 
 	logical_id = tonumber( logical_id )
 	if not logical_id then
-		index_with_error( i18n("Logical not selected") )
+		index_with_error( i18n("Logical disk is not selected") )
 	end
 
 	-- Let's call einarc at last
@@ -279,10 +279,10 @@ local function lvm_logical_volume_add( inputs )
 
 	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
 	if logical_volume_name == "" then
-		index_with_error( i18n("Volume name is not set") )
+		index_with_error( i18n("Logical volume name is not set") )
 	end
 	if not string.match( logical_volume_name, lvm.LogicalVolume.name_valid_re ) then
-		index_with_error( i18n("Invalid volume name") )
+		index_with_error( i18n("Invalid logical volume name") )
 	end
 
 	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
@@ -430,7 +430,7 @@ local function scst_access_pattern_new( inputs )
 
 	local access_pattern_name = inputs[ "access_pattern_create-name" ]
 	if access_pattern_name == "" then
-		index_with_error( i18n("AccessPattern name is not set") )
+		index_with_error( i18n("Access pattern's name is not set") )
 	end
 
 	local access_pattern_targetdriver = inputs[ "access_pattern_create-targetdriver" ]
@@ -469,7 +469,7 @@ local function scst_access_pattern_new( inputs )
 			message_error = i18n("Failed to save config") .. ": " .. result
 		end
 	else
-		message_error = i18n("Failed to create AccessPattern") .. ": " .. result
+		message_error = i18n("Failed to create access pattern") .. ": " .. result
 	end
 
 	index_with_error( message_error )
