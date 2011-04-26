@@ -199,4 +199,11 @@ function M.Configuration.dump()
 	return configuration
 end
 
+function M.Configuration.write()
+	local configuration = M.Configuration.dump()
+	local configuration_fd = io.open( M.Configuration.SCSTADMIN_CONFIG_PATH, "w" )
+	configuration_fd:write( configuration )
+	configuration_fd:close()
+end
+
 return M
