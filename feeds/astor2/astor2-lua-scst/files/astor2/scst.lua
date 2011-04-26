@@ -109,4 +109,11 @@ function M.AccessPattern:save()
 	return self
 end
 
+function M.AccessPattern:bind( filename )
+	assert( self )
+	assert( filename )
+	self.filename = filename
+	self:save()
+end
+
 return M
