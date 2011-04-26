@@ -140,6 +140,8 @@ end
 M.Configuration = {}
 local Configuration_mt = common.Class( M.Configuration )
 
+M.Configuration.SCSTADMIN_CONFIG_PATH = "/var/etc/scstadmin.conf"
+
 function M.Configuration.dump()
 	-- Collect only enabled and binded patterns
 	local access_patterns_enabled = {}
