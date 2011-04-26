@@ -24,6 +24,7 @@ common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 matrix = require( "luci.controller.matrix" )
+scst = require( "astor2.scst" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -258,6 +259,9 @@ local function einarc_logical_hotspare_delete( inputs )
 	index_with_error( message_error )
 end
 
+------------------------------------------------------------------------
+-- LVM related functions
+------------------------------------------------------------------------
 local function lvm_logical_volume_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -414,6 +418,59 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	index_with_error( message_error )
 end
 
+------------------------------------------------------------------------
+-- SCST related functions
+------------------------------------------------------------------------
+local function scst_access_pattern_new( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local access_pattern_name = inputs[ "access_pattern_create-name" ]
+	if access_pattern_name == "" then
+		index_with_error( i18n("AccessPattern name is not set") )
+	end
+
+	local access_pattern_targetdriver = inputs[ "access_pattern_create-targetdriver" ]
+	assert( access_pattern_targetdriver )
+
+	local access_pattern_lun = inputs[ "access_pattern_create-lun" ]
+	access_pattern_lun = tonumber( access_pattern_lun )
+	assert( common.is_number( access_pattern_lun ) )
+
+	local access_pattern_enabled = inputs[ "access_pattern_create-enabled" ]
+	if tonumber( access_pattern_enabled ) == 1 then
+		access_pattern_enabled = true
+	else
+		access_pattern_enabled = false
+	end
+
+	local access_pattern_readonly = inputs[ "access_pattern_create-readonly" ]
+	if tonumber( access_pattern_readonly ) == 1 then
+		access_pattern_readonly = true
+	else
+		access_pattern_readonly = false
+	end
+
+	local access_pattern_filename = inputs[ "access_pattern_create-filename" ]
+
+	local access_pattern_attributes = { name = access_pattern_name,
+		                            targetdriver = access_pattern_targetdriver,
+		                            lun = access_pattern_lun,
+		                            enabled = access_pattern_enabled,
+		                            readonly = access_pattern_readonly }
+
+	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
+	if return_code then
+		return_code, result = pcall( scst.AccessPattern.save, result )
+		if not return_code then
+			message_error = i18n("Failed to save config") .. ": " .. result
+		end
+	else
+		message_error = i18n("Failed to create AccessPattern") .. ": " .. result
+	end
+
+	index_with_error( message_error )
+end
 
 ------------------------------------------------------------------------
 -- Different common functions
@@ -448,7 +505,8 @@ function perform()
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
 		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end,
-		logical_volume_snapshot_resize = function() lvm_logical_volume_snapshot_resize( inputs ) end
+		logical_volume_snapshot_resize = function() lvm_logical_volume_snapshot_resize( inputs ) end,
+		access_pattern_create = function() scst_access_pattern_new( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
