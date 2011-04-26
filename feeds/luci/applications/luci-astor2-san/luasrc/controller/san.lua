@@ -24,6 +24,7 @@ common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 matrix = require( "luci.controller.matrix" )
+scst = require( "astor2.scst" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
