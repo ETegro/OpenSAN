@@ -17,34 +17,37 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<div id="div_access_patter_create">
+<div id="div_access_pattern_create">
 	<div class="inline">
 		<%: Name %>: 
 	</div>
 	<div class="inline">
-		<input type="text" />
+		<input name="san.access_pattern_create-name"
+		       type="text" />
 	</div>
 	<div>
 		<%: LUN %>: 
 	</div>
 	<div class="inline">
-		<input type="text" />
+		<input name="san.access_pattern_create-lun"
+		       type="text" />
 	</div>
 	<div class="inline">
-		<lable for="san.access_pattern"><%: State %>:</lable>
-		<input name="san.access_pattern"
-		       id="san.access_pattern_enable"
+		<lable for="san.access_pattern_create-state"><%: State %>:</lable>
+		<input name="san.access_pattern_create-state"
+		       id="san.access_pattern_create-state-enable"
 		       type ="radio"
 		       value="1" />
 		enable
-		<input name="san.access_pattern"
-		       id="san.access_pattern_disable"
+		<input name="san.access_pattern_create-state"
+		       id="san.access_pattern_create-state-disable"
 		       type ="radio"
 		       value="0" />
 		disable
 	</div>
 	<div>
-		<input type="submit"
+		<input name="san.submit_access_pattern_create"
+		       type="submit"
 		       value="<%: Add AcessPattern %>" />
 	</div>
 </div>
