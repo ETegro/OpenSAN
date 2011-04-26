@@ -435,7 +435,7 @@ local function scst_access_pattern_new( inputs )
 
 	local access_pattern_lun = inputs[ "access_pattern_create-lun" ]
 	access_pattern_lun = tonumber( access_pattern_lun )
-	assert( common.is_positive( access_pattern_lun ) )
+	assert( common.is_number( access_pattern_lun ) )
 
 	local access_pattern_enabled = inputs[ "access_pattern_create-enabled" ]
 	if tonumber( access_pattern_enabled ) == 1 then
