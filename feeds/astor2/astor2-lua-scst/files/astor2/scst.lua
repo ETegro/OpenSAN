@@ -221,6 +221,7 @@ function M.Daemon.check( configuration )
 	                              " -check_config " ..
 				      configuration_path )
 	if result.return_code ~= 0 then
+		os.remove( configuration_path )
 		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
 	end
 	local succeeded = false
@@ -230,8 +231,10 @@ function M.Daemon.check( configuration )
 		end
 	end
 	if not succeeded then
+		os.remove( configuration_path )
 		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
 	end
+	os.remove( configuration_path )
 end
 
 function M.Daemon.apply()
