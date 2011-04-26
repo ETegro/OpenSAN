@@ -259,6 +259,9 @@ local function einarc_logical_hotspare_delete( inputs )
 	index_with_error( message_error )
 end
 
+------------------------------------------------------------------------
+-- LVM related functions
+------------------------------------------------------------------------
 local function lvm_logical_volume_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -414,7 +417,6 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	end
 	index_with_error( message_error )
 end
-
 
 ------------------------------------------------------------------------
 -- Different common functions
