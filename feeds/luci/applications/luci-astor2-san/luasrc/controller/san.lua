@@ -360,13 +360,13 @@ local function lvm_logical_volume_snapshot_add( inputs )
 
 	for k, v in pairs( inputs ) do
 		if not logical_volume_name then
-			-- TODO regexp from astor2.lvm
 			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).([A-Za-z0-9\-_#%%:]+)$" )
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).(.+)$" )
 		end
 	end
 	assert( volume_group_name )
 	assert( logical_volume_name )
+	assert( string.match( logical_volume_name, lvm.LogicalVolume.name_valid_re ) )
 
 	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
 	snapshot_size = tonumber( snapshot_size )
