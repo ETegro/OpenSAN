@@ -449,7 +449,6 @@ local function scst_access_pattern_new( inputs )
 	end
 
 	local access_pattern_filename = inputs[ "access_pattern_create-filename" ]
-	assert( access_pattern_filename )
 
 	local access_pattern_attributes = { name = access_pattern_name,
 		                            targetdriver = access_pattern_targetdriver,
