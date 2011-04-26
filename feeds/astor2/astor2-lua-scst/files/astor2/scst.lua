@@ -126,6 +126,7 @@ function M.AccessPattern:unbind()
 end
 
 function M.AccessPattern:is_binded()
+	assert( self )
 	if self.filename then
 		return true
 	else
