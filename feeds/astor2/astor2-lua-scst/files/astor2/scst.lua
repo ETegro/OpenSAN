@@ -211,6 +211,8 @@ end
 M.Daemon = {}
 local Daemon_mt = common.Class( M.Daemon )
 
+M.Daemon.SCSTADMIN_PATH = "/usr/sbin/scstadmin"
+
 function M.Daemon.apply()
 	M.Configuration.write( M.Configuration.dump() )
 end
