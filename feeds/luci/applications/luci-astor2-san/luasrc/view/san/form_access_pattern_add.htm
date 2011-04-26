@@ -2,7 +2,7 @@
  aStor2 -- storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
- 
+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
  published by the Free Software Foundation, either version 3 of the
@@ -18,17 +18,13 @@
 %>
 
 <div id="div_access_pattern_create">
-	<div class="inline">
+	<div>
 		<%: Name %>: 
-	</div>
-	<div class="inline">
 		<input name="san.access_pattern_create-name"
 		       type="text" />
 	</div>
 	<div>
 		<%: Transport %>: 
-	</div>
-	<div class="inline">
 		<input name="san.access_pattern_create-targetdriver"
 		       type="text"
 		       readonly="readonly"
@@ -36,13 +32,11 @@
 	</div>
 	<div>
 		<%: LUN %>: 
-	</div>
-	<div class="inline">
 		<input name="san.access_pattern_create-lun"
 		       type="text" />
 	</div>
-	<div class="inline">
-		<lable for="san.access_pattern_create-enabled"><%: State %>:</lable>
+	<div>
+		<%: Readonly %>
 		<input name="san.access_pattern_create-enabled"
 		       id="san.access_pattern_create-enabled-true"
 		       type ="radio"
