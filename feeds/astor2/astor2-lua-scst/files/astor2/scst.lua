@@ -215,6 +215,21 @@ M.Daemon.SCSTADMIN_PATH = "/usr/sbin/scstadmin"
 
 function M.Daemon.apply()
 	M.Configuration.write( M.Configuration.dump() )
+	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
+	                              " -check_config " ..
+				      M.Configuration.SCSTADMIN_CONFIG_PATH )
+	if result.return_code ~= 0 then
+		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
+	end
+	local succeeded = false
+	for _, line in ipairs( result.output ) do
+		if string.match( line, "0 warnings" ) then
+			succeeded = true
+		end
+	end
+	if not succeeded then
+		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
+	end
 end
 
 return M
