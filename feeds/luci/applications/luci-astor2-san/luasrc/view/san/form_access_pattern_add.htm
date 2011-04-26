@@ -2,7 +2,6 @@
  aStor2 -- storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
-                         Sergey Matveev (stargrave@stargrave.org)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
@@ -18,17 +17,34 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<%+san/matrix_access_pattern_td_prefill%>
-
-<td valign="top"
-    class="<%+san/matrix_access_pattern_class%>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<%= line.access_pattern.name %>
-		</td>
-	</tr>
-</table>
-
-</td>
+<div id="div_access_patter_create">
+	<div class="inline">
+		<%: Name %>: 
+	</div>
+	<div class="inline">
+		<input type="text" />
+	</div>
+	<div>
+		<%: LUN %>: 
+	</div>
+	<div class="inline">
+		<input type="text" />
+	</div>
+	<div class="inline">
+		<lable for="san.access_pattern"><%: State %>:</lable>
+		<input name="san.access_pattern"
+		       id="san.access_pattern_enable"
+		       type ="radio"
+		       value="1" />
+		enable
+		<input name="san.access_pattern"
+		       id="san.access_pattern_disable"
+		       type ="radio"
+		       value="0" />
+		disable
+	</div>
+	<div>
+		<input type="submit"
+		       value="<%: Add AcessPattern %>" />
+	</div>
+</div>
