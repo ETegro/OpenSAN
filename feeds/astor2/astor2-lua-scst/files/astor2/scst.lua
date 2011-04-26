@@ -199,8 +199,7 @@ function M.Configuration.dump()
 	return configuration
 end
 
-function M.Configuration.write()
-	local configuration = M.Configuration.dump()
+function M.Configuration.write( configuration )
 	local configuration_fd = io.open( M.Configuration.SCSTADMIN_CONFIG_PATH, "w" )
 	configuration_fd:write( configuration )
 	configuration_fd:close()
@@ -213,7 +212,7 @@ M.Daemon = {}
 local Daemon_mt = common.Class( M.Daemon )
 
 function M.Daemon.apply()
-	M.Configuration.write()
+	M.Configuration.write( M.Configuration.dump() )
 end
 
 return M
