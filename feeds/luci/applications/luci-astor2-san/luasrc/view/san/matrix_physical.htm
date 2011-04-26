@@ -32,7 +32,11 @@
 			<a href="#" id="physical_info-<%= line.physical.id %>"><%= line.physical.id %></a>
 		</td>
 		<td><%= line.physical.model %></td>
-		<td><span title="<%= line.physical.size_mib %> <%: MiB %>"><%= line.physical.size %> <%: TiB %></span></td>
+		<td>
+			<span title="<%= line.physical.size_mib %> <%: MiB %>">
+				<%= line.physical.size %> <%: TiB %>
+			</span>
+		</td>
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
@@ -41,7 +45,11 @@
 				<li><%: S/N %>: <%= line.physical.serial %></li>
 				<li><%: Revision %>: <%= line.physical.revision %></li>
 				<li><%: State %>: <%= line.physical.state %></li>
-				<li><%: Size %>: <span title="<%= line.physical.size_mib %> (<%: MiB %>)"><%= line.physical.size %> (<%: TiB %>)</span></li>
+				<li><%: Size %>:
+					<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
+						<%= line.physical.size %> (<%: TiB %>)
+					</span>
+				</li>
 				<% for _, this_line in ipairs( matrix_overall ) do %>
 					<% if this_line.logical then %>
 						<%+san/form_hotspare_add%>
