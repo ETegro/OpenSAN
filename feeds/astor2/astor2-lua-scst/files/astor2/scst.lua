@@ -38,12 +38,12 @@ function M.AccessPattern:new( attrs )
 	assert( common.is_in_array( attrs.targetdriver,
 				    M.AccessPattern.ALLOWED_TARGETDRIVERS ) )
 	assert( common.is_number( attrs.lun ) )
-	if attrs.enabled == "1" then
+	if attrs.enabled == "1" or attrs.enabled == true then
 		attrs.enabled = true
 	else
 		attrs.enabled = false
 	end
-	if attrs.readonly == "1" then
+	if attrs.readonly == "1" or attrs.readonly == true then
 		attrs.readonly = true
 	else
 		attrs.readonly = false
