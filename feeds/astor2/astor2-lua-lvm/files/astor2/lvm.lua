@@ -78,16 +78,19 @@ function M.PhysicalVolume.list()
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
 		local device, volume_group, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([/%w]+):([^:]*):(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+
 		extent = tonumber( extent )
 		if extent == 0 then extent = 4096 end
+		extent = extent / 1024.0 -- Convert it to MiB immediately
+
 		capacity = tonumber( capacity ) * 0.5
 		capacity = capacity / 1024
-		unusable = capacity % extent / 1024
+		unusable = capacity % extent
 
 		physical_volumes[ #physical_volumes + 1 ] = M.PhysicalVolume:new( {
-			total = tonumber( total ) * extent / 1024,
-			free = tonumber( free ) * extent / 1024,
-			allocated = tonumber( allocated ) * extent / 1024,
+			total = tonumber( total ) * extent,
+			free = tonumber( free ) * extent,
+			allocated = tonumber( allocated ) * extent,
 			volumes = tonumber( volumes ),
 			capacity = capacity,
 			unusable = unusable,
@@ -165,7 +168,9 @@ function M.VolumeGroup.list( physical_volumes )
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
 		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*(%w+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+
 		extent = tonumber( extent )
+		extent = extent / 1024.0
 
 		local physicals_volumes_in_group = {}
 		for _, physical_volume in ipairs( physical_volumes ) do
@@ -179,9 +184,9 @@ function M.VolumeGroup.list( physical_volumes )
 			name = name,
 			max_volume = tonumber( max_volume ),
 			extent = extent,
-			total = tonumber( total ) * extent / 1024,
-			allocated = tonumber( allocated ) * extent / 1024,
-			free = tonumber( free ) * free / 1024,
+			total = tonumber( total ) * extent,
+			allocated = tonumber( allocated ) * extent,
+			free = tonumber( free ) * free,
 			number = tonumber( string.match( name, "(%d+)$" ) ),
 			physical_volumes = physicals_volumes_in_group
 		})
@@ -211,7 +216,7 @@ function M.VolumeGroup:logical_volume( name, size )
 		end
 	end
 	if not succeeded then
-		error("lvm:VolumeGroup:logical_volume() failed" )
+		error("lvm:VolumeGroup:logical_volume() failed: " .. table.concat( output.stdout, "\n" ) )
 	end
 end
 
@@ -276,7 +281,7 @@ function M.LogicalVolume:snapshot( size )
 		end
 	end
 	if not succeeded then
-		error("lvm:LogicalVolume:snapshot() failed" )
+		error("lvm:LogicalVolume:snapshot() failed: " .. table.concat( output.stdout, "\n" ) )
 	end
 end
 
@@ -413,7 +418,7 @@ end
 M.start = function()
 	if M.is_running() then return end
 	local succeeded, result = pcall( load_modules )
-	if not succeeded then error( "lvm:start() failed" ) end
+	if not succeeded then error( "lvm:start() failed: " .. result ) end
 	restore_lvm()
 end
 
