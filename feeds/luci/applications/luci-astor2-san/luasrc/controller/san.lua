@@ -504,7 +504,8 @@ function perform()
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
 		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end,
-		logical_volume_snapshot_resize = function() lvm_logical_volume_snapshot_resize( inputs ) end
+		logical_volume_snapshot_resize = function() lvm_logical_volume_snapshot_resize( inputs ) end,
+		access_pattern_create = function() scst_access_pattern_new( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
