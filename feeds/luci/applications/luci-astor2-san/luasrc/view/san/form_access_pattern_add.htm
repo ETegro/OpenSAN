@@ -39,7 +39,7 @@
 		       type="text" />
 	</div>
 	<div>
-		<%: Readonly %>
+		<%: State %>
 		<input name="san.access_pattern_create-enabled"
 		       id="san.access_pattern_create-enabled-true"
 		       type ="radio"
@@ -51,6 +51,20 @@
 		       value="0" />
 		disable
 	</div>
+	<div>
+		<%: Readonly %>
+		<input name="san.access_pattern_create-readonly"
+		       id="san.access_pattern_create-enabled-true"
+		       type ="radio"
+		       value="1" />
+		enable
+		<input name="san.access_pattern_create-enabled"
+		       id="san.access_pattern_create-enabled-false"
+		       type ="radio"
+		       value="0" />
+		disable
+	</div>
+
 	<div>
 		<input name="san.submit_access_pattern_create"
 		       type="submit"
