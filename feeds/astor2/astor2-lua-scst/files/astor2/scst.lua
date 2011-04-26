@@ -112,6 +112,15 @@ function M.AccessPattern:save()
 	return self
 end
 
+function M.AccessPattern:delete()
+	assert( self )
+	local ucicur = uci.cursor()
+	ucicur:delete( M.UCI_CONFIG_NAME,
+	               self.section_name )
+	ucicur:save( M.UCI_CONFIG_NAME )
+	ucicur:commit( M.UCI_CONFIG_NAME )
+end
+
 function M.AccessPattern:bind( filename )
 	assert( self )
 	assert( filename )
