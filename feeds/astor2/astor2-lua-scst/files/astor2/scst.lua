@@ -191,6 +191,8 @@ function M.Configuration.dump()
 			configuration = configuration .. "}\n"
 		end
 	end
+
+	return configuration
 end
 
 return M
