@@ -27,7 +27,9 @@
 			<%= line.logical_volume.name %>
 		</td>
 		<td>
-			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>"><%= line.logical_volume.size %> <%: TiB %></span>
+			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
+				<%= line.logical_volume.size %> <%: TiB %>
+			</span>
 		</td>
 		<td>
 			<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>"
