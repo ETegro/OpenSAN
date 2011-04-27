@@ -151,6 +151,31 @@ local Configuration_mt = common.Class( M.Configuration )
 
 M.Configuration.SCSTADMIN_CONFIG_PATH = "/var/etc/scstadmin.conf"
 
+local function iqn_from_filename( filename )
+	-- Retreive our hostname
+	local ucicur = uci.cursor()
+	local hostname = nil
+	ucicur:foreach( "system",
+	                "system",
+			function(s) hostname = s.hostname end )
+	assert( hostname )
+
+	-- Retreive LogicalVolume's name
+	local logical_volume_name = string.match( filename, "^/dev/vg%d+/(.+)$" )
+	assert( logical_volume_name )
+
+	-- Reverse domain name
+	local hostname_parts = common.split_by( hostname, "." )
+	local hostname_parts_reversed = {}
+	for i=#hostname_parts,1,-1 do
+		hostname_parts_reversed[ #hostname_parts - i + 1 ] = hostname_parts[ i ]
+	end
+
+	return "iqn.2011-04." ..
+	       table.concat( hostname_parts_reversed, "." ) ..
+	       ":" .. logical_volume_name
+end
+
 function M.Configuration.dump()
 	-- Collect only enabled and binded patterns
 	local access_patterns_enabled = {}
@@ -182,7 +207,8 @@ function M.Configuration.dump()
 	for target_driver, access_patterns_indexes in pairs( access_patterns_target_drivers ) do
 		if target_driver == "iscsi" then
 			configuration = configuration .. "TARGET_DRIVER iscsi {\n"
-			configuration = configuration .. "\tTARGET iqn.2006-10.net.vlnb:tgt {\n" -- TODO
+			configuration = configuration .. "\tTARGET " ..
+			                iqn_from_filename( access_pattern.filename ) .. " {\n"
 			for _, access_patterns_index in ipairs( access_patterns_indexes ) do
 				access_pattern = access_patterns_enabled[ access_patterns_index ]
 				local read_only = nil
@@ -200,7 +226,7 @@ function M.Configuration.dump()
 						"\t\t\tread_only " .. read_only .. "\n" ..
 						"\t\t}\n"
 			end
-			configuration = configuration .. "\t}\n" -- TODO
+			configuration = configuration .. "\t}\n"
 			configuration = configuration .. "}\n"
 		end
 	end
