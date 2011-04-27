@@ -475,6 +475,26 @@ local function scst_access_pattern_new( inputs )
 	index_with_error( message_error )
 end
 
+local function scst_access_pattern_delete( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local access_pattern_section_name = nil
+	for k, v in pairs( inputs ) do
+		if not access_pattern_section_name then
+			-- san.submit_access_pattern_delete-cfg022eb2
+			access_pattern_section_name = string.match( k, "^submit_access_pattern_delete.(%w+)$" )
+		end
+	end
+	assert( access_pattern_section_name )
+
+	local return_code, result = pcall( scst.AccessPattern.delete, { section_name = access_pattern_section_name } )
+	if not return_code then
+		message_error = i18n("Failed to delete access pattern") .. ": " .. result
+	end
+	index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
@@ -509,7 +529,8 @@ function perform()
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
 		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end,
 		logical_volume_snapshot_resize = function() lvm_logical_volume_snapshot_resize( inputs ) end,
-		access_pattern_create = function() scst_access_pattern_new( inputs ) end
+		access_pattern_create = function() scst_access_pattern_new( inputs ) end,
+		access_pattern_delete = function() scst_access_pattern_delete( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
