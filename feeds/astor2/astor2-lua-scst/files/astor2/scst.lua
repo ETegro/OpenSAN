@@ -171,7 +171,8 @@ local function iqn_from_filename( filename )
 		hostname_parts_reversed[ #hostname_parts - i + 1 ] = hostname_parts[ i ]
 	end
 
-	return "iqn.2011-04." ..
+	return "iqn." ..
+	       os.date( "%Y-%m" ) ..
 	       table.concat( hostname_parts_reversed, "." ) ..
 	       ":" .. logical_volume_name
 end
