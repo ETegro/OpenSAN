@@ -24,10 +24,11 @@ function hide_all_to_hide_elements() {
 	$( '[ class ^= "to_hide" ]' ).hide();
 };
 
-// Hide all on click button "Hide all".
-$( 'input[ name = "hide_all" ]' ).click( function() {
-	$( '[ class ^= "to_hide" ]' ).fadeOut();
-} );
+function hide_all_classed_buttons() {
+	$( 'input[ name = "hide_all" ]' ).click( function() {
+		$( '[ class ^= "to_hide" ]' ).fadeOut();
+	} );
+};
 
 // Show all on click button "Show all".
 $( 'input[ name = "show_all" ]' ).click( function() {
@@ -95,6 +96,7 @@ function setup_plunger(){
 };
 
 hide_all_to_hide_elements();
+hide_all_classed_buttons();
 setup_plunger();
 
 });
