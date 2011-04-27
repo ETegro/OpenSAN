@@ -20,8 +20,9 @@
 $.noConflict();
 jQuery(document).ready( function($) {
 
-// Hide all elements with class "to_hide*".
-$( '[ class ^= "to_hide" ]' ).hide();
+function hide_all_to_hide_elements() {
+	$( '[ class ^= "to_hide" ]' ).hide();
+};
 
 // Hide all on click button "Hide all".
 $( 'input[ name = "hide_all" ]' ).click( function() {
@@ -93,6 +94,7 @@ function setup_plunger(){
 	$( "#plunger" ).hide();
 };
 
+hide_all_to_hide_elements();
 setup_plunger();
 
 });
