@@ -30,10 +30,11 @@ function hide_all_button() {
 	} );
 };
 
-// Show all on click button "Show all".
-$( 'input[ name = "show_all" ]' ).click( function() {
-	$( '[ class ^= "to_hide" ]' ).fadeIn();
-} );
+function show_all_button() {
+	$( 'input[ name = "show_all" ]' ).click( function() {
+		$( '[ class ^= "to_hide" ]' ).fadeIn();
+	} );
+};
 
 // Hide/show form for "Create RAID".
 
@@ -97,6 +98,7 @@ function setup_plunger(){
 
 hide_all_to_hide_elements();
 hide_all_button();
+show_all_button();
 setup_plunger();
 
 });
