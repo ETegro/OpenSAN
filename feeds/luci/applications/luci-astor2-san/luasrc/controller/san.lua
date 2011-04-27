@@ -508,11 +508,14 @@ local function scst_access_pattern_bind( inputs )
 	end
 	assert( access_pattern_section_name )
 
-	logical_volume_device = nil
+	local logical_volume_device = inputs[ "logical_volume_select" ]
+	if not logical_volume_device then
+		index_with_error( i18n("Logical volume is not select") )
+	end
 
 	local return_code, result = pcall( scst.AccessPattern.bind,
-		                           { section_name = access_pattern_section_name },
-		                           filename = logical_volume_device )
+		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ),
+		                           logical_volume_device )
 	if not return_code then
 		message_error = i18n("Failed to bind access pattern") .. ": " .. result
 	end
