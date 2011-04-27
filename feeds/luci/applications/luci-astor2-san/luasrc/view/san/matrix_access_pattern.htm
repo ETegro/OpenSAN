@@ -27,6 +27,14 @@
 	<tr>
 		<td>
 			<%= line.access_pattern.name %>
+			<div>
+				<input name="san.submit_access_pattern_delete-<%= line.access_pattern.section_name %>"
+				       src="<%=resource%>/cbi/remove.gif"
+				       type="image"
+				       title="<%: Delete access pattern %>"
+				       value="<%: Delete access pattern %>" />
+			</div>
+
 		</td>
 	</tr>
 </table>
