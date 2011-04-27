@@ -248,6 +248,7 @@ end
 
 function M.Daemon.apply()
 	local configuration = M.Configuration.dump()
+	if #configuration == 0 then return end
 	M.Daemon.check( configuration )
 	M.Configuration.write( configuration,
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
