@@ -428,33 +428,31 @@ local function scst_access_pattern_new( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_name = inputs[ "access_pattern_create-name" ]
+	local access_pattern_name = inputs[ "access_pattern_new-name" ]
 	if access_pattern_name == "" then
 		index_with_error( i18n("Access pattern's name is not set") )
 	end
 
-	local access_pattern_targetdriver = inputs[ "access_pattern_create-targetdriver" ]
+	local access_pattern_targetdriver = inputs[ "access_pattern_new-targetdriver" ]
 	assert( access_pattern_targetdriver )
 
-	local access_pattern_lun = inputs[ "access_pattern_create-lun" ]
+	local access_pattern_lun = inputs[ "access_pattern_new-lun" ]
 	access_pattern_lun = tonumber( access_pattern_lun )
 	assert( common.is_number( access_pattern_lun ) )
 
-	local access_pattern_enabled = inputs[ "access_pattern_create-enabled" ]
+	local access_pattern_enabled = inputs[ "access_pattern_new-enabled" ]
 	if tonumber( access_pattern_enabled ) == 1 then
 		access_pattern_enabled = true
 	else
 		access_pattern_enabled = false
 	end
 
-	local access_pattern_readonly = inputs[ "access_pattern_create-readonly" ]
+	local access_pattern_readonly = inputs[ "access_pattern_new-readonly" ]
 	if tonumber( access_pattern_readonly ) == 1 then
 		access_pattern_readonly = true
 	else
 		access_pattern_readonly = false
 	end
-
-	local access_pattern_filename = inputs[ "access_pattern_create-filename" ]
 
 	local access_pattern_attributes = { name = access_pattern_name,
 		                            targetdriver = access_pattern_targetdriver,
@@ -495,6 +493,33 @@ local function scst_access_pattern_delete( inputs )
 	index_with_error( message_error )
 end
 
+local function scst_access_pattern_bind( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local access_pattern_section_name = nil
+	for k, v in pairs( inputs ) do
+		if not access_pattern_section_name then
+			-- san.submit_access_pattern_bind-cfg022eb2
+			access_pattern_section_name = string.match( k, "^submit_access_pattern_bind.(%w+)$" )
+		end
+	end
+	assert( access_pattern_section_name )
+
+	local logical_volume_device = inputs[ "logical_volume_select" ]
+	if not logical_volume_device then
+		index_with_error( i18n("Logical volume is not select") )
+	end
+
+	local return_code, result = pcall( scst.AccessPattern.bind,
+		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ),
+		                           logical_volume_device )
+	if not return_code then
+		message_error = i18n("Failed to bind access pattern") .. ": " .. result
+	end
+	index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
@@ -529,8 +554,9 @@ function perform()
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
 		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end,
 		logical_volume_snapshot_resize = function() lvm_logical_volume_snapshot_resize( inputs ) end,
-		access_pattern_create = function() scst_access_pattern_new( inputs ) end,
-		access_pattern_delete = function() scst_access_pattern_delete( inputs ) end
+		access_pattern_new = function() scst_access_pattern_new( inputs ) end,
+		access_pattern_delete = function() scst_access_pattern_delete( inputs ) end,
+		access_pattern_bind = function() scst_access_pattern_bind( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do

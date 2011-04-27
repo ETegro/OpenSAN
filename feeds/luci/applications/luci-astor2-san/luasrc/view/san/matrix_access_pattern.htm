@@ -26,9 +26,11 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<%= line.access_pattern.name %>
+			<div class="inline">
+				<%= line.access_pattern.name %>
+			</div>
 			<% if not line.access_pattern:is_binded() then %>
-			<div>
+			<div class="inline">
 				<input name="san.submit_access_pattern_delete-<%= line.access_pattern.section_name %>"
 				       src="<%=resource%>/cbi/remove.gif"
 				       type="image"
@@ -36,6 +38,13 @@
 				       value="<%: Delete access pattern %>" />
 			</div>
 			<% end %>
+			<div class="inline">
+				<input name="san.submit_access_pattern_bind-<%= line.access_pattern.section_name %>"
+				       src="<%=resource%>/cbi/fieldadd.gif"
+				       type="image"
+				       title="<%: Bind access pattern %>"
+				       value="<%: Bind access pattern %>" />
+			</div>
 		</td>
 	</tr>
 </table>
