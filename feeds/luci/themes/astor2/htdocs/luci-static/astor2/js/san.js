@@ -20,68 +20,88 @@
 $.noConflict();
 jQuery(document).ready( function($) {
 
-// Hide all elements with class "to_hide*".
-$( '[ class ^= "to_hide" ]' ).hide();
+function hide_all_to_hide_elements() {
+	$( '[ class ^= "to_hide" ]' ).hide();
+};
 
-// Hide all on click button "Hide all".
-$( 'input[ name = "hide_all" ]' ).click( function() {
-	$( '[ class ^= "to_hide" ]' ).fadeOut();
-} );
+function hide_all_button() {
+	$( 'input[ name = "hide_all" ]' ).click( function() {
+		$( '[ class ^= "to_hide" ]' ).fadeOut();
+	} );
+};
 
-// Show all on click button "Show all".
-$( 'input[ name = "show_all" ]' ).click( function() {
-	$( '[ class ^= "to_hide" ]' ).fadeIn();
-} );
+function show_all_button() {
+	$( 'input[ name = "show_all" ]' ).click( function() {
+		$( '[ class ^= "to_hide" ]' ).fadeIn();
+	} );
+};
 
-// Hide/show form for "Create RAID".
+function create_raid_form_toggle() {
+	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
 
-var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
-
-$( physicals_select ).click( function() {
-	if ( $( this ).is( ':checked' ) ) {
-		$( '#div_raid_create' ).fadeIn( 'fast' );
-	} else {
-		if ( $( physicals_select ).is( ':checked' ) ) {
-			//
+	$( physicals_select ).click( function() {
+		if ( $( this ).is( ':checked' ) ) {
+			$( '#div_raid_create' ).fadeIn( 'fast' );
 		} else {
-			$( '#div_raid_create' ).fadeOut( 'fast' );
+			if ( $( physicals_select ).is( ':checked' ) ) {
+				//
+			} else {
+				$( '#div_raid_create' ).fadeOut( 'fast' );
+			}
 		}
-	}
 
-	// RAID validator
-	var num = $( 'form input:checkbox[ name = "san.physical_id" ]:checked:' ).length;
-//	var num = drives_array.length;
-	var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
-	var restrictions = { min : { 'passthrough' : 1,
-				     'linear' : 1,
-				     '0' : 2,
-				     '1' : 2,
-				     '5' : 3,
-				     '6' : 4,
-				     '10' : 4 },
-			     max : { 'passthrough' : 1 }
-			   };
+		// RAID validator
+		var num = $( 'form input:checkbox[ name = "san.physical_id" ]:checked:' ).length;
+	//	var num = drives_array.length;
+		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
+		var restrictions = { min : { 'passthrough' : 1,
+					     'linear' : 1,
+					     '0' : 2,
+					     '1' : 2,
+					     '5' : 3,
+					     '6' : 4,
+					     '10' : 4 },
+				     max : { 'passthrough' : 1 }
+				   };
 
-	$( raidlevels ).each( function() {
-		var radio = $( this );
-		var min = restrictions.min[ radio.val() ] || 0;
-		var max = restrictions.max[ radio.val() ] || 1000;
-		if ( num >= min && num <= max ) {
-			$( this ).removeAttr( 'disabled' );
+		$( raidlevels ).each( function() {
+			var radio = $( this );
+			var min = restrictions.min[ radio.val() ] || 0;
+			var max = restrictions.max[ radio.val() ] || 1000;
+			if ( num >= min && num <= max ) {
+				$( this ).removeAttr( 'disabled' );
+			} else {
+				$( this ).attr( 'disabled', 'disabled' );
+			}
+		} );
+	} );
+};
+
+function drives_information_toggle(){
+	$( 'form a[ id *= "ical_info-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( $( parent_selector ).is( ':hidden' ) ) {
+			$( parent_selector ).fadeIn( 'fast' );
 		} else {
-			$( this ).attr( 'disabled', 'disabled' );
+			$( parent_selector ).fadeOut( 'fast' );
 		}
 	} );
-} );
+};
 
-// Hide/show information of physicals and logicals.
-$( 'form a[ id *= "ical_info-" ]' ).click( function() {
-	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-	if ( $( parent_selector ).is( ':hidden' ) ) {
-		$( parent_selector ).fadeIn( 'fast' );
-	} else {
-		$( parent_selector ).fadeOut( 'fast' );
-	}
-} );
+function setup_plunger(){
+	$( "#plunger_show" ).click( function(){
+		$( "#plunger" ).show();
+		setInterval( function(){$("#plunger").html( $.map( "32 32 32 32 32 32 32 46 45 46 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 46 32 32 32 32 32 124 124 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 44 96 32 32 32 32 32 10 32 32 32 32 32 32 32 124 46 124 32 32 96 44 32 32 32 32 32 32 10 32 96 46 32 32 32 32 124 46 124 32 32 32 46 96 32 32 32 44 96 10 32 44 96 32 32 32 32 124 32 124 32 32 46 96 32 32 32 44 32 32 10 96 44 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 44 96 32 10 32 32 39 32 32 32 32 124 95 124 32 32 32 32 32 32 44 96 32 32 10 32 32 32 32 32 44 78 78 78 78 78 44 32 32 32 32 32 32 32 32 10 32 32 32 32 105 78 78 78 78 78 78 78 105 32 32 32 32 32 32 32 10 32 32 32 32 73 109 109 109 109 109 109 109 73 32 32 32 32 32 32 32 10".split(" "), function( n, i ){ return String.fromCharCode( n ) } ).join("") )}, 500 );
+		setInterval( function(){$("#plunger").html( $.map( "10 32 32 32 32 32 32 32 46 45 46 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 46 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 96 44 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 96 44 32 32 32 32 32 32 10 32 96 46 32 32 32 32 124 46 124 32 32 32 96 46 32 32 32 44 96 10 32 96 44 32 32 32 32 124 46 124 32 32 96 46 32 32 32 44 32 32 10 44 96 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 96 44 32 10 32 39 32 32 32 32 32 124 95 124 32 32 32 32 32 32 44 96 32 32 10 32 32 32 32 32 44 78 78 78 78 78 44 32 32 32 32 32 32 32 32 10 32 32 32 32 105 78 78 78 78 78 78 78 105 32 32 32 32 32 32 32 10 32 32 32 73 109 109 109 109 109 109 109 109 109 73 32 32 32 32 32 32 32 10".split(" "), function( n, i ){ return String.fromCharCode( n ) } ).join("") )}, 1000 );
+	});
+	$( "#plunger" ).hide();
+};
+
+hide_all_to_hide_elements();
+hide_all_button();
+show_all_button();
+create_raid_form_toggle();
+drives_information_toggle();
+setup_plunger();
 
 });
