@@ -70,6 +70,15 @@ function M.AccessPattern.list()
 	return access_patterns
 end
 
+function M.AccessPattern.find_by_section_name( section_name )
+	for _, access_pattern in ipairs( M.AccessPattern.list() ) do
+		if access_pattern.section_name == section_name then
+			return access_pattern
+		end
+	end
+	return nil
+end
+
 function M.AccessPattern:save()
 	assert( self )
 	local ucicur = uci.cursor()
