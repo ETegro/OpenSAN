@@ -36,46 +36,46 @@ function show_all_button() {
 	} );
 };
 
-// Hide/show form for "Create RAID".
+function create_raid_form_toggle() {
+	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
 
-var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
-
-$( physicals_select ).click( function() {
-	if ( $( this ).is( ':checked' ) ) {
-		$( '#div_raid_create' ).fadeIn( 'fast' );
-	} else {
-		if ( $( physicals_select ).is( ':checked' ) ) {
-			//
+	$( physicals_select ).click( function() {
+		if ( $( this ).is( ':checked' ) ) {
+			$( '#div_raid_create' ).fadeIn( 'fast' );
 		} else {
-			$( '#div_raid_create' ).fadeOut( 'fast' );
+			if ( $( physicals_select ).is( ':checked' ) ) {
+				//
+			} else {
+				$( '#div_raid_create' ).fadeOut( 'fast' );
+			}
 		}
-	}
 
-	// RAID validator
-	var num = $( 'form input:checkbox[ name = "san.physical_id" ]:checked:' ).length;
-//	var num = drives_array.length;
-	var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
-	var restrictions = { min : { 'passthrough' : 1,
-				     'linear' : 1,
-				     '0' : 2,
-				     '1' : 2,
-				     '5' : 3,
-				     '6' : 4,
-				     '10' : 4 },
-			     max : { 'passthrough' : 1 }
-			   };
+		// RAID validator
+		var num = $( 'form input:checkbox[ name = "san.physical_id" ]:checked:' ).length;
+	//	var num = drives_array.length;
+		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
+		var restrictions = { min : { 'passthrough' : 1,
+					     'linear' : 1,
+					     '0' : 2,
+					     '1' : 2,
+					     '5' : 3,
+					     '6' : 4,
+					     '10' : 4 },
+				     max : { 'passthrough' : 1 }
+				   };
 
-	$( raidlevels ).each( function() {
-		var radio = $( this );
-		var min = restrictions.min[ radio.val() ] || 0;
-		var max = restrictions.max[ radio.val() ] || 1000;
-		if ( num >= min && num <= max ) {
-			$( this ).removeAttr( 'disabled' );
-		} else {
-			$( this ).attr( 'disabled', 'disabled' );
-		}
+		$( raidlevels ).each( function() {
+			var radio = $( this );
+			var min = restrictions.min[ radio.val() ] || 0;
+			var max = restrictions.max[ radio.val() ] || 1000;
+			if ( num >= min && num <= max ) {
+				$( this ).removeAttr( 'disabled' );
+			} else {
+				$( this ).attr( 'disabled', 'disabled' );
+			}
+		} );
 	} );
-} );
+};
 
 // Hide/show information of physicals and logicals.
 $( 'form a[ id *= "ical_info-" ]' ).click( function() {
@@ -99,6 +99,7 @@ function setup_plunger(){
 hide_all_to_hide_elements();
 hide_all_button();
 show_all_button();
+create_raid_form_toggle();
 setup_plunger();
 
 });
