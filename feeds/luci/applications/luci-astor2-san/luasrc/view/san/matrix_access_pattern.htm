@@ -26,9 +26,9 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<%= line.access_pattern.name %>
 			<% if not line.access_pattern:is_binded() then %>
 			<div>
+				<%= line.access_pattern.name %>
 				<input name="san.submit_access_pattern_delete-<%= line.access_pattern.section_name %>"
 				       src="<%=resource%>/cbi/remove.gif"
 				       type="image"
