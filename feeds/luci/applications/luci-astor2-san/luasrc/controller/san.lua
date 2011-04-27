@@ -454,8 +454,6 @@ local function scst_access_pattern_new( inputs )
 		access_pattern_readonly = false
 	end
 
-	local access_pattern_filename = inputs[ "access_pattern_create-filename" ]
-
 	local access_pattern_attributes = { name = access_pattern_name,
 		                            targetdriver = access_pattern_targetdriver,
 		                            lun = access_pattern_lun,
