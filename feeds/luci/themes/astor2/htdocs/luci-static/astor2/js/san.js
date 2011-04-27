@@ -77,15 +77,16 @@ function create_raid_form_toggle() {
 	} );
 };
 
-// Hide/show information of physicals and logicals.
-$( 'form a[ id *= "ical_info-" ]' ).click( function() {
-	var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-	if ( $( parent_selector ).is( ':hidden' ) ) {
-		$( parent_selector ).fadeIn( 'fast' );
-	} else {
-		$( parent_selector ).fadeOut( 'fast' );
-	}
-} );
+function drives_information_toggle(){
+	$( 'form a[ id *= "ical_info-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( $( parent_selector ).is( ':hidden' ) ) {
+			$( parent_selector ).fadeIn( 'fast' );
+		} else {
+			$( parent_selector ).fadeOut( 'fast' );
+		}
+	} );
+};
 
 function setup_plunger(){
 	$( "#plunger_show" ).click( function(){
@@ -100,6 +101,7 @@ hide_all_to_hide_elements();
 hide_all_button();
 show_all_button();
 create_raid_form_toggle();
+drives_information_toggle();
 setup_plunger();
 
 });
