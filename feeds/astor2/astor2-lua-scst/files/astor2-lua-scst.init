@@ -1,0 +1,13 @@
+#!/bin/sh /etc/rc.common
+START=50
+
+start()
+{
+	echo 'scst = require "astor2.scst";
+	      scst.Daemon.apply()' | lua -
+}
+
+stop()
+{
+	true
+}

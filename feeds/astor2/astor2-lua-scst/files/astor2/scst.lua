@@ -231,7 +231,7 @@ function M.Daemon.check( configuration )
 				      configuration_path )
 	if result.return_code ~= 0 then
 		os.remove( configuration_path )
-		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
+		error( "scst:Daemon:apply() check failed: " .. table.concat( result.stdout, "\n" ) )
 	end
 	local succeeded = false
 	for _, line in ipairs( result.stdout ) do
@@ -241,13 +241,14 @@ function M.Daemon.check( configuration )
 	end
 	if not succeeded then
 		os.remove( configuration_path )
-		error( "scst:Daemon:apply() check failed: " .. table.concat( result.output, "\n" ) )
+		error( "scst:Daemon:apply() check failed: " .. table.concat( result.stdout, "\n" ) )
 	end
 	os.remove( configuration_path )
 end
 
 function M.Daemon.apply()
 	local configuration = M.Configuration.dump()
+	if #configuration == 0 then return end
 	M.Daemon.check( configuration )
 	M.Configuration.write( configuration,
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
