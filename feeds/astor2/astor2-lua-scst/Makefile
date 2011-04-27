@@ -32,8 +32,11 @@ endef
 define Package/astor2-lua-scst/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/astor2
 	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/etc/init.d
+
 	$(INSTALL_DATA) ./files/astor2/*.lua $(1)/usr/lib/lua/astor2
 	$(INSTALL_CONF) ./files/scst.config $(1)/etc/config/scst
+	$(INSTALL_BIN) ./files/astor2-lua-scst.init $(1)/etc/init.d/astor2-lua-scst
 endef
 
 $(eval $(call BuildPackage,astor2-lua-scst))
