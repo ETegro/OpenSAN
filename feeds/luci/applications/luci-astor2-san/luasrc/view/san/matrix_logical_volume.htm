@@ -41,9 +41,14 @@
 			       title="<%: Remove logical volume %>"
 			       value="<%: Remove logical volume %>" />
 		</td>
+		<td>
+			<input name="san.logical_volume_select %>"
+			       type ="radio"
+			       value="<%= line.logical_volume.device %>" />
+		</td>
 	</tr>
 	<tr>
-		<td colspan="3">
+		<td colspan="4">
 			<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
 			</div>
 			<div class="inline">
