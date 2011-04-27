@@ -24,7 +24,7 @@ function hide_all_to_hide_elements() {
 	$( '[ class ^= "to_hide" ]' ).hide();
 };
 
-function hide_all_classed_buttons() {
+function hide_all_button() {
 	$( 'input[ name = "hide_all" ]' ).click( function() {
 		$( '[ class ^= "to_hide" ]' ).fadeOut();
 	} );
@@ -96,7 +96,7 @@ function setup_plunger(){
 };
 
 hide_all_to_hide_elements();
-hide_all_classed_buttons();
+hide_all_button();
 setup_plunger();
 
 });
