@@ -161,6 +161,12 @@ local Configuration_mt = common.Class( M.Configuration )
 M.Configuration.SCSTADMIN_CONFIG_PATH = "/var/etc/scstadmin.conf"
 
 local function iqn_from_filename( filename )
+	-- Retreive LogicalVolume's name
+	local logical_volume_name = string.match( filename, "^/dev/vg%d+/(.+)$" )
+	assert( logical_volume_name )
+
+	-- This may be useful later
+	--[[
 	-- Retreive our hostname
 	local ucicur = uci.cursor()
 	local hostname = nil
@@ -168,10 +174,6 @@ local function iqn_from_filename( filename )
 	                "system",
 			function(s) hostname = s.hostname end )
 	assert( hostname )
-
-	-- Retreive LogicalVolume's name
-	local logical_volume_name = string.match( filename, "^/dev/vg%d+/(.+)$" )
-	assert( logical_volume_name )
 
 	-- Reverse domain name
 	local hostname_parts = common.split_by( hostname, "." )
@@ -184,6 +186,8 @@ local function iqn_from_filename( filename )
 	       os.date( "%Y-%m" ) ..
 	       table.concat( hostname_parts_reversed, "." ) ..
 	       ":" .. logical_volume_name
+	]]
+	return "iqn.2011-03.org.opensan:" .. logical_volume_name
 end
 
 function M.Configuration.dump()
