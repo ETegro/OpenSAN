@@ -13,6 +13,7 @@
    signed-off
    signing-key
    color_highlighting
+   pretagging_merges
 
 Другие полезные ссылки
 ======================
