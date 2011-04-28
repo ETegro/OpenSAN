@@ -271,7 +271,7 @@ local function lvm_logical_volume_add( inputs )
 	for k, v in pairs( inputs ) do
 		if not volume_group_name then
 			-- san.submit_logical_volume_add-450-vg1302871899
-			logical_id, volume_group_name = string.match( k, "^submit_logical_volume_add.(%d+).(vg%d+)$" )
+			logical_id, volume_group_name = string.match( k, "^submit_logical_volume_add.(%d+).(vg%d+)END$" )
 		end
 	end
 	assert( logical_id )
