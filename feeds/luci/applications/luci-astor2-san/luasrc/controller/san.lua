@@ -308,7 +308,8 @@ local function lvm_logical_volume_remove( inputs )
 	for k, v in pairs( inputs ) do
 		if not logical_volume_name then
 			-- san.submit_logical_volume_remove-vg1302871899-lvname_new
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv([A-Za-z0-9\-_#%%:]+)$" )
+			-- TODO: replace regexp with library's one
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv([A-Za-z0-9\-_#%%:]+)END$" )
 		end
 	end
 	assert( volume_group_name )
