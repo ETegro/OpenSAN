@@ -223,10 +223,10 @@ function M.Configuration.dump()
 	for target_driver, access_patterns_indexes in pairs( access_patterns_target_drivers ) do
 		if target_driver == "iscsi" then
 			configuration = configuration .. "TARGET_DRIVER iscsi {\n"
-			configuration = configuration .. "\tTARGET " ..
-			                iqn_from_filename( access_pattern.filename ) .. " {\n"
 			for _, access_patterns_index in ipairs( access_patterns_indexes ) do
 				access_pattern = access_patterns_enabled[ access_patterns_index ]
+				configuration = configuration .. "\tTARGET " ..
+				                iqn_from_filename( access_pattern.filename ) .. " {\n"
 				local read_only = nil
 				if access_pattern.readonly then
 					read_only = "1"
@@ -241,8 +241,8 @@ function M.Configuration.dump()
 						" {\n" ..
 						"\t\t\tread_only " .. read_only .. "\n" ..
 						"\t\t}\n"
+				configuration = configuration .. "\t}\n"
 			end
-			configuration = configuration .. "\t}\n"
 			configuration = configuration .. "}\n"
 		end
 	end
