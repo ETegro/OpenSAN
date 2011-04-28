@@ -486,7 +486,8 @@ local function scst_access_pattern_delete( inputs )
 	end
 	assert( access_pattern_section_name )
 
-	local return_code, result = pcall( scst.AccessPattern.delete, { section_name = access_pattern_section_name } )
+	local return_code, result = pcall( scst.AccessPattern.delete,
+		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
 	if not return_code then
 		message_error = i18n("Failed to delete access pattern") .. ": " .. result
 	end
