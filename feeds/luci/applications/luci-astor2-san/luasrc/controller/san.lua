@@ -483,7 +483,7 @@ local function scst_access_pattern_delete( inputs )
 	for k, v in pairs( inputs ) do
 		if not access_pattern_section_name then
 			-- san.submit_access_pattern_delete-cfg022eb2
-			access_pattern_section_name = string.match( k, "^submit_access_pattern_delete.(%w+)$" )
+			access_pattern_section_name = string.match( k, "^submit_access_pattern_delete.(%w+)END$" )
 		end
 	end
 	assert( access_pattern_section_name )
