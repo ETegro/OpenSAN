@@ -216,7 +216,7 @@ local function einarc_logical_hotspare_add( inputs )
 
 	for k, v in pairs( inputs ) do
 		if not physical_id then
-			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)$" )
+			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)END$" )
 		end
 	end
 
