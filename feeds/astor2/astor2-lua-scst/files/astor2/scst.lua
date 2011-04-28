@@ -32,6 +32,7 @@ local AccessPattern_mt = common.Class( M.AccessPattern )
 
 M.AccessPattern.ALLOWED_TARGETDRIVERS = { "iscsi" }
 M.AccessPattern.UCI_TYPE_NAME = "astor2-access-pattern"
+M.AccessPattern.LUN_MAX = 16
 
 function M.AccessPattern:new( attrs )
 	assert( attrs.name )
