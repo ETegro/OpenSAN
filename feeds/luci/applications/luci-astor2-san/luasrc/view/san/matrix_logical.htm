@@ -33,7 +33,7 @@
 		<% end %>
 		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
 			<td>
-			<input name="san.submit_logical_delete-<%= line.logical.id %>"
+			<input name="san.submit_logical_delete-<%= line.logical.id %>END"
 			       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
 					 return false;
 					 return true;"
