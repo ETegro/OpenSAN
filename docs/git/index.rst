@@ -13,3 +13,7 @@
    signed-off
    signing-key
    color_highlighting
+
+Другие полезные ссылки
+======================
+* :ref:`Про сливание веток <coding-merging_rules>`
