@@ -45,7 +45,7 @@
 <% end %>
 <% if line.physical.state == "hotspare" then %>
 	<li>
-		<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>"
+		<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>END"
 		       class="inline"
 		       src="<%=resource%>/cbi/remove.gif"
 		       title="<%: Remove hotspare %>"

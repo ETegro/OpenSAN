@@ -244,7 +244,7 @@ local function einarc_logical_hotspare_delete( inputs )
 
 	for k, v in pairs( inputs ) do
 		if not physical_id then
-			logical_id, physical_id = string.match( k, "^submit_logical_hotspare_delete.(%d+).([%d:]+)$" )
+			logical_id, physical_id = string.match( k, "^submit_logical_hotspare_delete.(%d+).([%d:]+)END$" )
 		end
 	end
 	assert( logical_id )
