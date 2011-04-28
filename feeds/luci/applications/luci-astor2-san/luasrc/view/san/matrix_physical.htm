@@ -50,10 +50,14 @@
 						<%= line.physical.size %> (<%: TiB %>)
 					</span>
 				</li>
+				<% local there_is_logical = false %>
 				<% for _, this_line in ipairs( matrix_overall ) do %>
 					<% if this_line.logical then %>
-						<%+san/form_hotspare_add%>
+						<% there_is_logical = true %>
 					<% end %>
+				<% end %>
+				<% if there_is_logical then %>
+					<%+san/form_hotspare_add%>
 				<% end %>
 			</ul>
 		</td>
