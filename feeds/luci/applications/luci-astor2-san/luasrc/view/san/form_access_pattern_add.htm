@@ -17,46 +17,48 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<div id="div_access_pattern_create">
+<div id="div_access_pattern_new">
 	<div>
 		Create AccessPattern
 	</div>
 	<div>
 		<%: Name %>: 
-		<input name="san.access_pattern_create-name"
+		<input name="san.access_pattern_new-name"
 		       type="text" />
 	</div>
 	<div>
 		<%: Target driver %>: 
-		<input name="san.access_pattern_create-targetdriver"
+		<input name="san.access_pattern_new-targetdriver"
 		       type="text"
 		       readonly="readonly"
 		       value="iscsi" />
 	</div>
 	<div>
 		<%: LUN %>: 
-		<input name="san.access_pattern_create-lun"
-		       id="san.access_pattern_create-lun"
+		<input name="san.access_pattern_new-lun"
+		       id="san.access_pattern_new-lun"
 		       type="text" />
 	</div>
 	<div>
 		<%: Enabled %>
-		<input name="san.access_pattern_create-enabled"
-		       id="san.access_pattern_create-enabled"
+		<input name="san.access_pattern_new-enabled"
+		       id="san.access_pattern_new-enabled"
 		       type="checkbox"
 		       value="1" />
 	</div>
 	<div>
 		<%: Readonly %>
-		<input name="san.access_pattern_create-readonly"
-		       id="san.access_pattern_create-readonly"
+		<input name="san.access_pattern_new-readonly"
+		       id="san.access_pattern_new-readonly"
 		       type="checkbox"
 		       value="1" />
 	</div>
 
 	<div>
-		<input name="san.submit_access_pattern_create"
-		       type="submit"
-		       value="<%: Add %>" />
+		<input name="san.submit_access_pattern_new"
+		       src="<%=resource%>/cbi/add.gif"
+		       type="image"
+		       title="<%: Add access pattern %>"
+		       value="<%: Add access pattern %>" />
 	</div>
 </div>
