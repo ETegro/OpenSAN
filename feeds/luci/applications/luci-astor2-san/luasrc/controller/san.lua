@@ -531,7 +531,7 @@ local function scst_access_pattern_unbind( inputs )
 	for k, v in pairs( inputs ) do
 		if not access_pattern_section_name then
 			-- san.submit_access_pattern_unbind-cfg022eb2
-			access_pattern_section_name = string.match( k, "^submit_access_pattern_unbind.(%w+)$" )
+			access_pattern_section_name = string.match( k, "^submit_access_pattern_unbind.(%w+)END$" )
 		end
 	end
 	assert( access_pattern_section_name )
