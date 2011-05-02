@@ -19,4 +19,4 @@
 
 <% if not line.access_pattern.enabled then %>access_pattern-disabled<% end %>
 <% if not line.access_pattern.readonly then %>access_pattern-readonly<% end %>
-<% if line.access_pattern.filename then %>access_pattern-binded<% end %>
+<% if line.access_pattern:is_binded() then %>access_pattern-binded<% end %>
