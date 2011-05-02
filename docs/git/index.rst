@@ -14,6 +14,7 @@
    signing-key
    color_highlighting
    pretagging_merges
+   notes-using
 
 Другие полезные ссылки
 ======================
