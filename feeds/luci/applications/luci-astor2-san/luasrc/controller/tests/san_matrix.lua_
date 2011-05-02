@@ -1282,7 +1282,7 @@ TestMatrix = {}
 			)
 		)
 	end
-	function TestMatrix:test_access_pattern_adding()
+	function TestMatrix:test_access_pattern_adding_with_lvms()
 		local matrix = matrix.filter_add_access_patterns(
 			matrix.overall( {
 				physicals = self.physicals_triple,
@@ -1291,12 +1291,55 @@ TestMatrix = {}
 			self.access_patterns
 		)
 		assertEquals( matrix[1].access_pattern.name, "foobar3" )
+		assertEquals( matrix[1].access_pattern.rowspan, 1 )
 		assertEquals( matrix[2].access_pattern.name, "foobar4" )
+		assertEquals( matrix[2].access_pattern.rowspan, 1 )
 		assertEquals( matrix[3].access_pattern.name, "foobar5" )
+		assertEquals( matrix[3].access_pattern.rowspan, 1 )
 		assertEquals( matrix[4].access_pattern.name, "foobaz1" )
+		assertEquals( matrix[4].access_pattern.rowspan, 1 )
 		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
+		assertEquals( matrix[5].access_pattern.rowspan, 1 )
 		assertEquals( matrix[5].physical, nil )
 		assertEquals( matrix[5].logical, nil )
+	end
+	function TestMatrix:test_access_pattern_adding_in_just_raid()
+		local matrix = matrix.filter_add_access_patterns(
+			matrix.overall( {
+				physicals = self.physicals_double,
+				logicals = self.logicals_double,
+			} ),
+			self.access_patterns
+		)
+		assertEquals( matrix[1].access_pattern.name, "foobar3" )
+		assertEquals( matrix[1].access_pattern.rowspan, 2 )
+		assertEquals( matrix[2].access_pattern.name, "foobar4" )
+		assertEquals( matrix[2].access_pattern.rowspan, 2 )
+		assertEquals( matrix[3].access_pattern.name, "foobar5" )
+		assertEquals( matrix[3].access_pattern.rowspan, 2 )
+		assertEquals( matrix[4].access_pattern.name, "foobaz1" )
+		assertEquals( matrix[4].access_pattern.rowspan, 2 )
+		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
+		assertEquals( matrix[5].access_pattern.rowspan, 2 )
+	end
+	function TestMatrix:test_access_pattern_adding_with_physicals()
+		local matrix = matrix.filter_add_access_patterns(
+			matrix.overall( {
+				physicals = self.physicals_with_free,
+				logicals = self.logicals_with_free,
+			} ),
+			self.access_patterns
+		)
+		assertEquals( matrix[1].access_pattern.name, "foobar3" )
+		assertEquals( matrix[1].access_pattern.rowspan, 2 )
+		assertEquals( matrix[2].access_pattern.name, "foobar4" )
+		assertEquals( matrix[2].access_pattern.rowspan, 3 )
+		assertEquals( matrix[3].access_pattern.name, "foobar5" )
+		assertEquals( matrix[3].access_pattern.rowspan, 4 )
+		assertEquals( matrix[4].access_pattern.name, "foobaz1" )
+		assertEquals( matrix[4].access_pattern.rowspan, 4 )
+		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
+		assertEquals( matrix[5].access_pattern.rowspan, 4 )
 	end
 
 TestMibToTib = {}
