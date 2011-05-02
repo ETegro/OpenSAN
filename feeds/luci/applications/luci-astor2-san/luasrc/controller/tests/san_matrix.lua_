@@ -1344,7 +1344,7 @@ TestMatrix = {}
 
 TestMibToTib = {}
 	function TestMibToTib:test_values_160gb()
-		print( assertEquals( matrix.mib2tib( 160E3 ), "0.15" ) )
+		assertEquals( matrix.mib2tib( 160E3 ), "0.15" )
 	end
 	function TestMibToTib:test_values_320gb()
 		assertEquals( matrix.mib2tib( 320E3 ), "0.30" )
