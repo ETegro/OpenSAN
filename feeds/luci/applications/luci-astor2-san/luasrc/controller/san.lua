@@ -411,7 +411,7 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	assert( common.is_positive( snapshot_size_new ),
 	        "incorrect non-positive snapshot's size" )
 
-	if  snapshot_size_new < snapshot_size then
+	if snapshot_size_new < snapshot_size then
 		message_error = i18n("Snapshot size has to be bigger than it's current size")
 	else
 		local return_code, result = pcall( lvm.Snapshot.resize,
