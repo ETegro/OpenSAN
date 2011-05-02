@@ -238,6 +238,7 @@ local function einarc_logical_hotspare_add( inputs )
 	if not return_code then
 		message_error = i18n("Failed to add hotspare disk") .. ": " .. result
 	end
+
 	index_with_error( message_error )
 end
 
