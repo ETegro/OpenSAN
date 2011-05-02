@@ -281,7 +281,7 @@ local function lvm_logical_volume_add( inputs )
 	if logical_volume_name == "" then
 		index_with_error( i18n("Logical volume name is not set") )
 	end
-	if not string.match( logical_volume_name, lvm.LogicalVolume.name_valid_re ) then
+	if not string.match( logical_volume_name, lvm.LogicalVolume.NAME_VALID_RE ) then
 		index_with_error( i18n("Invalid logical volume name") )
 	end
 
@@ -371,7 +371,7 @@ local function lvm_logical_volume_snapshot_add( inputs )
 	end
 	assert( volume_group_name, "unable to parse out volume group's name" )
 	assert( logical_volume_name, "unable to parse out logical volume's name" )
-	assert( string.match( logical_volume_name, lvm.LogicalVolume.name_valid_re ),
+	assert( string.match( logical_volume_name, lvm.LogicalVolume.NAME_VALID_RE ),
 	        "invalid logical volume's name" )
 
 	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
