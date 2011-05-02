@@ -220,6 +220,8 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
 	local access_patterns_names = common.keys( access_patterns_named_hash  )
 	table.sort( access_patterns_names )
+
+	-- Fillup matrix with AccessPatterns
 	for current_line, access_pattern_name in ipairs( access_patterns_names ) do
 		access_pattern = access_patterns[ access_patterns_named_hash[ access_pattern_name ][1] ]
 		if not matrix[ current_line ] then
@@ -228,6 +230,7 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 		matrix[ current_line ][ "access_pattern" ] = access_pattern
 	end
 
+	-- Calculate AccessPatterns-related TD's rowspan
 	local logical_scope = 0
 	for current_line, line in ipairs( matrix ) do
 		if line.logical then
