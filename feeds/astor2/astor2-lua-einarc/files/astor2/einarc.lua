@@ -41,7 +41,8 @@ M.RAIDLEVELS = { "linear",
 -- @return Either an array of output strings from einarc, or nil if
 --         einarc failed, or raise "NotImplementedError" if it is so
 local function run( args )
-	assert( args and common.is_string( args ) )
+	assert( args and common.is_string( args ),
+	        "empty command line" )
 	local result = common.system( EINARC_CMD .. args )
 	if result.return_code ~= 0 then
 		for _, line in ipairs( result.stderr ) do
@@ -64,7 +65,8 @@ local Adapter_mt = common.Class( M.Adapter )
 -- @param property "raidlevels"
 -- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
 function M.Adapter:get( property )
-	assert( property and common.is_string( property ) )
+	assert( property and common.is_string( property ),
+	        "no property specified" )
 
 	-- WARNING: This is performance related issue only for
 	-- software einarc module.
@@ -84,12 +86,18 @@ M.Logical = {}
 local Logical_mt = common.Class( M.Logical )
 
 function M.Logical:new( attrs )
-	assert( common.is_number( attrs.id ) )
-	assert( common.is_string( attrs.level ) )
-	assert( common.is_array( attrs.drives ) )
-	assert( common.is_positive( attrs.capacity ) )
-	assert( common.is_string( attrs.device ) )
-	assert( common.is_string( attrs.state ) )
+	assert( common.is_number( attrs.id ),
+	        "non-number ID" )
+	assert( common.is_string( attrs.level ),
+	        "empty level" )
+	assert( common.is_array( attrs.drives ),
+	        "no drives" )
+	assert( common.is_positive( attrs.capacity ),
+	        "non-positive capacity" )
+	assert( common.is_string( attrs.device ),
+	        "empty device" )
+	assert( common.is_string( attrs.state ),
+	        "unknown state" )
 	return setmetatable( attrs, Logical_mt )
 end
 
@@ -103,7 +111,7 @@ function M.Logical.list()
 	local logicals = {}
 	for _, line in ipairs( output ) do
 		local id = tonumber( string.match( line, "^(%d+)" ) )
-		assert( id )
+		assert( id, "unable to retreive an ID" )
 		logicals[ id ] = M.Logical:new( {
 			id = id,
 			level = string.match( line, "^%d+\t(.+)\t[%d:,]+\t.*\t.*\t.*$" ) or "",
@@ -150,7 +158,7 @@ end
 --- einarc logical delete
 -- @result Raise error if it fails
 function M.Logical:delete()
-	assert( self.id )
+	assert( self.id, "unable to get self object" )
 	local output = run( "logical delete " .. tostring( self.id ) )
 	if output == nil then
 		error("einarc:logical.delete() failed")
@@ -161,7 +169,7 @@ end
 -- @param physical_id "0:1"
 -- @return Raise error if it fails
 function M.Logical:hotspare_add( physical_id )
-	assert( self.id )
+	assert( self.id, "unable to get self object" )
 	assert( physical_id and common.is_string( physical_id ) )
 	output = run( "logical hotspare_add " .. tostring( self.id ) .. " " .. physical_id )
 	if not output then error( "einarc:logical.hotspare_add() failed" ) end
@@ -171,7 +179,7 @@ end
 -- @param physical_id "0:1"
 -- @return Raise error if it fails
 function M.Logical:hotspare_delete( physical_id )
-	assert( self.id )
+	assert( self.id, "unable to get self object" )
 	assert( physical_id and common.is_string( physical_id ) )
 	output = run( "logical hotspare_delete " .. tostring( self.id ) .. " " .. physical_id )
 	if not output then error( "einarc:logical.hotspare_delete() failed" ) end
@@ -183,7 +191,7 @@ function M.Logical:physical_list()
 	if common.is_table( self.physicals ) then
 		return self.physicals
 	end
-	assert( self.id )
+	assert( self.id, "unable to get self object" )
 	-- 0:1	free
 	-- 0:2	hotspare
 	local output = run( "logical physical_list " .. tostring( self.id ) )
@@ -191,7 +199,8 @@ function M.Logical:physical_list()
 	self.physicals = {}
 	for _, line in ipairs( output ) do
 		local physical_id = string.match( line, "^([%d:]+)" )
-		assert( M.Physical.is_id( physical_id ) )
+		assert( M.Physical.is_id( physical_id ),
+		        "incorrect physical id" )
 		self.physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
 	end
 	return self.physicals
@@ -203,7 +212,7 @@ function M.Logical:progress_get()
 	if common.is_number( self.progress ) then
 		return self.progress
 	end
-	assert( self.id )
+	assert( self.id, "unable to get self object" )
 	for task_id, task in pairs( einarc.Task.list() ) do
 		if task.where == tostring( self.id ) then
 			self.progress = task.progress
@@ -277,7 +286,7 @@ end
 --- Is physical disk a hotspare
 -- @return true/false
 function M.Physical:is_hotspare()
-        assert( self.id )
+        assert( self.id, "unable to get self object" )
 	local output = M.Physical:get( self.id, "hotspare" )
 	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
 	return output[1] == "1"
