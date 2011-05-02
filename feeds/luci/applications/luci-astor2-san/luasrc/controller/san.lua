@@ -412,16 +412,16 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	        "incorrect non-positive snapshot's size" )
 
 	if snapshot_size_new < snapshot_size then
-		message_error = i18n("Snapshot size has to be bigger than it's current size")
-	else
-		local return_code, result = pcall( lvm.Snapshot.resize,
-						   { volume_group = { name = volume_group_name },
-						     size = snapshot_size,
-						     name = logical_volume_name },
-						   snapshot_size_new )
-		if not return_code then
-			message_error = i18n("Failed to resize snapshot") .. ": " .. result
-		end
+		index_with_error( i18n("Snapshot size has to be bigger than it's current size") )
+	end
+
+	local return_code, result = pcall( lvm.Snapshot.resize,
+					   { volume_group = { name = volume_group_name },
+					     size = snapshot_size,
+					     name = logical_volume_name },
+					   snapshot_size_new )
+	if not return_code then
+		message_error = i18n("Failed to resize snapshot") .. ": " .. result
 	end
 	index_with_error( message_error )
 end
@@ -468,13 +468,13 @@ local function scst_access_pattern_new( inputs )
 		                            readonly = access_pattern_readonly }
 
 	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
-	if return_code then
-		return_code, result = pcall( scst.AccessPattern.save, result )
-		if not return_code then
-			message_error = i18n("Failed to save config") .. ": " .. result
-		end
-	else
-		message_error = i18n("Failed to create access pattern") .. ": " .. result
+	if not return_code then
+		index_with_error( i18n("Failed to create access pattern") .. ": " .. result )
+	end
+
+	return_code, result = pcall( scst.AccessPattern.save, result )
+	if not return_code then
+		message_error = i18n("Failed to save config") .. ": " .. result
 	end
 
 	index_with_error( message_error )
