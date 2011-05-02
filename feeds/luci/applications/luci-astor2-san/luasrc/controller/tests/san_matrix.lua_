@@ -306,6 +306,36 @@ TestMatrix = {}
 				progress = 66.6
 			}
 		}
+		self.physicals_with_free = {
+			["3:1"] = {
+				id = "3:1",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001111",
+				size = 666,
+				state = "0"
+			},
+			["3:2"] = {
+				id = "3:2",
+				model = "model1",
+				revision = "qwerty",
+				serial = "010001112",
+				size = 666,
+				state = "free"
+			}
+		}
+		self.logicals_with_free = {
+			[0] = {
+				id = 0,
+				level = "passthrough",
+				physicals = {
+					["3:1"] = "0",
+				},
+				capacity = 666.0,
+				device = "/dev/md0",
+				state = "normal"
+			}
+		}
 	end
 	function TestMatrix:test_volume_group_percentage_zero()
 		local logicals = self.logicals_triple
@@ -976,36 +1006,6 @@ TestMatrix = {}
 		)
 	end
 	function TestMatrix:test_matrix_with_free_drives()
-		local physicals = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "0"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "free"
-			}
-		}
-		local logicals = {
-			[0] = {
-				id = 0,
-				level = "passthrough",
-				physicals = {
-					["3:1"] = "0",
-				},
-				capacity = 666.0,
-				device = "/dev/md0",
-				state = "normal"
-			}
-		}
 		local needed = {
 			{
 				physical = {
@@ -1076,8 +1076,8 @@ TestMatrix = {}
 		assert( common.compare_tables(
 				matrix.filter_borders_highlight(
 					matrix.overall( {
-						physicals = physicals,
-						logicals = logicals
+						physicals = self.physicals_with_free,
+						logicals = self.logicals_with_free
 					} )
 				),
 				needed
