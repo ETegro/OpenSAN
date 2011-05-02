@@ -1404,6 +1404,10 @@ TestMatrix = {}
 		assert( common.compare_tables( -- 666:5
 				got[12].physical.hotspare_availability,
 				{ 3, 13 } ) )
+		-- Check minimal sizes hash
+		assert( common.compare_tables( -- 666:5
+				got[12].physical.hotspare_minimal_sizes,
+				{ [3] = 666, [13] = 333 } ) )
 
 		-- Try to assign hotspare to different RAID levels
 		for _, level in ipairs( { "linear", "passthrough", "0" } ) do

@@ -296,6 +296,7 @@ function M.filter_calculate_hotspares( matrix )
 	for current_line, line in ipairs( matrix ) do
 		if line.physical and line.physical.state == "free" then
 			local hotspare_availability = {}
+			local hotspare_minimal_sizes = {}
 			for _, line_inner in ipairs( matrix ) do
 				if line_inner.logical and
 				not common.is_in_array( line_inner.logical.level,
@@ -308,6 +309,7 @@ function M.filter_calculate_hotspares( matrix )
 					end
 					if line.physical.size >= minimal_size then
 						hotspare_availability[ #hotspare_availability + 1 ] = line_inner.logical.id
+						hotspare_minimal_sizes[ line_inner.logical.id ] = minimal_size
 					end
 				end
 			end
@@ -316,6 +318,7 @@ function M.filter_calculate_hotspares( matrix )
 			else
 				table.sort( hotspare_availability )
 				matrix[ current_line ].physical.hotspare_availability = hotspare_availability
+				matrix[ current_line ].physical.hotspare_minimal_sizes = hotspare_minimal_sizes
 			end
 		end
 	end
