@@ -297,7 +297,7 @@ function M.filter_calculate_hotspares( matrix )
 		if line.physical and line.physical.state == "free" then
 			local hotspare_availability = {}
 			for _, line_inner in ipairs( matrix ) do
-				if line_inner.logical and not common.is_in_array( line_inner.logical.level, { "linear", "passthrough", "0" } ) then
+				if line_inner.logical and not common.is_in_array( line_inner.logical.level, einarc.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE ) then
 					local minimal_size = math.huge
 					for _, physical in pairs( line_inner.logical.physicals ) do
 						if physical.size < minimal_size then

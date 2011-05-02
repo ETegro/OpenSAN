@@ -35,6 +35,9 @@ M.RAIDLEVELS = { "linear",
                  "passthrough",
                  "0", "1", "5",
                  "6", "10" }
+M.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE = { "linear",
+                                        "passthrough",
+					"0" }
 
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
