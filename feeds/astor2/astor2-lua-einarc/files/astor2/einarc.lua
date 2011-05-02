@@ -276,8 +276,10 @@ end
 -- @param property "hotspare"
 -- @return { "0" }
 function M.Physical:get( property )
-	assert( self.id and common.is_string( id ) )
-	assert( property and common.is_string( property ) )
+	assert( self.id and common.is_string( id ),
+	        "unable to get self object" )
+	assert( property and common.is_string( property ),
+	        "empty property" )
 	local output = run( "physical get " .. self.id .. " " .. property )
 	if not output then error( "einarc:physical.get() failed" ) end
 	return output
