@@ -122,7 +122,7 @@ local function einarc_logical_add( inputs, drives )
 					device = logical.device
 				end
 			end
-			assert( device )
+			assert( device, "unable to find newly appeared device" )
 			-- Then, create PV on it
 			return_code, result = pcall( lvm.PhysicalVolume.create, device )
 			if return_code then
@@ -134,7 +134,8 @@ local function einarc_logical_add( inputs, drives )
 						physical_volumes = { physical_volume }
 					end
 				end
-				assert( physical_volumes )
+				assert( physical_volumes,
+				        "unable to find corresponding physical volume" )
 				-- And then, create VG on it
 				return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
 				if return_code then
@@ -166,7 +167,7 @@ local function einarc_logical_delete( inputs )
 			logical_id = string.match( k, "^submit_logical_delete.(%d+)END$" )
 		end
 	end
-	assert( logical_id )
+	assert( logical_id, "unable to parse out logical's id" )
 	logical_id = tonumber( logical_id )
 
 	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
@@ -178,7 +179,7 @@ local function einarc_logical_delete( inputs )
 			logical = logical_obj
 		end
 	end
-	assert( logical )
+	assert( logical, "unable to find corresponding logical" )
 
 	-- Find out corresponding PhysicalVolume
 	local physical_volume = nil
@@ -191,7 +192,7 @@ local function einarc_logical_delete( inputs )
 	if physical_volume then
 		-- Let's clean out VolumeGroup on it at first
 		local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
-		assert( volume_group )
+		assert( volume_group, "unable to find corresponding volume group" )
 		volume_group:remove()
 
 		-- And clean out PhysicalVolume
@@ -219,10 +220,9 @@ local function einarc_logical_hotspare_add( inputs )
 			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)END$" )
 		end
 	end
+	assert( physical_id, "unable to parse out physical's id" )
 
-	assert( physical_id )
 	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id ]
-
 	logical_id = tonumber( logical_id )
 	if not logical_id then
 		index_with_error( i18n("Logical disk is not selected") )
@@ -247,8 +247,8 @@ local function einarc_logical_hotspare_delete( inputs )
 			logical_id, physical_id = string.match( k, "^submit_logical_hotspare_delete.(%d+).([%d:]+)END$" )
 		end
 	end
-	assert( logical_id )
-	assert( physical_id )
+	assert( logical_id, "unable to parse out logical's id" )
+	assert( physical_id, "unable to parse out physical's id" )
 	logical_id = tonumber( logical_id )
 
 	-- Let's call einarc at last
@@ -274,8 +274,8 @@ local function lvm_logical_volume_add( inputs )
 			logical_id, volume_group_name = string.match( k, "^submit_logical_volume_add.(%d+).(vg%d+)END$" )
 		end
 	end
-	assert( logical_id )
-	assert( volume_group_name )
+	assert( logical_id, "unable to parse out logical's id" )
+	assert( volume_group_name, "unable to parse out volume group's name" )
 
 	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
 	if logical_volume_name == "" then
@@ -287,7 +287,8 @@ local function lvm_logical_volume_add( inputs )
 
 	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
 	logical_volume_size = tonumber( logical_volume_size )
-	assert( common.is_positive( logical_volume_size ) )
+	assert( common.is_positive( logical_volume_size ),
+	        "incorrect non-positive logical volume's size" )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
 		                           { name = volume_group_name },
@@ -312,8 +313,8 @@ local function lvm_logical_volume_remove( inputs )
 			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv([A-Za-z0-9\-_#%%:]+)END$" )
 		end
 	end
-	assert( volume_group_name )
-	assert( logical_volume_name )
+	assert( volume_group_name, "unable to parse out volume group's name" )
+	assert( logical_volume_name, "unable to parse out logical volume's name" )
 
 	local return_code, result = pcall( lvm.LogicalVolume.remove,
 		                           { volume_group = { name = volume_group_name },
@@ -333,15 +334,17 @@ local function lvm_logical_volume_resize( inputs )
 	for k, v in pairs( inputs ) do
 		if not logical_volume_name then
 			-- san.submit_logical_volume_resize-vg1302871899-lvname_new
+			-- TODO: replace regexp with library's one
 			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv([A-Za-z0-9\-_#%%:]+)END$" )
 		end
 	end
-	assert( volume_group_name )
-	assert( logical_volume_name )
+	assert( volume_group_name, "unable to parse out volume group's name" )
+	assert( logical_volume_name, "unable to parse out logical volume's name" )
 
 	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" .. logical_volume_name ]
 	logical_volume_size = tonumber( logical_volume_size )
-	assert( common.is_positive( logical_volume_size ) )
+	assert( common.is_positive( logical_volume_size ),
+	        "incorrect non-positive logical volume's size" )
 
 	local return_code, result = pcall( lvm.LogicalVolume.resize,
 		                           { volume_group = { name = volume_group_name },
@@ -366,13 +369,15 @@ local function lvm_logical_volume_snapshot_add( inputs )
 			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).(.+)END$" )
 		end
 	end
-	assert( volume_group_name )
-	assert( logical_volume_name )
-	assert( string.match( logical_volume_name, lvm.LogicalVolume.name_valid_re ) )
+	assert( volume_group_name, "unable to parse out volume group's name" )
+	assert( logical_volume_name, "unable to parse out logical volume's name" )
+	assert( string.match( logical_volume_name, lvm.LogicalVolume.name_valid_re ),
+	        "invalid logical volume's name" )
 
 	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
 	snapshot_size = tonumber( snapshot_size )
-	assert( common.is_positive( snapshot_size ) )
+	assert( common.is_positive( snapshot_size ),
+	        "incorrect non-positive snapshot's size" )
 
 	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
 		                           { name = logical_volume_name,
@@ -399,18 +404,21 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 			volume_group_name, snapshot_size, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_resize.(vg%d+).s(%d+).lv([A-Za-z0-9\-_#%%:]+)END$" )
 		end
 	end
-	assert( volume_group_name )
-	assert( logical_volume_name )
-	assert( snapshot_size )
+	assert( volume_group_name, "unable to parse out volume group's name" )
+	assert( logical_volume_name, "unable to parse out logical volume's name" )
 
 	snapshot_size = tonumber( snapshot_size )
+	assert( common.is_positive( snapshot_size ),
+	        "incorrect non-positive snapshot's size" )
 
 	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" .. logical_volume_name ]
 	snapshot_size_new = tonumber( snapshot_size_new )
 	assert( common.is_positive( snapshot_size_new ) )
+	assert( common.is_positive( snapshot_size_new ),
+	        "incorrect non-positive snapshot's size" )
 
 	if  snapshot_size_new < snapshot_size then
-		message_error = i18n("Snapshot size should be bigger than it's current size")
+		message_error = i18n("Snapshot size has to be bigger than it's current size")
 	else
 		local return_code, result = pcall( lvm.Snapshot.resize,
 						   { volume_group = { name = volume_group_name },
@@ -437,11 +445,13 @@ local function scst_access_pattern_new( inputs )
 	end
 
 	local access_pattern_targetdriver = inputs[ "access_pattern_new-targetdriver" ]
-	assert( access_pattern_targetdriver )
+	assert( access_pattern_targetdriver,
+	        "unable to parse out targetdrive" )
 
 	local access_pattern_lun = inputs[ "access_pattern_new-lun" ]
 	access_pattern_lun = tonumber( access_pattern_lun )
-	assert( common.is_number( access_pattern_lun ) )
+	assert( common.is_number( access_pattern_lun ),
+	        "unable to parse out numeric LUN" )
 
 	local access_pattern_enabled = inputs[ "access_pattern_new-enabled" ]
 	if tonumber( access_pattern_enabled ) == 1 then
@@ -487,7 +497,8 @@ local function scst_access_pattern_delete( inputs )
 			access_pattern_section_name = string.match( k, "^submit_access_pattern_delete.(%w+)END$" )
 		end
 	end
-	assert( access_pattern_section_name )
+	assert( access_pattern_section_name,
+	        "unable to parse out section's name" )
 
 	local return_code, result = pcall( scst.AccessPattern.delete,
 		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
@@ -508,7 +519,8 @@ local function scst_access_pattern_bind( inputs )
 			access_pattern_section_name = string.match( k, "^submit_access_pattern_bind.(%w+)END$" )
 		end
 	end
-	assert( access_pattern_section_name )
+	assert( access_pattern_section_name,
+	        "unable to parse out section's name" )
 
 	local logical_volume_device = inputs[ "logical_volume_select" ]
 	if not logical_volume_device then
@@ -535,7 +547,8 @@ local function scst_access_pattern_unbind( inputs )
 			access_pattern_section_name = string.match( k, "^submit_access_pattern_unbind.(%w+)END$" )
 		end
 	end
-	assert( access_pattern_section_name )
+	assert( access_pattern_section_name,
+	        "unable to parse out section's name" )
 
 	local return_code, result = pcall( scst.AccessPattern.unbind,
 		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )

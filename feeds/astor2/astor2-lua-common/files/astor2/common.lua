@@ -29,11 +29,13 @@ local SHELL_PATH = "/bin/sh"
 -- @param cmdline "mdadm --examine /dev/sda"
 -- @return { return_code = 0, stderr = { "line1", "line2" }, stdout = { "line1", "line2" } }
 function M.system( cmdline )
-	assert( cmdline )
+	assert( cmdline, "empty command line to execute" )
 	local stdout_path = os.tmpname()
 	local stderr_path = os.tmpname()
 	local script_path = os.tmpname()
-	assert( stdout_path and stderr_path and script_path )
+	assert( stdout_path, "unable to create temporary file for stdout" )
+	assert( stderr_path, "unable to create temporary file for stderr" )
+	assert( script_path, "unable to create temporary file for script" )
 
 	-- Script to be executed itself
 	local script_fd = io.open( script_path, "w" )
@@ -81,7 +83,7 @@ end
 -- @param array Array to search in
 -- @return True if exists, false otherwise
 function M.is_in_array( what, array )
-	assert( M.is_table( array ) )
+	assert( M.is_table( array ), "second argument is not an array" )
 	local is_in_it = false
 	for _, v in ipairs( array ) do
 		if what == v then
@@ -123,7 +125,7 @@ end
 -- @param n Number to check
 -- @return true or false
 function M.is_odd( n )
-	assert( M.is_number( n ) )
+	assert( M.is_number( n ), "non-number argument" )
 	return n % 2 == 0
 end
 
@@ -131,7 +133,7 @@ end
 -- @param n Number to check
 -- @return true or false
 function M.is_positive( n )
-	assert( M.is_number( n ) )
+	assert( M.is_number( n ), "non-number argument" )
 	return n > 0
 end
 
@@ -162,8 +164,8 @@ end
 -- @param hash { "0:1" = { state = "free", model = "some" }, "0:2" = { state = "failed", model = "some2" } }
 -- @return { free = { "0:1" }, failed = { "0:2" } }
 function M.unique_keys( key, hash )
-	assert( key )
-	assert( M.is_table( hash ) )
+	assert( key, "no key specified" )
+	assert( M.is_table( hash ), "non-table specified" )
 	local uniques = {}
 	for obj_id, obj_data in pairs( hash ) do
 		if not uniques[ obj_data[ key ] ] then
@@ -201,7 +203,8 @@ end
 -- @param table2 Second table to compare
 -- @return true/false
 function M.compare_tables( table1, table2 )
-	assert( M.is_table( table1 ) and M.is_table( table2 ) )
+	assert( M.is_table( table1 ) and M.is_table( table2 ),
+	        "attempt to compare non-table values" )
 	if table1 == table2 then return true end
 
 	-- Check tables keys equality
@@ -233,7 +236,7 @@ end
 -- @param table Table to print
 -- @return Pretty table printing
 function M.ppt( table, offset, message )
-	assert( M.is_table( table ) )
+	assert( M.is_table( table ), "unable to dump non-table value" )
 	local output = ""
 	local line72 = "------------------------------------------------------------------------"
 
@@ -277,8 +280,10 @@ end
 -- @param separator Words separator
 -- @return An array of words
 function M.split_by( str, separator )
-	assert( str and M.is_string( str ) )
-	assert( separator and M.is_string( separator ) )
+	assert( str and M.is_string( str ),
+	        "attempt to split non-string" )
+	assert( separator and M.is_string( separator ),
+	        "non-string separator specified" )
 	local words = {}
 	local pattern = string.format( "([^%s]+)", separator )
 	string.gsub( str,
