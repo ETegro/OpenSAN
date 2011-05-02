@@ -180,7 +180,7 @@ end
 -- @return Raise error if it fails
 function M.Logical:hotspare_delete( physical_id )
 	assert( self.id, "unable to get self object" )
-	assert( physical_id and common.is_string( physical_id ) )
+	assert( physical_id and M.Physical.is_id( physical_id ) )
 	output = run( "logical hotspare_delete " .. tostring( self.id ) .. " " .. physical_id )
 	if not output then error( "einarc:logical.hotspare_delete() failed" ) end
 end
