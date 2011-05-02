@@ -241,12 +241,18 @@ function M.Physical.is_id( id )
 end
 
 function M.Physical:new( attrs )
-	assert( M.Physical.is_id( attrs.id ) )
-	assert( common.is_string( attrs.model ) )
-	assert( common.is_string( attrs.revision ) )
-	assert( common.is_string( attrs.serial ) )
-	assert( common.is_positive( attrs.size ) )
-	assert( common.is_string( attrs.state ) )
+	assert( M.Physical.is_id( attrs.id ),
+	        "incorrect physical id" )
+	assert( common.is_string( attrs.model ),
+	        "empty model" )
+	assert( common.is_string( attrs.revision ),
+	        "empty revision" )
+	assert( common.is_string( attrs.serial ),
+	        "empty serial" )
+	assert( common.is_positive( attrs.size ),
+	        "non-positive size" )
+	assert( common.is_string( attrs.state ),
+	        "unknown model" )
 	return setmetatable( attrs, Physical_mt )
 end
 
@@ -260,7 +266,7 @@ function M.Physical.list()
 	local physicals = {}
 	for _, line in ipairs( output ) do
 		local id = string.match( line, "^([%d:]+)" )
-		assert( id )
+		assert( id, "unable to retreive an ID" )
 		physicals[ id ] = M.Physical:new( {
 			id = id,
 			model = string.match( line, "^[%d:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
@@ -302,10 +308,14 @@ M.Task = {}
 local Task_mt = common.Class( M.Task )
 
 function M.Task:new( attrs )
-	assert( common.is_number( attrs.id ) )
-	assert( common.is_string( attrs.what ) )
-	assert( common.is_string( attrs.where ) )
-	assert( common.is_number( attrs.progress ) )
+	assert( common.is_number( attrs.id ),
+	        "incorrect task id" )
+	assert( common.is_string( attrs.what ),
+	        "unexistent what" )
+	assert( common.is_string( attrs.where ),
+	        "unexistent where" )
+	assert( common.is_number( attrs.progress ),
+	        "no progress" )
 	return setmetatable( attrs, Task_mt )
 end
 
@@ -319,7 +329,7 @@ function M.Task.list()
 	local tasks = {}
 	for _, line in ipairs( output ) do
 		local id = string.match( line, "^(%d+)" )
-		assert( id )
+		assert( id, "unable to retreive an ID" )
 		tasks[ id ] = M.Task:new( {
 			id = tonumber( id ),
 			where = string.match( line, "^%d+\t(.*)\t.*\t.*$" ) or "",
@@ -338,7 +348,8 @@ end
 -- @param physical_id "2:3"
 -- @return two number args 2, 3
 function M.Physical.split_id( physical_id )
-	assert( M.Physical.is_id( physical_id ) )
+	assert( M.Physical.is_id( physical_id ),
+	        "incorrect physical id" )
 	return tonumber( string.match( physical_id , "^(%d+):" ) ),
 	       tonumber( string.match( physical_id , ":(%d+)$" ) )
 end
@@ -361,10 +372,12 @@ end
 -- @param physicals { "0:1" = Physical }
 -- @return { Physical, Physical }
 function M.Physical.sort( physicals )
-	assert( common.is_table( physicals ) )
+	assert( common.is_table( physicals ),
+	        "no physicals specified" )
 	-- Validate that all keys are real physical IDs
 	for physical_id,_ in pairs( physicals ) do
-		assert( M.Physical.is_id( physical_id ) )
+		assert( M.Physical.is_id( physical_id ),
+		        "incorrect physical id" )
 	end
 
 	local state_list = common.unique_keys( "state", physicals )
