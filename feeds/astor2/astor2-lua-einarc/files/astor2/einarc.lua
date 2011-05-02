@@ -277,7 +277,7 @@ end
 -- @return { "0" }
 function M.Physical:get( property )
 	assert( self.id and common.is_string( id ) )
-	assert( property and common.is_string( physical_id ) )
+	assert( property and common.is_string( property ) )
 	local output = run( "physical get " .. self.id .. " " .. property )
 	if not output then error( "einarc:physical.get() failed" ) end
 	return output
