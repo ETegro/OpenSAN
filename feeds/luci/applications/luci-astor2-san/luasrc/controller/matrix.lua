@@ -249,11 +249,13 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 			end
 			logical_scope = line.logical.rowspan
 		end
-		if line.physical and logical_scope == 0 and line.access_pattern then
-			matrix[ current_line ].access_pattern.rowspan = 3
-		end
-		if not line.physical and logical_scope == 0 and line.access_pattern then
-			matrix[ current_line ].access_pattern.rowspan = 4
+		if line.access_pattern and logical_scope == 0 then
+			-- We are outside logical's scope
+			if line.physical then
+				matrix[ current_line ].access_pattern.rowspan = 3
+			else
+				matrix[ current_line ].access_pattern.rowspan = 4
+			end
 		end
 		if logical_scope > 0 then
 			logical_scope = logical_scope - 1
