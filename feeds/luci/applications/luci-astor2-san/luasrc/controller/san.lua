@@ -334,8 +334,7 @@ local function lvm_logical_volume_resize( inputs )
 	for k, v in pairs( inputs ) do
 		if not logical_volume_name then
 			-- san.submit_logical_volume_resize-vg1302871899-lvname_new
-			-- TODO: replace regexp with library's one
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv([A-Za-z0-9\-_#%%:]+)END$" )
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
 		end
 	end
 	assert( volume_group_name, "unable to parse out volume group's name" )
@@ -365,8 +364,7 @@ local function lvm_logical_volume_snapshot_add( inputs )
 	for k, v in pairs( inputs ) do
 		if not logical_volume_name then
 			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
-			-- TODO: replace regexp with library's one
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).(.+)END$" )
+			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
 		end
 	end
 	assert( volume_group_name, "unable to parse out volume group's name" )
