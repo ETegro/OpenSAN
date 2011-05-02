@@ -35,10 +35,13 @@ M.AccessPattern.UCI_TYPE_NAME = "astor2-access-pattern"
 M.AccessPattern.LUN_MAX = 16
 
 function M.AccessPattern:new( attrs )
-	assert( attrs.name )
+	assert( attrs.name,
+	        "empty name" )
 	assert( common.is_in_array( attrs.targetdriver,
-				    M.AccessPattern.ALLOWED_TARGETDRIVERS ) )
-	assert( common.is_number( attrs.lun ) )
+				    M.AccessPattern.ALLOWED_TARGETDRIVERS ),
+	        "unallowed targetdriver" )
+	assert( common.is_number( attrs.lun ),
+	        "no LUN" )
 	if attrs.enabled == "1" or attrs.enabled == true then
 		attrs.enabled = true
 	else
@@ -81,7 +84,7 @@ function M.AccessPattern.find_by_section_name( section_name )
 end
 
 function M.AccessPattern:save()
-	assert( self )
+	assert( self, "unable to get self object" )
 	local ucicur = uci.cursor()
 	if self.section_name then
 		ucicur:delete( M.UCI_CONFIG_NAME,
@@ -123,7 +126,7 @@ function M.AccessPattern:save()
 end
 
 function M.AccessPattern:delete()
-	assert( self )
+	assert( self, "unable to get self object" )
 	local ucicur = uci.cursor()
 	ucicur:delete( M.UCI_CONFIG_NAME,
 	               self.section_name )
@@ -132,20 +135,20 @@ function M.AccessPattern:delete()
 end
 
 function M.AccessPattern:bind( filename )
-	assert( self )
+	assert( self, "unable to get self object" )
 	assert( filename )
 	self.filename = filename
 	self:save()
 end
 
 function M.AccessPattern:unbind()
-	assert( self )
+	assert( self, "unable to get self object" )
 	self.filename = ""
 	self:save()
 end
 
 function M.AccessPattern:is_binded()
-	assert( self )
+	assert( self, "unable to get self object" )
 	if self.filename then
 		return true
 	else
@@ -168,11 +171,11 @@ local function iqn_from_filename( filename )
 	ucicur:foreach( "system",
 	                "system",
 			function(s) hostname = s.hostname end )
-	assert( hostname )
+	assert( hostname, "unable to retreive hostname" )
 
 	-- Retreive LogicalVolume's name
 	local logical_volume_name = string.match( filename, "^/dev/vg%d+/(.+)$" )
-	assert( logical_volume_name )
+	assert( logical_volume_name, "unable to retreive logical volume name" )
 
 	-- This may be useful later
 	--[[
