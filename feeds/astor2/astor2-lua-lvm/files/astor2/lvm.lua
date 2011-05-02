@@ -26,7 +26,8 @@ local common = require( "astor2.common" )
 -- @param disk Disk path to check
 -- @return true/false
 local function is_disk( disk )
-	assert( disk and common.is_string( disk ) )
+	assert( disk and common.is_string( disk ),
+	        "no disk specified" )
 	local dev_exists = string.match( disk, "^/dev/[^/]+$" )
 	if not dev_exists then return false end
 	return true
@@ -39,29 +40,40 @@ M.PhysicalVolume = {}
 local PhysicalVolume_mt = common.Class( M.PhysicalVolume )
 
 function M.PhysicalVolume:new( attrs )
-	assert( common.is_number( attrs.total ) )
-	assert( common.is_number( attrs.free ) )
-	assert( common.is_number( attrs.allocated ) )
-	assert( common.is_number( attrs.volumes ) )
-	assert( common.is_positive( attrs.capacity ) )
-	assert( common.is_number( attrs.unusable ) )
-	assert( common.is_number( attrs.extent ) )
-	assert( common.is_string( attrs.volume_group ) )
-	assert( is_disk( attrs.device ) )
+	assert( common.is_number( attrs.total ),
+	        "non-number total" )
+	assert( common.is_number( attrs.free ),
+	        "non-number free" )
+	assert( common.is_number( attrs.allocated ),
+	        "non-number allocated" )
+	assert( common.is_number( attrs.volumes ),
+	        "non-number volumes" )
+	assert( common.is_positive( attrs.capacity ),
+	        "non-positive capacity" )
+	assert( common.is_number( attrs.unusable ),
+	        "non-number unusable" )
+	assert( common.is_number( attrs.extent ),
+	        "non-number extent" )
+	assert( common.is_string( attrs.volume_group ),
+	        "no volume group attribute" )
+	assert( is_disk( attrs.device ),
+	        "device is not a disk" )
 	return setmetatable( attrs, PhysicalVolume_mt )
 end
 
 --- Create PhysicalVolume on a disk
 -- @param disk Disk on which volume must be created
 function M.PhysicalVolume.create( disk )
-	assert( is_disk( disk ) )
+	assert( is_disk( disk ),
+	        "incorrect disk specified" )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
 	common.system_succeed( "lvm pvcreate " .. disk )
 end
 
 --- Remove PhysicalVolume
 function M.PhysicalVolume:remove()
-	assert( is_disk( self.device ) )
+	assert( is_disk( self.device ),
+	        "unable to verify self object" )
 	common.system_succeed( "lvm pvremove " .. self.device )
 end
 
@@ -110,11 +122,16 @@ M.VolumeGroup = {}
 local VolumeGroup_mt = common.Class( M.VolumeGroup )
 
 function M.VolumeGroup:new( attrs )
-	assert( common.is_number( attrs.extent ) )
-	assert( common.is_number( attrs.max_volume ) )
-	assert( common.is_number( attrs.total ) )
-	assert( common.is_number( attrs.allocated ) )
-	assert( common.is_number( attrs.free ) )
+	assert( common.is_number( attrs.extent ),
+	        "non-number extent" )
+	assert( common.is_number( attrs.max_volume ),
+	        "non-number max_volume" )
+	assert( common.is_number( attrs.total ),
+	        "non-number total" )
+	assert( common.is_number( attrs.allocated ),
+	        "non-number allocated" )
+	assert( common.is_number( attrs.free ),
+	        "non-number free" )
 	--assert( common.is_number( attrs.number ) )
 	return setmetatable( attrs, VolumeGroup_mt )
 end
@@ -126,7 +143,8 @@ end
 --- Create VolumeGroup
 -- @param physical_volumes List of PhysicalVolumes to create group on
 function M.VolumeGroup.create( physical_volumes )
-	assert( physical_volumes and common.is_array( physical_volumes ) )
+	assert( physical_volumes and common.is_array( physical_volumes ),
+	        "no physical volumes specified" )
 	local name = M.VolumeGroup.next_vg_name()
 
 	-- Sanity checks
@@ -149,7 +167,8 @@ end
 
 --- Remove VolumeGroup
 function M.VolumeGroup:remove()
-	assert( self.name and common.is_string( self.name ) )
+	assert( self.name and common.is_string( self.name ),
+	        "unable to get self object" )
 	common.system_succeed( "lvm vgremove " .. self.name )
 end
 
@@ -200,9 +219,12 @@ end
 -- @param name Name of LogicalVolume
 -- @param size Size of LogicalVolume
 function M.VolumeGroup:logical_volume( name, size )
-	assert( self.name )
-	assert( name and common.is_string( name ) )
-	assert( size and common.is_positive( size ) )
+	assert( self.name,
+	        "unable to get self object" )
+	assert( name and common.is_string( name ),
+	        "no name specified" )
+	assert( size and common.is_positive( size ),
+	        "non-positive size specified" )
 	local output = common.system( "lvm lvcreate -n " ..
 	                              name ..
 	                              " -L " ..
@@ -229,9 +251,12 @@ local LogicalVolume_mt = common.Class( M.LogicalVolume )
 M.LogicalVolume.name_valid_re = "^[A-Za-z0-9\-_#%%:]+$"
 
 function M.LogicalVolume:new( attrs )
-	assert( common.is_string( attrs.name ) )
-	assert( common.is_string( attrs.device ) )
-	assert( common.is_table( attrs.volume_group ) )
+	assert( common.is_string( attrs.name ),
+	        "empty name" )
+	assert( common.is_string( attrs.device ),
+	        "empty device" )
+	assert( common.is_table( attrs.volume_group ),
+	        "no volume group assigned to" )
 	assert( common.is_positive( attrs.size ) )
 	if not string.match( attrs.name, M.LogicalVolume.name_valid_re ) then
 		error("lvm:LogicalVolume:new() incorrect name supplied")
@@ -248,8 +273,10 @@ end
 
 --- Remove LogicalVolume
 function M.LogicalVolume:remove()
-	assert( self.volume_group )
-	assert( self.name )
+	assert( self.volume_group,
+	        "no volume group attached to" )
+	assert( self.name,
+	        "unable to get self object" )
 	common.system_succeed( "lvm lvremove -f " ..
 	                       self.volume_group.name .. "/" ..
 	                       self.name )
@@ -264,9 +291,12 @@ end
 -- @param size Snapshot size
 -- @return Raise error if it fails
 function M.LogicalVolume:snapshot( size )
-	assert( self.name )
-	assert( common.is_positive( size ) )
-	assert( common.is_string( self.device ) )
+	assert( self.name,
+	        "unable to get self object" )
+	assert( common.is_string( self.device ),
+	        "empty self object's device" )
+	assert( common.is_positive( size ),
+	        "non-positive size specified" )
 	local name = self.name .. os.date("_%Y-%m-%d_%H-%M-%S")
 	local output = common.system( "lvm lvcreate -s -n " ..
 	                              name ..
@@ -341,8 +371,10 @@ end
 -- @param size New wished size
 -- @return Raise error if it fails
 function M.LogicalVolume:resize( size )
-	assert( self.name )
-	assert( common.is_positive( size ) )
+	assert( self.name,
+	        "unable to get self object" )
+	assert( common.is_positive( size ),
+	        "non-positive size specified" )
 	if size == self.size then return end
 	if not lvresize( size, self ) then
 		error( "lvm:LogicalVolume:resize() failed" )
@@ -356,12 +388,18 @@ M.Snapshot = {}
 local Snapshot_mt = common.Class( M.Snapshot )
 
 function M.Snapshot:new( attrs )
-	assert( common.is_string( attrs.name ) )
-	assert( common.is_string( attrs.device ) )
-	assert( common.is_table( attrs.volume_group ) )
-	assert( common.is_positive( attrs.size ) )
-	assert( common.is_number( attrs.allocated ) )
-	assert( common.is_string( attrs.logical_volume ) )
+	assert( common.is_string( attrs.name ),
+	        "empty name" )
+	assert( common.is_string( attrs.device ),
+	        "empty device" )
+	assert( common.is_table( attrs.volume_group ),
+	        "no volume group assigned to" )
+	assert( common.is_positive( attrs.size ),
+	        "non-positive size" )
+	assert( common.is_number( attrs.allocated ),
+	        "non-number allocated" )
+	assert( common.is_string( attrs.logical_volume ),
+	        "no logical volume assigned to" )
 	return setmetatable( attrs, Snapshot_mt )
 end
 
@@ -375,8 +413,10 @@ M.Snapshot.remove = M.LogicalVolume.remove
 -- @param size New wished size
 -- @return Raise error if it fails
 function M.Snapshot:resize( size )
-	assert( self.name )
-	assert( common.is_positive( size ) )
+	assert( self.name,
+	        "unable to get self object" )
+	assert( common.is_positive( size ),
+	        "non-positive size specified" )
 	if size <= self.size then return end
 	if not lvresize( size, self ) then
 		error( "lvm:Snapshot:resize() failed" )
