@@ -1341,10 +1341,89 @@ TestMatrix = {}
 		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
 		assertEquals( matrix[5].access_pattern.rowspan, 4 )
 	end
+	function TestMatrix:test_hotspare_calculation()
+		-- Add several other drives that will be checked
+		self.physicals_double[ "666:1" ] = {
+			id = "666:1",
+			model = "verysmall",
+			revision = "qwerty",
+			serial = "01",
+			size = 133,
+			state = "free"
+		}
+		self.physicals_double[ "666:2" ] = {
+			id = "666:2",
+			model = "shouldfit",
+			revision = "qwerty",
+			serial = "01",
+			size = 333,
+			state = "free"
+		}
+		self.physicals_double[ "666:3" ] = {
+			id = "666:3",
+			model = "anotherfit",
+			revision = "qwerty",
+			serial = "01",
+			size = 444,
+			state = "free"
+		}
+		self.physicals_double[ "666:4" ] = {
+			id = "666:4",
+			model = "doublefit",
+			revision = "qwerty",
+			serial = "01",
+			size = 666,
+			state = "free"
+		}
+		self.physicals_double[ "666:5" ] = {
+			id = "666:5",
+			model = "fiteverywhere",
+			revision = "qwerty",
+			serial = "01",
+			size = 777,
+			state = "free"
+		}
+
+		local got = matrix.filter_calculate_hotspares(
+			matrix.overall( {
+				physicals = self.physicals_double,
+				logicals = self.logicals_double
+			} )
+		)
+
+		assertEquals( got[8].physical.hotspare_availability, nil ) -- 666:1
+		assert( common.compare_tables( -- 666:2
+				got[9].physical.hotspare_availability,
+				{ 13 } ) )
+		assert( common.compare_tables( -- 666:3
+				got[10].physical.hotspare_availability,
+				{ 13 } ) )
+		assert( common.compare_tables( -- 666:4
+				got[11].physical.hotspare_availability,
+				{ 3, 13 } ) )
+		assert( common.compare_tables( -- 666:5
+				got[12].physical.hotspare_availability,
+				{ 3, 13 } ) )
+
+		-- Try to assign hotspare to different RAID levels
+		for _, level in ipairs( { "linear", "passthrough", "0" } ) do
+			self.logicals_double[13].level = level
+			got = matrix.filter_calculate_hotspares(
+				matrix.overall( {
+					physicals = self.physicals_double,
+					logicals = self.logicals_double
+				} )
+			)
+			assertEquals( got[10].physical.hotspare_availability, nil ) -- 666:3
+			assert( common.compare_tables( -- 666:4
+					got[11].physical.hotspare_availability,
+					{ 3 } ) )
+		end
+	end
 
 TestMibToTib = {}
 	function TestMibToTib:test_values_160gb()
-		print( assertEquals( matrix.mib2tib( 160E3 ), "0.15" ) )
+		assertEquals( matrix.mib2tib( 160E3 ), "0.15" )
 	end
 	function TestMibToTib:test_values_320gb()
 		assertEquals( matrix.mib2tib( 320E3 ), "0.30" )

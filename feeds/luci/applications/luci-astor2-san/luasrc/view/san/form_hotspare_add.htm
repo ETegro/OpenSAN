@@ -17,18 +17,15 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<% if line.physical.state == "free" then %>
+<% if line.physical.hotspare_availability then %>
 	<li>
 		<div class="inline"><%: RAID %> #: </div>
 		<div class="inline">
 			<select id="san.logical_id_hotspare-<%= line.physical.id %>"
 				name="san.logical_id_hotspare-<%= line.physical.id %>"
 				size="1" >
-				<option value=""></option>
-				<% for _, option in ipairs( matrix_overall ) do %>
-					<% if option.logical then %>
-					<option value="<%= option.logical.id %>"><%= option.logical.id %></option>
-					<% end %>
+				<% for _, logical_id in ipairs( line.physical.hotspare_availability ) do %>
+					<option value="<%= logical_id %>"><%= logical_id %></option>
 				<% end %>
 			</select>
 		</div>
