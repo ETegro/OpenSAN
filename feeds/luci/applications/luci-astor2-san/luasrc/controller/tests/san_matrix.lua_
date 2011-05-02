@@ -504,7 +504,6 @@ TestMatrix = {}
 						right = false,
 						bottom = false
 					},
-
 					id = "13:2",
 					model = "model2",
 					revision = "asdfgh",
@@ -727,7 +726,6 @@ TestMatrix = {}
 					state = "normal"
 				}
 			},
-
 		}
 
 		assert( common.compare_tables(
@@ -918,7 +916,6 @@ TestMatrix = {}
 					snapshots = {},
 					size = 12
 				}
-
 			},
 			-- 6
 			{
@@ -1301,7 +1298,6 @@ TestMatrix = {}
 		assertEquals( matrix[5].physical, nil )
 		assertEquals( matrix[5].logical, nil )
 	end
-
 
 TestMibToTib = {}
 	function TestMibToTib:test_values_160gb()
