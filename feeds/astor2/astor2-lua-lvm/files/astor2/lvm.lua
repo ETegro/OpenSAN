@@ -248,7 +248,7 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
-M.LogicalVolume.name_valid_re = "^[A-Za-z0-9\-_#%%:]+$"
+M.LogicalVolume.NAME_VALID_RE = "[A-Za-z0-9\-_#%%:]+"
 
 function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.name ),
@@ -258,7 +258,7 @@ function M.LogicalVolume:new( attrs )
 	assert( common.is_table( attrs.volume_group ),
 	        "no volume group assigned to" )
 	assert( common.is_positive( attrs.size ) )
-	if not string.match( attrs.name, M.LogicalVolume.name_valid_re ) then
+	if not string.match( attrs.name, "^" .. M.LogicalVolume.NAME_VALID_RE .. "$" ) then
 		error("lvm:LogicalVolume:new() incorrect name supplied")
 	end
 	if not attrs.snapshots then
