@@ -228,6 +228,11 @@ local function einarc_logical_hotspare_add( inputs )
 		index_with_error( i18n("Logical disk is not selected") )
 	end
 
+	if tonumber( inputs[ "logical_minimal_size-" .. physical_id .. "-" .. tostring( logical_id ) ] ) <
+	   tonumber( inputs[ "physical_size-" .. physical_id ] ) then
+		message_error = i18n("Newly added hotspare disk is bigger than needed")
+	end
+
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
 	if not return_code then
