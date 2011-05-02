@@ -33,6 +33,9 @@
 				       name="san.logical_minimal_size-<%= line.physical.id %>-<%= logical_id %>"
 				       value="<%= minimal_size %>" />
 			<% end %>
+			<input type="hidden"
+			       name="san.physical_size-<%= line.physical.id %>"
+			       value="<%= line.physical.size %>" />
 		</div>
 		<div class="inline">
 			<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>END"
