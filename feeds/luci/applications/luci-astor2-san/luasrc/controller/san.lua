@@ -220,10 +220,9 @@ local function einarc_logical_hotspare_add( inputs )
 			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)END$" )
 		end
 	end
-
 	assert( physical_id, "unable to parse out physical's id" )
-	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id ]
 
+	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id ]
 	logical_id = tonumber( logical_id )
 	if not logical_id then
 		index_with_error( i18n("Logical disk is not selected") )
