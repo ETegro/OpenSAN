@@ -227,6 +227,35 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 		end
 		matrix[ current_line ][ "access_pattern" ] = access_pattern
 	end
+
+	local logical_scope = 0
+	for current_line, line in ipairs( matrix ) do
+		if line.logical then
+			local logical_volumes_names = common.keys( line.logical.logical_volumes or {} )
+			if #logical_volumes_names > 0 then
+				for i = current_line, line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
+					if matrix[ i ].access_pattern then
+						matrix[ i ].access_pattern.rowspan = 1
+					end
+				end
+			end
+			for i = current_line, line.logical.rowspan do
+				if matrix[ i ].access_pattern and not matrix[ i ].access_pattern.rowspan then
+					matrix[ i ].access_pattern.rowspan = 2
+				end
+			end
+			logical_scope = line.logical.rowspan
+		end
+		if line.physical and logical_scope == 0 and line.access_pattern then
+			matrix[ current_line ].access_pattern.rowspan = 3
+		end
+		if not line.physical and logical_scope == 0 and line.access_pattern then
+			matrix[ current_line ].access_pattern.rowspan = 4
+		end
+		if logical_scope > 0 then
+			logical_scope = logical_scope - 1
+		end
+	end
 	return matrix
 end
 
