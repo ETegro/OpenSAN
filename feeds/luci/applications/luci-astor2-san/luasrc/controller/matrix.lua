@@ -292,6 +292,34 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 	return matrix
 end
 
+function M.filter_calculate_hotspares( matrix )
+	for current_line, line in ipairs( matrix ) do
+		if line.physical and line.physical.state == "free" then
+			local hotspare_availability = {}
+			for _, line_inner in ipairs( matrix ) do
+				if line_inner.logical and not common.is_in_array( line_inner.logical.level, { "linear", "passthrough", "0" } ) then
+					local minimal_size = math.huge
+					for _, physical in pairs( line_inner.logical.physicals ) do
+						if physical.size < minimal_size then
+							minimal_size = physical.size
+						end
+					end
+					if line.physical.size >= minimal_size then
+						hotspare_availability[ #hotspare_availability + 1 ] = line_inner.logical.id
+					end
+				end
+			end
+			if #hotspare_availability == 0 then
+				matrix[ current_line ].physical.hotspare_availability = nil
+			else
+				table.sort( hotspare_availability )
+				matrix[ current_line ].physical.hotspare_availability = hotspare_availability
+			end
+		end
+	end
+	return matrix
+end
+
 local function logical_volume_group( logical, volume_groups )
 	for _, volume_group in ipairs( volume_groups ) do
 		if volume_group.physical_volumes[1].device == logical.device then
@@ -344,7 +372,8 @@ function M.caller()
 		M.filter_volume_group_percentage,
 		filter_mib2tib,
 		filter_add_logical_id_to_physical,
-		M.filter_add_access_patterns
+		M.filter_add_access_patterns,
+		M.filter_calculate_hotspares
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
