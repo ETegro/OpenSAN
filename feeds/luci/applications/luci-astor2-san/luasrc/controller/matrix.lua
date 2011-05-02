@@ -220,12 +220,46 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
 	local access_patterns_names = common.keys( access_patterns_named_hash  )
 	table.sort( access_patterns_names )
+
+	-- Fillup matrix with AccessPatterns
 	for current_line, access_pattern_name in ipairs( access_patterns_names ) do
 		access_pattern = access_patterns[ access_patterns_named_hash[ access_pattern_name ][1] ]
 		if not matrix[ current_line ] then
 			matrix[ current_line ] = {}
 		end
 		matrix[ current_line ][ "access_pattern" ] = access_pattern
+	end
+
+	-- Calculate AccessPatterns-related TD's rowspan
+	local logical_scope = 0
+	for current_line, line in ipairs( matrix ) do
+		if line.logical then
+			local logical_volumes_names = common.keys( line.logical.logical_volumes or {} )
+			if #logical_volumes_names > 0 then
+				for i = current_line, line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
+					if matrix[ i ].access_pattern then
+						matrix[ i ].access_pattern.rowspan = 1
+					end
+				end
+			end
+			for i = current_line, line.logical.rowspan do
+				if matrix[ i ].access_pattern and not matrix[ i ].access_pattern.rowspan then
+					matrix[ i ].access_pattern.rowspan = 2
+				end
+			end
+			logical_scope = line.logical.rowspan
+		end
+		if line.access_pattern and logical_scope == 0 then
+			-- We are outside logical's scope
+			if line.physical then
+				matrix[ current_line ].access_pattern.rowspan = 3
+			else
+				matrix[ current_line ].access_pattern.rowspan = 4
+			end
+		end
+		if logical_scope > 0 then
+			logical_scope = logical_scope - 1
+		end
 	end
 	return matrix
 end
