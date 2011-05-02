@@ -1,5 +1,5 @@
 --[[
-  aStor2 -- storage area network configurable via Web-interface
+/bin/bash: ATA: command not found
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Vladimir Petukhov <vladimir.petukhov@etegro.com>
                           Sergey Matveev <stargrave@stargrave.org>
@@ -127,6 +127,7 @@ function M.filter_borders_highlight( matrix )
 		if line.physical then
 			matrix[ current_line ].physical = check_highlights_attribute( matrix[ current_line ].physical )
 		end
+
 		if line.logical then
 			matrix[ current_line ].logical = check_highlights_attribute( matrix[ current_line ].logical )
 
@@ -163,6 +164,33 @@ function M.filter_borders_highlight( matrix )
 			matrix[ current_line ].logical.highlight.bottom = true
 			if logical_volumes_quantity ~= 0 then
 				matrix[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
+			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_alternation_border_colors( matrix, colors_array )
+	if not colors_array then
+		colors_array = { "black", "blue", "green", "orange", "red", "yellow" }
+	end
+	local color_number = 1
+	for current_line, line in ipairs( matrix ) do
+		local color = colors_array[ color_number ]
+		if line.logical then
+			if color_number == #colors_array then
+				color_number = 1
+			else
+				color_number = color_number + 1
+			end
+			matrix[ current_line ].logical.highlight.color = color
+			for _, physical in pairs( line.logical.physicals ) do
+				physical.highlight.color = color
+			end
+			if line.logical.logical_volumes then
+				for _, logical_volumes in pairs( line.logical.logical_volumes ) do
+					logical_volumes.highlight.color = color
+				end
 			end
 		end
 	end
@@ -312,6 +340,7 @@ function M.caller()
 	} )
 	local FILTERS = {
 		M.filter_borders_highlight,
+		M.filter_alternation_border_colors,
 		M.filter_volume_group_percentage,
 		filter_mib2tib,
 		filter_add_logical_id_to_physical,

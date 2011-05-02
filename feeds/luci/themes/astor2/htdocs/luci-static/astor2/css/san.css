@@ -44,6 +44,13 @@ form table tbody tr td { width: 25%; }
 .physical-background-state-free { background-color: #CCCCCC; }
 .physical-background-state-hotspare { background-color: #FFCC22; }
 
+.physical-highlight-color-black { border-color: black; }
+.physical-highlight-color-blue { border-color: blue; }
+.physical-highlight-color-green { border-color: green; }
+.physical-highlight-color-orange { border-color: orange; }
+.physical-highlight-color-red { border-color: red; }
+.physical-highlight-color-yellow { border-color: yellow; }
+
 /* Logicals */
 .logical-highlight-top { border-top: 5px solid #00CC00; }
 .logical-highlight-right { border-right: 5px solid #00CC00; }
@@ -55,8 +62,22 @@ form table tbody tr td { width: 25%; }
 .logical-background-state-initializing { background-color: #EEFF44; }
 .logical-background-state-rebuilding { background-color: #FFCC22; }
 
+.logical-highlight-color-black { border-color: black; }
+.logical-highlight-color-blue { border-color: blue; }
+.logical-highlight-color-green { border-color: green; }
+.logical-highlight-color-orange { border-color: orange; }
+.logical-highlight-color-red { border-color: red; }
+.logical-highlight-color-yellow { border-color: yellow; }
+
 /* Logicals volumes */
 .logical_volume-highlight-top { border-top: 5px solid #00CC00; }
 .logical_volume-highlight-right { border-right: 5px solid #00CC00; }
 .logical_volume-highlight-bottom { border-bottom: 5px solid #00CC00; }
 .logical_volume-highlight-left { border-left: 5px solid #00CC00; }
+
+.logical_volume-highlight-color-black { border-color: black; }
+.logical_volume-highlight-color-blue { border-color: blue; }
+.logical_volume-highlight-color-green { border-color: green; }
+.logical_volume-highlight-color-orange { border-color: orange; }
+.logical_volume-highlight-color-red { border-color: red; }
+.logical_volume-highlight-color-yellow { border-color: yellow; }
