@@ -375,10 +375,10 @@ function M.caller()
 		M.filter_borders_highlight,
 		M.filter_alternation_border_colors,
 		M.filter_volume_group_percentage,
-		filter_mib2tib,
 		filter_add_logical_id_to_physical,
 		M.filter_add_access_patterns,
-		M.filter_calculate_hotspares
+		M.filter_calculate_hotspares,
+		filter_mib2tib
 		-- filter_highlight_snapshots
 		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
