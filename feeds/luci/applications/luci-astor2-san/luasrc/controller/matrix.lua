@@ -380,7 +380,6 @@ function M.caller()
 		M.filter_calculate_hotspares,
 		filter_mib2tib
 		-- filter_highlight_snapshots
-		-- filter_rainbow_logical_highlights
 		-- filter_overall_fields_counter (for hiding)
 	}
 	for _,filter in ipairs( FILTERS ) do
