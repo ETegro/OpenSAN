@@ -25,6 +25,8 @@ einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 scst = require( "astor2.scst" )
 
+mime = require( "mime" )
+
 function M.gcd( x, y )
 	if y == 0 then return math.abs( x ) end
 	return M.gcd( y, x % y )
@@ -342,6 +344,19 @@ function M.filter_serialize( matrix )
 	return matrix
 end
 
+local function b64encode( data )
+	return (mime.b64( data ))
+end
+
+function filter_base64encode( matrix )
+	matrix.serialized_physicals = b64encode( matrix.serialized_physicals )
+	matrix.serialized_logicals = b64encode( matrix.serialized_logicals )
+	matrix.serialized_physical_volumes = b64encode( matrix.serialized_physical_volumes )
+	matrix.serialized_volume_groups = b64encode( matrix.serialized_volume_groups )
+	matrix.serialized_logical_volumes = b64encode( matrix.serialized_logical_volumes )
+	return matrix
+end
+
 local function logical_volume_group( logical, volume_groups )
 	for _, volume_group in ipairs( volume_groups ) do
 		if volume_group.physical_volumes[1].device == logical.device then
@@ -402,7 +417,8 @@ function M.caller()
 		M.filter_add_access_patterns,
 		M.filter_calculate_hotspares,
 		filter_mib2tib,
-		filter_serialize
+		filter_serialize,
+		filter_base64encode
 		-- filter_highlight_snapshots
 		-- filter_overall_fields_counter (for hiding)
 	}
