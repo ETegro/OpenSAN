@@ -353,7 +353,7 @@ TestMatrix = {}
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple
 			} )
-		} )
+		} )[ "lines" ]
 		assertEquals( got[1].logical_volume.volume_group.percentage, 0 )
 	end
 	function TestMatrix:test_volume_group_percentage()
@@ -371,7 +371,7 @@ TestMatrix = {}
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple
 			} )
-		} )
+		} )[ "lines" ]
 		assertEquals( got[1].logical_volume.volume_group.percentage, 12 )
 		assertEquals( got[3].logical_volume.volume_group.percentage, 100 )
 		assertEquals( got[5].logical_volume.volume_group.percentage, 19 )
@@ -643,7 +643,7 @@ TestMatrix = {}
 						physicals = self.physicals_double, -- actually should be astor2.einarc.etc
 						logicals = self.logicals_double,   -- actually should be astor2.einarc.etc
 					} )
-				} ),
+				} )[ "lines" ],
 				needed
 			)
 		)
@@ -1000,7 +1000,7 @@ TestMatrix = {}
 						physicals = self.physicals_triple,
 						logicals = self.logicals_triple
 					} )
-				} ),
+				} )[ "lines" ],
 				needed
 			)
 		)
@@ -1079,7 +1079,7 @@ TestMatrix = {}
 						physicals = self.physicals_with_free,
 						logicals = self.logicals_with_free
 					} )
-				} ),
+				} )[ "lines" ],
 				needed
 			)
 		)
@@ -1289,7 +1289,7 @@ TestMatrix = {}
 				logicals = self.logicals_triple,
 			} ),
 			self.access_patterns
-		} )
+		} )[ "lines" ]
 		assertEquals( got[1].access_pattern.name, "foobar3" )
 		assertEquals( got[1].access_pattern.colspan, 1 )
 		assertEquals( got[2].access_pattern.name, "foobar4" )
@@ -1310,7 +1310,7 @@ TestMatrix = {}
 				logicals = self.logicals_double,
 			} ),
 			self.access_patterns
-		} )
+		} )[ "lines" ]
 		assertEquals( got[1].access_pattern.name, "foobar3" )
 		assertEquals( got[1].access_pattern.colspan, 2 )
 		assertEquals( got[2].access_pattern.name, "foobar4" )
@@ -1329,7 +1329,7 @@ TestMatrix = {}
 				logicals = self.logicals_with_free,
 			} ),
 			self.access_patterns
-		} )
+		} )[ "lines" ]
 		assertEquals( got[1].access_pattern.name, "foobar3" )
 		assertEquals( got[1].access_pattern.colspan, 2 )
 		assertEquals( got[2].access_pattern.name, "foobar4" )
@@ -1389,7 +1389,7 @@ TestMatrix = {}
 				physicals = self.physicals_double,
 				logicals = self.logicals_double
 			} )
-		} )
+		} )[ "lines" ]
 
 		assertEquals( got[8].physical.hotspare_availability, nil ) -- 666:1
 		assert( common.compare_tables( -- 666:2
@@ -1417,7 +1417,7 @@ TestMatrix = {}
 					physicals = self.physicals_double,
 					logicals = self.logicals_double
 				} )
-			} )
+			} )[ "lines" ]
 			assertEquals( got[10].physical.hotspare_availability, nil ) -- 666:3
 			assert( common.compare_tables( -- 666:4
 					got[11].physical.hotspare_availability,
