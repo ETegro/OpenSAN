@@ -1,5 +1,5 @@
 --[[
-/bin/bash: ATA: command not found
+  aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Vladimir Petukhov <vladimir.petukhov@etegro.com>
                           Sergey Matveev <stargrave@stargrave.org>
