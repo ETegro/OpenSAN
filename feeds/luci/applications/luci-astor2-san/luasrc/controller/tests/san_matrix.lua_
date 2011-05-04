@@ -348,13 +348,13 @@ TestMatrix = {}
 		logicals[9].logical_volumes["baz"].volume_group.total = 0
 		logicals[9].logical_volumes["baz"].volume_group.allocated = 0
 
-		local matrix = matrix.filter_volume_group_percentage(
-			matrix.overall( {
+		local got = matrix.filter_volume_group_percentage( {
+			lines = matrix.overall( {
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple
 			} )
-		)
-		assertEquals( matrix[1].logical_volume.volume_group.percentage, 0 )
+		} )[ "lines" ]
+		assertEquals( got[1].logical_volume.volume_group.percentage, 0 )
 	end
 	function TestMatrix:test_volume_group_percentage()
 		local logicals = self.logicals_triple
@@ -366,15 +366,15 @@ TestMatrix = {}
 
 		logicals[9].logical_volumes["baz"].volume_group.total = 213456
 		logicals[9].logical_volumes["baz"].volume_group.allocated = 213056
-		local matrix = matrix.filter_volume_group_percentage(
-			matrix.overall( {
+		local got = matrix.filter_volume_group_percentage( {
+			lines = matrix.overall( {
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple
 			} )
-		)
-		assertEquals( matrix[1].logical_volume.volume_group.percentage, 12 )
-		assertEquals( matrix[3].logical_volume.volume_group.percentage, 100 )
-		assertEquals( matrix[5].logical_volume.volume_group.percentage, 19 )
+		} )[ "lines" ]
+		assertEquals( got[1].logical_volume.volume_group.percentage, 12 )
+		assertEquals( got[3].logical_volume.volume_group.percentage, 100 )
+		assertEquals( got[5].logical_volume.volume_group.percentage, 19 )
 	end
 	function TestMatrix:test_matrix_double()
 		local needed = {
@@ -638,12 +638,12 @@ TestMatrix = {}
 		}
 
 		assert( common.compare_tables(
-				matrix.filter_borders_highlight(
-					matrix.overall( {
+				matrix.filter_borders_highlight( {
+					lines = matrix.overall( {
 						physicals = self.physicals_double, -- actually should be astor2.einarc.etc
 						logicals = self.logicals_double,   -- actually should be astor2.einarc.etc
 					} )
-				),
+				} )[ "lines" ],
 				needed
 			)
 		)
@@ -995,12 +995,12 @@ TestMatrix = {}
 		}
 
 		assert( common.compare_tables(
-				matrix.filter_borders_highlight(
-					matrix.overall( {
+				matrix.filter_borders_highlight( {
+					lines = matrix.overall( {
 						physicals = self.physicals_triple,
 						logicals = self.logicals_triple
 					} )
-				),
+				} )[ "lines" ],
 				needed
 			)
 		)
@@ -1074,12 +1074,12 @@ TestMatrix = {}
 			}
 		}
 		assert( common.compare_tables(
-				matrix.filter_borders_highlight(
-					matrix.overall( {
+				matrix.filter_borders_highlight( {
+					lines = matrix.overall( {
 						physicals = self.physicals_with_free,
 						logicals = self.logicals_with_free
 					} )
-				),
+				} )[ "lines" ],
 				needed
 			)
 		)
@@ -1283,63 +1283,63 @@ TestMatrix = {}
 		)
 	end
 	function TestMatrix:test_access_pattern_adding_with_lvms()
-		local matrix = matrix.filter_add_access_patterns(
-			matrix.overall( {
+		local got = matrix.filter_add_access_patterns( {
+			lines = matrix.overall( {
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple,
-			} ),
+			} ) },
 			self.access_patterns
-		)
-		assertEquals( matrix[1].access_pattern.name, "foobar3" )
-		assertEquals( matrix[1].access_pattern.colspan, 1 )
-		assertEquals( matrix[2].access_pattern.name, "foobar4" )
-		assertEquals( matrix[2].access_pattern.colspan, 1 )
-		assertEquals( matrix[3].access_pattern.name, "foobar5" )
-		assertEquals( matrix[3].access_pattern.colspan, 1 )
-		assertEquals( matrix[4].access_pattern.name, "foobaz1" )
-		assertEquals( matrix[4].access_pattern.colspan, 1 )
-		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
-		assertEquals( matrix[5].access_pattern.colspan, 1 )
-		assertEquals( matrix[5].physical, nil )
-		assertEquals( matrix[5].logical, nil )
+		)[ "lines" ]
+		assertEquals( got[1].access_pattern.name, "foobar3" )
+		assertEquals( got[1].access_pattern.colspan, 1 )
+		assertEquals( got[2].access_pattern.name, "foobar4" )
+		assertEquals( got[2].access_pattern.colspan, 1 )
+		assertEquals( got[3].access_pattern.name, "foobar5" )
+		assertEquals( got[3].access_pattern.colspan, 1 )
+		assertEquals( got[4].access_pattern.name, "foobaz1" )
+		assertEquals( got[4].access_pattern.colspan, 1 )
+		assertEquals( got[5].access_pattern.name, "foobaz2" )
+		assertEquals( got[5].access_pattern.colspan, 1 )
+		assertEquals( got[5].physical, nil )
+		assertEquals( got[5].logical, nil )
 	end
 	function TestMatrix:test_access_pattern_adding_in_just_raid()
-		local matrix = matrix.filter_add_access_patterns(
-			matrix.overall( {
+		local got = matrix.filter_add_access_patterns( {
+			lines = matrix.overall( {
 				physicals = self.physicals_double,
 				logicals = self.logicals_double,
-			} ),
+			} ) },
 			self.access_patterns
-		)
-		assertEquals( matrix[1].access_pattern.name, "foobar3" )
-		assertEquals( matrix[1].access_pattern.colspan, 2 )
-		assertEquals( matrix[2].access_pattern.name, "foobar4" )
-		assertEquals( matrix[2].access_pattern.colspan, 2 )
-		assertEquals( matrix[3].access_pattern.name, "foobar5" )
-		assertEquals( matrix[3].access_pattern.colspan, 2 )
-		assertEquals( matrix[4].access_pattern.name, "foobaz1" )
-		assertEquals( matrix[4].access_pattern.colspan, 2 )
-		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
-		assertEquals( matrix[5].access_pattern.colspan, 2 )
+		)[ "lines" ]
+		assertEquals( got[1].access_pattern.name, "foobar3" )
+		assertEquals( got[1].access_pattern.colspan, 2 )
+		assertEquals( got[2].access_pattern.name, "foobar4" )
+		assertEquals( got[2].access_pattern.colspan, 2 )
+		assertEquals( got[3].access_pattern.name, "foobar5" )
+		assertEquals( got[3].access_pattern.colspan, 2 )
+		assertEquals( got[4].access_pattern.name, "foobaz1" )
+		assertEquals( got[4].access_pattern.colspan, 2 )
+		assertEquals( got[5].access_pattern.name, "foobaz2" )
+		assertEquals( got[5].access_pattern.colspan, 2 )
 	end
 	function TestMatrix:test_access_pattern_adding_with_physicals()
-		local matrix = matrix.filter_add_access_patterns(
-			matrix.overall( {
+		local got = matrix.filter_add_access_patterns( {
+			lines = matrix.overall( {
 				physicals = self.physicals_with_free,
 				logicals = self.logicals_with_free,
-			} ),
+			} ) },
 			self.access_patterns
-		)
-		assertEquals( matrix[1].access_pattern.name, "foobar3" )
-		assertEquals( matrix[1].access_pattern.colspan, 2 )
-		assertEquals( matrix[2].access_pattern.name, "foobar4" )
-		assertEquals( matrix[2].access_pattern.colspan, 3 )
-		assertEquals( matrix[3].access_pattern.name, "foobar5" )
-		assertEquals( matrix[3].access_pattern.colspan, 4 )
-		assertEquals( matrix[4].access_pattern.name, "foobaz1" )
-		assertEquals( matrix[4].access_pattern.colspan, 4 )
-		assertEquals( matrix[5].access_pattern.name, "foobaz2" )
-		assertEquals( matrix[5].access_pattern.colspan, 4 )
+		)[ "lines" ]
+		assertEquals( got[1].access_pattern.name, "foobar3" )
+		assertEquals( got[1].access_pattern.colspan, 2 )
+		assertEquals( got[2].access_pattern.name, "foobar4" )
+		assertEquals( got[2].access_pattern.colspan, 3 )
+		assertEquals( got[3].access_pattern.name, "foobar5" )
+		assertEquals( got[3].access_pattern.colspan, 4 )
+		assertEquals( got[4].access_pattern.name, "foobaz1" )
+		assertEquals( got[4].access_pattern.colspan, 4 )
+		assertEquals( got[5].access_pattern.name, "foobaz2" )
+		assertEquals( got[5].access_pattern.colspan, 4 )
 	end
 	function TestMatrix:test_hotspare_calculation()
 		-- Add several other drives that will be checked
@@ -1384,12 +1384,12 @@ TestMatrix = {}
 			state = "free"
 		}
 
-		local got = matrix.filter_calculate_hotspares(
-			matrix.overall( {
+		local got = matrix.filter_calculate_hotspares( {
+			lines = matrix.overall( {
 				physicals = self.physicals_double,
 				logicals = self.logicals_double
 			} )
-		)
+		} )[ "lines" ]
 
 		assertEquals( got[8].physical.hotspare_availability, nil ) -- 666:1
 		assert( common.compare_tables( -- 666:2
@@ -1412,12 +1412,12 @@ TestMatrix = {}
 		-- Try to assign hotspare to different RAID levels
 		for _, level in ipairs( { "linear", "passthrough", "0" } ) do
 			self.logicals_double[13].level = level
-			got = matrix.filter_calculate_hotspares(
-				matrix.overall( {
+			got = matrix.filter_calculate_hotspares( {
+				lines = matrix.overall( {
 					physicals = self.physicals_double,
 					logicals = self.logicals_double
 				} )
-			)
+			} )[ "lines" ]
 			assertEquals( got[10].physical.hotspare_availability, nil ) -- 666:3
 			assert( common.compare_tables( -- 666:4
 					got[11].physical.hotspare_availability,

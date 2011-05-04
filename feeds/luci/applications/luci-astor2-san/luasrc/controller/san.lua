@@ -26,6 +26,8 @@ lvm = require( "astor2.lvm" )
 matrix = require( "luci.controller.matrix" )
 scst = require( "astor2.scst" )
 
+mime = require( "mime" )
+
 require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
@@ -268,7 +270,7 @@ end
 ------------------------------------------------------------------------
 -- LVM related functions
 ------------------------------------------------------------------------
-local function lvm_logical_volume_add( inputs )
+local function lvm_logical_volume_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 	local volume_group_name = nil
@@ -289,6 +291,11 @@ local function lvm_logical_volume_add( inputs )
 	end
 	if not string.match( logical_volume_name, "^" .. lvm.LogicalVolume.NAME_VALID_RE .. "$" ) then
 		return index_with_error( i18n("Invalid logical volume name") )
+	end
+	for _, logical_volume in ipairs( data.logical_volumes ) do
+		if logical_volume.name == logical_volume_name then
+			return index_with_error( i18n("Such name already exists") )
+		end
 	end
 
 	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
@@ -577,17 +584,35 @@ local function decoded_inputs( inputs )
 	return new_inputs
 end
 
+local function b64encode( data )
+	return (mime.b64( data ))
+end
+
+local function b64decode( data )
+	return (mime.unb64( data ))
+end
+
 function perform()
 	local inputs = decoded_inputs( luci.http.formvaluetable( "san" ) )
 	local i18n = luci.i18n.translate
 	local get = luci.http.formvalue
+
+	-- Decode preserialized saved data
+	local deserializer = luci.util.restore_data
+	local data = {
+		logicals = deserializer( b64decode( inputs[ "serialized_logicals" ] ) ),
+		physicals = deserializer( b64decode( inputs[ "serialized_physicals" ] ) ),
+		physical_volumes = deserializer( b64decode( inputs[ "serialized_physical_volumes" ] ) ),
+		volume_groups = deserializer( b64decode( inputs[ "serialized_volume_groups" ] ) ),
+		logical_volumes = deserializer( b64decode( inputs[ "serialized_logical_volumes" ] ) )
+	}
 
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
 		logical_delete = function() einarc_logical_delete( inputs ) end,
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
-		logical_volume_add = function() lvm_logical_volume_add( inputs ) end,
+		logical_volume_add = function() lvm_logical_volume_add( inputs, data ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,
 		logical_volume_snapshot_add = function() lvm_logical_volume_snapshot_add( inputs ) end,
