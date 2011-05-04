@@ -51,7 +51,8 @@
 					</span>
 				</li>
 				<% local there_is_logical = false %>
-				<% for _, this_line in ipairs( matrix_overall ) do %>
+				<!-- TODO -->
+				<% for _, this_line in ipairs( matrix_overall.lines ) do %>
 					<% if this_line.logical then %>
 						<% there_is_logical = true %>
 					<% end %>
