@@ -84,7 +84,7 @@ local function einarc_logical_add( inputs, drives )
 
 	local raid_level = inputs["raid_level"]
 	if not raid_level then
-		index_with_error( i18n("RAID level is not selected") )
+		return index_with_error( i18n("RAID level is not selected") )
 	end
 
 	if common.is_string( drives ) then
@@ -92,7 +92,7 @@ local function einarc_logical_add( inputs, drives )
 	end
 
 	if not drives then
-		index_with_error( i18n("Drives are not selected") )
+		return index_with_error( i18n("Drives are not selected") )
 	end
 
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
@@ -114,7 +114,7 @@ local function einarc_logical_add( inputs, drives )
 		local logicals_were = einarc.Logical.list()
 		return_code, result = pcall( einarc.Logical.add, raid_level, drives )
 		if not return_code then
-			index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
+			return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
 		end
 
 		-- And let's create PV and VG on it
@@ -129,7 +129,7 @@ local function einarc_logical_add( inputs, drives )
 		-- Then, create PV on it
 		return_code, result = pcall( lvm.PhysicalVolume.create, device )
 		if not return_code then
-			index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
+			return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
 		end
 		lvm.PhysicalVolume.rescan()
 
@@ -154,7 +154,7 @@ local function einarc_logical_add( inputs, drives )
 		message_error = message
 	end
 
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function einarc_logical_delete( inputs )
@@ -207,7 +207,7 @@ local function einarc_logical_delete( inputs )
 		message_error = i18n("Failed to delete logical disk") .. ": " .. result
 	end
 
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function einarc_logical_hotspare_add( inputs )
@@ -225,7 +225,7 @@ local function einarc_logical_hotspare_add( inputs )
 	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id ]
 	logical_id = tonumber( logical_id )
 	if not logical_id then
-		index_with_error( i18n("Logical disk is not selected") )
+		return index_with_error( i18n("Logical disk is not selected") )
 	end
 
 	if tonumber( inputs[ "logical_minimal_size-" .. physical_id .. "-" .. tostring( logical_id ) ] ) <
@@ -239,7 +239,7 @@ local function einarc_logical_hotspare_add( inputs )
 		message_error = i18n("Failed to add hotspare disk") .. ": " .. result
 	end
 
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function einarc_logical_hotspare_delete( inputs )
@@ -262,7 +262,7 @@ local function einarc_logical_hotspare_delete( inputs )
 	if not return_code then
 		message_error = i18n("Failed to delete hotspare disk") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 ------------------------------------------------------------------------
@@ -285,10 +285,10 @@ local function lvm_logical_volume_add( inputs )
 
 	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
 	if logical_volume_name == "" then
-		index_with_error( i18n("Logical volume name is not set") )
+		return index_with_error( i18n("Logical volume name is not set") )
 	end
 	if not string.match( logical_volume_name, "^" .. lvm.LogicalVolume.NAME_VALID_RE .. "$" ) then
-		index_with_error( i18n("Invalid logical volume name") )
+		return index_with_error( i18n("Invalid logical volume name") )
 	end
 
 	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
@@ -303,7 +303,7 @@ local function lvm_logical_volume_add( inputs )
 	if not return_code then
 		message_error = i18n("Failed to add logical volume") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function lvm_logical_volume_remove( inputs )
@@ -327,7 +327,7 @@ local function lvm_logical_volume_remove( inputs )
 	if not return_code then
 		message_error = i18n("Failed to remove logical volume") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function lvm_logical_volume_resize( inputs )
@@ -357,7 +357,7 @@ local function lvm_logical_volume_resize( inputs )
 	if not return_code then
 		message_error = i18n("Failed to resize logical volume") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function lvm_logical_volume_snapshot_add( inputs )
@@ -387,7 +387,7 @@ local function lvm_logical_volume_snapshot_add( inputs )
 	if not return_code then
 		message_error = i18n("Failed to create snapshot") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function lvm_logical_volume_snapshot_resize( inputs )
@@ -418,7 +418,7 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	        "incorrect non-positive snapshot's size" )
 
 	if snapshot_size_new < snapshot_size then
-		index_with_error( i18n("Snapshot size has to be bigger than it's current size") )
+		return index_with_error( i18n("Snapshot size has to be bigger than it's current size") )
 	end
 
 	local return_code, result = pcall( lvm.Snapshot.resize,
@@ -429,7 +429,7 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	if not return_code then
 		message_error = i18n("Failed to resize snapshot") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 ------------------------------------------------------------------------
@@ -441,7 +441,7 @@ local function scst_access_pattern_new( inputs )
 
 	local access_pattern_name = inputs[ "access_pattern_new-name" ]
 	if access_pattern_name == "" then
-		index_with_error( i18n("Access pattern's name is not set") )
+		return index_with_error( i18n("Access pattern's name is not set") )
 	end
 
 	local access_pattern_targetdriver = inputs[ "access_pattern_new-targetdriver" ]
@@ -475,7 +475,7 @@ local function scst_access_pattern_new( inputs )
 
 	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
 	if not return_code then
-		index_with_error( i18n("Failed to create access pattern") .. ": " .. result )
+		return index_with_error( i18n("Failed to create access pattern") .. ": " .. result )
 	end
 
 	return_code, result = pcall( scst.AccessPattern.save, result )
@@ -483,7 +483,7 @@ local function scst_access_pattern_new( inputs )
 		message_error = i18n("Failed to save config") .. ": " .. result
 	end
 
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function scst_access_pattern_delete( inputs )
@@ -505,7 +505,7 @@ local function scst_access_pattern_delete( inputs )
 	if not return_code then
 		message_error = i18n("Failed to delete access pattern") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function scst_access_pattern_bind( inputs )
@@ -524,7 +524,7 @@ local function scst_access_pattern_bind( inputs )
 
 	local logical_volume_device = inputs[ "logical_volume_select" ]
 	if not logical_volume_device then
-		index_with_error( i18n("Logical volume is not select") )
+		return index_with_error( i18n("Logical volume is not select") )
 	end
 
 	local return_code, result = pcall( scst.AccessPattern.bind,
@@ -533,7 +533,7 @@ local function scst_access_pattern_bind( inputs )
 	if not return_code then
 		message_error = i18n("Failed to bind access pattern") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 local function scst_access_pattern_unbind( inputs )
@@ -555,7 +555,7 @@ local function scst_access_pattern_unbind( inputs )
 	if not return_code then
 		message_error = i18n("Failed to unbind access pattern") .. ": " .. result
 	end
-	index_with_error( message_error )
+	return index_with_error( message_error )
 end
 
 ------------------------------------------------------------------------
@@ -606,5 +606,5 @@ function perform()
 		end
 	end
 
-	index_with_error( i18n("Unknown action specified") )
+	return index_with_error( i18n("Unknown action specified") )
 end
