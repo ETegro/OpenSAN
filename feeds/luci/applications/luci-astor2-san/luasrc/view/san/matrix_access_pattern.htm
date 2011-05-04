@@ -18,8 +18,8 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<% if line.access_pattern.rowspan > 1 then %>
-	<td rowspan="<%= line.access_pattern.rowspan -1 %>">
+<% if line.access_pattern.colspan > 1 then %>
+	<td colspan="<%= line.access_pattern.colspan -1 %>">
 		&nbsp;
 	</td>
 <% end %>
