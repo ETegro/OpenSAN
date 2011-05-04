@@ -26,6 +26,8 @@ lvm = require( "astor2.lvm" )
 matrix = require( "luci.controller.matrix" )
 scst = require( "astor2.scst" )
 
+mime = require( "mime" )
+
 require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
@@ -575,6 +577,14 @@ local function decoded_inputs( inputs )
 		new_inputs[ luci.http.protocol.urldecode( k ) ] = v
 	end
 	return new_inputs
+end
+
+local function b64encode( data )
+	return (mime.b64( data ))
+end
+
+local function b64decode( data )
+	return (mime.unb64( data ))
 end
 
 function perform()
