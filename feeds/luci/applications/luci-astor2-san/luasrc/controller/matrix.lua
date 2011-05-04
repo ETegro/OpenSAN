@@ -332,6 +332,16 @@ function M.filter_calculate_hotspares( matrix )
 	return matrix
 end
 
+function M.filter_serialize( matrix )
+	local serializer = luci.util.serialize_data
+	matrix.serialized_physicals = serializer( matrix.physicals )
+	matrix.serialized_logicals = serializer( matrix.logicals )
+	matrix.serialized_physical_volumes = serializer( matrix.physical_volumes )
+	matrix.serialized_volume_groups = serializer( matrix.volume_groups )
+	matrix.serialized_logical_volumes = serializer( matrix.logical_volumes )
+	return matrix
+end
+
 local function logical_volume_group( logical, volume_groups )
 	for _, volume_group in ipairs( volume_groups ) do
 		if volume_group.physical_volumes[1].device == logical.device then
@@ -391,7 +401,8 @@ function M.caller()
 		filter_add_logical_id_to_physical,
 		M.filter_add_access_patterns,
 		M.filter_calculate_hotspares,
-		filter_mib2tib
+		filter_mib2tib,
+		filter_serialize
 		-- filter_highlight_snapshots
 		-- filter_overall_fields_counter (for hiding)
 	}
