@@ -123,7 +123,7 @@ local function check_highlights_attribute( obj )
 end
 
 function M.filter_borders_highlight( matrix )
-	lines = matrix.lines
+	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
 		if line.physical then
 			lines[ current_line ].physical = check_highlights_attribute( lines[ current_line ].physical )
