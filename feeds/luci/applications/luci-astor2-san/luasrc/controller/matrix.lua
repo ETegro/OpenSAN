@@ -367,10 +367,16 @@ function M.caller()
 		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
 		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
 	end
-	local matrix = M.overall( {
+	local matrix = {
+		lines = M.overall( {
+			physicals = physicals,
+			logicals = logicals } ),
+		logicals = logicals,
 		physicals = physicals,
-		logicals = logicals
-	} )
+		physical_volumes = physical_volumes,
+		volume_groups = volume_groups,
+		logical_volumes = logical_volumes
+	}
 	local FILTERS = {
 		M.filter_borders_highlight,
 		M.filter_alternation_border_colors,
