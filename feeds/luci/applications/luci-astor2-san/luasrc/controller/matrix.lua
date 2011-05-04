@@ -123,17 +123,18 @@ local function check_highlights_attribute( obj )
 end
 
 function M.filter_borders_highlight( matrix )
-	for current_line, line in ipairs( matrix ) do
+	lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
 		if line.physical then
-			matrix[ current_line ].physical = check_highlights_attribute( matrix[ current_line ].physical )
+			lines[ current_line ].physical = check_highlights_attribute( lines[ current_line ].physical )
 		end
 
 		if line.logical then
-			matrix[ current_line ].logical = check_highlights_attribute( matrix[ current_line ].logical )
+			lines[ current_line ].logical = check_highlights_attribute( lines[ current_line ].logical )
 
-			matrix[ current_line ].physical.highlight.top = true
-			matrix[ current_line ].physical.highlight.left = true
-			matrix[ current_line ].logical.highlight.top = true
+			lines[ current_line ].physical.highlight.top = true
+			lines[ current_line ].physical.highlight.left = true
+			lines[ current_line ].logical.highlight.top = true
 
 			local logical_volumes_quantity = #common.keys( line.logical.logical_volumes or {} )
 			local logical_volume_rowspan = 0
@@ -142,28 +143,28 @@ function M.filter_borders_highlight( matrix )
 			end
 			local physical_rowspan = line.physical.rowspan
 			if logical_volumes_quantity == 0 then
-				matrix[ current_line ].logical.highlight.right = true
+				lines[ current_line ].logical.highlight.right = true
 			else
-				matrix[ current_line ].logical_volume = check_highlights_attribute( matrix[ current_line ].logical_volume )
-				matrix[ current_line ].logical_volume.highlight.top = true
-				matrix[ current_line ].logical_volume.highlight.right = true
+				lines[ current_line ].logical_volume = check_highlights_attribute( lines[ current_line ].logical_volume )
+				lines[ current_line ].logical_volume.highlight.top = true
+				lines[ current_line ].logical_volume.highlight.right = true
 			end
 
 			local future_line = current_line + line.logical.rowspan
 			for i = current_line, future_line - 1, physical_rowspan do
-				matrix[ i ].physical = check_highlights_attribute( matrix[ i ].physical )
-				matrix[ i ].physical.highlight.left = true
+				lines[ i ].physical = check_highlights_attribute( lines[ i ].physical )
+				lines[ i ].physical.highlight.left = true
 			end
 			if logical_volumes_quantity ~= 0 then
 				for i = current_line, future_line - 1, logical_volume_rowspan do
-					matrix[ i ].logical_volume = check_highlights_attribute( matrix[ i ].logical_volume )
-					matrix[ i ].logical_volume.highlight.right = true
+					lines[ i ].logical_volume = check_highlights_attribute( lines[ i ].logical_volume )
+					lines[ i ].logical_volume.highlight.right = true
 				end
 			end
-			matrix[ future_line - physical_rowspan ].physical.highlight.bottom = true
-			matrix[ current_line ].logical.highlight.bottom = true
+			lines[ future_line - physical_rowspan ].physical.highlight.bottom = true
+			lines[ current_line ].logical.highlight.bottom = true
 			if logical_volumes_quantity ~= 0 then
-				matrix[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
+				lines[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
 			end
 		end
 	end
