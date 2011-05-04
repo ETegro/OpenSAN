@@ -77,6 +77,11 @@
 					<%: Readonly %>: <%= line.access_pattern.readonly %>
 				</div>
 			<% end %>
+			<% if line.access_pattern.filename then %>
+				<div>
+				<%: Device %>: <%= line.access_pattern.filename %>
+				</div>
+			<% end %>
 		</td>
 	</tr>
 </table>
