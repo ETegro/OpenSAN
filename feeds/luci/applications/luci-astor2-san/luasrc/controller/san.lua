@@ -508,7 +508,7 @@ local function scst_access_pattern_delete( inputs )
 	return index_with_error( message_error )
 end
 
-local function access_pattern_comparison_of_bind_luns ( logical_volume_device_for_bind, access_pattern_name_for_bind )
+local function access_pattern_comparison_of_bind_luns( logical_volume_device_for_bind, access_pattern_name_for_bind )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
