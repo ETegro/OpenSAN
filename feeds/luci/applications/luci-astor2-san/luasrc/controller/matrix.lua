@@ -389,6 +389,7 @@ end
 function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
+	local logicals_for_serialization = {}
 	local physical_volumes = lvm.PhysicalVolume.list()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
@@ -396,6 +397,7 @@ function M.caller()
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
+		logicals_for_serialization[ logical_id ] = common.deepcopy( logicals[ logical_id ] )
 		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
 		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
 	end
@@ -403,7 +405,7 @@ function M.caller()
 		lines = M.overall( {
 			physicals = physicals,
 			logicals = logicals } ),
-		logicals = logicals,
+		logicals = logicals_for_serialization,
 		physicals = physicals,
 		physical_volumes = physical_volumes,
 		volume_groups = volume_groups,
