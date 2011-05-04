@@ -1287,9 +1287,9 @@ TestMatrix = {}
 			lines = matrix.overall( {
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple,
-			} ),
+			} ) },
 			self.access_patterns
-		} )[ "lines" ]
+		)[ "lines" ]
 		assertEquals( got[1].access_pattern.name, "foobar3" )
 		assertEquals( got[1].access_pattern.colspan, 1 )
 		assertEquals( got[2].access_pattern.name, "foobar4" )
@@ -1308,9 +1308,9 @@ TestMatrix = {}
 			lines = matrix.overall( {
 				physicals = self.physicals_double,
 				logicals = self.logicals_double,
-			} ),
+			} ) },
 			self.access_patterns
-		} )[ "lines" ]
+		)[ "lines" ]
 		assertEquals( got[1].access_pattern.name, "foobar3" )
 		assertEquals( got[1].access_pattern.colspan, 2 )
 		assertEquals( got[2].access_pattern.name, "foobar4" )
@@ -1327,9 +1327,9 @@ TestMatrix = {}
 			lines = matrix.overall( {
 				physicals = self.physicals_with_free,
 				logicals = self.logicals_with_free,
-			} ),
+			} ) },
 			self.access_patterns
-		} )[ "lines" ]
+		)[ "lines" ]
 		assertEquals( got[1].access_pattern.name, "foobar3" )
 		assertEquals( got[1].access_pattern.colspan, 2 )
 		assertEquals( got[2].access_pattern.name, "foobar4" )
