@@ -214,7 +214,8 @@ function M.filter_volume_group_percentage( matrix )
 end
 
 local function filter_mib2tib( matrix )
-	for _, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
 		if line.physical then
 			line.physical.size_mib = line.physical.size
 			line.physical.size = M.mib2tib( line.physical.size )
