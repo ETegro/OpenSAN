@@ -439,6 +439,11 @@ local function scst_access_pattern_new( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
+	local access_pattern_name = inputs[ "access_pattern_new-name" ]
+	if access_pattern_name == "" then
+		index_with_error( i18n("Access pattern's name is not set") )
+	end
+
 	local access_pattern_targetdriver = inputs[ "access_pattern_new-targetdriver" ]
 	assert( access_pattern_targetdriver,
 	        "unable to parse out targetdrive" )
@@ -462,25 +467,20 @@ local function scst_access_pattern_new( inputs )
 		access_pattern_readonly = false
 	end
 
-	local access_pattern_name = inputs[ "access_pattern_new-name" ]
-	if access_pattern_name == "" then
-		index_with_error( i18n("Access pattern's name is not set") )
-	else
-		local access_pattern_attributes = { name = access_pattern_name,
-		                                    targetdriver = access_pattern_targetdriver,
-		                                    lun = access_pattern_lun,
-		                                    enabled = access_pattern_enabled,
-		                                    readonly = access_pattern_readonly }
+	local access_pattern_attributes = { name = access_pattern_name,
+		                            targetdriver = access_pattern_targetdriver,
+		                            lun = access_pattern_lun,
+		                            enabled = access_pattern_enabled,
+		                            readonly = access_pattern_readonly }
 
-		local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
-		if not return_code then
-			index_with_error( i18n("Failed to create access pattern") .. ": " .. result )
-		end
+	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
+	if not return_code then
+		index_with_error( i18n("Failed to create access pattern") .. ": " .. result )
+	end
 
-		return_code, result = pcall( scst.AccessPattern.save, result )
-		if not return_code then
-			message_error = i18n("Failed to save config") .. ": " .. result
-		end
+	return_code, result = pcall( scst.AccessPattern.save, result )
+	if not return_code then
+		message_error = i18n("Failed to save config") .. ": " .. result
 	end
 
 	index_with_error( message_error )
