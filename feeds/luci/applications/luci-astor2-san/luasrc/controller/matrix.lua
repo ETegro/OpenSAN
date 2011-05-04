@@ -200,7 +200,8 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 end
 
 function M.filter_volume_group_percentage( matrix )
-	for _, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
 		if line.logical_volume then
 			local percentage = math.ceil( 100 * line.logical_volume.volume_group.allocated /
 			                                    line.logical_volume.volume_group.total )
