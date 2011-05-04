@@ -299,11 +299,12 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 end
 
 function M.filter_calculate_hotspares( matrix )
-	for current_line, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
 		if line.physical and line.physical.state == "free" then
 			local hotspare_availability = {}
 			local hotspare_minimal_sizes = {}
-			for _, line_inner in ipairs( matrix ) do
+			for _, line_inner in ipairs( lines ) do
 				if line_inner.logical and
 				not common.is_in_array( line_inner.logical.level,
 				                        einarc.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE ) then
@@ -320,11 +321,11 @@ function M.filter_calculate_hotspares( matrix )
 				end
 			end
 			if #hotspare_availability == 0 then
-				matrix[ current_line ].physical.hotspare_availability = nil
+				lines[ current_line ].physical.hotspare_availability = nil
 			else
 				table.sort( hotspare_availability )
-				matrix[ current_line ].physical.hotspare_availability = hotspare_availability
-				matrix[ current_line ].physical.hotspare_minimal_sizes = hotspare_minimal_sizes
+				lines[ current_line ].physical.hotspare_availability = hotspare_availability
+				lines[ current_line ].physical.hotspare_minimal_sizes = hotspare_minimal_sizes
 			end
 		end
 	end
