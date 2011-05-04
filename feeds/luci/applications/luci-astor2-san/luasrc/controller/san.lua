@@ -592,6 +592,16 @@ function perform()
 	local i18n = luci.i18n.translate
 	local get = luci.http.formvalue
 
+	-- Decode preserialized saved data
+	local deserializer = luci.util.restore_data
+	local data = {
+		logicals = deserializer( b64decode( inputs[ "serialized_logicals" ] ) ),
+		physicals = deserializer( b64decode( inputs[ "serialized_physicals" ] ) ),
+		physical_volumes = deserializer( b64decode( inputs[ "serialized_physical_volumes" ] ) ),
+		volume_groups = deserializer( b64decode( inputs[ "serialized_volume_groups" ] ) ),
+		logical_volumes = deserializer( b64decode( inputs[ "serialized_logical_volumes" ] ) )
+	}
+
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
 		logical_delete = function() einarc_logical_delete( inputs ) end,
