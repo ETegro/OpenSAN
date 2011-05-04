@@ -401,6 +401,13 @@ function M.caller()
 		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
 		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
 	end
+
+	-- Some workarounds to prevent recursion during serialization
+	local logical_volumes_for_serialization = common.deepcopy( logical_volumes )
+	for _, logical_volume in ipairs( logical_volumes_for_serialization ) do
+		logical_volume.volume_group = logical_volume.volume_group.name
+	end
+
 	local matrix = {
 		lines = M.overall( {
 			physicals = physicals,
@@ -409,7 +416,7 @@ function M.caller()
 		physicals = physicals,
 		physical_volumes = physical_volumes,
 		volume_groups = volume_groups,
-		logical_volumes = logical_volumes
+		logical_volumes = logical_volumes_for_serialization
 	}
 	local FILTERS = {
 		M.filter_borders_highlight,
