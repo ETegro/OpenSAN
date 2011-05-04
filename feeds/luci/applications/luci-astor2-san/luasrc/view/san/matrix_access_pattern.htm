@@ -18,8 +18,13 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
+<% if line.access_pattern.rowspan > 1 then %>
+	<td rowspan="<%= line.access_pattern.rowspan -1 %>">
+		&nbsp;
+	</td>
+<% end %>
+
 <td valign="top"
-    rowspan="<%= line.access_pattern.rowspan %>"
     class="<%+san/matrix_access_pattern_class%>">
 
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
