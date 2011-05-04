@@ -38,7 +38,7 @@
 		<select id="san.access_pattern_new-lun"
 			name="san.access_pattern_new-lun"
 			size="1" >
-			<% for i = 0, (15-1) do %><%#TODO insert value of astor2.scst.AccessPattern.LUN_MAX %>
+			<% for i = 0, (16-1) do %><%#TODO insert value of astor2.scst.AccessPattern.LUN_MAX %>
 				<option value="<%= i %>"><%= i %></option>
 			<% end %>
 		</select>
@@ -57,7 +57,6 @@
 		       type="checkbox"
 		       value="1" />
 	</div>
-
 	<div>
 		<input name="san.submit_access_pattern_new"
 		       src="<%=resource%>/cbi/add.gif"
