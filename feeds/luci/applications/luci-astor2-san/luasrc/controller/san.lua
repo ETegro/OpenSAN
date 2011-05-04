@@ -141,7 +141,7 @@ local function einarc_logical_add( inputs, drives )
 			end
 		end
 		assert( physical_volumes,
-			"unable to find corresponding physical volume" )
+		        "unable to find corresponding physical volume" )
 		-- And then, create VG on it
 		return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
 		if return_code then
@@ -297,9 +297,9 @@ local function lvm_logical_volume_add( inputs )
 	        "incorrect non-positive logical volume's size" )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-		                           { name = volume_group_name },
-		                           logical_volume_name,
-		                           logical_volume_size )
+	                                   { name = volume_group_name },
+	                                   logical_volume_name,
+	                                   logical_volume_size )
 	if not return_code then
 		message_error = i18n("Failed to add logical volume") .. ": " .. result
 	end
@@ -322,8 +322,8 @@ local function lvm_logical_volume_remove( inputs )
 	assert( logical_volume_name, "unable to parse out logical volume's name" )
 
 	local return_code, result = pcall( lvm.LogicalVolume.remove,
-		                           { volume_group = { name = volume_group_name },
-		                             name = logical_volume_name } )
+	                                   { volume_group = { name = volume_group_name },
+	                                     name = logical_volume_name } )
 	if not return_code then
 		message_error = i18n("Failed to remove logical volume") .. ": " .. result
 	end
@@ -351,9 +351,9 @@ local function lvm_logical_volume_resize( inputs )
 	        "incorrect non-positive logical volume's size" )
 
 	local return_code, result = pcall( lvm.LogicalVolume.resize,
-		                           { volume_group = { name = volume_group_name },
-		                             name = logical_volume_name },
-		                           logical_volume_size )
+	                                   { volume_group = { name = volume_group_name },
+	                                   name = logical_volume_name },
+	                                   logical_volume_size )
 	if not return_code then
 		message_error = i18n("Failed to resize logical volume") .. ": " .. result
 	end
@@ -381,9 +381,9 @@ local function lvm_logical_volume_snapshot_add( inputs )
 	        "incorrect non-positive snapshot's size" )
 
 	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
-		                           { name = logical_volume_name,
-		                             device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name },
-		                           snapshot_size )
+	                                   { name = logical_volume_name,
+	                                     device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name },
+	                                   snapshot_size )
 	if not return_code then
 		message_error = i18n("Failed to create snapshot") .. ": " .. result
 	end
@@ -422,10 +422,10 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	end
 
 	local return_code, result = pcall( lvm.Snapshot.resize,
-					   { volume_group = { name = volume_group_name },
-					     size = snapshot_size,
-					     name = logical_volume_name },
-					   snapshot_size_new )
+	                                   { volume_group = { name = volume_group_name },
+	                                     size = snapshot_size,
+	                                     name = logical_volume_name },
+	                                   snapshot_size_new )
 	if not return_code then
 		message_error = i18n("Failed to resize snapshot") .. ": " .. result
 	end
@@ -528,8 +528,8 @@ local function scst_access_pattern_bind( inputs )
 	end
 
 	local return_code, result = pcall( scst.AccessPattern.bind,
-		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ),
-		                           logical_volume_device )
+	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ),
+	                                   logical_volume_device )
 	if not return_code then
 		message_error = i18n("Failed to bind access pattern") .. ": " .. result
 	end
@@ -551,7 +551,7 @@ local function scst_access_pattern_unbind( inputs )
 	        "unable to parse out section's name" )
 
 	local return_code, result = pcall( scst.AccessPattern.unbind,
-		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
+	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
 	if not return_code then
 		message_error = i18n("Failed to unbind access pattern") .. ": " .. result
 	end
