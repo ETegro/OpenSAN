@@ -56,6 +56,22 @@
 					       value="<%: Unbind access pattern %>" />
 				</div>
 			<% end %>
+			<div>
+				<%: TargetDriver %>: <%= line.access_pattern.targetdriver %>
+			</div>
+			<div>
+				<%: LUN %>: <%= line.access_pattern.lun %>
+			</div>
+			<% if line.access_pattern.enabled then %>
+				<div>
+					<%: Enabled %>: <%= line.access_pattern.enabled %>
+				</div>
+			<% end %>
+			<% if line.access_pattern.readonly then %>
+				<div>
+					<%: Readonly %>: <%= line.access_pattern.readonly %>
+				</div>
+			<% end %>
 		</td>
 	</tr>
 </table>
