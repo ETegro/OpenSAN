@@ -176,7 +176,8 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 		colors_array = { "black", "blue", "green", "orange", "red", "yellow" }
 	end
 	local color_number = 1
-	for current_line, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
 		local color = colors_array[ color_number ]
 		if line.logical then
 			if color_number == #colors_array then
@@ -184,7 +185,7 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 			else
 				color_number = color_number + 1
 			end
-			matrix[ current_line ].logical.highlight.color = color
+			lines[ current_line ].logical.highlight.color = color
 			for _, physical in pairs( line.logical.physicals ) do
 				physical.highlight.color = color
 			end
