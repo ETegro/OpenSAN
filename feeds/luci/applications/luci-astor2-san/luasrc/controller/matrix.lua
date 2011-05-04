@@ -258,7 +258,7 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 		matrix[ current_line ][ "access_pattern" ] = access_pattern
 	end
 
-	-- Calculate AccessPatterns-related TD's rowspan
+	-- Calculate AccessPatterns-related TD's colspan
 	local logical_scope = 0
 	for current_line, line in ipairs( matrix ) do
 		if line.logical then
@@ -266,13 +266,13 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 			if #logical_volumes_names > 0 then
 				for i = current_line, line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
 					if matrix[ i ].access_pattern then
-						matrix[ i ].access_pattern.rowspan = 1
+						matrix[ i ].access_pattern.colspan = 1
 					end
 				end
 			end
 			for i = current_line, line.logical.rowspan do
-				if matrix[ i ].access_pattern and not matrix[ i ].access_pattern.rowspan then
-					matrix[ i ].access_pattern.rowspan = 2
+				if matrix[ i ].access_pattern and not matrix[ i ].access_pattern.colspan then
+					matrix[ i ].access_pattern.colspan = 2
 				end
 			end
 			logical_scope = line.logical.rowspan
@@ -280,9 +280,9 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 		if line.access_pattern and logical_scope == 0 then
 			-- We are outside logical's scope
 			if line.physical then
-				matrix[ current_line ].access_pattern.rowspan = 3
+				matrix[ current_line ].access_pattern.colspan = 3
 			else
-				matrix[ current_line ].access_pattern.rowspan = 4
+				matrix[ current_line ].access_pattern.colspan = 4
 			end
 		end
 		if logical_scope > 0 then
