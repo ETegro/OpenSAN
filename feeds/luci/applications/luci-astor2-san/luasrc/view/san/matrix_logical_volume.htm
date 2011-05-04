@@ -49,36 +49,40 @@
 	</tr>
 	<tr>
 		<td colspan="4">
-			<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
-			<div class="inline">
-				<%: Resize logical volume %>: <%= line.logical_volume.name %>
-			</div>
-			<div class="inline">
-				<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>END"
-				       onclick=" if ( !confirm( '<%: Really resize logical volume? %>' ) )
-						 return false;
-						 return true;"
-				       src="<%=resource%>/cbi/reload.gif"
-				       type="image"
-				       title="<%: Resize logical volume %>"
-				       value="<%: Resize logical volume %>" />
-			</div>
-			<a id="volume_logical_info-<%= line.logical_volume.name %>"
-			   href="#"
-			   class="inline">
-				<img src="<%=resource%>/cbi/fieldadd.gif"
-				     alt="<%: Snapshot %>"
-				     title="<%: Snapshot %>" />
-			</a>
-			<div>
-				<input id="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-				       class="logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-				       name="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-				       readonly="readonly"
-				       type="text"
-				       value="0" />
-			</div>
-			<%+san/matrix_logical_volume_slider_resize.js%>
+			<% if #line.logical_volume.snapshots == 0 then %>
+				<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
+				<div class="inline">
+					<%: Resize logical volume %>: <%= line.logical_volume.name %>
+				</div>
+				<div class="inline">
+					<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>END"
+					       onclick=" if ( !confirm( '<%: Really resize logical volume? %>' ) )
+							 return false;
+							 return true;"
+					       src="<%=resource%>/cbi/reload.gif"
+					       type="image"
+					       title="<%: Resize logical volume %>"
+					       value="<%: Resize logical volume %>" />
+				</div>
+				<div>
+					<input id="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
+					       class="logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
+					       name="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
+					       readonly="readonly"
+					       type="text"
+					       value="0" />
+				</div>
+				<%+san/matrix_logical_volume_slider_resize.js%>
+			<% end %>
+				<div>
+					<a id="volume_logical_info-<%= line.logical_volume.name %>"
+					   href="#"
+					   class="inline">
+						<img src="<%=resource%>/cbi/fieldadd.gif"
+						     alt="<%: Snapshot %>"
+						     title="<%: Snapshot %>" />
+					</a>
+				</div>
 		</td>
 	</tr>
 	<tr class="to_hide">
