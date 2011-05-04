@@ -2,6 +2,7 @@
  aStor2 -- storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                         Sergey Matveev (stargrave@stargrave.org)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
@@ -17,26 +18,8 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<script type="text/javascript">
-
-jQuery.noConflict();
-(function($){
-	var slider_name = '#logical_volume_resize_slider-<%= sha1 line.logical_volume.name %>';
-	var slider_input_name = '.logical_volume_resize_slider_size-<%= sha1 line.logical_volume.name %>';
-	$( slider_name ).slider({
-		orientation: 'horizontal',
-		min: <%= line.logical_volume.volume_group.extent %>,
-		max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
-		range: 'min',
-		step: <%= line.logical_volume.volume_group.extent %>,
-		value: <%= line.logical_volume.size_mib %>,
-		slide: function( event, ui ) {
-			$( slider_input_name ).val( ui.value );
-		}
-	});
-	$( slider_input_name )
-		.val( $( slider_name )
-		.slider( 'value' ) );
-})(jQuery);
-
-</script>
+<input name="san.submit_access_pattern_bind-<%= sha1 line.access_pattern.section_name %>"
+       src="<%=resource%>/cbi/fieldadd.gif"
+       type="image"
+       title="<%: Bind access pattern %>"
+       value="<%: Bind access pattern %>" />

@@ -32,14 +32,7 @@
 			</span>
 		</td>
 		<td>
-			<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>END"
-			       onclick=" if ( !confirm( '<%: Really remove logical volume? %>' ) )
-					 return false;
-					 return true;"
-			       src="<%=resource%>/cbi/remove.gif"
-			       type="image"
-			       title="<%: Remove logical volume %>"
-			       value="<%: Remove logical volume %>" />
+			<%+san/matrix_logical_volume_remove%>
 		</td>
 		<td>
 		<% local access_pattern_exists = false %>
@@ -58,32 +51,10 @@
 	<tr>
 		<td colspan="4">
 			<% if #line.logical_volume.snapshots == 0 then %>
-				<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
-				<div class="inline">
-					<%: Resize logical volume %>: <%= line.logical_volume.name %>
-				</div>
-				<div class="inline">
-					<input name="san.submit_logical_volume_resize-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>END"
-					       onclick=" if ( !confirm( '<%: Really resize logical volume? %>' ) )
-							 return false;
-							 return true;"
-					       src="<%=resource%>/cbi/reload.gif"
-					       type="image"
-					       title="<%: Resize logical volume %>"
-					       value="<%: Resize logical volume %>" />
-				</div>
-				<div>
-					<input id="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-					       class="logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-					       name="san.logical_volume_resize_slider_size-<%= line.logical_volume.name %>"
-					       readonly="readonly"
-					       type="text"
-					       value="0" />
-				</div>
-				<%+san/matrix_logical_volume_slider_resize.js%>
+				<%+san/matrix_logical_volume_resizing%>
 			<% end %>
 				<div>
-					<a id="volume_logical_info-<%= line.logical_volume.name %>"
+					<a id="volume_logical_info-<%= sha1 line.logical_volume.name %>"
 					   href="#"
 					   class="inline">
 						<img src="<%=resource%>/cbi/fieldadd.gif"
@@ -95,26 +66,7 @@
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
-			<div class="inline">
-				<%: Take new snapshot %>
-			</div>
-			<div class="inline">
-				<input name="san.submit_logical_volume_snapshot_add-lvd<%= line.logical_volume.device %>END"
-				       src="<%=resource%>/cbi/add.gif"
-				       title="<%: Add snapshot %>"
-				       type="image"
-				       value="<%: Add snapshot %>" />
-			</div>
-			<div id="new_snapshot_slider-<%= line.logical_volume.name %>"></div>
-			<div>
-				<input id="san.new_snapshot_slider_size-<%= line.logical_volume.name %>"
-				       class="new_snapshot_slider_size-<%= line.logical_volume.name %>"
-				       name="san.new_snapshot_slider_size-<%= line.logical_volume.name %>"
-				       readonly="readonly"
-				       type="text"
-				       value="0" />
-			</div>
-			<%+san/matrix_logical_volume_slider_snapshot_size.js%>
+			<%+san/matrix_logical_volume_snapshot_taking%>
 		</td>
 	</tr>
 </table>

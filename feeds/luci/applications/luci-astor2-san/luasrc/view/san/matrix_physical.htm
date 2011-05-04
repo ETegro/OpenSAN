@@ -40,27 +40,7 @@
 	</tr>
 	<tr class="to_hide">
 		<td colspan="3">
-			<ul>
-				<li><%: Model %>: <%= line.physical.model %></li>
-				<li><%: S/N %>: <%= line.physical.serial %></li>
-				<li><%: Revision %>: <%= line.physical.revision %></li>
-				<li><%: State %>: <%= line.physical.state %></li>
-				<li><%: Size %>:
-					<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
-						<%= line.physical.size %> (<%: TiB %>)
-					</span>
-				</li>
-				<% local there_is_logical = false %>
-				<!-- TODO -->
-				<% for _, this_line in ipairs( matrix_overall.lines ) do %>
-					<% if this_line.logical then %>
-						<% there_is_logical = true %>
-					<% end %>
-				<% end %>
-				<% if there_is_logical then %>
-					<%+san/form_hotspare_add%>
-				<% end %>
-			</ul>
+			<%+san/matrix_physical_information%>
 		</td>
 	</tr>
 </table>

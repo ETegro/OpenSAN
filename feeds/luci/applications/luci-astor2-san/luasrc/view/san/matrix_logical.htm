@@ -26,22 +26,17 @@
 		<td>
 			<%= line.logical.id %>
 		</td>
-		<td><%: RAID %> <%= line.logical.level %></td>
-		<td><%= line.logical.state %></td>
+		<td>
+			<%: RAID %> <%= line.logical.level %>
+		</td>
+		<td>
+			<%= line.logical.state %>
+		</td>
 		<% if line.logical.progress then %>
 			<td>(<%= line.logical.progress %> %)</td>
 		<% end %>
 		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
-			<td>
-			<input name="san.submit_logical_delete-<%= line.logical.id %>END"
-			       onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
-					 return false;
-					 return true;"
-			       src="<%=resource%>/cbi/remove.gif"
-			       type="image"
-			       title="<%: Remove %>"
-			       value="<%: Remove %>" />
-			</td>
+			<%+san/matrix_logical_remove%>
 		<% end %>
 	</tr>
 	<tr>
@@ -53,33 +48,7 @@
 			local_colspan = local_colspan + 1
 		end %>
 		<td colspan="<%= local_colspan %>">
-			<%+san/matrix_logical_fill_bar%>
-			<div id="new_volume_slider-<%= line.logical.id %>"></div>
-			<div class="inline">
-				<%: New logical volume name %>
-			</div>
-			<div class="inline">
-				<input id="san.new_volume_name-<%= line.logical.id %>"
-				       name="san.new_volume_name-<%= line.logical.id %>"
-				       type="text"
-				       value="" />
-			</div>
-			<div class="inline">
-				<input name="san.submit_logical_volume_add-<%= line.logical.id %>-<%= line.logical.volume_group.name %>END"
-				       src="<%=resource%>/cbi/add.gif"
-				       title="<%: Add logical volume %>"
-				       type="image"
-				       value="<%: Add logical volume %>" />
-			</div>
-			<div>
-				<input id="san.new_volume_slider_size-<%= line.logical.id %>"
-				       class="new_volume_slider_size-<%= line.logical.id %>"
-				       name="san.new_volume_slider_size-<%= line.logical.id %>"
-				       readonly="readonly"
-				       type="text"
-				       value="0" />
-			</div>
-			<%+san/matrix_logical_slider.js%>
+			<%+san/matrix_logical_volume_add%>
 		</td>
 	</tr>
 </table>

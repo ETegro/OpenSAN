@@ -27,6 +27,22 @@ matrix = require( "luci.controller.matrix" )
 scst = require( "astor2.scst" )
 
 mime = require( "mime" )
+require( "sha1" )
+
+-- Calculate SHA1 regular expression
+hashre = ""
+for i = 1, 160 / 8 * 2 do hashre = hashre .. "." end
+
+local function find_by_hash( hash, objs )
+	local found = nil
+	for _, obj in ipairs( objs ) do
+		if sha1( tostring( obj ) ) == hash then
+			found = obj
+		end
+	end
+	assert( found, "unable to find object by hash" )
+	return found
+end
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -100,6 +116,7 @@ local function einarc_logical_add( inputs, drives )
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 	if is_valid then
 		-- Check that there are no different models of hard drives for adding
+		-- TODO: use data
 		local found_models = {}
 		for _, physical in pairs( einarc.Physical.list() ) do
 			if common.is_in_array( physical.id, drives ) then
@@ -113,7 +130,7 @@ local function einarc_logical_add( inputs, drives )
 		-- Let's call einarc at last
 		local return_code = nil
 		local result = nil
-		local logicals_were = einarc.Logical.list()
+		local logicals_were = einarc.Logical.list() -- TODO: use data
 		return_code, result = pcall( einarc.Logical.add, raid_level, drives )
 		if not return_code then
 			return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
@@ -159,22 +176,27 @@ local function einarc_logical_add( inputs, drives )
 	return index_with_error( message_error )
 end
 
-local function einarc_logical_delete( inputs )
+local function find_logical_id_in_data_by_hash( logical_id_hash, data )
+	return find_by_hash( logical_id_hash, common.keys( data.logicals ) )
+end
+
+local function einarc_logical_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local logical_id = nil
+	local logical_id_hash = nil
 	for k, v in pairs( inputs ) do
-		if not logical_id then
-			logical_id = string.match( k, "^submit_logical_delete.(%d+)END$" )
+		if not logical_id_hash then
+			logical_id_hash = string.match( k, "^submit_logical_delete.(" .. hashre .. ")" )
 		end
 	end
-	assert( logical_id, "unable to parse out logical's id" )
-	logical_id = tonumber( logical_id )
+	assert( logical_id_hash, "unable to parse out logical's id" )
+	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
 	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
 
 	-- Retreive corresponding logical drive object
+	-- TODO: use data
 	local logical = nil
 	for _, logical_obj in pairs( einarc.Logical.list() ) do
 		if logical_obj.id == logical_id then
@@ -184,6 +206,7 @@ local function einarc_logical_delete( inputs )
 	assert( logical, "unable to find corresponding logical" )
 
 	-- Find out corresponding PhysicalVolume
+	-- TODO: use data
 	local physical_volume = nil
 	for _, physical_volume_obj in ipairs( lvm.PhysicalVolume.list() ) do
 		if physical_volume_obj.device == logical.device then
@@ -193,6 +216,7 @@ local function einarc_logical_delete( inputs )
 
 	if physical_volume then
 		-- Let's clean out VolumeGroup on it at first
+		-- TODO: use data
 		local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
 		assert( volume_group, "unable to find corresponding volume group" )
 		volume_group:remove()
@@ -212,26 +236,31 @@ local function einarc_logical_delete( inputs )
 	return index_with_error( message_error )
 end
 
-local function einarc_logical_hotspare_add( inputs )
+local function find_physical_id_in_data_by_hash( physical_id_hash, data )
+	return find_by_hash( physical_id_hash, common.keys( data.physicals ) )
+end
+
+local function einarc_logical_hotspare_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local physical_id = nil
+	local physical_id_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not physical_id then
-			physical_id = string.match( k, "^submit_logical_hotspare_add.([%d:]+)END$" )
+		if not physical_id_hash then
+			physical_id_hash = string.match( k, "^submit_logical_hotspare_add.(" .. hashre .. ")" )
 		end
 	end
-	assert( physical_id, "unable to parse out physical's id" )
+	assert( physical_id_hash, "unable to parse out physical's id" )
+	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
 
-	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id ]
+	local logical_id = inputs[ "logical_id_hotspare-" .. physical_id_hash ]
 	logical_id = tonumber( logical_id )
 	if not logical_id then
 		return index_with_error( i18n("Logical disk is not selected") )
 	end
 
-	if tonumber( inputs[ "logical_minimal_size-" .. physical_id .. "-" .. tostring( logical_id ) ] ) <
-	   tonumber( inputs[ "physical_size-" .. physical_id ] ) then
+	if tonumber( inputs[ "logical_minimal_size-" .. physical_id_hash .. "-" .. sha1( tostring( logical_id ) ) ] ) <
+	   tonumber( inputs[ "physical_size-" .. physical_id_hash ] ) then
 		message_error = i18n("Newly added hotspare disk is bigger than needed")
 	end
 
@@ -244,20 +273,21 @@ local function einarc_logical_hotspare_add( inputs )
 	return index_with_error( message_error )
 end
 
-local function einarc_logical_hotspare_delete( inputs )
+local function einarc_logical_hotspare_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local physical_id = nil
-	local logical_id = nil
+	local physical_id_hash = nil
+	local logical_id_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not physical_id then
-			logical_id, physical_id = string.match( k, "^submit_logical_hotspare_delete.(%d+).([%d:]+)END$" )
+		if not physical_id_hash then
+			logical_id_hash, physical_id_hash = string.match( k, "^submit_logical_hotspare_delete.(" .. hashre .. ").(" .. hashre .. ")" )
 		end
 	end
-	assert( logical_id, "unable to parse out logical's id" )
-	assert( physical_id, "unable to parse out physical's id" )
-	logical_id = tonumber( logical_id )
+	assert( logical_id_hash, "unable to parse out logical's id" )
+	assert( physical_id_hash, "unable to parse out physical's id" )
+	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
+	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
@@ -270,22 +300,29 @@ end
 ------------------------------------------------------------------------
 -- LVM related functions
 ------------------------------------------------------------------------
+
+local function find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
+	return find_by_hash( volume_group_name_hash, common.keys( common.unique_keys( "name", data.volume_groups ) ) )
+end
+
 local function lvm_logical_volume_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name = nil
-	local logical_id = nil
+	local volume_group_name_hash = nil
+	local logical_id_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not volume_group_name then
+		if not volume_group_name_hash then
 			-- san.submit_logical_volume_add-450-vg1302871899
-			logical_id, volume_group_name = string.match( k, "^submit_logical_volume_add.(%d+).(vg%d+)END$" )
+			logical_id_hash, volume_group_name_hash = string.match( k, "^submit_logical_volume_add.(" .. hashre .. ").(" .. hashre .. ")" )
 		end
 	end
-	assert( logical_id, "unable to parse out logical's id" )
-	assert( volume_group_name, "unable to parse out volume group's name" )
+	assert( logical_id_hash, "unable to parse out logical's id" )
+	assert( volume_group_name_hash, "unable to parse out volume group's name" )
+	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
+	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 
-	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id ]
+	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id_hash ]
 	if logical_volume_name == "" then
 		return index_with_error( i18n("Logical volume name is not set") )
 	end
@@ -298,7 +335,7 @@ local function lvm_logical_volume_add( inputs, data )
 		end
 	end
 
-	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id ]
+	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id_hash ]
 	logical_volume_size = tonumber( logical_volume_size )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
@@ -313,20 +350,26 @@ local function lvm_logical_volume_add( inputs, data )
 	return index_with_error( message_error )
 end
 
+local function find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
+	return find_by_hash( logical_volume_name_hash, common.keys( common.unique_keys( "name", data.logical_volumes ) ) )
+end
+
 local function lvm_logical_volume_remove( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name = nil
-	local logical_volume_name = nil
+	local volume_group_name_hash = nil
+	local logical_volume_name_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not logical_volume_name then
+		if not logical_volume_name_hash then
 			-- san.submit_logical_volume_remove-vg1302871899-lvname_new
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_remove.(vg%d+).lv(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
+			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_remove.(" .. hashre .. ").lv(" .. hashre .. ")" )
 		end
 	end
-	assert( volume_group_name, "unable to parse out volume group's name" )
-	assert( logical_volume_name, "unable to parse out logical volume's name" )
+	assert( volume_group_name_hash, "unable to parse out volume group's name" )
+	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
+	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
 	local return_code, result = pcall( lvm.LogicalVolume.remove,
 	                                   { volume_group = { name = volume_group_name },
@@ -340,19 +383,21 @@ end
 local function lvm_logical_volume_resize( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name = nil
-	local logical_volume_name = nil
+	local volume_group_name_hash = nil
+	local logical_volume_name_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not logical_volume_name then
+		if not logical_volume_name_hash then
 			-- san.submit_logical_volume_resize-vg1302871899-lvname_new
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
+			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
 		end
 	end
-	assert( volume_group_name, "unable to parse out volume group's name" )
-	assert( logical_volume_name, "unable to parse out logical volume's name" )
+	assert( volume_group_name_hash, "unable to parse out volume group's name" )
+	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
+	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" .. logical_volume_name ]
+	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" .. logical_volume_name_hash ]
 	logical_volume_size = tonumber( logical_volume_size )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
@@ -370,19 +415,21 @@ end
 local function lvm_logical_volume_snapshot_add( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name = nil
-	local logical_volume_name = nil
+	local volume_group_name_hash = nil
+	local logical_volume_name_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not logical_volume_name then
+		if not logical_volume_name_hash then
 			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
-			volume_group_name, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(vg%d+).(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
+			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(" .. hashre .. ").(" .. hashre .. ")" )
 		end
 	end
-	assert( volume_group_name, "unable to parse out volume group's name" )
-	assert( logical_volume_name, "unable to parse out logical volume's name" )
+	assert( volume_group_name_hash, "unable to parse out volume group's name" )
+	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
+	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name ]
+	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. logical_volume_name_hash ]
 	snapshot_size = tonumber( snapshot_size )
 	assert( common.is_positive( snapshot_size ),
 	        "incorrect non-positive snapshot's size" )
@@ -401,24 +448,26 @@ local function lvm_logical_volume_snapshot_resize( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local volume_group_name = nil
+	local volume_group_name_hash = nil
 	local snapshot_size = nil
-	local logical_volume_name = nil
+	local logical_volume_name_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not logical_volume_name then
+		if not logical_volume_name_hash then
 			-- san.submit_logical_volume_snapshot_resize-vg1302871899-s1923-lvname_new
-			volume_group_name, snapshot_size, logical_volume_name = string.match( k, "^submit_logical_volume_snapshot_resize.(vg%d+).s(%d+).lv(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
+			volume_group_name_hash, snapshot_size, logical_volume_name_hash = string.match( k, "^submit_logical_volume_snapshot_resize.(" .. hashre .. ").s(%d+).lv(" .. hashre .. ")" )
 		end
 	end
-	assert( volume_group_name, "unable to parse out volume group's name" )
-	assert( logical_volume_name, "unable to parse out logical volume's name" )
+	assert( volume_group_name_hash, "unable to parse out volume group's name" )
+	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
+	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
 	snapshot_size = tonumber( snapshot_size )
 	assert( common.is_positive( snapshot_size ),
 	        "incorrect non-positive snapshot's size" )
 
-	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" .. logical_volume_name ]
+	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" .. logical_volume_name_hash ]
 	snapshot_size_new = tonumber( snapshot_size_new )
 	assert( common.is_positive( snapshot_size_new ) )
 	assert( common.is_positive( snapshot_size_new ),
@@ -461,18 +510,7 @@ local function scst_access_pattern_new( inputs )
 	        "unable to parse out numeric LUN" )
 
 	local access_pattern_enabled = inputs[ "access_pattern_new-enabled" ]
-	if tonumber( access_pattern_enabled ) == 1 then
-		access_pattern_enabled = true
-	else
-		access_pattern_enabled = false
-	end
-
 	local access_pattern_readonly = inputs[ "access_pattern_new-readonly" ]
-	if tonumber( access_pattern_readonly ) == 1 then
-		access_pattern_readonly = true
-	else
-		access_pattern_readonly = false
-	end
 
 	local access_pattern_attributes = { name = access_pattern_name,
 		                            targetdriver = access_pattern_targetdriver,
@@ -493,19 +531,25 @@ local function scst_access_pattern_new( inputs )
 	return index_with_error( message_error )
 end
 
+local function find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
+	return find_by_hash( access_pattern_section_name_hash,
+	                     common.keys( common.unique_keys( "section_name", scst.AccessPattern.list() ) ) )
+end
+
 local function scst_access_pattern_delete( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name = nil
+	local access_pattern_section_name_hash = nil
 	for k, v in pairs( inputs ) do
-		if not access_pattern_section_name then
+		if not access_pattern_section_name_hash then
 			-- san.submit_access_pattern_delete-cfg022eb2
-			access_pattern_section_name = string.match( k, "^submit_access_pattern_delete.(%w+)END$" )
+			access_pattern_section_name_hash = string.match( k, "^submit_access_pattern_delete.(" .. hashre .. ")" )
 		end
 	end
-	assert( access_pattern_section_name,
+	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
+	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 
 	local return_code, result = pcall( scst.AccessPattern.delete,
 		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
@@ -519,15 +563,16 @@ local function scst_access_pattern_bind( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name = nil
+	local access_pattern_section_name_hash = nil
 	for k, v in pairs( inputs ) do
-		if not access_pattern_section_name then
+		if not access_pattern_section_name_hash then
 			-- san.submit_access_pattern_bind-cfg022eb2
-			access_pattern_section_name = string.match( k, "^submit_access_pattern_bind.(%w+)END$" )
+			access_pattern_section_name_hash = string.match( k, "^submit_access_pattern_bind.(" .. hashre .. ")" )
 		end
 	end
-	assert( access_pattern_section_name,
+	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
+	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 
 	local logical_volume_device = inputs[ "logical_volume_select" ]
 	if not logical_volume_device then
@@ -547,15 +592,16 @@ local function scst_access_pattern_unbind( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name = nil
+	local access_pattern_section_name_hash = nil
 	for k, v in pairs( inputs ) do
-		if not access_pattern_section_name then
+		if not access_pattern_section_name_hash then
 			-- san.submit_access_pattern_unbind-cfg022eb2
-			access_pattern_section_name = string.match( k, "^submit_access_pattern_unbind.(%w+)END$" )
+			access_pattern_section_name_hash = string.match( k, "^submit_access_pattern_unbind.(" .. hashre .. ")" )
 		end
 	end
-	assert( access_pattern_section_name,
+	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
+	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 
 	local return_code, result = pcall( scst.AccessPattern.unbind,
 	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
@@ -584,10 +630,6 @@ local function decoded_inputs( inputs )
 	return new_inputs
 end
 
-local function b64encode( data )
-	return (mime.b64( data ))
-end
-
 local function b64decode( data )
 	return (mime.unb64( data ))
 end
@@ -609,9 +651,9 @@ function perform()
 
 	local SUBMIT_MAP = {
 		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
-		logical_delete = function() einarc_logical_delete( inputs ) end,
-		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs ) end,
-		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs ) end,
+		logical_delete = function() einarc_logical_delete( inputs, data ) end,
+		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs, data ) end,
+		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs, data ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs, data ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs ) end,
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs ) end,

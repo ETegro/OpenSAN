@@ -17,26 +17,24 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<script type="text/javascript">
-
-jQuery.noConflict();
-(function($){
-	var slider_name = '#logical_volume_resize_slider-<%= sha1 line.logical_volume.name %>';
-	var slider_input_name = '.logical_volume_resize_slider_size-<%= sha1 line.logical_volume.name %>';
-	$( slider_name ).slider({
-		orientation: 'horizontal',
-		min: <%= line.logical_volume.volume_group.extent %>,
-		max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
-		range: 'min',
-		step: <%= line.logical_volume.volume_group.extent %>,
-		value: <%= line.logical_volume.size_mib %>,
-		slide: function( event, ui ) {
-			$( slider_input_name ).val( ui.value );
-		}
-	});
-	$( slider_input_name )
-		.val( $( slider_name )
-		.slider( 'value' ) );
-})(jQuery);
-
-</script>
+<ul>
+	<li><%: Model %>: <%= line.physical.model %></li>
+	<li><%: S/N %>: <%= line.physical.serial %></li>
+	<li><%: Revision %>: <%= line.physical.revision %></li>
+	<li><%: State %>: <%= line.physical.state %></li>
+	<li><%: Size %>:
+		<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
+			<%= line.physical.size %> (<%: TiB %>)
+		</span>
+	</li>
+	<% local there_is_logical = false %>
+	<!-- TODO -->
+	<% for _, this_line in ipairs( matrix_overall.lines ) do %>
+		<% if this_line.logical then %>
+			<% there_is_logical = true %>
+		<% end %>
+	<% end %>
+	<% if there_is_logical then %>
+		<%+san/form_hotspare%>
+	<% end %>
+</ul>
