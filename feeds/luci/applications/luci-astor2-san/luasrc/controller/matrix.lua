@@ -237,7 +237,8 @@ local function filter_mib2tib( matrix )
 end
 
 local function filter_add_logical_id_to_physical( matrix )
-	for _, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
 		if line.logical then
 			for _, physical in pairs( line.logical.physicals ) do
 				physical.logical_id = line.logical.id
