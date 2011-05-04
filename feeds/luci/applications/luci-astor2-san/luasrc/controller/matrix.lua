@@ -334,7 +334,7 @@ function M.filter_calculate_hotspares( matrix )
 	return matrix
 end
 
-function M.filter_serialize( matrix )
+function filter_serialize( matrix )
 	local serializer = luci.util.serialize_data
 	matrix.serialized_physicals = serializer( matrix.physicals )
 	matrix.serialized_logicals = serializer( matrix.logicals )
