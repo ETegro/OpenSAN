@@ -421,7 +421,7 @@ local function lvm_logical_volume_snapshot_add( inputs, data )
 	for k, v in pairs( inputs ) do
 		if not logical_volume_name_hash then
 			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
-			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_snapshot_add.lvd.dev.(" .. hashre .. ").(" .. hashre .. ")" )
+			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_snapshot_add.lvd(" .. hashre .. ").(" .. hashre .. ")" )
 		end
 	end
 	assert( volume_group_name_hash, "unable to parse out volume group's name" )
