@@ -592,7 +592,7 @@ local function scst_access_pattern_bind( inputs )
 	end
 
 	if access_pattern_comparison_of_bind_luns( logical_volume_device, access_pattern_section_name ) then
-		return index_with_error( i18n("This is LUN is busy, please select other LUN") )
+		return index_with_error( i18n("This is LUN is busy, please choose another one") )
 	end
 
 	local return_code, result = pcall( scst.AccessPattern.bind,
