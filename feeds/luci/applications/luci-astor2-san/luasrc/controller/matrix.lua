@@ -225,10 +225,18 @@ local function filter_mib2tib( matrix )
 		if line.logical then
 			line.logical.capacity_mib = line.logical.capacity
 			line.logical.capacity = M.mib2tib( line.logical.capacity )
-			line.logical.volume_group.allocated_mib = line.logical.volume_group.allocated
-			line.logical.volume_group.allocated = M.mib2tib( line.logical.volume_group.allocated )
-			line.logical.volume_group.total_mib = line.logical.volume_group.total
-			line.logical.volume_group.total = M.mib2tib( line.logical.volume_group.total )
+			if line.logical.volume_group then
+				line.logical.volume_group.allocated_mib = line.logical.volume_group.allocated
+				line.logical.volume_group.allocated = M.mib2tib( line.logical.volume_group.allocated )
+				line.logical.volume_group.total_mib = line.logical.volume_group.total
+				line.logical.volume_group.total = M.mib2tib( line.logical.volume_group.total )
+			else
+				line.logical.volume_group = {}
+				line.logical.volume_group.allocated_mib = 0
+				line.logical.volume_group.allocated = 0
+				line.logical.volume_group.total_mib = line.logical.capacity_mib
+				line.logical.volume_group.total = line.logical.capacity
+			end
 		end
 		if line.logical_volume then
 			line.logical_volume.size_mib = line.logical_volume.size
