@@ -313,16 +313,9 @@ local function lvm_logical_volume_add( inputs, data )
 		return nil
 	end
 
-	-- Determine if logical drive has PhysicalVolume
-	local physical_volume_existing = nil
-	for _, physical_volume in ipairs( data.physical_volumes ) do
-		if physical_volume.device == data.logicals[ logical_id ].device then
-			physical_volume_existing = physical_volume
-		end
-	end
-
 	local volume_group = nil
-
+	local physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device,
+	                                                                 data.physical_volumes )
 	if physical_volume_existing then
 		if physical_volume_existing.volume_group and
 		   not lvm.PhysicalVolume.is_orphan( physical_volume_existing ) then
