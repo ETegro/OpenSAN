@@ -127,47 +127,9 @@ local function einarc_logical_add( inputs, drives )
 			message_error = i18n("Only single model hard drives should be used")
 		end
 
-		-- Let's call einarc at last
-		local return_code = nil
-		local result = nil
-		local logicals_were = einarc.Logical.list() -- TODO: use data
-		return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+		local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
 		if not return_code then
 			return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
-		end
-
-		-- And let's create PV and VG on it
-		-- At first, find out newly created device
-		local device = nil
-		for logical_id, logical in pairs( einarc.Logical.list() ) do
-			if not logicals_were[ logical_id ] then
-				device = logical.device
-			end
-		end
-		assert( device, "unable to find newly appeared device" )
-		-- Then, create PV on it
-		return_code, result = pcall( lvm.PhysicalVolume.create, device )
-		if not return_code then
-			return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
-		end
-		lvm.PhysicalVolume.rescan()
-
-		-- Find out newly created PhysicalVolume
-		local physical_volumes = nil
-		for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
-			if physical_volume.device == device then
-				physical_volumes = { physical_volume }
-			end
-		end
-		assert( physical_volumes,
-		        "unable to find corresponding physical volume" )
-		-- And then, create VG on it
-		return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
-		if return_code then
-			lvm.PhysicalVolume.rescan()
-			lvm.VolumeGroup.rescan()
-		else
-			message_error = i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result
 		end
 	else
 		message_error = message
@@ -313,14 +275,11 @@ local function lvm_logical_volume_add( inputs, data )
 
 	for k, v in pairs( inputs ) do
 		if not volume_group_name_hash then
-			-- san.submit_logical_volume_add-450-vg1302871899
-			logical_id_hash, volume_group_name_hash = string.match( k, "^submit_logical_volume_add.(" .. hashre .. ").(" .. hashre .. ")" )
+			logical_id_hash = string.match( k, "^submit_logical_volume_add.(" .. hashre .. ")" )
 		end
 	end
 	assert( logical_id_hash, "unable to parse out logical's id" )
-	assert( volume_group_name_hash, "unable to parse out volume group's name" )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
-	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 
 	local logical_volume_name = inputs[ "new_volume_name-" .. logical_id_hash ]
 	if logical_volume_name == "" then
@@ -340,8 +299,71 @@ local function lvm_logical_volume_add( inputs, data )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
 
+	local return_code = nil
+	local result = nil
+
+	-- Determine if logical drive has PhysicalVolume
+	local physical_volume_existing = nil
+	for _, physical_volume in ipairs( data.physical_volumes ) do
+		if physical_volume.device == data.logicals[ logical_id ].device then
+			physical_volume_existing = physical_volume
+		end
+	end
+
+	local volume_group = nil
+
+	if physical_volume_existing then
+		if physical_volume_existing.volume_group then
+			for _, volume_group_inner in ipairs( data.volume_groups ) do
+				if volume_group_inner.name == physical_volume_existing.volume_group then
+					volume_group = volume_group_inner
+				end
+			end
+		else
+			return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume_existing } )
+			if return_code then
+				lvm.PhysicalVolume.rescan()
+				lvm.VolumeGroup.rescan()
+			else
+				return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
+			end
+		end
+	else
+		return_code, result = pcall( lvm.PhysicalVolume.create, data.logicals[ logical_id ].device )
+		if not return_code then
+			return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
+		end
+		lvm.PhysicalVolume.rescan()
+
+		-- Find out newly created PhysicalVolume
+		local physical_volumes = nil
+		for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+			if physical_volume.device == data.logicals[ logical_id ].device then
+				physical_volumes = { physical_volume }
+			end
+		end
+		assert( physical_volumes,
+		        "unable to find corresponding physical volume" )
+
+		return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
+		if return_code then
+			lvm.PhysicalVolume.rescan()
+			lvm.VolumeGroup.rescan()
+		else
+			return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
+		end
+
+		physical_volume_existing = physical_volumes
+	end
+
+	if not volume_group then
+		volume_group = lvm.VolumeGroup.list( { physical_volume_existing } )[1]
+	end
+	assert( volume_group,
+		"unable to find corresponding volume group" )
+
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-	                                   { name = volume_group_name },
+	                                   volume_group,
 	                                   logical_volume_name,
 	                                   logical_volume_size )
 	if not return_code then
