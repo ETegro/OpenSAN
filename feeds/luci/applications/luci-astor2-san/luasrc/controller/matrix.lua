@@ -406,6 +406,7 @@ function M.caller()
 	local logical_volumes_for_serialization = common.deepcopy( logical_volumes )
 	for _, logical_volume in ipairs( logical_volumes_for_serialization ) do
 		logical_volume.volume_group = logical_volume.volume_group.name
+		logical_volume.snapshots = {}
 	end
 
 	local matrix = {
