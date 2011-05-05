@@ -380,7 +380,7 @@ local function lvm_logical_volume_remove( inputs, data )
 	return index_with_error( message_error )
 end
 
-local function lvm_logical_volume_resize( inputs )
+local function lvm_logical_volume_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 	local volume_group_name_hash = nil
@@ -389,7 +389,7 @@ local function lvm_logical_volume_resize( inputs )
 	for k, v in pairs( inputs ) do
 		if not logical_volume_name_hash then
 			-- san.submit_logical_volume_resize-vg1302871899-lvname_new
-			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_resize.(vg%d+).lv(" .. lvm.LogicalVolume.NAME_VALID_RE .. ")END$" )
+			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_resize.(" .. hashre .. ").lv(" .. hashre .. ")" )
 		end
 	end
 	assert( volume_group_name_hash, "unable to parse out volume group's name" )
