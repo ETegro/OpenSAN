@@ -54,7 +54,7 @@
 				<%+san/matrix_logical_volume_resizing%>
 			<% end %>
 				<div>
-					<a id="volume_logical_info-<%= sha1 line.logical_volume.name %>"
+					<a id="volume_logical_info-<%= sha1( line.logical_volume.name ) %>"
 					   href="#"
 					   class="inline">
 						<img src="<%=resource%>/cbi/fieldadd.gif"

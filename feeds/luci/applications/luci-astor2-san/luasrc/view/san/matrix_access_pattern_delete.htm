@@ -18,7 +18,7 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<input name="san.submit_access_pattern_delete-<%= sha1 line.access_pattern.section_name %>"
+<input name="san.submit_access_pattern_delete-<%= sha1( line.access_pattern.section_name ) %>"
        onclick=" if ( !confirm( '<%: Really delete access pattern? %>' ) )
 	 return false;
 	 return true;"

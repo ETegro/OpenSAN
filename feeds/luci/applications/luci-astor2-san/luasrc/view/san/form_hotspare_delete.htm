@@ -18,7 +18,7 @@
 %>
 
 <li>
-	<input name="san.submit_logical_hotspare_delete-<%= sha1 line.physical.logical_id %>-<%= sha1 line.physical.id %>"
+	<input name="san.submit_logical_hotspare_delete-<%= sha1( tostring( line.physical.logical_id ) ) %>-<%= sha1( line.physical.id ) %>"
 	       class="inline"
 	       src="<%=resource%>/cbi/remove.gif"
 	       title="<%: Remove hotspare %>"

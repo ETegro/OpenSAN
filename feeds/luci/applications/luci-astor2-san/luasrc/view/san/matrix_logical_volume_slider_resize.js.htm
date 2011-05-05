@@ -21,8 +21,8 @@
 
 jQuery.noConflict();
 (function($){
-	var slider_name = '#logical_volume_resize_slider-<%= sha1 line.logical_volume.name %>';
-	var slider_input_name = '.logical_volume_resize_slider_size-<%= sha1 line.logical_volume.name %>';
+	var slider_name = '#logical_volume_resize_slider-<%= sha1( line.logical_volume.name ) %>';
+	var slider_input_name = '.logical_volume_resize_slider_size-<%= sha1( line.logical_volume.name ) %>';
 	$( slider_name ).slider({
 		orientation: 'horizontal',
 		min: <%= line.logical_volume.volume_group.extent %>,
