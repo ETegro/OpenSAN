@@ -301,11 +301,11 @@ local function lvm_logical_volume_add( inputs, data )
 	local return_code = nil
 	local result = nil
 
-	local function find_physical_volume_by_device( device, devices_set )
-		if not devices_set then
-			local devices_set = lvm.PhysicalVolume.list()
+	local function find_physical_volume_by_device( device, physical_volumes )
+		if not physical_volumes then
+			physical_volumes = lvm.PhysicalVolume.list()
 		end
-		for _, physical_volume in ipairs( devices_set ) do
+		for _, physical_volume in ipairs( physical_volumes ) do
 			if physical_volume.device == device then
 				return physical_volume
 			end
