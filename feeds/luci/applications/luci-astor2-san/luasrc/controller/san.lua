@@ -310,7 +310,7 @@ local function lvm_logical_volume_add( inputs, data )
 				return physical_volume
 			end
 		end
-		assert( nil, "unable to find corresponding physical volume" )
+		return nil
 	end
 
 	-- Determine if logical drive has PhysicalVolume
