@@ -588,7 +588,7 @@ local function scst_access_pattern_bind( inputs )
 
 	local logical_volume_device = inputs[ "logical_volume_select" ]
 	if not logical_volume_device then
-		return index_with_error( i18n("Logical volume is not select") )
+		return index_with_error( i18n("Logical volume is not selected") )
 	end
 
 	if access_pattern_comparison_of_bind_luns( logical_volume_device, access_pattern_section_name ) then
