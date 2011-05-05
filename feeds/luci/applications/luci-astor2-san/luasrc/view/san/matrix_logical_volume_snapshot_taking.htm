@@ -22,9 +22,8 @@
 </div>
 <div class="inline">
 	<input name="san.submit_logical_volume_snapshot_add-lvd<%= sha1( line.logical_volume.volume_group.name ) %>-<%= sha1( line.logical_volume.name ) %>"
-	       src="<%=resource%>/cbi/add.gif"
+	       type="submit"
 	       title="<%: Add snapshot %>"
-	       type="image"
 	       value="<%: Add snapshot %>" />
 </div>
 <div id="new_snapshot_slider-<%= sha1( line.logical_volume.name ) %>"></div>
