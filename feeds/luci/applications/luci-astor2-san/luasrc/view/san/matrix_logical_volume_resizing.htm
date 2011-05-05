@@ -17,7 +17,7 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<div id="logical_volume_resize_slider-<%= line.logical_volume.name %>"></div>
+<div id="logical_volume_resize_slider-<%= sha1( line.logical_volume.name ) %>"></div>
 <div class="inline">
 	<%: Resize logical volume %>: <%= line.logical_volume.name %>
 </div>
