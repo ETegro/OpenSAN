@@ -559,6 +559,18 @@ local function scst_access_pattern_delete( inputs )
 	return index_with_error( message_error )
 end
 
+local function access_pattern_comparison_of_bind_luns( logical_volume_device_for_bind, access_pattern_section_name_for_bind )
+	local access_pattern_name_for_bind = scst.AccessPattern.find_by_section_name( access_pattern_section_name_for_bind )
+	for _, access_pattern in ipairs( scst.AccessPattern.list() ) do
+		if access_pattern.filename == logical_volume_device_for_bind then
+			if access_pattern.lun == access_pattern_name_for_bind.lun then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 local function scst_access_pattern_bind( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -579,12 +591,17 @@ local function scst_access_pattern_bind( inputs )
 		return index_with_error( i18n("Logical volume is not select") )
 	end
 
+	if access_pattern_comparison_of_bind_luns( logical_volume_device, access_pattern_section_name ) then
+		return index_with_error( i18n("This is LUN is busy, please select other LUN") )
+	end
+
 	local return_code, result = pcall( scst.AccessPattern.bind,
 	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ),
 	                                   logical_volume_device )
 	if not return_code then
 		message_error = i18n("Failed to bind access pattern") .. ": " .. result
 	end
+
 	return index_with_error( message_error )
 end
 
