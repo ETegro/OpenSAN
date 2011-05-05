@@ -201,6 +201,31 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 	return matrix
 end
 
+function M.filter_highlight_snapshots( matrix, colors_array )
+	if not colors_array then
+		colors_array = { "green", "orange", "yellow" }
+	end
+	local color_number = 1
+
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		local color = colors_array[ color_number ]
+		if line.logical_volume then
+
+			if color_number == #colors_array then
+				color_number = 1
+			else
+				color_number = color_number + 1
+			end
+
+			if line.logical_volume.is_snapshot() == false then
+				lines[ current_line ].logical_volume.highlight.background_color = color
+			end
+		end
+	end
+	return matrix
+end
+
 function M.filter_volume_group_percentage( matrix )
 	local lines = matrix.lines
 	for _, line in ipairs( lines ) do
@@ -426,6 +451,8 @@ function M.caller()
 	local FILTERS = {
 		M.filter_borders_highlight,
 		M.filter_alternation_border_colors,
+		M.filter_highlight_snapshots,
+		-- filter_highlight_snapshots
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_add_access_patterns,
@@ -433,7 +460,6 @@ function M.caller()
 		filter_mib2tib,
 		filter_serialize,
 		filter_base64encode
-		-- filter_highlight_snapshots
 		-- filter_overall_fields_counter (for hiding)
 	}
 	for _,filter in ipairs( FILTERS ) do
