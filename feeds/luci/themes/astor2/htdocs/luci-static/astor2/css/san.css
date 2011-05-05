@@ -57,7 +57,7 @@ form table tbody tr td { width: 25%; }
 .logical-highlight-bottom { border-bottom: 5px solid #00CC00; }
 .logical-highlight-left { border-left: 5px solid #00CC00; }
 
-.logical-background-state-normal { background-color: #99FF99 ; }
+.logical-background-state-normal { background-color: #99FF99; }
 .logical-background-state-degraded { background-color: #FF2211; }
 .logical-background-state-initializing { background-color: #EEFF44; }
 .logical-background-state-rebuilding { background-color: #FFCC22; }
@@ -81,3 +81,7 @@ form table tbody tr td { width: 25%; }
 .logical_volume-highlight-color-orange { border-color: orange; }
 .logical_volume-highlight-color-red { border-color: red; }
 .logical_volume-highlight-color-yellow { border-color: yellow; }
+
+.logical_volume-background-color-green { background-color: green; }
+.logical_volume-background-color-orange { background-color: orange; }
+.logical_volume-background-color-yellow { background-color: yellow; }
