@@ -82,6 +82,15 @@ function M.PhysicalVolume.rescan()
 	common.system_succeed( "lvm pvscan" )
 end
 
+function M.PhysicalVolume:is_orphan()
+	assert( self, "unable to get self object" )
+	if string.match( self.volume_group, "#orphans_" ) then
+		return true
+	else
+		return false
+	end
+end
+
 --- List all PhysicalVolumes
 -- @return { PhysicalVolume, PhysicalVolume }
 function M.PhysicalVolume.list()
@@ -155,7 +164,7 @@ function M.VolumeGroup.create( physical_volumes )
 	end
 	for _, physical_volume in ipairs( physical_volumes ) do
 		if physical_volume.volume_group and
-		   not string.match( physical_volume.volume_group, "#orphans_" ) then
+		   not physical_volume:is_orphan() then
 			error( "lvm:VolumeGroup.create(): disk already is in VolumeGroup" )
 		end
 	end
