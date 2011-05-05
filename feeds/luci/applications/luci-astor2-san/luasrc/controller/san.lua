@@ -301,6 +301,18 @@ local function lvm_logical_volume_add( inputs, data )
 	local return_code = nil
 	local result = nil
 
+	local function find_physical_volume_by_device( device, devices_set )
+		if not devices_set then
+			local devices_set = lvm.PhysicalVolume.list()
+		end
+		for _, physical_volume in ipairs( devices_set ) do
+			if physical_volume.device == device then
+				return physical_volume
+			end
+		end
+		assert( nil, "unable to find corresponding physical volume" )
+	end
+
 	-- Determine if logical drive has PhysicalVolume
 	local physical_volume_existing = nil
 	for _, physical_volume in ipairs( data.physical_volumes ) do
@@ -310,15 +322,6 @@ local function lvm_logical_volume_add( inputs, data )
 	end
 
 	local volume_group = nil
-
-	local function find_physical_volume_by_device( device )
-		for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
-			if physical_volume.device == device then
-				return physical_volume
-			end
-		end
-		assert( nil, "unable to find corresponding physical volume" )
-	end
 
 	if physical_volume_existing then
 		if physical_volume_existing.volume_group and
