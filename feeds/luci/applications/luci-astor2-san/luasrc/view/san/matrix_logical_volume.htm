@@ -53,15 +53,13 @@
 			<% if #line.logical_volume.snapshots == 0 then %>
 				<%+san/matrix_logical_volume_resizing%>
 			<% end %>
-				<div>
-					<a id="volume_logical_info-<%= sha1( line.logical_volume.name ) %>"
-					   href="#"
-					   class="inline">
-						<img src="<%=resource%>/cbi/fieldadd.gif"
-						     alt="<%: Snapshot %>"
-						     title="<%: Snapshot %>" />
-					</a>
-				</div>
+			<a id="volume_logical_info-<%= sha1( line.logical_volume.name ) %>"
+			   href="#"
+			   class="inline">
+				<img src="<%=resource%>/cbi/fieldadd.gif"
+				     alt="<%: Snapshot %>"
+				     title="<%: Snapshot %>" />
+			</a>
 		</td>
 	</tr>
 	<tr class="to_hide">
