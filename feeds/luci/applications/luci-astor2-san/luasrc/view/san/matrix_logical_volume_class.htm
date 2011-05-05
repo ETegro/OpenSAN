@@ -17,6 +17,7 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
+<% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
 <% if line.logical_volume.highlight.left then %>logical_volume-highlight-left<% end %>
 <% if line.logical_volume.highlight.top then %>logical_volume-highlight-top<% end %>
 <% if line.logical_volume.highlight.right then %>logical_volume-highlight-right<% end %>
