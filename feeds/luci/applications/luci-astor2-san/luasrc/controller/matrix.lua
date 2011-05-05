@@ -272,7 +272,7 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 		if line.logical then
 			local logical_volumes_names = common.keys( line.logical.logical_volumes or {} )
 			if #logical_volumes_names > 0 then
-				for i = current_line, line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
+				for i = current_line, current_line -1 + line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
 					if lines[ i ].access_pattern then
 						lines[ i ].access_pattern.colspan = 1
 					end
