@@ -270,11 +270,10 @@ end
 local function lvm_logical_volume_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name_hash = nil
 	local logical_id_hash = nil
 
 	for k, v in pairs( inputs ) do
-		if not volume_group_name_hash then
+		if not logical_id_hash then
 			logical_id_hash = string.match( k, "^submit_logical_volume_add.(" .. hashre .. ")" )
 		end
 	end
@@ -312,8 +311,18 @@ local function lvm_logical_volume_add( inputs, data )
 
 	local volume_group = nil
 
+	local function find_physical_volume_by_device( device )
+		for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+			if physical_volume.device == device then
+				return physical_volume
+			end
+		end
+		assert( nil, "unable to find corresponding physical volume" )
+	end
+
 	if physical_volume_existing then
-		if physical_volume_existing.volume_group then
+		if physical_volume_existing.volume_group and
+		   not lvm.PhysicalVolume.is_orphan( physical_volume_existing ) then
 			for _, volume_group_inner in ipairs( data.volume_groups ) do
 				if volume_group_inner.name == physical_volume_existing.volume_group then
 					volume_group = volume_group_inner
@@ -335,17 +344,9 @@ local function lvm_logical_volume_add( inputs, data )
 		end
 		lvm.PhysicalVolume.rescan()
 
-		-- Find out newly created PhysicalVolume
-		local physical_volumes = nil
-		for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
-			if physical_volume.device == data.logicals[ logical_id ].device then
-				physical_volumes = { physical_volume }
-			end
-		end
-		assert( physical_volumes,
-		        "unable to find corresponding physical volume" )
+		physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device )
 
-		return_code, result = pcall( lvm.VolumeGroup.create, physical_volumes )
+		return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume_existing } )
 		if return_code then
 			lvm.PhysicalVolume.rescan()
 			lvm.VolumeGroup.rescan()
@@ -353,7 +354,7 @@ local function lvm_logical_volume_add( inputs, data )
 			return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
 		end
 
-		physical_volume_existing = physical_volumes
+		physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device )
 	end
 
 	if not volume_group then
