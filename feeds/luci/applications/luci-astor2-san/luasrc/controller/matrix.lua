@@ -25,6 +25,8 @@ einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 scst = require( "astor2.scst" )
 
+mime = require( "mime" )
+
 function M.gcd( x, y )
 	if y == 0 then return math.abs( x ) end
 	return M.gcd( y, x % y )
@@ -123,17 +125,18 @@ local function check_highlights_attribute( obj )
 end
 
 function M.filter_borders_highlight( matrix )
-	for current_line, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
 		if line.physical then
-			matrix[ current_line ].physical = check_highlights_attribute( matrix[ current_line ].physical )
+			lines[ current_line ].physical = check_highlights_attribute( lines[ current_line ].physical )
 		end
 
 		if line.logical then
-			matrix[ current_line ].logical = check_highlights_attribute( matrix[ current_line ].logical )
+			lines[ current_line ].logical = check_highlights_attribute( lines[ current_line ].logical )
 
-			matrix[ current_line ].physical.highlight.top = true
-			matrix[ current_line ].physical.highlight.left = true
-			matrix[ current_line ].logical.highlight.top = true
+			lines[ current_line ].physical.highlight.top = true
+			lines[ current_line ].physical.highlight.left = true
+			lines[ current_line ].logical.highlight.top = true
 
 			local logical_volumes_quantity = #common.keys( line.logical.logical_volumes or {} )
 			local logical_volume_rowspan = 0
@@ -142,28 +145,28 @@ function M.filter_borders_highlight( matrix )
 			end
 			local physical_rowspan = line.physical.rowspan
 			if logical_volumes_quantity == 0 then
-				matrix[ current_line ].logical.highlight.right = true
+				lines[ current_line ].logical.highlight.right = true
 			else
-				matrix[ current_line ].logical_volume = check_highlights_attribute( matrix[ current_line ].logical_volume )
-				matrix[ current_line ].logical_volume.highlight.top = true
-				matrix[ current_line ].logical_volume.highlight.right = true
+				lines[ current_line ].logical_volume = check_highlights_attribute( lines[ current_line ].logical_volume )
+				lines[ current_line ].logical_volume.highlight.top = true
+				lines[ current_line ].logical_volume.highlight.right = true
 			end
 
 			local future_line = current_line + line.logical.rowspan
 			for i = current_line, future_line - 1, physical_rowspan do
-				matrix[ i ].physical = check_highlights_attribute( matrix[ i ].physical )
-				matrix[ i ].physical.highlight.left = true
+				lines[ i ].physical = check_highlights_attribute( lines[ i ].physical )
+				lines[ i ].physical.highlight.left = true
 			end
 			if logical_volumes_quantity ~= 0 then
 				for i = current_line, future_line - 1, logical_volume_rowspan do
-					matrix[ i ].logical_volume = check_highlights_attribute( matrix[ i ].logical_volume )
-					matrix[ i ].logical_volume.highlight.right = true
+					lines[ i ].logical_volume = check_highlights_attribute( lines[ i ].logical_volume )
+					lines[ i ].logical_volume.highlight.right = true
 				end
 			end
-			matrix[ future_line - physical_rowspan ].physical.highlight.bottom = true
-			matrix[ current_line ].logical.highlight.bottom = true
+			lines[ future_line - physical_rowspan ].physical.highlight.bottom = true
+			lines[ current_line ].logical.highlight.bottom = true
 			if logical_volumes_quantity ~= 0 then
-				matrix[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
+				lines[ future_line - logical_volume_rowspan ].logical_volume.highlight.bottom = true
 			end
 		end
 	end
@@ -175,7 +178,8 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 		colors_array = { "black", "blue", "green", "orange", "red", "yellow" }
 	end
 	local color_number = 1
-	for current_line, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
 		local color = colors_array[ color_number ]
 		if line.logical then
 			if color_number == #colors_array then
@@ -183,7 +187,7 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 			else
 				color_number = color_number + 1
 			end
-			matrix[ current_line ].logical.highlight.color = color
+			lines[ current_line ].logical.highlight.color = color
 			for _, physical in pairs( line.logical.physicals ) do
 				physical.highlight.color = color
 			end
@@ -198,7 +202,8 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 end
 
 function M.filter_volume_group_percentage( matrix )
-	for _, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
 		if line.logical_volume then
 			local percentage = math.ceil( 100 * line.logical_volume.volume_group.allocated /
 			                                    line.logical_volume.volume_group.total )
@@ -211,7 +216,8 @@ function M.filter_volume_group_percentage( matrix )
 end
 
 local function filter_mib2tib( matrix )
-	for _, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
 		if line.physical then
 			line.physical.size_mib = line.physical.size
 			line.physical.size = M.mib2tib( line.physical.size )
@@ -233,7 +239,8 @@ local function filter_mib2tib( matrix )
 end
 
 local function filter_add_logical_id_to_physical( matrix )
-	for _, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
 		if line.logical then
 			for _, physical in pairs( line.logical.physicals ) do
 				physical.logical_id = line.logical.id
@@ -249,30 +256,31 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 	local access_patterns_names = common.keys( access_patterns_named_hash  )
 	table.sort( access_patterns_names )
 
+	local lines = matrix.lines
 	-- Fillup matrix with AccessPatterns
 	for current_line, access_pattern_name in ipairs( access_patterns_names ) do
 		access_pattern = access_patterns[ access_patterns_named_hash[ access_pattern_name ][1] ]
-		if not matrix[ current_line ] then
-			matrix[ current_line ] = {}
+		if not lines[ current_line ] then
+			lines[ current_line ] = {}
 		end
-		matrix[ current_line ][ "access_pattern" ] = access_pattern
+		lines[ current_line ][ "access_pattern" ] = access_pattern
 	end
 
 	-- Calculate AccessPatterns-related TD's colspan
 	local logical_scope = 0
-	for current_line, line in ipairs( matrix ) do
+	for current_line, line in ipairs( lines ) do
 		if line.logical then
 			local logical_volumes_names = common.keys( line.logical.logical_volumes or {} )
 			if #logical_volumes_names > 0 then
 				for i = current_line, line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
-					if matrix[ i ].access_pattern then
-						matrix[ i ].access_pattern.colspan = 1
+					if lines[ i ].access_pattern then
+						lines[ i ].access_pattern.colspan = 1
 					end
 				end
 			end
 			for i = current_line, line.logical.rowspan do
-				if matrix[ i ].access_pattern and not matrix[ i ].access_pattern.colspan then
-					matrix[ i ].access_pattern.colspan = 2
+				if lines[ i ].access_pattern and not lines[ i ].access_pattern.colspan then
+					lines[ i ].access_pattern.colspan = 2
 				end
 			end
 			logical_scope = line.logical.rowspan
@@ -280,9 +288,9 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 		if line.access_pattern and logical_scope == 0 then
 			-- We are outside logical's scope
 			if line.physical then
-				matrix[ current_line ].access_pattern.colspan = 3
+				lines[ current_line ].access_pattern.colspan = 3
 			else
-				matrix[ current_line ].access_pattern.colspan = 4
+				lines[ current_line ].access_pattern.colspan = 4
 			end
 		end
 		if logical_scope > 0 then
@@ -293,11 +301,12 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 end
 
 function M.filter_calculate_hotspares( matrix )
-	for current_line, line in ipairs( matrix ) do
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
 		if line.physical and line.physical.state == "free" then
 			local hotspare_availability = {}
 			local hotspare_minimal_sizes = {}
-			for _, line_inner in ipairs( matrix ) do
+			for _, line_inner in ipairs( lines ) do
 				if line_inner.logical and
 				not common.is_in_array( line_inner.logical.level,
 				                        einarc.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE ) then
@@ -314,14 +323,37 @@ function M.filter_calculate_hotspares( matrix )
 				end
 			end
 			if #hotspare_availability == 0 then
-				matrix[ current_line ].physical.hotspare_availability = nil
+				lines[ current_line ].physical.hotspare_availability = nil
 			else
 				table.sort( hotspare_availability )
-				matrix[ current_line ].physical.hotspare_availability = hotspare_availability
-				matrix[ current_line ].physical.hotspare_minimal_sizes = hotspare_minimal_sizes
+				lines[ current_line ].physical.hotspare_availability = hotspare_availability
+				lines[ current_line ].physical.hotspare_minimal_sizes = hotspare_minimal_sizes
 			end
 		end
 	end
+	return matrix
+end
+
+function filter_serialize( matrix )
+	local serializer = luci.util.serialize_data
+	matrix.serialized_physicals = serializer( matrix.physicals )
+	matrix.serialized_logicals = serializer( matrix.logicals )
+	matrix.serialized_physical_volumes = serializer( matrix.physical_volumes )
+	matrix.serialized_volume_groups = serializer( matrix.volume_groups )
+	matrix.serialized_logical_volumes = serializer( matrix.logical_volumes )
+	return matrix
+end
+
+local function b64encode( data )
+	return (mime.b64( data ))
+end
+
+function filter_base64encode( matrix )
+	matrix.serialized_physicals = b64encode( matrix.serialized_physicals )
+	matrix.serialized_logicals = b64encode( matrix.serialized_logicals )
+	matrix.serialized_physical_volumes = b64encode( matrix.serialized_physical_volumes )
+	matrix.serialized_volume_groups = b64encode( matrix.serialized_volume_groups )
+	matrix.serialized_logical_volumes = b64encode( matrix.serialized_logical_volumes )
 	return matrix
 end
 
@@ -357,6 +389,7 @@ end
 function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
+	local logicals_for_serialization = {}
 	local physical_volumes = lvm.PhysicalVolume.list()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
@@ -364,13 +397,27 @@ function M.caller()
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
+		logicals_for_serialization[ logical_id ] = common.deepcopy( logicals[ logical_id ] )
 		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
 		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
 	end
-	local matrix = M.overall( {
+
+	-- Some workarounds to prevent recursion during serialization
+	local logical_volumes_for_serialization = common.deepcopy( logical_volumes )
+	for _, logical_volume in ipairs( logical_volumes_for_serialization ) do
+		logical_volume.volume_group = logical_volume.volume_group.name
+	end
+
+	local matrix = {
+		lines = M.overall( {
+			physicals = physicals,
+			logicals = logicals } ),
+		logicals = logicals_for_serialization,
 		physicals = physicals,
-		logicals = logicals
-	} )
+		physical_volumes = physical_volumes,
+		volume_groups = volume_groups,
+		logical_volumes = logical_volumes_for_serialization
+	}
 	local FILTERS = {
 		M.filter_borders_highlight,
 		M.filter_alternation_border_colors,
@@ -378,7 +425,9 @@ function M.caller()
 		filter_add_logical_id_to_physical,
 		M.filter_add_access_patterns,
 		M.filter_calculate_hotspares,
-		filter_mib2tib
+		filter_mib2tib,
+		filter_serialize,
+		filter_base64encode
 		-- filter_highlight_snapshots
 		-- filter_overall_fields_counter (for hiding)
 	}
