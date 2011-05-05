@@ -220,6 +220,13 @@ function M.filter_highlight_snapshots( matrix, colors_array )
 
 			if line.logical_volume.is_snapshot() == false then
 				lines[ current_line ].logical_volume.highlight.background_color = color
+
+				if #line.logical_volume.snapshots ~= 0 then
+					--lines[ current_line ].logical_volume.snapshots[1].highlight.background_color = "red"
+					for snapshot_key in ipairs( common.keys( line.logical_volume.snapshots ) ) do
+						line.logical_volume.snapshots[ snapshot_key ].highlight.background_color = color
+					end
+				end
 			end
 		end
 	end
