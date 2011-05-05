@@ -21,7 +21,7 @@
 	<%: Take new snapshot %>
 </div>
 <div class="inline">
-	<input name="san.submit_logical_volume_snapshot_add-lvd<%= sha1( line.logical_volume.device ) %>"
+	<input name="san.submit_logical_volume_snapshot_add-lvd<%= sha1( line.logical_volume.volume_group.name ) %>-<%= sha1( line.logical_volume.name ) %>"
 	       src="<%=resource%>/cbi/add.gif"
 	       title="<%: Add snapshot %>"
 	       type="image"
