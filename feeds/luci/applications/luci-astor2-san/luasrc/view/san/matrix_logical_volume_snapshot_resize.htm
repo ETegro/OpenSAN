@@ -1,0 +1,42 @@
+<%#
+ aStor2 -- storage area network configurable via Web-interface
+ Copyright (C) 2009-2011 ETegro Technologies, PLC
+                         Vladimir Petukhov (vladimir.petukhov@etegro.com)
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+ 
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+%>
+
+<div>
+	<%: Resize snapshot %>
+</div>
+<div id="logical_volume_snapshot_resize_slider-<%= sha1( line.logical_volume.name ) %>"></div>
+<div>
+	<input id="san.logical_volume_snapshot_resize_slider_size-<%= sha1( line.logical_volume.name ) %>"
+	       class="logical_volume_snapshot_resize_slider_size-<%= sha1( line.logical_volume.name ) %>"
+	       name="san.logical_volume_snapshot_resize_slider_size-<%= sha1( line.logical_volume.name ) %>"
+	       readonly="readonly"
+	       type="text"
+	       value="0" />
+</div>
+<div>
+	<input name="san.submit_logical_volume_snapshot_resize-<%= sha1( line.logical_volume.volume_group.name ) %>-s<%= line.logical_volume.size_mib %>-lv<%= sha1( line.logical_volume.name ) %>"
+	       onclick=" if ( !confirm( '<%: Really resize snapshot? %>' ) )
+			 return false;
+			 return true;"
+	       src="<%=resource%>/cbi/reload.gif"
+	       type="image"
+	       title="<%: Resize snapshot %>"
+	       value="<%: Resize snapshot %>" />
+</div>
+<%+san/matrix_logical_volume_snapshot_slider_resize.js%>

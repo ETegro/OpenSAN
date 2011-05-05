@@ -1,5 +1,5 @@
 --[[
-/bin/bash: ATA: command not found
+  aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Vladimir Petukhov <vladimir.petukhov@etegro.com>
                           Sergey Matveev <stargrave@stargrave.org>
@@ -404,8 +404,13 @@ function M.caller()
 
 	-- Some workarounds to prevent recursion during serialization
 	local logical_volumes_for_serialization = common.deepcopy( logical_volumes )
-	for _, logical_volume in ipairs( logical_volumes_for_serialization ) do
+	logical_volumes_for_serialization = snapshots_to_outer( logical_volumes_for_serialization )
+	for _, logical_volume in pairs( logical_volumes_for_serialization ) do
 		logical_volume.volume_group = logical_volume.volume_group.name
+		logical_volume.logical_volume = nil
+		if logical_volume.snapshots then
+			logical_volume.snapshots = {}
+		end
 	end
 
 	local matrix = {

@@ -32,41 +32,12 @@
 			</span>
 		</td>
 		<td>
-			<input name="san.submit_logical_volume_remove-<%= line.logical_volume.volume_group.name %>-lv<%= line.logical_volume.name %>END"
-			       onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
-					 return false;
-					 return true;"
-			       src="<%=resource%>/cbi/remove.gif"
-			       type="image"
-			       title="<%: Remove snapshot %>"
-			       value="<%: Remove snapshot %>" />
+			<%+san/matrix_logical_volume_snapshot_remove%>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="3">
-			<div>
-				<%: Resize snapshot %>
-			</div>
-			<div id="logical_volume_snapshot_resize_slider-<%= line.logical_volume.name %>"></div>
-			<div>
-				<input id="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
-				       class="logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
-				       name="san.logical_volume_snapshot_resize_slider_size-<%= line.logical_volume.name %>"
-				       readonly="readonly"
-				       type="text"
-				       value="0" />
-			</div>
-			<div>
-				<input name="san.submit_logical_volume_snapshot_resize-<%= line.logical_volume.volume_group.name %>-s<%= line.logical_volume.size_mib %>-lv<%= line.logical_volume.name %>END"
-				       onclick=" if ( !confirm( '<%: Really resize snapshot? %>' ) )
-						 return false;
-						 return true;"
-				       src="<%=resource%>/cbi/reload.gif"
-				       type="image"
-				       title="<%: Resize snapshot %>"
-				       value="<%: Resize snapshot %>" />
-			</div>
-			<%+san/matrix_logical_volume_snapshot_slider_resize.js%>
+			<%+san/matrix_logical_volume_snapshot_resize%>
 		</td>
 	</tr>
 </table>

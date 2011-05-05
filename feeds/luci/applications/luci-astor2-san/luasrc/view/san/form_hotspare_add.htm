@@ -17,44 +17,32 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<% if line.physical.hotspare_availability then %>
-	<li>
-		<div class="inline"><%: RAID %> #: </div>
-		<div class="inline">
-			<select id="san.logical_id_hotspare-<%= line.physical.id %>"
-				name="san.logical_id_hotspare-<%= line.physical.id %>"
-				size="1" >
-				<% for _, logical_id in ipairs( line.physical.hotspare_availability ) do %>
-					<option value="<%= logical_id %>"><%= logical_id %></option>
-				<% end %>
-			</select>
-			<% for logical_id, minimal_size in pairs( line.physical.hotspare_minimal_sizes ) do %>
-				<input type="hidden"
-				       name="san.logical_minimal_size-<%= line.physical.id %>-<%= logical_id %>"
-				       value="<%= minimal_size %>" />
+<li>
+	<div class="inline"><%: RAID %> #: </div>
+	<div class="inline">
+		<select id="san.logical_id_hotspare-<%= sha1( line.physical.id ) %>"
+			name="san.logical_id_hotspare-<%= sha1( line.physical.id ) %>"
+			size="1" >
+			<% for _, logical_id in ipairs( line.physical.hotspare_availability ) do %>
+				<option value="<%= logical_id %>"><%= logical_id %></option>
 			<% end %>
+		</select>
+		<% for logical_id, minimal_size in pairs( line.physical.hotspare_minimal_sizes ) do %>
 			<input type="hidden"
-			       name="san.physical_size-<%= line.physical.id %>"
-			       value="<%= line.physical.size %>" />
-		</div>
-		<div class="inline">
-			<input id="san.submit_logical_hotspare_add-<%= line.physical.id %>END"
-			       class="inline"
-			       name="san.submit_logical_hotspare_add-<%= line.physical.id %>END"
-			       src="<%=resource%>/cbi/add.gif"
-			       title="<%: Add hotspare %>"
-			       type="image"
-			       value="<%: Add hotspare %>" />
-		</div>
-	</li>
-<% end %>
-<% if line.physical.state == "hotspare" then %>
-	<li>
-		<input name="san.submit_logical_hotspare_delete-<%= line.physical.logical_id %>-<%= line.physical.id %>END"
+			       name="san.logical_minimal_size-<%= sha1( line.physical.id ) %>-<%= sha1( tostring( logical_id ) )%>"
+			       value="<%= minimal_size %>" />
+		<% end %>
+		<input type="hidden"
+		       name="san.physical_size-<%= sha1( line.physical.id ) %>"
+		       value="<%= line.physical.size %>" />
+	</div>
+	<div class="inline">
+		<input id="san.submit_logical_hotspare_add-<%= sha1( line.physical.id ) %>"
 		       class="inline"
-		       src="<%=resource%>/cbi/remove.gif"
-		       title="<%: Remove hotspare %>"
+		       name="san.submit_logical_hotspare_add-<%= sha1( line.physical.id ) %>"
+		       src="<%=resource%>/cbi/add.gif"
+		       title="<%: Add hotspare %>"
 		       type="image"
-		       value="<%: Remove hotspare %>" />
-	</li>
-<% end %>
+		       value="<%: Add hotspare %>" />
+	</div>
+</li>
