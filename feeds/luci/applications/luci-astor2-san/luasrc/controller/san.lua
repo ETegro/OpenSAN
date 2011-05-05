@@ -354,7 +354,7 @@ local function find_logical_volume_name_in_data_by_hash( logical_volume_name_has
 	return find_by_hash( logical_volume_name_hash, common.keys( common.unique_keys( "name", data.logical_volumes ) ) )
 end
 
-local function lvm_logical_volume_remove( inputs )
+local function lvm_logical_volume_remove( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 	local volume_group_name_hash = nil
@@ -412,7 +412,7 @@ local function lvm_logical_volume_resize( inputs )
 	return index_with_error( message_error )
 end
 
-local function lvm_logical_volume_snapshot_add( inputs )
+local function lvm_logical_volume_snapshot_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 	local volume_group_name_hash = nil
@@ -444,7 +444,7 @@ local function lvm_logical_volume_snapshot_add( inputs )
 	return index_with_error( message_error )
 end
 
-local function lvm_logical_volume_snapshot_resize( inputs )
+local function lvm_logical_volume_snapshot_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
@@ -668,7 +668,7 @@ function perform()
 	for _, submit in ipairs( common.keys( inputs ) ) do
 		for submit_part, function_to_call in pairs( SUBMIT_MAP ) do
 			if string.match( submit, "^submit_" .. submit_part ) then
-				function_to_call( inputs )
+				function_to_call()
 			end
 		end
 	end
