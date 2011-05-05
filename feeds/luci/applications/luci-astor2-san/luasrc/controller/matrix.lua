@@ -278,7 +278,7 @@ function M.filter_add_access_patterns( matrix, access_patterns )
 					end
 				end
 			end
-			for i = current_line, line.logical.rowspan do
+			for i = current_line, current_line + line.logical.rowspan -1 do
 				if lines[ i ].access_pattern and not lines[ i ].access_pattern.colspan then
 					lines[ i ].access_pattern.colspan = 2
 				end
