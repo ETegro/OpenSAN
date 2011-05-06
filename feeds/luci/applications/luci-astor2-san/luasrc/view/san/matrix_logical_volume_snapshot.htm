@@ -34,6 +34,19 @@
 		<td>
 			<%+san/matrix_logical_volume_snapshot_remove%>
 		</td>
+		<td>
+			<% local access_pattern_exists = false %>
+			<% for _, line_access_pattern in ipairs( common.keys( matrix_overall ) ) do %>
+				<% if access_pattern then %>
+					<% access_pattern_exists = true %>
+				<% end %>
+			<% end %>
+			<% if access_pattern_exists then %>
+				<input name="san.logical_volume_select"
+				       type ="radio"
+				       value="<%= line.logical_volume.device %>" />
+			<% end %>
+		</td>
 	</tr>
 	<tr>
 		<td colspan="3">
