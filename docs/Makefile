@@ -39,10 +39,13 @@ _static:
 _templates:
 	mkdir -p $@
 
+pictures:
+	$(MAKE) -C luci all
+
 clean:
 	-rm -rf $(BUILDDIR)/*
 
-html: _static _templates
+html: _static _templates pictures
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
