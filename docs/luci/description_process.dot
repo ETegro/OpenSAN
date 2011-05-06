@@ -1,0 +1,35 @@
+digraph {
+	node [ shape = "record", style = "filled" ];
+	style = "filled";
+	color = "peru";
+	overlap = "false";
+	bgcolor = "transparent";
+
+	index [ label = "index" ];
+	matrix_caller [ label = "matrix.caller | { data.einarc = einarc.*() | data.lvm = lvm.*() | serialize( data ) | base64( data ) | <matrix_process>matrix_process() | <matrix>data.lines }" ];
+	template_save [ label = "template\nprocessing | { display( message_error) | render( data.lines ) | input type=hidden value=data.* }" ];
+	index -> matrix_caller -> template_save;
+
+	matrix_process [ label = "{ matrix = matrix() | matrix = filter1( matrix ) | matrix = filter2( matrix ) | ... | matrix = filterI( matrix ) }" ];
+	matrix_caller:matrix_process -> matrix_process -> matrix_caller:matrix;
+
+	user [ label = "User", shape = "circle" ];
+	post [ label = "POST inputs", shape = "invtriangle" ];
+	template_save -> user -> post;
+
+	submit [ label = "perform() | { urldecode( inputs ) | data = debase64( inputs.data ) | deserialize( data ) | find_method_by_submit( inputs ) | found_method( inputs, data ) }" ];
+	post -> submit;
+
+	index_with_error [ label = "index_with_error()" ];
+	submit -> einarc_ -> index_with_error;
+	submit -> lvm_ -> index_with_error;
+	submit -> scst_ -> index_with_error;
+	einarc_ [ label = "einarc_()" ];
+	lvm_ [ label = "lvm_()" ];
+	scst_ [ label = "scst_()" ];
+
+	get_message_error [ label = "GET index?message_error=", shape = "plaintext", color = "transparent" ];
+	index_with_error -> get_message_error -> index [ style = "dotted" ];
+	message_error [ label = "message_error", shape = "plaintext", color = "transparent" ];
+	index -> message_error -> template_save;
+}
