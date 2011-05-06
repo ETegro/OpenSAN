@@ -2,6 +2,7 @@ digraph {
 	node [ shape = "record", style = "filled" ];
 	style = "filled";
 	color = "peru";
+	bgcolor = "transparent";
 
 	subgraph cluster_matrix {
 		label = "matrix";

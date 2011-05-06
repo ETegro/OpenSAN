@@ -3,6 +3,7 @@ digraph {
 	style = "filled";
 	color = "peru";
 	overlap = "false";
+	bgcolor = "transparent";
 
 	subgraph cluster_lines {
 		label = "lines";
