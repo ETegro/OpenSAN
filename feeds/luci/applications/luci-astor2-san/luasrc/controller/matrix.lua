@@ -227,7 +227,6 @@ function M.filter_highlight_snapshots( matrix, colors_array )
 						line.logical_volume.snapshots[ snapshot_key ].highlight.background_color = color
 					end
 				end
-
 			end
 		end
 	end
