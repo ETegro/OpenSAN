@@ -17,18 +17,20 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<input type="hidden"
-       name="san.serialized_physicals"
-       value="<%= matrix_overall.serialized_physicals %>" />
-<input type="hidden"
-       name="san.serialized_logicals"
-       value="<%= matrix_overall.serialized_logicals %>" />
-<input type="hidden"
-       name="san.serialized_physical_volumes"
-       value="<%= matrix_overall.serialized_physical_volumes %>" />
-<input type="hidden"
-       name="san.serialized_volume_groups"
-       value="<%= matrix_overall.serialized_volume_groups %>" />
-<input type="hidden"
-       name="san.serialized_logical_volumes"
-       value="<%= matrix_overall.serialized_logical_volumes %>" />
+<div id="serialized_data">
+	<input type="hidden"
+	       name="san.serialized_physicals"
+	       value="<%= matrix_overall.serialized_physicals %>" />
+	<input type="hidden"
+	       name="san.serialized_logicals"
+	       value="<%= matrix_overall.serialized_logicals %>" />
+	<input type="hidden"
+	       name="san.serialized_physical_volumes"
+	       value="<%= matrix_overall.serialized_physical_volumes %>" />
+	<input type="hidden"
+	       name="san.serialized_volume_groups"
+	       value="<%= matrix_overall.serialized_volume_groups %>" />
+	<input type="hidden"
+	       name="san.serialized_logical_volumes"
+	       value="<%= matrix_overall.serialized_logical_volumes %>" />
+</div>
