@@ -13,3 +13,4 @@ LuCI касающиеся вещи
    sliders-boundaries
    updating
    theming
+   san_work_describing
