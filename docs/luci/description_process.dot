@@ -10,8 +10,9 @@ digraph {
 	template_save [ label = "template\nprocessing | { display( message_error) | render( data.lines ) | input type=hidden value=data.* }", fillcolor = "peru" ];
 	index -> matrix_caller -> template_save;
 
-	matrix_process [ label = "{ matrix = matrix() | matrix = filter1( matrix ) | matrix = filter2( matrix ) | ... | matrix = filterI( matrix ) }", fillcolor = "deepskyblue" ];
-	matrix_caller:matrix_process -> matrix_process -> matrix_caller:matrix;
+	matrix_process [ label = "{ matrix = matrix() | matrix = filter1( matrix ) | matrix = filter2( matrix ) | ... | <filterI>matrix = filterI( matrix ) }", fillcolor = "deepskyblue" ];
+	matrix_caller:matrix_process -> matrix_process;
+	matrix_process:filterI -> matrix_caller:matrix;
 
 	user [ label = "User", shape = "circle" ];
 	post [ label = "POST inputs", shape = "invtriangle", fillcolor = "deepskyblue" ];
