@@ -4,17 +4,22 @@
 Принципиальная схема работы контроллера
 =======================================
 
-.. figure:: description_process.png
+.. contents::
+
+Схема GET/POST запросов к контроллеру
+=====================================
+.. image:: description_process.png
    :scale: 85
+   :align: center
 
-   Схема GET/POST запросов к контроллеру
-
-.. figure:: description_matrix.png
+Структура matrix_overall
+========================
+.. image:: description_matrix.png
    :scale: 60
+   :align: center
 
-   Структура matrix_overall
-
-.. figure:: description_lines.png
+Структура matrix_overall.lines
+==============================
+.. image:: description_lines.png
    :scale: 65
-
-   Структура matrix_overall.lines
+   :align: center
