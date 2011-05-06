@@ -1,0 +1,48 @@
+digraph {
+	node [ shape = "record", style = "filled" ];
+	style = "filled";
+	color = "peru";
+	bgcolor = "transparent";
+
+	subgraph cluster_matrix {
+		label = "matrix";
+
+		node_matrix [ label = "{ <lines>lines | <physicals>physicals | <logicals>logicals | <physical_volumes>physical_volumes | <volume_groups>volume_groups | <logical_volumes>logical_volumes }", fillcolor = "limegreen" ];
+	}
+	subgraph cluster_logicals {
+		label = "logicals";
+
+		node_logicals [ label = "logical_id | { state (S) | <drives>drives | capacity (N) | device (S) | level (S) | <physicals>physicals | id (N) }", fillcolor = "limegreen" ];
+		node_logicals_drives [ label = "{ physical_id | physical_id }", fillcolor = "deepskyblue" ];
+		node_logicals_physicals [ label = "physical_id | state (S)", fillcolor = "limegreen" ];
+		node_logicals:drives -> node_logicals_drives;
+		node_logicals:physicals -> node_logicals_physicals;
+	}
+	subgraph cluster_physicals {
+		label = "physicals";
+
+		node_physicals [ label = "physical_id | { revision (S) | id (S) | logical_id (N) | state (S) | model (S) | size (N) | serial (S) }", fillcolor = "limegreen" ];
+	}
+	subgraph cluster_physical_volumes {
+		label = "physical_volumes";
+
+		node_physical_volumes [ label = "{ total (N) | free (N) | capacity (N) | allocated (N) | unusable (N) | extent (N) | volumes (N) | volume_group (S) | device (S) }", fillcolor = "deepskyblue" ];
+	}
+	subgraph cluster_volume_groups {
+		label = "volume_groups";
+
+		node_volume_groups [ label = "{ total_mib (N) | free (N) | allocated_mib (N) | extent (N) | <physical_volumes>physical_volumes | name (S) | max_volume (N) }", fillcolor = "deepskyblue" ];
+		node_volume_groups:physical_volumes -> node_physical_volumes;
+	}
+	subgraph cluster_logical_volumes {
+		label = "logical_volumes";
+
+		node_logical_volumes [ label = "{ name (S) | device (S) | volume_group (S) | size (N) | allocated (N) }", fillcolor = "deepskyblue" ];
+	}
+
+	node_matrix:logicals -> node_logicals;
+	node_matrix:physicals -> node_physicals;
+	node_matrix:physical_volumes -> node_physical_volumes;
+	node_matrix:volume_groups -> node_volume_groups;
+	node_matrix:logical_volumes -> node_logical_volumes;
+}
