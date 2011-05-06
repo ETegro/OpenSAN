@@ -6,7 +6,7 @@ digraph {
 	bgcolor = "transparent";
 
 	index [ label = "index", fillcolor = "red" ];
-	matrix_caller [ label = "matrix.caller | { data.einarc = einarc.*() | data.lvm = lvm.*() | serialize( data ) | base64( data ) | <matrix_process>matrix_process() | <matrix>data.lines }", fillcolor = "peru" ];
+	matrix_caller [ label = "matrix.caller() | { data.einarc = einarc.*() | data.lvm = lvm.*() | serialize( data ) | base64( data ) | <matrix_process>matrix_process() | <matrix>data.lines }", fillcolor = "peru" ];
 	template_save [ label = "template\nprocessing | { display( message_error) | render( data.lines ) | input type=hidden value=data.* }", fillcolor = "peru" ];
 	index -> matrix_caller -> template_save;
 
