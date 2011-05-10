@@ -40,14 +40,14 @@
 		<% end %>
 	</tr>
 	<tr>
-		<% local local_colspan = 4
+		<% local local_logical_colspan = 4
 		   if line.logical.progress then
-			local_colspan = local_colspan + 1
+			local_logical_colspan = local_logical_colspan + 1
 		   end
 		   if #common.keys( line.logical.logical_volumes ) == 0 then
-			local_colspan = local_colspan + 1
+			local_logical_colspan = local_logical_colspan + 1
 		end %>
-		<td colspan="<%= local_colspan %>">
+		<td colspan="<%= local_logical_colspan %>">
 			<%+san/matrix_logical_volume_add%>
 		</td>
 	</tr>
