@@ -212,13 +212,13 @@ function M.filter_highlight_snapshots( matrix, colors_array )
 		local color = colors_array[ color_number ]
 		if line.logical_volume then
 
-			if color_number == #colors_array then
-				color_number = 1
-			else
-				color_number = color_number + 1
-			end
-
 			if not line.logical_volume.is_snapshot() then
+				if color_number == #colors_array then
+					color_number = 1
+				else
+					color_number = color_number + 1
+				end
+
 				lines[ current_line ].logical_volume.highlight.background_color = color
 
 				if #line.logical_volume.snapshots ~= 0 then
