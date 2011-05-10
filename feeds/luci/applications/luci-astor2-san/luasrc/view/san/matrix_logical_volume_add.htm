@@ -36,7 +36,9 @@
 </div>
 <div>
 	<input id="san.new_volume_slider_size-<%= sha1( tostring( line.logical.id ) ) %>"
-	       class="new_volume_slider_size-<%= sha1( tostring( line.logical.id ) ) %>"
+	       class="new_volume_slider_size-<%= sha1( tostring( line.logical.id ) ) %> 
+	              logical-background-state-<%= line.logical.state %> 
+	              noborder"
 	       name="san.new_volume_slider_size-<%= sha1( tostring( line.logical.id ) ) %>"
 	       readonly="readonly"
 	       type="text"

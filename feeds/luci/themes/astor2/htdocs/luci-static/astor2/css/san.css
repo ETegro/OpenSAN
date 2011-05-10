@@ -20,11 +20,13 @@
 
 /* Body elemets */
 
+input { width: auto; }
 ul, li { list-style: none; }
 
 /* Body classes */
 
 .inline { display: inline-block; }
+.noborder { border: 0; }
 
 /* Main table */
 
