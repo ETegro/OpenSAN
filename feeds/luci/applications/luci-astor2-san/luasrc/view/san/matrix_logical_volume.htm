@@ -60,7 +60,7 @@
 		jQuery.noConflict();
 		(function($){
 			var logical_volume_name_sha = '.logical_volume_name-<%= sha1( line.logical_volume.device ) %>';
-			var access_pattern_sha_to_backlight = '.access_pattern-backlight-<%= sha1( line.access_pattern.filename ) %>';
+			var access_pattern_sha_to_backlight = '.access_pattern-backlight-<%= sha1( line.logical_volume.device ) %>';
 			$( logical_volume_name_sha ).click( function() {
 				$( access_pattern_sha_to_backlight ).css( 'background-color', 'red' );
 			} )
