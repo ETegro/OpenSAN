@@ -59,10 +59,19 @@
 		<script type="text/javascript">
 		jQuery.noConflict();
 		(function($){
+			<% if line.logical_volume.highlight.background_color then %>
+				var logical_volume_css = {
+					'background-color' : '<%= line.logical_volume.highlight.background_color %>'
+				};
+			<% else %>
+				var logical_volume_css = {
+					'background-color' : 'red'
+				};
+			<% end %>
 			var logical_volume_name_sha = '.logical_volume_name-<%= sha1( line.logical_volume.device ) %>';
 			var access_pattern_sha_to_backlight = '.access_pattern-backlight-<%= sha1( line.logical_volume.device ) %>';
 			$( logical_volume_name_sha ).click( function() {
-				$( access_pattern_sha_to_backlight ).css( 'background-color', 'red' );
+				$( access_pattern_sha_to_backlight ).css( logical_volume_css );
 			} )
 		})(jQuery);
 		</script>
