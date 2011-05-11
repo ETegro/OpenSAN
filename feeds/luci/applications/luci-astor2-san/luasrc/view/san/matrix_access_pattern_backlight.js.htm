@@ -38,7 +38,7 @@ jQuery.noConflict();
 	$( logical_volume )
 		.click( function() {
 			$( access_patterns ).removeAttr( 'style' );
-			$( access_pattern_to_backlight ).css( logical_volume_css );
+			$( access_pattern_to_backlight ).animate( logical_volume_css, 500 );
 		}
 	);
 
