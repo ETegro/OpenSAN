@@ -49,7 +49,9 @@
 			<% end %>
 		<% end %>
 		<td>
-			<%= line.logical_volume.name %>
+			<a href="#" id="logical_volume_name-<%= line.logical_volume.name %>" title="<%= line.logical_volume.name %>">
+				<%= line.logical_volume.name %>
+			</a>
 		</td>
 		<td>
 			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
