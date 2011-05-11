@@ -518,11 +518,11 @@ local function scst_access_pattern_new( inputs )
 	local access_pattern_name = inputs[ "access_pattern_new-name" ]
 	if access_pattern_name == "" then
 		return index_with_error( i18n("Access pattern's name is not set") )
-	else
-		for _, access_pattern in ipairs( scst.AccessPattern.list() ) do
-			if access_pattern.name == access_pattern_name then
-				return index_with_error( i18n("Access pattern's name already exists") )
-			end
+	end
+
+	for _, access_pattern in ipairs( scst.AccessPattern.list() ) do
+		if access_pattern.name == access_pattern_name then
+			return index_with_error( i18n("Access pattern's name already exists") )
 		end
 	end
 
