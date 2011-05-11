@@ -70,9 +70,11 @@
 			<% end %>
 			var logical_volume_name_sha = '.logical_volume_name-<%= sha1( line.logical_volume.device ) %>';
 			var access_pattern_sha_to_backlight = '.access_pattern-backlight-<%= sha1( line.logical_volume.device ) %>';
+			var access_pattern_sha_to_unbacklight = 'td[ class *= "access_pattern-backlight" ]';
 			$( logical_volume_name_sha ).click( function() {
+				$( access_pattern_sha_to_unbacklight ).css( 'background-color', 'red' );
 				$( access_pattern_sha_to_backlight ).css( logical_volume_css );
-			} )
+			} );
 		})(jQuery);
 		</script>
 		<td>
