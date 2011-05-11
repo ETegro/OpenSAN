@@ -35,6 +35,19 @@
 				<% end %>
 			<% end %>
 		<% end %>
+		<% if #line.logical_volume.snapshots ~= 0 then %>
+			<% for _, snapshot in ipairs ( line.logical_volume.snapshots ) do %>
+				<% for _, line_ap in ipairs( matrix_overall.lines ) do %>
+					<% if line_ap.access_pattern then %>
+						<% if line_ap.access_pattern:is_binded() then %>
+							<% if line_ap.access_pattern.filename == snapshot.device then %>
+								<% logical_volume_is_binded = true %>
+							<% end %>
+						<% end %>
+					<% end %>
+				<% end %>
+			<% end %>
+		<% end %>
 		<td>
 			<%= line.logical_volume.name %>
 		</td>
