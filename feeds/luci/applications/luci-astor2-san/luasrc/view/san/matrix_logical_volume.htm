@@ -49,8 +49,14 @@
 			<% end %>
 		<% end %>
 		<td>
-			<%= line.logical_volume.name %>
+			<a href="#"
+			   id="logical_volume_name-<%= line.logical_volume.name %>"
+			   class="logical_volume_name-<%= sha1( line.logical_volume.device ) %>"
+			   title="<%= line.logical_volume.name %>">
+				<%= line.logical_volume.name %>
+			</a>
 		</td>
+		<%+san/matrix_access_pattern_backlight.js%>
 		<td>
 			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
 				<%= line.logical_volume.size %> <%: TiB %>
