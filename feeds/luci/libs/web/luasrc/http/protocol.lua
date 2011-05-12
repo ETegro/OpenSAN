@@ -20,7 +20,7 @@ module("luci.http.protocol", package.seeall)
 
 local ltn12 = require("luci.ltn12")
 
-HTTP_MAX_CONTENT      = 1024*8		-- 8 kB maximum content size
+HTTP_MAX_CONTENT      = 1024*512		-- 8 kB maximum content size
 
 --- Decode an urlencoded string - optionally without decoding
 -- the "+" sign to " " - and return the decoded string.
