@@ -157,9 +157,8 @@ local function einarc_logical_delete( inputs, data )
 	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
 
 	-- Retreive corresponding logical drive object
-	-- TODO: use data
 	local logical = nil
-	for _, logical_obj in pairs( einarc.Logical.list() ) do
+	for _, logical_obj in pairs( data.logicals ) do
 		if logical_obj.id == logical_id then
 			logical = logical_obj
 		end
