@@ -52,7 +52,6 @@ function create_raid_form_toggle() {
 
 		// RAID validator
 		var num = $( 'form input:checkbox[ name = "san.physical_id" ]:checked:' ).length;
-	//	var num = drives_array.length;
 		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
 		var restrictions = { min : { 'passthrough' : 1,
 					     'linear' : 1,
