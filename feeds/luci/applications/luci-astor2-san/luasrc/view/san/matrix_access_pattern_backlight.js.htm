@@ -37,6 +37,7 @@ jQuery.noConflict();
 		.click( function() {
 			$( access_patterns ).removeAttr( 'style' );
 			$( access_pattern_to_backlight ).animate( logical_volume_css, 500 );
+			return false;
 		}
 	);
 })(jQuery);
