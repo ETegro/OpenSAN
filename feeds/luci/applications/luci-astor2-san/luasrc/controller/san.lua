@@ -96,7 +96,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-local function einarc_logical_add( inputs, drives )
+local function einarc_logical_add( inputs, drives, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
@@ -116,9 +116,8 @@ local function einarc_logical_add( inputs, drives )
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 	if is_valid then
 		-- Check that there are no different models of hard drives for adding
-		-- TODO: use data
 		local found_models = {}
-		for _, physical in pairs( einarc.Physical.list() ) do
+		for _, physical in pairs( data.physicals ) do
 			if common.is_in_array( physical.id, drives ) then
 				found_models[ physical.model ] = 1
 			end
@@ -693,7 +692,7 @@ function perform()
 	}
 
 	local SUBMIT_MAP = {
-		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
+		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ), data ) end,
 		logical_delete = function() einarc_logical_delete( inputs, data ) end,
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs, data ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs, data ) end,
