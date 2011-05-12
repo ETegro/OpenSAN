@@ -17,7 +17,7 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<input name="san.submit_logical_volume_remove-<%= sha1( line.logical_volume.volume_group.name ) %>-lv<%= sha1( line.logical_volume.name ) %>"
+<input name="san.submit_logical_volume_remove-<%= sha1cache( line.logical_volume.volume_group.name ) %>-lv<%= sha1cache( line.logical_volume.name ) %>"
        onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
 		 return false;
 		 return true;"

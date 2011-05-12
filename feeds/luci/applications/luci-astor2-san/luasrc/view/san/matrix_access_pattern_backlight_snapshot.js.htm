@@ -30,8 +30,8 @@ jQuery.noConflict();
 			'background-color' : 'red'
 		};
 	<% end %>
-	var snapshot = '.logical_volume_snapshot_name-<%= sha1( line.logical_volume.device ) %>';
-	var access_pattern_to_backlight = '.access_pattern-backlight-<%= sha1( line.logical_volume.device ) %>';
+	var snapshot = '.logical_volume_snapshot_name-<%= sha1cache( line.logical_volume.device ) %>';
+	var access_pattern_to_backlight = '.access_pattern-backlight-<%= sha1cache( line.logical_volume.device ) %>';
 	var access_patterns = 'td[ class *= "access_pattern-backlight" ]';
 	$( snapshot )
 		.click( function() {

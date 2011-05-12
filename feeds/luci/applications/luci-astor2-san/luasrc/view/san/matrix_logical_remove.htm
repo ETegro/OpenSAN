@@ -18,7 +18,7 @@
 %>
 
 <td>
-<input name="san.submit_logical_delete-<%= sha1( tostring( line.logical.id ) ) %>"
+<input name="san.submit_logical_delete-<%= sha1cache( tostring( line.logical.id ) ) %>"
        onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
 		 return false;
 		 return true;"
