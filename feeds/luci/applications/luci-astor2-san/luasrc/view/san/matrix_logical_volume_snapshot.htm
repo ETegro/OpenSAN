@@ -36,8 +36,18 @@
 			<% end %>
 		<% end %>
 		<td>
-			<%= line.logical_volume.name %>
+			<% if logical_volume_is_binded then %>
+				<a href="#"
+				   id="logical_volume_snapshot_name-<%= line.logical_volume.name %>"
+				   class="logical_volume_snapshot_name-<%= sha1( line.logical_volume.device ) %>"
+				   title="<%= line.logical_volume.name %>">
+					<%= line.logical_volume.name %>
+				</a>
+			<% else %>
+				<%= line.logical_volume.name %>
+			<% end %>
 		</td>
+		<%+san/matrix_access_pattern_backlight_snapshot.js%>
 		<td>
 			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
 				<%= line.logical_volume.size %> <%: TiB %>

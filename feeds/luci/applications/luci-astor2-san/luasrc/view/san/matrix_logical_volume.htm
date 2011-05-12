@@ -49,12 +49,16 @@
 			<% end %>
 		<% end %>
 		<td>
-			<a href="#"
-			   id="logical_volume_name-<%= line.logical_volume.name %>"
-			   class="logical_volume_name-<%= sha1( line.logical_volume.device ) %>"
-			   title="<%= line.logical_volume.name %>">
+			<% if logical_volume_is_binded then %>
+				<a href="#"
+				   id="logical_volume_name-<%= line.logical_volume.name %>"
+				   class="logical_volume_name-<%= sha1( line.logical_volume.device ) %>"
+				   title="<%= line.logical_volume.name %>">
+					<%= line.logical_volume.name %>
+				</a>
+			<% else %>
 				<%= line.logical_volume.name %>
-			</a>
+			<% end %>
 		</td>
 		<%+san/matrix_access_pattern_backlight.js%>
 		<td>
