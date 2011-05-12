@@ -166,9 +166,8 @@ local function einarc_logical_delete( inputs, data )
 	assert( logical, "unable to find corresponding logical" )
 
 	-- Find out corresponding PhysicalVolume
-	-- TODO: use data
 	local physical_volume = nil
-	for _, physical_volume_obj in ipairs( lvm.PhysicalVolume.list() ) do
+	for _, physical_volume_obj in ipairs( data.physical_volumes ) do
 		if physical_volume_obj.device == logical.device then
 			physical_volume = physical_volume_obj
 		end
