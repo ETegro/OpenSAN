@@ -96,7 +96,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
-local function einarc_logical_add( inputs, drives )
+local function einarc_logical_add( inputs, drives, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
@@ -116,9 +116,8 @@ local function einarc_logical_add( inputs, drives )
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
 	if is_valid then
 		-- Check that there are no different models of hard drives for adding
-		-- TODO: use data
 		local found_models = {}
-		for _, physical in pairs( einarc.Physical.list() ) do
+		for _, physical in pairs( data.physicals ) do
 			if common.is_in_array( physical.id, drives ) then
 				found_models[ physical.model ] = 1
 			end
@@ -158,9 +157,8 @@ local function einarc_logical_delete( inputs, data )
 	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
 
 	-- Retreive corresponding logical drive object
-	-- TODO: use data
 	local logical = nil
-	for _, logical_obj in pairs( einarc.Logical.list() ) do
+	for _, logical_obj in pairs( data.logicals ) do
 		if logical_obj.id == logical_id then
 			logical = logical_obj
 		end
@@ -168,9 +166,8 @@ local function einarc_logical_delete( inputs, data )
 	assert( logical, "unable to find corresponding logical" )
 
 	-- Find out corresponding PhysicalVolume
-	-- TODO: use data
 	local physical_volume = nil
-	for _, physical_volume_obj in ipairs( lvm.PhysicalVolume.list() ) do
+	for _, physical_volume_obj in ipairs( data.physical_volumes ) do
 		if physical_volume_obj.device == logical.device then
 			physical_volume = physical_volume_obj
 		end
@@ -178,14 +175,20 @@ local function einarc_logical_delete( inputs, data )
 
 	if physical_volume then
 		-- Let's clean out VolumeGroup on it at first
-		-- TODO: use data
 		-- TODO: determine if it has VolumeGroup itself
-		local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
+		local volume_group = nil
+		for _, volume_group_in_data in ipairs( data.volume_groups ) do
+			for _, physical_volume_in_data in ipairs( volume_group_in_data.physical_volumes ) do
+				if physical_volume_in_data.device == physical_volume.device then
+					volume_group = volume_group_in_data
+				end
+			end
+		end
 		assert( volume_group, "unable to find corresponding volume group" )
-		volume_group:remove()
+		lvm.VolumeGroup.remove( { name = volume_group.name } )
 
 		-- And clean out PhysicalVolume
-		physical_volume:remove()
+		lvm.PhysicalVolume.remove( { device = physical_volume.device } )
 	end
 
 	lvm.VolumeGroup.rescan()
@@ -693,7 +696,7 @@ function perform()
 	}
 
 	local SUBMIT_MAP = {
-		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ) ) end,
+		logical_add = function() einarc_logical_add( inputs, get( "san.physical_id" ), data ) end,
 		logical_delete = function() einarc_logical_delete( inputs, data ) end,
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs, data ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs, data ) end,
