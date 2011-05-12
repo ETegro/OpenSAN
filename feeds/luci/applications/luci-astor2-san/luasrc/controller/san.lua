@@ -175,14 +175,20 @@ local function einarc_logical_delete( inputs, data )
 
 	if physical_volume then
 		-- Let's clean out VolumeGroup on it at first
-		-- TODO: use data
 		-- TODO: determine if it has VolumeGroup itself
-		local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
+		local volume_group = nil
+		for _, volume_group_in_data in ipairs( data.volume_groups ) do
+			for _, physical_volume_in_data in ipairs( volume_group_in_data.physical_volumes ) do
+				if physical_volume_in_data.device == physical_volume.device then
+					volume_group = volume_group_in_data
+				end
+			end
+		end
 		assert( volume_group, "unable to find corresponding volume group" )
-		volume_group:remove()
+		lvm.VolumeGroup.remove( { name = volume_group.name } )
 
 		-- And clean out PhysicalVolume
-		physical_volume:remove()
+		lvm.PhysicalVolume.remove( { device = physical_volume.device } )
 	end
 
 	lvm.VolumeGroup.rescan()
