@@ -402,7 +402,8 @@ local function logical_volume_group( logical, volume_groups )
 end
 
 local function snapshots_to_outer( logical_volumes )
-	for _, logical_volume in pairs( logical_volumes ) do
+	for _, logical_volume_name in ipairs( common.keys( logical_volumes ) ) do
+		local logical_volume = logical_volumes[ logical_volume_name ]
 		if logical_volume.snapshots then
 			for _, snapshot in ipairs( logical_volume.snapshots ) do
 				logical_volumes[ snapshot.name ] = snapshot
