@@ -18,7 +18,7 @@
 %>
 
 <li>
-	<input name="san.submit_logical_hotspare_delete-<%= sha1( tostring( line.physical.logical_id ) ) %>-<%= sha1( line.physical.id ) %>"
+	<input name="san.submit_logical_hotspare_delete-<%= sha1cache( tostring( line.physical.logical_id ) ) %>-<%= sha1cache( line.physical.id ) %>"
 	       class="inline"
 	       type="submit"
 	       title="<%: Remove hotspare %>"

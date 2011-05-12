@@ -21,18 +21,18 @@
 	<%: Take new snapshot %>
 </div>
 <div class="inline">
-	<input name="san.submit_logical_volume_snapshot_add-lvd<%= sha1( line.logical_volume.volume_group.name ) %>-<%= sha1( line.logical_volume.name ) %>"
+	<input name="san.submit_logical_volume_snapshot_add-lvd<%= sha1cache( line.logical_volume.volume_group.name ) %>-<%= sha1cache( line.logical_volume.name ) %>"
 	       type="submit"
 	       title="<%: Add snapshot %>"
 	       value="<%: Add snapshot %>" />
 </div>
-<div id="new_snapshot_slider-<%= sha1( line.logical_volume.name ) %>"></div>
+<div id="new_snapshot_slider-<%= sha1cache( line.logical_volume.name ) %>"></div>
 <div>
-	<input id="san.new_snapshot_slider_size-<%= sha1( line.logical_volume.name ) %>"
-	       class="new_snapshot_slider_size-<%= sha1( line.logical_volume.name ) %>
+	<input id="san.new_snapshot_slider_size-<%= sha1cache( line.logical_volume.name ) %>"
+	       class="new_snapshot_slider_size-<%= sha1cache( line.logical_volume.name ) %>
 	              <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
 	              noborder"
-	       name="san.new_snapshot_slider_size-<%= sha1( line.logical_volume.name ) %>"
+	       name="san.new_snapshot_slider_size-<%= sha1cache( line.logical_volume.name ) %>"
 	       readonly="readonly"
 	       type="text"
 	       value="0" />

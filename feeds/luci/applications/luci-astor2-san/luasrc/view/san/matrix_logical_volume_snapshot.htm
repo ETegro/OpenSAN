@@ -39,7 +39,7 @@
 			<% if logical_volume_is_binded then %>
 				<a href="#"
 				   id="logical_volume_snapshot_name-<%= line.logical_volume.name %>"
-				   class="logical_volume_snapshot_name-<%= sha1( line.logical_volume.device ) %>"
+				   class="logical_volume_snapshot_name-<%= sha1cache( line.logical_volume.device ) %>"
 				   title="<%= line.logical_volume.name %>">
 					<%= line.logical_volume.name %>
 				</a>
