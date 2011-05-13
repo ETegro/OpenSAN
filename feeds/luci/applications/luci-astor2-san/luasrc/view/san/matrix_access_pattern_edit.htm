@@ -47,9 +47,11 @@
 		       type="checkbox"
 		       value="1" />
 	</div>
-	<% if line.access_pattern.readonly then %>
-		<div>
-			<%: Readonly %>: <%= line.access_pattern.readonly %>
-		</div>
-	<% end %>
+	<div>
+		<%: Readonly %>
+		<input name="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.name ) %>"
+		       id="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.name ) %>"
+		       type="checkbox"
+		       value="1" />
+	</div>
 <div>
