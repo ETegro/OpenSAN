@@ -24,7 +24,11 @@
 		       type="text" />
 	</div>
 	<div>
-		<%: TargetDriver %>: <%= line.access_pattern.targetdriver %>
+		<%: Target driver %>:
+		<input name="san.access_pattern_edit-targetdriver-<%= sha1cache( line.access_pattern.name ) %>"
+		       type="text"
+		       readonly="readonly"
+		       value="iscsi" />
 	</div>
 	<div>
 		<%: LUN %>: <%= line.access_pattern.lun %>
