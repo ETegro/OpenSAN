@@ -50,6 +50,9 @@
 		<input name="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       id="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       type="checkbox"
+			<% if line.access_pattern.enabled then %>
+				checked="checked"
+			<% end %>
 		       value="1" />
 	</div>
 	<div>
