@@ -657,6 +657,68 @@ local function scst_access_pattern_unbind( inputs )
 	return index_with_error( message_error )
 end
 
+local function scst_access_pattern_edit( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local access_pattern_section_name_hash = nil
+	for k, v in pairs( inputs ) do
+		if not access_pattern_section_name_hash then
+			-- san.submit_access_pattern_edit-fb27572667ded35003468f14bf5ec3be45dbd568
+			access_pattern_section_name_hash = string.match( k,
+				"^submit_access_pattern_edit.(" .. hashre .. ")" )
+		end
+	end
+	assert( access_pattern_section_name_hash, "unable to parse out section's name" )
+	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
+
+	local access_pattern_name = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
+	message_error = table.concat( common.keys( access_pattern_name ), " " )
+
+--[[
+	--san.access_pattern_edit-name-fb27572667ded35003468f14bf5ec3be45dbd568
+	local access_pattern_name = inputs[ "access_pattern_edit-name-" .. sha ]
+	if access_pattern_name == "" then
+		return index_with_error( i18n("Access pattern's name is not set") )
+	end
+
+	for _, access_pattern in ipairs( scst.AccessPattern.list() ) do
+		if access_pattern.name == access_pattern_name then
+			return index_with_error( i18n("Access pattern's name already exists") )
+		end
+	end
+
+	local access_pattern_targetdriver = inputs[ "access_pattern_edit-targetdriver-" .. sha ]
+	assert( access_pattern_targetdriver,
+	        "unable to parse out targetdrive" )
+
+	local access_pattern_lun = inputs[ "access_pattern_edit-lun-" .. sha ]
+	access_pattern_lun = tonumber( access_pattern_lun )
+	assert( common.is_number( access_pattern_lun ),
+	        "unable to parse out numeric LUN" )
+
+	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. sha ]
+	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. sha ]
+
+	local access_pattern_attributes = { name = access_pattern_name,
+		                            targetdriver = access_pattern_targetdriver,
+		                            lun = access_pattern_lun,
+		                            enabled = access_pattern_enabled,
+		                            readonly = access_pattern_readonly }
+
+	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
+	if not return_code then
+		return index_with_error( i18n("Failed to create access pattern") .. ": " .. result )
+	end
+
+	return_code, result = pcall( scst.AccessPattern.save, result )
+	if not return_code then
+		message_error = i18n("Failed to save config") .. ": " .. result
+	end
+--]]
+	return index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
@@ -708,7 +770,8 @@ function perform()
 		access_pattern_new = function() scst_access_pattern_new( inputs ) end,
 		access_pattern_delete = function() scst_access_pattern_delete( inputs ) end,
 		access_pattern_bind = function() scst_access_pattern_bind( inputs ) end,
-		access_pattern_unbind = function() scst_access_pattern_unbind( inputs ) end
+		access_pattern_unbind = function() scst_access_pattern_unbind( inputs ) end,
+		access_pattern_edit = function() scst_access_pattern_edit( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
