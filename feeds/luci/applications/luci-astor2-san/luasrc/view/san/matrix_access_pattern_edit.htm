@@ -40,11 +40,13 @@
 			<% end %>
 		</select>
 	</div>
-	<% if line.access_pattern.enabled then %>
-		<div>
-			<%: Enabled %>: <%= line.access_pattern.enabled %>
-		</div>
-	<% end %>
+	<div>
+		<%: Enabled %>
+		<input name="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.name ) %>"
+		       id="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.name ) %>"
+		       type="checkbox"
+		       value="1" />
+	</div>
 	<% if line.access_pattern.readonly then %>
 		<div>
 			<%: Readonly %>: <%= line.access_pattern.readonly %>
