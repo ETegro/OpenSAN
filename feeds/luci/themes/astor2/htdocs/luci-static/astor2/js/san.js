@@ -89,12 +89,12 @@ function drives_information_toggle(){
 };
 
 function access_patterns_edit_toggle() {
-	$( 'form a[ id *= "access_pattern_edit-" ]' ).click( function() {
+	$( 'form a[ id ^= "access_pattern_edit-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-		if ( $( parent_selector ).is( ':hidden' ) ) {
-			$( parent_selector ).fadeIn( 'fast' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
 		} else {
-			$( parent_selector ).fadeOut( 'fast' );
+			parent_selector.fadeOut( 'fast' );
 		}
 		return false;
 	} );
@@ -115,6 +115,7 @@ hide_all_button();
 show_all_button();
 create_raid_form_toggle();
 drives_information_toggle();
+access_patterns_edit_toggle();
 setup_plunger();
 
 });
