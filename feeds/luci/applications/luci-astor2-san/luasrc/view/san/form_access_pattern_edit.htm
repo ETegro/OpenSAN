@@ -17,23 +17,23 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<div id="div_access_pattern_edit-<%= sha1cache( line.access_pattern.name ) %>">
+<div id="div_access_pattern_edit-<%= sha1cache( line.access_pattern.section_name ) %>">
 	<div>
 		<%: Name %>:
-		<input name="san.access_pattern_edit-name-<%= sha1cache( line.access_pattern.name ) %>"
+		<input name="san.access_pattern_edit-name-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       type="text" />
 	</div>
 	<div>
 		<%: Target driver %>:
-		<input name="san.access_pattern_edit-targetdriver-<%= sha1cache( line.access_pattern.name ) %>"
+		<input name="san.access_pattern_edit-targetdriver-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       type="text"
 		       readonly="readonly"
 		       value="iscsi" />
 	</div>
 	<div>
 		<%: LUN %>:
-		<select id="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.name ) %>"
-			name="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.name ) %>"
+		<select id="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.section_name ) %>"
+			name="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.section_name ) %>"
 			size="1" >
 			<% for i = 0, (16-1) do %>
 				<option value="<%= i %>"><%= i %></option>
@@ -42,15 +42,15 @@
 	</div>
 	<div>
 		<%: Enabled %>
-		<input name="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.name ) %>"
-		       id="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.name ) %>"
+		<input name="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
+		       id="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       type="checkbox"
 		       value="1" />
 	</div>
 	<div>
 		<%: Readonly %>
-		<input name="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.name ) %>"
-		       id="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.name ) %>"
+		<input name="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
+		       id="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       type="checkbox"
 		       value="1" />
 	</div>
