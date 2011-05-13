@@ -31,7 +31,14 @@
 		       value="iscsi" />
 	</div>
 	<div>
-		<%: LUN %>: <%= line.access_pattern.lun %>
+		<%: LUN %>:
+		<select id="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.name ) %>"
+			name="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.name ) %>"
+			size="1" >
+			<% for i = 0, (16-1) do %>
+				<option value="<%= i %>"><%= i %></option>
+			<% end %>
+		</select>
 	</div>
 	<% if line.access_pattern.enabled then %>
 		<div>
