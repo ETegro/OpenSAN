@@ -47,8 +47,8 @@
 	</div>
 	<div>
 		<%: Enabled %>
-		<input name="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
-		       id="san.access_pattern_new-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<input name="san.access_pattern_edit-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
+		       id="san.access_pattern_edit-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       type="checkbox"
 			<% if line.access_pattern.enabled then %>
 				checked="checked"
@@ -57,8 +57,8 @@
 	</div>
 	<div>
 		<%: Readonly %>
-		<input name="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
-		       id="san.access_pattern_new-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<input name="san.access_pattern_edit-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
+		       id="san.access_pattern_edit-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
 		       type="checkbox"
 			<% if line.access_pattern.readonly then %>
 				checked="checked"
