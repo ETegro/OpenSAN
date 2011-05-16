@@ -51,3 +51,10 @@ stop()
 {
 	kill `pidof $DAEMON_NAME`
 }
+
+restart()
+{
+	stop
+	sleep 1
+	start
+}
