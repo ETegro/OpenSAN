@@ -87,6 +87,10 @@ function M.AccessPattern.find_by_section_name( section_name )
 	return M.AccessPattern.find_by( "section_name", section_name )
 end
 
+function M.AccessPattern.find_by_name( name )
+	return M.AccessPattern.find_by( "name", name )
+end
+
 function M.AccessPattern:save()
 	assert( self, "unable to get self object" )
 	local ucicur = uci.cursor()
