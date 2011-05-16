@@ -628,7 +628,12 @@ local function scst_access_pattern_bind( inputs )
 	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ),
 	                                   logical_volume_device )
 	if not return_code then
-		message_error = i18n("Failed to bind access pattern") .. ": " .. result
+		return index_with_error( i18n("Failed to bind access pattern") .. ": " .. result )
+	end
+
+	return_code, result = pcall( scst.Daemon.apply )
+	if not return_code then
+		message_error = i18n("Failed to apply iSCSI configuration") .. ": " .. result
 	end
 
 	return index_with_error( message_error )
