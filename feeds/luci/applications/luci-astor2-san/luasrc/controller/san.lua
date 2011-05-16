@@ -672,8 +672,24 @@ local function scst_access_pattern_edit( inputs )
 	assert( access_pattern_section_name_hash, "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 
-	local access_pattern_name = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
-	message_error = table.concat( common.keys( access_pattern_name ), " " )
+	local access_pattern = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
+
+	-- san.access_pattern_edit-name-fb27572667ded35003468f14bf5ec3be45dbd568
+	local access_pattern_name = inputs[ "access_pattern_edit-name-" .. access_pattern_section_name_hash ]
+
+	-- san.access_pattern_edit-targetdriver-fb27572667ded35003468f14bf5ec3be45dbd568 
+	local access_pattern_targetdriver = inputs[ "access_pattern_edit-targetdriver-" .. access_pattern_section_name_hash ]
+
+	-- san.access_pattern_edit-lun-fb27572667ded35003468f14bf5ec3be45dbd568
+	local access_pattern_lun = inputs[ "access_pattern_edit-lun-" .. access_pattern_section_name_hash ]
+
+	-- san.access_pattern_edit-enabled-fb27572667ded35003468f14bf5ec3be45dbd568
+	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. access_pattern_section_name_hash ]
+
+	-- san.access_pattern_edit-readonly-fb27572667ded35003468f14bf5ec3be45dbd568
+	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. access_pattern_section_name_hash ]
+
+	message_error = access_pattern_readonly
 
 --[[
 	--san.access_pattern_edit-name-fb27572667ded35003468f14bf5ec3be45dbd568
