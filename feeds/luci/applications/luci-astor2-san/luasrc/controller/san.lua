@@ -660,7 +660,6 @@ end
 local function scst_access_pattern_edit( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-
 	local access_pattern_section_name_hash = nil
 	for k, v in pairs( inputs ) do
 		if not access_pattern_section_name_hash then
@@ -670,59 +669,44 @@ local function scst_access_pattern_edit( inputs )
 		end
 	end
 	assert( access_pattern_section_name_hash, "unable to parse out section's name" )
-
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
-
 	local access_pattern = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
 	local access_pattern_name = inputs[ "access_pattern_edit-name-" .. access_pattern_section_name_hash ]
-	local access_pattern_targetdriver = inputs[ "access_pattern_edit-targetdriver-" .. access_pattern_section_name_hash ]
-	local access_pattern_lun = inputs[ "access_pattern_edit-lun-" .. access_pattern_section_name_hash ]
-	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. access_pattern_section_name_hash ]
-	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. access_pattern_section_name_hash ]
-
-	message_error = access_pattern_readonly
-
---[[
-	--san.access_pattern_edit-name-fb27572667ded35003468f14bf5ec3be45dbd568
-	local access_pattern_name = inputs[ "access_pattern_edit-name-" .. sha ]
 	if access_pattern_name == "" then
 		return index_with_error( i18n("Access pattern's name is not set") )
 	end
-
-	for _, access_pattern in ipairs( scst.AccessPattern.list() ) do
-		if access_pattern.name == access_pattern_name then
-			return index_with_error( i18n("Access pattern's name already exists") )
+	if access_pattern_name ~= access_pattern.name then
+		for _, access_pattern in ipairs( scst.AccessPattern.list() ) do
+			if access_pattern.name == access_pattern_name then
+				return index_with_error( i18n("Access pattern's name already exists") )
+			end
 		end
 	end
-
-	local access_pattern_targetdriver = inputs[ "access_pattern_edit-targetdriver-" .. sha ]
-	assert( access_pattern_targetdriver,
-	        "unable to parse out targetdrive" )
-
-	local access_pattern_lun = inputs[ "access_pattern_edit-lun-" .. sha ]
+	local access_pattern_targetdriver = inputs[ "access_pattern_edit-targetdriver-" .. access_pattern_section_name_hash ]
+	local access_pattern_lun = inputs[ "access_pattern_edit-lun-" .. access_pattern_section_name_hash ]
 	access_pattern_lun = tonumber( access_pattern_lun )
-	assert( common.is_number( access_pattern_lun ),
-	        "unable to parse out numeric LUN" )
+	assert( common.is_number( access_pattern_lun ), "unable to parse out numeric LUN" )
+	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. access_pattern_section_name_hash ]
+	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. access_pattern_section_name_hash ]
 
-	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. sha ]
-	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. sha ]
+--[[
+	access_pattern.name = access_pattern_name
+	access_pattern.targetdriver = access_pattern_targetdriver
+	access_pattern.lun = access_pattern_lun
+	access_pattern.enabled = access_pattern_enabled
+	access_pattern.readonly = access_pattern_readonly
+--]]
+	access_pattern_attributes = { section_name = access_pattern.section_name,
+	                            name = access_pattern_name,
+	                            targetdriver = access_pattern_targetdriver,
+	                            lun = access_pattern_lun,
+	                            enabled = access_pattern_enabled,
+	                            readonly = access_pattern_readonly }
 
-	local access_pattern_attributes = { name = access_pattern_name,
-		                            targetdriver = access_pattern_targetdriver,
-		                            lun = access_pattern_lun,
-		                            enabled = access_pattern_enabled,
-		                            readonly = access_pattern_readonly }
-
-	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
-	if not return_code then
-		return index_with_error( i18n("Failed to create access pattern") .. ": " .. result )
-	end
-
-	return_code, result = pcall( scst.AccessPattern.save, result )
+	local return_code, result = pcall( scst.AccessPattern.save, access_pattern_attributes )
 	if not return_code then
 		message_error = i18n("Failed to save config") .. ": " .. result
 	end
---]]
 	return index_with_error( message_error )
 end
 
