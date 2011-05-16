@@ -624,8 +624,9 @@ local function scst_access_pattern_bind( inputs )
 		return index_with_error( i18n("This is LUN is busy, please choose another one") )
 	end
 
+	local access_pattern = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
 	local return_code, result = pcall( scst.AccessPattern.bind,
-	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ),
+					   access_pattern,
 	                                   logical_volume_device )
 	if not return_code then
 		return index_with_error( i18n("Failed to bind access pattern") .. ": " .. result )
@@ -634,7 +635,7 @@ local function scst_access_pattern_bind( inputs )
 	return_code, result = pcall( scst.Daemon.apply )
 	if not return_code then
 		message_error = i18n("Failed to apply iSCSI configuration") .. ": " .. result
-		scst.AccessPattern.unbind( scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
+		scst.AccessPattern.unbind( scst.AccessPattern.find_by_name( access_pattern.name ) )
 		scst.Daemon.apply()
 	end
 
