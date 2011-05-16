@@ -634,6 +634,8 @@ local function scst_access_pattern_bind( inputs )
 	return_code, result = pcall( scst.Daemon.apply )
 	if not return_code then
 		message_error = i18n("Failed to apply iSCSI configuration") .. ": " .. result
+		scst.AccessPattern.unbind( scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
+		scst.Daemon.apply()
 	end
 
 	return index_with_error( message_error )
