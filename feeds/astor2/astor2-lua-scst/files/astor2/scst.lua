@@ -156,15 +156,8 @@ function M.AccessPattern:is_binded()
 	end
 end
 
-------------------------------------------------------------------------
--- Configuration
-------------------------------------------------------------------------
-M.Configuration = {}
-local Configuration_mt = common.Class( M.Configuration )
-
-M.Configuration.SCSTADMIN_CONFIG_PATH = "/var/etc/scstadmin.conf"
-
-local function iqn_from_filename( filename )
+function M.AccessPattern:iqn()
+	assert( self, "unable to get self object" )
 	-- Retreive our hostname
 	local ucicur = uci.cursor()
 	local hostname = nil
@@ -174,7 +167,7 @@ local function iqn_from_filename( filename )
 	assert( hostname, "unable to retreive hostname" )
 
 	-- Retreive LogicalVolume's name
-	local logical_volume_name = string.match( filename, "^/dev/vg%d+/(.+)$" )
+	local logical_volume_name = string.match( self.filename, "^/dev/vg%d+/(.+)$" )
 	assert( logical_volume_name, "unable to retreive logical volume name" )
 
 	-- This may be useful later
@@ -195,6 +188,14 @@ local function iqn_from_filename( filename )
 	       hostname .. ":" ..
 	       logical_volume_name
 end
+
+------------------------------------------------------------------------
+-- Configuration
+------------------------------------------------------------------------
+M.Configuration = {}
+local Configuration_mt = common.Class( M.Configuration )
+
+M.Configuration.SCSTADMIN_CONFIG_PATH = "/var/etc/scstadmin.conf"
 
 function M.Configuration.dump()
 	-- Collect only enabled and binded patterns
@@ -230,7 +231,7 @@ function M.Configuration.dump()
 			for _, access_patterns_index in ipairs( access_patterns_indexes ) do
 				access_pattern = access_patterns_enabled[ access_patterns_index ]
 				configuration = configuration .. "\tTARGET " ..
-				                iqn_from_filename( access_pattern.filename ) .. " {\n"
+				                access_pattern:iqn() .. " {\n"
 				local read_only = nil
 				if access_pattern.readonly then
 					read_only = "1"
