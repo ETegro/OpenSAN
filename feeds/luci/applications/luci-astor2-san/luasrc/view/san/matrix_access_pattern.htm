@@ -70,6 +70,11 @@
 				<%: Device %>: <%= line.access_pattern.filename %>
 				</div>
 			<% end %>
+			<% if line.access_pattern.filename then %>
+				<div>
+				<%: IQN %>: <%= line.access_pattern:iqn() %>
+				</div>
+			<% end %>
 		</td>
 	</tr>
 	<tr class="to_hide">
