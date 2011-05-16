@@ -3,6 +3,7 @@ START=50
 
 VAR_PR=/var/lib/scst/pr
 SCSTD=/usr/sbin/iscsi-scstd
+DAEMON_NAME=iscsi-scstd
 
 # Don't touch this "memsize thingy" unless you are blessed
 # with knowledge about it.
@@ -48,5 +49,5 @@ start()
 
 stop()
 {
-	true
+	kill `pidof $DAEMON_NAME`
 }
