@@ -1,20 +1,22 @@
-.. OpenSAN documentation master file, created by
-   sphinx-quickstart on Mon May 16 22:29:54 2011.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. _index:
 
-Welcome to OpenSAN's documentation!
-===================================
+=======
+OpenSAN
+=======
 
-Contents:
+Here will be project's description.
 
-.. toctree::
-   :maxdepth: 2
+Maillists
+=========
+* OpenSAN's general discussion
+  (`information <https://groups.google.com/group/opensan-discuss>`__,
+  `subscribe <mailto:opensan-discuss+subscribe@googlegroups.com?subject=subscribe>`__,
+  `posting <mailto:opensan-discuss@googlegroups.com>`__)
+* OpenSAN's commits
+  (`information <https://groups.google.com/group/opensan-commits>`__,
+  `subscribe <mailto:opensan-commits+subscribe@googlegroups.com?subject=subscribe>`__)
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+.. .. toctree::
+      :maxdepth: 1
+   
+      maillists
