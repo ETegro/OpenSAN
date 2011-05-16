@@ -246,9 +246,9 @@ function M.Configuration.dump()
 						" {\n" ..
 						"\t\t\tread_only " .. read_only .. "\n" ..
 						"\t\t}\n"
-				configuration = configuration .. "\t}\n"
+				configuration = configuration .. "\t\tenabled 1\n\t}\n"
 			end
-			configuration = configuration .. "}\n"
+			configuration = configuration .. "\tenabled 1\n}\n"
 		end
 	end
 
