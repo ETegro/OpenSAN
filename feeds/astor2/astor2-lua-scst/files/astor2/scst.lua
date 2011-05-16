@@ -99,8 +99,8 @@ function M.AccessPattern:save()
 		readonly = self.readonly
 	} )
 
-	section_name = ucicur:add( M.UCI_CONFIG_NAME,
-					M.AccessPattern.UCI_TYPE_NAME )
+	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
+	                                 M.AccessPattern.UCI_TYPE_NAME )
 	ucicur:set( M.UCI_CONFIG_NAME,
 		    section_name,
 		    "name",
