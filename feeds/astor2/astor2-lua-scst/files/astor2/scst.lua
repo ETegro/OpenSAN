@@ -91,13 +91,13 @@ function M.AccessPattern:save()
 		               self.section_name )
 	end
 	local access_pattern_new = M.AccessPattern:new( {
-	                                   name = self.name,
-	                                   targetdriver = self.targetdriver,
-	                                   lun = self.lun,
-	                                   filename = self.filename,
-	                                   enabled = self.enabled,
-	                                   readonly = self.readonly
-	                                   } )
+		name = self.name,
+		targetdriver = self.targetdriver,
+		lun = self.lun,
+		filename = self.filename,
+		enabled = self.enabled,
+		readonly = self.readonly
+	} )
 
 	section_name = ucicur:add( M.UCI_CONFIG_NAME,
 					M.AccessPattern.UCI_TYPE_NAME )
