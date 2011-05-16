@@ -48,7 +48,10 @@
 			local_logical_colspan = local_logical_colspan + 1
 		end %>
 		<td colspan="<%= local_logical_colspan %>">
-			<%+san/matrix_logical_volume_add%>
+			<%+san/matrix_logical_fill_bar%>
+			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %></span>
+				<%+san/matrix_logical_volume_add%>
+			<% end %>
 		</td>
 	</tr>
 </table>
