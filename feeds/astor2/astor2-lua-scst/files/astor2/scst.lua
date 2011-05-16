@@ -90,39 +90,48 @@ function M.AccessPattern:save()
 		ucicur:delete( M.UCI_CONFIG_NAME,
 		               self.section_name )
 	end
-	self.section_name = ucicur:add( M.UCI_CONFIG_NAME,
+	local access_pattern_new = M.AccessPattern:new( {
+	                                   name = self.name,
+	                                   targetdriver = self.targetdriver,
+	                                   lun = self.lun,
+	                                   filename = self.filename,
+	                                   enabled = self.enabled,
+	                                   readonly = self.readonly
+	                                   } )
+
+	section_name = ucicur:add( M.UCI_CONFIG_NAME,
 					M.AccessPattern.UCI_TYPE_NAME )
 	ucicur:set( M.UCI_CONFIG_NAME,
-		    self.section_name,
+		    section_name,
 		    "name",
-		    self.name )
+		    access_pattern_new.name )
 	ucicur:set( M.UCI_CONFIG_NAME,
-		    self.section_name,
+		    section_name,
 		    "targetdriver",
-		    self.targetdriver )
+		    access_pattern_new.targetdriver )
 	ucicur:set( M.UCI_CONFIG_NAME,
-		    self.section_name,
+		    section_name,
 		    "lun",
-		    tostring( self.lun ) )
+		    tostring( access_pattern_new.lun ) )
 	ucicur:set( M.UCI_CONFIG_NAME,
-		    self.section_name,
+		    section_name,
 		    "filename",
-		    self.filename or "" )
-	if self.enabled == true then
+		    access_pattern_new.filename or "" )
+	if access_pattern_new.enabled == true then
 		ucicur:set( M.UCI_CONFIG_NAME,
-			    self.section_name,
+			    section_name,
 			    "enabled",
 			    "1" )
 	end
-	if self.readonly == true then
+	if access_pattern_new.readonly == true then
 		ucicur:set( M.UCI_CONFIG_NAME,
-			    self.section_name,
+			    section_name,
 			    "readonly",
 			    "1" )
 	end
 	ucicur:save( M.UCI_CONFIG_NAME )
 	ucicur:commit( M.UCI_CONFIG_NAME )
-	return self
+	return access_pattern_new
 end
 
 function M.AccessPattern:delete()

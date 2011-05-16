@@ -43,7 +43,7 @@ function create_raid_form_toggle() {
 		if ( $( this ).is( ':checked' ) ) {
 			$( '#div_raid_create' ).fadeIn( 'fast' );
 		} else {
-			if ( $( physicals_select ).is( ':checked' ) ) {
+			if ( physicals_select.is( ':checked' ) ) {
 				//
 			} else {
 				$( '#div_raid_create' ).fadeOut( 'fast' );
@@ -79,10 +79,22 @@ function create_raid_form_toggle() {
 function drives_information_toggle(){
 	$( 'form a[ id *= "ical_info-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-		if ( $( parent_selector ).is( ':hidden' ) ) {
-			$( parent_selector ).fadeIn( 'fast' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
 		} else {
-			$( parent_selector ).fadeOut( 'fast' );
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function access_patterns_edit_toggle() {
+	$( 'form a[ id ^= "access_pattern_edit-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
 		}
 		return false;
 	} );
@@ -103,6 +115,7 @@ hide_all_button();
 show_all_button();
 create_raid_form_toggle();
 drives_information_toggle();
+access_patterns_edit_toggle();
 setup_plunger();
 
 });
