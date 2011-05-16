@@ -309,8 +309,8 @@ function M.Daemon.apply()
 	M.Configuration.write( configuration,
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 	common.system_succeed( M.Daemon.SCSTADMIN_PATH ..
-	                       "-force " ..
-	                       "-noprompt " ..
+	                       " -force" ..
+	                       " -noprompt" ..
 	                       " -config " ..
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 end
