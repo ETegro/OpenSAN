@@ -682,7 +682,6 @@ TestMatrix = {}
 			)
 		)
 	end
-
 	function TestMatrix:test_matrix_triple()
 		local needed = {
 			-- 1
