@@ -18,7 +18,7 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<input name="san.submit_access_pattern_bind-<%= sha1cache( line.access_pattern.section_name ) %>"
+<input name="san.submit_access_pattern_bind-<%= hash( line.access_pattern.section_name ) %>"
        type="submit"
        title="<%: Bind access pattern %>"
        value="<%: Bind %>" />

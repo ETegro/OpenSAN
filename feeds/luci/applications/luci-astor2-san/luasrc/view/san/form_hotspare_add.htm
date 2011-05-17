@@ -20,8 +20,8 @@
 <li>
 	<div class="inline"><%: RAID %> #: </div>
 	<div class="inline">
-		<select id="san.logical_id_hotspare-<%= sha1cache( line.physical.id ) %>"
-			name="san.logical_id_hotspare-<%= sha1cache( line.physical.id ) %>"
+		<select id="san.logical_id_hotspare-<%= hash( line.physical.id ) %>"
+			name="san.logical_id_hotspare-<%= hash( line.physical.id ) %>"
 			size="1" >
 			<% for _, logical_id in ipairs( line.physical.hotspare_availability ) do %>
 				<option value="<%= logical_id %>"><%= logical_id %></option>
@@ -29,16 +29,16 @@
 		</select>
 		<% for logical_id, minimal_size in pairs( line.physical.hotspare_minimal_sizes ) do %>
 			<input type="hidden"
-			       name="san.logical_minimal_size-<%= sha1cache( line.physical.id ) %>-<%= sha1cache( tostring( logical_id ) )%>"
+			       name="san.logical_minimal_size-<%= hash( line.physical.id ) %>-<%= hash( tostring( logical_id ) )%>"
 			       value="<%= minimal_size %>" />
 		<% end %>
 		<input type="hidden"
-		       name="san.physical_size-<%= sha1cache( line.physical.id ) %>"
+		       name="san.physical_size-<%= hash( line.physical.id ) %>"
 		       value="<%= line.physical.size %>" />
 	</div>
 	<div class="inline">
-		<input id="san.submit_logical_hotspare_add-<%= sha1cache( line.physical.id ) %>"
-		       name="san.submit_logical_hotspare_add-<%= sha1cache( line.physical.id ) %>"
+		<input id="san.submit_logical_hotspare_add-<%= hash( line.physical.id ) %>"
+		       name="san.submit_logical_hotspare_add-<%= hash( line.physical.id ) %>"
 		       class="inline"
 		       type="submit"
 		       title="<%: Add hotspare %>"
