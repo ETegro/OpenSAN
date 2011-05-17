@@ -24,19 +24,13 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<% local access_pattern_exists = false %>
-		<% local logical_volume_is_binded = false %>
 		<% for _, line_ap in ipairs( matrix_overall.lines ) do %>
 			<% if line_ap.access_pattern then %>
 				<% access_pattern_exists = true %>
-				<% if line_ap.access_pattern:is_binded() then %>
-					<% if line_ap.access_pattern.filename == line.logical_volume.device then %>
-						<% logical_volume_is_binded = true %>
-					<% end %>
-				<% end %>
 			<% end %>
 		<% end %>
 		<td>
-			<% if logical_volume_is_binded then %>
+			<% if logical_volume.access_patterns then %>
 				<a href="#"
 				   id="logical_volume_snapshot_name-<%= line.logical_volume.name %>"
 				   class="logical_volume_snapshot_name-<%= hash( line.logical_volume.device ) %>"
@@ -54,7 +48,7 @@
 			</span>
 		</td>
 		<td>
-			<% if not logical_volume_is_binded then %>
+			<% if not logical_volume.access_patterns then %>
 				<%+san/matrix_logical_volume_snapshot_remove%>
 			<% end %>
 		</td>
