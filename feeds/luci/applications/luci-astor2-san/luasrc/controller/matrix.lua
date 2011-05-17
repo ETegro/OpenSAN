@@ -258,8 +258,8 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 				physical.highlight.color = color
 			end
 			if line.logical.logical_volumes then
-				for _, logical_volumes in pairs( line.logical.logical_volumes ) do
-					logical_volumes.highlight.color = color
+				for _, logical_volume in pairs( line.logical.logical_volumes ) do
+					logical_volume.highlight.color = color
 				end
 			end
 		end
