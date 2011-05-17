@@ -1379,7 +1379,7 @@ TestMatrix = {}
 			)
 		)
 	end
-	--[[
+
 	function TestMatrix:test_with_access_patterns_many()
 		-- Generate physicals
 		local physicals = {}
@@ -1406,13 +1406,13 @@ TestMatrix = {}
 			logical_volumes = {
 				["lvm1"] = lvm.LogicalVolume:new( {
 					name = "lvm1",
-					device = "foobar",
+					device = "foobar1",
 					volume_group = {},
 					size = 123
 				} ),
 				["lvm2"] = lvm.LogicalVolume:new( {
 					name = "lvm2",
-					device = "foobar",
+					device = "foobar2",
 					volume_group = {},
 					size = 123
 				} )
@@ -1429,17 +1429,32 @@ TestMatrix = {}
 		self.access_patterns[4].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
 		self.access_patterns[5].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
 
-		assert( common.compare_tables(
-				matrix.overall( {
-					physicals = physicals,
-					logicals = logicals,
-					access_patterns = self.access_patterns
-				} ),
-				needed
-			)
-		)
+		local got = matrix.overall( {
+			physicals = physicals,
+			logicals = logicals,
+			access_patterns = self.access_patterns
+		} )
+
+		assertEquals( got[1].logical.rowspan, 30 )
+		assertEquals( got[1].logical_volume.rowspan, 15 )
+		assertEquals( got[1].logical_volume.name, "lvm1" )
+		assertEquals( got[1].physical.rowspan, 5 )
+		for i = 1, 30, 5 do
+			assert( got[ i ].physical )
+			if i > 1 and i < 30 then
+				assert( not got[ i - 1 ].physical )
+				assert( not got[ i + 1 ].physical )
+			end
+		end
+		for i = 1, 30, 15 do
+			assert( got[ i ].logical_volume )
+		end
+		assertEquals( got[ 15 + 1 ].access_pattern.name, "foobar3" )
+		assertEquals( got[ 15 + 2 ].access_pattern.name, "foobar4" )
+		assertEquals( got[ 15 + 3 ].access_pattern.name, "foobar5" )
+		assertEquals( got[ 15 + 4 ].access_pattern.name, "foobaz1" )
+		assertEquals( got[ 15 + 5 ].access_pattern.name, "foobaz2" )
 	end
-	]]
 
 TestFilterHotspareCalculation = {}
 	function TestFilterHotspareCalculation:setUp()
