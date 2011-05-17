@@ -239,51 +239,6 @@ local LOGICALS_WITH_FREE = {
 	}
 }
 
-TestFilterPercentage = {}
-	function TestFilterPercentage:setUp()
-		self.physicals_triple = common.deepcopy( PHYSICALS_TRIPLE )
-		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
-	end
-	function TestFilterPercentage:test_volume_group_percentage_zero()
-		local logicals = self.logicals_triple
-		logicals[9].logical_volumes["bar"].volume_group.total = 0
-		logicals[9].logical_volumes["bar"].volume_group.allocated = 100
-
-		-- Dummy values
-		logicals[9].logical_volumes["foo"].volume_group.total = 0
-		logicals[9].logical_volumes["foo"].volume_group.allocated = 0
-		logicals[9].logical_volumes["baz"].volume_group.total = 0
-		logicals[9].logical_volumes["baz"].volume_group.allocated = 0
-
-		local got = matrix.filter_volume_group_percentage( {
-			lines = matrix.overall( {
-				physicals = self.physicals_triple,
-				logicals = self.logicals_triple
-			} )
-		} )[ "lines" ]
-		assertEquals( got[1].logical_volume.volume_group.percentage, 0 )
-	end
-	function TestFilterPercentage:test_volume_group_percentage()
-		local logicals = self.logicals_triple
-		logicals[9].logical_volumes["foo"].volume_group.total = 666
-		logicals[9].logical_volumes["foo"].volume_group.allocated = 123
-
-		logicals[9].logical_volumes["bar"].volume_group.total = 100
-		logicals[9].logical_volumes["bar"].volume_group.allocated = 12
-
-		logicals[9].logical_volumes["baz"].volume_group.total = 213456
-		logicals[9].logical_volumes["baz"].volume_group.allocated = 213056
-		local got = matrix.filter_volume_group_percentage( {
-			lines = matrix.overall( {
-				physicals = self.physicals_triple,
-				logicals = self.logicals_triple
-			} )
-		} )[ "lines" ]
-		assertEquals( got[1].logical_volume.volume_group.percentage, 12 )
-		assertEquals( got[3].logical_volume.volume_group.percentage, 100 )
-		assertEquals( got[5].logical_volume.volume_group.percentage, 19 )
-	end
-
 TestMatrix = {}
 	function TestMatrix:setUp()
 		self.access_patterns = common.deepcopy( ACCESS_PATTERNS )
@@ -1341,6 +1296,51 @@ TestMatrix = {}
 					got[11].physical.hotspare_availability,
 					{ 3 } ) )
 		end
+	end
+
+TestFilterPercentage = {}
+	function TestFilterPercentage:setUp()
+		self.physicals_triple = common.deepcopy( PHYSICALS_TRIPLE )
+		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
+	end
+	function TestFilterPercentage:test_volume_group_percentage_zero()
+		local logicals = self.logicals_triple
+		logicals[9].logical_volumes["bar"].volume_group.total = 0
+		logicals[9].logical_volumes["bar"].volume_group.allocated = 100
+
+		-- Dummy values
+		logicals[9].logical_volumes["foo"].volume_group.total = 0
+		logicals[9].logical_volumes["foo"].volume_group.allocated = 0
+		logicals[9].logical_volumes["baz"].volume_group.total = 0
+		logicals[9].logical_volumes["baz"].volume_group.allocated = 0
+
+		local got = matrix.filter_volume_group_percentage( {
+			lines = matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple
+			} )
+		} )[ "lines" ]
+		assertEquals( got[1].logical_volume.volume_group.percentage, 0 )
+	end
+	function TestFilterPercentage:test_volume_group_percentage()
+		local logicals = self.logicals_triple
+		logicals[9].logical_volumes["foo"].volume_group.total = 666
+		logicals[9].logical_volumes["foo"].volume_group.allocated = 123
+
+		logicals[9].logical_volumes["bar"].volume_group.total = 100
+		logicals[9].logical_volumes["bar"].volume_group.allocated = 12
+
+		logicals[9].logical_volumes["baz"].volume_group.total = 213456
+		logicals[9].logical_volumes["baz"].volume_group.allocated = 213056
+		local got = matrix.filter_volume_group_percentage( {
+			lines = matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple
+			} )
+		} )[ "lines" ]
+		assertEquals( got[1].logical_volume.volume_group.percentage, 12 )
+		assertEquals( got[3].logical_volume.volume_group.percentage, 100 )
+		assertEquals( got[5].logical_volume.volume_group.percentage, 19 )
 	end
 
 LuaUnit:run()
