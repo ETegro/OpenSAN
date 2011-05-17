@@ -17,24 +17,24 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<div id="div_access_pattern_edit-<%= sha1cache( line.access_pattern.section_name ) %>">
+<div id="div_access_pattern_edit-<%= hash( line.access_pattern.section_name ) %>">
 	<div>
 		<%: Name %>:
-		<input name="san.access_pattern_edit-name-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<input name="san.access_pattern_edit-name-<%= hash( line.access_pattern.section_name ) %>"
 		       type="text"
 		       value="<%= line.access_pattern.name %>" />
 	</div>
 	<div>
 		<%: Target driver %>:
-		<input name="san.access_pattern_edit-targetdriver-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<input name="san.access_pattern_edit-targetdriver-<%= hash( line.access_pattern.section_name ) %>"
 		       type="text"
 		       readonly="readonly"
 		       value="iscsi" />
 	</div>
 	<div>
 		<%: LUN %>:
-		<select id="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.section_name ) %>"
-			name="san.access_pattern_edit-lun-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<select id="san.access_pattern_edit-lun-<%= hash( line.access_pattern.section_name ) %>"
+			name="san.access_pattern_edit-lun-<%= hash( line.access_pattern.section_name ) %>"
 			size="1" >
 			<% for i = 0, (16-1) do %>
 				<% if i == line.access_pattern.lun then%>
@@ -47,8 +47,8 @@
 	</div>
 	<div>
 		<%: Enabled %>
-		<input name="san.access_pattern_edit-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
-		       id="san.access_pattern_edit-enabled-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<input name="san.access_pattern_edit-enabled-<%= hash( line.access_pattern.section_name ) %>"
+		       id="san.access_pattern_edit-enabled-<%= hash( line.access_pattern.section_name ) %>"
 		       type="checkbox"
 			<% if line.access_pattern.enabled then %>
 				checked="checked"
@@ -57,8 +57,8 @@
 	</div>
 	<div>
 		<%: Readonly %>
-		<input name="san.access_pattern_edit-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
-		       id="san.access_pattern_edit-readonly-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<input name="san.access_pattern_edit-readonly-<%= hash( line.access_pattern.section_name ) %>"
+		       id="san.access_pattern_edit-readonly-<%= hash( line.access_pattern.section_name ) %>"
 		       type="checkbox"
 			<% if line.access_pattern.readonly then %>
 				checked="checked"
@@ -66,7 +66,7 @@
 		       value="1" />
 	</div>
 	<div>
-		<input name="san.submit_access_pattern_edit-<%= sha1cache( line.access_pattern.section_name ) %>"
+		<input name="san.submit_access_pattern_edit-<%= hash( line.access_pattern.section_name ) %>"
 		       type="submit"
 		       title="<%: Edit access pattern %>"
 		       value="<%: Edit %>" />

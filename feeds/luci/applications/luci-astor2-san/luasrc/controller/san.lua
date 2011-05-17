@@ -27,16 +27,24 @@ matrix = require( "luci.controller.matrix" )
 scst = require( "astor2.scst" )
 
 mime = require( "mime" )
-require( "sha1" )
 
--- Calculate SHA1 regular expression
+------------------------------------------------------------------------
+-- Hash related functions
+------------------------------------------------------------------------
+require( "sha2" )
+
+-- Calculate SHA2-256 regular expression
 hashre = ""
-for i = 1, 160 / 8 * 2 do hashre = hashre .. "." end
+for i = 1, 256 / 8 * 2 do hashre = hashre .. "." end
 
-local function find_by_hash( hash, objs )
+local function hash( data )
+	return sha2.sha256hex( data )
+end
+
+local function find_by_hash( obj_hash, objs )
 	local found = nil
 	for _, obj in ipairs( objs ) do
-		if sha1( tostring( obj ) ) == hash then
+		if hash( tostring( obj ) ) == obj_hash then
 			found = obj
 		end
 	end
@@ -225,7 +233,7 @@ local function einarc_logical_hotspare_add( inputs, data )
 		return index_with_error( i18n("Logical disk is not selected") )
 	end
 
-	if tonumber( inputs[ "logical_minimal_size-" .. physical_id_hash .. "-" .. sha1( tostring( logical_id ) ) ] ) <
+	if tonumber( inputs[ "logical_minimal_size-" .. physical_id_hash .. "-" .. hash( tostring( logical_id ) ) ] ) <
 	   tonumber( inputs[ "physical_size-" .. physical_id_hash ] ) then
 		message_error = i18n("Newly added hotspare disk is bigger than needed")
 	end
