@@ -1154,64 +1154,220 @@ TestMatrix = {}
 			)
 		)
 	end
-	function TestMatrix:test_access_pattern_adding_with_lvms()
-		local got = matrix.filter_add_access_patterns( {
-			lines = matrix.overall( {
-				physicals = self.physicals_triple,
-				logicals = self.logicals_triple,
-			} ) },
-			self.access_patterns
-		)[ "lines" ]
-		assertEquals( got[1].access_pattern.name, "foobar3" )
-		assertEquals( got[1].access_pattern.colspan, 1 )
-		assertEquals( got[2].access_pattern.name, "foobar4" )
-		assertEquals( got[2].access_pattern.colspan, 1 )
-		assertEquals( got[3].access_pattern.name, "foobar5" )
-		assertEquals( got[3].access_pattern.colspan, 1 )
-		assertEquals( got[4].access_pattern.name, "foobaz1" )
-		assertEquals( got[4].access_pattern.colspan, 1 )
-		assertEquals( got[5].access_pattern.name, "foobaz2" )
-		assertEquals( got[5].access_pattern.colspan, 1 )
-		assertEquals( got[5].physical, nil )
-		assertEquals( got[5].logical, nil )
+	function TestMatrix:test_with_access_patterns_single()
+		-- Bind three first access patterns to logical volumes
+		self.access_patterns[1].filename = self.logicals_triple[9].logical_volumes["bar"].device
+		self.access_patterns[2].filename = self.logicals_triple[9].logical_volumes["baz"].device
+		self.access_patterns[3].filename = self.logicals_triple[9].logical_volumes["foo"].device
+		local needed = {
+			-- 1
+			{
+				physical = {
+					rowspan = 3,
+					id = "3:1",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001111",
+					size = 666,
+					state = "allocated"
+				},
+				logical = {
+					rowspan = 6,
+					id = 9,
+					level = "1",
+					physicals = {
+						["3:1"] = {
+							rowspan = 3,
+							id = "3:1",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001111",
+							size = 666,
+							state = "allocated"
+						},
+						["3:2"] = {
+							rowspan = 3,
+							id = "3:2",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001112",
+							size = 666,
+							state = "allocated"
+						}
+					},
+					logical_volumes = {
+						["foo"] = {
+							rowspan = 2,
+							name = "foo",
+							device = "foobar1",
+							volume_group = {},
+							snapshots = {},
+							size = 12
+						},
+						["bar"] = {
+							rowspan = 2,
+							name = "bar",
+							device = "foobar2",
+							volume_group = {},
+							snapshots = {},
+							size = 23
+						},
+						["baz"] = {
+							rowspan = 2,
+							name = "baz",
+							device = "foobar3",
+							volume_group = {},
+							snapshots = {},
+							size = 34
+						}
+					},
+					capacity = 666.0,
+					device = "/dev/md3",
+					state = "normal"
+				},
+				logical_volume = {
+					rowspan = 2,
+					name = "bar",
+					device = "foobar2",
+					volume_group = {},
+					snapshots = {},
+					size = 23
+				},
+				access_pattern = {
+					name = "foobaz1",
+					section_name = "foobar1",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					lun = 1
+				}
+			},
+			-- 2
+			{
+			},
+			-- 3
+			{
+				logical_volume = {
+					rowspan = 2,
+					name = "baz",
+					device = "foobar3",
+					volume_group = {},
+					snapshots = {},
+					size = 34
+				},
+				access_pattern = {
+					name = "foobaz2",
+					section_name = "foobar2",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					lun = 2
+				}
+			},
+			-- 4
+			{
+				physical = {
+					rowspan = 3,
+					id = "3:2",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001112",
+					size = 666,
+					state = "allocated"
+				}
+			},
+			-- 5
+			{
+				logical_volume = {
+					rowspan = 2,
+					name = "foo",
+					device = "foobar1",
+					volume_group = {},
+					snapshots = {},
+					size = 12
+				},
+				access_pattern = {
+					name = "foobar3",
+					section_name = "foobar3",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					lun = 3
+				}
+			},
+			-- 6
+			{
+			}
+		}
+
+		assert( common.compare_tables(
+				matrix.overall( {
+					physicals = self.physicals_triple,
+					logicals = self.logicals_triple,
+					access_patterns = self.access_patterns
+				} ),
+				needed
+			)
+		)
 	end
-	function TestMatrix:test_access_pattern_adding_in_just_raid()
-		local got = matrix.filter_add_access_patterns( {
-			lines = matrix.overall( {
-				physicals = self.physicals_double,
-				logicals = self.logicals_double,
-			} ) },
-			self.access_patterns
-		)[ "lines" ]
-		assertEquals( got[1].access_pattern.name, "foobar3" )
-		assertEquals( got[1].access_pattern.colspan, 2 )
-		assertEquals( got[2].access_pattern.name, "foobar4" )
-		assertEquals( got[2].access_pattern.colspan, 2 )
-		assertEquals( got[3].access_pattern.name, "foobar5" )
-		assertEquals( got[3].access_pattern.colspan, 2 )
-		assertEquals( got[4].access_pattern.name, "foobaz1" )
-		assertEquals( got[4].access_pattern.colspan, 2 )
-		assertEquals( got[5].access_pattern.name, "foobaz2" )
-		assertEquals( got[5].access_pattern.colspan, 2 )
-	end
-	function TestMatrix:test_access_pattern_adding_with_physicals()
-		local got = matrix.filter_add_access_patterns( {
-			lines = matrix.overall( {
-				physicals = self.physicals_with_free,
-				logicals = self.logicals_with_free,
-			} ) },
-			self.access_patterns
-		)[ "lines" ]
-		assertEquals( got[1].access_pattern.name, "foobar3" )
-		assertEquals( got[1].access_pattern.colspan, 2 )
-		assertEquals( got[2].access_pattern.name, "foobar4" )
-		assertEquals( got[2].access_pattern.colspan, 3 )
-		assertEquals( got[3].access_pattern.name, "foobar5" )
-		assertEquals( got[3].access_pattern.colspan, 4 )
-		assertEquals( got[4].access_pattern.name, "foobaz1" )
-		assertEquals( got[4].access_pattern.colspan, 4 )
-		assertEquals( got[5].access_pattern.name, "foobaz2" )
-		assertEquals( got[5].access_pattern.colspan, 4 )
+	function TestMatrix:test_with_access_patterns_many()
+		-- Generate physicals
+		local physicals = {}
+		for i = 1, 6 do
+			physicals[ #physicals + 1 ] = einarc.Physical:new( {
+				id = "0:" .. tonumber( i ),
+				model = "foobar",
+				revision = "foobar",
+				serial = "foobar",
+				size = 666,
+				state = "0"
+			} )
+		end
+
+		local logical_id = 0
+		local logicals = { [ logical_id ] = {
+			id = logical_id,
+			level = "1",
+			capacity = 666,
+			state = "normal",
+			device = "/dev/md0",
+			physicals = {},
+			logical_volumes = {
+				["lvm1"] = lvm.LogicalVolume:new( {
+					name = "lvm1",
+					device = "foobar",
+					volume_group = {},
+					size = 123
+				} ),
+				["lvm2"] = lvm.LogicalVolume:new( {
+					name = "lvm2",
+					device = "foobar",
+					volume_group = {},
+					size = 123
+				} )
+			}
+		} }
+
+		for _, physical in ipairs( physicals ) do
+			logicals[ logical_id ].physicals[ physical.id ] = logical_id
+		end
+
+		self.access_patterns[1].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[2].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[3].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[4].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[5].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[6].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+
+		assert( common.compare_tables(
+				matrix.overall( {
+					physicals = physicals,
+					logicals = logicals,
+					access_patterns = self.access_patterns
+				} ),
+				needed
+			)
+		)
 	end
 
 TestFilterHotspareCalculation = {}
