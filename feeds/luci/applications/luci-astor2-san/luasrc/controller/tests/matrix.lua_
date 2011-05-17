@@ -1537,15 +1537,39 @@ TestMatrix = {}
 				access_patterns = self.access_patterns
 			} )
 		} )[ "lines" ]
-		assert( common.compare_tables( got[6].logical_volume.highlight, {
+		assert( common.compare_tables( got[16].logical_volume.highlight, {
 			left = false,
 			top = false,
 			right = false,
-			bottom = false
+			bottom = true
 		} ) )
-		assert( common.compare_tables( got[6].access_pattern.highlight, {
+		assert( common.compare_tables( got[16].access_pattern.highlight, {
 			left = false,
 			top = true,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 1].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 2].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 3].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 4].access_pattern.highlight, {
+			left = false,
+			top = false,
 			right = true,
 			bottom = true
 		} ) )
