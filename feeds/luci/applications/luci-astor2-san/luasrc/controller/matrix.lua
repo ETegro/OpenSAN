@@ -260,6 +260,11 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 			if line.logical.logical_volumes then
 				for _, logical_volume in pairs( line.logical.logical_volumes ) do
 					logical_volume.highlight.color = color
+					if logical_volume.access_patterns then
+						for _, access_pattern in pairs( logical_volume.access_patterns ) do
+							access_pattern.highlight.color = color
+						end
+					end
 				end
 			end
 		end
