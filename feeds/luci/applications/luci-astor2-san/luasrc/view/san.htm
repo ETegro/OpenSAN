@@ -11,11 +11,11 @@
  
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Affero General Public License for more details.
  
  You should have received a copy of the GNU Affero General Public License
- along with this program. If not, see http://www.gnu.org/licenses/.
+ along with this program.  If not, see http://www.gnu.org/licenses/.
 -->
 
 <%+header%>
@@ -27,6 +27,18 @@ HASH_CASH = {}
 function sha1cache( data )
 	if not HASH_CASH[ data ] then HASH_CASH[ data ] = sha1( data ) end
 	return HASH_CASH[ data ]
+end
+%>
+
+<%
+function escape_html( str )
+	local function __chrenc( chr )
+		return string.format( "&#x%02x;", string.byte( chr ) )
+	end
+	if type( str ) == "string" then
+		str = str:gsub( "([^a-zA-Z0-9$_%-%.%+*(),])", __chrenc )
+	end
+	return str
 end
 %>
 
