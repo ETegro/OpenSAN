@@ -35,6 +35,7 @@ end
 <%#-------------------------------------------------------------------%>
 
 <%
+-- This function is based on LuCI's luci.http.protocol.urlencode()
 function escape_html( str )
 	local function __chrenc( chr )
 		return string.format( "&#x%02x;", string.byte( chr ) )
