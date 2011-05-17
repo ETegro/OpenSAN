@@ -41,10 +41,10 @@ local function hash( data )
 	return sha2.sha256hex( data )
 end
 
-local function find_by_hash( hash, objs )
+local function find_by_hash( obj_hash, objs )
 	local found = nil
 	for _, obj in ipairs( objs ) do
-		if hash( tostring( obj ) ) == hash then
+		if hash( tostring( obj ) ) == obj_hash then
 			found = obj
 		end
 	end
