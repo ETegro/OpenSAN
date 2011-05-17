@@ -39,6 +39,7 @@ for i = 1, 256 / 8 * 2 do hashre = hashre .. "." end
 
 local function hash( data )
 	return sha2.sha256hex( data )
+end
 
 local function find_by_hash( hash, objs )
 	local found = nil
