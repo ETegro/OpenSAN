@@ -129,11 +129,23 @@ function M.overall( data )
 
 		current_line = future_line
 	end
+	local final_line = current_line
 
 	for _, physical in pairs( einarc.Physical.sort( physicals_free ) ) do
 		matrix[ current_line ] = { physical = physical }
 		matrix[ current_line ].physical.rowspan = 1
 		current_line = current_line + 1
+	end
+
+	current_line = final_line
+	for _, access_pattern in ipairs( access_patterns ) do
+		if not access_pattern.filename then
+			if not matrix[ current_line ] then
+				matrix[ current_line ] = {}
+			end
+			matrix[ current_line ].access_pattern = access_pattern
+			current_line = current_line + 1
+		end
 	end
 
 	return matrix

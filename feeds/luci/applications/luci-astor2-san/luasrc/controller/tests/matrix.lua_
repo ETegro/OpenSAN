@@ -1366,6 +1366,28 @@ TestMatrix = {}
 			},
 			-- 6
 			{
+			},
+			-- 7
+			{
+				access_pattern = {
+					name = "foobar4",
+					section_name = "foobar4",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					lun = 4
+				}
+			},
+			-- 8
+			{
+				access_pattern = {
+					name = "foobar5",
+					section_name = "foobar5",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					lun = 5
+				}
 			}
 		}
 
