@@ -429,6 +429,7 @@ function M.caller()
 	local physical_volumes = lvm.PhysicalVolume.list()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
+	local access_patterns = scst.AccessPattern.list()
 
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
@@ -457,7 +458,8 @@ function M.caller()
 		physicals = physicals,
 		physical_volumes = physical_volumes,
 		volume_groups = volume_groups,
-		logical_volumes = logical_volumes_for_serialization
+		logical_volumes = logical_volumes_for_serialization,
+		access_patterns = access_patterns
 	}
 	local FILTERS = {
 		M.filter_borders_highlight,
