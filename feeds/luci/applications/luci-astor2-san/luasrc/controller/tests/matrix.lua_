@@ -23,217 +23,231 @@ lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
 matrix = require( "matrix" )
 
+local ACCESS_PATTERNS = {
+	{
+		name = "foobaz1",
+		section_name = "foobar1",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 1
+	},
+	{
+		name = "foobaz2",
+		section_name = "foobar2",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 2
+	},
+	{
+		name = "foobar3",
+		section_name = "foobar3",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 3
+	},
+	{
+		name = "foobar4",
+		section_name = "foobar4",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 4
+	},
+	{
+		name = "foobar5",
+		section_name = "foobar5",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 5
+	}
+}
+
+local PHYSICALS_TRIPLE = {
+	["3:1"] = {
+		id = "3:1",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001111",
+		size = 666,
+		state = "9"
+	},
+	["3:2"] = {
+		id = "3:2",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001112",
+		size = 666,
+		state = "9"
+	}
+}
+
+local LOGICALS_TRIPLE = {
+	[9] = {
+		id = 9,
+		level = "1",
+		physicals = {
+			["3:1"] = "9",
+			["3:2"] = "9"
+		},
+		capacity = 666.0,
+		device = "/dev/md3",
+		state = "normal",
+		logical_volumes = {
+			["foo"] = lvm.LogicalVolume:new( {
+				name = "foo",
+				device = "foobar1",
+				volume_group = {}, -- It is dummy
+				size = 12
+			} ),
+			["bar"] = lvm.LogicalVolume:new( {
+				name = "bar",
+				device = "foobar2",
+				volume_group = {}, -- It is dummy
+				size = 23
+			} ),
+			["baz"] = lvm.LogicalVolume:new( {
+				name = "baz",
+				device = "foobar3",
+				volume_group = {}, -- It is dummy
+				size = 34
+			} )
+		}
+	}
+}
+
+local PHYSICALS_DOUBLE = {
+	["3:1"] = {
+		id = "3:1",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001111",
+		size = 666,
+		state = "3"
+	},
+	["3:2"] = {
+		id = "3:2",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001112",
+		size = 666,
+		state = "3"
+	},
+	["13:1"] = {
+		id = "13:1",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001121",
+		size = 333,
+		state = "13"
+	},
+	["13:2"] = {
+		id = "13:2",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001122",
+		size = 333,
+		state = "13"
+	},
+	["13:3"] = {
+		id = "13:3",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001123",
+		size = 333,
+		state = "13"
+	},
+	["13:4"] = {
+		id = "13:4",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001124",
+		size = 333,
+		state = "failed"
+	},
+	["13:5"] = {
+		id = "13:5",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001125",
+		size = 333,
+		state = "hotspare"
+	}
+}
+
+local LOGICALS_DOUBLE = {
+	[3] = {
+		id = 3,
+		level = "1",
+		physicals = {
+			["3:1"] = "3",
+			["3:2"] = "3"
+		},
+		capacity = 666.0,
+		device = "/dev/md3",
+		state = "normal"
+	},
+	[13] = {
+		id = 13,
+		level = "5",
+		physicals = {
+			["13:1"] = "13",
+			["13:2"] = "13",
+			["13:3"] = "13",
+			["13:4"] = "failed",
+			["13:5"] = "hotspare"
+		},
+		capacity = 666.0,
+		device = "/dev/md13",
+		state = "degraded",
+		progress = 66.6
+	}
+}
+
+local PHYSICALS_WITH_FREE = {
+	["3:1"] = {
+		id = "3:1",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001111",
+		size = 666,
+		state = "0"
+	},
+	["3:2"] = {
+		id = "3:2",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001112",
+		size = 666,
+		state = "free"
+	}
+}
+
+local LOGICALS_WITH_FREE = {
+	[0] = {
+		id = 0,
+		level = "passthrough",
+		physicals = {
+			["3:1"] = "0",
+		},
+		capacity = 666.0,
+		device = "/dev/md0",
+		state = "normal"
+	}
+}
+
 TestMatrix = {}
 	function TestMatrix:setUp()
-		self.access_patterns = {
-			{
-				name = "foobaz1",
-				section_name = "foobar1",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 1
-			},
-			{
-				name = "foobaz2",
-				section_name = "foobar2",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 2
-			},
-			{
-				name = "foobar3",
-				section_name = "foobar3",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 3
-			},
-			{
-				name = "foobar4",
-				section_name = "foobar4",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 4
-			},
-			{
-				name = "foobar5",
-				section_name = "foobar5",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 5
-			}
-		}
-		self.physicals_triple = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "9"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "9"
-			}
-		}
-		self.logicals_triple = {
-			[9] = {
-				id = 9,
-				level = "1",
-				physicals = {
-					["3:1"] = "9",
-					["3:2"] = "9"
-				},
-				capacity = 666.0,
-				device = "/dev/md3",
-				state = "normal",
-				logical_volumes = {
-					["foo"] = lvm.LogicalVolume:new( {
-						name = "foo",
-						device = "foobar1",
-						volume_group = {}, -- It is dummy
-						size = 12
-					} ),
-					["bar"] = lvm.LogicalVolume:new( {
-						name = "bar",
-						device = "foobar2",
-						volume_group = {}, -- It is dummy
-						size = 23
-					} ),
-					["baz"] = lvm.LogicalVolume:new( {
-						name = "baz",
-						device = "foobar3",
-						volume_group = {}, -- It is dummy
-						size = 34
-					} )
-				}
-			}
-		}
-		self.physicals_double = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "3"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "3"
-			},
-			["13:1"] = {
-				id = "13:1",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001121",
-				size = 333,
-				state = "13"
-			},
-			["13:2"] = {
-				id = "13:2",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001122",
-				size = 333,
-				state = "13"
-			},
-			["13:3"] = {
-				id = "13:3",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001123",
-				size = 333,
-				state = "13"
-			},
-			["13:4"] = {
-				id = "13:4",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001124",
-				size = 333,
-				state = "failed"
-			},
-			["13:5"] = {
-				id = "13:5",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001125",
-				size = 333,
-				state = "hotspare"
-			}
-		}
-		self.logicals_double = {
-			[3] = {
-				id = 3,
-				level = "1",
-				physicals = {
-					["3:1"] = "3",
-					["3:2"] = "3"
-				},
-				capacity = 666.0,
-				device = "/dev/md3",
-				state = "normal"
-			},
-			[13] = {
-				id = 13,
-				level = "5",
-				physicals = {
-					["13:1"] = "13",
-					["13:2"] = "13",
-					["13:3"] = "13",
-					["13:4"] = "failed",
-					["13:5"] = "hotspare"
-				},
-				capacity = 666.0,
-				device = "/dev/md13",
-				state = "degraded",
-				progress = 66.6
-			}
-		}
-		self.physicals_with_free = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "0"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "free"
-			}
-		}
-		self.logicals_with_free = {
-			[0] = {
-				id = 0,
-				level = "passthrough",
-				physicals = {
-					["3:1"] = "0",
-				},
-				capacity = 666.0,
-				device = "/dev/md0",
-				state = "normal"
-			}
-		}
+		self.access_patterns = common.deepcopy( ACCESS_PATTERNS )
+		self.physicals_triple = common.deepcopy( PHYSICALS_TRIPLE )
+		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
+		self.physicals_double = common.deepcopy( PHYSICALS_DOUBLE )
+		self.logicals_double = common.deepcopy( LOGICALS_DOUBLE )
+		self.physicals_with_free = common.deepcopy( PHYSICALS_WITH_FREE )
+		self.logicals_with_free = common.deepcopy( LOGICALS_WITH_FREE )
 	end
 	function TestMatrix:test_volume_group_percentage_zero()
 		local logicals = self.logicals_triple
