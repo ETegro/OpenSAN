@@ -32,7 +32,6 @@ function hash( data )
 	return HASH_CASH[ data ]
 end
 %>
-<%#-------------------------------------------------------------------%>
 
 <%
 -- This function is based on LuCI's luci.http.protocol.urlencode()
@@ -46,6 +45,7 @@ function escape_html( str )
 	return str
 end
 %>
+<%#-------------------------------------------------------------------%>
 
 <% if message_error then %>
 	<p class="error"><%= message_error %></p>
