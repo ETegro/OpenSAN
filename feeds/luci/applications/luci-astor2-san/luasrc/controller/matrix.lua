@@ -448,6 +448,9 @@ function M.caller()
 		if logical_volume.snapshots then
 			logical_volume.snapshots = {}
 		end
+		if logical_volume.access_patterns then
+			logical_volume.access_patterns = common.keys( logical_volume.access_patterns )
+		end
 	end
 
 	local matrix = {
