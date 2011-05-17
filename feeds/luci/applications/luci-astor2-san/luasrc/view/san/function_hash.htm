@@ -1,7 +1,6 @@
 <!--
  aStor2 - storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
-                         Vladimir Petukhov (vladimir.petukhov@etegro.com)
                          Sergey Matveev (stargrave@stargrave.org)
  
  This program is free software: you can redistribute it and/or modify
@@ -18,14 +17,12 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 -->
 
-<%+header%>
+<%
+require( "sha1" )
 
-<%+san/function_hash%>
-
-<% if message_error then %>
-	<p class="error"><%= message_error %></p>
-<% end %>
-
-<%+san/matrix%>
-
-<%+footer%>
+HASH_CASH = {}
+function sha1cache( data )
+	if not HASH_CASH[ data ] then HASH_CASH[ data ] = sha1( data ) end
+	return HASH_CASH[ data ]
+end
+%>
