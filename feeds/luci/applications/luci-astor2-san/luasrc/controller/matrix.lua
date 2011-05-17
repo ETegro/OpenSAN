@@ -11,11 +11,11 @@
   
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU Affero General Public License for more details.
   
   You should have received a copy of the GNU Affero General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local M = {}
@@ -289,7 +289,7 @@ end
 function M.filter_add_access_patterns( matrix, access_patterns )
 	access_patterns = access_patterns or scst.AccessPattern.list()
 	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
-	local access_patterns_names = common.keys( access_patterns_named_hash  )
+	local access_patterns_names = common.keys( access_patterns_named_hash )
 	table.sort( access_patterns_names )
 
 	local lines = matrix.lines
