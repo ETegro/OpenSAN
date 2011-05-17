@@ -67,7 +67,12 @@
 			<% end %>
 			<% if line.access_pattern.filename then %>
 				<div>
-				<%: Device %>: <%= line.access_pattern.filename %>
+					<%: Device %>: <%= line.access_pattern.filename %>
+				</div>
+			<% end %>
+			<% if line.access_pattern.filename then %>
+				<div>
+					<%: IQN %>: <%= line.access_pattern:iqn() %>
 				</div>
 			<% end %>
 		</td>
