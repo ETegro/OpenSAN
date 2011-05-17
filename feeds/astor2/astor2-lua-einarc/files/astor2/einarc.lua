@@ -255,7 +255,7 @@ function M.Physical:new( attrs )
 	assert( common.is_positive( attrs.size ),
 	        "non-positive size" )
 	assert( common.is_string( attrs.state ),
-	        "unknown model" )
+	        "incorrect state" )
 	return setmetatable( attrs, Physical_mt )
 end
 
