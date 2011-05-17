@@ -34,6 +34,18 @@ end
 %>
 <%#-------------------------------------------------------------------%>
 
+<%
+function escape_html( str )
+	local function __chrenc( chr )
+		return string.format( "&#x%02x;", string.byte( chr ) )
+	end
+	if type( str ) == "string" then
+		str = str:gsub( "([^a-zA-Z0-9$_%-%.%+*(),])", __chrenc )
+	end
+	return str
+end
+%>
+
 <% if message_error then %>
 	<p class="error"><%= message_error %></p>
 <% end %>

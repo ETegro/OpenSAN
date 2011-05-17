@@ -31,7 +31,7 @@
 	<tr>
 		<td>
 			<div class="inline">
-				<%= line.access_pattern.name %>
+				<%= escape_html( line.access_pattern.name ) %>
 			</div>
 			<% if not line.access_pattern:is_binded() then %>
 				<div class="inline">

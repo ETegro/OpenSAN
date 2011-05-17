@@ -289,7 +289,7 @@ end
 function M.filter_add_access_patterns( matrix, access_patterns )
 	access_patterns = access_patterns or scst.AccessPattern.list()
 	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
-	local access_patterns_names = common.keys( access_patterns_named_hash  )
+	local access_patterns_names = common.keys( access_patterns_named_hash )
 	table.sort( access_patterns_names )
 
 	local lines = matrix.lines
