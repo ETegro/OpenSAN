@@ -40,6 +40,7 @@ end
 function M.overall( data )
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
+	local access_patterns = data.access_patterns or {}
 	local physicals_free = common.deepcopy( physicals )
 	local matrix = {}
 	local current_line = 1
@@ -53,10 +54,31 @@ function M.overall( data )
 		local physicals_quantity = #common.keys( logical.physicals )
 		local logical_volumes_quantity = #common.keys( logical.logical_volumes or {} )
 		local lines_quantity = physicals_quantity
+
+		-- Bind access patterns to logical volumes and find maximal
+		-- patterns quantity in single logical volume
+		local access_patterns_quantity_max = 1
+		for _, logical_volume in pairs( logical.logical_volumes or {} ) do
+			local quantity = 0
+			for _, access_pattern in ipairs( access_patterns ) do
+				if access_pattern.filename == logical_volume.device then
+					if not logical_volume.access_patterns then
+						logical_volume.access_patterns = {}
+					end
+					logical_volume.access_patterns[ access_pattern.name ] = access_pattern
+					quantity = quantity + 1
+				end
+			end
+			if access_patterns_quantity_max < quantity then
+				access_patterns_quantity_max = quantity
+			end
+		end
+
+		-- Overall lines quantity will be LCM( PVs, APs*LVs )
 		if logical_volumes_quantity ~= 0 then
 			lines_quantity = M.lcm(
 				physicals_quantity,
-				logical_volumes_quantity
+				logical_volumes_quantity * access_patterns_quantity_max
 			)
 		end
 		local future_line = current_line + lines_quantity
@@ -91,8 +113,18 @@ function M.overall( data )
 		local logical_volume_rowspan = lines_quantity / logical_volumes_quantity
 		for i, logical_volume_name in ipairs( logical_volume_names ) do
 			local offset = current_line + ( i - 1 ) * logical_volume_rowspan
-			matrix[ offset ].logical_volume = logical.logical_volumes[ logical_volume_name ]
+			local logical_volume = logical.logical_volumes[ logical_volume_name ]
+			matrix[ offset ].logical_volume = logical_volume
 			matrix[ offset ].logical_volume.rowspan = logical_volume_rowspan
+
+			if logical_volume.access_patterns then
+				local access_pattern_names = common.keys( logical_volume.access_patterns )
+				table.sort( access_pattern_names )
+
+				for ap_offset = offset, offset + #access_pattern_names do
+					matrix[ ap_offset ].access_pattern = logical_volume.access_patterns[ access_pattern_names[ ap_offset - offset + 1 ] ]
+				end
+			end
 		end
 
 		current_line = future_line
@@ -466,7 +498,6 @@ function M.caller()
 		M.filter_highlight_snapshots,
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
-		M.filter_add_access_patterns,
 		M.filter_calculate_hotspares,
 		filter_mib2tib,
 		filter_serialize,
