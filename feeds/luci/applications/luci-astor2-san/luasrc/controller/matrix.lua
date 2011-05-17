@@ -335,56 +335,6 @@ local function filter_add_logical_id_to_physical( matrix )
 	return matrix
 end
 
-function M.filter_add_access_patterns( matrix, access_patterns )
-	access_patterns = access_patterns or scst.AccessPattern.list()
-	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
-	local access_patterns_names = common.keys( access_patterns_named_hash )
-	table.sort( access_patterns_names )
-
-	local lines = matrix.lines
-	-- Fillup matrix with AccessPatterns
-	for current_line, access_pattern_name in ipairs( access_patterns_names ) do
-		access_pattern = access_patterns[ access_patterns_named_hash[ access_pattern_name ][1] ]
-		if not lines[ current_line ] then
-			lines[ current_line ] = {}
-		end
-		lines[ current_line ][ "access_pattern" ] = access_pattern
-	end
-
-	-- Calculate AccessPatterns-related TD's colspan
-	local logical_scope = 0
-	for current_line, line in ipairs( lines ) do
-		if line.logical then
-			local logical_volumes_names = common.keys( line.logical.logical_volumes or {} )
-			if #logical_volumes_names > 0 then
-				for i = current_line, current_line -1 + line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
-					if lines[ i ].access_pattern then
-						lines[ i ].access_pattern.colspan = 1
-					end
-				end
-			end
-			for i = current_line, current_line + line.logical.rowspan -1 do
-				if lines[ i ].access_pattern and not lines[ i ].access_pattern.colspan then
-					lines[ i ].access_pattern.colspan = 2
-				end
-			end
-			logical_scope = line.logical.rowspan
-		end
-		if line.access_pattern and logical_scope == 0 then
-			-- We are outside logical's scope
-			if line.physical then
-				lines[ current_line ].access_pattern.colspan = 3
-			else
-				lines[ current_line ].access_pattern.colspan = 4
-			end
-		end
-		if logical_scope > 0 then
-			logical_scope = logical_scope - 1
-		end
-	end
-	return matrix
-end
-
 function M.filter_calculate_hotspares( matrix )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
