@@ -1375,6 +1375,7 @@ TestMatrix = {}
 					targetdriver = "iscsi",
 					enabled = true,
 					readonly = false,
+					colspan = 3,
 					lun = 4
 				}
 			},
@@ -1386,6 +1387,7 @@ TestMatrix = {}
 					targetdriver = "iscsi",
 					enabled = true,
 					readonly = false,
+					colspan = 3,
 					lun = 5
 				}
 			}

@@ -144,6 +144,11 @@ function M.overall( data )
 				matrix[ current_line ] = {}
 			end
 			matrix[ current_line ].access_pattern = access_pattern
+			if matrix[ current_line ].physical then
+				matrix[ current_line ].access_pattern.colspan = 2
+			else
+				matrix[ current_line ].access_pattern.colspan = 3
+			end
 			current_line = current_line + 1
 		end
 	end
