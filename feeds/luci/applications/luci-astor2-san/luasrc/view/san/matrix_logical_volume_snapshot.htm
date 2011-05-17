@@ -23,12 +23,6 @@
 
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
-		<% local access_pattern_exists = false %>
-		<% for _, line_ap in ipairs( matrix_overall.lines ) do %>
-			<% if line_ap.access_pattern then %>
-				<% access_pattern_exists = true %>
-			<% end %>
-		<% end %>
 		<td>
 			<% if logical_volume.access_patterns then %>
 				<a href="#"
@@ -53,7 +47,7 @@
 			<% end %>
 		</td>
 		<td>
-			<% if access_pattern_exists then %>
+			<% if #access_patterns > 0 then %>
 				<input name="san.logical_volume_select"
 				       type ="radio"
 				       value="<%= line.logical_volume.device %>" />
