@@ -1214,7 +1214,13 @@ TestMatrix = {}
 		assertEquals( got[5].access_pattern.name, "foobaz2" )
 		assertEquals( got[5].access_pattern.colspan, 4 )
 	end
-	function TestMatrix:test_hotspare_calculation()
+
+TestFilterHotspareCalculation = {}
+	function TestFilterHotspareCalculation:setUp()
+		self.physicals_double = common.deepcopy( PHYSICALS_DOUBLE )
+		self.logicals_double = common.deepcopy( LOGICALS_DOUBLE )
+	end
+	function TestFilterHotspareCalculation:test_hotspare_calculation()
 		-- Add several other drives that will be checked
 		self.physicals_double[ "666:1" ] = {
 			id = "666:1",
