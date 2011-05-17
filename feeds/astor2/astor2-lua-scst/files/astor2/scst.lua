@@ -74,13 +74,21 @@ function M.AccessPattern.list()
 	return access_patterns
 end
 
-function M.AccessPattern.find_by_section_name( section_name )
+function M.AccessPattern.find_by( attribute, value )
 	for _, access_pattern in ipairs( M.AccessPattern.list() ) do
-		if access_pattern.section_name == section_name then
+		if access_pattern[ attribute ] == value then
 			return access_pattern
 		end
 	end
 	return nil
+end
+
+function M.AccessPattern.find_by_section_name( section_name )
+	return M.AccessPattern.find_by( "section_name", section_name )
+end
+
+function M.AccessPattern.find_by_name( name )
+	return M.AccessPattern.find_by( "name", name )
 end
 
 function M.AccessPattern:save()
@@ -255,9 +263,9 @@ function M.Configuration.dump()
 						" {\n" ..
 						"\t\t\tread_only " .. read_only .. "\n" ..
 						"\t\t}\n"
-				configuration = configuration .. "\t}\n"
+				configuration = configuration .. "\t\tenabled 1\n\t}\n"
 			end
-			configuration = configuration .. "}\n"
+			configuration = configuration .. "\tenabled 1\n}\n"
 		end
 	end
 
@@ -309,6 +317,8 @@ function M.Daemon.apply()
 	M.Configuration.write( configuration,
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 	common.system_succeed( M.Daemon.SCSTADMIN_PATH ..
+	                       " -force" ..
+	                       " -noprompt" ..
 	                       " -config " ..
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 end
