@@ -18,11 +18,13 @@
 -->
 
 <%
-require( "sha1" )
+require( "sha2" )
 
 HASH_CASH = {}
-function sha1cache( data )
-	if not HASH_CASH[ data ] then HASH_CASH[ data ] = sha1( data ) end
+function hash( data )
+	if not HASH_CASH[ data ] then
+		HASH_CASH[ data ] = sha2.sha256hex( data )
+	end
 	return HASH_CASH[ data ]
 end
 %>
