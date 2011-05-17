@@ -74,7 +74,9 @@ end
 
 function M.system_succeed( cmdline )
 	local result = M.system( cmdline )
-	if result.return_code ~= 0 then error( "system() does not succeed" ) end
+	if result.return_code ~= 0 then
+		error( "system() does not succeed: " .. M.ppt( result ) )
+	end
 	return result.stdout
 end
 
