@@ -208,8 +208,25 @@ function M.filter_borders_highlight( matrix )
 			end
 			if logical_volumes_quantity ~= 0 then
 				for i = current_line, future_line - 1, logical_volume_rowspan do
-					lines[ i ].logical_volume = check_highlights_attribute( lines[ i ].logical_volume )
-					lines[ i ].logical_volume.highlight.right = true
+					local logical_volume = lines[ i ].logical_volume
+					logical_volume = check_highlights_attribute( logical_volume )
+					if logical_volume.access_patterns then
+						local access_patterns_names = common.keys( logical_volume.access_patterns )
+						for ap_i, access_pattern_name in ipairs( access_patterns_names ) do
+							local access_pattern = lines[ i + ap_i - 1 ].access_pattern
+							check_highlights_attribute( access_pattern )
+							access_pattern.highlight.right = true
+							if ap_i == 1 then
+								access_pattern.highlight.top = true
+							end
+							if ap_i == #access_patterns_names then
+								access_pattern.highlight.bottom = true
+							end
+						end
+						lines[ i ].logical_volume.highlight.right = false
+					else
+						lines[ i ].logical_volume.highlight.right = true
+					end
 				end
 			end
 			lines[ future_line - physical_rowspan ].physical.highlight.bottom = true
