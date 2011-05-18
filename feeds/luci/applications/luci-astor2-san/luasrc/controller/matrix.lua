@@ -122,6 +122,9 @@ function M.overall( data )
 				table.sort( access_pattern_names )
 
 				for ap_offset = offset, offset + #access_pattern_names do
+					if not matrix[ ap_offset ] then
+						matrix[ ap_offset ] = {}
+					end
 					matrix[ ap_offset ].access_pattern = logical_volume.access_patterns[ access_pattern_names[ ap_offset - offset + 1 ] ]
 				end
 			end
