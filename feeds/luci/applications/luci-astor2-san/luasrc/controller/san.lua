@@ -149,16 +149,26 @@ local function find_logical_id_in_data_by_hash( logical_id_hash, data )
 	return find_by_hash( logical_id_hash, common.keys( data.logicals ) )
 end
 
+local function parse_inputs_by_re( inputs, re )
+	local re = table.concat( re, "" )
+	for k, v in pairs( inputs ) do
+		local result = { string.match( k, re ) }
+		if #result > 0 then
+			if #result == 1 then
+				return result[1]
+			else
+				return result
+			end
+		end
+	end
+	return nil
+end
+
 local function einarc_logical_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local logical_id_hash = nil
-	for k, v in pairs( inputs ) do
-		if not logical_id_hash then
-			logical_id_hash = string.match( k, "^submit_logical_delete.(" .. hashre .. ")" )
-		end
-	end
+	local logical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_delete.(",hashre,")"} )
 	assert( logical_id_hash, "unable to parse out logical's id" )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
@@ -217,13 +227,8 @@ end
 local function einarc_logical_hotspare_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local physical_id_hash = nil
 
-	for k, v in pairs( inputs ) do
-		if not physical_id_hash then
-			physical_id_hash = string.match( k, "^submit_logical_hotspare_add.(" .. hashre .. ")" )
-		end
-	end
+	local physical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_hotspare_add.(",hashre,")"} )
 	assert( physical_id_hash, "unable to parse out physical's id" )
 	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
 
@@ -250,16 +255,11 @@ end
 local function einarc_logical_hotspare_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local physical_id_hash = nil
-	local logical_id_hash = nil
 
-	for k, v in pairs( inputs ) do
-		if not physical_id_hash then
-			logical_id_hash, physical_id_hash = string.match( k, "^submit_logical_hotspare_delete.(" .. hashre .. ").(" .. hashre .. ")" )
-		end
-	end
-	assert( logical_id_hash, "unable to parse out logical's id" )
-	assert( physical_id_hash, "unable to parse out physical's id" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_hotspare_delete.(",hashre,").(",hashre,")"} )
+	assert( tmp, "unable to parse out logical's and physical's ids" )
+	local physical_id_hash = tmp[1]
+	local logical_id_hash = tmp[2]
 	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
@@ -282,13 +282,8 @@ end
 local function lvm_logical_volume_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local logical_id_hash = nil
 
-	for k, v in pairs( inputs ) do
-		if not logical_id_hash then
-			logical_id_hash = string.match( k, "^submit_logical_volume_add.(" .. hashre .. ")" )
-		end
-	end
+	local logical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_volume_add.(",hashre,")"} )
 	assert( logical_id_hash, "unable to parse out logical's id" )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
@@ -388,17 +383,11 @@ end
 local function lvm_logical_volume_remove( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name_hash = nil
-	local logical_volume_name_hash = nil
 
-	for k, v in pairs( inputs ) do
-		if not logical_volume_name_hash then
-			-- san.submit_logical_volume_remove-vg1302871899-lvname_new
-			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_remove.(" .. hashre .. ").lv(" .. hashre .. ")" )
-		end
-	end
-	assert( volume_group_name_hash, "unable to parse out volume group's name" )
-	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_remove.(",hashre,").lv(",hashre,")"} )
+	assert( tmp, "unable to parse out volume group's and logical volume's names" )
+	local volume_group_name_hash = tmp[1]
+	local logical_volume_name_hash = tmp[2]
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
@@ -414,17 +403,11 @@ end
 local function lvm_logical_volume_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name_hash = nil
-	local logical_volume_name_hash = nil
 
-	for k, v in pairs( inputs ) do
-		if not logical_volume_name_hash then
-			-- san.submit_logical_volume_resize-vg1302871899-lvname_new
-			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_resize.(" .. hashre .. ").lv(" .. hashre .. ")" )
-		end
-	end
-	assert( volume_group_name_hash, "unable to parse out volume group's name" )
-	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_resize.(",hashre,").lv(",hashre,")"} )
+	assert( tmp, "unable to parse out volume group's and logical volume's names" )
+	local volume_group_name_hash = tmp[1]
+	local logical_volume_name_hash = tmp[2]
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
@@ -446,17 +429,11 @@ end
 local function lvm_logical_volume_snapshot_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local volume_group_name_hash = nil
-	local logical_volume_name_hash = nil
 
-	for k, v in pairs( inputs ) do
-		if not logical_volume_name_hash then
-			-- san.submit_logical_volume_snapshot_add-lvd/dev/vg1303136641/name_new
-			volume_group_name_hash, logical_volume_name_hash = string.match( k, "^submit_logical_volume_snapshot_add.lvd(" .. hashre .. ").(" .. hashre .. ")" )
-		end
-	end
-	assert( volume_group_name_hash, "unable to parse out volume group's name" )
-	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_snapshot_add.lvd(",hashre,").(",hashre,")"} )
+	assert( tmp, "unable to parse out volume group's and logical volume's names" )
+	local volume_group_name_hash = tmp[1]
+	local logical_volume_name_hash = tmp[2]
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
@@ -479,18 +456,11 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local volume_group_name_hash = nil
-	local snapshot_size = nil
-	local logical_volume_name_hash = nil
-
-	for k, v in pairs( inputs ) do
-		if not logical_volume_name_hash then
-			-- san.submit_logical_volume_snapshot_resize-vg1302871899-s1923-lvname_new
-			volume_group_name_hash, snapshot_size, logical_volume_name_hash = string.match( k, "^submit_logical_volume_snapshot_resize.(" .. hashre .. ").s(%d+).lv(" .. hashre .. ")" )
-		end
-	end
-	assert( volume_group_name_hash, "unable to parse out volume group's name" )
-	assert( logical_volume_name_hash, "unable to parse out logical volume's name" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_snapshot_resize.(",hashre,").s(%d+).lv(",hashre,")"} )
+	assert( tmp, "unable to parse out volume group's and logical volume's names, original snapshot's size" )
+	local volume_group_name_hash = tmp[1]
+	local snapshot_size = tmp[2]
+	local logical_volume_name_hash = tmp[3]
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
@@ -577,13 +547,7 @@ local function scst_access_pattern_delete( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name_hash = nil
-	for k, v in pairs( inputs ) do
-		if not access_pattern_section_name_hash then
-			-- san.submit_access_pattern_delete-cfg022eb2
-			access_pattern_section_name_hash = string.match( k, "^submit_access_pattern_delete.(" .. hashre .. ")" )
-		end
-	end
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_delete.(",hashre,")"} )
 	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
@@ -612,13 +576,7 @@ local function scst_access_pattern_bind( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name_hash = nil
-	for k, v in pairs( inputs ) do
-		if not access_pattern_section_name_hash then
-			-- san.submit_access_pattern_bind-cfg022eb2
-			access_pattern_section_name_hash = string.match( k, "^submit_access_pattern_bind.(" .. hashre .. ")" )
-		end
-	end
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_bind.(",hashre,")"} )
 	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
@@ -654,13 +612,7 @@ local function scst_access_pattern_unbind( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name_hash = nil
-	for k, v in pairs( inputs ) do
-		if not access_pattern_section_name_hash then
-			-- san.submit_access_pattern_unbind-cfg022eb2
-			access_pattern_section_name_hash = string.match( k, "^submit_access_pattern_unbind.(" .. hashre .. ")" )
-		end
-	end
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_unbind.(",hashre,")"} )
 	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
@@ -682,14 +634,8 @@ end
 local function scst_access_pattern_edit( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
-	local access_pattern_section_name_hash = nil
-	for k, v in pairs( inputs ) do
-		if not access_pattern_section_name_hash then
-			-- san.submit_access_pattern_edit-fb27572667ded35003468f14bf5ec3be45dbd568
-			access_pattern_section_name_hash = string.match( k,
-				"^submit_access_pattern_edit.(" .. hashre .. ")" )
-		end
-	end
+
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_edit.(",hashre,")"} )
 	assert( access_pattern_section_name_hash, "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 	local access_pattern = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
