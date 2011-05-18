@@ -18,8 +18,6 @@
 %>
 
 physical-background-state-<%= line.physical.state %>
-<% if line.physical.highlight.left then %>physical-highlight-left<% end %>
-<% if line.physical.highlight.top then %>physical-highlight-top<% end %>
-<% if line.physical.highlight.right then %>physical-highlight-right<% end %>
-<% if line.physical.highlight.bottom then %>physical-highlight-bottom<% end %>
-<% if line.physical.highlight.color then %>physical-highlight-color-<%= line.physical.highlight.color %><% end %>
+
+<% highlight = line.physical.highlight %>
+<%+san/class_highlight%>

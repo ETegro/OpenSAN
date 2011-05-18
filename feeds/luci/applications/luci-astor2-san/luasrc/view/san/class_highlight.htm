@@ -1,7 +1,7 @@
 <%#
  aStor2 -- storage area network configurable via Web-interface
  Copyright (C) 2009-2011 ETegro Technologies, PLC
-                         Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                         Sergey Matveev (stargrave@stargrave.org)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,10 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
-
-<% highlight = line.logical_volume.highlight %>
-<%+san/class_highlight%>
+<% if highlight then %>
+	<% if highlight.left then %>highlight-left<% end %>
+	<% if highlight.top then %>highlight-top<% end %>
+	<% if highlight.right then %>highlight-right<% end %>
+	<% if highlight.bottom then %>highlight-bottom<% end %>
+	<% if highlight.color then %>highlight-color-<%= highlight.color %><% end %>
+<% end %>

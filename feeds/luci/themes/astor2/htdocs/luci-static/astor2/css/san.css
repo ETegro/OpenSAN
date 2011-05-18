@@ -35,61 +35,32 @@ form table tbody tr td { width: 25%; }
 /* Matrix */
 
 
-/* Physicals */
-.physical-highlight-top { border-top: 5px solid #00CC00; }
-.physical-highlight-right { border-right: 5px solid #00CC00; }
-.physical-highlight-bottom { border-bottom: 5px solid #00CC00; }
-.physical-highlight-left { border-left: 5px solid #00CC00; }
+/* Highlights */
+.highlight-top { border-top: 5px solid #00CC00; }
+.highlight-right { border-right: 5px solid #00CC00; }
+.highlight-bottom { border-bottom: 5px solid #00CC00; }
+.highlight-left { border-left: 5px solid #00CC00; }
 
+.highlight-color-black { border-color: black; }
+.highlight-color-blue { border-color: blue; }
+.highlight-color-green { border-color: green; }
+.highlight-color-orange { border-color: orange; }
+.highlight-color-red { border-color: red; }
+.highlight-color-yellow { border-color: yellow; }
+
+/* Physicals */
 .physical-background-state-allocated { background-color: #99FF99; }
 .physical-background-state-failed { background-color: #FF2211; }
 .physical-background-state-free { background-color: #CCCCCC; }
 .physical-background-state-hotspare { background-color: #FFCC22; }
 
-.physical-highlight-color-black { border-color: black; }
-.physical-highlight-color-blue { border-color: blue; }
-.physical-highlight-color-green { border-color: green; }
-.physical-highlight-color-orange { border-color: orange; }
-.physical-highlight-color-red { border-color: red; }
-.physical-highlight-color-yellow { border-color: yellow; }
-
 /* Logicals */
-.logical-highlight-top { border-top: 5px solid #00CC00; }
-.logical-highlight-right { border-right: 5px solid #00CC00; }
-.logical-highlight-bottom { border-bottom: 5px solid #00CC00; }
-.logical-highlight-left { border-left: 5px solid #00CC00; }
-
 .logical-background-state-normal { background-color: #99FF99; }
 .logical-background-state-degraded { background-color: #FF2211; }
 .logical-background-state-initializing { background-color: #EEFF44; }
 .logical-background-state-rebuilding { background-color: #FFCC22; }
 
-.logical-highlight-color-black { border-color: black; }
-.logical-highlight-color-blue { border-color: blue; }
-.logical-highlight-color-green { border-color: green; }
-.logical-highlight-color-orange { border-color: orange; }
-.logical-highlight-color-red { border-color: red; }
-.logical-highlight-color-yellow { border-color: yellow; }
-
 /* Logicals volumes */
-.logical_volume-highlight-top { border-top: 5px solid #00CC00; }
-.logical_volume-highlight-right { border-right: 5px solid #00CC00; }
-.logical_volume-highlight-bottom { border-bottom: 5px solid #00CC00; }
-.logical_volume-highlight-left { border-left: 5px solid #00CC00; }
-
-.logical_volume-highlight-color-black { border-color: black; }
-.logical_volume-highlight-color-blue { border-color: blue; }
-.logical_volume-highlight-color-green { border-color: green; }
-.logical_volume-highlight-color-orange { border-color: orange; }
-.logical_volume-highlight-color-red { border-color: red; }
-.logical_volume-highlight-color-yellow { border-color: yellow; }
-
 .logical_volume-background-color-lime { background-color: lime; }
 .logical_volume-background-color-orange { background-color: orange; }
 .logical_volume-background-color-yellow { background-color: yellow; }
-
-/* Access patterns */
-.access_pattern-highlight-top { border-top: 5px solid #00CC00; }
-.access_pattern-highlight-right { border-right: 5px solid #00CC00; }
-.access_pattern-highlight-bottom { border-bottom: 5px solid #00CC00; }
-.access_pattern-highlight-left { border-left: 5px solid #00CC00; }

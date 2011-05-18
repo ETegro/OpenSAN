@@ -21,10 +21,5 @@
 <% if line.access_pattern.readonly then %>access_pattern-readonly<% end %>
 <% if line.access_pattern:is_binded() then %>access_pattern-binded<% end %>
 
-<% if line.access_pattern.highlight then %>
-<% if line.access_pattern.highlight.left then %>access_pattern-highlight-left<% end %>
-<% if line.access_pattern.highlight.top then %>access_pattern-highlight-top<% end %>
-<% if line.access_pattern.highlight.right then %>access_pattern-highlight-right<% end %>
-<% if line.access_pattern.highlight.bottom then %>access_pattern-highlight-bottom<% end %>
-<% if line.access_pattern.highlight.color then %>access_pattern-highlight-color-<%= line.access_pattern.highlight.color %><% end %>
-<% end %>
+<% highlight = line.access_pattern.highlight %>
+<%+san/class_highlight%>
