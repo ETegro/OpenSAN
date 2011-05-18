@@ -45,7 +45,7 @@
 			<%+san/physical/index%>
 		<% end %>
 		<% if line.logical then %>
-			<%+san/matrix_logical%>
+			<%+san/logical/index%>
 		<% end %>
 		<% if line.logical_volume and line.logical_volume.is_snapshot() == true then %>
 			<%+san/matrix_logical_volume_snapshot%>
@@ -60,7 +60,7 @@
 	<% end %>
 </table>
 
-<%+san/form_logical_add%>
+<%+san/logical/forms/add%>
 <%+san/access_pattern/forms/add%>
 
 </form>

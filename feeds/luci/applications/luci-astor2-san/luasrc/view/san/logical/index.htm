@@ -19,7 +19,7 @@
 
 <td valign="top"
     rowspan="<%= line.logical.rowspan %>"
-    class="<%+san/matrix_logical_class%>">
+    class="<%+san/logical/class%>">
 
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
@@ -36,7 +36,7 @@
 			<td>(<%= line.logical.progress %> %)</td>
 		<% end %>
 		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
-			<%+san/matrix_logical_remove%>
+			<%+san/logical/remove%>
 		<% end %>
 	</tr>
 	<tr>
@@ -48,7 +48,7 @@
 			local_logical_colspan = local_logical_colspan + 1
 		end %>
 		<td colspan="<%= local_logical_colspan %>">
-			<%+san/matrix_logical_fill_bar%>
+			<%+san/logical/fillbar%>
 			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %></span>
 				<%+san/matrix_logical_volume_add%>
 			<% end %>
