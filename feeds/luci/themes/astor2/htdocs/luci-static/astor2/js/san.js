@@ -24,18 +24,6 @@ function hide_all_to_hide_elements() {
 	$( '[ class ^= "to_hide" ]' ).hide();
 };
 
-function hide_all_button() {
-	$( 'input[ name = "hide_all" ]' ).click( function() {
-		$( '[ class ^= "to_hide" ]' ).fadeOut();
-	} );
-};
-
-function show_all_button() {
-	$( 'input[ name = "show_all" ]' ).click( function() {
-		$( '[ class ^= "to_hide" ]' ).fadeIn();
-	} );
-};
-
 function create_raid_form_toggle() {
 	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
 
@@ -111,8 +99,6 @@ function setup_plunger(){
 };
 
 hide_all_to_hide_elements();
-hide_all_button();
-show_all_button();
 create_raid_form_toggle();
 drives_information_toggle();
 access_patterns_edit_toggle();
