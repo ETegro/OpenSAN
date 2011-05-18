@@ -478,7 +478,8 @@ function M.caller()
 	local matrix = {
 		lines = M.overall( {
 			physicals = physicals,
-			logicals = logicals } ),
+			logicals = logicals,
+			access_patterns = access_patterns } ),
 		logicals = logicals_for_serialization,
 		physicals = physicals,
 		physical_volumes = physical_volumes,
