@@ -41,12 +41,12 @@
 			</span>
 		</td>
 		<td>
-			<% if not logical_volume.access_patterns then %>
+			<% if not line.logical_volume.access_patterns then %>
 				<%+san/matrix_logical_volume_snapshot_remove%>
 			<% end %>
 		</td>
 		<td>
-			<% if #access_patterns > 0 then %>
+			<% if #matrix_overall.access_patterns > 0 then %>
 				<input name="san.logical_volume_select"
 				       type ="radio"
 				       value="<%= line.logical_volume.device %>" />
