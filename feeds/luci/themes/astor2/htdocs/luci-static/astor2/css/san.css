@@ -87,3 +87,9 @@ form table tbody tr td { width: 25%; }
 .logical_volume-background-color-lime { background-color: lime; }
 .logical_volume-background-color-orange { background-color: orange; }
 .logical_volume-background-color-yellow { background-color: yellow; }
+
+/* Access patterns */
+.access_pattern-highlight-top { border-top: 5px solid #00CC00; }
+.access_pattern-highlight-right { border-right: 5px solid #00CC00; }
+.access_pattern-highlight-bottom { border-bottom: 5px solid #00CC00; }
+.access_pattern-highlight-left { border-left: 5px solid #00CC00; }
