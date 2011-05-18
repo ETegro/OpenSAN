@@ -15,7 +15,7 @@
 Структура matrix_overall
 ========================
 .. image:: description_matrix.png
-   :scale: 60
+   :scale: 50
    :align: center
 
 Легенда
@@ -28,7 +28,7 @@
 Структура matrix_overall.lines
 ==============================
 .. image:: description_lines.png
-   :scale: 65
+   :scale: 40
    :align: center
 
 Легенда
