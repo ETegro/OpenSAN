@@ -7,7 +7,7 @@ digraph {
 	subgraph cluster_matrix {
 		label = "matrix";
 
-		node_matrix [ label = "{ <lines>lines | <physicals>physicals | <logicals>logicals | <physical_volumes>physical_volumes | <volume_groups>volume_groups | <logical_volumes>logical_volumes }", fillcolor = "limegreen" ];
+		node_matrix [ label = "{ <lines>lines | <physicals>physicals | <logicals>logicals | <physical_volumes>physical_volumes | <volume_groups>volume_groups | <logical_volumes>logical_volumes | <access_patterns>access_patterns }", fillcolor = "limegreen" ];
 	}
 	subgraph cluster_logicals {
 		label = "logicals";
@@ -40,9 +40,16 @@ digraph {
 		node_logical_volumes [ label = "{ name (S) | device (S) | volume_group (S) | size (N) | allocated (N) }", fillcolor = "deepskyblue" ];
 	}
 
+	subgraph cluster_access_patterns {
+		label = "access_patterns";
+
+		node_access_patterns [ label = "{ lun (N) | name (S) | colspan (N) | targetdriver (S) | enabled (B) | readonly (B) | section_name (S) }", fillcolor = "deepskyblue" ];
+	}
+
 	node_matrix:logicals -> node_logicals;
 	node_matrix:physicals -> node_physicals;
 	node_matrix:physical_volumes -> node_physical_volumes;
 	node_matrix:volume_groups -> node_volume_groups;
 	node_matrix:logical_volumes -> node_logical_volumes;
+	node_matrix:access_patterns -> node_access_patterns;
 }

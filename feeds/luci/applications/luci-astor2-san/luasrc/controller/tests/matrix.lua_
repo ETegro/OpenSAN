@@ -23,358 +23,231 @@ lvm = require( "astor2.lvm" )
 einarc = require( "astor2.einarc" )
 matrix = require( "matrix" )
 
--- Those tests are taken from boot library
-TestGcd = {}
-	function TestGcd:test1()
-		assertEquals( matrix.gcd(  1, -1), 1 )
-	end
-	function TestGcd:test2()
-		assertEquals( matrix.gcd( -1,  1), 1 )
-	end
-	function TestGcd:test3()
-		assertEquals( matrix.gcd(  1,  1), 1 )
-	end
-	function TestGcd:test4()
-		assertEquals( matrix.gcd( -1, -1), 1 )
-	end
-	function TestGcd:test5()
-		assertEquals( matrix.gcd(  0,  0), 0 )
-	end
-	function TestGcd:test6()
-		assertEquals( matrix.gcd(  7,  0), 7 )
-	end
-	function TestGcd:test7()
-		assertEquals( matrix.gcd(  0,  9), 9 )
-	end
-	function TestGcd:test8()
-		assertEquals( matrix.gcd( -7,  0), 7 )
-	end
-	function TestGcd:test9()
-		assertEquals( matrix.gcd(  0, -9), 9 )
-	end
-	function TestGcd:test10()
-		assertEquals( matrix.gcd( 42, 30), 6 )
-	end
-	function TestGcd:test11()
-		assertEquals( matrix.gcd(  6, -9), 3 )
-	end
-	function TestGcd:test12()
-		assertEquals( matrix.gcd(-10,-10), 10 )
-	end
-	function TestGcd:test13()
-		assertEquals( matrix.gcd(-25,-10), 5 )
-	end
-	function TestGcd:test14()
-		assertEquals( matrix.gcd(  3,  7), 1 )
-	end
-	function TestGcd:test15()
-		assertEquals( matrix.gcd(  8,  9), 1 )
-	end
-	function TestGcd:test16()
-		assertEquals( matrix.gcd(  7, 49), 7 )
-	end
+local ACCESS_PATTERNS = {
+	{
+		name = "foobaz1",
+		section_name = "foobar1",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 1
+	},
+	{
+		name = "foobaz2",
+		section_name = "foobar2",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 2
+	},
+	{
+		name = "foobar3",
+		section_name = "foobar3",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 3
+	},
+	{
+		name = "foobar4",
+		section_name = "foobar4",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 4
+	},
+	{
+		name = "foobar5",
+		section_name = "foobar5",
+		targetdriver = "iscsi",
+		enabled = true,
+		readonly = false,
+		lun = 5
+	}
+}
 
--- Those tests are taken from boost library
-TestLcm = {}
-	function TestLcm:test1()
-		assertEquals( matrix.lcm(  1,  -1), 1 )
-	end
-	function TestLcm:test2()
-		assertEquals( matrix.lcm( -1,   1), 1 )
-	end
-	function TestLcm:test3()
-		assertEquals( matrix.lcm(  1,   1), 1 )
-	end
-	function TestLcm:test4()
-		assertEquals( matrix.lcm( -1,  -1), 1 )
-	end
-	function TestLcm:test5()
-		assertEquals( matrix.lcm(  0,   0), 0 )
-	end
-	function TestLcm:test6()
-		assertEquals( matrix.lcm(  6,   0), 0 )
-	end
-	function TestLcm:test7()
-		assertEquals( matrix.lcm(  0,   7), 0 )
-	end
-	function TestLcm:test8()
-		assertEquals( matrix.lcm( -5,   0), 0 )
-	end
-	function TestLcm:test9()
-		assertEquals( matrix.lcm(  0,  -4), 0 )
-	end
-	function TestLcm:test10()
-		assertEquals( matrix.lcm( 18,  30), 90 )
-	end
-	function TestLcm:test11()
-		assertEquals( matrix.lcm( -6,   9), 18 )
-	end
-	function TestLcm:test12()
-		assertEquals( matrix.lcm(-10, -10), 10 )
-	end
-	function TestLcm:test13()
-		assertEquals( matrix.lcm( 25, -10), 50 )
-	end
-	function TestLcm:test14()
-		assertEquals( matrix.lcm(  3,   7), 21 )
-	end
-	function TestLcm:test15()
-		assertEquals( matrix.lcm(  8,   9), 72 )
-	end
-	function TestLcm:test16()
-		assertEquals( matrix.lcm(  7,  49), 49 )
-	end
+local PHYSICALS_TRIPLE = {
+	["3:1"] = {
+		id = "3:1",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001111",
+		size = 666,
+		state = "9"
+	},
+	["3:2"] = {
+		id = "3:2",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001112",
+		size = 666,
+		state = "9"
+	}
+}
+
+local LOGICALS_TRIPLE = {
+	[9] = {
+		id = 9,
+		level = "1",
+		physicals = {
+			["3:1"] = "9",
+			["3:2"] = "9"
+		},
+		capacity = 666.0,
+		device = "/dev/md3",
+		state = "normal",
+		logical_volumes = {
+			["foo"] = lvm.LogicalVolume:new( {
+				name = "foo",
+				device = "foobar1",
+				volume_group = {}, -- It is dummy
+				size = 12
+			} ),
+			["bar"] = lvm.LogicalVolume:new( {
+				name = "bar",
+				device = "foobar2",
+				volume_group = {}, -- It is dummy
+				size = 23
+			} ),
+			["baz"] = lvm.LogicalVolume:new( {
+				name = "baz",
+				device = "foobar3",
+				volume_group = {}, -- It is dummy
+				size = 34
+			} )
+		}
+	}
+}
+
+local PHYSICALS_DOUBLE = {
+	["3:1"] = {
+		id = "3:1",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001111",
+		size = 666,
+		state = "3"
+	},
+	["3:2"] = {
+		id = "3:2",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001112",
+		size = 666,
+		state = "3"
+	},
+	["13:1"] = {
+		id = "13:1",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001121",
+		size = 333,
+		state = "13"
+	},
+	["13:2"] = {
+		id = "13:2",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001122",
+		size = 333,
+		state = "13"
+	},
+	["13:3"] = {
+		id = "13:3",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001123",
+		size = 333,
+		state = "13"
+	},
+	["13:4"] = {
+		id = "13:4",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001124",
+		size = 333,
+		state = "failed"
+	},
+	["13:5"] = {
+		id = "13:5",
+		model = "model2",
+		revision = "asdfgh",
+		serial = "010001125",
+		size = 333,
+		state = "hotspare"
+	}
+}
+
+local LOGICALS_DOUBLE = {
+	[3] = {
+		id = 3,
+		level = "1",
+		physicals = {
+			["3:1"] = "3",
+			["3:2"] = "3"
+		},
+		capacity = 666.0,
+		device = "/dev/md3",
+		state = "normal"
+	},
+	[13] = {
+		id = 13,
+		level = "5",
+		physicals = {
+			["13:1"] = "13",
+			["13:2"] = "13",
+			["13:3"] = "13",
+			["13:4"] = "failed",
+			["13:5"] = "hotspare"
+		},
+		capacity = 666.0,
+		device = "/dev/md13",
+		state = "degraded",
+		progress = 66.6
+	}
+}
+
+local PHYSICALS_WITH_FREE = {
+	["3:1"] = {
+		id = "3:1",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001111",
+		size = 666,
+		state = "0"
+	},
+	["3:2"] = {
+		id = "3:2",
+		model = "model1",
+		revision = "qwerty",
+		serial = "010001112",
+		size = 666,
+		state = "free"
+	}
+}
+
+local LOGICALS_WITH_FREE = {
+	[0] = {
+		id = 0,
+		level = "passthrough",
+		physicals = {
+			["3:1"] = "0",
+		},
+		capacity = 666.0,
+		device = "/dev/md0",
+		state = "normal"
+	}
+}
 
 TestMatrix = {}
 	function TestMatrix:setUp()
-		self.access_patterns = {
-			{
-				name = "foobaz1",
-				section_name = "foobar1",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 1
-			},
-			{
-				name = "foobaz2",
-				section_name = "foobar2",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 2
-			},
-			{
-				name = "foobar3",
-				section_name = "foobar3",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 3
-			},
-			{
-				name = "foobar4",
-				section_name = "foobar4",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 4
-			},
-			{
-				name = "foobar5",
-				section_name = "foobar5",
-				targetdriver = "iscsi",
-				enabled = true,
-				readonly = false,
-				lun = 5
-			}
-		}
-		self.physicals_triple = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "9"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "9"
-			}
-		}
-		self.logicals_triple = {
-			[9] = {
-				id = 9,
-				level = "1",
-				physicals = {
-					["3:1"] = "9",
-					["3:2"] = "9"
-				},
-				capacity = 666.0,
-				device = "/dev/md3",
-				state = "normal",
-				logical_volumes = {
-					["foo"] = lvm.LogicalVolume:new( {
-						name = "foo",
-						device = "foobar1",
-						volume_group = {}, -- It is dummy
-						size = 12
-					} ),
-					["bar"] = lvm.LogicalVolume:new( {
-						name = "bar",
-						device = "foobar2",
-						volume_group = {}, -- It is dummy
-						size = 23
-					} ),
-					["baz"] = lvm.LogicalVolume:new( {
-						name = "baz",
-						device = "foobar3",
-						volume_group = {}, -- It is dummy
-						size = 34
-					} )
-				}
-			}
-		}
-		self.physicals_double = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "3"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "3"
-			},
-			["13:1"] = {
-				id = "13:1",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001121",
-				size = 333,
-				state = "13"
-			},
-			["13:2"] = {
-				id = "13:2",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001122",
-				size = 333,
-				state = "13"
-			},
-			["13:3"] = {
-				id = "13:3",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001123",
-				size = 333,
-				state = "13"
-			},
-			["13:4"] = {
-				id = "13:4",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001124",
-				size = 333,
-				state = "failed"
-			},
-			["13:5"] = {
-				id = "13:5",
-				model = "model2",
-				revision = "asdfgh",
-				serial = "010001125",
-				size = 333,
-				state = "hotspare"
-			}
-		}
-		self.logicals_double = {
-			[3] = {
-				id = 3,
-				level = "1",
-				physicals = {
-					["3:1"] = "3",
-					["3:2"] = "3"
-				},
-				capacity = 666.0,
-				device = "/dev/md3",
-				state = "normal"
-			},
-			[13] = {
-				id = 13,
-				level = "5",
-				physicals = {
-					["13:1"] = "13",
-					["13:2"] = "13",
-					["13:3"] = "13",
-					["13:4"] = "failed",
-					["13:5"] = "hotspare"
-				},
-				capacity = 666.0,
-				device = "/dev/md13",
-				state = "degraded",
-				progress = 66.6
-			}
-		}
-		self.physicals_with_free = {
-			["3:1"] = {
-				id = "3:1",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001111",
-				size = 666,
-				state = "0"
-			},
-			["3:2"] = {
-				id = "3:2",
-				model = "model1",
-				revision = "qwerty",
-				serial = "010001112",
-				size = 666,
-				state = "free"
-			}
-		}
-		self.logicals_with_free = {
-			[0] = {
-				id = 0,
-				level = "passthrough",
-				physicals = {
-					["3:1"] = "0",
-				},
-				capacity = 666.0,
-				device = "/dev/md0",
-				state = "normal"
-			}
-		}
-	end
-	function TestMatrix:test_volume_group_percentage_zero()
-		local logicals = self.logicals_triple
-		logicals[9].logical_volumes["bar"].volume_group.total = 0
-		logicals[9].logical_volumes["bar"].volume_group.allocated = 100
-
-		-- Dummy values
-		logicals[9].logical_volumes["foo"].volume_group.total = 0
-		logicals[9].logical_volumes["foo"].volume_group.allocated = 0
-		logicals[9].logical_volumes["baz"].volume_group.total = 0
-		logicals[9].logical_volumes["baz"].volume_group.allocated = 0
-
-		local got = matrix.filter_volume_group_percentage( {
-			lines = matrix.overall( {
-				physicals = self.physicals_triple,
-				logicals = self.logicals_triple
-			} )
-		} )[ "lines" ]
-		assertEquals( got[1].logical_volume.volume_group.percentage, 0 )
-	end
-	function TestMatrix:test_volume_group_percentage()
-		local logicals = self.logicals_triple
-		logicals[9].logical_volumes["foo"].volume_group.total = 666
-		logicals[9].logical_volumes["foo"].volume_group.allocated = 123
-
-		logicals[9].logical_volumes["bar"].volume_group.total = 100
-		logicals[9].logical_volumes["bar"].volume_group.allocated = 12
-
-		logicals[9].logical_volumes["baz"].volume_group.total = 213456
-		logicals[9].logical_volumes["baz"].volume_group.allocated = 213056
-		local got = matrix.filter_volume_group_percentage( {
-			lines = matrix.overall( {
-				physicals = self.physicals_triple,
-				logicals = self.logicals_triple
-			} )
-		} )[ "lines" ]
-		assertEquals( got[1].logical_volume.volume_group.percentage, 12 )
-		assertEquals( got[3].logical_volume.volume_group.percentage, 100 )
-		assertEquals( got[5].logical_volume.volume_group.percentage, 19 )
+		self.access_patterns = common.deepcopy( ACCESS_PATTERNS )
+		self.physicals_triple = common.deepcopy( PHYSICALS_TRIPLE )
+		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
+		self.physicals_double = common.deepcopy( PHYSICALS_DOUBLE )
+		self.logicals_double = common.deepcopy( LOGICALS_DOUBLE )
+		self.physicals_with_free = common.deepcopy( PHYSICALS_WITH_FREE )
+		self.logicals_with_free = common.deepcopy( LOGICALS_WITH_FREE )
 	end
 	function TestMatrix:test_matrix_double()
 		local needed = {
@@ -809,7 +682,6 @@ TestMatrix = {}
 			)
 		)
 	end
-
 	function TestMatrix:test_matrix_triple()
 		local needed = {
 			-- 1
@@ -1282,66 +1154,433 @@ TestMatrix = {}
 			)
 		)
 	end
-	function TestMatrix:test_access_pattern_adding_with_lvms()
-		local got = matrix.filter_add_access_patterns( {
+	function TestMatrix:test_with_access_patterns_single()
+		-- Bind three first access patterns to logical volumes
+		self.access_patterns[1].filename = self.logicals_triple[9].logical_volumes["bar"].device
+		self.access_patterns[2].filename = self.logicals_triple[9].logical_volumes["baz"].device
+		self.access_patterns[3].filename = self.logicals_triple[9].logical_volumes["foo"].device
+		local needed = {
+			-- 1
+			{
+				physical = {
+					rowspan = 3,
+					id = "3:1",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001111",
+					size = 666,
+					state = "allocated"
+				},
+				logical = {
+					rowspan = 6,
+					id = 9,
+					level = "1",
+					physicals = {
+						["3:1"] = {
+							rowspan = 3,
+							id = "3:1",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001111",
+							size = 666,
+							state = "allocated"
+						},
+						["3:2"] = {
+							rowspan = 3,
+							id = "3:2",
+							model = "model1",
+							revision = "qwerty",
+							serial = "010001112",
+							size = 666,
+							state = "allocated"
+						}
+					},
+					logical_volumes = {
+						["foo"] = {
+							rowspan = 2,
+							name = "foo",
+							device = "foobar1",
+							volume_group = {},
+							snapshots = {},
+							size = 12,
+							access_patterns = {
+								["foobar3"] = {
+									name = "foobar3",
+									section_name = "foobar3",
+									targetdriver = "iscsi",
+									enabled = true,
+									readonly = false,
+									filename = "foobar1",
+									lun = 3
+								}
+							}
+						},
+						["bar"] = {
+							rowspan = 2,
+							name = "bar",
+							device = "foobar2",
+							volume_group = {},
+							snapshots = {},
+							size = 23,
+							access_patterns = {
+								["foobaz1"] = {
+									name = "foobaz1",
+									section_name = "foobar1",
+									targetdriver = "iscsi",
+									enabled = true,
+									readonly = false,
+									filename = "foobar2",
+									lun = 1
+								}
+							}
+						},
+						["baz"] = {
+							rowspan = 2,
+							name = "baz",
+							device = "foobar3",
+							volume_group = {},
+							snapshots = {},
+							size = 34,
+							access_patterns = {
+								["foobaz2"] = {
+									name = "foobaz2",
+									section_name = "foobar2",
+									targetdriver = "iscsi",
+									enabled = true,
+									readonly = false,
+									filename = "foobar3",
+									lun = 2
+								}
+							}
+						}
+					},
+					capacity = 666.0,
+					device = "/dev/md3",
+					state = "normal"
+				},
+				logical_volume = {
+					rowspan = 2,
+					name = "bar",
+					device = "foobar2",
+					volume_group = {},
+					snapshots = {},
+					size = 23,
+					access_patterns = {
+						["foobaz1"] = {
+							name = "foobaz1",
+							section_name = "foobar1",
+							targetdriver = "iscsi",
+							enabled = true,
+							readonly = false,
+							filename = "foobar2",
+							lun = 1
+						}
+					}
+				},
+				access_pattern = {
+					name = "foobaz1",
+					section_name = "foobar1",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					filename = "foobar2",
+					lun = 1
+				}
+			},
+			-- 2
+			{
+			},
+			-- 3
+			{
+				logical_volume = {
+					rowspan = 2,
+					name = "baz",
+					device = "foobar3",
+					volume_group = {},
+					snapshots = {},
+					size = 34,
+					access_patterns = {
+						["foobaz2"] = {
+							name = "foobaz2",
+							section_name = "foobar2",
+							targetdriver = "iscsi",
+							enabled = true,
+							readonly = false,
+							filename = "foobar3",
+							lun = 2
+						}
+					}
+				},
+				access_pattern = {
+					name = "foobaz2",
+					section_name = "foobar2",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					filename = "foobar3",
+					lun = 2
+				}
+			},
+			-- 4
+			{
+				physical = {
+					rowspan = 3,
+					id = "3:2",
+					model = "model1",
+					revision = "qwerty",
+					serial = "010001112",
+					size = 666,
+					state = "allocated"
+				}
+			},
+			-- 5
+			{
+				logical_volume = {
+					rowspan = 2,
+					name = "foo",
+					device = "foobar1",
+					volume_group = {},
+					snapshots = {},
+					size = 12,
+					access_patterns = {
+						["foobar3"] = {
+							name = "foobar3",
+							section_name = "foobar3",
+							targetdriver = "iscsi",
+							enabled = true,
+							readonly = false,
+							filename = "foobar1",
+							lun = 3
+						}
+					}
+				},
+				access_pattern = {
+					name = "foobar3",
+					section_name = "foobar3",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					filename = "foobar1",
+					lun = 3
+				}
+			},
+			-- 6
+			{
+			},
+			-- 7
+			{
+				access_pattern = {
+					name = "foobar4",
+					section_name = "foobar4",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					colspan = 3,
+					lun = 4
+				}
+			},
+			-- 8
+			{
+				access_pattern = {
+					name = "foobar5",
+					section_name = "foobar5",
+					targetdriver = "iscsi",
+					enabled = true,
+					readonly = false,
+					colspan = 3,
+					lun = 5
+				}
+			}
+		}
+
+		assert( common.compare_tables(
+				matrix.overall( {
+					physicals = self.physicals_triple,
+					logicals = self.logicals_triple,
+					access_patterns = self.access_patterns
+				} ),
+				needed
+			)
+		)
+	end
+
+	function TestMatrix:test_with_access_patterns_single_with_highlight()
+		self.access_patterns[1].filename = self.logicals_triple[9].logical_volumes["bar"].device
+		self.access_patterns[2].filename = self.logicals_triple[9].logical_volumes["baz"].device
+		self.access_patterns[3].filename = self.logicals_triple[9].logical_volumes["foo"].device
+
+		local got = matrix.filter_borders_highlight( {
 			lines = matrix.overall( {
 				physicals = self.physicals_triple,
 				logicals = self.logicals_triple,
-			} ) },
-			self.access_patterns
-		)[ "lines" ]
-		assertEquals( got[1].access_pattern.name, "foobar3" )
-		assertEquals( got[1].access_pattern.colspan, 1 )
-		assertEquals( got[2].access_pattern.name, "foobar4" )
-		assertEquals( got[2].access_pattern.colspan, 1 )
-		assertEquals( got[3].access_pattern.name, "foobar5" )
-		assertEquals( got[3].access_pattern.colspan, 1 )
-		assertEquals( got[4].access_pattern.name, "foobaz1" )
-		assertEquals( got[4].access_pattern.colspan, 1 )
-		assertEquals( got[5].access_pattern.name, "foobaz2" )
-		assertEquals( got[5].access_pattern.colspan, 1 )
-		assertEquals( got[5].physical, nil )
-		assertEquals( got[5].logical, nil )
+				access_patterns = self.access_patterns
+			} )
+		} )[ "lines" ]
+		assert( common.compare_tables( got[1].logical_volume.highlight, {
+			left = false,
+			top = true,
+			right = false,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[1].access_pattern.highlight, {
+			left = false,
+			top = true,
+			right = true,
+			bottom = true
+		} ) )
+		assert( common.compare_tables( got[3].logical_volume.highlight, {
+			left = false,
+			top = false,
+			right = false,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[3].access_pattern.highlight, {
+			left = false,
+			top = true,
+			right = true,
+			bottom = true
+		} ) )
+		assert( common.compare_tables( got[5].logical_volume.highlight, {
+			left = false,
+			top = false,
+			right = false,
+			bottom = true
+		} ) )
+		assert( common.compare_tables( got[5].access_pattern.highlight, {
+			left = false,
+			top = true,
+			right = true,
+			bottom = true
+		} ) )
 	end
-	function TestMatrix:test_access_pattern_adding_in_just_raid()
-		local got = matrix.filter_add_access_patterns( {
+
+	function TestMatrix:test_with_access_patterns_many()
+		-- Generate physicals
+		local physicals = {}
+		for i = 1, 6 do
+			local physical_id = "0:" .. tonumber( i )
+			physicals[ physical_id ] = einarc.Physical:new( {
+				id = physical_id,
+				model = "foobar",
+				revision = "foobar",
+				serial = "foobar",
+				size = 666,
+				state = "0"
+			} )
+		end
+
+		local logical_id = 0
+		local logicals = { [ logical_id ] = {
+			id = logical_id,
+			level = "1",
+			capacity = 666,
+			state = "normal",
+			device = "/dev/md0",
+			physicals = {},
+			logical_volumes = {
+				["lvm1"] = lvm.LogicalVolume:new( {
+					name = "lvm1",
+					device = "foobar1",
+					volume_group = {},
+					size = 123
+				} ),
+				["lvm2"] = lvm.LogicalVolume:new( {
+					name = "lvm2",
+					device = "foobar2",
+					volume_group = {},
+					size = 123
+				} )
+			}
+		} }
+
+		for physical_id, _ in pairs( physicals ) do
+			logicals[ logical_id ].physicals[ physical_id ] = logical_id
+		end
+
+		self.access_patterns[1].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[2].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[3].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[4].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[5].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+
+		local got = matrix.overall( {
+			physicals = physicals,
+			logicals = logicals,
+			access_patterns = self.access_patterns
+		} )
+
+		assertEquals( got[1].logical.rowspan, 30 )
+		assertEquals( got[1].logical_volume.rowspan, 15 )
+		assertEquals( got[1].logical_volume.name, "lvm1" )
+		assertEquals( got[1].physical.rowspan, 5 )
+		for i = 1, 30, 5 do
+			assert( got[ i ].physical )
+			if i > 1 and i < 30 then
+				assert( not got[ i - 1 ].physical )
+				assert( not got[ i + 1 ].physical )
+			end
+		end
+		for i = 1, 30, 15 do
+			assert( got[ i ].logical_volume )
+		end
+		assertEquals( got[ 15 + 1 ].access_pattern.name, "foobar3" )
+		assertEquals( got[ 15 + 2 ].access_pattern.name, "foobar4" )
+		assertEquals( got[ 15 + 3 ].access_pattern.name, "foobar5" )
+		assertEquals( got[ 15 + 4 ].access_pattern.name, "foobaz1" )
+		assertEquals( got[ 15 + 5 ].access_pattern.name, "foobaz2" )
+
+		-- And also check highlighting
+		got = matrix.filter_borders_highlight( {
 			lines = matrix.overall( {
-				physicals = self.physicals_double,
-				logicals = self.logicals_double,
-			} ) },
-			self.access_patterns
-		)[ "lines" ]
-		assertEquals( got[1].access_pattern.name, "foobar3" )
-		assertEquals( got[1].access_pattern.colspan, 2 )
-		assertEquals( got[2].access_pattern.name, "foobar4" )
-		assertEquals( got[2].access_pattern.colspan, 2 )
-		assertEquals( got[3].access_pattern.name, "foobar5" )
-		assertEquals( got[3].access_pattern.colspan, 2 )
-		assertEquals( got[4].access_pattern.name, "foobaz1" )
-		assertEquals( got[4].access_pattern.colspan, 2 )
-		assertEquals( got[5].access_pattern.name, "foobaz2" )
-		assertEquals( got[5].access_pattern.colspan, 2 )
+				physicals = physicals,
+				logicals = logicals,
+				access_patterns = self.access_patterns
+			} )
+		} )[ "lines" ]
+		assert( common.compare_tables( got[16].logical_volume.highlight, {
+			left = false,
+			top = false,
+			right = false,
+			bottom = true
+		} ) )
+		assert( common.compare_tables( got[16].access_pattern.highlight, {
+			left = false,
+			top = true,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 1].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 2].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 3].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[16 + 4].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = true
+		} ) )
 	end
-	function TestMatrix:test_access_pattern_adding_with_physicals()
-		local got = matrix.filter_add_access_patterns( {
-			lines = matrix.overall( {
-				physicals = self.physicals_with_free,
-				logicals = self.logicals_with_free,
-			} ) },
-			self.access_patterns
-		)[ "lines" ]
-		assertEquals( got[1].access_pattern.name, "foobar3" )
-		assertEquals( got[1].access_pattern.colspan, 2 )
-		assertEquals( got[2].access_pattern.name, "foobar4" )
-		assertEquals( got[2].access_pattern.colspan, 3 )
-		assertEquals( got[3].access_pattern.name, "foobar5" )
-		assertEquals( got[3].access_pattern.colspan, 4 )
-		assertEquals( got[4].access_pattern.name, "foobaz1" )
-		assertEquals( got[4].access_pattern.colspan, 4 )
-		assertEquals( got[5].access_pattern.name, "foobaz2" )
-		assertEquals( got[5].access_pattern.colspan, 4 )
+
+TestFilterHotspareCalculation = {}
+	function TestFilterHotspareCalculation:setUp()
+		self.physicals_double = common.deepcopy( PHYSICALS_DOUBLE )
+		self.logicals_double = common.deepcopy( LOGICALS_DOUBLE )
 	end
-	function TestMatrix:test_hotspare_calculation()
+	function TestFilterHotspareCalculation:test_hotspare_calculation()
 		-- Add several other drives that will be checked
 		self.physicals_double[ "666:1" ] = {
 			id = "666:1",
@@ -1425,39 +1664,49 @@ TestMatrix = {}
 		end
 	end
 
-TestMibToTib = {}
-	function TestMibToTib:test_values_160gb()
-		assertEquals( matrix.mib2tib( 160E3 ), "0.15" )
+TestFilterPercentage = {}
+	function TestFilterPercentage:setUp()
+		self.physicals_triple = common.deepcopy( PHYSICALS_TRIPLE )
+		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
 	end
-	function TestMibToTib:test_values_320gb()
-		assertEquals( matrix.mib2tib( 320E3 ), "0.30" )
+	function TestFilterPercentage:test_volume_group_percentage_zero()
+		local logicals = self.logicals_triple
+		logicals[9].logical_volumes["bar"].volume_group.total = 0
+		logicals[9].logical_volumes["bar"].volume_group.allocated = 100
+
+		-- Dummy values
+		logicals[9].logical_volumes["foo"].volume_group.total = 0
+		logicals[9].logical_volumes["foo"].volume_group.allocated = 0
+		logicals[9].logical_volumes["baz"].volume_group.total = 0
+		logicals[9].logical_volumes["baz"].volume_group.allocated = 0
+
+		local got = matrix.filter_volume_group_percentage( {
+			lines = matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple
+			} )
+		} )[ "lines" ]
+		assertEquals( got[1].logical_volume.volume_group.percentage, 0 )
 	end
-	function TestMibToTib:test_values_640gb()
-		assertEquals( matrix.mib2tib( 640E3 ), "0.61" )
-	end
-	function TestMibToTib:test_values_750gb()
-		assertEquals( matrix.mib2tib( 750E3 ), "0.71" )
-	end
-	function TestMibToTib:test_values_1tb()
-		assertEquals( matrix.mib2tib( 1E6 ), "0.95" )
-	end
-	function TestMibToTib:test_values_1500gb()
-		assertEquals( matrix.mib2tib( 15E5 ), "1.43" )
-	end
-	function TestMibToTib:test_values_2tb()
-		assertEquals( matrix.mib2tib( 2E6 ), "1.90" )
-	end
-	function TestMibToTib:test_values_10tb()
-		assertEquals( matrix.mib2tib( 10E6 ), "9.53" )
-	end
-	function TestMibToTib:test_values_100tb()
-		assertEquals( matrix.mib2tib( 100E6 ), "95.36" )
-	end
-	function TestMibToTib:test_values_1pb()
-		assertEquals( matrix.mib2tib( 1E9 ), "953.67" )
-	end
-	function TestMibToTib:test_values_zero()
-		assertEquals( matrix.mib2tib( 0 ), "0.00" )
+	function TestFilterPercentage:test_volume_group_percentage()
+		local logicals = self.logicals_triple
+		logicals[9].logical_volumes["foo"].volume_group.total = 666
+		logicals[9].logical_volumes["foo"].volume_group.allocated = 123
+
+		logicals[9].logical_volumes["bar"].volume_group.total = 100
+		logicals[9].logical_volumes["bar"].volume_group.allocated = 12
+
+		logicals[9].logical_volumes["baz"].volume_group.total = 213456
+		logicals[9].logical_volumes["baz"].volume_group.allocated = 213056
+		local got = matrix.filter_volume_group_percentage( {
+			lines = matrix.overall( {
+				physicals = self.physicals_triple,
+				logicals = self.logicals_triple
+			} )
+		} )[ "lines" ]
+		assertEquals( got[1].logical_volume.volume_group.percentage, 12 )
+		assertEquals( got[3].logical_volume.volume_group.percentage, 100 )
+		assertEquals( got[5].logical_volume.volume_group.percentage, 19 )
 	end
 
 LuaUnit:run()
