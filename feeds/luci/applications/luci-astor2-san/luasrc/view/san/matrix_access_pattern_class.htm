@@ -19,10 +19,7 @@
 
 <% if not line.access_pattern.enabled then %>access_pattern-disabled<% end %>
 <% if line.access_pattern.readonly then %>access_pattern-readonly<% end %>
-<% if line.access_pattern:is_binded() then %>
-	access_pattern-binded
-	access_pattern-backlight-<%= hash( line.access_pattern.filename ) %>
-<% end %>
+<% if line.access_pattern:is_binded() then %>access_pattern-binded<% end %>
 
 <% if line.access_pattern.highlight.left then %>access_pattern-highlight-left<% end %>
 <% if line.access_pattern.highlight.top then %>access_pattern-highlight-top<% end %>
