@@ -54,13 +54,13 @@
 			<%+san/matrix_logical_volume%>
 		<% end %>
 		<% if line.access_pattern then %>
-			<%+san/matrix_access_pattern%>
+			<%+san/access_pattern/index%>
 		<% end %>
 	</tr>
 	<% end %>
 </table>
 
 <%+san/form_logical_add%>
-<%+san/form_access_pattern_add%>
+<%+san/access_pattern/forms/add%>
 
 </form>
