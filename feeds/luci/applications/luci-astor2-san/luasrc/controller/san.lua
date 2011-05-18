@@ -150,6 +150,7 @@ local function find_logical_id_in_data_by_hash( logical_id_hash, data )
 end
 
 local function parse_inputs_by_re( inputs, re )
+	local re = table.concat( re, "" )
 	for k, v in pairs( inputs ) do
 		local result = { string.match( k, re ) }
 		if #result > 0 then
@@ -167,7 +168,7 @@ local function einarc_logical_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local logical_id_hash = parse_inputs_by_re( inputs, "^submit_logical_delete.(" .. hashre .. ")" )
+	local logical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_delete.(",hashre,")"} )
 	assert( logical_id_hash, "unable to parse out logical's id" )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
@@ -227,7 +228,7 @@ local function einarc_logical_hotspare_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local physical_id_hash = parse_inputs_by_re( inputs, "^submit_logical_hotspare_add.(" .. hashre .. ")" )
+	local physical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_hotspare_add.(",hashre,")"} )
 	assert( physical_id_hash, "unable to parse out physical's id" )
 	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
 
@@ -255,7 +256,7 @@ local function einarc_logical_hotspare_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local tmp = parse_inputs_by_re( inputs, "^submit_logical_hotspare_delete.(" .. hashre .. ").(" .. hashre .. ")" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_hotspare_delete.(",hashre,").(",hashre,")"} )
 	assert( tmp, "unable to parse out logical's and physical's ids" )
 	local physical_id_hash = tmp[1]
 	local logical_id_hash = tmp[2]
@@ -282,7 +283,7 @@ local function lvm_logical_volume_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local logical_id_hash = parse_inputs_by_re( inputs, "^submit_logical_volume_add.(" .. hashre .. ")" )
+	local logical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_volume_add.(",hashre,")"} )
 	assert( logical_id_hash, "unable to parse out logical's id" )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
@@ -383,7 +384,7 @@ local function lvm_logical_volume_remove( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local tmp = parse_inputs_by_re( inputs, "^submit_logical_volume_remove.(" .. hashre .. ").lv(" .. hashre .. ")" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_remove.(",hashre,").lv(",hashre,")"} )
 	assert( tmp, "unable to parse out volume group's and logical volume's names" )
 	local volume_group_name_hash = tmp[1]
 	local logical_volume_name_hash = tmp[2]
@@ -403,7 +404,7 @@ local function lvm_logical_volume_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local tmp = parse_inputs_by_re( inputs, "^submit_logical_volume_resize.(" .. hashre .. ").lv(" .. hashre .. ")" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_resize.(",hashre,").lv(",hashre,")"} )
 	assert( tmp, "unable to parse out volume group's and logical volume's names" )
 	local volume_group_name_hash = tmp[1]
 	local logical_volume_name_hash = tmp[2]
@@ -429,7 +430,7 @@ local function lvm_logical_volume_snapshot_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local tmp = parse_inputs_by_re( inputs, "^submit_logical_volume_snapshot_add.lvd(" .. hashre .. ").(" .. hashre .. ")" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_snapshot_add.lvd(",hashre,").(",hashre,")"} )
 	assert( tmp, "unable to parse out volume group's and logical volume's names" )
 	local volume_group_name_hash = tmp[1]
 	local logical_volume_name_hash = tmp[2]
@@ -455,7 +456,7 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local tmp = parse_inputs_by_re( inputs, "^submit_logical_volume_snapshot_resize.(" .. hashre .. ").s(%d+).lv(" .. hashre .. ")" )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_snapshot_resize.(",hashre,").s(%d+).lv(",hashre,")"} )
 	assert( tmp, "unable to parse out volume group's and logical volume's names, original snapshot's size" )
 	local volume_group_name_hash = tmp[1]
 	local snapshot_size = tmp[2]
@@ -546,7 +547,7 @@ local function scst_access_pattern_delete( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, "^submit_access_pattern_delete.(" .. hashre .. ")" )
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_delete.(",hashre,")"} )
 	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
@@ -575,7 +576,7 @@ local function scst_access_pattern_bind( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, "^submit_access_pattern_bind.(" .. hashre .. ")" )
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_bind.(",hashre,")"} )
 	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
@@ -611,7 +612,7 @@ local function scst_access_pattern_unbind( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, "^submit_access_pattern_unbind.(" .. hashre .. ")" )
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_unbind.(",hashre,")"} )
 	assert( access_pattern_section_name_hash,
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
@@ -634,7 +635,7 @@ local function scst_access_pattern_edit( inputs )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, "^submit_access_pattern_edit.(" .. hashre .. ")" )
+	local access_pattern_section_name_hash = parse_inputs_by_re( inputs, {"^submit_access_pattern_edit.(",hashre,")"} )
 	assert( access_pattern_section_name_hash, "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 	local access_pattern = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
