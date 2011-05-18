@@ -14,3 +14,4 @@ LuCI касающиеся вещи
    updating
    theming
    san_work_describing
+   unittesting
