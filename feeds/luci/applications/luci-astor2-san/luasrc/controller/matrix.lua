@@ -138,7 +138,11 @@ function M.overall( data )
 	end
 
 	current_line = final_line
-	for _, access_pattern in ipairs( access_patterns ) do
+	local access_pattern_names = common.unique_keys( "name", access_patterns )
+	local access_pattern_names_sort = common.keys( access_pattern_names )
+	table.sort( access_pattern_names_sort )
+	for _, access_pattern_name in ipairs( access_pattern_names_sort ) do
+		local access_pattern = access_patterns[ access_pattern_names[ access_pattern_name ][1] ]
 		if not access_pattern.filename then
 			if not matrix[ current_line ] then
 				matrix[ current_line ] = {}
