@@ -50,7 +50,7 @@
 		<td colspan="<%= local_logical_colspan %>">
 			<%+san/logical/fillbar%>
 			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %></span>
-				<%+san/matrix_logical_volume_add%>
+				<%+san/logical_volume/forms/add%>
 			<% end %>
 		</td>
 	</tr>

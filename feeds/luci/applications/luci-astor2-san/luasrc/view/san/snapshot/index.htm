@@ -19,21 +19,12 @@
 
 <td valign="top"
     rowspan="<%= line.logical_volume.rowspan %>"
-    class="<%+san/matrix_logical_volume_class%>">
+    class="<%+san/logical_volume/class%>">
 
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<% if line.logical_volume.access_patterns then %>
-				<a href="#"
-				   id="logical_volume_snapshot_name-<%= line.logical_volume.name %>"
-				   class="logical_volume_snapshot_name-<%= hash( line.logical_volume.device ) %>"
-				   title="<%= line.logical_volume.name %>">
-					<%= line.logical_volume.name %>
-				</a>
-			<% else %>
-				<%= line.logical_volume.name %>
-			<% end %>
+			<%= line.logical_volume.name %>
 		</td>
 		<td>
 			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
@@ -42,7 +33,7 @@
 		</td>
 		<td>
 			<% if not line.logical_volume.access_patterns then %>
-				<%+san/matrix_logical_volume_snapshot_remove%>
+				<%+san/snapshot/remove%>
 			<% end %>
 		</td>
 		<td>
@@ -55,7 +46,7 @@
 	</tr>
 	<tr>
 		<td colspan="3">
-			<%+san/matrix_logical_volume_snapshot_resize%>
+			<%+san/snapshot/resize%>
 		</td>
 	</tr>
 </table>
