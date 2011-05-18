@@ -17,9 +17,7 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-logical-background-state-<%= line.logical.state %>
-<% if line.logical.highlight.left then %>logical-highlight-left<% end %>
-<% if line.logical.highlight.top then %>logical-highlight-top<% end %>
-<% if line.logical.highlight.right then %>logical-highlight-right<% end %>
-<% if line.logical.highlight.bottom then %>logical-highlight-bottom<% end %>
-<% if line.logical.highlight.color then %>logical-highlight-color-<%= line.logical.highlight.color %><% end %>
+<% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
+
+<% highlight = line.logical_volume.highlight %>
+<%+san/class_highlight%>

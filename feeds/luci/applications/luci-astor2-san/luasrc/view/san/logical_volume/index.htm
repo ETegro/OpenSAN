@@ -18,40 +18,49 @@
 %>
 
 <td valign="top"
-    rowspan="<%= line.logical.rowspan %>"
-    class="<%+san/matrix_logical_class%>">
+    rowspan="<%= line.logical_volume.rowspan %>"
+    class="<%+san/logical_volume/class%>">
 
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<%= line.logical.id %>
+			<%= line.logical_volume.name %>
 		</td>
 		<td>
-			<%: RAID %> <%= line.logical.level %>
+			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
+				<%= line.logical_volume.size %> <%: TiB %>
+			</span>
 		</td>
 		<td>
-			<%= line.logical.state %>
+			<% if not line.logical_volume.access_patterns then %>
+				<%+san/logical_volume/remove%>
+			<% end %>
 		</td>
-		<% if line.logical.progress then %>
-			<td>(<%= line.logical.progress %> %)</td>
-		<% end %>
-		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
-			<%+san/matrix_logical_remove%>
-		<% end %>
+		<td>
+			<% if #matrix_overall.access_patterns > 0 then %>
+				<input name="san.logical_volume_select"
+				       type ="radio"
+				       value="<%= line.logical_volume.device %>" />
+			<% end %>
+		</td>
 	</tr>
 	<tr>
-		<% local local_logical_colspan = 4
-		   if line.logical.progress then
-			local_logical_colspan = local_logical_colspan + 1
-		   end
-		   if #common.keys( line.logical.logical_volumes ) == 0 then
-			local_logical_colspan = local_logical_colspan + 1
-		end %>
-		<td colspan="<%= local_logical_colspan %>">
-			<%+san/matrix_logical_fill_bar%>
-			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %></span>
-				<%+san/matrix_logical_volume_add%>
+		<td colspan="4">
+			<% if #line.logical_volume.snapshots == 0 then %>
+				<%+san/logical_volume/resize%>
 			<% end %>
+			<a id="volume_logical_info-<%= hash( line.logical_volume.name ) %>"
+			   href="#"
+			   class="inline">
+				<img src="<%=resource%>/cbi/fieldadd.gif"
+				     alt="<%: Snapshot %>"
+				     title="<%: Snapshot %>" />
+			</a>
+		</td>
+	</tr>
+	<tr class="to_hide">
+		<td colspan="3">
+			<%+san/snapshot/forms/take%>
 		</td>
 	</tr>
 </table>

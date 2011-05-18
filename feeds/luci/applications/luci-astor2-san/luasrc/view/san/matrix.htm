@@ -42,25 +42,25 @@
 
 	<tr>
 		<% if line.physical then %>
-			<%+san/matrix_physical%>
+			<%+san/physical/index%>
 		<% end %>
 		<% if line.logical then %>
-			<%+san/matrix_logical%>
+			<%+san/logical/index%>
 		<% end %>
 		<% if line.logical_volume and line.logical_volume.is_snapshot() == true then %>
-			<%+san/matrix_logical_volume_snapshot%>
+			<%+san/snapshot/index%>
 		<% end %>
 		<% if line.logical_volume and line.logical_volume.is_snapshot() == false then %>
-			<%+san/matrix_logical_volume%>
+			<%+san/logical_volume/index%>
 		<% end %>
 		<% if line.access_pattern then %>
-			<%+san/matrix_access_pattern%>
+			<%+san/access_pattern/index%>
 		<% end %>
 	</tr>
 	<% end %>
 </table>
 
-<%+san/form_logical_add%>
-<%+san/form_access_pattern_add%>
+<%+san/logical/forms/add%>
+<%+san/access_pattern/forms/add%>
 
 </form>

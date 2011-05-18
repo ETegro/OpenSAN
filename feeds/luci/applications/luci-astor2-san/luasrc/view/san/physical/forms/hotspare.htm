@@ -17,24 +17,9 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<ul>
-	<li><%: Model %>: <%= line.physical.model %></li>
-	<li><%: S/N %>: <%= line.physical.serial %></li>
-	<li><%: Revision %>: <%= line.physical.revision %></li>
-	<li><%: State %>: <%= line.physical.state %></li>
-	<li><%: Size %>:
-		<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
-			<%= line.physical.size %> (<%: TiB %>)
-		</span>
-	</li>
-	<% local there_is_logical = false %>
-	<!-- TODO -->
-	<% for _, this_line in ipairs( matrix_overall.lines ) do %>
-		<% if this_line.logical then %>
-			<% there_is_logical = true %>
-		<% end %>
-	<% end %>
-	<% if there_is_logical then %>
-		<%+san/form_hotspare%>
-	<% end %>
-</ul>
+<% if line.physical.hotspare_availability then %>
+	<%+san/physical/forms/add%>
+<% end %>
+<% if line.physical.state == "hotspare" then %>
+	<%+san/physical/forms/delete%>
+<% end %>

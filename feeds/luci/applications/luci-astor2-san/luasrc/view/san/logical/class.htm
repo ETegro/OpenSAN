@@ -17,9 +17,6 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 %>
 
-<% if line.physical.hotspare_availability then %>
-	<%+san/form_hotspare_add%>
-<% end %>
-<% if line.physical.state == "hotspare" then %>
-	<%+san/form_hotspare_delete%>
-<% end %>
+logical-background-state-<%= line.logical.state %>
+<% highlight = line.logical.highlight %>
+<%+san/class_highlight%>
