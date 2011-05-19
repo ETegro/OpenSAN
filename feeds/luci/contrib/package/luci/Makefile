@@ -325,6 +325,7 @@ $(eval $(call application,astor2-san,aStor2 SAN,\
 	+PACKAGE_luci-app-astor2-san:astor2-lua-common \
 	+PACKAGE_luci-app-astor2-san:astor2-lua-einarc \
 	+PACKAGE_luci-app-astor2-san:astor2-lua-lvm \
+	+PACKAGE_luci-app-astor2-san:astor2-lua-scst \
 	+PACKAGE_luci-app-astor2-san:luasha2 \
 	+PACKAGE_luci-theme-astor2))
 
