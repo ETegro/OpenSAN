@@ -44,6 +44,7 @@ function index()
 		page.order  = 20
 	end
 
+--[[
 	if has_wifi and has_wifi.size > 0 then
 		page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), i18n("Wifi"), 15)
 		page.leaf = true
@@ -73,6 +74,7 @@ function index()
 			end
 		end
 	end
+]]
 
 	page = entry({"admin", "network", "network"}, arcombine(cbi("admin_network/network"), cbi("admin_network/ifaces")), i18n("Interfaces"), 10)
 	page.leaf   = true
