@@ -56,14 +56,14 @@ require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
 	local i18n = luci.i18n.translate
-	local e = entry( { "san" },
+	local e = entry( { "admin", "san" },
 	                 call( "index_overall" ),
 	                 i18n("SAN"),
 	                 10 )
 	e.i18n = "astor2_san"
 
 	-- Einarc related
-	e = entry( { "san", "perform" },
+	e = entry( { "admin", "san", "perform" },
 	           call( "perform" ),
 	           nil,
 	           10 )
