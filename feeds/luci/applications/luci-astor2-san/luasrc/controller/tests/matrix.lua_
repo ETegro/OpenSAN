@@ -1157,7 +1157,7 @@ TestMatrix = {}
 	function TestMatrix:test_filter_alternation_border_colors()
 		local max_logicals = 6
 		local max_physicals = 3
-		local max_logical_volumes = 3
+		local max_logical_volumes = 4
 		local physicals = {}
 		for l = 0, ( max_logicals - 1 ) do
 			for i = 1, max_physicals do
@@ -1183,32 +1183,23 @@ TestMatrix = {}
 				device = "/dev/md0",
 				physicals = {},
 				logical_volumes = {
-					[ "lvm-" .. l .. "1" ] = lvm.LogicalVolume:new( {
-						name = "lvm-" .. l .. "1",
-						device = "foobar1",
-						volume_group = {},
-						size = 123
-					} ),
-					[ "lvm-" .. l .. "2" ] = lvm.LogicalVolume:new( {
-						name = "lvm-" .. l .. "2",
-						device = "foobar2",
-						volume_group = {},
-						size = 123
-					} ),
-					[ "lvm-" .. l .. "3" ] = lvm.LogicalVolume:new( {
-						name = "lvm-" .. l .. "3",
-						device = "foobar3",
-						volume_group = {},
-						size = 123
-					} ),
-					[ "lvm-" .. l .. "4" ] = lvm.LogicalVolume:new( {
-						name = "lvm-" .. l .. "4",
-						device = "foobar4",
-						volume_group = {},
-						size = 123
-					} )
 				}
 			}
+
+			local logical_volumes = {}
+			for v = 1, max_logical_volumes do
+				local volume_name = "lvm" .. l .. v
+				logical_volumes[ volume_name ] = lvm.LogicalVolume:new( {
+					name = volume_name,
+					device = "foobar" .. v,
+					volume_group = {},
+					size = 123
+				} )
+			end
+			for volume_name,_ in pairs( logical_volumes ) do
+				logicals[ logical_id ].logical_volumes[ volume_name ] = logical_volumes[ volume_name ]
+			end
+
 			local physicals = {}
 			for i = 1, max_physicals do
 				local physical_id = tonumber( l ) .. ":" .. tonumber( i )
