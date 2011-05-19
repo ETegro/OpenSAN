@@ -33,9 +33,11 @@ function index()
 		entry({"admin", "system", "fstab", "swap"},  cbi("admin_system/fstab/swap"),  nil).leaf = true
 	end
 
+--[[
 	if nixio.fs.access("/sys/class/leds") then
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
+]]
 
 	entry({"admin", "system", "backup"}, call("action_backup"), i18n("Backup / Restore"), 70)
 	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("Flash Firmware"), 80)
