@@ -8,7 +8,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: iface_overview.htm 6843 2011-02-06 01:58:55Z jow $
+$Id: iface_overview.htm 7011 2011-05-03 03:20:15Z jow $
 
 -%>
 
@@ -76,8 +76,8 @@ $Id: iface_overview.htm 6843 2011-02-06 01:58:55Z jow $
 					{
 						var ifc = ifcs[i];
 						var is_up = (ifc.flags && ifc.flags.up);
-						var rxb = ifc.stats ? (ifc.stats["rx_bytes"] / 1024) : 0;
-						var txb = ifc.stats ? (ifc.stats["tx_bytes"] / 1024) : 0;
+						var rxb = ifc.stats ? ifc.stats["rx_bytes"] : 0;
+						var txb = ifc.stats ? ifc.stats["tx_bytes"] : 0;
 						var rxp = ifc.stats ? ifc.stats["rx_packets"] : 0;
 						var txp = ifc.stats ? ifc.stats["tx_packets"] : 0;
 						var mac = ifc.macaddr ? ifc.macaddr : '00:00:00:00:00:00';
@@ -168,8 +168,8 @@ $Id: iface_overview.htm 6843 2011-02-06 01:58:55Z jow $
 						if (t)
 						{
 							t.innerHTML = String.format(
-								'<strong><%:RX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />' +
-								'<strong><%:TX%></strong>: %.2f <%:KB%> (%d <%:Pkts.%>)<br />',
+								'<strong><%:RX%></strong>: %1024.2mB (%d <%:Pkts.%>)<br />' +
+								'<strong><%:TX%></strong>: %1024.2mB (%d <%:Pkts.%>)<br />',
 									rxb, rxp, txb, txp
 							);
 						}
@@ -196,7 +196,7 @@ $Id: iface_overview.htm 6843 2011-02-06 01:58:55Z jow $
 
 		<table class="cbi-section-table" style="margin:10px; empty-cells:hide">
 			<tr class="cbi-section-table-titles">
-				<th class="cbi-section-table-cell">&nbsp;</th>
+				<th class="cbi-section-table-cell">&#160;</th>
 				<th class="cbi-section-table-cell"><%:Interface%></th>
 				<th class="cbi-section-table-cell"><%:Uptime%></th>
 				<th class="cbi-section-table-cell"><%:MAC%></th>
