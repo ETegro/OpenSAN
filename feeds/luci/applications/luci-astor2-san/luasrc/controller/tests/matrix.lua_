@@ -1253,9 +1253,7 @@ TestMatrix = {}
 		assertEquals( got[ line ].logical.highlight.color, color )
 		assertEquals( got[ line ].physical.highlight.color, color )
 		for i = 1, max_logical_volumes do
-			print( "test : " .. line )
 			assertEquals( got[ line ].logical_volume.highlight.color, color )
-			print( "test ok: " .. line )
 			line = line + max_logical_volumes- 1
 		end
 		--blue #{ "black", "blue", "green" }[ 2 ]
@@ -1264,9 +1262,7 @@ TestMatrix = {}
 		assertEquals( got[ line ].logical.highlight.color, color )
 		assertEquals( got[ line ].physical.highlight.color, color )
 		for i = 1, max_logical_volumes do
-			print( "test : " .. line )
 			assertEquals( got[ line ].logical_volume.highlight.color, color )
-			print( "test ok: " .. line )
 			line = line + max_logical_volumes - 1
 		end
 		--green #{ "black", "blue", "green" }[ 3 ]
@@ -1275,9 +1271,7 @@ TestMatrix = {}
 		assertEquals( got[ line ].logical.highlight.color, color )
 		assertEquals( got[ line ].physical.highlight.color, color )
 		for i = 1, max_logical_volumes do
-			print( "test : " .. line )
 			assertEquals( got[ line ].logical_volume.highlight.color, color )
-			print( "test ok: " .. line )
 			line = line + max_logical_volumes - 1
 		end
 		--black #{ "black", "blue", "green" }[ 1 ]
@@ -1286,22 +1280,17 @@ TestMatrix = {}
 		assertEquals( got[ line ].logical.highlight.color, color )
 		assertEquals( got[ line ].physical.highlight.color, color )
 		for i = 1, max_logical_volumes do
-			print( "test : " .. line )
 			assertEquals( got[ line ].logical_volume.highlight.color, color )
-			print( "test ok: " .. line )
 			line = line + max_logical_volumes - 1
 		end
 
 		local color = 1
 		local line = 1
 		for i = 1, max_logicals do
-			print( "LINE " .. line )
 			assertEquals( got[ line ].logical.highlight.color, colors_array[ color ] )
 			assertEquals( got[ line ].physical.highlight.color, colors_array[ color ] )
 			for k = 1, max_logical_volumes do
-				print( "TEST : " .. line )
 				assertEquals( got[ line ].logical_volume.highlight.color, colors_array[ color ] )
-				print( "TEST OK: " .. line )
 					line = line + max_logical_volumes - 1
 			end
 			if color == #colors_array then
@@ -1435,14 +1424,11 @@ TestMatrix = {}
 		local color = 1
 		local line = 1
 		for i = 1, max_logicals do
-			print( "LINE " .. line )
 			assertEquals( got[ line ].logical.highlight.color, colors_array[ color ] )
 			assertEquals( got[ line ].physical.highlight.color, colors_array[ color ] )
 			assertEquals( got[ line ].access_pattern.highlight.color, colors_array[ color ] )
 			for k = 1, max_logical_volumes do
-				print( "TEST : " .. line )
 				assertEquals( got[ line ].logical_volume.highlight.color, colors_array[ color ] )
-				print( "TEST OK: " .. line )
 					line = line + max_logical_volumes - 1
 			end
 			if color == #colors_array then
