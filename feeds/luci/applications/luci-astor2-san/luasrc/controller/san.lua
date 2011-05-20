@@ -79,6 +79,26 @@ end
 ------------------------------------------------------------------------
 -- Einarc related functions
 ------------------------------------------------------------------------
+local function device_clear( device ) -- This function actually uses LVM only library
+	local physical_volume_found = nil
+	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+		if physical_volume.device == device then
+			physical_volume_found = physical_volume
+		end
+	end
+
+	if not physical_volume_found then return end
+
+	for _, volume_group in ipairs( lvm.VolumeGroup.list( { physical_volume_found } ) ) do
+		for _, logical_volume in ipairs( lvm.LogicalVolume.list( { volume_group } ) ) do
+			logical_volume:remove()
+		end
+		volume_group:remove()
+	end
+
+	physical_volume_found:remove()
+end
+
 local function is_valid_raid_configuration( raid_level, drives )
 	local i18n = luci.i18n.translate
 	local VALIDATORS = {
@@ -132,6 +152,14 @@ local function einarc_logical_add( inputs, drives, data )
 		end
 		if #common.keys( found_models ) ~= 1 then
 			message_error = i18n("Only single model hard drives should be used")
+		end
+
+		lvm.PhysicalVolume.rescan()
+		lvm.VolumeGroup.rescan()
+		lvm.LogicalVolume.rescan()
+		assert( nil, common.ppt( data.physicals ) )
+		for _, drive in ipairs( drives ) do
+			device_clear( data.physicals[ drive ].device )
 		end
 
 		local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
@@ -305,6 +333,12 @@ local function lvm_logical_volume_add( inputs, data )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
 
+	local device = data.logicals[ logical_id ].device
+	lvm.PhysicalVolume.rescan()
+	lvm.VolumeGroup.rescan()
+	lvm.LogicalVolume.rescan()
+	device_clear( device )
+
 	local return_code = nil
 	local result = nil
 
@@ -320,49 +354,26 @@ local function lvm_logical_volume_add( inputs, data )
 		return nil
 	end
 
-	local volume_group = nil
-	local physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device,
-	                                                                 data.physical_volumes )
-	if physical_volume_existing then
-		if physical_volume_existing.volume_group and
-		   not lvm.PhysicalVolume.is_orphan( physical_volume_existing ) then
-			for _, volume_group_inner in ipairs( data.volume_groups ) do
-				if volume_group_inner.name == physical_volume_existing.volume_group then
-					volume_group = volume_group_inner
-				end
-			end
-		else
-			return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume_existing } )
-			if return_code then
-				lvm.PhysicalVolume.rescan()
-				lvm.VolumeGroup.rescan()
-			else
-				return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
-			end
-		end
-	else
-		return_code, result = pcall( lvm.PhysicalVolume.create, data.logicals[ logical_id ].device )
-		if not return_code then
-			return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
-		end
+	return_code, result = pcall( lvm.PhysicalVolume.create, device )
+	if not return_code then
+		return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
+	end
+	lvm.PhysicalVolume.rescan()
+
+	local physical_volume = find_physical_volume_by_device( device )
+
+	return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume } )
+	if return_code then
 		lvm.PhysicalVolume.rescan()
-
-		physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device )
-
-		return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume_existing } )
-		if return_code then
-			lvm.PhysicalVolume.rescan()
-			lvm.VolumeGroup.rescan()
-		else
-			return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
-		end
-
-		physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device )
+		lvm.VolumeGroup.rescan()
+	else
+		return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
 	end
 
-	if not volume_group then
-		volume_group = lvm.VolumeGroup.list( { physical_volume_existing } )[1]
-	end
+	physical_volume = find_physical_volume_by_device( device )
+
+	local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
+
 	assert( volume_group,
 		"unable to find corresponding volume group" )
 
