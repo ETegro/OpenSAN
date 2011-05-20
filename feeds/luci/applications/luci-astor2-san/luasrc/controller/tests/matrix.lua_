@@ -1158,6 +1158,7 @@ TestMatrix = {}
 		local max_logicals = 6
 		local max_physicals = 3
 		local max_logical_volumes = 4
+		-- Generate physicals
 		local physicals = {}
 		for l = 0, ( max_logicals - 1 ) do
 			for i = 1, max_physicals do
@@ -1172,6 +1173,7 @@ TestMatrix = {}
 				} )
 			end
 		end
+		-- Generate logicals
 		local logicals = {}
 		for l = 0, ( max_logicals - 1 ) do
 			local logical_id = tonumber( l )
@@ -1185,7 +1187,7 @@ TestMatrix = {}
 				logical_volumes = {
 				}
 			}
-
+			--Generate logical_volumes
 			local logical_volumes = {}
 			for v = 1, max_logical_volumes do
 				local volume_name = "lvm" .. l .. v
@@ -1199,7 +1201,7 @@ TestMatrix = {}
 			for volume_name,_ in pairs( logical_volumes ) do
 				logicals[ logical_id ].logical_volumes[ volume_name ] = logical_volumes[ volume_name ]
 			end
-
+			-- Filling physicals in logicals
 			local physicals = {}
 			for i = 1, max_physicals do
 				local physical_id = tonumber( l ) .. ":" .. tonumber( i )
@@ -1244,6 +1246,122 @@ TestMatrix = {}
 		assertEquals( got[ 37 ].physical.highlight.color, "black" )
 		assertEquals( got[ 37 ].logical_volume.highlight.color, "black" )
 	end
+
+	function TestMatrix:test_filter_alternation_border_colors_with_access_patterns()
+		local max_logicals = 6
+		local max_physicals = 3
+		local max_logical_volumes = 4
+		local max_access_patterns = 1
+		-- Generate physicals
+		local physicals = {}
+		for l = 0, ( max_logicals - 1 ) do
+			for p = 1, max_physicals do
+				local physical_id = tonumber( l ) .. ":" .. tonumber( p )
+				physicals[ physical_id ] = einarc.Physical:new( {
+					id = physical_id,
+					model = "foobar",
+					revision = "foobar",
+					serial = "foobar",
+					size = 666 * max_physicals,
+					state = "0"
+				} )
+			end
+		end
+		-- Generate logicals
+		local logicals = {}
+		for l = 0, ( max_logicals - 1 ) do
+			local logical_id = tonumber( l )
+			logicals[ logical_id ] = {
+				id = logical_id,
+				level = "1",
+				capacity = 666,
+				state = "normal",
+				device = "/dev/md" .. tonumber( l ),
+				physicals = {},
+				logical_volumes = {
+				}
+			}
+			--Generate logical_volumes
+			local logical_volumes = {}
+			for v = 1, max_logical_volumes do
+				local volume_name = "lvm" .. tonumber( l ) .. tonumber( v )
+				logical_volumes[ volume_name ] = lvm.LogicalVolume:new( {
+					name = volume_name,
+					device = "foobar" .. tonumber( v ),
+					volume_group = {},
+					size = 123
+				} )
+				--Generate access_patterns
+				local access_patterns = {}
+				for a = 1, max_access_patterns do
+					local pattern_name = "ap-name-" .. tonumber( a )
+					access_patterns[ pattern_name ] = scst.AccessPattern:new( {
+						name = pattern_name,
+						section_name = "foobar" .. tonumber( a ),
+						targetdriver = "iscsi",
+						enabled = true,
+						readonly = false,
+						lun = tonumber( a ) - 1
+					} )
+				end
+				-- Filling access_patterns in logical_volumes
+				logical_volumes[ volume_name ].access_patterns = {}
+				for pattern_name,_ in pairs( access_patterns ) do
+					access_patterns[ pattern_name ].filename = logical_volumes[ volume_name ].device
+					logical_volumes[ volume_name ].access_patterns[ pattern_name ] = access_patterns[ pattern_name ]
+				end
+			end
+			for volume_name,_ in pairs( logical_volumes ) do
+				logicals[ logical_id ].logical_volumes[ volume_name ] = logical_volumes[ volume_name ]
+			end
+			-- Filling physicals in logicals
+			local physicals = {}
+			for p = 1, max_physicals do
+				local physical_id = tonumber( l ) .. ":" .. tonumber( p )
+				physicals[ physical_id ] = einarc.Physical:new( {
+					id = physical_id,
+					model = "foobar",
+					revision = "foobar",
+					serial = "foobar",
+					size = 666,
+					state = "0"
+				} )
+			end
+			for physical_id,_ in pairs( physicals ) do
+				logicals[ logical_id ].physicals[ physical_id ] = logical_id
+			end
+		end
+
+		got = matrix.filter_alternation_border_colors(
+			matrix.filter_borders_highlight( {
+				lines = matrix.overall( {
+					physicals = physicals,
+					logicals = logicals
+				} )
+			} ),
+			{ "black", "blue", "green" }
+		)[ "lines" ]
+
+		print( common.ppt( { got } ) )
+		assertEquals( got[ 1 ].logical.highlight.color, "black" )
+		assertEquals( got[ 1 ].physical.highlight.color, "black" )
+		assertEquals( got[ 1 ].logical_volume.highlight.color, "black" )
+		assertEquals( got[ 1 ].access_pattern.highlight.color, "black" )
+
+		assertEquals( got[ 4 ].logical_volume.highlight.color, "black" )
+		assertEquals( got[ 7 ].logical_volume.highlight.color, "black" )
+		assertEquals( got[ 10 ].logical_volume.highlight.color, "black" )
+		assertEquals( got[ 13 ].logical.highlight.color, "blue" )
+		assertEquals( got[ 13 ].physical.highlight.color, "blue" )
+		assertEquals( got[ 13 ].logical_volume.highlight.color, "blue" )
+		assertEquals( got[ 25 ].logical.highlight.color, "green" )
+		assertEquals( got[ 25 ].physical.highlight.color, "green" )
+		assertEquals( got[ 25 ].logical_volume.highlight.color, "green" )
+		assertEquals( got[ 37 ].logical.highlight.color, "black" )
+		assertEquals( got[ 37 ].physical.highlight.color, "black" )
+		assertEquals( got[ 37 ].logical_volume.highlight.color, "black" )
+	end
+
 	function TestMatrix:test_with_access_patterns_single()
 		-- Bind three first access patterns to logical volumes
 		self.access_patterns[1].filename = self.logicals_triple[9].logical_volumes["bar"].device
