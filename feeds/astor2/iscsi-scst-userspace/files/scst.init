@@ -2,6 +2,7 @@
 START=50
 
 VAR_PR=/var/lib/scst/pr
+VAR_ETC=/var/etc
 SCSTD=/usr/sbin/iscsi-scstd
 DAEMON_NAME=iscsi-scstd
 
@@ -43,7 +44,7 @@ configure_memsize()
 start()
 {
 #	configure_memsize
-	mkdir -p $VAR_PR
+	mkdir -p $VAR_PR $VAR_ETC
 	$SCSTD
 }
 

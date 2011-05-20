@@ -56,14 +56,14 @@ require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
 	local i18n = luci.i18n.translate
-	local e = entry( { "san" },
+	local e = entry( { "admin", "san" },
 	                 call( "index_overall" ),
 	                 i18n("SAN"),
 	                 10 )
 	e.i18n = "astor2_san"
 
 	-- Einarc related
-	e = entry( { "san", "perform" },
+	e = entry( { "admin", "san", "perform" },
 	           call( "perform" ),
 	           nil,
 	           10 )
@@ -72,7 +72,7 @@ end
 
 local function index_with_error( message_error )
 	local http = luci.http
-	http.redirect( luci.dispatcher.build_url( "san" ) .. "/" ..
+	http.redirect( luci.dispatcher.build_url( "admin", "san" ) .. "/" ..
 	               http.build_querystring( { message_error = message_error } ) )
 end
 

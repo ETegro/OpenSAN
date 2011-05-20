@@ -10,7 +10,7 @@ You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: json.lua 5537 2009-11-13 18:25:59Z Cyrus $
+$Id: json.lua 6988 2011-04-17 11:39:17Z jow $
 
 Decoder:
 	Info:
@@ -82,7 +82,7 @@ function encode(obj, ...)
 	repeat
 		chnk, err = e()
 		out[#out+1] = chnk
-	until chnk
+	until not chnk
 	return not err and table.concat(out) or nil
 end
 
@@ -141,7 +141,7 @@ end
 
 function Encoder.put(self, chunk)
 	if self.buffersize < 2 then
-		corountine.yield(chunk)
+		coroutine.yield(chunk)
 	else
 		if #self.buffer + #chunk > self.buffersize then
 			local written = 0
