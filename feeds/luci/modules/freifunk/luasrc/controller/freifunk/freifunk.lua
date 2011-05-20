@@ -9,7 +9,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: freifunk.lua 6918 2011-02-19 14:54:16Z soma $
+$Id: freifunk.lua 6981 2011-04-04 12:04:42Z soma $
 ]]--
 module("luci.controller.freifunk.freifunk", package.seeall)
 
@@ -294,7 +294,7 @@ function public_status_json()
 	end
 	
 	rv[#rv+1] = {
-		time = os.date("%c"),
+		time = os.date("%a, %d %b %Y, %H:%M:%S"),
 		uptime = twa.date_format(tonumber(sys.uptime())),
 		load = string.format("%.2f, %.2f, %.2f", load1, load5, load15),
 		mem = mem,

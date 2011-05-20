@@ -9,7 +9,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: wifi_add.lua 6775 2011-01-20 23:26:49Z jow $
+$Id: wifi_add.lua 6977 2011-03-24 21:08:28Z jow $
 ]]--
 
 local fs   = require "nixio.fs"
@@ -142,8 +142,9 @@ function newnet.parse(self, section)
 		}
 
 		if m.hidden.wep == "1" then
-			wconf.encryption = "wep"
-			wconf.key        = key and key:formvalue(section) or ""
+			wconf.encryption = "wep-open"
+			wconf.key        = "1"
+			wconf.key1       = key and key:formvalue(section) or ""
 		elseif (tonumber(m.hidden.wpa_version) or 0) > 0 then
 			wconf.encryption = (tonumber(m.hidden.wpa_version) or 0) >= 2 and "psk2" or "psk"
 			wconf.key        = key and key:formvalue(section) or ""
