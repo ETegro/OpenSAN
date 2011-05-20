@@ -9,7 +9,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: routes.htm 5741 2010-03-08 00:52:21Z jow $
+$Id: routes.htm 6966 2011-03-13 22:15:53Z jow $
 
 -%>
 
@@ -27,6 +27,28 @@ $Id: routes.htm 5741 2010-03-08 00:52:21Z jow $
 <div class="cbi-map" id="cbi-network">
 	<h2><a id="content" name="content"><%:Routes%></a></h2>
 	<div class="cbi-map-descr"><%:The following rules are currently active on this system.%></div>
+
+	<fieldset class="cbi-section" id="cbi-table-table">
+		<legend>ARP</legend>
+		<div class="cbi-section-node">
+			<table class="cbi-section-table">
+				<tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell"><%_<abbr title="Internet Protocol Version 4">IPv4</abbr>-Address%></th>
+					<th class="cbi-section-table-cell"><%_<abbr title="Media Access Control">MAC</abbr>-Address%></th>
+					<th class="cbi-section-table-cell"><%:Interface%></th>
+				</tr>
+
+				<% luci.sys.net.arptable(function(e) %>
+				<tr class="cbi-section-table-row cbi-rowstyle-<%=(style and 1 or 2)%>">
+					<td class="cbi-value-field"><%=e["IP address"]%></td>
+					<td class="cbi-value-field"><%=e["HW address"]%></td>
+					<td class="cbi-value-field"><%=e["Device"]%></td>
+				</tr>
+				<% style = not style; end) %>
+			</table>
+		</div>
+	</fieldset>
+	<br />
 
 	<fieldset class="cbi-section" id="cbi-table-table">
 		<legend><%_Active <abbr title="Internet Protocol Version 4">IPv4</abbr>-Routes%></legend>

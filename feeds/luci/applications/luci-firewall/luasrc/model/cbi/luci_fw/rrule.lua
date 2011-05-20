@@ -10,7 +10,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: rrule.lua 6563 2010-11-27 05:26:48Z jow $
+$Id: rrule.lua 6983 2011-04-13 00:33:42Z soma $
 ]]--
 
 local sys = require "luci.sys"
@@ -121,7 +121,7 @@ src_mac.placeholder = translate("any")
 
 src_ip = s:taboption("advanced", Value, "src_ip", translate("Source IP address"))
 src_ip.optional = true
-src_ip.datatype = "ip4addr"
+src_ip.datatype = "neg_ip4addr"
 src_ip.placeholder = translate("any")
 
 sport = s:taboption("advanced", Value, "src_port", translate("Source port"),

@@ -9,7 +9,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: rdnss.lua 6808 2011-01-29 03:27:37Z jow $
+$Id: rdnss.lua 7020 2011-05-04 08:55:57Z jow $
 ]]--
 
 local sid = arg[1]
@@ -82,7 +82,7 @@ o.datatype    = "ip6addr"
 o.placeholder = translate("default")
 function o.cfgvalue(self, section)
 	local l = { }
-	local v = m.uci:get_list("radvd", section, "prefix")
+	local v = m.uci:get_list("radvd", section, "addr")
 	for v in utl.imatch(v) do
 		l[#l+1] = v
 	end
