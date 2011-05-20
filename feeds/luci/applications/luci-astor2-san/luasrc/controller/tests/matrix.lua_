@@ -1748,10 +1748,10 @@ TestFilterAlternationBorderColors = {}
 			--Generate logical_volumes
 			local logical_volumes = {}
 			for v = 1, max_logical_volumes do
-				local volume_name = "lvm" .. l .. v
+				local volume_name = "lvm" .. tonumber( l ) .. tonumber( v )
 				logical_volumes[ volume_name ] = lvm.LogicalVolume:new( {
 					name = volume_name,
-					device = "foobar" .. v,
+					device = "foobar" .. tonumber( v ),
 					volume_group = {},
 					size = 123
 				} )
@@ -1993,6 +1993,108 @@ TestFilterAlternationBorderColors = {}
 				color = color + 1
 			end
 		end
+	end
+
+TestFilterHighlightSnapshots = {}
+	function TestFilterHighlightSnapshots:test_colors()
+		local max_logicals = 1
+		local max_physicals = 1
+		local max_logical_volumes = 1
+		local max_snapshots = 2
+		local colors_array = { "lime", "yellow", "orange" }
+		-- Generate physicals
+		local physicals = {}
+		for l = 0, ( max_logicals - 1 ) do
+			for i = 1, max_physicals do
+				local physical_id = tonumber( l ) .. ":" .. tonumber( i )
+				physicals[ physical_id ] = einarc.Physical:new( {
+					id = physical_id,
+					model = "foobar",
+					revision = "foobar",
+					serial = "foobar",
+					size = 666 * max_physicals,
+					state = "0"
+				} )
+			end
+		end
+		-- Generate logicals
+		local logicals = {}
+		for l = 0, ( max_logicals - 1 ) do
+			local logical_id = tonumber( l )
+			logicals[ logical_id ] = {
+				id = logical_id,
+				level = "1",
+				capacity = 666,
+				state = "normal",
+				device = "/dev/md0",
+				physicals = {},
+				logical_volumes = {
+				}
+			}
+			--Generate logical_volumes
+			local logical_volumes = {}
+			for v = 1, max_logical_volumes do
+				local volume_name = "lvm" .. tonumber( l ) .. tonumber( v )
+				logical_volumes[ volume_name ] = lvm.LogicalVolume:new( {
+					name = volume_name,
+					device = "foobar" .. tonumber( v ),
+					volume_group = {},
+					size = 123
+				} )
+
+				--Generate snapshots
+				local snapshots = {}
+				for s = 1, max_snapshots do
+					local snapshot_name = volume_name .. "_time-" .. tonumber( s )
+					snapshots[ snapshot_name ] = lvm.Snapshot:new( {
+						name = snapshot_name,
+						device = "foobar" .. tonumber( v ) .. "_time-" .. tonumber( s ),
+						volume_group = {},
+						size = 12,
+						allocated = 6,
+						logical_volume = volume_name
+					} )
+				end
+
+				logical_volumes[ volume_name ].snapshots = {}
+				-- Filling snapshots in logical_volumes
+				for snapshot_name,_ in pairs( snapshots ) do
+					logical_volumes[ volume_name ].snapshots[ snapshot_name ] = snapshots[ snapshot_name ]
+				end
+			end
+
+			for volume_name,_ in pairs( logical_volumes ) do
+				logicals[ logical_id ].logical_volumes[ volume_name ] = logical_volumes[ volume_name ]
+			end
+			-- Filling physicals in logicals
+			local physicals = {}
+			for i = 1, max_physicals do
+				local physical_id = tonumber( l ) .. ":" .. tonumber( i )
+				physicals[ physical_id ] = einarc.Physical:new( {
+					id = physical_id,
+					model = "foobar",
+					revision = "foobar",
+					serial = "foobar",
+					size = 666,
+					state = "0"
+				} )
+			end
+			for physical_id,_ in pairs( physicals ) do
+				logicals[ logical_id ].physicals[ physical_id ] = logical_id
+			end
+		end
+
+		local got = matrix.filter_alternation_border_colors(
+			matrix.filter_borders_highlight( {
+				lines = matrix.overall( {
+					physicals = physicals,
+					logicals = logicals
+				} )
+			} ),
+			colors_array
+		)[ "lines" ]
+
+		print( common.ppt( { got } ) )
 	end
 
 LuaUnit:run()
