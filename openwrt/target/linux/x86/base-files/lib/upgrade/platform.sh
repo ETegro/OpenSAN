@@ -1,4 +1,32 @@
-USE_REFRESH=1
+#!/bin/sh
+
+IMAGE=$1
+IMAGE_VMLINUZ=vmlinuz
+MAGIC_VMLINUZ=ea05
+IMAGE_ROOTFS=rootfs
+MAGIC_ROOTFS="0000"
+
+DD=dd
+GUNZIP=gunzip
+CPIO=cpio
+
+[ -z "$IMAGE" ] && exit 1
+
+# This based on original get_magic_word, but with ability to parse stdin
+_get_magic_word()
+{
+	dd bs=2 count=1 2>/dev/null | hexdump -v -n 2 -e '1/1 "%02x"'
+}
+
+_get_vmlinuz()
+{
+	$GUNZIP -c $IMAGE | $CPIO -i $IMAGE_VMLINUZ
+}
+
+_get_rootfs()
+{
+	$GUNZIP -c $IMAGE | $CPIO -i $IMAGE_ROOTFS
+}
 
 platform_check_image() {
 	[ "$ARGC" -gt 1 ] && return 1
@@ -20,14 +48,3 @@ platform_do_upgrade() {
 		|| ROOTFS="$(awk 'BEGIN { RS=" "; FS="="; } ($1 == "root") { print $2 }' < /proc/cmdline)"
 	[ -b ${ROOTFS%[0-9]} ] && get_image "$1" > ${ROOTFS%[0-9]}
 }
-
-x86_prepare_ext2() {
-	# if we're running from ext2, we need to make sure that we have a mtd 
-	# partition that points to the active rootfs partition.
-	# however this only matters if we actually need to preserve the config files
-	[ "$SAVE_CONFIG" -eq 1 ] || return 0
-	grep rootfs /proc/mtd >/dev/null || {
-		echo /dev/hda2,65536,rootfs > /sys/module/block2mtd/parameters/block2mtd
-	}
-}
-append sysupgrade_pre_upgrade x86_prepare_ext2
