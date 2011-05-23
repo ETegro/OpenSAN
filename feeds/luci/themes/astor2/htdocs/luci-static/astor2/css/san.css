@@ -25,6 +25,10 @@ ul, li { list-style: none; }
 
 /* Body classes */
 
+.error {
+	font-weight: 700;
+	font-size: 150%;
+	}
 .inline { display: inline-block; }
 .noborder { border: 0; }
 
