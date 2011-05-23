@@ -8,7 +8,7 @@ MAGIC_ROOTFS="0000"
 
 DD=dd
 GUNZIP=gunzip
-CPIO=cpio
+CPIO=gnu-cpio
 
 [ -z "$IMAGE" ] && exit 1
 
