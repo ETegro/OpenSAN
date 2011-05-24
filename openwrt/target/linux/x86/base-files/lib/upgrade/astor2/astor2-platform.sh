@@ -3,11 +3,13 @@
 DD=dd
 GUNZIP=gunzip
 CPIO=gnu-cpio
+FDISK=fdisk
 
 IMAGE_VMLINUZ=vmlinuz
 MAGIC_VMLINUZ=ea05
 IMAGE_ROOTFS=rootfs
 MAGIC_ROOTFS="0000"
+ROOT_DEVICE=/dev/sda
 
 ACTION=$1
 IMAGE=$2
@@ -31,7 +33,8 @@ _get_rootfs()
 	$GUNZIP -c $IMAGE | $CPIO -i --to-stdout $IMAGE_ROOTFS
 }
 
-platform_check_image() {
+platform_check_image()
+{
 	case "`_get_vmlinuz | _get_magic_word`" in
 		$MAGIC_VMLINUZ)
 			true
@@ -52,13 +55,20 @@ platform_check_image() {
 	esac
 }
 
-platform_do_upgrade() {
-	local ROOTFS
-	sync
-	grep -q -e "jffs2" -e "squashfs" /proc/cmdline \
-		&& ROOTFS="$(awk 'BEGIN { RS=" "; FS="="; } ($1 == "block2mtd.block2mtd") { print substr($2,1,index($2, ",")-1) }' < /proc/cmdline)" \
-		|| ROOTFS="$(awk 'BEGIN { RS=" "; FS="="; } ($1 == "root") { print $2 }' < /proc/cmdline)"
-	[ -b ${ROOTFS%[0-9]} ] && get_image "$1" > ${ROOTFS%[0-9]}
+platform_do_upgrade()
+{
+	true
+}
+
+_check_partitions()
+{
+	[ "`$FDISK -l $ROOT_DEVICE | grep "^$ROOT_DEVICE" | wc -l`" = "3" ]
+}
+
+platform_check_space()
+{
+	# Check if we already have three partitions
+	_check_partitions && return 0
 }
 
 $ACTION $IMAGE
