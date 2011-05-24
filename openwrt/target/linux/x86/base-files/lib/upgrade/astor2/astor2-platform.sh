@@ -65,10 +65,36 @@ _check_partitions()
 	[ "`$FDISK -l $ROOT_DEVICE | grep "^$ROOT_DEVICE" | wc -l`" = "3" ]
 }
 
+DEVICE_LAST=""
+DEVICE_SIZE=""
+TOTAL_SIZE="`$FDISK -l $ROOT_DEVICE | grep "heads.*sectors.*cylinders" | awk '{print $(NF-1)}'`"
+_check_space()
+{
+	local device_info="`$FDISK -l $ROOT_DEVICE | grep "^${ROOT_DEVICE}2"`"
+	DEVICE_LAST="`echo "$device_info" | awk '{print $3}'`"
+	DEVICE_SIZE=$(( $DEVICE_LAST - `echo "$device_info" | awk '{print $2}'` ))
+	[ $(( $TOTAL_SIZE - $DEVICE_LAST )) -ge $DEVICE_SIZE ]
+}
+
+_create_third_partition()
+{
+	local fdisk_script=`mktemp`
+	echo "n" >> $fdisk_script
+	echo "p" >> $fdisk_script
+	echo "3" >> $fdisk_script
+	echo $(( $DEVICE_LAST + 1 )) >> $fdisk_script
+	echo $(( $DEVICE_LAST + 1 + $DEVICE_SIZE )) >> $fdisk_script
+	echo "w" >> $fdisk_script
+	$FDISK $ROOT_DEVICE < $fdisk_script
+	rm -f $fdisk_script
+}
+
 platform_check_space()
 {
 	# Check if we already have three partitions
 	_check_partitions && return 0
+	_check_space && return 1
+	_create_third_partition
 }
 
 $ACTION $IMAGE
