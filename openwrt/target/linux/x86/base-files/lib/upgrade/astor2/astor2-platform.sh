@@ -119,7 +119,7 @@ _flash_kernel()
 {
 	local mountpoint=`mktemp -d`
 	mkdir -p $mountpoint
-	mount $ROOT_DEVICE $mountpoint
+	mount ${ROOT_DEVICE}1 $mountpoint
 	cp $mountpoint/boot/vmlinuz $mountpoint/boot/vmlinuz-failsafe
 	_get_vmlinuz > $mountpoint/boot/vmlinuz
 	cat > $mountpoint/boot/grub/menu.lst <<__EOF__
