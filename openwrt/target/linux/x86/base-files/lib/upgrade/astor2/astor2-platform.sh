@@ -53,11 +53,7 @@ platform_check_image()
 			return 1
 		;;
 	esac
-}
-
-platform_do_upgrade()
-{
-	true
+	return 0
 }
 
 _check_partitions()
@@ -93,8 +89,67 @@ platform_check_space()
 {
 	# Check if we already have three partitions
 	_check_partitions && return 0
+
 	_check_space && return 1
 	_create_third_partition
+}
+
+CURRENT_ROOT=""
+_set_current_root()
+{
+	CURRENT_ROOT="`cat /proc/cmdline | awk '{print $1}' | awk -F= '{print $2}'`"
+}
+
+FUTURE_ROOT=""
+_set_future_root()
+{
+	if [ "$CURRENT_ROOT" = "/dev/sda2" ]; then
+		FUTURE_ROOT="/dev/sda3"
+	else
+		FUTURE_ROOT="/dev/sda2"
+	fi
+}
+
+_flash_rootfs()
+{
+	_get_rootfs > $FUTURE_ROOT
+}
+
+_flash_kernel()
+{
+	local mountpoint=`mktemp -d`
+	mkdir -p $mountpoint
+	mount $ROOT_DEVICE $mountpoint
+	cp $mountpoint/boot/vmlinuz $mountpoint/boot/vmlinuz-failsafe
+	_get_vmlinuz > $mountpoint/boot/vmlinuz
+	cat > $mountpoint/boot/grub/menu.lst <<__EOF__
+serial --unit=0 --speed=38400 --word=8 --parity=no --stop=1
+terminal --timeout=2 console serial
+
+default 0
+timeout 5
+
+title   OpenWrt
+root    (hd0,0)
+kernel  /boot/vmlinuz root=$FUTURE_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
+boot
+
+title	OpenWrt (failsafe)
+root	(hd0,0)
+kernel  /boot/vmlinuz-failsafe root=$CURRENT_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
+boot
+__EOF__
+	umount $mountpoint
+	rmdir $mountpoint
+}
+
+platform_do_upgrade()
+{
+	#TODO: races prevention
+	_set_current_root
+	_set_future_root
+	_flash_rootfs
+	_flash_kernel
 }
 
 $ACTION $IMAGE
