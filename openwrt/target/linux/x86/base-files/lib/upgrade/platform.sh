@@ -1,3 +1,4 @@
+USE_REFRESH=1
 LIBRARY_PATH=/lib/upgrade/astor2/platform.sh
 
 platform_check_image() {
@@ -6,6 +7,11 @@ platform_check_image() {
 
 platform_do_upgrade() {
 	dash -c "$LIBRARY_PATH platform_do_upgrade $1"
+}
+
+platform_refresh_partitions()
+{
+	return 0
 }
 
 platform_copy_config()
