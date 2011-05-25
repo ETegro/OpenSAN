@@ -1,4 +1,4 @@
-USE_REFRESH=1
+USE_REFRESH=0
 LIBRARY_PATH=/lib/upgrade/astor2/platform.sh
 
 platform_check_image() {
