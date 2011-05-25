@@ -1,5 +1,5 @@
 USE_REFRESH=1
-LIBRARY_PATH=/lib/upgrade/astor2/astor2-platform.sh
+LIBRARY_PATH=/lib/upgrade/astor2/platform.sh
 
 platform_check_image() {
 	exec $LIBRARY_PATH platform_check_image "$1"
