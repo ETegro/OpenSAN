@@ -150,6 +150,7 @@ platform_do_upgrade()
 	_set_future_root
 	_flash_rootfs
 	_flash_kernel
+	sync
 }
 
 platform_copy_config()
@@ -160,6 +161,7 @@ platform_copy_config()
 	tar xfC "$CONF_TAR" $mountpoint
 	umount $mountpoint
 	rmdir $mountpoint
+	sync
 }
 
 $ACTION $IMAGE
