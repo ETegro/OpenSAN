@@ -184,6 +184,8 @@ platform_do_upgrade()
 
 platform_copy_config()
 {
+	_set_current_root
+	_set_future_root
 	local mountpoint=`mktemp -d`
 	mkdir -p $mountpoint
 	mount $FUTURE_ROOT $mountpoint
