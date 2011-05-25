@@ -189,7 +189,7 @@ platform_copy_config()
 	local mountpoint=`mktemp -d`
 	mkdir -p $mountpoint
 	mount $FUTURE_ROOT $mountpoint
-	tar xfC "$CONF_TAR" $mountpoint
+	tar -x -f "$CONF_TAR" -C $mountpoint
 	umount $mountpoint
 	rmdir $mountpoint
 	sync
