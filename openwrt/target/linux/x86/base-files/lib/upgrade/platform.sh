@@ -2,11 +2,11 @@ USE_REFRESH=0
 LIBRARY_PATH=/lib/upgrade/astor2/platform.sh
 
 platform_check_image() {
-	exec $LIBRARY_PATH platform_check_image "$1"
+	dash -c "$LIBRARY_PATH platform_check_image $1"
 }
 
 platform_do_upgrade() {
-	exec $LIBRARY_PATH platform_do_upgrade "$1"
+	dash -c "$LIBRARY_PATH platform_do_upgrade $1"
 }
 
 x86_prepare_ext2() {
