@@ -64,3 +64,6 @@ form table tbody tr td { width: 25%; }
 .logical_volume-background-color-lime { background-color: lime; }
 .logical_volume-background-color-orange { background-color: orange; }
 .logical_volume-background-color-yellow { background-color: yellow; }
+
+/* Access patterns */
+.access_pattern-disabled { background-color: #CCCCCC; }
