@@ -110,6 +110,32 @@ _set_future_root()
 	fi
 }
 
+CURRENT_KERNEL=""
+_set_current_kernel()
+{
+	local mountpoint=`mktemp -d`
+	mkdir -p $mountpoint
+	mount ${ROOT_DEVICE}1 $mountpoint
+	local kernel="`grep $CURRENT_ROOT $mountpoint/boot/grub/menu.lst | awk '{print $2}'`"
+	if echo "$kernel" | grep -q failsafe; then
+		CURRENT_KERNEL="vmlinuz-failsafe"
+	else
+		CURRENT_KERNEL="vmlinuz"
+	fi
+	umount $mountpoint
+	rmdir $mountpoint
+}
+
+FUTURE_KERNEL=""
+_set_future_kernel()
+{
+	if [ "$CURRENT_KERNEL" = "vmlinuz" ]; then
+		FUTURE_KERNEL="vmlinuz-failsafe"
+	else
+		FUTURE_KERNEL="vmlinuz"
+	fi
+}
+
 _flash_rootfs()
 {
 	_get_rootfs > $FUTURE_ROOT
@@ -120,8 +146,8 @@ _flash_kernel()
 	local mountpoint=`mktemp -d`
 	mkdir -p $mountpoint
 	mount ${ROOT_DEVICE}1 $mountpoint
-	cp $mountpoint/boot/vmlinuz $mountpoint/boot/vmlinuz-failsafe
-	_get_vmlinuz > $mountpoint/boot/vmlinuz
+	cp $mountpoint/boot/$CURRENT_KERNEL $mountpoint/boot/$FUTURE_KERNEL
+	_get_vmlinuz > $mountpoint/boot/$CURRENT_KERNEL
 	cat > $mountpoint/boot/grub/menu.lst <<__EOF__
 serial --unit=0 --speed=38400 --word=8 --parity=no --stop=1
 terminal --timeout=2 console serial
@@ -131,12 +157,12 @@ timeout 5
 
 title   OpenWrt
 root    (hd0,0)
-kernel  /boot/vmlinuz root=$FUTURE_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
+kernel  /boot/$CURRENT_KERNEL root=$FUTURE_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
 boot
 
 title	OpenWrt (failsafe)
 root	(hd0,0)
-kernel  /boot/vmlinuz-failsafe root=$CURRENT_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
+kernel  /boot/$FUTURE_KERNEL root=$CURRENT_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
 boot
 __EOF__
 	umount $mountpoint
@@ -148,6 +174,8 @@ platform_do_upgrade()
 	#TODO: races prevention
 	_set_current_root
 	_set_future_root
+	_set_current_kernel
+	_set_future_kernel
 	_flash_rootfs
 	_flash_kernel
 	sync
