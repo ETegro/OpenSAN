@@ -202,16 +202,6 @@ function action_upgrade()
 		) )
 	end
 
-	-- Based on previous image_supported()
-	local function sufficient_space()
-		return ( 0 == os.execute(
-			". /etc/functions.sh; " ..
-			"include /lib/upgrade; " ..
-			"platform_check_space %q >/dev/null"
-				% tmpfile
-		) )
-	end
-
 	local function image_checksum()
 		return (luci.sys.exec("md5sum %q" % tmpfile):match("^([^%s]+)"))
 	end
@@ -261,7 +251,6 @@ function action_upgrade()
 	local step         = tonumber(luci.http.formvalue("step") or 1)
 	local has_image    = nixio.fs.access(tmpfile)
 	local has_support  = image_supported()
-	local has_sufficient_space = sufficient_space()
 	local has_platform = nixio.fs.access("/lib/upgrade/platform.sh")
 	local has_upload   = luci.http.formvalue("image")
 
@@ -269,7 +258,7 @@ function action_upgrade()
 	-- so don't produce meaningful errors here because the the
 	-- previous pages should arrange the stuff as required.
 	if step == 4 then
-		if has_platform and has_image and has_support and has_sufficient_space then
+		if has_platform and has_image and has_support then
 			-- Mimetype text/plain
 			luci.http.prepare_content("text/plain")
 			luci.http.write("Starting sysupgrade...\n")
@@ -292,7 +281,7 @@ function action_upgrade()
 	--
 
 	-- Step 1: file upload, error on unsupported image format
-	elseif not has_image or not has_support or not has_sufficient_space or step == 1 then
+	elseif not has_image or not has_support or step == 1 then
 		-- If there is an image but user has requested step 1
 		-- or type is not supported, then remove it.
 		if has_image then
@@ -301,8 +290,7 @@ function action_upgrade()
 
 		luci.template.render("admin_system/upgrade", {
 			step=1,
-			bad_image=(has_image and (not has_support or not has_sufficient_space) or false),
-			no_sufficient_space=has_sufficient_space,
+			bad_image=(has_image and not has_support or false),
 			keepavail=keep_avail,
 			supported=has_platform
 		} )

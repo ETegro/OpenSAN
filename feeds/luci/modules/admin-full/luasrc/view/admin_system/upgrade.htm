@@ -24,15 +24,10 @@ $Id: upgrade.htm 5458 2009-10-31 20:03:27Z jow $
 	<p>
 		<%:Upload an OpenWrt image file to reflash the device.%>
 		<% if bad_image then %>
-			<% if no_sufficient_space then %>
-			<br /><br />
-			<div class="error"><%:Not enough free space on a storage device%></div<
-			<% else %>
 			<br /><br />
 			<div class="error"><%:The uploaded image file does not
 				contain a supported format. Make sure that you choose the generic
 				image format for your platform. %></div>
-			<% end %>
 		<% end %>
 	</p>
 	<div>
