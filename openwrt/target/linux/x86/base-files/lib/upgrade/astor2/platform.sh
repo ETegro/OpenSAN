@@ -15,7 +15,8 @@ ACTION=$1
 IMAGE=$2
 
 [ -z "$ACTION" ] && exit 1
-[ -z "$IMAGE" ] && exit 1
+[ "$ACTION" = "platform_check_image" -a -z "$IMAGE" ] && exit 1
+[ "$ACTION" = "platform_do_upgrade" -a -z "$IMAGE" ] && exit 1
 
 # This based on original get_magic_word, but with ability to parse stdin
 _get_magic_word()
