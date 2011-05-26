@@ -500,7 +500,6 @@ function M.caller()
 		filter_mib2tib,
 		filter_serialize,
 		filter_base64encode
-		-- filter_overall_fields_counter (for hiding)
 	}
 	for _,filter in ipairs( FILTERS ) do
 		matrix = filter( matrix )
