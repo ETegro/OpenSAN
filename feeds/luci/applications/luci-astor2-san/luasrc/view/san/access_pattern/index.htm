@@ -43,11 +43,6 @@
 			<% if line.access_pattern:is_binded() then %>
 				<%+san/access_pattern/unbind%>
 			<% end %>
-			<% if line.access_pattern.enabled then %>
-				<div>
-					<%: Enabled %>: <%= line.access_pattern.enabled %>
-				</div>
-			<% end %>
 			<% if line.access_pattern.readonly then %>
 				<div>
 					<%: Readonly %>: <%= line.access_pattern.readonly %>
