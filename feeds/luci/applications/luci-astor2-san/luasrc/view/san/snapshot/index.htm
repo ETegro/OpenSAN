@@ -31,9 +31,11 @@
 		<% end %>
 		<td>
 			<% if #matrix_overall.access_patterns > 0 then %>
-				<input name="san.logical_volume_select"
-				       type ="radio"
-				       value="<%= line.logical_volume.device %>" />
+				<div>
+					<input name="san.logical_volume_select"
+					       type ="radio"
+					       value="<%= line.logical_volume.device %>" />
+				</div>
 			<% end %>
 		</td>
 	</tr>
