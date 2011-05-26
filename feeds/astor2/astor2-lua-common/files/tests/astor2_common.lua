@@ -69,6 +69,21 @@ TestIsObj = {}
 		assert( not common.is_array( { foo = "bar" } ) )
 	end
 
+TestStrip = {}
+	function TestStrip:test_basic()
+		assertEquals( common.strip( "foobar" ), "foobar" )
+		assertEquals( common.strip( " foobar" ), "foobar" )
+		assertEquals( common.strip( "foobar " ), "foobar" )
+		assertEquals( common.strip( " foobar " ), "foobar" )
+		assertEquals( common.strip( "     foobar    " ), "foobar" )
+	end
+	function TestStrip:test_spaces_inside()
+		assertEquals( common.strip( "     foo   bar    " ), "foo   bar" )
+	end
+	function TestStrip:test_tabd()
+		assertEquals( common.strip( "	foobar	" ), "foobar" )
+	end
+
 TestGetKeys = {}
         function TestGetKeys:setUp()
 		self.physical_list = {

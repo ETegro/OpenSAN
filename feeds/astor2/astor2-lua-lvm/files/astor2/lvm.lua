@@ -61,12 +61,20 @@ function M.PhysicalVolume:new( attrs )
 	return setmetatable( attrs, PhysicalVolume_mt )
 end
 
+--- Prepare disk for working with (first sectors cleaning up)
+-- @param disk Disk for preparation
+function M.PhysicalVolume.prepare( disk )
+	assert( is_disk( disk ),
+	        "incorrect disk specified" )
+	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=4" )
+end
+
 --- Create PhysicalVolume on a disk
 -- @param disk Disk on which volume must be created
 function M.PhysicalVolume.create( disk )
 	assert( is_disk( disk ),
 	        "incorrect disk specified" )
-	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+	M.PhysicalVolume.prepare( disk )
 	common.system_succeed( "lvm pvcreate " .. disk )
 end
 
@@ -129,6 +137,7 @@ end
 --------------------------------------------------------------------------
 M.VolumeGroup = {}
 local VolumeGroup_mt = common.Class( M.VolumeGroup )
+M.VolumeGroup.PE_DEFAULT_SIZE = 64 -- MiB
 
 function M.VolumeGroup:new( attrs )
 	assert( common.is_number( attrs.extent ),
@@ -170,6 +179,7 @@ function M.VolumeGroup.create( physical_volumes )
 	end
 
 	common.system_succeed( "lvm vgcreate " ..
+	                       "-s " .. tostring( M.VolumeGroup.PE_DEFAULT_SIZE ) .. " " ..
 	                       name .. " " ..
 	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
 end
@@ -257,7 +267,28 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
-M.LogicalVolume.NAME_VALID_RE = "[A-Za-z0-9\-_#%%:]+"
+--- Check LogicalVolume's name validness
+-- @param name Name to validate
+-- @return true/false
+function M.LogicalVolume.name_is_valid( name )
+	assert( common.is_string( name ), "no name specified" )
+	if name == "snapshot" or
+	   name == "pvmove" then
+		return false
+	end
+	if string.match( name, "_mlog" ) or
+	   string.match( name, "_mimage" ) then
+		return false
+	end
+	if string.match( name, '^-' ) or
+	   string.match( name, '^%.' ) then
+		return false
+	end
+	if not string.match( name, "^[a-zA-Z0-9+_.-]+$" ) then
+		return false
+	end
+	return true
+end
 
 function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.name ),
@@ -267,7 +298,7 @@ function M.LogicalVolume:new( attrs )
 	assert( common.is_table( attrs.volume_group ),
 	        "no volume group assigned to" )
 	assert( common.is_positive( attrs.size ) )
-	if not string.match( attrs.name, "^" .. M.LogicalVolume.NAME_VALID_RE .. "$" ) then
+	if not M.LogicalVolume.name_is_valid( attrs.name ) then
 		error("lvm:LogicalVolume:new() incorrect name supplied")
 	end
 	if not attrs.snapshots then

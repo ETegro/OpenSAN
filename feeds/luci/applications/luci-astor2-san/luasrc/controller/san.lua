@@ -291,7 +291,7 @@ local function lvm_logical_volume_add( inputs, data )
 	if logical_volume_name == "" then
 		return index_with_error( i18n("Logical volume name is not set") )
 	end
-	if not string.match( logical_volume_name, "^" .. lvm.LogicalVolume.NAME_VALID_RE .. "$" ) then
+	if not lvm.LogicalVolume.name_is_valid( logical_volume_name ) then
 		return index_with_error( i18n("Invalid logical volume name") )
 	end
 	for _, logical_volume in ipairs( data.logical_volumes ) do
