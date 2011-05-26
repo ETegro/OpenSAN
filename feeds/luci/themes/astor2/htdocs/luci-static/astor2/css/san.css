@@ -18,13 +18,13 @@
 */
 @charset "UTF-8";
 
-/* Body elemets */
+/* Body */
 
+/* Elemets */
 input { width: auto; }
 ul, li { list-style: none; }
 
-/* Body classes */
-
+/* Classes */
 .bold { font-weight: 700; }
 .error {
 	font-weight: 700;
@@ -34,18 +34,17 @@ ul, li { list-style: none; }
 .noborder { border: 0; }
 
 /* Main table */
-
 form table tbody tr td { width: 25%; }
 form table thead tr td {
 	font-size: 120%;
 	font-weight: 700;
-	padding: 0 0 5px 0;
+	padding: 0 0 .5em 0;
 	text-align: center;
 	}
-form table table { padding: 5px; }
+form > table > tbody > tr > td { padding: .5em; }
+form table fieldset{ padding: .5em; }
 
 /* Matrix */
-
 
 /* Highlights */
 .highlight-top { border-top: 5px solid #00CC00; }
@@ -79,3 +78,6 @@ form table table { padding: 5px; }
 
 /* Access patterns */
 .access_pattern-disabled { background-color: #CCCCCC; }
+
+/* Sliders */
+div[ id *= "new_volume_slider-" ] { margin: .5em 0 .5em 0; }
