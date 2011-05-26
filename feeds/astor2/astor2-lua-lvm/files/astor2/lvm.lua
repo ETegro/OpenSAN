@@ -267,7 +267,28 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
-M.LogicalVolume.NAME_VALID_RE = "[A-Za-z0-9\-_#%%:]+"
+--- Check LogicalVolume's name validness
+-- @param name Name to validate
+-- @return true/false
+function M.LogicalVolume.name_is_valid( name )
+	assert( common.is_string( name ), "no name specified" )
+	if name == "snapshot" or
+	   name == "pvmove" then
+		return false
+	end
+	if string.match( name, "_mlog" ) or
+	   string.match( name, "_mimage" ) then
+		return false
+	end
+	if string.match( name, '^-' ) or
+	   string.match( name, '^%.' ) then
+		return false
+	end
+	if not string.match( name, "^[a-zA-Z0-9+_.-]+$" ) then
+		return false
+	end
+	return true
+end
 
 function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.name ),
@@ -277,7 +298,7 @@ function M.LogicalVolume:new( attrs )
 	assert( common.is_table( attrs.volume_group ),
 	        "no volume group assigned to" )
 	assert( common.is_positive( attrs.size ) )
-	if not string.match( attrs.name, "^" .. M.LogicalVolume.NAME_VALID_RE .. "$" ) then
+	if not M.LogicalVolume.name_is_valid( attrs.name ) then
 		error("lvm:LogicalVolume:new() incorrect name supplied")
 	end
 	if not attrs.snapshots then
