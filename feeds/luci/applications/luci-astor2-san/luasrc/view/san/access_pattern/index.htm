@@ -34,20 +34,12 @@
 				<%= escape_html( line.access_pattern.name ) %>
 			</div>
 			<% if not line.access_pattern:is_binded() then %>
-				<div class="inline">
-					<%+san/access_pattern/delete%>
-				</div>
-				<div class="inline">
-					<%+san/access_pattern/edit%>
-				</div>
-				<div class="inline">
-					<%+san/access_pattern/bind%>
-				</div>
+				<%+san/access_pattern/delete%>
+				<%+san/access_pattern/edit%>
+				<%+san/access_pattern/bind%>
 			<% end %>
 			<% if line.access_pattern:is_binded() then %>
-				<div class="inline">
-					<%+san/access_pattern/unbind%>
-				</div>
+				<%+san/access_pattern/unbind%>
 			<% end %>
 			<div>
 				<%: TargetDriver %>: <%= line.access_pattern.targetdriver %>
