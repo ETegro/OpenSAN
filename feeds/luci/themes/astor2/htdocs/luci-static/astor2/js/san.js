@@ -21,7 +21,7 @@ $.noConflict();
 jQuery(document).ready( function($) {
 
 function hide_all_to_hide_elements() {
-	$( '[ class ^= "to_hide" ]' ).hide();
+	$( '[ class *= "to_hide" ]' ).hide();
 };
 
 function toggle_create_raid_form() {
@@ -65,7 +65,7 @@ function toggle_create_raid_form() {
 };
 
 function toggle_drives_information(){
-	$( 'form a[ id *= "physical_info-" ]' ).click( function() {
+	$( 'form a[ id ^= "physical_info-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -77,7 +77,7 @@ function toggle_drives_information(){
 };
 
 function toggle_snapshot_creation(){
-	$( 'form a[ id *= "snapshot_creation-" ]' ).click( function() {
+	$( 'form a[ id ^= "snapshot_creation-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
