@@ -39,10 +39,10 @@ form table tbody tr td { width: 25%; }
 form table thead tr td {
 	font-size: 120%;
 	font-weight: 700;
-	padding: 0 0 5px 0;
+	padding: 0 0 .5em 0;
 	text-align: center;
 	}
-form table table { padding: 5px; }
+form table table { padding: .5em; }
 
 /* Matrix */
 
