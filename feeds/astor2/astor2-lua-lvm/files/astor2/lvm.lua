@@ -74,7 +74,7 @@ end
 function M.PhysicalVolume.create( disk )
 	assert( is_disk( disk ),
 	        "incorrect disk specified" )
-	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+	M.PhysicalVolume.prepare( disk )
 	common.system_succeed( "lvm pvcreate " .. disk )
 end
 
