@@ -31,20 +31,18 @@
 			<% if #matrix_overall.access_patterns > 0 then %>
 				<%+san/logical_volume/bind%>
 			<% end %>
-		</td>
-	</tr>
-	<tr>
-		<td>
+			<div>
+				<a id="snapshot_creation-<%= hash( line.logical_volume.name ) %>"
+				   href="#"
+				   class="inline">
+					<img src="<%=resource%>/cbi/fieldadd.gif"
+					     alt="<%: Snapshot %>"
+					     title="<%: Snapshot %>" />
+				</a>
+			</div>
 			<% if #line.logical_volume.snapshots == 0 then %>
 				<%+san/logical_volume/resize%>
 			<% end %>
-			<a id="volume_logical_info-<%= hash( line.logical_volume.name ) %>"
-			   href="#"
-			   class="inline">
-				<img src="<%=resource%>/cbi/fieldadd.gif"
-				     alt="<%: Snapshot %>"
-				     title="<%: Snapshot %>" />
-			</a>
 		</td>
 	</tr>
 	<tr class="to_hide">
