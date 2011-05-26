@@ -20,7 +20,7 @@
 <div class="bold">
 	ID: <%= line.logical.id %>;
 	RAID: <%= line.logical.level %>;
-	Status: <%= line.logical.state %>
+	<%: State %>: <%= line.logical.state %>
 	<% if line.logical.progress then %>
 		(<%= line.logical.progress %> %)</td>
 	<% end %>
