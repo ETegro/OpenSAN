@@ -191,6 +191,13 @@ function M.VolumeGroup:remove()
 	common.system_succeed( "lvm vgremove " .. self.name )
 end
 
+--- Disable (de-activate) VolumeGroup
+function M.VolumeGroup:disable()
+	assert( self.name and common.is_string( self.name ),
+	        "unable to get self object" )
+	common.system_succeed( "lvm vgchange -a n " .. self.name )
+end
+
 --- Rescan all VolumeGroups on a system
 function M.VolumeGroup.rescan()
 	common.system_succeed( "lvm vgscan --ignorelockingfailure --mknodes" )
