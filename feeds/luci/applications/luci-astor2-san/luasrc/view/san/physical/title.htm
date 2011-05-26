@@ -17,12 +17,17 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div>
-	<input name="san.submit_logical_volume_remove-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
-	       onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
-			 return false;
-			 return true;"
-	       type="submit"
-	       title="<%: Remove snapshot %>"
-	       value="<%: Remove %>" />
+<div class="bold">
+	<% if not line.physical.highlight.left then %>
+		<input name="san.physical_id"
+		       type="checkbox"
+		       value="<%= line.physical.id %>" />
+	<% end %>
+	<a href="#" id="physical_info-<%= line.physical.id %>">
+		ID: <%= line.physical.id %>;
+		<%= line.physical.model %>;
+		<span title="<%= line.physical.size_mib %> <%: MiB %>">
+			<%= line.physical.size %> <%: TiB %>
+		</span>
+	</a>
 </div>

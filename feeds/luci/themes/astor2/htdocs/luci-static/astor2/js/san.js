@@ -65,8 +65,20 @@ function create_raid_form_toggle() {
 };
 
 function drives_information_toggle(){
-	$( 'form a[ id *= "ical_info-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+	$( 'form a[ id *= "physical_info-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function snapshot_creation_toggle(){
+	$( 'form a[ id *= "snapshot_creation-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
 		} else {
@@ -101,6 +113,7 @@ function setup_plunger(){
 hide_all_to_hide_elements();
 create_raid_form_toggle();
 drives_information_toggle();
+snapshot_creation_toggle();
 access_patterns_edit_toggle();
 setup_plunger();
 

@@ -17,12 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div>
-	<input name="san.submit_logical_volume_remove-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
-	       onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
-			 return false;
-			 return true;"
-	       type="submit"
-	       title="<%: Remove snapshot %>"
-	       value="<%: Remove %>" />
+<div class="bold">
+	<%= escape_html( line.access_pattern.name ) %>;
+	<%= line.access_pattern.targetdriver %>;
+	<%: LUN %><%= line.access_pattern.lun %>
 </div>

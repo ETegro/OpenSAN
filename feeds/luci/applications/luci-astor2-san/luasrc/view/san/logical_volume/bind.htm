@@ -18,11 +18,7 @@
 %>
 
 <div>
-	<input name="san.submit_logical_volume_remove-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
-	       onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
-			 return false;
-			 return true;"
-	       type="submit"
-	       title="<%: Remove snapshot %>"
-	       value="<%: Remove %>" />
+	<input name="san.logical_volume_select"
+	       type ="radio"
+	       value="<%= line.logical_volume.device %>" />
 </div>

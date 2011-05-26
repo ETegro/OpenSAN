@@ -25,12 +25,23 @@ ul, li { list-style: none; }
 
 /* Body classes */
 
+.bold { font-weight: 700; }
+.error {
+	font-weight: 700;
+	font-size: 150%;
+	}
 .inline { display: inline-block; }
 .noborder { border: 0; }
 
 /* Main table */
 
 form table tbody tr td { width: 25%; }
+form table thead tr td {
+	font-size: 120%;
+	font-weight: 700;
+	padding: 0 0 5px 0;
+	text-align: center;
+	}
 
 /* Matrix */
 

@@ -24,30 +24,14 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<%= line.logical.id %>
+			<%+san/logical/title%>
+			<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
+				<%+san/logical/remove%>
+			<% end %>
 		</td>
-		<td>
-			<%: RAID %> <%= line.logical.level %>
-		</td>
-		<td>
-			<%= line.logical.state %>
-		</td>
-		<% if line.logical.progress then %>
-			<td>(<%= line.logical.progress %> %)</td>
-		<% end %>
-		<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
-			<%+san/logical/remove%>
-		<% end %>
 	</tr>
 	<tr>
-		<% local local_logical_colspan = 4
-		   if line.logical.progress then
-			local_logical_colspan = local_logical_colspan + 1
-		   end
-		   if #common.keys( line.logical.logical_volumes ) == 0 then
-			local_logical_colspan = local_logical_colspan + 1
-		end %>
-		<td colspan="<%= local_logical_colspan %>">
+		<td>
 			<%+san/logical/fillbar%>
 			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %></span>
 				<%+san/logical_volume/forms/add%>

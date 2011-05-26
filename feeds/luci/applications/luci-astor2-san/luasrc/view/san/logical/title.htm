@@ -17,12 +17,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div>
-	<input name="san.submit_logical_volume_remove-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
-	       onclick=" if ( !confirm( '<%: Really remove snapshot? %>' ) )
-			 return false;
-			 return true;"
-	       type="submit"
-	       title="<%: Remove snapshot %>"
-	       value="<%: Remove %>" />
+<div class="bold">
+	ID: <%= line.logical.id %>;
+	RAID: <%= line.logical.level %>;
+	Status: <%= line.logical.state %>
+	<% if line.logical.progress then %>
+		(<%= line.logical.progress %> %)</td>
+	<% end %>
 </div>
