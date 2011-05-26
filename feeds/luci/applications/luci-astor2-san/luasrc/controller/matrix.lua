@@ -58,10 +58,10 @@ function M.overall( data )
 		-- Bind access patterns to logical volumes and find maximal
 		-- patterns quantity in single logical volume
 		local access_patterns_quantity_max = 1
-		for _, logical_volume in pairs( logical.logical_volumes or {} ) do
+		for logical_volume_device, logical_volume in pairs( logical.logical_volumes or {} ) do
 			local quantity = 0
 			for _, access_pattern in ipairs( access_patterns ) do
-				if access_pattern.filename == logical_volume.device then
+				if access_pattern.filename == logical_volume_device then
 					if not logical_volume.access_patterns then
 						logical_volume.access_patterns = {}
 					end
