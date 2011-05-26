@@ -17,31 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<td valign="top"
-    rowspan="<%= line.logical_volume.rowspan %>"
-    class="<%+san/logical_volume/class%>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<%+san/snapshot/title%>
-		</td>
-		<% if not line.logical_volume.access_patterns then %>
-			<%+san/snapshot/remove%>
-		<% end %>
-		<td>
-			<% if #matrix_overall.access_patterns > 0 then %>
-				<input name="san.logical_volume_select"
-				       type ="radio"
-				       value="<%= line.logical_volume.device %>" />
-			<% end %>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<%+san/snapshot/resize%>
-		</td>
-	</tr>
-</table>
-
-</td>
+<div class="bold">
+	<%= line.logical_volume.name %>;
+	<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
+		<%= line.logical_volume.size %> <%: TiB %>
+	</span>
+<div>
