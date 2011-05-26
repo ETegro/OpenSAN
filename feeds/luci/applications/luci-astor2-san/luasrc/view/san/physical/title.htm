@@ -17,21 +17,17 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<td valign="top"
-    rowspan="<%= line.physical.rowspan %>"
-    class="<%+san/physical/class%>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<%+san/physical/title%>
-		</td>
-	</tr>
-	<tr class="to_hide">
-		<td>
-			<%+san/physical/information%>
-		</td>
-	</tr>
-</table>
-
-</td>
+<div>
+	<% if not line.physical.highlight.left then %>
+		<input name="san.physical_id"
+		       type="checkbox"
+		       value="<%= line.physical.id %>" />
+	<% end %>
+	<a href="#" id="physical_info-<%= line.physical.id %>">
+		ID: <%= line.physical.id %>;
+		<%= line.physical.model %>;
+		<span title="<%= line.physical.size_mib %> <%: MiB %>">
+			<%= line.physical.size %> <%: TiB %>
+		</span>
+	</a>
+</div>

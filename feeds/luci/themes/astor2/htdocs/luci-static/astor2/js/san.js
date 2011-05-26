@@ -66,7 +66,7 @@ function create_raid_form_toggle() {
 
 function drives_information_toggle(){
 	$( 'form a[ id *= "physical_info-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
 		} else {
