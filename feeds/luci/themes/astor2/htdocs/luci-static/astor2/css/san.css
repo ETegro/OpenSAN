@@ -18,13 +18,13 @@
 */
 @charset "UTF-8";
 
-/* Body elemets */
+/* Body */
 
+/* Elemets */
 input { width: auto; }
 ul, li { list-style: none; }
 
-/* Body classes */
-
+/* Classes */
 .bold { font-weight: 700; }
 .error {
 	font-weight: 700;
@@ -34,7 +34,6 @@ ul, li { list-style: none; }
 .noborder { border: 0; }
 
 /* Main table */
-
 form table tbody tr td { width: 25%; }
 form table thead tr td {
 	font-size: 120%;
@@ -45,7 +44,6 @@ form table thead tr td {
 form table table { padding: .5em; }
 
 /* Matrix */
-
 
 /* Highlights */
 .highlight-top { border-top: 5px solid #00CC00; }
