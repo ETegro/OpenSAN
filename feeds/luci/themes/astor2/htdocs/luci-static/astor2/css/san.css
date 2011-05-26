@@ -42,7 +42,6 @@ form table thead tr td {
 	text-align: center;
 	}
 form > table > tbody > tr > td { padding: .5em; }
-/*form table table { padding: .5em; }*/
 form table fieldset{ padding: .5em; }
 
 /* Matrix */
