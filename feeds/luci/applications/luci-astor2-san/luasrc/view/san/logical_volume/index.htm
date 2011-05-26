@@ -24,23 +24,21 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<%= line.logical_volume.name %>
-		</td>
-		<td>
-			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
-				<%= line.logical_volume.size %> <%: TiB %>
-			</span>
-		</td>
-		<td>
+			<div>
+				<%= line.logical_volume.name %>
+				<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
+					<%= line.logical_volume.size %> <%: TiB %>
+				</span>
+			</div>
 			<% if not line.logical_volume.access_patterns then %>
 				<%+san/logical_volume/remove%>
 			<% end %>
-		</td>
-		<td>
 			<% if #matrix_overall.access_patterns > 0 then %>
-				<input name="san.logical_volume_select"
-				       type ="radio"
-				       value="<%= line.logical_volume.device %>" />
+				<div>
+					<input name="san.logical_volume_select"
+					       type ="radio"
+					       value="<%= line.logical_volume.device %>" />
+				</div>
 			<% end %>
 		</td>
 	</tr>
