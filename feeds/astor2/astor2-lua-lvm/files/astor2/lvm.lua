@@ -61,6 +61,14 @@ function M.PhysicalVolume:new( attrs )
 	return setmetatable( attrs, PhysicalVolume_mt )
 end
 
+--- Prepare disk for working with (first sectors cleaning up)
+-- @param disk Disk for preparation
+function M.PhysicalVolume.prepare( disk )
+	assert( is_disk( disk ),
+	        "incorrect disk specified" )
+	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+end
+
 --- Create PhysicalVolume on a disk
 -- @param disk Disk on which volume must be created
 function M.PhysicalVolume.create( disk )
