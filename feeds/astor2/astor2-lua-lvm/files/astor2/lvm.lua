@@ -137,6 +137,7 @@ end
 --------------------------------------------------------------------------
 M.VolumeGroup = {}
 local VolumeGroup_mt = common.Class( M.VolumeGroup )
+M.VolumeGroup.PE_DEFAULT_SIZE = 64 -- MiB
 
 function M.VolumeGroup:new( attrs )
 	assert( common.is_number( attrs.extent ),
@@ -178,6 +179,7 @@ function M.VolumeGroup.create( physical_volumes )
 	end
 
 	common.system_succeed( "lvm vgcreate " ..
+	                       "-s " .. tostring( M.VolumeGroup.PE_DEFAULT_SIZE ) .. " " ..
 	                       name .. " " ..
 	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
 end
