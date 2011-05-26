@@ -139,6 +139,14 @@ function M.is_positive( n )
 	return n > 0
 end
 
+--- Remove leading and trailing whitespaces from the string
+-- @param str String where whitespaces should be removed
+-- @return String without leading and trailing whitespaces
+function M.strip( str )
+	assert( M.is_string( str ), "non-string argument" )
+	return string.match( str, "^%s*(%S.*%S)%s*$" )
+end
+
 --- Get keys from hash
 -- @param hash { "key1" = { ... }, "key2" = { ... } }
 -- @return { "key1", "key2" }
