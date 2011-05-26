@@ -33,7 +33,7 @@
 	<tr>
 		<td>
 			<%+san/logical/fillbar%>
-			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %></span>
+			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %>
 				<%+san/logical_volume/forms/add%>
 			<% end %>
 		</td>
