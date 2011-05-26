@@ -46,9 +46,11 @@
 			<div>
 				<% if line.access_pattern.readonly then %>
 					<%: Readonly %>: <%= line.access_pattern.readonly %>
+					<br />
 				<% end %>
 				<% if line.access_pattern.filename then %>
 					<%: Device %>: <%= line.access_pattern.filename %>
+					<br />
 				<% end %>
 				<% if line.access_pattern.filename then %>
 					<%: IQN %>: <%= line.access_pattern:iqn() %>
