@@ -43,21 +43,17 @@
 			<% if line.access_pattern:is_binded() then %>
 				<%+san/access_pattern/unbind%>
 			<% end %>
-			<% if line.access_pattern.readonly then %>
-				<div>
+			<div>
+				<% if line.access_pattern.readonly then %>
 					<%: Readonly %>: <%= line.access_pattern.readonly %>
-				</div>
-			<% end %>
-			<% if line.access_pattern.filename then %>
-				<div>
+				<% end %>
+				<% if line.access_pattern.filename then %>
 					<%: Device %>: <%= line.access_pattern.filename %>
-				</div>
-			<% end %>
-			<% if line.access_pattern.filename then %>
-				<div>
+				<% end %>
+				<% if line.access_pattern.filename then %>
 					<%: IQN %>: <%= line.access_pattern:iqn() %>
-				</div>
-			<% end %>
+				<% end %>
+			</div>
 		</td>
 	</tr>
 	<tr class="to_hide">
