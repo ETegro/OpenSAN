@@ -30,11 +30,7 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<div class="inline">
-				<%= escape_html( line.access_pattern.name ) %>;
-				<%= line.access_pattern.targetdriver %>;
-				<%: LUN %><%= line.access_pattern.lun %>
-			</div>
+			<%+san/access_pattern/title%>
 			<% if not line.access_pattern:is_binded() then %>
 				<%+san/access_pattern/delete%>
 				<%+san/access_pattern/edit%>
