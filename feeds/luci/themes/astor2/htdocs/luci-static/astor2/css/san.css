@@ -25,6 +25,7 @@ ul, li { list-style: none; }
 
 /* Body classes */
 
+.bold { font-weight: 700; }
 .error {
 	font-weight: 700;
 	font-size: 150%;
