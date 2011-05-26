@@ -185,6 +185,12 @@ define Image/Build
 	$(CP) $(KDIR)/root.$(1) $(BIN_DIR)/$(IMG_PREFIX)-rootfs-$(1).img
 	$(CP) $(KDIR)/bzImage $(BIN_DIR)/$(IMG_PREFIX)-vmlinuz
   ifeq ($(1),ext4)
+	# aStor2 compatible firmware image creation
+	$(CP) $(BIN_DIR)/$(IMG_PREFIX)-vmlinuz vmlinuz
+	$(CP) $(BIN_DIR)/$(IMG_PREFIX)-rootfs-$(1).img rootfs
+	find vmlinuz rootfs | cpio -o --format=crc | gzip -9c > $(BIN_DIR)/$(IMG_PREFIX).opensan
+	rm -f vmlinuz rootfs
+	# ext4 target image itself
 	gzip -f9 $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img
 	gzip -f9 $(BIN_DIR)/$(IMG_PREFIX)-rootfs-$(1).img
   endif
