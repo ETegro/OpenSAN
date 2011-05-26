@@ -66,7 +66,7 @@ end
 function M.PhysicalVolume.prepare( disk )
 	assert( is_disk( disk ),
 	        "incorrect disk specified" )
-	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=4" )
 end
 
 --- Create PhysicalVolume on a disk
