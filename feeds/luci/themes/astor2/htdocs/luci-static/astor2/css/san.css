@@ -79,3 +79,6 @@ form table table { padding: 5px; }
 
 /* Access patterns */
 .access_pattern-disabled { background-color: #CCCCCC; }
+
+/* Sliders */
+div[ id *= "new_volume_slider-" ] { margin: .5em 0 .5em 0; }
