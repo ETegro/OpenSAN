@@ -31,7 +31,9 @@
 	<tr>
 		<td>
 			<div class="inline">
-				<%= escape_html( line.access_pattern.name ) %>
+				<%= escape_html( line.access_pattern.name ) %>;
+				<%= line.access_pattern.targetdriver %>;
+				<%: LUN %><%= line.access_pattern.lun %>
 			</div>
 			<% if not line.access_pattern:is_binded() then %>
 				<%+san/access_pattern/delete%>
@@ -41,12 +43,6 @@
 			<% if line.access_pattern:is_binded() then %>
 				<%+san/access_pattern/unbind%>
 			<% end %>
-			<div>
-				<%: TargetDriver %>: <%= line.access_pattern.targetdriver %>
-			</div>
-			<div>
-				<%: LUN %>: <%= line.access_pattern.lun %>
-			</div>
 			<% if line.access_pattern.enabled then %>
 				<div>
 					<%: Enabled %>: <%= line.access_pattern.enabled %>
