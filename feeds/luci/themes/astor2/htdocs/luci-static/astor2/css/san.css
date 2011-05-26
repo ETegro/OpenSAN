@@ -42,6 +42,7 @@ form table thead tr td {
 	padding: 0 0 5px 0;
 	text-align: center;
 	}
+form table table { padding: 5px; }
 
 /* Matrix */
 
