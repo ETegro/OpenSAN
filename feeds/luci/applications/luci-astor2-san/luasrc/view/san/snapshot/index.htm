@@ -25,13 +25,13 @@
 	<tr>
 		<td>
 			<%+san/snapshot/title%>
+			<% if not line.logical_volume.access_patterns then %>
+				<%+san/snapshot/remove%>
+			<% end %>
+			<% if #matrix_overall.access_patterns > 0 then %>
+				<%+san/snapshot/bind%>
+			<% end %>
 		</td>
-		<% if not line.logical_volume.access_patterns then %>
-			<%+san/snapshot/remove%>
-		<% end %>
-		<% if #matrix_overall.access_patterns > 0 then %>
-			<%+san/snapshot/bind%>
-		<% end %>
 	</tr>
 	<tr>
 		<td>
