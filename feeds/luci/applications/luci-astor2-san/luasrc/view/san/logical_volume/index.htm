@@ -25,20 +25,14 @@
 	<tr>
 		<td>
 			<%+san/logical_volume/title%>
-			<% if not line.logical_volume.access_patterns then %>
-				<%+san/logical_volume/remove%>
-			<% end %>
-			<% if #matrix_overall.access_patterns > 0 then %>
-				<%+san/logical_volume/bind%>
-			<% end %>
-			<div>
-				<a id="snapshot_creation-<%= hash( line.logical_volume.name ) %>"
-				   href="#"
-				   class="inline">
-					<img src="<%=resource%>/cbi/fieldadd.gif"
-					     alt="<%: Snapshot %>"
-					     title="<%: Snapshot %>" />
-				</a>
+			<div class="control">
+				<% if #matrix_overall.access_patterns > 0 then %>
+					<%+san/logical_volume/bind%>
+				<% end %>
+				<%+san/logical_volume/snapshot%>
+				<% if not line.logical_volume.access_patterns then %>
+					<%+san/logical_volume/remove%>
+				<% end %>
 			</div>
 			<% if #line.logical_volume.snapshots == 0 then %>
 				<%+san/logical_volume/resize%>

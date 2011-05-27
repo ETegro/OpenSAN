@@ -17,28 +17,27 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<!-- TODO: create fieldset here -->
-<div id="logical_volume_resize_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
-<div class="inline">
-	<%: Resize %>:
-</div>
-<div class="inline">
-	<input name="san.submit_logical_volume_resize-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
-	       onclick=" if ( !confirm( '<%: Really resize logical volume? %>' ) )
-			 return false;
-			 return true;"
-	       type="submit"
-	       title="<%: Resize logical volume %>"
-	       value="<%: Resize %>" />
-</div>
-<div>
-	<input id="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
-	       class="logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
-	              <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
-	              noborder"
-	       name="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
-	       readonly="readonly"
-	       type="text"
-	       value="0" />
-</div>
-<%+san/logical_volume/resize_slider.js%>
+<fieldset>
+	<legend><%: Resize %></legend>
+	<div id="logical_volume_resize_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
+	<div>
+		<input id="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+		       class="logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
+			      <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
+			      noborder"
+		       name="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+		       readonly="readonly"
+		       type="text"
+		       value="0" />
+	</div>
+	<div>
+		<input name="san.submit_logical_volume_resize-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
+		       onclick=" if ( !confirm( '<%: Really resize logical volume? %>' ) )
+				 return false;
+				 return true;"
+		       type="submit"
+		       title="<%: Resize logical volume %>"
+		       value="<%: Resize %>" />
+	</div>
+	<%+san/logical_volume/resize_slider.js%>
+</fieldset>

@@ -17,6 +17,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<input name="san.logical_volume_select"
-       type ="radio"
-       value="<%= line.logical_volume.device %>" />
+<a id="snapshot_creation-<%= hash( line.logical_volume.name ) %>"
+   href="#"
+   class="inline">
+	<img src="<%=resource%>/cbi/fieldadd.gif"
+	     alt="<%: Snapshot %>"
+	     title="<%: Snapshot %>" />
+</a>
