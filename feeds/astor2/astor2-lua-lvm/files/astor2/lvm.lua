@@ -362,6 +362,10 @@ function M.LogicalVolume:snapshot( size )
 	end
 end
 
+local function vglv_device( volume_group_name, logical_volume_name )
+	return "/dev/" .. volume_group_name .. "/" .. logical_volume_name 
+end
+
 --- List all LogicalVolumes on specified VolumeGroup
 -- @param volume_groups VolumeGroups to check
 -- @return { LogicalVolume, LogicalVolume }
@@ -373,7 +377,7 @@ function M.LogicalVolume.list( volume_groups )
 		local splitted_name = splitted[1]
 		local splitted_volume_group = splitted[2]
 		local splitted_size = tonumber( string.sub( splitted[3], 1, -2 ) )
-		local device = "/dev/" .. splitted_volume_group .. "/" .. splitted_name
+		local device = vglv_device( splitted_volume_group, splitted_name )
 		local splitted_possible_logical_volume = splitted[4]
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
