@@ -17,8 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<!-- TODO: create fieldset here -->
-<li>
+<fieldset>
+	<legend><%: Hotspare %></legend>
 	<div class="inline"><%: RAID %> #: </div>
 	<div class="inline">
 		<select id="san.logical_id_hotspare-<%= hash( line.physical.id ) %>"
@@ -45,4 +45,4 @@
 		       title="<%: Add %>"
 		       value="<%: Add %>" />
 	</div>
-</li>
+</fieldset>
