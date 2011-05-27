@@ -294,11 +294,6 @@ local function lvm_logical_volume_add( inputs, data )
 	if not lvm.LogicalVolume.name_is_valid( logical_volume_name ) then
 		return index_with_error( i18n("Invalid logical volume name") )
 	end
-	for _, logical_volume in ipairs( data.logical_volumes ) do
-		if logical_volume.name == logical_volume_name then
-			return index_with_error( i18n("Such name already exists") )
-		end
-	end
 
 	local logical_volume_size = inputs[ "new_volume_slider_size-" .. logical_id_hash ]
 	logical_volume_size = tonumber( logical_volume_size )
