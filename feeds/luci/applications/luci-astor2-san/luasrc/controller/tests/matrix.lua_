@@ -1481,13 +1481,13 @@ TestMatrix = {}
 			logical_volumes = {
 				["lvm1"] = lvm.LogicalVolume:new( {
 					name = "lvm1",
-					device = "foobar1",
+					device = "lvm1",
 					volume_group = {},
 					size = 123
 				} ),
 				["lvm2"] = lvm.LogicalVolume:new( {
 					name = "lvm2",
-					device = "foobar2",
+					device = "lvm2",
 					volume_group = {},
 					size = 123
 				} )
