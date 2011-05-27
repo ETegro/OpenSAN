@@ -21,10 +21,10 @@ $.noConflict();
 jQuery(document).ready( function($) {
 
 function hide_all_to_hide_elements() {
-	$( '[ class ^= "to_hide" ]' ).hide();
+	$( '[ class *= "to_hide" ]' ).hide();
 };
 
-function create_raid_form_toggle() {
+function toggle_create_raid_form() {
 	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
 
 	$( physicals_select ).click( function() {
@@ -64,8 +64,8 @@ function create_raid_form_toggle() {
 	} );
 };
 
-function drives_information_toggle(){
-	$( 'form a[ id *= "physical_info-" ]' ).click( function() {
+function toggle_drives_information(){
+	$( 'form a[ id ^= "physical_info-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -76,8 +76,8 @@ function drives_information_toggle(){
 	} );
 };
 
-function snapshot_creation_toggle(){
-	$( 'form a[ id *= "snapshot_creation-" ]' ).click( function() {
+function toggle_snapshot_creation(){
+	$( 'form a[ id ^= "snapshot_creation-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -88,7 +88,7 @@ function snapshot_creation_toggle(){
 	} );
 };
 
-function access_patterns_edit_toggle() {
+function toggle_edit_access_patterns() {
 	$( 'form a[ id ^= "access_pattern_edit-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
@@ -111,10 +111,10 @@ function setup_plunger(){
 };
 
 hide_all_to_hide_elements();
-create_raid_form_toggle();
-drives_information_toggle();
-snapshot_creation_toggle();
-access_patterns_edit_toggle();
+toggle_create_raid_form();
+toggle_drives_information();
+toggle_snapshot_creation();
+toggle_edit_access_patterns();
 setup_plunger();
 
 });
