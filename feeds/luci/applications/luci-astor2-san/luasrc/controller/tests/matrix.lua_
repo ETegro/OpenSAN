@@ -1200,7 +1200,7 @@ TestMatrix = {}
 						["foo"] = {
 							rowspan = 2,
 							name = "foo",
-							device = "foobar1",
+							device = "foo",
 							volume_group = {},
 							snapshots = {},
 							size = 12,
@@ -1211,7 +1211,7 @@ TestMatrix = {}
 									targetdriver = "iscsi",
 									enabled = true,
 									readonly = false,
-									filename = "foobar1",
+									filename = "foo",
 									lun = 3
 								}
 							}
@@ -1219,7 +1219,7 @@ TestMatrix = {}
 						["bar"] = {
 							rowspan = 2,
 							name = "bar",
-							device = "foobar2",
+							device = "bar",
 							volume_group = {},
 							snapshots = {},
 							size = 23,
@@ -1230,7 +1230,7 @@ TestMatrix = {}
 									targetdriver = "iscsi",
 									enabled = true,
 									readonly = false,
-									filename = "foobar2",
+									filename = "bar",
 									lun = 1
 								}
 							}
@@ -1238,7 +1238,7 @@ TestMatrix = {}
 						["baz"] = {
 							rowspan = 2,
 							name = "baz",
-							device = "foobar3",
+							device = "baz",
 							volume_group = {},
 							snapshots = {},
 							size = 34,
@@ -1249,7 +1249,7 @@ TestMatrix = {}
 									targetdriver = "iscsi",
 									enabled = true,
 									readonly = false,
-									filename = "foobar3",
+									filename = "baz",
 									lun = 2
 								}
 							}
@@ -1262,7 +1262,7 @@ TestMatrix = {}
 				logical_volume = {
 					rowspan = 2,
 					name = "bar",
-					device = "foobar2",
+					device = "bar",
 					volume_group = {},
 					snapshots = {},
 					size = 23,
@@ -1273,7 +1273,7 @@ TestMatrix = {}
 							targetdriver = "iscsi",
 							enabled = true,
 							readonly = false,
-							filename = "foobar2",
+							filename = "bar",
 							lun = 1
 						}
 					}
@@ -1284,7 +1284,7 @@ TestMatrix = {}
 					targetdriver = "iscsi",
 					enabled = true,
 					readonly = false,
-					filename = "foobar2",
+					filename = "bar",
 					lun = 1
 				}
 			},
@@ -1296,7 +1296,7 @@ TestMatrix = {}
 				logical_volume = {
 					rowspan = 2,
 					name = "baz",
-					device = "foobar3",
+					device = "baz",
 					volume_group = {},
 					snapshots = {},
 					size = 34,
@@ -1307,7 +1307,7 @@ TestMatrix = {}
 							targetdriver = "iscsi",
 							enabled = true,
 							readonly = false,
-							filename = "foobar3",
+							filename = "baz",
 							lun = 2
 						}
 					}
@@ -1318,7 +1318,7 @@ TestMatrix = {}
 					targetdriver = "iscsi",
 					enabled = true,
 					readonly = false,
-					filename = "foobar3",
+					filename = "baz",
 					lun = 2
 				}
 			},
@@ -1339,7 +1339,7 @@ TestMatrix = {}
 				logical_volume = {
 					rowspan = 2,
 					name = "foo",
-					device = "foobar1",
+					device = "foo",
 					volume_group = {},
 					snapshots = {},
 					size = 12,
@@ -1350,7 +1350,7 @@ TestMatrix = {}
 							targetdriver = "iscsi",
 							enabled = true,
 							readonly = false,
-							filename = "foobar1",
+							filename = "foo",
 							lun = 3
 						}
 					}
@@ -1361,7 +1361,7 @@ TestMatrix = {}
 					targetdriver = "iscsi",
 					enabled = true,
 					readonly = false,
-					filename = "foobar1",
+					filename = "foo",
 					lun = 3
 				}
 			},
