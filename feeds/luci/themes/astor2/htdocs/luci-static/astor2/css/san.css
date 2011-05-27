@@ -34,15 +34,11 @@ ul, li { list-style: none; }
 .noborder { border: 0; }
 
 /* Main table */
-form table tbody tr td { width: 25%; }
-form table thead tr td {
-	font-size: 120%;
-	font-weight: 700;
-	padding: 0 0 .5em 0;
-	text-align: center;
+table.matrix > tbody > tr > th {
+	width: 25%;
 	}
-form > table > tbody > tr > td { padding: .5em; }
-form table fieldset{ padding: .5em; }
+table.matrix > tbody > tr > td,
+table fieldset { padding: .5em; }
 
 /* Matrix */
 
