@@ -84,4 +84,5 @@ table.matrix div.control {
 
 /* Sliders */
 div[ id *= "new_volume_slider-" ],
+div[ id *= "logical_volume_resize_slider-" ],
 div[ id *= "new_snapshot_slider-" ] { margin: .5em 0 .5em 0; }
