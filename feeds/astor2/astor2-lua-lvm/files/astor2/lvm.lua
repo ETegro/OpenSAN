@@ -381,7 +381,7 @@ function M.LogicalVolume.list( volume_groups )
 		local splitted_possible_logical_volume = splitted[4]
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
-		elseif splitted_possible_logical_volume and result[ splitted_possible_logical_volume ] then
+		elseif splitted_possible_logical_volume and result[ vglv_device( splitted_volume_group, splitted_possible_logical_volume ) ] then
 			-- Skip if it is not needed VolumeGroup
 			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
 				local snapshot = M.Snapshot:new({
