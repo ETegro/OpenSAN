@@ -31,13 +31,14 @@
 	<tr>
 		<td>
 			<%+san/access_pattern/title%>
-			<% if not line.access_pattern:is_binded() then %>
-				<%+san/access_pattern/delete%>
-				<%+san/access_pattern/edit%>
-				<%+san/access_pattern/bind%>
-			<% end %>
 			<% if line.access_pattern:is_binded() then %>
 				<%+san/access_pattern/unbind%>
+			<% else %>
+				<%+san/access_pattern/delete%>
+				<%+san/access_pattern/edit%>
+				<% if #matrix_overall.logical_volumes > 0 then %>
+					<%+san/access_pattern/bind%>
+				<% end %>
 			<% end %>
 			<div>
 				<% if line.access_pattern.readonly then %>

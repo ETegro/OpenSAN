@@ -27,14 +27,5 @@
 			<%= line.physical.size %> (<%: TiB %>)
 		</span>
 	</li>
-	<% local there_is_logical = false %>
-	<!-- TODO -->
-	<% for _, this_line in ipairs( matrix_overall.lines ) do %>
-		<% if this_line.logical then %>
-			<% there_is_logical = true %>
-		<% end %>
-	<% end %>
-	<% if there_is_logical then %>
-		<%+san/physical/forms/hotspare%>
-	<% end %>
+	<%+san/physical/forms/hotspare%>
 </ul>
