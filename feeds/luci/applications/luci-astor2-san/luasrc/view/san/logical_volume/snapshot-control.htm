@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<a id="snapshot_creation-<%= hash( line.logical_volume.name ) %>"
+<a id="snapshot_creation-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
    href="#"
    class="inline icon-fieldadd"
    title="<%: Snapshot %>">&nbsp;</a>
