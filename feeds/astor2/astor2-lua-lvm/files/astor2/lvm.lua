@@ -362,6 +362,10 @@ function M.LogicalVolume:snapshot( size )
 	end
 end
 
+local function vglv_device( volume_group_name, logical_volume_name )
+	return "/dev/" .. volume_group_name .. "/" .. logical_volume_name
+end
+
 --- List all LogicalVolumes on specified VolumeGroup
 -- @param volume_groups VolumeGroups to check
 -- @return { LogicalVolume, LogicalVolume }
@@ -370,29 +374,40 @@ function M.LogicalVolume.list( volume_groups )
 	local volume_groups_by_name = common.unique_keys( "name", volume_groups )
 	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
 		local splitted = common.split_by( line, " " )
+		local splitted_name = splitted[1]
+		local splitted_volume_group = splitted[2]
+		local splitted_size = tonumber( string.sub( splitted[3], 1, -2 ) )
+		local device = vglv_device( splitted_volume_group, splitted_name )
+		local splitted_possible_logical_volume = splitted[4]
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
-		elseif splitted[4] and result[ splitted[4] ] then
+		elseif splitted_possible_logical_volume and result[ vglv_device( splitted_volume_group, splitted_possible_logical_volume ) ] then
 			-- Skip if it is not needed VolumeGroup
-			if common.is_in_array( splitted[2], common.keys( volume_groups_by_name ) ) then
+			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
 				local snapshot = M.Snapshot:new({
-					name = splitted[1],
-					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_groups[ volume_groups_by_name[ splitted[2] ][1] ],
-					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
-					logical_volume = splitted[4],
+					name = splitted_name,
+					device = device,
+					volume_group = volume_groups[ volume_groups_by_name[ splitted_volume_group ][1] ],
+					size = splitted_size,
+					logical_volume = splitted_possible_logical_volume,
 					allocated = tonumber( splitted[5] )
 				})
-				result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
+				result[
+					vglv_device( splitted_volume_group, splitted_possible_logical_volume )
+				].snapshots[
+					#result[
+						vglv_device( splitted_volume_group, splitted_possible_logical_volume )
+					].snapshots + 1
+				] = snapshot
 			end
 		else
 			-- Skip if it is not needed VolumeGroup
-			if common.is_in_array( splitted[2], common.keys( volume_groups_by_name ) ) then
-				result[ splitted[1] ] = M.LogicalVolume:new({
-					name = splitted[1],
-					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_groups[ volume_groups_by_name[ splitted[2] ][1] ],
-					size = tonumber( string.sub( splitted[3], 1, -2 ) )
+			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
+				result[ device ] = M.LogicalVolume:new({
+					name = splitted_name,
+					device = device,
+					volume_group = volume_groups[ volume_groups_by_name[ splitted_volume_group ][1] ],
+					size = splitted_size
 				})
 			end
 		end
