@@ -33,14 +33,22 @@ fieldset { clear: both; }
 	}
 .inline { display: inline-block; }
 .noborder { border: 0; }
-.icon-remove {
-	background-image: url( '../../resources/cbi/remove.gif' );
+
+/* Icons for buttons */
+.icon-remove,
+.icon-fieldadd {
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 16px;
 	height: 16px;
-	/*padding: 0 5px;*/
 	border: 0;
+	}
+.icon-remove {
+	background-image: url( '../../resources/cbi/remove.gif' );
+	}
+.icon-fieldadd {
+	background-image: url( '../../resources/cbi/fieldadd.gif' );
+	text-decoration: none;
 	}
 
 /* Main table */

@@ -25,6 +25,11 @@
 	<tr>
 		<td>
 			<%+san/physical/title%>
+			<div class="control">
+				<% if line.physical.state == "hotspare" then %>
+					<%+san/physical/forms/hotspare/delete%>
+				<% end %>
+			</div>
 		</td>
 	</tr>
 	<tr class="to_hide">

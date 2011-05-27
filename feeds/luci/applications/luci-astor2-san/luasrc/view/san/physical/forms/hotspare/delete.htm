@@ -17,10 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<li>
-	<input name="san.submit_logical_hotspare_delete-<%= hash( tostring( line.physical.logical_id ) ) %>-<%= hash( line.physical.id ) %>"
-	       class="inline"
-	       type="submit"
-	       title="<%: Remove hotspare %>"
-	       value="<%: Remove hotspare %>" />
-</li>
+<input name="san.submit_logical_hotspare_delete-<%= hash( tostring( line.physical.logical_id ) ) %>-<%= hash( line.physical.id ) %>"
+       class="inline icon-remove"
+       type="submit"
+       title="<%: Remove hotspare %>"
+       value="" />
