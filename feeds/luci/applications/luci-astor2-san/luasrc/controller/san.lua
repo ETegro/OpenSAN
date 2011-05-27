@@ -258,8 +258,8 @@ local function einarc_logical_hotspare_delete( inputs, data )
 
 	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_hotspare_delete.(",hashre,").(",hashre,")"} )
 	assert( tmp, "unable to parse out logical's and physical's ids" )
-	local physical_id_hash = tmp[1]
-	local logical_id_hash = tmp[2]
+	local logical_id_hash = tmp[1]
+	local physical_id_hash = tmp[2]
 	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
