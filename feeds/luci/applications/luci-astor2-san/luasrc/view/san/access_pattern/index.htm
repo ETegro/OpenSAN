@@ -31,13 +31,12 @@
 	<tr>
 		<td>
 			<%+san/access_pattern/title%>
-			<% if not line.access_pattern:is_binded() then %>
+			<% if line.access_pattern:is_binded() then %>
+				<%+san/access_pattern/unbind%>
+			<% else %>
 				<%+san/access_pattern/delete%>
 				<%+san/access_pattern/edit%>
 				<%+san/access_pattern/bind%>
-			<% end %>
-			<% if line.access_pattern:is_binded() then %>
-				<%+san/access_pattern/unbind%>
 			<% end %>
 			<div>
 				<% if line.access_pattern.readonly then %>
