@@ -25,13 +25,13 @@
 	<tr>
 		<td>
 			<%+san/logical_volume/title%>
-			<% if not line.logical_volume.access_patterns then %>
-				<%+san/logical_volume/remove%>
-			<% end %>
-			<% if #matrix_overall.access_patterns > 0 then %>
-				<%+san/logical_volume/bind%>
-			<% end %>
-			<div>
+			<div class="controll">
+				<% if not line.logical_volume.access_patterns then %>
+					<%+san/logical_volume/remove%>
+				<% end %>
+				<% if #matrix_overall.access_patterns > 0 then %>
+					<%+san/logical_volume/bind%>
+				<% end %>
 				<a id="snapshot_creation-<%= hash( line.logical_volume.name ) %>"
 				   href="#"
 				   class="inline">
