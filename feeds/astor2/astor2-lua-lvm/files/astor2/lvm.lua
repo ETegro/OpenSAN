@@ -374,9 +374,10 @@ function M.LogicalVolume.list( volume_groups )
 		local splitted_volume_group = splitted[2]
 		local splitted_size = tonumber( string.sub( splitted[3], 1, -2 ) )
 		local device = "/dev/" .. splitted_volume_group .. "/" .. splitted_name
+		local splitted_possible_logical_volume = splitted[4]
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
-		elseif splitted[4] and result[ splitted[4] ] then
+		elseif splitted_possible_logical_volume and result[ splitted_possible_logical_volume ] then
 			-- Skip if it is not needed VolumeGroup
 			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
 				local snapshot = M.Snapshot:new({
@@ -384,10 +385,10 @@ function M.LogicalVolume.list( volume_groups )
 					device = device,
 					volume_group = volume_groups[ volume_groups_by_name[ splitted_volume_group ][1] ],
 					size = splitted_size,
-					logical_volume = splitted[4],
+					logical_volume = splitted_possible_logical_volume,
 					allocated = tonumber( splitted[5] )
 				})
-				result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
+				result[ splitted_possible_logical_volume ].snapshots[ #result[ splitted_possible_logical_volume ].snapshots + 1 ] = snapshot
 			end
 		else
 			-- Skip if it is not needed VolumeGroup
