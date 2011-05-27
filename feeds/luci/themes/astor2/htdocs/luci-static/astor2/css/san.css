@@ -36,6 +36,7 @@ fieldset { clear: both; }
 
 /* Icons for buttons */
 .icon-remove,
+.icon-reload,
 .icon-fieldadd {
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -48,6 +49,10 @@ fieldset { clear: both; }
 	}
 .icon-fieldadd {
 	background-image: url( '../../resources/cbi/fieldadd.gif' );
+	text-decoration: none;
+	}
+.icon-reload {
+	background-image: url( '../../resources/cbi/reload.gif' );
 	text-decoration: none;
 	}
 
