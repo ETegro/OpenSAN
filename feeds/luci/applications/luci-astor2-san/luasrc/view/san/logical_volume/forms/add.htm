@@ -29,12 +29,6 @@
 		       type="text"
 		       value="" />
 	</div>
-	<div class="inline">
-		<input name="san.submit_logical_volume_add-<%= hash( tostring( line.logical.id ) ) %>"
-		       type="submit"
-		       title="<%: Add logical volume %>"
-		       value="<%: Add %>" />
-	</div>
 	<div>
 		<input id="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
 		       class="new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>
@@ -44,6 +38,12 @@
 		       readonly="readonly"
 		       type="text"
 		       value="0" />
+	</div>
+	<div>
+		<input name="san.submit_logical_volume_add-<%= hash( tostring( line.logical.id ) ) %>"
+		       type="submit"
+		       title="<%: Add logical volume %>"
+		       value="<%: Add %>" />
 	</div>
 	<%+san/logical/slider.js%>
 </fieldset>
