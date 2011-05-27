@@ -23,6 +23,7 @@
 /* Elemets */
 input { width: auto; }
 ul, li { list-style: none; }
+fieldset { clear: left; }
 
 /* Classes */
 .bold { font-weight: 700; }
