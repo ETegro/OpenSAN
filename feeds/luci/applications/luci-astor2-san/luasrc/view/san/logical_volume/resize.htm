@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div id="logical_volume_resize_slider-<%= hash( line.logical_volume.name ) %>"></div>
+<div id="logical_volume_resize_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
 <div class="inline">
 	<%: Resize logical volume %>:
 </div>
@@ -31,11 +31,11 @@
 	       value="<%: Resize %>" />
 </div>
 <div>
-	<input id="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.name ) %>"
-	       class="logical_volume_resize_slider_size-<%= hash( line.logical_volume.name ) %>
+	<input id="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+	       class="logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
 	              <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
 	              noborder"
-	       name="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.name ) %>"
+	       name="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 	       readonly="readonly"
 	       type="text"
 	       value="0" />
