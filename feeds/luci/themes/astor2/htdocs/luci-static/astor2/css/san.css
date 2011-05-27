@@ -37,9 +37,8 @@ ul, li { list-style: none; }
 table.matrix > tbody > tr > th {
 	width: 25%;
 	}
-
-/*form > table > tbody > tr > td { padding: .5em; }*/
-/*form table fieldset{ padding: .5em; }*/
+table.matrix > tbody > tr > td,
+table fieldset { padding: .5em; }
 
 /* Matrix */
 
