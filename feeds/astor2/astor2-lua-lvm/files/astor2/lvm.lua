@@ -392,12 +392,18 @@ function M.LogicalVolume.list( volume_groups )
 					logical_volume = splitted_possible_logical_volume,
 					allocated = tonumber( splitted[5] )
 				})
-				result[ splitted_possible_logical_volume ].snapshots[ #result[ splitted_possible_logical_volume ].snapshots + 1 ] = snapshot
+				result[
+					vglv_device( splitted_volume_group, splitted_possible_logical_volume )
+				].snapshots[
+					#result[
+						vglv_device( splitted_volume_group, splitted_possible_logical_volume )
+					].snapshots + 1
+				] = snapshot
 			end
 		else
 			-- Skip if it is not needed VolumeGroup
 			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
-				result[ splitted_name ] = M.LogicalVolume:new({
+				result[ device ] = M.LogicalVolume:new({
 					name = splitted_name,
 					device = device,
 					volume_group = volume_groups[ volume_groups_by_name[ splitted_volume_group ][1] ],
