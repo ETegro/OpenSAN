@@ -43,7 +43,7 @@ table.matrix .title {
 	float: left;
 	width: 70%;
 	}
-table.matrix .control {
+table.matrix div.control {
 	float: right;
 	}
 
@@ -83,4 +83,5 @@ table.matrix .control {
 .access_pattern-disabled { background-color: #CCCCCC; }
 
 /* Sliders */
-div[ id *= "new_volume_slider-" ] { margin: .5em 0 .5em 0; }
+div[ id *= "new_volume_slider-" ],
+div[ id *= "new_snapshot_slider-" ] { margin: .5em 0 .5em 0; }
