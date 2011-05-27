@@ -33,6 +33,15 @@ fieldset { clear: both; }
 	}
 .inline { display: inline-block; }
 .noborder { border: 0; }
+.icon-remove {
+	background-image: url( '../../resources/cbi/remove.gif' );
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 16px;
+	height: 16px;
+	/*padding: 0 5px;*/
+	border: 0;
+	}
 
 /* Main table */
 table.matrix > tbody > tr > th {
