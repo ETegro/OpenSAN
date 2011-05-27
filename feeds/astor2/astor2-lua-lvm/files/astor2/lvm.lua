@@ -363,7 +363,7 @@ function M.LogicalVolume:snapshot( size )
 end
 
 local function vglv_device( volume_group_name, logical_volume_name )
-	return "/dev/" .. volume_group_name .. "/" .. logical_volume_name 
+	return "/dev/" .. volume_group_name .. "/" .. logical_volume_name
 end
 
 --- List all LogicalVolumes on specified VolumeGroup
