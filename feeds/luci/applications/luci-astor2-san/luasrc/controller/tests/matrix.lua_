@@ -99,19 +99,19 @@ local LOGICALS_TRIPLE = {
 		logical_volumes = {
 			["foo"] = lvm.LogicalVolume:new( {
 				name = "foo",
-				device = "foobar1",
+				device = "foo",
 				volume_group = {}, -- It is dummy
 				size = 12
 			} ),
 			["bar"] = lvm.LogicalVolume:new( {
 				name = "bar",
-				device = "foobar2",
+				device = "bar",
 				volume_group = {}, -- It is dummy
 				size = 23
 			} ),
 			["baz"] = lvm.LogicalVolume:new( {
 				name = "baz",
-				device = "foobar3",
+				device = "baz",
 				volume_group = {}, -- It is dummy
 				size = 34
 			} )
@@ -753,7 +753,7 @@ TestMatrix = {}
 								bottom = true
 							},
 							name = "foo",
-							device = "foobar1",
+							device = "foo",
 							volume_group = {},
 							snapshots = {},
 							size = 12
@@ -767,7 +767,7 @@ TestMatrix = {}
 								bottom = false
 							},
 							name = "bar",
-							device = "foobar2",
+							device = "bar",
 							volume_group = {},
 							snapshots = {},
 							size = 23
@@ -781,7 +781,7 @@ TestMatrix = {}
 								bottom = false
 							},
 							name = "baz",
-							device = "foobar3",
+							device = "baz",
 							volume_group = {},
 							snapshots = {},
 							size = 34
@@ -800,7 +800,7 @@ TestMatrix = {}
 						bottom = false
 					},
 					name = "bar",
-					device = "foobar2",
+					device = "bar",
 					volume_group = {},
 					snapshots = {},
 					size = 23
@@ -820,7 +820,7 @@ TestMatrix = {}
 						bottom = false
 					},
 					name = "baz",
-					device = "foobar3",
+					device = "baz",
 					volume_group = {},
 					snapshots = {},
 					size = 34
@@ -855,7 +855,7 @@ TestMatrix = {}
 						bottom = true
 					},
 					name = "foo",
-					device = "foobar1",
+					device = "foo",
 					volume_group = {},
 					snapshots = {},
 					size = 12
