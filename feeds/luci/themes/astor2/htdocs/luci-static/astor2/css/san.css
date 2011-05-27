@@ -39,6 +39,13 @@ table.matrix > tbody > tr > th {
 	}
 table.matrix > tbody > tr > td,
 table fieldset { padding: .5em; }
+table.matrix .title {
+	float: left;
+	width: 70%;
+	}
+table.matrix .control {
+	float: right;
+	}
 
 /* Matrix */
 

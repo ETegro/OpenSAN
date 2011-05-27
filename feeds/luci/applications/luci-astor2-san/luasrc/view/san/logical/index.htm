@@ -25,9 +25,11 @@
 	<tr>
 		<td>
 			<%+san/logical/title%>
-			<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
-				<%+san/logical/remove%>
-			<% end %>
+			<div class="control">
+				<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
+					<%+san/logical/remove%>
+				<% end %>
+			</div>
 		</td>
 	</tr>
 	<tr>
