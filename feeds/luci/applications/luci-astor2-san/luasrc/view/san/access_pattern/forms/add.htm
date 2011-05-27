@@ -37,7 +37,8 @@
 			<select id="san.access_pattern_new-lun"
 				name="san.access_pattern_new-lun"
 				size="1" >
-				<% for i = 0, (16-1) do %><%#TODO insert value of astor2.scst.AccessPattern.LUN_MAX %>
+				<% local scst = require "astor2.scst"
+				   for i = 0, scst.AccessPattern.LUN_MAX do %>
 					<option value="<%= i %>"><%= i %></option>
 				<% end %>
 			</select>
