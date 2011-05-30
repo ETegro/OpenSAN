@@ -46,10 +46,6 @@
 					<br />
 				<% end %>
 				<% if line.access_pattern.filename then %>
-					<%: Device %>: <%= line.access_pattern.filename %>
-					<br />
-				<% end %>
-				<% if line.access_pattern.filename then %>
 					<%: IQN %>: <%= line.access_pattern:iqn() %>
 				<% end %>
 			</div>
