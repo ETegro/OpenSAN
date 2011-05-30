@@ -42,6 +42,7 @@ ul, li {
 
 /* Icons for buttons */
 .icon-remove,
+.icon-bind,
 .icon-reload,
 .icon-fieldadd,
 .icon-edit {
@@ -54,6 +55,10 @@ ul, li {
 .icon-remove {
 	background-image: url( '../../resources/cbi/remove.gif' );
 	}
+.icon-bind {
+	background-image: url( '../../resources/cbi/link.gif' );
+	}
+
 .icon-fieldadd {
 	background-image: url( '../../resources/cbi/fieldadd.gif' );
 	text-decoration: none;
