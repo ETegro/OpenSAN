@@ -15,7 +15,7 @@ diff -urN astor2-einarc-svn1882/src/raid/software.rb astor2-einarc-svn1882-usb-f
  		def usb_device?(device)
  			name = device.gsub(/^\/dev\//, '')
 -			return (not [File.read("/sys/block/#{name}/uevent")].grep(/usb/).empty?)
-+			return File.readlink( name ) =~ /usb/
++			return File.readlink( "/sys/block/#{name}" ) =~ /usb/
  		end
  
  		def active?(device)
