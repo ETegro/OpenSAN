@@ -1,15 +1,15 @@
 graph { flow: south }
 
-( Создание RAID
+( Creation of RAID
 
-[] -> [ есть ли PV? ]
+[] ==> [ Does PV exist? ]
 
-[ есть ли PV? ] -- ДА --> [ есть ли VG? ]
-[ есть ли PV? ] -- НЕТ --> [ создать RAID ]
+[ Does PV exist? ] -- YES --> [ Does VG exist? ]
+[ Does PV exist? ] -- NO --> [ Create RAID ]
 
-[ есть ли VG? ] -- ДА --> {flow: back} [ остановить VG ] --> [ создать RAID ]
-[ есть ли VG? ] -- НЕТ --> [ создать RAID ]
+[ Does VG exist? ] -- YES --> {flow: back} [ Stop all non-RAID VGs ] --> [ Create RAID ]
+[ Does VG exist? ] -- NO --> [ Create RAID ]
 
-[ создать RAID ] --> [ prepare( созданный RAID ) ]
+[ Create RAID ] --> [ prepare( newly created RAID ) ]
 
 )
