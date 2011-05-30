@@ -17,11 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<input name="san.submit_logical_hotspare_delete-<%= hash( tostring( line.physical.logical_id ) ) %>-<%= hash( line.physical.id ) %>"
-       onclick=" if ( !confirm( '<%: Really delete hotspare drive? %>' ) )
-                 return false;
-                 return true;"
-       class="inline icon-remove"
-       type="submit"
-       title="<%: Remove hotspare %>"
-       value="" />
+<a id="snapshot_resize_link-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+   href="#"
+   class="inline icon-reload"
+   title="<%: Resize %>">&nbsp;</a>
