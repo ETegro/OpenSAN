@@ -20,48 +20,67 @@
 <div id="div_access_pattern_new">
 	<fieldset>
 		<legend><%: Access pattern %></legend>
-		<div>
-			<%: Name %>:
-			<input name="san.access_pattern_new-name"
-			       type="text" />
-		</div>
-		<div>
-			<%: Target driver %>:
-			<input name="san.access_pattern_new-targetdriver"
-			       type="text"
-			       readonly="readonly"
-			       value="iscsi" />
-		</div>
-		<div>
-			<%: LUN %>:
-			<select id="san.access_pattern_new-lun"
-				name="san.access_pattern_new-lun"
-				size="1" >
-				<% local scst = require "astor2.scst"
-				   for i = 0, scst.AccessPattern.LUN_MAX do %>
-					<option value="<%= i %>"><%= i %></option>
-				<% end %>
-			</select>
-		</div>
-		<div>
-			<%: Enabled %>
-			<input name="san.access_pattern_new-enabled"
-			       id="san.access_pattern_new-enabled"
-			       type="checkbox"
-			       value="1" />
-		</div>
-		<div>
-			<%: Readonly %>
-			<input name="san.access_pattern_new-readonly"
-			       id="san.access_pattern_new-readonly"
-			       type="checkbox"
-			       value="1" />
-		</div>
-		<div>
-			<input name="san.submit_access_pattern_new"
-			       type="submit"
-			       title="<%: Add access pattern %>"
-			       value="<%: Add %>" />
-		</div>
+		<table class="form">
+			<tbody>
+				<tr>
+					<td><%: Name %>:</td>
+					<td>
+						<input name="san.access_pattern_new-name"
+						       type="text" />
+					</td>
+				</tr>
+				<tr>
+					<td><%: Target driver %>:</td>
+					<td>
+						<input name="san.access_pattern_new-targetdriver"
+						       type="text"
+						       readonly="readonly"
+						       value="iscsi" />
+					</td>
+				</tr>
+				<tr>
+					<td><%: LUN %>:</td>
+					<td>
+						<select id="san.access_pattern_new-lun"
+							name="san.access_pattern_new-lun"
+							size="1" >
+							<% local scst = require "astor2.scst"
+							   for i = 0, scst.AccessPattern.LUN_MAX do %>
+								<option value="<%= i %>"><%= i %></option>
+							<% end %>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><%: Enabled %></td>
+					<td>
+						<input name="san.access_pattern_new-enabled"
+						       id="san.access_pattern_new-enabled"
+						       type="checkbox"
+						       value="1" />
+					</td>
+				</tr>
+				<tr>
+					<td><%: Readonly %></td>
+					<td>
+						<input name="san.access_pattern_new-readonly"
+						       id="san.access_pattern_new-readonly"
+						       type="checkbox"
+						       value="1" />
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>
+						<div class="form">
+							<input name="san.submit_access_pattern_new"
+							       type="submit"
+							       title="<%: Add access pattern %>"
+							       value="<%: Add %>" />
+						</div>
+					</td>
+				</tr>
+			<tbody>
+		</table>
 	</fieldset>
 </div>
