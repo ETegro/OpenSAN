@@ -65,6 +65,7 @@ table fieldset { padding: .5em; }
 table.matrix .title {
 	float: left;
 	width: 70%;
+	overflow: auto;
 	}
 table.matrix div.control {
 	float: right;
