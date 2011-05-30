@@ -76,9 +76,6 @@ table.matrix fieldset {
 table.matrix fieldset table.form {
 	width: 100%;
 	}
-table.matrix fieldset div.form input[ type = "text" ] {
-	width: auto;
-	}
 table.matrix fieldset div.form input[ type = "submit" ] {
 	float: right;
 	}
