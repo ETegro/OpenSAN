@@ -17,36 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<td valign="top"
-    rowspan="<%= line.logical.rowspan %>"
-    class="<%+san/logical/class%>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<%+san/logical/title%>
-			<div class="control">
-				<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %>
-					<%+san/logical/logical_volume-control%>
-				<% end %>
-				<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
-					<%+san/logical/remove%>
-				<% end %>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<%+san/logical/fillbar%>
-		</td>
-	</tr>
-	<tr class="to_hide">
-		<td>
-			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %>
-				<%+san/logical_volume/forms/add%>
-			<% end %>
-		</td>
-	</tr>
-</table>
-
-</td>
+ <a id="logical_volume_creation-<%= hash( tostring( line.logical.id ) ) %>"
+    href="#"
+    class="inline icon-fieldadd"
+    title="<%: Logical %>">&nbsp;</a>

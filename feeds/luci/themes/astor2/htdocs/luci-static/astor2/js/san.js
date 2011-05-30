@@ -76,6 +76,18 @@ function toggle_drives_information(){
 	} );
 };
 
+function toggle_logical_volume_creation(){
+	$( 'form a[ id ^= "logical_volume_creation-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
 function toggle_resize_logical_volume(){
 	$( 'form a[ id ^= "logical_volume_resize_link-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
@@ -137,6 +149,7 @@ function setup_plunger(){
 hide_all_to_hide_elements();
 toggle_create_raid_form();
 toggle_drives_information();
+toggle_logical_volume_creation();
 toggle_resize_logical_volume();
 toggle_resize_snapshot();
 toggle_snapshot_creation();
