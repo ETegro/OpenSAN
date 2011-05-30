@@ -1,9 +1,9 @@
 graph { flow: south }
 
-( Удаление RAID
+( Deletion of RAID
 
-[] ==> [ есть ли PV? ] -- ДА --> [ есть ли VG? ] -- ДА --> [ остановить VG ] --> [ prepare( RAID ) ]
-[ есть ли PV? ], [ есть ли VG? ] -- НЕТ --> [ prepare( RAID ) ]
-[ prepare( RAID ) ] --> [ удалить RAID ] ==> []
+[] ==> [ Does PV exist? ] -- YES --> [ Does VG exist? ] -- YES --> [ Stop VG ] --> [ prepare( RAID ) ]
+[ Does PV exist? ], [ Does VG exist? ] -- NO --> [ prepare( RAID ) ]
+[ prepare( RAID ) ] --> [ Delete RAID ] ==> []
 
 )
