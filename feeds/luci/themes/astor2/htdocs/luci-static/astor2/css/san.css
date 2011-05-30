@@ -111,3 +111,25 @@ div[ id *= "new_volume_slider-" ],
 div[ id *= "logical_volume_resize_slider-" ],
 div[ id *= "new_snapshot_slider-" ],
 div[ id *= "logical_volume_snapshot_resize_slider-" ] { margin: .5em 0 .5em 0; }
+
+/* Fillbar */
+.fillbar {
+	margin: .5em 0;
+	width: 100%;
+	position: relative;
+	border:1px solid #999999;
+	}
+.fillbar .fillbar_background {
+	background-color:#CCCCCC;
+	height: 2em;
+	}
+.fillbar .fillbar_info {
+	position: absolute;
+	left: 0;
+	top: 0;
+	text-align: center;
+	width:100%;
+	}
+.fillbar .fillbar_text {
+	padding: .5em;
+	}

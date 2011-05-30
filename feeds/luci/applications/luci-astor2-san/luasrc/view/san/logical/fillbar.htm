@@ -18,15 +18,15 @@
 %>
 
 <!-- This code is based on LuCI's administration interface status progressbars -->
-<div style="width:200px; position:relative; border:1px solid #999999">
-	<div style="background-color:#CCCCCC; width:<%= line.logical.volume_group.percentage or "0" %>%; height:15px">
-		<div style="position:absolute; left:0; top:0; text-align:center; width:100%%; color:#000000">
-			<small title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
+<div class="fillbar">
+	<div class="fillbar_background" style="width:<%= line.logical.volume_group.percentage or "0" %>%;">
+		<div class="fillbar_info">
+			<div class="fillbar_text" title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
 			<%= line.logical.volume_group.allocated %> <%: TiB %>
 			/
 			<%= line.logical.volume_group.total %> <%: TiB %>
 			(<%= line.logical.volume_group.percentage or "0" %>%)
-			</small>
+			</div>
 		</div>
 	</div>
 </div>
