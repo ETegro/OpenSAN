@@ -1,11 +1,11 @@
 graph { flow: south }
 
-( Создание LogicalVolume
+( Creation of LogicalVolume
 
-[] ==> [ есть ли PV? ] -- ДА --> [ есть ли VG? ] -- ДА --> [ есть ли LV? ] -- ДА --> [ создать LV ]
-[ есть ли LV? ] -- НЕТ --> [ остановить VG ] --> [ prepare( RAID ) ]
-[ есть ли PV? ], [ есть ли VG? ] -- НЕТ --> [ prepare( RAID ) ]
+[] ==> [ Does PV exist? ] -- YES --> [ Does VG exist? ] -- YES --> [ Does LV exist? ] -- YES --> [ Create LV ]
+[ Does LV exist? ] -- NO --> [ Stop VG ] --> [ prepare( RAID ) ]
+[ Does PV exist? ], [ Does VG exist? ] -- NO --> [ prepare( RAID ) ]
 
-[ prepare( RAID ) ] --> [ создать PV ] --> [ создать VG ] --> [ создать LV ] ==> []
+[ prepare( RAID ) ] --> [ Create PV ] --> [ Create VG ] --> [ Create LV ] ==> []
 
 )
