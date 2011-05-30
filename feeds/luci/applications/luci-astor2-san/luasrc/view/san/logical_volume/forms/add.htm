@@ -19,34 +19,49 @@
 
 <fieldset>
 	<legend><%: Logical volume%></legend>
-	<div class="form">
-		<label for="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>">
-			<%: Name %>:
-		</label>
-		<input id="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
-		       name="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
-		       type="text"
-		       value="" />
-	</div>
-	<div class="form">
-		<label for="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>">
-			<%: Size %>:
-		</label>
-		<input id="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
-		       class="new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>
-			      logical-background-state-<%= line.logical.state %>
-			      noborder"
-		       name="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
-		       readonly="readonly"
-		       type="text"
-		       value="0" />
-	</div>
-	<div id="new_volume_slider-<%= hash( tostring( line.logical.id ) ) %>"></div>
-	<div class="form">
-		<input name="san.submit_logical_volume_add-<%= hash( tostring( line.logical.id ) ) %>"
-		       type="submit"
-		       title="<%: Add logical volume %>"
-		       value="<%: Add %>" />
-	</div>
+	<table class="form">
+		<tbody>
+			<tr>
+				<td width="25%">
+					<label for="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>">
+						<%: Name %>:
+					</label>
+				</td>
+				<td width="75%">
+					<input id="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
+					       name="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
+					       type="text"
+					       value="" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input id="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
+					       class="new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>
+						      logical-background-state-<%= line.logical.state %>
+						      noborder"
+					       name="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
+					       readonly="readonly"
+					       type="text"
+					       class="inline"
+					       value="0" />
+				</td>
+				<td>
+					<div id="new_volume_slider-<%= hash( tostring( line.logical.id ) ) %>"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+					<div class="form">
+						<input name="san.submit_logical_volume_add-<%= hash( tostring( line.logical.id ) ) %>"
+						       type="submit"
+						       title="<%: Add logical volume %>"
+						       value="<%: Add %>" />
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	<%+san/logical/slider.js%>
 </fieldset>

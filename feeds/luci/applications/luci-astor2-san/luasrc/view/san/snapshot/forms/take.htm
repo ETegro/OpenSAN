@@ -19,22 +19,35 @@
 
 <fieldset>
 	<legend><%: Take snapshot %></legend>
-	<div class="form">
-		<input id="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
-		       class="new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
-			      <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
-			      noborder"
-		       name="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
-		       readonly="readonly"
-		       type="text"
-		       value="0" />
-	</div>
-	<div id="new_snapshot_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
-	<div class="form">
-		<input name="san.submit_logical_volume_snapshot_add-lvd<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
-		       type="submit"
-		       title="<%: Add snapshot %>"
-		       value="<%: Add %>" />
-	</div>
+	<table class="form">
+		<tbody>
+			<tr>
+				<td width="25%">
+					<input id="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+					       class="new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
+						      <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
+						      noborder"
+					       name="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+					       readonly="readonly"
+					       type="text"
+					       value="0" />
+				</td>
+				<td width="75%">
+					<div id="new_snapshot_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+					<div class="form">
+						<input name="san.submit_logical_volume_snapshot_add-lvd<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+						       type="submit"
+						       title="<%: Add snapshot %>"
+						       value="<%: Add %>" />
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	<%+san/snapshot/forms/take_size.js%>
 </fieldset>

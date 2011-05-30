@@ -26,7 +26,7 @@
 				<th scope="col"><%: Physical drives %></th>
 				<th scope="col"><%: Logical drives %></th>
 				<th scope="col"><%: Logical volumes %></th>
-				<th scope="col"><%: Access patterns %></th>
+				<th scope="col"><a href="#div_access_pattern_new" id="access_patterns"><%: Access patterns %></a></th>
 			</tr>
 			<% for _, line_local in ipairs( matrix_overall.lines ) do %>
 				<%# Our templates must be able to access locally scoped line_local %>
