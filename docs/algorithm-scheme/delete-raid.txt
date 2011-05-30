@@ -2,8 +2,8 @@ graph { flow: south }
 
 ( Удаление RAID
 
-[] -> [ есть ли PV? ] -- ДА --> [ есть ли VG? ] -- ДА --> [ остановить VG ] --> [ prepare( RAID ) ]
+[] ==> [ есть ли PV? ] -- ДА --> [ есть ли VG? ] -- ДА --> [ остановить VG ] --> [ prepare( RAID ) ]
 [ есть ли PV? ], [ есть ли VG? ] -- НЕТ --> [ prepare( RAID ) ]
-[ prepare( RAID ) ] --> [ удалить RAID ]
+[ prepare( RAID ) ] --> [ удалить RAID ] ==> []
 
 )
