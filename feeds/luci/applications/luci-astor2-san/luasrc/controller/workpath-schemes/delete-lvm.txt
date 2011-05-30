@@ -20,7 +20,6 @@ graph { flow: south }
 ( Deletion of LogicalVolume
 
 [] ==> [ Is it last LV? ] -- NO --> [ Delete LV ]
-[ Is it last LV? ] -- YES --> [ Stop VG ] --> [ prepare( RAID ) ] --> [ Delete LV ]
-[ Delete LV ] ==> []
+[ Is it last LV? ] -- YES --> [ Stop VG ] --> [ prepare( RAID ) ]
 
 )
