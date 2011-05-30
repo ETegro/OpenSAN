@@ -19,8 +19,7 @@
 
 <fieldset>
 	<legend><%: Resize %></legend>
-	<div id="logical_volume_resize_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
-	<div>
+	<div class="form">
 		<input id="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 		       class="logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
 			      <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
@@ -30,7 +29,8 @@
 		       type="text"
 		       value="0" />
 	</div>
-	<div>
+	<div id="logical_volume_resize_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
+	<div class="form">
 		<input name="san.submit_logical_volume_resize-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
 		       onclick=" if ( !confirm( '<%: Really resize logical volume? %>' ) )
 				 return false;

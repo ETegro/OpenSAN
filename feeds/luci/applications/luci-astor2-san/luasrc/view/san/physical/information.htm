@@ -17,15 +17,30 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<ul>
-	<li><%: Model %>: <%= line.physical.model %></li>
-	<li><%: S/N %>: <%= line.physical.serial %></li>
-	<li><%: Revision %>: <%= line.physical.revision %></li>
-	<li><%: State %>: <%= line.physical.state %></li>
-	<li><%: Size %>:
-		<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
-			<%= line.physical.size %> (<%: TiB %>)
-		</span>
-	</li>
-</ul>
+<table>
+	<tr>
+		<td><%: Model %>:</td>
+		<td><%= line.physical.model %></td>
+	</tr>
+	<tr>
+		<td><%: S/N %>:</td>
+		<td><%= line.physical.serial %></li>
+	</tr>
+	<tr>
+		<td><%: Revision %>:</td>
+		<td><%= line.physical.revision %></td>
+	</tr>
+	<tr>
+		<td><%: State %>:</td>
+		<td><%= line.physical.state %></td>
+	</tr>
+	<tr>
+		<td><%: Size %>:</td>
+		<td>
+			<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
+				<%= line.physical.size %> (<%: TiB %>)
+			</span>
+		</td>
+	</tr>
+</table>
 <%+san/physical/forms/hotspare%>

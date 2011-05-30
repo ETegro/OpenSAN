@@ -21,16 +21,24 @@
 /* Body */
 
 /* Elemets */
-ul, li { list-style: none; }
+ul, li {
+	list-style: none;
+	}
 
 /* Classes */
-.bold { font-weight: 700; }
+.bold {
+	font-weight: 700;
+	}
 .error {
 	font-weight: 700;
 	font-size: 150%;
 	}
-.inline { display: inline-block; }
-.noborder { border: 0; }
+.inline {
+	display: inline-block;
+	}
+.noborder {
+	border: 0;
+	}
 
 /* Icons for buttons */
 .icon-remove,
@@ -59,8 +67,12 @@ table.matrix > tbody > tr > th {
 	width: 25%;
 	}
 table.matrix > tbody > tr > td,
-table.matrix fieldset { padding: .5em; }
-table.matrix fieldset { clear: both; }
+table.matrix fieldset {
+	padding: .5em;
+	}
+table.matrix fieldset {
+	clear: both;
+	}
 table.matrix fieldset div.form {
 	clear: left;
 	padding-top: .5em;
@@ -69,8 +81,12 @@ table.matrix fieldset div.form label {
 	float: left;
 	width: 25%;
 	}
-table.matrix fieldset div.form input[ type = "text" ] { width: 74%; }
-table.matrix fieldset div.form input[ type = "submit" ] { float: right; }
+table.matrix fieldset div.form input[ type = "text" ] {
+	width: 74%;
+	}
+table.matrix fieldset div.form input[ type = "submit" ] {
+	float: right;
+	}
 table.matrix .title {
 	float: left;
 	width: 70%;
@@ -84,7 +100,9 @@ table.matrix div.control {
 div[ id *= "new_volume_slider-" ],
 div[ id *= "logical_volume_resize_slider-" ],
 div[ id *= "new_snapshot_slider-" ],
-div[ id *= "logical_volume_snapshot_resize_slider-" ] { margin: .5em 0 .5em 0; }
+div[ id *= "logical_volume_snapshot_resize_slider-" ] {
+	margin: .5em 0 .5em 0;
+	}
 
 /* Fillbar */
 .fillbar {
@@ -107,6 +125,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] { margin: .5em 0 .5em 0; }
 .fillbar .fillbar_text {
 	padding: .5em;
 	}
+
 /* Matrix colors */
 
 /* Highlights */
