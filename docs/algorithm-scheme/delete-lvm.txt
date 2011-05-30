@@ -1,0 +1,7 @@
+graph { flow: south }
+
+( Удаление LogicalVolume
+
+[] -> [ удалить LV ]
+
+)
