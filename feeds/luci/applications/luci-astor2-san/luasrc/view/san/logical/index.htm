@@ -26,6 +26,9 @@
 		<td>
 			<%+san/logical/title%>
 			<div class="control">
+				<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %>
+					<%+san/logical/logical_volume-control%>
+				<% end %>
 				<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
 					<%+san/logical/remove%>
 				<% end %>
@@ -35,6 +38,10 @@
 	<tr>
 		<td>
 			<%+san/logical/fillbar%>
+		</td>
+	</tr>
+	<tr class="to_hide">
+		<td>
 			<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %>
 				<%+san/logical_volume/forms/add%>
 			<% end %>
