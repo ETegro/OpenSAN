@@ -2,7 +2,6 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Vladimir Petukhov (vladimir.petukhov@etegro.com)
-                          Sergey Matveev (stargrave@stargrave.org)
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,36 +17,16 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<% if line.access_pattern.colspan then %>
-	<td colspan="<%= line.access_pattern.colspan %>">
-		&nbsp;
-	</td>
-<% end %>
-
-<td valign="top"
-    class="<%+san/access_pattern/class%>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<%+san/access_pattern/title%>
-			<% if line.access_pattern:is_binded() then %>
-				<%+san/access_pattern/unbind%>
-			<% else %>
-				<%+san/access_pattern/delete%>
-				<%+san/access_pattern/edit%>
-				<% if #matrix_overall.logical_volumes > 0 then %>
-					<%+san/access_pattern/bind%>
-				<% end %>
-			<% end %>
-			<%+san/access_pattern/information%>
-		</td>
-	</tr>
-	<tr class="to_hide">
-		<td>
-			<%+san/access_pattern/forms/edit%>
-		</td>
-	<tr>
-</table>
-
-</td>
+<div>
+	<% if line.access_pattern.readonly then %>
+		<%: Readonly %>: <%= line.access_pattern.readonly %>
+		<br />
+	<% end %>
+	<% if line.access_pattern.filename then %>
+		<%: Device %>: <%= line.access_pattern.filename %>
+		<br />
+	<% end %>
+	<% if line.access_pattern.filename then %>
+		<%: IQN %>: <%= line.access_pattern:iqn() %>
+	<% end %>
+</div>
