@@ -21,9 +21,7 @@
 /* Body */
 
 /* Elemets */
-input { width: auto; }
 ul, li { list-style: none; }
-fieldset { clear: both; }
 
 /* Classes */
 .bold { font-weight: 700; }
@@ -61,7 +59,18 @@ table.matrix > tbody > tr > th {
 	width: 25%;
 	}
 table.matrix > tbody > tr > td,
-table fieldset { padding: .5em; }
+table.matrix fieldset { padding: .5em; }
+table.matrix fieldset { clear: both; }
+table.matrix fieldset div.form {
+	clear: left;
+	padding-top: .5em;
+	}
+table.matrix fieldset div.form label {
+	float: left;
+	width: 25%;
+	}
+table.matrix fieldset div.form input[ type = "text" ] { width: 74%; }
+table.matrix fieldset div.form input[ type = "submit" ] { float: right; }
 table.matrix .title {
 	float: left;
 	width: 70%;
@@ -71,7 +80,34 @@ table.matrix div.control {
 	float: right;
 	}
 
-/* Matrix */
+/* Sliders */
+div[ id *= "new_volume_slider-" ],
+div[ id *= "logical_volume_resize_slider-" ],
+div[ id *= "new_snapshot_slider-" ],
+div[ id *= "logical_volume_snapshot_resize_slider-" ] { margin: .5em 0 .5em 0; }
+
+/* Fillbar */
+.fillbar {
+	margin: .5em 0;
+	width: 100%;
+	position: relative;
+	border:1px solid #999999;
+	}
+.fillbar .fillbar_background {
+	background-color:#CCCCCC;
+	height: 2em;
+	}
+.fillbar .fillbar_info {
+	position: absolute;
+	left: 0;
+	top: 0;
+	text-align: center;
+	width:100%;
+	}
+.fillbar .fillbar_text {
+	padding: .5em;
+	}
+/* Matrix colors */
 
 /* Highlights */
 .highlight-top { border-top: 5px solid #00CC00; }
@@ -105,31 +141,3 @@ table.matrix div.control {
 
 /* Access patterns */
 .access_pattern-disabled { background-color: #CCCCCC; }
-
-/* Sliders */
-div[ id *= "new_volume_slider-" ],
-div[ id *= "logical_volume_resize_slider-" ],
-div[ id *= "new_snapshot_slider-" ],
-div[ id *= "logical_volume_snapshot_resize_slider-" ] { margin: .5em 0 .5em 0; }
-
-/* Fillbar */
-.fillbar {
-	margin: .5em 0;
-	width: 100%;
-	position: relative;
-	border:1px solid #999999;
-	}
-.fillbar .fillbar_background {
-	background-color:#CCCCCC;
-	height: 2em;
-	}
-.fillbar .fillbar_info {
-	position: absolute;
-	left: 0;
-	top: 0;
-	text-align: center;
-	width:100%;
-	}
-.fillbar .fillbar_text {
-	padding: .5em;
-	}
