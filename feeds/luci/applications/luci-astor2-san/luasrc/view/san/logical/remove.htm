@@ -17,12 +17,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<td>
 <input name="san.submit_logical_delete-<%= hash( tostring( line.logical.id ) ) %>"
        onclick=" if ( !confirm( '<%: Really delete logical drive? %>' ) )
 		 return false;
 		 return true;"
+       class="icon-remove"
        type="submit"
        title="<%: Remove drive %>"
-       value="<%: Remove %>" />
-</td>
+       value="" />

@@ -58,10 +58,10 @@ function M.overall( data )
 		-- Bind access patterns to logical volumes and find maximal
 		-- patterns quantity in single logical volume
 		local access_patterns_quantity_max = 1
-		for _, logical_volume in pairs( logical.logical_volumes or {} ) do
+		for logical_volume_device, logical_volume in pairs( logical.logical_volumes or {} ) do
 			local quantity = 0
 			for _, access_pattern in ipairs( access_patterns ) do
-				if access_pattern.filename == logical_volume.device then
+				if access_pattern.filename == logical_volume_device then
 					if not logical_volume.access_patterns then
 						logical_volume.access_patterns = {}
 					end
@@ -108,12 +108,12 @@ function M.overall( data )
 		end
 
 		-- Fillup logical volumes
-		local logical_volume_names = common.keys( logical.logical_volumes or {} )
-		table.sort( logical_volume_names )
+		local logical_volume_devices = common.keys( logical.logical_volumes or {} )
+		table.sort( logical_volume_devices )
 		local logical_volume_rowspan = lines_quantity / logical_volumes_quantity
-		for i, logical_volume_name in ipairs( logical_volume_names ) do
+		for i, logical_volume_device in ipairs( logical_volume_devices ) do
 			local offset = current_line + ( i - 1 ) * logical_volume_rowspan
-			local logical_volume = logical.logical_volumes[ logical_volume_name ]
+			local logical_volume = logical.logical_volumes[ logical_volume_device ]
 			matrix[ offset ].logical_volume = logical_volume
 			matrix[ offset ].logical_volume.rowspan = logical_volume_rowspan
 
@@ -430,11 +430,10 @@ local function logical_volume_group( logical, volume_groups )
 end
 
 local function snapshots_to_outer( logical_volumes )
-	for _, logical_volume_name in ipairs( common.keys( logical_volumes ) ) do
-		local logical_volume = logical_volumes[ logical_volume_name ]
+	for logical_volume_device, logical_volume in pairs( logical_volumes ) do
 		if logical_volume.snapshots then
 			for _, snapshot in ipairs( logical_volume.snapshots ) do
-				logical_volumes[ snapshot.name ] = snapshot
+				logical_volumes[ snapshot.device ] = snapshot
 			end
 		end
 	end
@@ -445,7 +444,7 @@ local function logical_logical_volumes( logical, logical_volumes )
 	local logical_volumes_needed = {}
 	for _, logical_volume in ipairs( logical_volumes ) do
 		if logical_volume.volume_group.physical_volumes[1].device == logical.device then
-			logical_volumes_needed[ logical_volume.name ] = logical_volume
+			logical_volumes_needed[ logical_volume.device ] = logical_volume
 		end
 	end
 	return snapshots_to_outer( logical_volumes_needed )
@@ -501,7 +500,6 @@ function M.caller()
 		filter_mib2tib,
 		filter_serialize,
 		filter_base64encode
-		-- filter_overall_fields_counter (for hiding)
 	}
 	for _,filter in ipairs( FILTERS ) do
 		matrix = filter( matrix )

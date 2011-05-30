@@ -17,7 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<li>
+<fieldset>
+	<legend><%: Hotspare %></legend>
 	<div class="inline"><%: RAID %> #: </div>
 	<div class="inline">
 		<select id="san.logical_id_hotspare-<%= hash( line.physical.id ) %>"
@@ -41,7 +42,7 @@
 		       name="san.submit_logical_hotspare_add-<%= hash( line.physical.id ) %>"
 		       class="inline"
 		       type="submit"
-		       title="<%: Add hotspare %>"
-		       value="<%: Add hotspare %>" />
+		       title="<%: Add %>"
+		       value="<%: Add %>" />
 	</div>
-</li>
+</fieldset>

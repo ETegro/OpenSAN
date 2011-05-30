@@ -18,22 +18,96 @@
 */
 @charset "UTF-8";
 
-/* Body elemets */
+/* Body */
 
-input { width: auto; }
+/* Elemets */
 ul, li { list-style: none; }
 
-/* Body classes */
-
+/* Classes */
+.bold { font-weight: 700; }
+.error {
+	font-weight: 700;
+	font-size: 150%;
+	}
 .inline { display: inline-block; }
 .noborder { border: 0; }
 
+/* Icons for buttons */
+.icon-remove,
+.icon-reload,
+.icon-fieldadd {
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	}
+.icon-remove {
+	background-image: url( '../../resources/cbi/remove.gif' );
+	}
+.icon-fieldadd {
+	background-image: url( '../../resources/cbi/fieldadd.gif' );
+	text-decoration: none;
+	}
+.icon-reload {
+	background-image: url( '../../resources/cbi/reload.gif' );
+	text-decoration: none;
+	}
+
 /* Main table */
+table.matrix > tbody > tr > th {
+	width: 25%;
+	}
+table.matrix > tbody > tr > td,
+table.matrix fieldset { padding: .5em; }
+table.matrix fieldset { clear: both; }
+table.matrix fieldset div.form {
+	clear: left;
+	padding-top: .5em;
+	}
+table.matrix fieldset div.form label {
+	float: left;
+	width: 25%;
+	}
+table.matrix fieldset div.form input[ type = "text" ] { width: 74%; }
+table.matrix fieldset div.form input[ type = "submit" ] { float: right; }
+table.matrix .title {
+	float: left;
+	width: 70%;
+	overflow: auto;
+	}
+table.matrix div.control {
+	float: right;
+	}
 
-form table tbody tr td { width: 25%; }
+/* Sliders */
+div[ id *= "new_volume_slider-" ],
+div[ id *= "logical_volume_resize_slider-" ],
+div[ id *= "new_snapshot_slider-" ],
+div[ id *= "logical_volume_snapshot_resize_slider-" ] { margin: .5em 0 .5em 0; }
 
-/* Matrix */
-
+/* Fillbar */
+.fillbar {
+	margin: .5em 0;
+	width: 100%;
+	position: relative;
+	border:1px solid #999999;
+	}
+.fillbar .fillbar_background {
+	background-color:#CCCCCC;
+	height: 2em;
+	}
+.fillbar .fillbar_info {
+	position: absolute;
+	left: 0;
+	top: 0;
+	text-align: center;
+	width:100%;
+	}
+.fillbar .fillbar_text {
+	padding: .5em;
+	}
+/* Matrix colors */
 
 /* Highlights */
 .highlight-top { border-top: 5px solid #00CC00; }
@@ -64,3 +138,6 @@ form table tbody tr td { width: 25%; }
 .logical_volume-background-color-lime { background-color: lime; }
 .logical_volume-background-color-orange { background-color: orange; }
 .logical_volume-background-color-yellow { background-color: yellow; }
+
+/* Access patterns */
+.access_pattern-disabled { background-color: #CCCCCC; }

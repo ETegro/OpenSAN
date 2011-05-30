@@ -256,6 +256,12 @@ function M.Physical:new( attrs )
 	        "non-positive size" )
 	assert( common.is_string( attrs.state ),
 	        "incorrect state" )
+
+	-- Strip out whitespaces
+	attrs.model = common.strip( attrs.model )
+	attrs.serial = common.strip( attrs.serial )
+	attrs.revision = common.strip( attrs.revision )
+
 	return setmetatable( attrs, Physical_mt )
 end
 

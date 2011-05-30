@@ -18,9 +18,10 @@
 %>
 
 <input name="san.submit_logical_volume_remove-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>"
-       onclick=" if ( !confirm( '<%: Really remove logical volume? %>' ) )
+       onclick=" if ( !confirm( '<%: Really remove logical volume? This will delete all corresponding snapshots as well! %>' ) )
 		 return false;
 		 return true;"
+       class="icon-remove"
        type="submit"
        title="<%: Remove logical volume %>"
-       value="<%: Remove %>" />
+       value="" />

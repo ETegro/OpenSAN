@@ -30,51 +30,29 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<div class="inline">
-				<%= escape_html( line.access_pattern.name ) %>
-			</div>
-			<% if not line.access_pattern:is_binded() then %>
-				<div class="inline">
-					<%+san/access_pattern/delete%>
-				</div>
-				<div class="inline">
-					<%+san/access_pattern/edit%>
-				</div>
-				<div class="inline">
-					<%+san/access_pattern/bind%>
-				</div>
-			<% end %>
+			<%+san/access_pattern/title%>
 			<% if line.access_pattern:is_binded() then %>
-				<div class="inline">
-					<%+san/access_pattern/unbind%>
-				</div>
+				<%+san/access_pattern/unbind%>
+			<% else %>
+				<%+san/access_pattern/delete%>
+				<%+san/access_pattern/edit%>
+				<% if #matrix_overall.logical_volumes > 0 then %>
+					<%+san/access_pattern/bind%>
+				<% end %>
 			<% end %>
 			<div>
-				<%: TargetDriver %>: <%= line.access_pattern.targetdriver %>
-			</div>
-			<div>
-				<%: LUN %>: <%= line.access_pattern.lun %>
-			</div>
-			<% if line.access_pattern.enabled then %>
-				<div>
-					<%: Enabled %>: <%= line.access_pattern.enabled %>
-				</div>
-			<% end %>
-			<% if line.access_pattern.readonly then %>
-				<div>
+				<% if line.access_pattern.readonly then %>
 					<%: Readonly %>: <%= line.access_pattern.readonly %>
-				</div>
-			<% end %>
-			<% if line.access_pattern.filename then %>
-				<div>
+					<br />
+				<% end %>
+				<% if line.access_pattern.filename then %>
 					<%: Device %>: <%= line.access_pattern.filename %>
-				</div>
-			<% end %>
-			<% if line.access_pattern.filename then %>
-				<div>
+					<br />
+				<% end %>
+				<% if line.access_pattern.filename then %>
 					<%: IQN %>: <%= line.access_pattern:iqn() %>
-				</div>
-			<% end %>
+				<% end %>
+			</div>
 		</td>
 	</tr>
 	<tr class="to_hide">

@@ -21,10 +21,10 @@ $.noConflict();
 jQuery(document).ready( function($) {
 
 function hide_all_to_hide_elements() {
-	$( '[ class ^= "to_hide" ]' ).hide();
+	$( '[ class *= "to_hide" ]' ).hide();
 };
 
-function create_raid_form_toggle() {
+function toggle_create_raid_form() {
 	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
 
 	$( physicals_select ).click( function() {
@@ -64,9 +64,9 @@ function create_raid_form_toggle() {
 	} );
 };
 
-function drives_information_toggle(){
-	$( 'form a[ id *= "ical_info-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+function toggle_drives_information(){
+	$( 'form a[ id ^= "physical_info-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
 		} else {
@@ -76,7 +76,55 @@ function drives_information_toggle(){
 	} );
 };
 
-function access_patterns_edit_toggle() {
+function toggle_logical_volume_creation() {
+	$( 'form a[ id ^= "logical_volume_creation-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function toggle_resize_logical_volume() {
+	$( 'form a[ id ^= "logical_volume_resize_link-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function toggle_snapshot_creation() {
+	$( 'form a[ id ^= "snapshot_creation-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function toggle_resize_snapshot() {
+	$( 'form a[ id ^= "snapshot_resize_link-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function toggle_edit_access_patterns() {
 	$( 'form a[ id ^= "access_pattern_edit-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
@@ -99,9 +147,13 @@ function setup_plunger(){
 };
 
 hide_all_to_hide_elements();
-create_raid_form_toggle();
-drives_information_toggle();
-access_patterns_edit_toggle();
+toggle_create_raid_form();
+toggle_drives_information();
+toggle_logical_volume_creation();
+toggle_resize_logical_volume();
+toggle_resize_snapshot();
+toggle_snapshot_creation();
+toggle_edit_access_patterns();
 setup_plunger();
 
 });

@@ -1,24 +1,22 @@
 USE_REFRESH=1
+LIBRARY_PATH=/lib/upgrade/astor2/platform.sh
 
 platform_check_image() {
-	[ "$ARGC" -gt 1 ] && return 1
-
-	case "$(get_magic_word "$1")" in
-		eb48) return 0;;
-		*)
-			echo "Invalid image type"
-			return 1
-		;;
-	esac
+	dash -c "$LIBRARY_PATH platform_check_image $1"
 }
 
 platform_do_upgrade() {
-	local ROOTFS
-	sync
-	grep -q -e "jffs2" -e "squashfs" /proc/cmdline \
-		&& ROOTFS="$(awk 'BEGIN { RS=" "; FS="="; } ($1 == "block2mtd.block2mtd") { print substr($2,1,index($2, ",")-1) }' < /proc/cmdline)" \
-		|| ROOTFS="$(awk 'BEGIN { RS=" "; FS="="; } ($1 == "root") { print $2 }' < /proc/cmdline)"
-	[ -b ${ROOTFS%[0-9]} ] && get_image "$1" > ${ROOTFS%[0-9]}
+	dash -c "$LIBRARY_PATH platform_do_upgrade $1"
+}
+
+platform_refresh_partitions()
+{
+	return 0
+}
+
+platform_copy_config()
+{
+	dash -c "$LIBRARY_PATH platform_copy_config $1"
 }
 
 x86_prepare_ext2() {
@@ -30,4 +28,4 @@ x86_prepare_ext2() {
 		echo /dev/hda2,65536,rootfs > /sys/module/block2mtd/parameters/block2mtd
 	}
 }
-append sysupgrade_pre_upgrade x86_prepare_ext2
+#append sysupgrade_pre_upgrade x86_prepare_ext2

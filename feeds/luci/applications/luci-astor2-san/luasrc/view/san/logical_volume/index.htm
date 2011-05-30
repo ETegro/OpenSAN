@@ -24,43 +24,29 @@
 <table border="0px" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
-			<%= line.logical_volume.name %>
-		</td>
-		<td>
-			<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
-				<%= line.logical_volume.size %> <%: TiB %>
-			</span>
-		</td>
-		<td>
-			<% if not line.logical_volume.access_patterns then %>
-				<%+san/logical_volume/remove%>
-			<% end %>
-		</td>
-		<td>
-			<% if #matrix_overall.access_patterns > 0 then %>
-				<input name="san.logical_volume_select"
-				       type ="radio"
-				       value="<%= line.logical_volume.device %>" />
-			<% end %>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="4">
-			<% if #line.logical_volume.snapshots == 0 then %>
-				<%+san/logical_volume/resize%>
-			<% end %>
-			<a id="volume_logical_info-<%= hash( line.logical_volume.name ) %>"
-			   href="#"
-			   class="inline">
-				<img src="<%=resource%>/cbi/fieldadd.gif"
-				     alt="<%: Snapshot %>"
-				     title="<%: Snapshot %>" />
-			</a>
+			<%+san/logical_volume/title%>
+			<div class="control">
+				<% if #matrix_overall.access_patterns > 0 then %>
+					<%+san/logical_volume/bind%>
+				<% end %>
+				<%+san/logical_volume/resize-control%>
+				<%+san/logical_volume/snapshot-control%>
+				<% if not line.logical_volume.access_patterns then %>
+					<%+san/logical_volume/remove%>
+				<% end %>
+			</div>
 		</td>
 	</tr>
 	<tr class="to_hide">
-		<td colspan="3">
+		<td>
 			<%+san/snapshot/forms/take%>
+		</td>
+	</tr>
+	<tr class="to_hide">
+		<td>
+			<% if #line.logical_volume.snapshots == 0 then %>
+				<%+san/logical_volume/resize%>
+			<% end %>
 		</td>
 	</tr>
 </table>

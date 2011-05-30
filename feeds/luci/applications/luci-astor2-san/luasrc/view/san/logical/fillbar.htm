@@ -17,11 +17,16 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div>
-	<span title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
-		<%= line.logical.volume_group.allocated %> <%: TiB %>
-		/
-		<%= line.logical.volume_group.total %> <%: TiB %>
-		(<%= line.logical.volume_group.percentage or "0" %> %)
-	</span>
+<!-- This code is based on LuCI's administration interface status progressbars -->
+<div class="fillbar">
+	<div class="fillbar_background" style="width:<%= line.logical.volume_group.percentage or "0" %>%;">
+		<div class="fillbar_info">
+			<div class="fillbar_text" title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
+			<%= line.logical.volume_group.allocated %> <%: TiB %>
+			/
+			<%= line.logical.volume_group.total %> <%: TiB %>
+			(<%= line.logical.volume_group.percentage or "0" %>%)
+			</div>
+		</div>
+	</div>
 </div>

@@ -18,8 +18,6 @@
 %>
 
 <% if line.physical.hotspare_availability then %>
-	<%+san/physical/forms/add%>
+	<%+san/physical/forms/hotspare/add%>
 <% end %>
-<% if line.physical.state == "hotspare" then %>
-	<%+san/physical/forms/delete%>
-<% end %>
+

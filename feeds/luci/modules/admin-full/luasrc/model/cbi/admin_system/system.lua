@@ -10,7 +10,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: system.lua 6884 2011-02-12 19:30:59Z soma $
+$Id: system.lua 7082 2011-05-19 23:58:20Z jow $
 ]]--
 
 require("luci.sys")
@@ -264,4 +264,4 @@ c.write = function(self, section, value)
 end
 
 
-return m, m3, m2
+return m, m3 or m2, m3 and m2
