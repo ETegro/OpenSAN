@@ -1,0 +1,274 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "0 level requires two or more drives"
+msgstr ""
+
+msgid "1 level requries odd number of two or more drives"
+msgstr ""
+
+msgid "10 level requires odd number of four or more drives"
+msgstr ""
+
+msgid "5 level requires three or more drives"
+msgstr ""
+
+msgid "6 level requires odd number of four or more drives"
+msgstr ""
+
+msgid "Access pattern"
+msgstr ""
+
+msgid "Access pattern's name already exists"
+msgstr ""
+
+msgid "Access pattern's name is not set"
+msgstr ""
+
+msgid "Access patterns"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add access pattern"
+msgstr ""
+
+msgid "Add logical drive"
+msgstr ""
+
+msgid "Add logical volume"
+msgstr ""
+
+msgid "Add snapshot"
+msgstr ""
+
+msgid "Bind"
+msgstr ""
+
+msgid "Bind access pattern"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete access pattern"
+msgstr ""
+
+msgid "Drives are not selected"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit access pattern"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Failed to add hotspare disk"
+msgstr ""
+
+msgid "Failed to add logical volume"
+msgstr ""
+
+msgid "Failed to apply iSCSI configuration"
+msgstr ""
+
+msgid "Failed to bind access pattern"
+msgstr ""
+
+msgid "Failed to create PhysicalVolume on logical disk"
+msgstr ""
+
+msgid "Failed to create VolumeGroup on logical disk"
+msgstr ""
+
+msgid "Failed to create access pattern"
+msgstr ""
+
+msgid "Failed to create logical disk"
+msgstr ""
+
+msgid "Failed to create snapshot"
+msgstr ""
+
+msgid "Failed to delete access pattern"
+msgstr ""
+
+msgid "Failed to delete hotspare disk"
+msgstr ""
+
+msgid "Failed to delete logical disk"
+msgstr ""
+
+msgid "Failed to remove logical volume"
+msgstr ""
+
+msgid "Failed to resize logical volume"
+msgstr ""
+
+msgid "Failed to resize snapshot"
+msgstr ""
+
+msgid "Failed to save config"
+msgstr ""
+
+msgid "Failed to unbind access pattern"
+msgstr ""
+
+msgid "Hotspare"
+msgstr ""
+
+msgid "IQN"
+msgstr ""
+
+msgid "Incorrect RAID level"
+msgstr ""
+
+msgid "Invalid logical volume name"
+msgstr ""
+
+msgid "LUN"
+msgstr ""
+
+msgid "Linear level requires at least one drive"
+msgstr ""
+
+msgid "Logical disk is not selected"
+msgstr ""
+
+msgid "Logical drive"
+msgstr ""
+
+msgid "Logical drives"
+msgstr ""
+
+msgid "Logical volume"
+msgstr ""
+
+msgid "Logical volume is not selected"
+msgstr ""
+
+msgid "Logical volume name is not set"
+msgstr ""
+
+msgid "Logical volumes"
+msgstr ""
+
+msgid "MiB"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Newly added hotspare disk is bigger than needed"
+msgstr ""
+
+msgid "Only single model hard drives should be used"
+msgstr ""
+
+msgid "Passthrough level requries exactly single drive"
+msgstr ""
+
+msgid "Physical drives"
+msgstr ""
+
+msgid "RAID"
+msgstr ""
+
+msgid "RAID level is not selected"
+msgstr ""
+
+msgid "Readonly"
+msgstr ""
+
+msgid "Really delete access pattern?"
+msgstr ""
+
+msgid "Really delete hotspare drive?"
+msgstr ""
+
+msgid "Really delete logical drive?"
+msgstr ""
+
+msgid ""
+"Really remove logical volume? This will delete all corresponding snapshots "
+"as well!"
+msgstr ""
+
+msgid "Really remove snapshot?"
+msgstr ""
+
+msgid "Really resize logical volume?"
+msgstr ""
+
+msgid "Really resize snapshot?"
+msgstr ""
+
+msgid "Remove hotspare"
+msgstr ""
+
+msgid "Remove logical drive"
+msgstr ""
+
+msgid "Remove logical volume"
+msgstr ""
+
+msgid "Remove snapshot"
+msgstr ""
+
+msgid "Resize"
+msgstr ""
+
+msgid "Resize logical volume"
+msgstr ""
+
+msgid "Resize snapshot"
+msgstr ""
+
+msgid "Revision"
+msgstr ""
+
+msgid "S/N"
+msgstr ""
+
+msgid "SAN"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Snapshot"
+msgstr ""
+
+msgid "Snapshot size has to be bigger than it's current size"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Take snapshot"
+msgstr ""
+
+msgid "Target driver"
+msgstr ""
+
+msgid "This is LUN is busy, please choose another one"
+msgstr ""
+
+msgid "TiB"
+msgstr ""
+
+msgid "Unbind"
+msgstr ""
+
+msgid "Unbind access pattern"
+msgstr ""
+
+msgid "Unknown action specified"
+msgstr ""

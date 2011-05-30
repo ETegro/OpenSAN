@@ -13,5 +13,6 @@ LuCI касающиеся вещи
    sliders-boundaries
    updating
    theming
+   translation
    san_work_describing
    unittesting
