@@ -118,7 +118,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	}
 .fillbar .fillbar_background {
 	background-color:#CCCCCC;
-	height: 2em;
+	height: 1.6em;
 	}
 .fillbar .fillbar_info {
 	position: absolute;
@@ -128,7 +128,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	width:100%;
 	}
 .fillbar .fillbar_text {
-	padding: .5em;
+	padding: .2em;
 	}
 
 /* Matrix colors */
