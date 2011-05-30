@@ -19,7 +19,6 @@
 
 <fieldset>
 	<legend><%: Logical volume%></legend>
-	<div id="new_volume_slider-<%= hash( tostring( line.logical.id ) ) %>"></div>
 	<div class="form">
 		<label for="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>">
 			<%: Name %>:
@@ -42,6 +41,7 @@
 		       type="text"
 		       value="0" />
 	</div>
+	<div id="new_volume_slider-<%= hash( tostring( line.logical.id ) ) %>"></div>
 	<div class="form">
 		<input name="san.submit_logical_volume_add-<%= hash( tostring( line.logical.id ) ) %>"
 		       type="submit"
