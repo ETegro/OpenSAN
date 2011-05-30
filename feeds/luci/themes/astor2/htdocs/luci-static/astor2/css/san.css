@@ -43,6 +43,7 @@ ul, li {
 /* Icons for buttons */
 .icon-remove,
 .icon-bind,
+.icon-unbind,
 .icon-reload,
 .icon-fieldadd,
 .icon-edit {
@@ -52,13 +53,13 @@ ul, li {
 	height: 16px;
 	border: 0;
 	}
+.icon-unbind,
 .icon-remove {
 	background-image: url( '../../resources/cbi/remove.gif' );
 	}
 .icon-bind {
 	background-image: url( '../../resources/cbi/link.gif' );
 	}
-
 .icon-fieldadd {
 	background-image: url( '../../resources/cbi/fieldadd.gif' );
 	text-decoration: none;
