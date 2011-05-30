@@ -124,6 +124,50 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
+--[[
++ - - - - - - - - - -+
+' Creation of RAID   '
+'                    '
+'                    '
+'                    '
+'                    '
+'   H                '
+'   H                '
+'   H                '
+'   H                 - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+'   v                                                                      '
+' +----------------+                                                       '
+' | Does PV exist? | ------------------------------------------------+     '
+' +----------------+                                                 |     '
+'   |                                                                |     '
+'   | YES                                                            |     '
+'   v                                                                |     '
+' +----------------+   YES      +-------------------------------+    |     '
+' | Does VG exist? | ---------> |     Stop all non-RAID VGs     |    | NO  '
+' +----------------+            +-------------------------------+    |     '
+'   |                             |                                  |     '
+'   |                             |                                  |     '
+'   |                             v                                  |     '
+'   |                  NO       +-------------------------------+    |     '
+'   +-------------------------> |          Create RAID          | <--+     '
+'                               +-------------------------------+          '
+'                                 |                                        '
++ - - - - - - - - - - - - - -     |                                 - - - -+
+                              '   |                               '
+                              '   |                               '
+                              '   v                               '
+                              ' +-------------------------------+ '
+                              ' | prepare( newly created RAID ) | '
+                              ' +-------------------------------+ '
+                              '   H                               '
+                              '   H                               '
+                              '   v                               '
+                              '                                   '
+                              '                                   '
+                              '                                   '
+                              '                                   '
+                              + - - - - - - - - - - - - - - - - - +
+]]
 local function einarc_logical_add( inputs, drives, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -192,6 +236,58 @@ local function parse_inputs_by_re( inputs, re )
 	return nil
 end
 
+--[[
+                    + - - - - - - - - - - +
+                    '                     '
+                    '                     '
+                    '                     '
+                    '                     '
+                    '   H                 '
+                    '   H                 '
+                    '   H                 '
+                    '   H                   - - - -+
+                    '   v                          '
+                    ' +-----------------+          '
+                    ' | Does PV exist?  | ---+     '
+                    ' +-----------------+    |     '
+                    '   |                    |     '
+                    '   | YES                |     '
+                    '   |                    |     '
++ - - - - - - - - -     |                    |     '
+' Deletion of RAID      |                    |     '
+'                       v                    |     '
+'                     +-----------------+    |     '
+'   +---------------- | Does VG exist?  |    |     '
+'   |                 +-----------------+    |     '
+'   |                   |                    | NO  '
+'   |                   | YES                |     '
+'   |                   v                    |     '
+'   |                 +-----------------+    |     '
+'   | NO              |     Stop VG     |    |     '
+'   |                 +-----------------+    |     '
+'   |                   |                    |     '
+'   |                   |                    |     '
+'   |                   v                    |     '
+'   |                 +-----------------+    |     '
+'   +---------------> | prepare( RAID ) | <--+     '
+'                     +-----------------+          '
+'                       |                          '
++ - - - - - - - - -     |                   - - - -+
+                    '   |                 '
+                    '   |                 '
+                    '   v                 '
+                    ' +-----------------+ '
+                    ' |   Delete RAID   | '
+                    ' +-----------------+ '
+                    '   H                 '
+                    '   H                 '
+                    '   v                 '
+                    '                     '
+                    '                     '
+                    '                     '
+                    '                     '
+                    + - - - - - - - - - - +
+]]
 local function einarc_logical_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -307,6 +403,80 @@ local function find_volume_group_name_in_data_by_hash( volume_group_name_hash, d
 	return find_by_hash( volume_group_name_hash, common.keys( common.unique_keys( "name", data.volume_groups ) ) )
 end
 
+--[[
+         +- - - - - - - - - - - - - - -+
+         ' Creation of LogicalVolume   '
+         '                             '
+         '                             '
+         '                             '
+         '                             '
+         '   H                         '
+         '   H                         '
+         '   H                         '
+         '   H                          - - - - -+
+         '   v                                   '
+         ' +-------------------------+           '
+         ' |     Does PV exist?      | ---+      '
+         ' +-------------------------+    |      '
+         '   |                            |      '
+         '   | YES                        |      '
+         '   |                            |      '
++ - - - -    |                            |      '
+'            v                            |      '
+'          +-------------------------+    |      '
+'   +----- |     Does VG exist?      |    |      '
+'   |      +-------------------------+    |      '
+'   |        |                            |      '
+'   |        | YES                        |      '
+'   |        |                            |      '
+'   |        |                            |      +- - - +
+'   |        v                            |             '
+'   |      +-------------------------+    |             '
+'   |      |     Does LV exist?      | ---+---------+   '
+'   |      +-------------------------+    |         |   '
+'   | NO     |                            |         |   '
+'   |        | NO                         |         |   '
+'   |        v                            |         |   '
+'   |      +-------------------------+    |         |   '
+'   |      |         Stop VG         |    | NO      |   '
+'   |      +-------------------------+    |         |   '
+'   |        |                            |         |   '
+'   |        |                            |         |   '
+'   |        v                            |         |   '
+'   |      +-------------------------+    |         |   '
+'   +----> |     prepare( RAID )     | <--+         |   '
+'          +-------------------------+              |   '
+'            |                                      |   '
++ - - - -    |                                      |   '
+         '   |                                      |   '
+         '   |                                      |   '
+         '   v                                      |   '
+         ' +-------------------------+              |   '
+         ' |        Create PV        |              |   '
+         ' +-------------------------+              |   '
+         '   |                                      |   '
+         '   |                                      |   '
+         '   v                                      |   '
+         ' +-------------------------+              |   '
+         ' |        Create VG        |              |   '
+         ' +-------------------------+              |   '
+         '   |                                      |   '
+         '   |                                      |   '
+         '   v                                      |   '
+         ' +-------------------------+   YES        |   '
+         ' |        Create LV        | <------------+   '
+         ' +-------------------------+                  '
+         '   H                                          '
+         '   H                          - - - - - - - - +
+         '   H                         '
+         '   H                         '
+         '   v                         '
+         '                             '
+         '                             '
+         '                             '
+         '                             '
+         +- - - - - - - - - - - - - - -+
+]]
 local function lvm_logical_volume_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -386,6 +556,50 @@ local function find_logical_volume_name_in_data_by_hash( logical_volume_name_has
 	return find_by_hash( logical_volume_name_hash, common.keys( common.unique_keys( "name", data.logical_volumes ) ) )
 end
 
+--[[
++ - - - - - - - - - - - - - - +
+' Deletion of LogicalVolume   '
+'                             '
+'                             '
+'                             '
+'                             '
+'   H                         '
+'   H                         '
+'   H                         '
+'   H                           - - - -+
+'   v                                  '
+' +-------------------------+          '
+' |     Is it last LV?      | ---+     '
+' +-------------------------+    |     '
+'   |                            |     '
+'   | YES                        |     '
+'   v                            |     '
+' +-------------------------+    |     '
+' |         Stop VG         |    |     '
+' +-------------------------+    |     '
+'   |                            |     '
+'   |                            | NO  '
+'   v                            |     '
+' +-------------------------+    |     '
+' |     prepare( RAID )     |    |     '
+' +-------------------------+    |     '
+'   |                            |     '
+'   |                            |     '
+'   v                            |     '
+' +-------------------------+    |     '
+' |        Delete LV        | <--+     '
+' +-------------------------+          '
+'   H                                  '
+'   H                           - - - -+
+'   H                         '
+'   H                         '
+'   v                         '
+'                             '
+'                             '
+'                             '
+'                             '
++ - - - - - - - - - - - - - - +
+]]
 local function lvm_logical_volume_remove( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
