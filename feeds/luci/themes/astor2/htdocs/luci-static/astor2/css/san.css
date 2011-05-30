@@ -53,7 +53,9 @@ ul, li {
 	height: 16px;
 	border: 0;
 	}
-.icon-unbind,
+.icon-unbind {
+	background-image: url( '../../resources/cbi/up.gif' );
+	}
 .icon-remove {
 	background-image: url( '../../resources/cbi/remove.gif' );
 	}
@@ -116,7 +118,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	}
 .fillbar .fillbar_background {
 	background-color:#CCCCCC;
-	height: 2em;
+	height: 1.6em;
 	}
 .fillbar .fillbar_info {
 	position: absolute;
@@ -126,7 +128,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	width:100%;
 	}
 .fillbar .fillbar_text {
-	padding: .5em;
+	padding: .2em;
 	}
 
 /* Matrix colors */
