@@ -43,7 +43,8 @@ ul, li {
 /* Icons for buttons */
 .icon-remove,
 .icon-reload,
-.icon-fieldadd {
+.icon-fieldadd,
+.icon-edit {
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 16px;
@@ -59,6 +60,10 @@ ul, li {
 	}
 .icon-reload {
 	background-image: url( '../../resources/cbi/reload.gif' );
+	text-decoration: none;
+	}
+.icon-edit {
+	background-image: url( '../../resources/cbi/edit.gif' );
 	text-decoration: none;
 	}
 
