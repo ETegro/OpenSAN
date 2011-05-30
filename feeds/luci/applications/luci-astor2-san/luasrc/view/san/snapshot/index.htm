@@ -26,11 +26,11 @@
 		<td>
 			<%+san/snapshot/title%>
 			<div class="control">
-				<% if not line.logical_volume.access_patterns then %>
-					<%+san/snapshot/remove%>
-				<% end %>
 				<% if #matrix_overall.access_patterns > 0 then %>
 					<%+san/snapshot/bind%>
+				<% end %>
+				<% if not line.logical_volume.access_patterns then %>
+					<%+san/snapshot/remove%>
 				<% end %>
 			</div>
 		</td>
