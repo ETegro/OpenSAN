@@ -19,8 +19,7 @@
 
 <fieldset>
 	<legend><%: Take snapshot %></legend>
-	<div id="new_snapshot_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
-	<div>
+	<div class="form">
 		<input id="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 		       class="new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
 			      <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
@@ -30,7 +29,8 @@
 		       type="text"
 		       value="0" />
 	</div>
-	<div">
+	<div id="new_snapshot_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
+	<div class="form">
 		<input name="san.submit_logical_volume_snapshot_add-lvd<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 		       type="submit"
 		       title="<%: Add snapshot %>"
