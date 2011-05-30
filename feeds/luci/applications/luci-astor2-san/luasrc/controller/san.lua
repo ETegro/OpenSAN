@@ -95,7 +95,7 @@ local function is_valid_raid_configuration( raid_level, drives )
 		["6"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
 		          message = i18n("6 level requires odd number of four or more drives") },
 		["10"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
-		           message = i18n("10 level requires odd number or four or more drives") }
+		           message = i18n("10 level requires odd number of four or more drives") }
 	}
 	local succeeded, is_valid = pcall( VALIDATORS[ raid_level ].validator, drives )
 	if not succeeded then
