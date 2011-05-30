@@ -1,7 +1,9 @@
 graph { flow: south }
 
-( Удаление LogicalVolume
+( Deletion of LogicalVolume
 
-[] -> [ удалить LV ]
+[] ==> [ Is it last LV? ] -- NO --> [ Delete LV ]
+[ Is it last LV? ] -- YES --> [ Stop VG ] --> [ prepare( RAID ) ] --> [ Delete LV ]
+[ Delete LV ] ==> []
 
 )
