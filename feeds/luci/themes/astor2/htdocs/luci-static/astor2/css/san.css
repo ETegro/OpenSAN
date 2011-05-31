@@ -53,6 +53,19 @@ ul, li {
 	height: 16px;
 	border: 0;
 	}
+.icon-add-wide,
+.icon-apply-wide {
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 17px;
+	padding-right 1px;
+	}
+.icon-apply-wide {
+	background-image: url( '../../resources/cbi/apply.gif' );
+	}
+.icon-add-wide {
+	background-image: url( '../../resources/cbi/add.gif' );
+	}
 .icon-unbind {
 	background-image: url( '../../resources/cbi/up.gif' );
 	}
@@ -99,6 +112,23 @@ table.matrix .title {
 	}
 table.matrix div.control {
 	float: right;
+	}
+
+/* Bottom table with forms */
+table.bottom_forms {
+	width: 100%;
+	}
+table.bottom_forms > tbody > tr > td {
+	width: 25%;
+	}
+table.bottom_forms fieldset div.form input[ type = "submit" ] {
+	float: right;
+	}
+table.bottom_forms fieldset table.form {
+	width: 100%;
+	}
+table.bottom_forms fieldset {
+	padding: .5em;
 	}
 
 /* Sliders */
