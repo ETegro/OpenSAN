@@ -19,14 +19,6 @@ graph { flow: south }
 
 ( Creation of RAID
 
-[] ==> [ Does PV exist? ]
-
-[ Does PV exist? ] -- YES --> [ Does VG exist? ]
-[ Does PV exist? ] -- NO --> [ Create RAID ]
-
-[ Does VG exist? ] -- YES --> {flow: back} [ Stop all non-RAID VGs ] --> [ Create RAID ]
-[ Does VG exist? ] -- NO --> [ Create RAID ]
-
-[ Create RAID ] --> [ prepare( newly created RAID ) ] ==> []
+[] ==> [ Stop all non-RAID VGs ] --> [ Create RAID ] --> [ prepare( newly created RAID ) ] ==> []
 
 )
