@@ -29,7 +29,9 @@
 				<% if #matrix_overall.access_patterns > 0 then %>
 					<%+san/logical_volume/bind%>
 				<% end %>
-				<%+san/logical_volume/resize-control%>
+				<% if #line.logical_volume.snapshots == 0 then %>
+					<%+san/logical_volume/resize-control%>
+				<% end %>
 				<%+san/logical_volume/snapshot-control%>
 				<% if not line.logical_volume.access_patterns then %>
 					<%+san/logical_volume/remove%>
