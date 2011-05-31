@@ -53,6 +53,19 @@ ul, li {
 	height: 16px;
 	border: 0;
 	}
+.icon-add-wide,
+.icon-apply-wide {
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 17px;
+	padding-right 1px;
+	}
+.icon-apply-wide {
+	background-image: url( '../../resources/cbi/apply.gif' );
+	}
+.icon-add-wide {
+	background-image: url( '../../resources/cbi/add.gif' );
+	}
 .icon-unbind {
 	background-image: url( '../../resources/cbi/up.gif' );
 	}
