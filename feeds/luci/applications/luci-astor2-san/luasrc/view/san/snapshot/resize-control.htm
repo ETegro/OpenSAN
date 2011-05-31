@@ -17,7 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<a id="snapshot_resize_link-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
-   href="#"
-   class="inline icon-reload"
-   title="<%: Resize %>">&nbsp;</a>
+<input name="snapshot_resize_button-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+   type="button"
+   class="icon-reload"
+   title="<%: Resize %>"
+   value="" />
