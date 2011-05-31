@@ -12,21 +12,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "0 level requires two or more drives"
-msgstr "Уровень 0 требует два или более жёстких диска"
-
-msgid "1 level requries odd number of two or more drives"
-msgstr "Уровень 1 требует чётное количество двух или более жёстких дисков"
-
-msgid "10 level requires odd number of four or more drives"
-msgstr "Уровень 10 требует чётное количество четырёх или более жёстких дисков"
-
-msgid "5 level requires three or more drives"
-msgstr "Уровень 5 требует три или более жёстких дисков"
-
-msgid "6 level requires odd number of four or more drives"
-msgstr "Уровень 6 требует чётное количество четырёх или более жёстких дисков"
-
 msgid "Access pattern"
 msgstr "Шаблон доступа"
 
@@ -54,14 +39,8 @@ msgstr "Добавить логический раздел"
 msgid "Add snapshot"
 msgstr "Добавить snapshot"
 
-msgid "Bind"
-msgstr "Прикрепить"
-
 msgid "Bind access pattern"
 msgstr "Прикрепить шаблон доступа"
-
-msgid "Delete"
-msgstr "Удалить"
 
 msgid "Delete access pattern"
 msgstr "Удалить шаблон доступа"
@@ -144,9 +123,6 @@ msgstr "Неправильное имя логического раздела"
 msgid "LUN"
 msgstr ""
 
-msgid "Linear level requires at least one drive"
-msgstr "Уровень linear требует хотя бы одного жёсткого диска"
-
 msgid "Logical disk is not selected"
 msgstr "Логический диск не выбран"
 
@@ -183,17 +159,35 @@ msgstr "Добавленный hotspare диск имеет больший ра�
 msgid "Only single model hard drives should be used"
 msgstr "Жёсткие диски только одной модели желательно должны использоваться"
 
-msgid "Passthrough level requries exactly single drive"
-msgstr "Уровень passthrough требует исключительно одного жёсткого диска"
-
 msgid "Physical drives"
 msgstr "Физические диски"
 
 msgid "RAID"
 msgstr ""
 
+msgid "RAID 0 level requires two or more drives"
+msgstr "RAID уровень 0 требует два или более жёстких диска"
+
+msgid "RAID 1 level requries odd number of two or more drives"
+msgstr "RAID уровень 1 требует чётное количество двух или более жёстких дисков"
+
+msgid "RAID 10 level requires odd number of four or more drives"
+msgstr "RAID уровень 10 требует чётное количество четырёх или более жёстких дисков"
+
+msgid "RAID 5 level requires three or more drives"
+msgstr "RAID уровень 5 требует три или более жёстких дисков"
+
+msgid "RAID 6 level requires odd number of four or more drives"
+msgstr "RAID уровень 6 требует чётное количество четырёх или более жёстких дисков"
+
 msgid "RAID level is not selected"
 msgstr "Уровень RAID не выбран"
+
+msgid "RAID linear level requires at least one drive"
+msgstr "RAID уровень linear требует хотя бы одного жёсткого диска"
+
+msgid "RAID passthrough level requries exactly single drive"
+msgstr "RAID уровень passthrough требует исключительно одного жёсткого диска"
 
 msgid "Readonly"
 msgstr "Только для чтения"
@@ -276,9 +270,6 @@ msgstr "Этот LUN занят, пожалуйста выберите друг�
 
 msgid "TiB"
 msgstr ""
-
-msgid "Unbind"
-msgstr "Открепить"
 
 msgid "Unbind access pattern"
 msgstr "Открепить шаблон доступа"
