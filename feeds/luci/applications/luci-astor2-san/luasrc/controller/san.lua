@@ -485,9 +485,7 @@ local function lvm_logical_volume_add( inputs, data )
 	        "incorrect non-positive logical volume's size" )
 
 	local device = data.logicals[ logical_id ].device
-	lvm.PhysicalVolume.rescan()
-	lvm.VolumeGroup.rescan()
-	lvm.LogicalVolume.rescan()
+	lvm.restore()
 	device_clear( device )
 
 	local return_code = nil
