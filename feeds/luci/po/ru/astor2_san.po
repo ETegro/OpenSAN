@@ -42,6 +42,11 @@ msgstr "Добавить snapshot"
 msgid "Bind access pattern"
 msgstr "Прикрепить шаблон доступа"
 
+msgid ""
+"Decreasing logical volumes size may corrupt your data! Are you sure you want "
+"to do this?"
+msgstr "Уменьшение размера логического тома может повлечь искажение ваших данных. Вы уверены что хотите сделать это?"
+
 msgid "Delete access pattern"
 msgstr "Удалить шаблон доступа"
 
@@ -172,13 +177,15 @@ msgid "RAID 1 level requries odd number of two or more drives"
 msgstr "RAID уровень 1 требует чётное количество двух или более жёстких дисков"
 
 msgid "RAID 10 level requires odd number of four or more drives"
-msgstr "RAID уровень 10 требует чётное количество четырёх или более жёстких дисков"
+msgstr ""
+"RAID уровень 10 требует чётное количество четырёх или более жёстких дисков"
 
 msgid "RAID 5 level requires three or more drives"
 msgstr "RAID уровень 5 требует три или более жёстких дисков"
 
 msgid "RAID 6 level requires odd number of four or more drives"
-msgstr "RAID уровень 6 требует чётное количество четырёх или более жёстких дисков"
+msgstr ""
+"RAID уровень 6 требует чётное количество четырёх или более жёстких дисков"
 
 msgid "RAID level is not selected"
 msgstr "Уровень RAID не выбран"
