@@ -184,7 +184,7 @@ function M.AccessPattern:iqn()
 	assert( hostname, "unable to retreive hostname" )
 
 	-- Retreive LogicalVolume's name
-	local logical_volume_name = string.match( self.filename, "^/dev/vg%d+/(.+)$" )
+	local volume_group_name, logical_volume_name = string.match( self.filename, "^/dev/(.+)/(.+)$" )
 	assert( logical_volume_name, "unable to retreive logical volume name" )
 
 	-- This may be useful later
@@ -203,6 +203,7 @@ function M.AccessPattern:iqn()
 	]]
 	return "iqn.2011-03.org.opensan:" ..
 	       hostname .. ":" ..
+	       volume_group_name .. "_" ..
 	       logical_volume_name
 end
 
