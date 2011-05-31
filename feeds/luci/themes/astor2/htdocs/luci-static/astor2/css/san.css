@@ -114,6 +114,14 @@ table.matrix div.control {
 	float: right;
 	}
 
+/* Bottom table with forms */
+table.bottom_forms {
+	width: 100%;
+	}
+table.bottom_forms > tbody > tr > td {
+	width: 25%;
+	}
+
 /* Sliders */
 div[ id *= "new_volume_slider-" ],
 div[ id *= "logical_volume_resize_slider-" ],
