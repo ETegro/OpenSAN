@@ -411,9 +411,19 @@ local function lvm_logical_volume_resize( inputs, data )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
 
+	local logical_volume_found = nil
+	for _, logical_volume in ipairs( data.logical_volumes ) do
+		if logical_volume.name == logical_volume_name and
+		   logical_volume.volume_group == volume_group_name then
+			logical_volume_found = logical_volume
+		end
+	end
+	assert( logical_volume_found, "unable to find original logical volume" )
+
 	local return_code, result = pcall( lvm.LogicalVolume.resize,
 	                                   { volume_group = { name = volume_group_name },
-	                                   name = logical_volume_name },
+	                                     name = logical_volume_name,
+					     size = logical_volume_found.size },
 	                                   logical_volume_size )
 	if not return_code then
 		message_error = i18n("Failed to resize logical volume") .. ": " .. result
