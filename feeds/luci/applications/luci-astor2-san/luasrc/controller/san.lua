@@ -503,7 +503,7 @@ local function lvm_logical_volume_add( inputs, data )
 	if volume_group_found then
 		for _, logical_volume in ipairs( data.logical_volumes ) do
 			if logical_volume.volume_group == volume_group_found.name then
-				create_from_scratch = true
+				create_from_scratch = false
 			end
 		end
 		if not create_from_scratch then
