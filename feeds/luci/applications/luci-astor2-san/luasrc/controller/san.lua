@@ -282,8 +282,6 @@ local function einarc_logical_delete( inputs, data )
 	assert( logical_id_hash, "unable to parse out logical's id" )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
-	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
-
 	-- Retreive corresponding logical drive object
 	local logical = nil
 	for _, logical_obj in pairs( data.logicals ) do
@@ -293,34 +291,19 @@ local function einarc_logical_delete( inputs, data )
 	end
 	assert( logical, "unable to find corresponding logical" )
 
-	-- Find out corresponding PhysicalVolume
-	local physical_volume = nil
-	for _, physical_volume_obj in ipairs( data.physical_volumes ) do
-		if physical_volume_obj.device == logical.device then
-			physical_volume = physical_volume_obj
-		end
-	end
-
-	if physical_volume then
-		-- Let's clean out VolumeGroup on it at first
-		-- TODO: determine if it has VolumeGroup itself
-		local volume_group = nil
-		for _, volume_group_in_data in ipairs( data.volume_groups ) do
-			for _, physical_volume_in_data in ipairs( volume_group_in_data.physical_volumes ) do
-				if physical_volume_in_data.device == physical_volume.device then
-					volume_group = volume_group_in_data
-				end
+	for _, volume_group in ipairs( data.volume_groups ) do
+		local need_to_stop = false
+		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
+			if physical_volume.device == logical.device then
+				need_to_stop = true
 			end
 		end
-		assert( volume_group, "unable to find corresponding volume group" )
-		lvm.VolumeGroup.remove( { name = volume_group.name } )
-
-		-- And clean out PhysicalVolume
-		lvm.PhysicalVolume.remove( { device = physical_volume.device } )
+		if need_to_stop then
+			lvm.VolumeGroup.disable( volume_group )
+		end
 	end
 
-	lvm.VolumeGroup.rescan()
-	lvm.PhysicalVolume.rescan()
+	lvm.PhysicalVolume.prepare( logical.device )
 
 	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
