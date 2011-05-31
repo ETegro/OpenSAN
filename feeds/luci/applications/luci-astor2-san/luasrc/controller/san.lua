@@ -183,7 +183,7 @@ local function einarc_logical_add( inputs, drives, data )
 			end
 		end
 		if is_not_busy then
-			volume_group:disable()
+			lvm.VolumeGroup.disable( volume_group )
 		end
 	end
 
@@ -486,45 +486,68 @@ local function lvm_logical_volume_add( inputs, data )
 
 	local device = data.logicals[ logical_id ].device
 	lvm.restore()
-	device_clear( device )
 
 	local return_code = nil
 	local result = nil
 
-	local function find_physical_volume_by_device( device, physical_volumes )
-		if not physical_volumes then
-			physical_volumes = lvm.PhysicalVolume.list()
-		end
-		for _, physical_volume in ipairs( physical_volumes ) do
+	local volume_group_found = nil
+	for _, volume_group in ipairs( data.volume_groups ) do
+		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
 			if physical_volume.device == device then
-				return physical_volume
+				volume_group_found = volume_group
 			end
 		end
-		return nil
 	end
 
-	return_code, result = pcall( lvm.PhysicalVolume.create, device )
-	if not return_code then
-		return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
+	local create_from_scratch = true
+	if volume_group_found then
+		for _, logical_volume in ipairs( data.logical_volumes ) do
+			if logical_volume.volume_group == volume_group_found.name then
+				create_from_scratch = true
+			end
+		end
+		if not create_from_scratch then
+			lvm.VolumeGroup.disable( volume_group_found )
+		end
 	end
-	lvm.PhysicalVolume.rescan()
 
-	local physical_volume = find_physical_volume_by_device( device )
+	if create_from_scratch then
+		lvm.PhysicalVolume.prepare( device )
 
-	return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume } )
-	if return_code then
+		local function find_physical_volume_by_device( device, physical_volumes )
+			if not physical_volumes then
+				physical_volumes = lvm.PhysicalVolume.list()
+			end
+			for _, physical_volume in ipairs( physical_volumes ) do
+				if physical_volume.device == device then
+					return physical_volume
+				end
+			end
+			return nil
+		end
+
+		return_code, result = pcall( lvm.PhysicalVolume.create, device )
+		if not return_code then
+			return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
+		end
 		lvm.PhysicalVolume.rescan()
-		lvm.VolumeGroup.rescan()
-	else
-		return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
+
+		local physical_volume = find_physical_volume_by_device( device )
+
+		return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume } )
+		if return_code then
+			lvm.PhysicalVolume.rescan()
+			lvm.VolumeGroup.rescan()
+		else
+			return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
+		end
+
+		physical_volume = find_physical_volume_by_device( device )
+		volume_group_found = lvm.VolumeGroup.list( { physical_volume } )[1]
 	end
-
-	physical_volume = find_physical_volume_by_device( device )
-
-	local volume_group = lvm.VolumeGroup.list( { physical_volume } )[1]
 
 	assert( volume_group,
-		"unable to find corresponding volume group" )
+	        "unable to find corresponding volume group" )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
 	                                   volume_group,
