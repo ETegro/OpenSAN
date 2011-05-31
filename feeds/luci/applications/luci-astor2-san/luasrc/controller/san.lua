@@ -512,8 +512,6 @@ local function lvm_logical_volume_add( inputs, data )
 	end
 
 	if create_from_scratch then
-		lvm.PhysicalVolume.prepare( device )
-
 		local function find_physical_volume_by_device( device, physical_volumes )
 			if not physical_volumes then
 				physical_volumes = lvm.PhysicalVolume.list()
