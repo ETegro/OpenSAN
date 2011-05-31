@@ -132,13 +132,16 @@ function M.overall( data )
 
 			if logical_volume.access_patterns then
 				local access_pattern_names = common.keys( logical_volume.access_patterns )
+				local access_pattern_rowspan = logical_volume_rowspan / #access_pattern_names
 				table.sort( access_pattern_names )
 
-				for ap_offset = offset, offset + #access_pattern_names do
+				for ap_i = 1, #access_pattern_names do
+					ap_offset = offset + ( ap_i - 1 ) * access_pattern_rowspan
 					if not matrix[ ap_offset ] then
 						matrix[ ap_offset ] = {}
 					end
-					matrix[ ap_offset ].access_pattern = logical_volume.access_patterns[ access_pattern_names[ ap_offset - offset + 1 ] ]
+					matrix[ ap_offset ].access_pattern = logical_volume.access_patterns[ access_pattern_names[ ap_i ] ]
+					matrix[ ap_offset ].access_pattern.rowspan = access_pattern_rowspan
 				end
 			end
 		end
@@ -166,8 +169,10 @@ function M.overall( data )
 			matrix[ current_line ].access_pattern = access_pattern
 			if matrix[ current_line ].physical then
 				matrix[ current_line ].access_pattern.colspan = 2
+				matrix[ current_line ].access_pattern.rowspan = 1
 			else
 				matrix[ current_line ].access_pattern.colspan = 3
+				matrix[ current_line ].access_pattern.rowspan = 1
 			end
 			current_line = current_line + 1
 		end
@@ -232,8 +237,9 @@ function M.filter_borders_highlight( matrix )
 					logical_volume = check_highlights_attribute( logical_volume )
 					if logical_volume.access_patterns then
 						local access_patterns_names = common.keys( logical_volume.access_patterns )
+						local access_pattern_rowspan = logical_volume_rowspan / #access_patterns_names
 						for ap_i, access_pattern_name in ipairs( access_patterns_names ) do
-							local access_pattern = lines[ i + ap_i - 1 ].access_pattern
+							local access_pattern = lines[ i + ( ap_i - 1 ) * access_pattern_rowspan ].access_pattern
 							check_highlights_attribute( access_pattern )
 							access_pattern.highlight.right = true
 							if ap_i == 1 then
