@@ -19,30 +19,17 @@
 
 <table>
 	<tbody>
-		<tr>
-			<td><%: Model %>:</td>
-			<td><%= line.physical.model %></td>
-		</tr>
-		<tr>
-			<td><%: S/N %>:</td>
-			<td><%= line.physical.serial %></li>
-		</tr>
-		<tr>
-			<td><%: Revision %>:</td>
-			<td><%= line.physical.revision %></td>
-		</tr>
-		<tr>
-			<td><%: State %>:</td>
-			<td><%= line.physical.state %></td>
-		</tr>
-		<tr>
-			<td><%: Size %>:</td>
-			<td>
-				<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
-					<%= line.physical.size %> (<%: TiB %>)
-				</span>
-			</td>
-		</tr>
+		<% if line.access_pattern.readonly then %>
+			<tr>
+				<td><%: Readonly %>:</td>
+				<td><%= line.access_pattern.readonly %></td>
+			</tr>
+		<% end %>
+		<% if line.access_pattern.filename then %>
+			<tr>
+				<td><%: IQN %>:</td>
+				<td><%= line.access_pattern:iqn() %></td>
+			</tr>
+		<% end %>
 	</tbody>
 </table>
-<%+san/physical/forms/hotspare%>

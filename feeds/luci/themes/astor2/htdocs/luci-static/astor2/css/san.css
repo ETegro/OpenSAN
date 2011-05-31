@@ -42,16 +42,25 @@ ul, li {
 
 /* Icons for buttons */
 .icon-remove,
+.icon-bind,
+.icon-unbind,
 .icon-reload,
-.icon-fieldadd {
+.icon-fieldadd,
+.icon-edit {
 	background-repeat: no-repeat;
 	background-position: center center;
 	width: 16px;
 	height: 16px;
 	border: 0;
 	}
+.icon-unbind {
+	background-image: url( '../../resources/cbi/up.gif' );
+	}
 .icon-remove {
 	background-image: url( '../../resources/cbi/remove.gif' );
+	}
+.icon-bind {
+	background-image: url( '../../resources/cbi/link.gif' );
 	}
 .icon-fieldadd {
 	background-image: url( '../../resources/cbi/fieldadd.gif' );
@@ -59,6 +68,10 @@ ul, li {
 	}
 .icon-reload {
 	background-image: url( '../../resources/cbi/reload.gif' );
+	text-decoration: none;
+	}
+.icon-edit {
+	background-image: url( '../../resources/cbi/edit.gif' );
 	text-decoration: none;
 	}
 
@@ -73,16 +86,8 @@ table.matrix fieldset {
 table.matrix fieldset {
 	clear: both;
 	}
-table.matrix fieldset div.form {
-	clear: left;
-	padding-top: .5em;
-	}
-table.matrix fieldset div.form label {
-	float: left;
-	width: 25%;
-	}
-table.matrix fieldset div.form input[ type = "text" ] {
-	width: 74%;
+table.matrix fieldset table.form {
+	width: 100%;
 	}
 table.matrix fieldset div.form input[ type = "submit" ] {
 	float: right;
@@ -113,7 +118,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	}
 .fillbar .fillbar_background {
 	background-color:#CCCCCC;
-	height: 2em;
+	height: 1.6em;
 	}
 .fillbar .fillbar_info {
 	position: absolute;
@@ -123,7 +128,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	width:100%;
 	}
 .fillbar .fillbar_text {
-	padding: .5em;
+	padding: .2em;
 	}
 
 /* Matrix colors */

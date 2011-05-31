@@ -1,10 +1,247 @@
-msgid "Check"
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-05-30 17:21+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Access pattern"
+msgstr "Шаблон доступа"
+
+msgid "Access pattern's name already exists"
+msgstr "Такое имя шаблона доступа уже существует"
+
+msgid "Access pattern's name is not set"
+msgstr "Имя шаблона доступа не задано"
+
+msgid "Access patterns"
+msgstr "Шаблоны доступа"
+
+msgid "Add"
+msgstr "Добавить"
+
+msgid "Add access pattern"
+msgstr "Добавить шаблон доступа"
+
+msgid "Add logical drive"
+msgstr "Добавить логический диск"
+
+msgid "Add logical volume"
+msgstr "Добавить логический раздел"
+
+msgid "Add snapshot"
+msgstr "Добавить snapshot"
+
+msgid "Bind access pattern"
+msgstr "Прикрепить шаблон доступа"
+
+msgid "Delete access pattern"
+msgstr "Удалить шаблон доступа"
+
+msgid "Drives are not selected"
+msgstr "Жёсткие диски не выбраны"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Edit access pattern"
+msgstr "Редактировать шаблон доступа"
+
+msgid "Enabled"
+msgstr "Активен"
+
+msgid "Failed to add hotspare disk"
+msgstr "Не могу добавить hotspare диск"
+
+msgid "Failed to add logical volume"
+msgstr "Не могу добавить логический раздел"
+
+msgid "Failed to apply iSCSI configuration"
+msgstr "Не могу применить конфигурацию iSCSI"
+
+msgid "Failed to bind access pattern"
+msgstr "Не могу прикрепить шаблон доступа"
+
+msgid "Failed to create PhysicalVolume on logical disk"
+msgstr "Не могу создать PhysicalVolume на логическом диске"
+
+msgid "Failed to create VolumeGroup on logical disk"
+msgstr "Не могу создать VolumeGroup на логическом диске"
+
+msgid "Failed to create access pattern"
+msgstr "Не могу создать шаблон доступа"
+
+msgid "Failed to create logical disk"
+msgstr "Не могу создать логический диск"
+
+msgid "Failed to create snapshot"
+msgstr "Не могу создать snapshot"
+
+msgid "Failed to delete access pattern"
+msgstr "Не могу удалить шаблон доступа"
+
+msgid "Failed to delete hotspare disk"
+msgstr "Не могу удалить hotspare диск"
+
+msgid "Failed to delete logical disk"
+msgstr "Не могу удалить логический диск"
+
+msgid "Failed to remove logical volume"
+msgstr "Не могу удалить логический раздел"
+
+msgid "Failed to resize logical volume"
+msgstr "Не могу изменить размер логического раздела"
+
+msgid "Failed to resize snapshot"
+msgstr "Не могу изменить размер snapshot-а"
+
+msgid "Failed to save config"
+msgstr "Не могу сохранить конфигурацию"
+
+msgid "Failed to unbind access pattern"
+msgstr "Не могу открепить шаблон доступа"
+
+msgid "Hotspare"
 msgstr ""
 
-msgid "ID"
+msgid "IQN"
 msgstr ""
 
-msgid "RAID level"
+msgid "Incorrect RAID level"
+msgstr "Неправильный уровень RAID"
+
+msgid "Invalid logical volume name"
+msgstr "Неправильное имя логического раздела"
+
+msgid "LUN"
+msgstr ""
+
+msgid "Logical disk is not selected"
+msgstr "Логический диск не выбран"
+
+msgid "Logical drive"
+msgstr "Логический диск"
+
+msgid "Logical drives"
+msgstr "Логические диски"
+
+msgid "Logical volume"
+msgstr "Логический раздел"
+
+msgid "Logical volume is not selected"
+msgstr "Логический раздел не выбран"
+
+msgid "Logical volume name is not set"
+msgstr "Имя логического раздела не выставлено"
+
+msgid "Logical volumes"
+msgstr "Логические разделы"
+
+msgid "MiB"
+msgstr ""
+
+msgid "Model"
+msgstr "Модель"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Newly added hotspare disk is bigger than needed"
+msgstr "Добавленный hotspare диск имеет больший размер требуемого"
+
+msgid "Only single model hard drives should be used"
+msgstr "Жёсткие диски только одной модели желательно должны использоваться"
+
+msgid "Physical drives"
+msgstr "Физические диски"
+
+msgid "RAID"
+msgstr ""
+
+msgid "RAID 0 level requires two or more drives"
+msgstr "RAID уровень 0 требует два или более жёстких диска"
+
+msgid "RAID 1 level requries odd number of two or more drives"
+msgstr "RAID уровень 1 требует чётное количество двух или более жёстких дисков"
+
+msgid "RAID 10 level requires odd number of four or more drives"
+msgstr "RAID уровень 10 требует чётное количество четырёх или более жёстких дисков"
+
+msgid "RAID 5 level requires three or more drives"
+msgstr "RAID уровень 5 требует три или более жёстких дисков"
+
+msgid "RAID 6 level requires odd number of four or more drives"
+msgstr "RAID уровень 6 требует чётное количество четырёх или более жёстких дисков"
+
+msgid "RAID level is not selected"
+msgstr "Уровень RAID не выбран"
+
+msgid "RAID linear level requires at least one drive"
+msgstr "RAID уровень linear требует хотя бы одного жёсткого диска"
+
+msgid "RAID passthrough level requries exactly single drive"
+msgstr "RAID уровень passthrough требует исключительно одного жёсткого диска"
+
+msgid "Readonly"
+msgstr "Только для чтения"
+
+msgid "Really delete access pattern?"
+msgstr "Правда удалить шаблон доступа?"
+
+msgid "Really delete hotspare drive?"
+msgstr "Правда удалить hotspare жёсткий диск?"
+
+msgid "Really delete logical drive?"
+msgstr "Правда удалить логический диск?"
+
+msgid ""
+"Really remove logical volume? This will delete all corresponding snapshots "
+"as well!"
+msgstr ""
+"Правда удалить логический раздел? Это также удалит и сопутствующие snapshot-"
+"ы!"
+
+msgid "Really remove snapshot?"
+msgstr "Правда удалить snapshot?"
+
+msgid "Really resize logical volume?"
+msgstr "Правда изменить размер логического раздела?"
+
+msgid "Really resize snapshot?"
+msgstr "Правда изменить размер snapshot-а?"
+
+msgid "Remove hotspare"
+msgstr "Удалить hotspare"
+
+msgid "Remove logical drive"
+msgstr "Удалить логический диск"
+
+msgid "Remove logical volume"
+msgstr "Удалить логический раздел"
+
+msgid "Remove snapshot"
+msgstr "Удалить snapshot"
+
+msgid "Resize"
+msgstr "Изменить размер"
+
+msgid "Resize logical volume"
+msgstr "Изменить размер логического раздела"
+
+msgid "Resize snapshot"
+msgstr "Изменить размер snapshot-а"
+
+msgid "Revision"
+msgstr "Ревизия"
+
+msgid "S/N"
 msgstr ""
 
 msgid "SAN"
@@ -13,5 +250,29 @@ msgstr ""
 msgid "Size"
 msgstr "Размер"
 
+msgid "Snapshot"
+msgstr ""
+
+msgid "Snapshot size has to be bigger than it's current size"
+msgstr "Размер snapshot-а должен быть больше своего текущего размера"
+
 msgid "State"
 msgstr "Состояние"
+
+msgid "Take snapshot"
+msgstr "Взять snapshot"
+
+msgid "Target driver"
+msgstr "Целевой драйвер"
+
+msgid "This is LUN is busy, please choose another one"
+msgstr "Этот LUN занят, пожалуйста выберите другой"
+
+msgid "TiB"
+msgstr ""
+
+msgid "Unbind access pattern"
+msgstr "Открепить шаблон доступа"
+
+msgid "Unknown action specified"
+msgstr "Неизвестное действие задано"

@@ -103,19 +103,19 @@ local function is_valid_raid_configuration( raid_level, drives )
 	local i18n = luci.i18n.translate
 	local VALIDATORS = {
 		["linear"] = { validator = function( drives ) return #drives > 0 end,
-		               message = i18n("Linear level requires at least one drive") },
+		               message = i18n("RAID linear level requires at least one drive") },
 		["passthrough"] = { validator = function( drives ) return #drives == 1 end,
-		                    message = i18n("Passthrough level requries exactly single drive") },
+		                    message = i18n("RAID passthrough level requries exactly single drive") },
 		["0"] = { validator = function( drives ) return #drives >= 2 end,
-		          message = i18n("0 level requires two or more drives") },
+		          message = i18n("RAID 0 level requires two or more drives") },
 		["1"] = { validator = function( drives ) return #drives >= 2 and common.is_odd( #drives ) end,
-		          message = i18n("1 level requries odd number of two or more drives") },
+		          message = i18n("RAID 1 level requries odd number of two or more drives") },
 		["5"] = { validator = function( drives ) return #drives >= 3 end,
-		          message = i18n("5 level requires three or more drives") },
+		          message = i18n("RAID 5 level requires three or more drives") },
 		["6"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
-		          message = i18n("6 level requires odd number of four or more drives") },
+		          message = i18n("RAID 6 level requires odd number of four or more drives") },
 		["10"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
-		           message = i18n("10 level requires odd number or four or more drives") }
+		           message = i18n("RAID 10 level requires odd number of four or more drives") }
 	}
 	local succeeded, is_valid = pcall( VALIDATORS[ raid_level ].validator, drives )
 	if not succeeded then
