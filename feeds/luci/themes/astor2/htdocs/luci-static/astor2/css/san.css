@@ -89,9 +89,6 @@ ul, li {
 	}
 
 /* Main table */
-table.matrix > tbody > tr > th {
-	width: 25%;
-	}
 table.matrix > tbody > tr > td,
 table.matrix fieldset {
 	padding: .5em;
