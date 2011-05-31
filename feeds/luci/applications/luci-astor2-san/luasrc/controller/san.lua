@@ -186,33 +186,38 @@ local function einarc_logical_add( inputs, drives, data )
 	end
 
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
-	if is_valid then
-		-- Check that there are no different models of hard drives for adding
-		local found_models = {}
-		for _, physical in pairs( data.physicals ) do
-			if common.is_in_array( physical.id, drives ) then
-				found_models[ physical.model ] = 1
-			end
-		end
-		if #common.keys( found_models ) ~= 1 then
-			message_error = i18n("Only single model hard drives should be used")
-		end
-
-		lvm.PhysicalVolume.rescan()
-		lvm.VolumeGroup.rescan()
-		lvm.LogicalVolume.rescan()
-		assert( nil, common.ppt( data.physicals ) )
-		for _, drive in ipairs( drives ) do
-			device_clear( data.physicals[ drive ].device )
-		end
-
-		local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
-		if not return_code then
-			return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
-		end
-	else
-		message_error = message
+	if not is_valid then
+		return index_with_error( message )
 	end
+
+	-- TODO
+	-- Check that there are no different models of hard drives for adding
+	local found_models = {}
+	for _, physical in pairs( data.physicals ) do
+		if common.is_in_array( physical.id, drives ) then
+			found_models[ physical.model ] = 1
+		end
+	end
+	if #common.keys( found_models ) ~= 1 then
+		message_error = i18n("Only single model hard drives should be used")
+	end
+
+	--[[
+	lvm.restore()
+	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
+		if physical_volume
+	end
+	]]
+
+	for _, drive in ipairs( drives ) do
+		device_clear( data.physicals[ drive ].device )
+	end
+
+	local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+	if not return_code then
+		return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
+	end
+	-- TODO
 
 	return index_with_error( message_error )
 end
