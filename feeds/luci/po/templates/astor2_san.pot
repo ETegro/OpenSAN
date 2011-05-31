@@ -1,21 +1,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
-msgid "0 level requires two or more drives"
-msgstr ""
-
-msgid "1 level requries odd number of two or more drives"
-msgstr ""
-
-msgid "10 level requires odd number of four or more drives"
-msgstr ""
-
-msgid "5 level requires three or more drives"
-msgstr ""
-
-msgid "6 level requires odd number of four or more drives"
-msgstr ""
-
 msgid "Access pattern"
 msgstr ""
 
@@ -43,13 +28,7 @@ msgstr ""
 msgid "Add snapshot"
 msgstr ""
 
-msgid "Bind"
-msgstr ""
-
 msgid "Bind access pattern"
-msgstr ""
-
-msgid "Delete"
 msgstr ""
 
 msgid "Delete access pattern"
@@ -133,9 +112,6 @@ msgstr ""
 msgid "LUN"
 msgstr ""
 
-msgid "Linear level requires at least one drive"
-msgstr ""
-
 msgid "Logical disk is not selected"
 msgstr ""
 
@@ -172,16 +148,34 @@ msgstr ""
 msgid "Only single model hard drives should be used"
 msgstr ""
 
-msgid "Passthrough level requries exactly single drive"
-msgstr ""
-
 msgid "Physical drives"
 msgstr ""
 
 msgid "RAID"
 msgstr ""
 
+msgid "RAID 0 level requires two or more drives"
+msgstr ""
+
+msgid "RAID 1 level requries odd number of two or more drives"
+msgstr ""
+
+msgid "RAID 10 level requires odd number of four or more drives"
+msgstr ""
+
+msgid "RAID 5 level requires three or more drives"
+msgstr ""
+
+msgid "RAID 6 level requires odd number of four or more drives"
+msgstr ""
+
 msgid "RAID level is not selected"
+msgstr ""
+
+msgid "RAID linear level requires at least one drive"
+msgstr ""
+
+msgid "RAID passthrough level requries exactly single drive"
 msgstr ""
 
 msgid "Readonly"
@@ -262,9 +256,6 @@ msgid "This is LUN is busy, please choose another one"
 msgstr ""
 
 msgid "TiB"
-msgstr ""
-
-msgid "Unbind"
 msgstr ""
 
 msgid "Unbind access pattern"
