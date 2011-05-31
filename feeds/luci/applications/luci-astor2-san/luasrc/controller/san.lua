@@ -604,12 +604,35 @@ local function lvm_logical_volume_remove( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local return_code, result = pcall( lvm.LogicalVolume.remove,
-	                                   { volume_group = { name = volume_group_name },
-	                                     name = logical_volume_name } )
-	if not return_code then
-		message_error = i18n("Failed to remove logical volume") .. ": " .. result
+	local is_last = true
+	for _, logical_volume in ipairs( data.logical_volumes ) do
+		if logical_volume.volume_group == volume_group_name and
+		   logical_volume.name ~= logical_volume_name then
+			is_last = false
+		end
 	end
+
+	local return_code = nil
+	local result = nil
+	if is_last then
+		for _, volume_group in ipairs( data.volume_groups ) do
+			if volume_group.name == volume_group_name then
+				lvm.VolumeGroup.disable( volume_group )
+				for _, physical_volume in ipairs( volume_group.physical_volumes ) do
+					lvm.PhysicalVolume.prepare( physical_volume.device )
+				end
+			end
+		end
+	else
+		local return_code, result = pcall( lvm.LogicalVolume.remove,
+						   { volume_group = { name = volume_group_name },
+						     name = logical_volume_name } )
+		if not return_code then
+			return index_with_error( i18n("Failed to remove logical volume") .. ": " .. result )
+		end
+
+	end
+
 	return index_with_error( message_error )
 end
 
