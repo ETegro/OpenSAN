@@ -23,10 +23,10 @@
 	<table class="matrix" border="1px" cellpadding="0" cellspacing="0" width="100%">
 		<tbody>
 			<tr>
-				<th scope="col"><%: Physical drives %></th>
-				<th scope="col"><%: Logical drives %></th>
-				<th scope="col"><%: Logical volumes %></th>
-				<th scope="col"><a href="#div_access_pattern_new" id="access_patterns"><%: Access patterns %></a></th>
+				<th scope="col" width="20%"><%: Physical drives %></th>
+				<th scope="col" width="20%"><%: Logical drives %></th>
+				<th scope="col" width="25%"><%: Logical volumes %></th>
+				<th scope="col" width="35%"><a href="#div_access_pattern_new" id="access_patterns"><%: Access patterns %></a></th>
 			</tr>
 			<% for _, line_local in ipairs( matrix_overall.lines ) do %>
 				<%# Our templates must be able to access locally scoped line_local %>
@@ -49,15 +49,21 @@
 					<% end %>
 				</tr>
 			<% end %>
+		</tbody>
+	</table>
+	<table class="bottom_forms">
+		<tbody>
 			<tr>
 				<td>
 					<%+san/logical/forms/add%>
 				</td>
-				<td colspan="2">&nbsp;</td>
+				<td></td>
+				<td></td>
 				<td>
 					<%+san/access_pattern/forms/add%>
 				</td>
 			</tr>
+
 		</tbody>
 	</table>
 </form>

@@ -88,7 +88,7 @@ function toggle_drives_information() {
 };
 
 function toggle_logical_volume_creation() {
-	$( 'form a[ id ^= "logical_volume_creation-" ]' ).click( function() {
+	$( 'form input[ name ^= "logical_volume_creation-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -100,7 +100,7 @@ function toggle_logical_volume_creation() {
 };
 
 function toggle_resize_logical_volume() {
-	$( 'form a[ id ^= "logical_volume_resize_link-" ]' ).click( function() {
+	$( 'form input[ name ^= "logical_volume_resize_button-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -112,7 +112,7 @@ function toggle_resize_logical_volume() {
 };
 
 function toggle_snapshot_creation() {
-	$( 'form a[ id ^= "snapshot_creation-" ]' ).click( function() {
+	$( 'form input[ name ^= "snapshot_creation-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -124,7 +124,7 @@ function toggle_snapshot_creation() {
 };
 
 function toggle_resize_snapshot() {
-	$( 'form a[ id ^= "snapshot_resize_link-" ]' ).click( function() {
+	$( 'form input[ name ^= "snapshot_resize_button-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -136,7 +136,7 @@ function toggle_resize_snapshot() {
 };
 
 function toggle_edit_access_patterns() {
-	$( 'form a[ id ^= "access_pattern_edit-" ]' ).click( function() {
+	$( 'form input[ name ^= "access_pattern_edit-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );

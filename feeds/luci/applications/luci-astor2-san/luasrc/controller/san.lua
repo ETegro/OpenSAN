@@ -608,6 +608,18 @@ local function lvm_logical_volume_remove( inputs, data )
 	return index_with_error( message_error )
 end
 
+local function find_lv_by_name_and_vg_name( lv_name, vg_name, logical_volumes )
+	local logical_volume_found = nil
+	for _, logical_volume in pairs( logical_volumes ) do
+		if logical_volume.name == lv_name and
+		   logical_volume.volume_group == vg_name then
+			logical_volume_found = logical_volume
+		end
+	end
+	assert( logical_volume_found, "unable to find original logical volume" )
+	return logical_volume_found
+end
+
 local function lvm_logical_volume_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -624,9 +636,14 @@ local function lvm_logical_volume_resize( inputs, data )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
 
+	local logical_volume_found = find_lv_by_name_and_vg_name( logical_volume_name,
+	                                                          volume_group_name,
+								  data.logical_volumes )
+
 	local return_code, result = pcall( lvm.LogicalVolume.resize,
 	                                   { volume_group = { name = volume_group_name },
-	                                   name = logical_volume_name },
+	                                     name = logical_volume_name,
+					     size = logical_volume_found.size },
 	                                   logical_volume_size )
 	if not return_code then
 		message_error = i18n("Failed to resize logical volume") .. ": " .. result
@@ -664,31 +681,29 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
 
-	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_snapshot_resize.(",hashre,").s(%d+).lv(",hashre,")"} )
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_volume_snapshot_resize.(",hashre,").(",hashre,")"} )
 	assert( tmp, "unable to parse out volume group's and logical volume's names, original snapshot's size" )
 	local volume_group_name_hash = tmp[1]
-	local snapshot_size = tmp[2]
-	local logical_volume_name_hash = tmp[3]
+	local logical_volume_name_hash = tmp[2]
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	snapshot_size = tonumber( snapshot_size )
-	assert( common.is_positive( snapshot_size ),
-	        "incorrect non-positive snapshot's size" )
-
 	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" .. volume_group_name_hash .. "-" .. logical_volume_name_hash ]
 	snapshot_size_new = tonumber( snapshot_size_new )
-	assert( common.is_positive( snapshot_size_new ) )
 	assert( common.is_positive( snapshot_size_new ),
 	        "incorrect non-positive snapshot's size" )
 
-	if snapshot_size_new < snapshot_size then
+	local snapshot_found = find_lv_by_name_and_vg_name( logical_volume_name,
+	                                                    volume_group_name,
+	                                                    data.logical_volumes )
+
+	if snapshot_size_new < snapshot_found.size then
 		return index_with_error( i18n("Snapshot size has to be bigger than it's current size") )
 	end
 
 	local return_code, result = pcall( lvm.Snapshot.resize,
 	                                   { volume_group = { name = volume_group_name },
-	                                     size = snapshot_size,
+	                                     size = snapshot_found.size,
 	                                     name = logical_volume_name },
 	                                   snapshot_size_new )
 	if not return_code then

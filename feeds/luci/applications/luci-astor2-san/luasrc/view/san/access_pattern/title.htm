@@ -20,5 +20,6 @@
 <div class="title bold">
 	<%= escape_html( line.access_pattern.name ) %>;
 	<%= line.access_pattern.targetdriver %>;
+	<% if line.access_pattern.readonly then %>RO;<% else %>RW;<% end %>
 	<%: LUN %><%= line.access_pattern.lun %>
 </div>

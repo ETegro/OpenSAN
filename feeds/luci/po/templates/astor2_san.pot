@@ -31,6 +31,11 @@ msgstr ""
 msgid "Bind access pattern"
 msgstr ""
 
+msgid ""
+"Decreasing logical volumes size may corrupt your data! Are you sure you want "
+"to do this?"
+msgstr ""
+
 msgid "Delete access pattern"
 msgstr ""
 

@@ -40,11 +40,12 @@
 				<td>&nbsp;</td>
 				<td>
 					<div class="form">
-						<input name="san.submit_logical_volume_snapshot_resize-<%= hash( line.logical_volume.volume_group.name ) %>-s<%= line.logical_volume.size_mib %>-lv<%= hash( line.logical_volume.name ) %>"
+						<input name="san.submit_logical_volume_snapshot_resize-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 						       onclick=" if ( !confirm( '<%: Really resize snapshot? %>' ) )
 								 return false;
 								 return true;"
 						       type="submit"
+						       class="icon-apply-wide"
 						       title="<%: Resize snapshot %>"
 						       value="<%: Resize %>" />
 					</div>
