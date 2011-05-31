@@ -94,11 +94,24 @@ function M.overall( data )
 
 		-- Fillup physicals
 		for physical_id, physical in pairs( logical.physicals ) do
-			if physicals[ physical_id ].state == tostring( logical_id ) then
-				physicals[ physical_id ].state = "allocated"
+			if physicals[ physical_id ] then
+				if physicals[ physical_id ].state == tostring( logical_id ) then
+					physicals[ physical_id ].state = "allocated"
+				end
+				physicals_free[ physical_id ] = nil
+			else
+				-- We have got failed disk
+				physicals[ physical_id ] = einarc.Physical:new( {
+					id = physical_id,
+					model = "unknown",
+					revision = "unknown",
+					serial = "unknown",
+					size = 1,
+					state = "failed"
+				} )
+				physicals[ physical_id ].size = 0
 			end
 			logical.physicals[ physical_id ] = physicals[ physical_id ]
-			physicals_free[ physical_id ] = nil
 		end
 		local physical_rowspan = lines_quantity / physicals_quantity
 		for i, physical in ipairs( einarc.Physical.sort( logical.physicals ) ) do
