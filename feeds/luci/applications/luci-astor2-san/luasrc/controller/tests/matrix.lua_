@@ -1212,6 +1212,7 @@ TestMatrix = {}
 									enabled = true,
 									readonly = false,
 									filename = "foo",
+									rowspan = 2,
 									lun = 3
 								}
 							}
@@ -1231,6 +1232,7 @@ TestMatrix = {}
 									enabled = true,
 									readonly = false,
 									filename = "bar",
+									rowspan = 2,
 									lun = 1
 								}
 							}
@@ -1250,6 +1252,7 @@ TestMatrix = {}
 									enabled = true,
 									readonly = false,
 									filename = "baz",
+									rowspan = 2,
 									lun = 2
 								}
 							}
@@ -1274,6 +1277,7 @@ TestMatrix = {}
 							enabled = true,
 							readonly = false,
 							filename = "bar",
+							rowspan = 2,
 							lun = 1
 						}
 					}
@@ -1285,6 +1289,7 @@ TestMatrix = {}
 					enabled = true,
 					readonly = false,
 					filename = "bar",
+					rowspan = 2,
 					lun = 1
 				}
 			},
@@ -1308,6 +1313,7 @@ TestMatrix = {}
 							enabled = true,
 							readonly = false,
 							filename = "baz",
+							rowspan = 2,
 							lun = 2
 						}
 					}
@@ -1319,6 +1325,7 @@ TestMatrix = {}
 					enabled = true,
 					readonly = false,
 					filename = "baz",
+					rowspan = 2,
 					lun = 2
 				}
 			},
@@ -1351,6 +1358,7 @@ TestMatrix = {}
 							enabled = true,
 							readonly = false,
 							filename = "foo",
+							rowspan = 2,
 							lun = 3
 						}
 					}
@@ -1362,6 +1370,7 @@ TestMatrix = {}
 					enabled = true,
 					readonly = false,
 					filename = "foo",
+					rowspan = 2,
 					lun = 3
 				}
 			},
@@ -1377,6 +1386,7 @@ TestMatrix = {}
 					enabled = true,
 					readonly = false,
 					colspan = 3,
+					rowspan = 1,
 					lun = 4
 				}
 			},
@@ -1389,6 +1399,7 @@ TestMatrix = {}
 					enabled = true,
 					readonly = false,
 					colspan = 3,
+					rowspan = 1,
 					lun = 5
 				}
 			}
@@ -1524,11 +1535,11 @@ TestMatrix = {}
 		for i = 1, 30, 15 do
 			assert( got[ i ].logical_volume )
 		end
-		assertEquals( got[ 15 + 1 ].access_pattern.name, "foobar3" )
-		assertEquals( got[ 15 + 2 ].access_pattern.name, "foobar4" )
-		assertEquals( got[ 15 + 3 ].access_pattern.name, "foobar5" )
-		assertEquals( got[ 15 + 4 ].access_pattern.name, "foobaz1" )
-		assertEquals( got[ 15 + 5 ].access_pattern.name, "foobaz2" )
+		assertEquals( got[ 15 + 1 + 0 * 3 ].access_pattern.name, "foobar3" )
+		assertEquals( got[ 15 + 1 + 1 * 3 ].access_pattern.name, "foobar4" )
+		assertEquals( got[ 15 + 1 + 2 * 3 ].access_pattern.name, "foobar5" )
+		assertEquals( got[ 15 + 1 + 3 * 3 ].access_pattern.name, "foobaz1" )
+		assertEquals( got[ 15 + 1 + 4 * 3 ].access_pattern.name, "foobaz2" )
 
 		-- And also check highlighting
 		got = matrix.filter_borders_highlight( {
@@ -1538,37 +1549,37 @@ TestMatrix = {}
 				access_patterns = self.access_patterns
 			} )
 		} )[ "lines" ]
-		assert( common.compare_tables( got[16].logical_volume.highlight, {
+		assert( common.compare_tables( got[15 + 1].logical_volume.highlight, {
 			left = false,
 			top = false,
 			right = false,
 			bottom = true
 		} ) )
-		assert( common.compare_tables( got[16].access_pattern.highlight, {
+		assert( common.compare_tables( got[15 + 1].access_pattern.highlight, {
 			left = false,
 			top = true,
 			right = true,
 			bottom = false
 		} ) )
-		assert( common.compare_tables( got[16 + 1].access_pattern.highlight, {
+		assert( common.compare_tables( got[15 + 1 + 1 * 3].access_pattern.highlight, {
 			left = false,
 			top = false,
 			right = true,
 			bottom = false
 		} ) )
-		assert( common.compare_tables( got[16 + 2].access_pattern.highlight, {
+		assert( common.compare_tables( got[15 + 1 + 2 * 3].access_pattern.highlight, {
 			left = false,
 			top = false,
 			right = true,
 			bottom = false
 		} ) )
-		assert( common.compare_tables( got[16 + 3].access_pattern.highlight, {
+		assert( common.compare_tables( got[15 + 1 + 3 * 3].access_pattern.highlight, {
 			left = false,
 			top = false,
 			right = true,
 			bottom = false
 		} ) )
-		assert( common.compare_tables( got[16 + 4].access_pattern.highlight, {
+		assert( common.compare_tables( got[15 + 1 + 4 * 3].access_pattern.highlight, {
 			left = false,
 			top = false,
 			right = true,

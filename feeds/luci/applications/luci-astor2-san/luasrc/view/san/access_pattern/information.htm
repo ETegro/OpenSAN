@@ -19,12 +19,6 @@
 
 <table>
 	<tbody>
-		<% if line.access_pattern.readonly then %>
-			<tr>
-				<td><%: Readonly %>:</td>
-				<td><%= line.access_pattern.readonly %></td>
-			</tr>
-		<% end %>
 		<% if line.access_pattern.filename then %>
 			<tr>
 				<td><%: IQN %>:</td>
