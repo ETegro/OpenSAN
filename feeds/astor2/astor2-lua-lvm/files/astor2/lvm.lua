@@ -510,7 +510,7 @@ M.is_running = function()
 end
 
 --- Perform rescan of all LVM-related objects
-local function restore_lvm()
+M.restore = function()
 	M.PhysicalVolume.rescan()
 	M.VolumeGroup.rescan()
 	M.LogicalVolume.rescan()
@@ -521,7 +521,7 @@ M.start = function()
 	if M.is_running() then return end
 	local succeeded, result = pcall( load_modules )
 	if not succeeded then error( "lvm:start() failed: " .. result ) end
-	restore_lvm()
+	M.restore()
 end
 
 return M
