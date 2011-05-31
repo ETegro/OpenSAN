@@ -477,7 +477,6 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 
 	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" .. volume_group_name_hash .. "-" .. logical_volume_name_hash ]
 	snapshot_size_new = tonumber( snapshot_size_new )
-	assert( common.is_positive( snapshot_size_new ) )
 	assert( common.is_positive( snapshot_size_new ),
 	        "incorrect non-positive snapshot's size" )
 
