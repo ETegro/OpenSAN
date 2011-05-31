@@ -79,26 +79,6 @@ end
 ------------------------------------------------------------------------
 -- Einarc related functions
 ------------------------------------------------------------------------
-local function device_clear( device ) -- This function actually uses LVM only library
-	local physical_volume_found = nil
-	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
-		if physical_volume.device == device then
-			physical_volume_found = physical_volume
-		end
-	end
-
-	if not physical_volume_found then return end
-
-	for _, volume_group in ipairs( lvm.VolumeGroup.list( { physical_volume_found } ) ) do
-		for _, logical_volume in ipairs( lvm.LogicalVolume.list( { volume_group } ) ) do
-			logical_volume:remove()
-		end
-		volume_group:remove()
-	end
-
-	physical_volume_found:remove()
-end
-
 local function is_valid_raid_configuration( raid_level, drives )
 	local i18n = luci.i18n.translate
 	local VALIDATORS = {
@@ -125,48 +105,38 @@ local function is_valid_raid_configuration( raid_level, drives )
 end
 
 --[[
-+ - - - - - - - - - -+
-' Creation of RAID   '
-'                    '
-'                    '
-'                    '
-'                    '
-'   H                '
-'   H                '
-'   H                '
-'   H                 - - - - - - - - - - - - - - - - - - - - - - - - - - -+
-'   v                                                                      '
-' +----------------+                                                       '
-' | Does PV exist? | ------------------------------------------------+     '
-' +----------------+                                                 |     '
-'   |                                                                |     '
-'   | YES                                                            |     '
-'   v                                                                |     '
-' +----------------+   YES      +-------------------------------+    |     '
-' | Does VG exist? | ---------> |     Stop all non-RAID VGs     |    | NO  '
-' +----------------+            +-------------------------------+    |     '
-'   |                             |                                  |     '
-'   |                             |                                  |     '
-'   |                             v                                  |     '
-'   |                  NO       +-------------------------------+    |     '
-'   +-------------------------> |          Create RAID          | <--+     '
-'                               +-------------------------------+          '
-'                                 |                                        '
-+ - - - - - - - - - - - - - -     |                                 - - - -+
-                              '   |                               '
-                              '   |                               '
-                              '   v                               '
-                              ' +-------------------------------+ '
-                              ' | prepare( newly created RAID ) | '
-                              ' +-------------------------------+ '
-                              '   H                               '
-                              '   H                               '
-                              '   v                               '
-                              '                                   '
-                              '                                   '
-                              '                                   '
-                              '                                   '
-                              + - - - - - - - - - - - - - - - - - +
++ - - - - - - - - - - - - - - - - - +
+' Creation of RAID                  '
+'                                   '
+'                                   '
+'                                   '
+'                                   '
+'   H                               '
+'   H                               '
+'   v                               '
+' +-------------------------------+ '
+' |     Stop all non-RAID VGs     | '
+' +-------------------------------+ '
+'   |                               '
+'   |                               '
+'   v                               '
+' +-------------------------------+ '
+' |          Create RAID          | '
+' +-------------------------------+ '
+'   |                               '
+'   |                               '
+'   v                               '
+' +-------------------------------+ '
+' | prepare( newly created RAID ) | '
+' +-------------------------------+ '
+'   H                               '
+'   H                               '
+'   v                               '
+'                                   '
+'                                   '
+'                                   '
+'                                   '
++ - - - - - - - - - - - - - - - - - +
 ]]
 local function einarc_logical_add( inputs, drives, data )
 	local i18n = luci.i18n.translate
@@ -190,7 +160,6 @@ local function einarc_logical_add( inputs, drives, data )
 		return index_with_error( message )
 	end
 
-	-- TODO
 	-- Check that there are no different models of hard drives for adding
 	local found_models = {}
 	for _, physical in pairs( data.physicals ) do
@@ -202,22 +171,34 @@ local function einarc_logical_add( inputs, drives, data )
 		message_error = i18n("Only single model hard drives should be used")
 	end
 
-	--[[
 	lvm.restore()
-	for _, physical_volume in ipairs( lvm.PhysicalVolume.list() ) do
-		if physical_volume
-	end
-	]]
 
-	for _, drive in ipairs( drives ) do
-		device_clear( data.physicals[ drive ].device )
+	for _, volume_group in ipairs( data.volume_groups ) do
+		local is_not_busy = true
+		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
+			for _, logical in ipairs( data.logicals ) do
+				if logical.device == physical_volume.device then
+					is_not_busy = false
+				end
+			end
+		end
+		if is_not_busy then
+			volume_group:disable()
+		end
 	end
 
 	local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
 	if not return_code then
 		return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
 	end
-	-- TODO
+
+	for _, logical in pairs( einarc.Logical.list() ) do
+		for _, logical_previous in ipairs( data.logicals ) do
+			if logical_previous.device ~= logical.device then
+				lvm.PhysicalVolume.prepare( logical.device )
+			end
+		end
+	end
 
 	return index_with_error( message_error )
 end
