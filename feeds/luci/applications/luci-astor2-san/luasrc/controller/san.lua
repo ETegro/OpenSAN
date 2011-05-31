@@ -506,7 +506,7 @@ local function lvm_logical_volume_add( inputs, data )
 				create_from_scratch = false
 			end
 		end
-		if not create_from_scratch then
+		if create_from_scratch then
 			lvm.VolumeGroup.disable( volume_group_found )
 		end
 	end
