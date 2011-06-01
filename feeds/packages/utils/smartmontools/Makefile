@@ -55,11 +55,11 @@ endef
 define Package/smartmontools/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/smartctl $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/smartd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) ./files/smartd.conf $(1)/etc
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/smartd.init $(1)/etc/init.d/smartd
+#	$(INSTALL_BIN) $(PKG_BUILD_DIR)/smartd $(1)/usr/sbin/
+#	$(INSTALL_DIR) $(1)/etc
+#	$(INSTALL_DATA) ./files/smartd.conf $(1)/etc
+#	$(INSTALL_DIR) $(1)/etc/init.d
+#	$(INSTALL_BIN) ./files/smartd.init $(1)/etc/init.d/smartd
 endef
 
 $(eval $(call BuildPackage,smartmontools))
