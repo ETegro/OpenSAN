@@ -35,12 +35,14 @@ end
 
 <%
 -- This function is based on LuCI's luci.http.protocol.urlencode()
+local CYRILLIC_CHARACTERS = "абвгдеёзийклмнопрстуфхцьъыэжчшщяюАБВГДЕЁЗИЙКЛМНОПРСТУФХЦЬЪЫЭЖЧШЩЯЮ"
 function escape_html( str )
 	local function __chrenc( chr )
 		return string.format( "&#x%02x;", string.byte( chr ) )
 	end
 	if type( str ) == "string" then
-		str = str:gsub( "([^a-zA-Z0-9$_%-%.%+*(),])", __chrenc )
+		str = str:gsub( "([^a-zA-Z0-9$_%-%.%+*()," .. CYRILLIC_CHARACTERS .. "])", __chrenc )
+
 	end
 	return str
 end

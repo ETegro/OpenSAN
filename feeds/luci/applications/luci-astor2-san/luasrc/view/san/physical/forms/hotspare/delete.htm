@@ -18,10 +18,10 @@
 %>
 
 <input name="san.submit_logical_hotspare_delete-<%= hash( tostring( line.physical.logical_id ) ) %>-<%= hash( line.physical.id ) %>"
-       onclick=" if ( !confirm( '<%: Really delete hotspare drive? %>' ) )
+       onclick=" if ( !confirm( '<%: Really delete dedicated hotspare drive? %>' ) )
                  return false;
                  return true;"
        class="inline icon-remove"
        type="submit"
-       title="<%: Remove hotspare %>"
+       title="<%: Remove dedicated hotspare %>"
        value="" />

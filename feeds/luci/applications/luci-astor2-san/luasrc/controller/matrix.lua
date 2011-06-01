@@ -25,8 +25,6 @@ einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 scst = require( "astor2.scst" )
 
-mime = require( "mime" )
-
 function M.gcd( x, y )
 	if y == 0 then return math.abs( x ) end
 	return M.gcd( y, x % y )
@@ -306,18 +304,17 @@ function M.filter_highlight_snapshots( matrix, colors_array )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
 		local color = colors_array[ color_number ]
-		if line.logical_volume then
-			if not line.logical_volume.is_snapshot() then
-				if color_number == #colors_array then
-					color_number = 1
-				else
-					color_number = color_number + 1
-				end
-				lines[ current_line ].logical_volume.highlight.background_color = color
-				if #line.logical_volume.snapshots ~= 0 then
-					for _, snapshot in ipairs( line.logical_volume.snapshots ) do
-						snapshot.highlight.background_color = color
-					end
+		if line.logical_volume and
+		   not line.logical_volume.is_snapshot() then
+			if color_number == #colors_array then
+				color_number = 1
+			else
+				color_number = color_number + 1
+			end
+			lines[ current_line ].logical_volume.highlight.background_color = color
+			if #line.logical_volume.snapshots ~= 0 then
+				for _, snapshot in ipairs( line.logical_volume.snapshots ) do
+					snapshot.highlight.background_color = color
 				end
 			end
 		end
@@ -427,8 +424,20 @@ function filter_serialize( matrix )
 	return matrix
 end
 
+-- Lua 5.1+ base64 v3.0 (c) 2009 by Alex Kloss <alexthkloss@web.de>
+-- licensed under the terms of the LGPL2
 local function b64encode( data )
-	return (mime.b64( data ))
+	local b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+	return ( ( data:gsub( ".", function(x)
+		local r, b = "", x:byte()
+		for i = 8, 1, -1 do r = r .. ( b % 2^i - b % 2^( i - 1 ) > 0 and "1" or "0" ) end
+		return r;
+	end ) .. "0000" ):gsub( "%d%d%d?%d?%d?%d?", function(x)
+		if( #x < 6 ) then return "" end
+		local c = 0
+		for i = 1, 6 do c = c + ( x:sub( i, i ) == "1" and 2^( 6 - i ) or 0 ) end
+		return b:sub( c + 1, c + 1 )
+	end ) .. ({ "", '==', "=" })[ #data % 3 + 1 ] )
 end
 
 function filter_base64encode( matrix )
@@ -449,14 +458,16 @@ local function logical_volume_group( logical, volume_groups )
 end
 
 local function snapshots_to_outer( logical_volumes )
+	local processed = {}
 	for logical_volume_device, logical_volume in pairs( logical_volumes ) do
+		processed[ logical_volume_device ] = logical_volume
 		if logical_volume.snapshots then
 			for _, snapshot in ipairs( logical_volume.snapshots ) do
-				logical_volumes[ snapshot.device ] = snapshot
+				processed[ snapshot.device ] = snapshot
 			end
 		end
 	end
-	return logical_volumes
+	return processed
 end
 
 local function logical_logical_volumes( logical, logical_volumes )
