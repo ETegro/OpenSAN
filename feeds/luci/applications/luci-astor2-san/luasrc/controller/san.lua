@@ -73,7 +73,7 @@ end
 local function index_with_error( message_error )
 	local http = luci.http
 	http.redirect( luci.dispatcher.build_url( "admin", "san" ) .. "/" ..
-	               http.build_querystring( { message_error = message_error } ) )
+	               http.build_querystring( { message_error = tostring( message_error ) } ) )
 end
 
 ------------------------------------------------------------------------
