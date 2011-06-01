@@ -306,18 +306,17 @@ function M.filter_highlight_snapshots( matrix, colors_array )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
 		local color = colors_array[ color_number ]
-		if line.logical_volume then
-			if not line.logical_volume.is_snapshot() then
-				if color_number == #colors_array then
-					color_number = 1
-				else
-					color_number = color_number + 1
-				end
-				lines[ current_line ].logical_volume.highlight.background_color = color
-				if #line.logical_volume.snapshots ~= 0 then
-					for _, snapshot in ipairs( line.logical_volume.snapshots ) do
-						snapshot.highlight.background_color = color
-					end
+		if line.logical_volume and
+		   not line.logical_volume.is_snapshot() then
+			if color_number == #colors_array then
+				color_number = 1
+			else
+				color_number = color_number + 1
+			end
+			lines[ current_line ].logical_volume.highlight.background_color = color
+			if #line.logical_volume.snapshots ~= 0 then
+				for _, snapshot in ipairs( line.logical_volume.snapshots ) do
+					snapshot.highlight.background_color = color
 				end
 			end
 		end
@@ -449,14 +448,16 @@ local function logical_volume_group( logical, volume_groups )
 end
 
 local function snapshots_to_outer( logical_volumes )
+	local processed = {}
 	for logical_volume_device, logical_volume in pairs( logical_volumes ) do
+		processed[ logical_volume_device ] = logical_volume
 		if logical_volume.snapshots then
 			for _, snapshot in ipairs( logical_volume.snapshots ) do
-				logical_volumes[ snapshot.device ] = snapshot
+				processed[ snapshot.device ] = snapshot
 			end
 		end
 	end
-	return logical_volumes
+	return processed
 end
 
 local function logical_logical_volumes( logical, logical_volumes )
