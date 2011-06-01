@@ -16,10 +16,10 @@ msgid "Access pattern"
 msgstr "Шаблон доступа"
 
 msgid "Access pattern's name already exists"
-msgstr "Такое имя шаблона доступа уже существует"
+msgstr "Такое название шаблона доступа уже существует"
 
 msgid "Access pattern's name is not set"
-msgstr "Имя шаблона доступа не задано"
+msgstr "Название шаблона доступа не задано"
 
 msgid "Access patterns"
 msgstr "Шаблоны доступа"
@@ -131,7 +131,7 @@ msgid "Incorrect RAID level"
 msgstr "Неправильный уровень RAID"
 
 msgid "Invalid logical volume name"
-msgstr "Неправильное имя логического тома"
+msgstr "Неправильное название логического тома"
 
 msgid "LUN"
 msgstr ""
@@ -152,7 +152,7 @@ msgid "Logical volume is not selected"
 msgstr "Логический том не выбран"
 
 msgid "Logical volume name is not set"
-msgstr "Имя логического тома не задано"
+msgstr "Название логического тома не задано"
 
 msgid "Logical volumes"
 msgstr "Логические тома"
