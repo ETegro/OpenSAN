@@ -30,6 +30,9 @@ msgstr "Добавить"
 msgid "Add access pattern"
 msgstr "Добавить шаблон доступа"
 
+msgid "Add dedicated hotspare"
+msgstr "Добавить выделенный hotspare"
+
 msgid "Add logical drive"
 msgstr "Добавить логический диск"
 
@@ -45,7 +48,12 @@ msgstr "Прикрепить шаблон доступа"
 msgid ""
 "Decreasing logical volumes size may corrupt your data! Are you sure you want "
 "to do this?"
-msgstr "Уменьшение размера логического тома может повлечь искажение ваших данных. Вы уверены что хотите сделать это?"
+msgstr ""
+"Уменьшение размера логического тома может повлечь искажение ваших данных. Вы "
+"уверены что хотите сделать это?"
+
+msgid "Dedicated hotspare"
+msgstr "Выделенный hotspare"
 
 msgid "Delete access pattern"
 msgstr "Удалить шаблон доступа"
@@ -62,8 +70,8 @@ msgstr "Редактировать шаблон доступа"
 msgid "Enabled"
 msgstr "Активен"
 
-msgid "Failed to add hotspare disk"
-msgstr "Невозможно добавить hotspare диск"
+msgid "Failed to add dedicated hotspare disk"
+msgstr "Невозможно добавить выделенный hotspare диск"
 
 msgid "Failed to add logical volume"
 msgstr "Невозможно добавить логический том"
@@ -92,8 +100,8 @@ msgstr "Невозможно создать снимок"
 msgid "Failed to delete access pattern"
 msgstr "Невозможно удалить шаблон доступа"
 
-msgid "Failed to delete hotspare disk"
-msgstr "Невозможно удалить hotspare диск"
+msgid "Failed to delete dedicated hotspare disk"
+msgstr "Невозможно удалить выделенный hotspare диск"
 
 msgid "Failed to delete logical disk"
 msgstr "Невозможно удалить логический диск"
@@ -113,7 +121,7 @@ msgstr "Невозможно сохранить конфигурацию"
 msgid "Failed to unbind access pattern"
 msgstr "Невозможно открепить шаблон доступа"
 
-msgid "Hotspare"
+msgid "ID"
 msgstr ""
 
 msgid "IQN"
@@ -158,8 +166,8 @@ msgstr "Модель"
 msgid "Name"
 msgstr "Имя"
 
-msgid "Newly added hotspare disk is bigger than needed"
-msgstr "Добавленный hotspare диск имеет больший размер требуемого"
+msgid "Newly added dedicated hotspare disk is bigger than needed"
+msgstr "Добавленный выделенный hotspare диск имеет больший размер, чем требуется"
 
 msgid "Only single model hard drives should be used"
 msgstr "Жёсткие диски только одной модели желательно должны использоваться"
@@ -202,8 +210,8 @@ msgstr "Только для чтения"
 msgid "Really delete access pattern?"
 msgstr "Действительно удалить шаблон доступа?"
 
-msgid "Really delete hotspare drive?"
-msgstr "Действительно удалить hotspare жёсткий диск?"
+msgid "Really delete dedicated hotspare drive?"
+msgstr "Действительно удалить выделенный hotspare жёсткий диск?"
 
 msgid "Really delete logical drive?"
 msgstr "Действительно удалить логический диск?"
@@ -211,7 +219,8 @@ msgstr "Действительно удалить логический диск?
 msgid ""
 "Really remove logical volume? This will delete all corresponding snapshots "
 "as well!"
-msgstr "Действительно удалить логический том? Это также удалит и связанные снимки"
+msgstr ""
+"Действительно удалить логический том? Это также удалит и связанные снимки"
 
 msgid "Really remove snapshot?"
 msgstr "Действительно удалить снимок?"
@@ -222,8 +231,8 @@ msgstr "Действительно изменить размер логичес�
 msgid "Really resize snapshot?"
 msgstr "Действительно изменить размер снимка?"
 
-msgid "Remove hotspare"
-msgstr "Удалить hotspare"
+msgid "Remove dedicated hotspare"
+msgstr "Удалить выделенный hotspare"
 
 msgid "Remove logical drive"
 msgstr "Удалить логический диск"
