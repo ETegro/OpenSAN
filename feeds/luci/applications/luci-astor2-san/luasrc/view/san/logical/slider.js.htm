@@ -28,7 +28,7 @@ jQuery.noConflict();
 		min: <%= line.logical.volume_group.extent %>,
 		max: <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %>,
 		range: 'min',
-		value: ( <%= line.logical.volume_group.total_mib %> - <%= line.logical.volume_group.allocated_mib %> ) / 2,
+		value: <%= line.logical.volume_group.extent %>,
 		step: <%= line.logical.volume_group.extent %>,
 		slide: function( event, ui ) {
 			$( slider_input_name ).val( ui.value );
