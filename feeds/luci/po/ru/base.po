@@ -191,9 +191,8 @@ msgstr ""
 msgid "Access Point"
 msgstr "Точка доступа"
 
-#, fuzzy
 msgid "Access point (APN)"
-msgstr "Активен"
+msgstr "Точка доступа (APN)"
 
 msgid "Action"
 msgstr ""
@@ -474,11 +473,10 @@ msgstr ""
 msgid "Configuration file"
 msgstr "Файл конфигурации"
 
-#, fuzzy
 msgid ""
 "Configure the local DNS server to use the name servers adverticed by the PPP "
 "peer"
-msgstr "Перед. / Получ."
+msgstr "Сконфигурировать локальный DNS сервер на использование серверов имён сообщённых PPP соединением"
 
 msgid "Configures this mount as overlay storage for block-extroot"
 msgstr ""
@@ -486,9 +484,8 @@ msgstr ""
 msgid "Confirmation"
 msgstr "Подтверждение"
 
-#, fuzzy
 msgid "Connect script"
-msgstr "Ошибок"
+msgstr "Сценарий соединения"
 
 msgid "Connected"
 msgstr ""
@@ -640,9 +637,8 @@ msgstr "Выключено"
 msgid "Discard upstream RFC1918 responses"
 msgstr ""
 
-#, fuzzy
 msgid "Disconnect script"
-msgstr "Создать / Добавить Файрвол-зону"
+msgstr "Сценарий рассоединения"
 
 msgid "Distance Optimization"
 msgstr ""
@@ -1205,9 +1201,8 @@ msgstr "Этот интерфейс не принадлежит ни к одно
 msgid "Limit"
 msgstr "Предел"
 
-#, fuzzy
 msgid "Link"
-msgstr "Связь включена"
+msgstr "Соединение"
 
 msgid "Link On"
 msgstr "Связь включена"
@@ -1350,9 +1345,8 @@ msgstr ""
 msgid "Mode"
 msgstr "Режим"
 
-#, fuzzy
 msgid "Modem device"
-msgstr "Automatic Disconnect"
+msgstr "Модем"
 
 msgid "Monitor"
 msgstr "Monitor"
@@ -1374,9 +1368,8 @@ msgstr ""
 msgid "Mount Point"
 msgstr "Точка присоединения"
 
-#, fuzzy
 msgid "Mount Points"
-msgstr "Точка присоединения"
+msgstr "Точки присоединения"
 
 msgid "Mount Points - Mount Entry"
 msgstr ""
@@ -1578,9 +1571,8 @@ msgstr ""
 msgid "PIN code"
 msgstr "PPPoA Encapsulation"
 
-#, fuzzy
 msgid "PPP Settings"
-msgstr "Настройки"
+msgstr "PPP настройки"
 
 msgid "PPPoA Encapsulation"
 msgstr "PPPoA Encapsulation"
@@ -1632,11 +1624,10 @@ msgstr "Выполнить перезагрузку"
 
 #, fuzzy
 msgid "Physical Settings"
-msgstr "Начальные Установки"
+msgstr "Установки"
 
-#, fuzzy
 msgid "Pkts."
-msgstr "Порты"
+msgstr "Пакетов"
 
 msgid "Please enter your username and password."
 msgstr "Пожалуйста, введите логин и пароль."
@@ -1723,9 +1714,8 @@ msgstr ""
 msgid "Radius-Port"
 msgstr "Radius-Port"
 
-#, fuzzy
 msgid "Radius-Server"
-msgstr "RadiusServer"
+msgstr "RADIUS сервер"
 
 msgid ""
 "Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
@@ -1948,9 +1938,8 @@ msgstr "Сервисы и демоны выполняющие определён
 msgid "Settings"
 msgstr "Настройки"
 
-#, fuzzy
 msgid "Setup wait time"
-msgstr "Трафик"
+msgstr "Время ожидания настройки"
 
 msgid "Shutdown this interface"
 msgstr "Отключить данный интерфейс"
@@ -2350,9 +2339,8 @@ msgstr ""
 msgid "Use as root filesystem"
 msgstr ""
 
-#, fuzzy
 msgid "Use peer DNS"
-msgstr "Перед. / Получ."
+msgstr ""
 
 msgid ""
 "Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</"
@@ -2433,13 +2421,11 @@ msgstr ""
 msgid "Wireless Adapter"
 msgstr ""
 
-#, fuzzy
 msgid "Wireless Network"
-msgstr "Локальная сеть"
+msgstr "Беспроводная сеть"
 
-#, fuzzy
 msgid "Wireless Overview"
-msgstr "Обзор"
+msgstr "Обзор беспроводной сети"
 
 msgid "Wireless Security"
 msgstr ""
