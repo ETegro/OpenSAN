@@ -18,8 +18,8 @@
 %>
 
 <fieldset>
-	<legend><%: Hotspare %></legend>
-	<div class="inline"><%: RAID %> #: </div>
+	<legend><%: Dedicated hotspare %></legend>
+	<div class="inline"><%: RAID %> <%: ID %>: </div>
 	<div class="inline">
 		<select id="san.logical_id_hotspare-<%= hash( line.physical.id ) %>"
 			name="san.logical_id_hotspare-<%= hash( line.physical.id ) %>"
@@ -42,7 +42,7 @@
 		       name="san.submit_logical_hotspare_add-<%= hash( line.physical.id ) %>"
 		       class="icon-add-wide"
 		       type="submit"
-		       title="<%: Add %>"
+		       title="<%: Add dedicated hotspare %>"
 		       value="<%: Add %>" />
 	</div>
 </fieldset>

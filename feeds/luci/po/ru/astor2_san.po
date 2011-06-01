@@ -16,10 +16,10 @@ msgid "Access pattern"
 msgstr "Шаблон доступа"
 
 msgid "Access pattern's name already exists"
-msgstr "Такое имя шаблона доступа уже существует"
+msgstr "Такое название шаблона доступа уже существует"
 
 msgid "Access pattern's name is not set"
-msgstr "Имя шаблона доступа не задано"
+msgstr "Название шаблона доступа не задано"
 
 msgid "Access patterns"
 msgstr "Шаблоны доступа"
@@ -30,14 +30,17 @@ msgstr "Добавить"
 msgid "Add access pattern"
 msgstr "Добавить шаблон доступа"
 
+msgid "Add dedicated hotspare"
+msgstr "Добавить выделенный hotspare"
+
 msgid "Add logical drive"
 msgstr "Добавить логический диск"
 
 msgid "Add logical volume"
-msgstr "Добавить логический раздел"
+msgstr "Добавить логический том"
 
 msgid "Add snapshot"
-msgstr "Добавить snapshot"
+msgstr "Добавить снимок"
 
 msgid "Bind access pattern"
 msgstr "Прикрепить шаблон доступа"
@@ -45,7 +48,12 @@ msgstr "Прикрепить шаблон доступа"
 msgid ""
 "Decreasing logical volumes size may corrupt your data! Are you sure you want "
 "to do this?"
-msgstr "Уменьшение размера логического тома может повлечь искажение ваших данных. Вы уверены что хотите сделать это?"
+msgstr ""
+"Уменьшение размера логического тома может повлечь искажение ваших данных. Вы "
+"уверены что хотите сделать это?"
+
+msgid "Dedicated hotspare"
+msgstr "Выделенный hotspare"
 
 msgid "Delete access pattern"
 msgstr "Удалить шаблон доступа"
@@ -62,58 +70,58 @@ msgstr "Редактировать шаблон доступа"
 msgid "Enabled"
 msgstr "Активен"
 
-msgid "Failed to add hotspare disk"
-msgstr "Не могу добавить hotspare диск"
+msgid "Failed to add dedicated hotspare disk"
+msgstr "Невозможно добавить выделенный hotspare диск"
 
 msgid "Failed to add logical volume"
-msgstr "Не могу добавить логический раздел"
+msgstr "Невозможно добавить логический том"
 
 msgid "Failed to apply iSCSI configuration"
-msgstr "Не могу применить конфигурацию iSCSI"
+msgstr "Невозможно применить конфигурацию iSCSI"
 
 msgid "Failed to bind access pattern"
-msgstr "Не могу прикрепить шаблон доступа"
+msgstr "Невозможно прикрепить шаблон доступа"
 
 msgid "Failed to create PhysicalVolume on logical disk"
-msgstr "Не могу создать PhysicalVolume на логическом диске"
+msgstr "Невозможно создать PhysicalVolume на логическом диске"
 
 msgid "Failed to create VolumeGroup on logical disk"
-msgstr "Не могу создать VolumeGroup на логическом диске"
+msgstr "Невозможно создать VolumeGroup на логическом диске"
 
 msgid "Failed to create access pattern"
-msgstr "Не могу создать шаблон доступа"
+msgstr "Невозможно создать шаблон доступа"
 
 msgid "Failed to create logical disk"
-msgstr "Не могу создать логический диск"
+msgstr "Невозможно создать логический диск"
 
 msgid "Failed to create snapshot"
-msgstr "Не могу создать snapshot"
+msgstr "Невозможно создать снимок"
 
 msgid "Failed to delete access pattern"
-msgstr "Не могу удалить шаблон доступа"
+msgstr "Невозможно удалить шаблон доступа"
 
-msgid "Failed to delete hotspare disk"
-msgstr "Не могу удалить hotspare диск"
+msgid "Failed to delete dedicated hotspare disk"
+msgstr "Невозможно удалить выделенный hotspare диск"
 
 msgid "Failed to delete logical disk"
-msgstr "Не могу удалить логический диск"
+msgstr "Невозможно удалить логический диск"
 
 msgid "Failed to remove logical volume"
-msgstr "Не могу удалить логический раздел"
+msgstr "Невозможно удалить логический том"
 
 msgid "Failed to resize logical volume"
-msgstr "Не могу изменить размер логического раздела"
+msgstr "Невозможно изменить размер логического тома"
 
 msgid "Failed to resize snapshot"
-msgstr "Не могу изменить размер snapshot-а"
+msgstr "Невозможно изменить размер снимка"
 
 msgid "Failed to save config"
-msgstr "Не могу сохранить конфигурацию"
+msgstr "Невозможно сохранить конфигурацию"
 
 msgid "Failed to unbind access pattern"
-msgstr "Не могу открепить шаблон доступа"
+msgstr "Невозможно открепить шаблон доступа"
 
-msgid "Hotspare"
+msgid "ID"
 msgstr ""
 
 msgid "IQN"
@@ -123,7 +131,7 @@ msgid "Incorrect RAID level"
 msgstr "Неправильный уровень RAID"
 
 msgid "Invalid logical volume name"
-msgstr "Неправильное имя логического раздела"
+msgstr "Неправильное название логического тома"
 
 msgid "LUN"
 msgstr ""
@@ -138,16 +146,16 @@ msgid "Logical drives"
 msgstr "Логические диски"
 
 msgid "Logical volume"
-msgstr "Логический раздел"
+msgstr "Логический том"
 
 msgid "Logical volume is not selected"
-msgstr "Логический раздел не выбран"
+msgstr "Логический том не выбран"
 
 msgid "Logical volume name is not set"
-msgstr "Имя логического раздела не выставлено"
+msgstr "Название логического тома не задано"
 
 msgid "Logical volumes"
-msgstr "Логические разделы"
+msgstr "Логические тома"
 
 msgid "MiB"
 msgstr ""
@@ -158,8 +166,8 @@ msgstr "Модель"
 msgid "Name"
 msgstr "Имя"
 
-msgid "Newly added hotspare disk is bigger than needed"
-msgstr "Добавленный hotspare диск имеет больший размер требуемого"
+msgid "Newly added dedicated hotspare disk is bigger than needed"
+msgstr "Добавленный выделенный hotspare диск имеет больший размер, чем требуется"
 
 msgid "Only single model hard drives should be used"
 msgstr "Жёсткие диски только одной модели желательно должны использоваться"
@@ -200,50 +208,49 @@ msgid "Readonly"
 msgstr "Только для чтения"
 
 msgid "Really delete access pattern?"
-msgstr "Правда удалить шаблон доступа?"
+msgstr "Действительно удалить шаблон доступа?"
 
-msgid "Really delete hotspare drive?"
-msgstr "Правда удалить hotspare жёсткий диск?"
+msgid "Really delete dedicated hotspare drive?"
+msgstr "Действительно удалить выделенный hotspare жёсткий диск?"
 
 msgid "Really delete logical drive?"
-msgstr "Правда удалить логический диск?"
+msgstr "Действительно удалить логический диск?"
 
 msgid ""
 "Really remove logical volume? This will delete all corresponding snapshots "
 "as well!"
 msgstr ""
-"Правда удалить логический раздел? Это также удалит и сопутствующие snapshot-"
-"ы!"
+"Действительно удалить логический том? Это также удалит и связанные снимки"
 
 msgid "Really remove snapshot?"
-msgstr "Правда удалить snapshot?"
+msgstr "Действительно удалить снимок?"
 
 msgid "Really resize logical volume?"
-msgstr "Правда изменить размер логического раздела?"
+msgstr "Действительно изменить размер логического тома?"
 
 msgid "Really resize snapshot?"
-msgstr "Правда изменить размер snapshot-а?"
+msgstr "Действительно изменить размер снимка?"
 
-msgid "Remove hotspare"
-msgstr "Удалить hotspare"
+msgid "Remove dedicated hotspare"
+msgstr "Удалить выделенный hotspare"
 
 msgid "Remove logical drive"
 msgstr "Удалить логический диск"
 
 msgid "Remove logical volume"
-msgstr "Удалить логический раздел"
+msgstr "Удалить логический том"
 
 msgid "Remove snapshot"
-msgstr "Удалить snapshot"
+msgstr "Удалить снимок"
 
 msgid "Resize"
 msgstr "Изменить размер"
 
 msgid "Resize logical volume"
-msgstr "Изменить размер логического раздела"
+msgstr "Изменить размер логического тома"
 
 msgid "Resize snapshot"
-msgstr "Изменить размер snapshot-а"
+msgstr "Изменить размер снимка"
 
 msgid "Revision"
 msgstr "Ревизия"
@@ -258,16 +265,16 @@ msgid "Size"
 msgstr "Размер"
 
 msgid "Snapshot"
-msgstr ""
+msgstr "Снимок"
 
 msgid "Snapshot size has to be bigger than it's current size"
-msgstr "Размер snapshot-а должен быть больше своего текущего размера"
+msgstr "Размер снимка должен быть больше своего текущего размера"
 
 msgid "State"
 msgstr "Состояние"
 
 msgid "Take snapshot"
-msgstr "Взять snapshot"
+msgstr "Взять снимок"
 
 msgid "Target driver"
 msgstr "Целевой драйвер"

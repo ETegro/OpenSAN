@@ -19,6 +19,9 @@ msgstr ""
 msgid "Add access pattern"
 msgstr ""
 
+msgid "Add dedicated hotspare"
+msgstr ""
+
 msgid "Add logical drive"
 msgstr ""
 
@@ -36,6 +39,9 @@ msgid ""
 "to do this?"
 msgstr ""
 
+msgid "Dedicated hotspare"
+msgstr ""
+
 msgid "Delete access pattern"
 msgstr ""
 
@@ -51,7 +57,7 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-msgid "Failed to add hotspare disk"
+msgid "Failed to add dedicated hotspare disk"
 msgstr ""
 
 msgid "Failed to add logical volume"
@@ -81,7 +87,7 @@ msgstr ""
 msgid "Failed to delete access pattern"
 msgstr ""
 
-msgid "Failed to delete hotspare disk"
+msgid "Failed to delete dedicated hotspare disk"
 msgstr ""
 
 msgid "Failed to delete logical disk"
@@ -102,7 +108,7 @@ msgstr ""
 msgid "Failed to unbind access pattern"
 msgstr ""
 
-msgid "Hotspare"
+msgid "ID"
 msgstr ""
 
 msgid "IQN"
@@ -147,7 +153,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-msgid "Newly added hotspare disk is bigger than needed"
+msgid "Newly added dedicated hotspare disk is bigger than needed"
 msgstr ""
 
 msgid "Only single model hard drives should be used"
@@ -189,7 +195,7 @@ msgstr ""
 msgid "Really delete access pattern?"
 msgstr ""
 
-msgid "Really delete hotspare drive?"
+msgid "Really delete dedicated hotspare drive?"
 msgstr ""
 
 msgid "Really delete logical drive?"
@@ -209,7 +215,7 @@ msgstr ""
 msgid "Really resize snapshot?"
 msgstr ""
 
-msgid "Remove hotspare"
+msgid "Remove dedicated hotspare"
 msgstr ""
 
 msgid "Remove logical drive"
