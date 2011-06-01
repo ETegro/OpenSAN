@@ -459,16 +459,16 @@ msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Configuration / Apply"
-msgstr ""
+msgstr "Конфигурация / Применить"
 
 msgid "Configuration / Changes"
-msgstr ""
+msgstr "Конфигурация / Изменения"
 
 msgid "Configuration / Revert"
-msgstr ""
+msgstr "Конфигурация / Возвратить"
 
 msgid "Configuration applied."
-msgstr ""
+msgstr "Конфигурация применена."
 
 msgid "Configuration file"
 msgstr "Файл конфигурации"
@@ -1530,10 +1530,10 @@ msgid "Open"
 msgstr ""
 
 msgid "Option changed"
-msgstr ""
+msgstr "Опция изменена"
 
 msgid "Option removed"
-msgstr ""
+msgstr "Опция удалена"
 
 msgid "Options"
 msgstr "Опции"
@@ -1901,10 +1901,10 @@ msgid ""
 msgstr "передано / получено"
 
 msgid "Section added"
-msgstr ""
+msgstr "Секция добавлена"
 
 msgid "Section removed"
-msgstr ""
+msgstr "Секция удалена"
 
 msgid "See \"mount\" manpage for details"
 msgstr ""
@@ -2543,7 +2543,7 @@ msgid "yes"
 msgstr ""
 
 msgid "« Back"
-msgstr ""
+msgstr "« Назад"
 
 #~ msgid ""
 #~ "Also kernel or service logfiles can be viewed here to get an overview "
