@@ -240,13 +240,13 @@ local function einarc_logical_hotspare_add( inputs, data )
 
 	if tonumber( inputs[ "logical_minimal_size-" .. physical_id_hash .. "-" .. hash( tostring( logical_id ) ) ] ) <
 	   tonumber( inputs[ "physical_size-" .. physical_id_hash ] ) then
-		message_error = i18n("Newly added hotspare disk is bigger than needed")
+		message_error = i18n("Newly added dedicated hotspare disk is bigger than needed")
 	end
 
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
 	if not return_code then
-		message_error = i18n("Failed to add hotspare disk") .. ": " .. result
+		message_error = i18n("Failed to add dedicated hotspare disk") .. ": " .. result
 	end
 
 	return index_with_error( message_error )
@@ -266,7 +266,7 @@ local function einarc_logical_hotspare_delete( inputs, data )
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
 	if not return_code then
-		message_error = i18n("Failed to delete hotspare disk") .. ": " .. result
+		message_error = i18n("Failed to delete dedicated hotspare disk") .. ": " .. result
 	end
 	return index_with_error( message_error )
 end
