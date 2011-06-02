@@ -118,7 +118,7 @@ table.matrix div.control {
 table.matrix table.access_pattern_information {
 	clear: both;
 	}
-table.matrix table.access_pattern_information input[ type = "text" ]{
+table.matrix table.access_pattern_information input[ type = "text" ] {
 	width: 100%;
 	}
 
@@ -146,18 +146,28 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	margin: .5em 0;
 	width: 100%;
 	position: relative;
-	border:1px solid #999999;
 	}
 .fillbar .fillbar_background {
-	background-color:#CCCCCC;
 	height: 1.6em;
+	}
+.highlight-border-color-darkgreen .fillbar {
+	border: 1px solid #2A922A;
+	}
+.highlight-border-color-darkblue .fillbar {
+	border: 1px solid #2A2E92;
+	}
+.highlight-border-color-darkgreen .fillbar .fillbar_background {
+	background-color: #7AE368;
+	}
+.highlight-border-color-darkblue .fillbar .fillbar_background {
+	background-color: #93B8F6;
 	}
 .fillbar .fillbar_info {
 	position: absolute;
 	left: 0;
 	top: 0;
 	text-align: center;
-	width:100%;
+	width: 100%;
 	}
 .fillbar .fillbar_text {
 	padding: .2em;
@@ -170,30 +180,36 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 .highlight-right { border-right: 5px solid #00CC00; }
 .highlight-bottom { border-bottom: 5px solid #00CC00; }
 .highlight-left { border-left: 5px solid #00CC00; }
-
-.highlight-color-black { border-color: black; }
-.highlight-color-blue { border-color: blue; }
-.highlight-color-green { border-color: green; }
-.highlight-color-orange { border-color: orange; }
-.highlight-color-red { border-color: red; }
-.highlight-color-yellow { border-color: yellow; }
+.highlight-border-color-darkgreen { border-color: #2A922A; }
+.highlight-border-color-darkblue { border-color: #2A2E92; }
 
 /* Physicals */
-.physical-background-state-allocated { background-color: #99FF99; }
+.physical-background-color-lightgreen { background-color: #B6F7AB; }
+.physical-background-color-lightblue { background-color: #BCD2FB; }
+.physical-background-color-green { background-color: #7AE368; }
+.physical-background-color-blue { background-color: #93B8F6; }
+/* Physicals states */
 .physical-background-state-failed { background-color: #FF2211; }
 .physical-background-state-free { background-color: #CCCCCC; }
-.physical-background-state-hotspare { background-color: #FFCC22; }
 
 /* Logicals */
-.logical-background-state-normal { background-color: #99FF99; }
-.logical-background-state-degraded { background-color: #FF2211; }
-.logical-background-state-initializing { background-color: #EEFF44; }
-.logical-background-state-rebuilding { background-color: #FFCC22; }
+.logical-background-color-lightgreen { background-color: #B6F7AB; }
+.logical-background-color-lightblue { background-color: #BCD2FB; }
+/* Logicals states*/
+.logical-state-degraded { background-color: #FF2211; }
+.logical-state-initializing { background-color: #EEFF44; }
+.logical-state-rebuilding { background-color: #FFCC22; }
 
 /* Logicals volumes */
-.logical_volume-background-color-lime { background-color: lime; }
-.logical_volume-background-color-orange { background-color: orange; }
-.logical_volume-background-color-yellow { background-color: yellow; }
+.logical_volume-background-color-lightgreen { background-color: #B6F7AB; }
+.logical_volume-background-color-green { background-color: #7AE368; }
+.logical_volume-background-color-lightblue { background-color: #BCD2FB; }
+.logical_volume-background-color-blue { background-color: #93B8F6; }
 
 /* Access patterns */
+.access_pattern-background-color-lightgreen { background-color: #B6F7AB; }
+.access_pattern-background-color-green { background-color: #7AE368; }
+.access_pattern-background-color-lightblue { background-color: #BCD2FB; }
+.access_pattern-background-color-blue { background-color: #93B8F6; }
+/* Access patterns states */
 .access_pattern-disabled { background-color: #CCCCCC; }
