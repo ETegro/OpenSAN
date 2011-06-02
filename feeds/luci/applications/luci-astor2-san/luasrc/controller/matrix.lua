@@ -265,7 +265,7 @@ end
 
 function M.filter_alternation_border_colors( matrix, colors_array )
 	if not colors_array then
-		colors_array = { "black", "blue", "green", "orange", "red", "yellow" }
+		colors_array = { "green", "blue" }
 	end
 	local color_number = 1
 	local lines = matrix.lines
