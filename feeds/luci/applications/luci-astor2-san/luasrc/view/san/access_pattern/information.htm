@@ -17,12 +17,18 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<table>
+<table class="access_pattern_information">
 	<tbody>
 		<% if line.access_pattern.filename then %>
 			<tr>
 				<td><%: IQN %>:</td>
-				<td><%= line.access_pattern:iqn() %></td>
+				<td>
+					<input name="<%= escape_html( line.access_pattern.name ) %>"
+					       type="text"
+					       class="noborder"
+				               title="<%= line.access_pattern:iqn() %>"
+				               value="<%= line.access_pattern:iqn() %>" />
+				</td>
 			</tr>
 		<% end %>
 	</tbody>
