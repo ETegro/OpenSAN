@@ -484,6 +484,8 @@ function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 	local logicals_for_serialization = {}
+
+	lvm.restore()
 	local physical_volumes = lvm.PhysicalVolume.list()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
