@@ -118,7 +118,7 @@ table.matrix div.control {
 table.matrix table.access_pattern_information {
 	clear: both;
 	}
-table.matrix table.access_pattern_information input[ type = "text" ]{
+table.matrix table.access_pattern_information input[ type = "text" ] {
 	width: 100%;
 	}
 
