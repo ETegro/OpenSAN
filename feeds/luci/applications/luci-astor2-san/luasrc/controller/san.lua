@@ -526,11 +526,11 @@ local function lvm_logical_volume_add( inputs, data )
 		volume_group_found = lvm.VolumeGroup.list( { physical_volume } )[1]
 	end
 
-	assert( volume_group,
+	assert( volume_group_found,
 	        "unable to find corresponding volume group" )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-	                                   volume_group,
+	                                   volume_group_found,
 	                                   logical_volume_name,
 	                                   logical_volume_size )
 	if not return_code then
