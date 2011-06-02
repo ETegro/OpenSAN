@@ -120,7 +120,22 @@ function M.overall( data )
 
 		-- Fillup logical volumes
 		local logical_volume_devices = common.keys( logical.logical_volumes or {} )
-		table.sort( logical_volume_devices )
+		table.sort(
+			logical_volume_devices,
+			function( a, b )
+				local snapshot_regexp = "(.+).%d%d%d%d.%d%d.%d%d.%d%d.%d%d.%d%d"
+				local a_snapshot = string.match( a, snapshot_regexp )
+				local b_snapshot = string.match( b, snapshot_regexp )
+
+				if a_snapshot == b then return false end
+				if a == b_snapshot then return true end
+				if a_snapshot and not b_snapshot then return a_snapshot < b end
+				if not a_snapshot and b_snapshot then return a < b_snapshot end
+
+				return a < b
+			end
+		)
+
 		local logical_volume_rowspan = lines_quantity / logical_volumes_quantity
 		for i, logical_volume_device in ipairs( logical_volume_devices ) do
 			local offset = current_line + ( i - 1 ) * logical_volume_rowspan
