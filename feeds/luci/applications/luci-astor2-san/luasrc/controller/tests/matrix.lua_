@@ -1218,7 +1218,7 @@ TestMatrix = {}
 
 		assertEquals( got[1].logical_volume.name, "foo" )
 		assertEquals( got[2].logical_volume.name, "foo_2011-06-13_13-13-13" )
-		assertEquals( got[2].logical_volume.name, "foo10" )
+		assertEquals( got[3].logical_volume.name, "foo10" )
 	end
 
 
