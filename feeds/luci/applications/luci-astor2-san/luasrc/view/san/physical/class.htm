@@ -19,5 +19,11 @@
 
 <% highlight = line.physical.highlight %>
 <%+san/class_highlight%>
-<% if highlight.color then %>physical-background-color-light<%= highlight.color %><% end %>
-physical-background-state-<%= line.physical.state %>
+<% if highlight.color then %>
+	physical-background-color-light<%= highlight.color %>
+<% end %>
+<% if line.physical.state == "hotspare" then %>
+	physical-background-color-<%= highlight.color %>
+<% else %>
+	physical-background-state-<%= line.physical.state %>
+<% end %>

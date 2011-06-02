@@ -176,10 +176,12 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 /* Physicals */
 .physical-background-color-lightgreen { background-color: #B6F7AB; }
 .physical-background-color-lightblue { background-color: #BCD2FB; }
+.physical-background-color-green { background-color: #7AE368; }
+.physical-background-color-blue { background-color: #93B8F6; }
 /*.physical-background-state-allocated { background-color: #99FF99; }*/
 .physical-background-state-failed { background-color: #FF2211; }
 .physical-background-state-free { background-color: #CCCCCC; }
-.physical-background-state-hotspare { background-color: #FFCC22; }
+/*.physical-background-state-hotspare { background-color: #FFCC22; }*/
 
 /* Logicals */
 .logical-background-color-lightgreen { background-color: #B6F7AB; }
