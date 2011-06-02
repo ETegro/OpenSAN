@@ -120,6 +120,7 @@ table.matrix table.access_pattern_information {
 	}
 table.matrix table.access_pattern_information input[ type = "text" ] {
 	width: 100%;
+	background-color: inherit;
 	}
 
 /* Bottom table with forms */
