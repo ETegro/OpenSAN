@@ -172,7 +172,7 @@ local function einarc_logical_add( inputs, drives, data )
 
 	lvm.restore()
 
-	for _, volume_group in ipairs( data.volume_groups ) do
+	for _, volume_group in ipairs( lvm.VolumeGroup.list( lvm.PhysicalVolume.list() ) ) do
 		local is_not_busy = true
 		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
 			for _, logical in ipairs( data.logicals ) do
