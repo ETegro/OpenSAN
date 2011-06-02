@@ -298,7 +298,7 @@ end
 
 function M.filter_highlight_snapshots( matrix, colors_array )
 	if not colors_array then
-		colors_array = { "lime", "yellow", "orange" }
+		colors_array = { "normal_color", "light_color" }
 	end
 	local color_number = 1
 	local lines = matrix.lines
@@ -534,7 +534,9 @@ function M.caller()
 	for _,filter in ipairs( FILTERS ) do
 		matrix = filter( matrix )
 	end
+--	assert( temp, common.ppt( matrix ) )
 	return matrix
 end
+
 
 return M
