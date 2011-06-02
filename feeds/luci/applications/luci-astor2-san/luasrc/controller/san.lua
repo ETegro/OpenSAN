@@ -192,13 +192,17 @@ local function einarc_logical_add( inputs, drives, data )
 	end
 
 	for _, logical in pairs( einarc.Logical.list() ) do
-		if #data.logicals == 0 then
+		if #common.keys( data.logicals ) == 0 then
 			lvm.PhysicalVolume.prepare( logical.device )
 		end
-		for _, logical_previous in ipairs( data.logicals ) do
-			if logical_previous.device ~= logical.device then
-				lvm.PhysicalVolume.prepare( logical.device )
+		local preparation_need = true
+		for _, logical_previous in pairs( data.logicals ) do
+			if logical_previous.device == logical.device then
+				preparation_need = false
 			end
+		end
+		if preparation_need then
+			lvm.PhysicalVolume.prepare( logical.device )
 		end
 	end
 
