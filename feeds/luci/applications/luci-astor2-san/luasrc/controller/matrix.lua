@@ -280,7 +280,7 @@ end
 
 function M.filter_alternation_border_colors( matrix, colors_array )
 	if not colors_array then
-		colors_array = { "black", "blue", "green", "orange", "red", "yellow" }
+		colors_array = { "green", "blue" }
 	end
 	local color_number = 1
 	local lines = matrix.lines
@@ -313,7 +313,7 @@ end
 
 function M.filter_highlight_snapshots( matrix, colors_array )
 	if not colors_array then
-		colors_array = { "lime", "yellow", "orange" }
+		colors_array = { "normal_color", "light_color" }
 	end
 	local color_number = 1
 	local lines = matrix.lines
@@ -330,6 +330,31 @@ function M.filter_highlight_snapshots( matrix, colors_array )
 			if #line.logical_volume.snapshots ~= 0 then
 				for _, snapshot in ipairs( line.logical_volume.snapshots ) do
 					snapshot.highlight.background_color = color
+				end
+			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_highlight_accesss_patterns( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical_volume and
+		   not line.logical_volume.is_snapshot() then
+			if line.logical_volume.access_patterns then
+				for _, access_pattern in pairs( line.logical_volume.access_patterns ) do
+					access_pattern.highlight.background_color = line.logical_volume.highlight.background_color
+				end
+			end
+			if #line.logical_volume.snapshots ~= 0 then
+				for _, snapshot in ipairs( line.logical_volume.snapshots ) do
+					--snapshot.highlight.background_color = color
+					if snapshot.access_patterns then
+						for _, access_pattern in pairs( snapshot.access_patterns ) do
+							access_pattern.highlight.background_color = snapshot.highlight.background_color
+						end
+					end
 				end
 			end
 		end
@@ -541,6 +566,7 @@ function M.caller()
 		M.filter_borders_highlight,
 		M.filter_alternation_border_colors,
 		M.filter_highlight_snapshots,
+		M.filter_highlight_accesss_patterns,
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
