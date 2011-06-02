@@ -171,12 +171,13 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 .highlight-bottom { border-bottom: 5px solid #00CC00; }
 .highlight-left { border-left: 5px solid #00CC00; }
 
-.highlight-color-black { border-color: black; }
-.highlight-color-blue { border-color: blue; }
-.highlight-color-green { border-color: green; }
-.highlight-color-orange { border-color: orange; }
-.highlight-color-red { border-color: red; }
-.highlight-color-yellow { border-color: yellow; }
+/* light color */
+/* normal colors */
+.highlight-color-green { border-color: #00FF00; }
+.highlight-color-blue { border-color: #0000FF; }
+/* dark colors */
+.highlight-border-color-darkgreen { border-color: #2A922A; }
+.highlight-border-color-darkblue { border-color: #2A2E92; }
 
 /* Physicals */
 .physical-background-state-allocated { background-color: #99FF99; }
