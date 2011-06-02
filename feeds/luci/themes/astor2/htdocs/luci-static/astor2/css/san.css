@@ -24,6 +24,9 @@
 ul, li {
 	list-style: none;
 	}
+table {
+	width: 100%;
+	}
 
 /* Classes */
 .bold {
@@ -111,18 +114,20 @@ table.matrix div.control {
 	float: right;
 	}
 
-/* Bottom table with forms */
-table.bottom_forms {
+/* AccessPattern */
+table.matrix table.access_pattern_information {
+	clear: both;
+	}
+table.matrix table.access_pattern_information input[ type = "text" ]{
 	width: 100%;
 	}
+
+/* Bottom table with forms */
 table.bottom_forms > tbody > tr > td {
 	width: 25%;
 	}
 table.bottom_forms fieldset div.form input[ type = "submit" ] {
 	float: right;
-	}
-table.bottom_forms fieldset table.form {
-	width: 100%;
 	}
 table.bottom_forms fieldset {
 	padding: .5em;
