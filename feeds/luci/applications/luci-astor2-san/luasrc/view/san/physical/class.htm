@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-physical-background-state-<%= line.physical.state %>
-
 <% highlight = line.physical.highlight %>
 <%+san/class_highlight%>
+<% if highlight.color then %>physical-background-color-light<%= highlight.color %><% end %>
+physical-background-state-<%= line.physical.state %>
