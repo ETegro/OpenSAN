@@ -532,6 +532,13 @@ local function lvm_logical_volume_add( inputs, data )
 	assert( volume_group_found,
 	        "unable to find corresponding volume group" )
 
+	for _, logical_volume in ipairs( data.logical_volumes ) do
+		if logical_volume.name == logical_volume_name and
+		   logical_volume.volume_group == volume_group_found.name then
+			return index_with_error( i18n("Logical disk can not contain equally named logical volumes") )
+		end
+	end
+
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
 	                                   volume_group_found,
 	                                   logical_volume_name,
