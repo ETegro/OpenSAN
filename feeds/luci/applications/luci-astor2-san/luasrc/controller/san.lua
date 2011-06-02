@@ -192,13 +192,17 @@ local function einarc_logical_add( inputs, drives, data )
 	end
 
 	for _, logical in pairs( einarc.Logical.list() ) do
-		if #data.logicals == 0 then
+		if #common.keys( data.logicals ) == 0 then
 			lvm.PhysicalVolume.prepare( logical.device )
 		end
-		for _, logical_previous in ipairs( data.logicals ) do
-			if logical_previous.device ~= logical.device then
-				lvm.PhysicalVolume.prepare( logical.device )
+		local preparation_need = true
+		for _, logical_previous in pairs( data.logicals ) do
+			if logical_previous.device == logical.device then
+				preparation_need = false
 			end
+		end
+		if preparation_need then
+			lvm.PhysicalVolume.prepare( logical.device )
 		end
 	end
 
@@ -531,6 +535,13 @@ local function lvm_logical_volume_add( inputs, data )
 
 	assert( volume_group_found,
 	        "unable to find corresponding volume group" )
+
+	for _, logical_volume in ipairs( data.logical_volumes ) do
+		if logical_volume.name == logical_volume_name and
+		   logical_volume.volume_group == volume_group_found.name then
+			return index_with_error( i18n("Logical disk can not contain equally named logical volumes") )
+		end
+	end
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
 	                                   volume_group_found,

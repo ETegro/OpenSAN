@@ -123,6 +123,9 @@ msgstr ""
 msgid "LUN"
 msgstr ""
 
+msgid "Logical disk can not contain equally named logical volumes"
+msgstr ""
+
 msgid "Logical disk is not selected"
 msgstr ""
 
