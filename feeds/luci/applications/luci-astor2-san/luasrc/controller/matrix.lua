@@ -353,7 +353,7 @@ local function filter_mib2tib( matrix )
 				line.logical.volume_group.total = M.mib2tib( line.logical.volume_group.total )
 			else
 				line.logical.volume_group = {}
-				line.logical.volume_group.extent = 4
+				line.logical.volume_group.extent = lvm.VolumeGroup.PE_DEFAULT_SIZE
 				line.logical.volume_group.allocated_mib = 0
 				line.logical.volume_group.allocated = 0
 				line.logical.volume_group.total_mib = line.logical.capacity_mib

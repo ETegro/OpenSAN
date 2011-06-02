@@ -103,6 +103,40 @@ local function is_valid_raid_configuration( raid_level, drives )
 	return is_valid, VALIDATORS[ raid_level ].message
 end
 
+--[[
++ - - - - - - - - - - - - - - - - - +
+' Creation of RAID                  '
+'                                   '
+'                                   '
+'                                   '
+'                                   '
+'   H                               '
+'   H                               '
+'   v                               '
+' +-------------------------------+ '
+' |     Stop all non-RAID VGs     | '
+' +-------------------------------+ '
+'   |                               '
+'   |                               '
+'   v                               '
+' +-------------------------------+ '
+' |          Create RAID          | '
+' +-------------------------------+ '
+'   |                               '
+'   |                               '
+'   v                               '
+' +-------------------------------+ '
+' | prepare( newly created RAID ) | '
+' +-------------------------------+ '
+'   H                               '
+'   H                               '
+'   v                               '
+'                                   '
+'                                   '
+'                                   '
+'                                   '
++ - - - - - - - - - - - - - - - - - +
+]]
 local function einarc_logical_add( inputs, drives, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -121,24 +155,51 @@ local function einarc_logical_add( inputs, drives, data )
 	end
 
 	local is_valid, message = is_valid_raid_configuration( raid_level, drives )
-	if is_valid then
-		-- Check that there are no different models of hard drives for adding
-		local found_models = {}
-		for _, physical in pairs( data.physicals ) do
-			if common.is_in_array( physical.id, drives ) then
-				found_models[ physical.model ] = 1
+	if not is_valid then
+		return index_with_error( message )
+	end
+
+	-- Check that there are no different models of hard drives for adding
+	local found_models = {}
+	for _, physical in pairs( data.physicals ) do
+		if common.is_in_array( physical.id, drives ) then
+			found_models[ physical.model ] = 1
+		end
+	end
+	if #common.keys( found_models ) ~= 1 then
+		message_error = i18n("Only single model hard drives should be used")
+	end
+
+	lvm.restore()
+
+	for _, volume_group in ipairs( lvm.VolumeGroup.list( lvm.PhysicalVolume.list() ) ) do
+		local is_not_busy = true
+		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
+			for _, logical in ipairs( data.logicals ) do
+				if logical.device == physical_volume.device then
+					is_not_busy = false
+				end
 			end
 		end
-		if #common.keys( found_models ) ~= 1 then
-			message_error = i18n("Only single model hard drives should be used")
+		if is_not_busy then
+			lvm.VolumeGroup.disable( volume_group )
 		end
+	end
 
-		local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
-		if not return_code then
-			return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
+	local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
+	if not return_code then
+		return index_with_error( i18n("Failed to create logical disk") .. ": " .. result )
+	end
+
+	for _, logical in pairs( einarc.Logical.list() ) do
+		if #data.logicals == 0 then
+			lvm.PhysicalVolume.prepare( logical.device )
 		end
-	else
-		message_error = message
+		for _, logical_previous in ipairs( data.logicals ) do
+			if logical_previous.device ~= logical.device then
+				lvm.PhysicalVolume.prepare( logical.device )
+			end
+		end
 	end
 
 	return index_with_error( message_error )
@@ -163,6 +224,58 @@ local function parse_inputs_by_re( inputs, re )
 	return nil
 end
 
+--[[
+                    + - - - - - - - - - - +
+                    '                     '
+                    '                     '
+                    '                     '
+                    '                     '
+                    '   H                 '
+                    '   H                 '
+                    '   H                 '
+                    '   H                   - - - -+
+                    '   v                          '
+                    ' +-----------------+          '
+                    ' | Does PV exist?  | ---+     '
+                    ' +-----------------+    |     '
+                    '   |                    |     '
+                    '   | YES                |     '
+                    '   |                    |     '
++ - - - - - - - - -     |                    |     '
+' Deletion of RAID      |                    |     '
+'                       v                    |     '
+'                     +-----------------+    |     '
+'   +---------------- | Does VG exist?  |    |     '
+'   |                 +-----------------+    |     '
+'   |                   |                    | NO  '
+'   |                   | YES                |     '
+'   |                   v                    |     '
+'   |                 +-----------------+    |     '
+'   | NO              |     Stop VG     |    |     '
+'   |                 +-----------------+    |     '
+'   |                   |                    |     '
+'   |                   |                    |     '
+'   |                   v                    |     '
+'   |                 +-----------------+    |     '
+'   +---------------> | prepare( RAID ) | <--+     '
+'                     +-----------------+          '
+'                       |                          '
++ - - - - - - - - -     |                   - - - -+
+                    '   |                 '
+                    '   |                 '
+                    '   v                 '
+                    ' +-----------------+ '
+                    ' |   Delete RAID   | '
+                    ' +-----------------+ '
+                    '   H                 '
+                    '   H                 '
+                    '   v                 '
+                    '                     '
+                    '                     '
+                    '                     '
+                    '                     '
+                    + - - - - - - - - - - +
+]]
 local function einarc_logical_delete( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -170,8 +283,6 @@ local function einarc_logical_delete( inputs, data )
 	local logical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_delete.(",hashre,")"} )
 	assert( logical_id_hash, "unable to parse out logical's id" )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
-
-	-- TODO: check that logical drive does not contain any LVM's LogicalVolumes
 
 	-- Retreive corresponding logical drive object
 	local logical = nil
@@ -182,34 +293,19 @@ local function einarc_logical_delete( inputs, data )
 	end
 	assert( logical, "unable to find corresponding logical" )
 
-	-- Find out corresponding PhysicalVolume
-	local physical_volume = nil
-	for _, physical_volume_obj in ipairs( data.physical_volumes ) do
-		if physical_volume_obj.device == logical.device then
-			physical_volume = physical_volume_obj
-		end
-	end
-
-	if physical_volume then
-		-- Let's clean out VolumeGroup on it at first
-		-- TODO: determine if it has VolumeGroup itself
-		local volume_group = nil
-		for _, volume_group_in_data in ipairs( data.volume_groups ) do
-			for _, physical_volume_in_data in ipairs( volume_group_in_data.physical_volumes ) do
-				if physical_volume_in_data.device == physical_volume.device then
-					volume_group = volume_group_in_data
-				end
+	for _, volume_group in ipairs( data.volume_groups ) do
+		local need_to_stop = false
+		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
+			if physical_volume.device == logical.device then
+				need_to_stop = true
 			end
 		end
-		assert( volume_group, "unable to find corresponding volume group" )
-		lvm.VolumeGroup.remove( { name = volume_group.name } )
-
-		-- And clean out PhysicalVolume
-		lvm.PhysicalVolume.remove( { device = physical_volume.device } )
+		if need_to_stop then
+			lvm.VolumeGroup.disable( volume_group )
+		end
 	end
 
-	lvm.VolumeGroup.rescan()
-	lvm.PhysicalVolume.rescan()
+	lvm.PhysicalVolume.prepare( logical.device )
 
 	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
@@ -278,6 +374,80 @@ local function find_volume_group_name_in_data_by_hash( volume_group_name_hash, d
 	return find_by_hash( volume_group_name_hash, common.keys( common.unique_keys( "name", data.volume_groups ) ) )
 end
 
+--[[
+         +- - - - - - - - - - - - - - -+
+         ' Creation of LogicalVolume   '
+         '                             '
+         '                             '
+         '                             '
+         '                             '
+         '   H                         '
+         '   H                         '
+         '   H                         '
+         '   H                          - - - - -+
+         '   v                                   '
+         ' +-------------------------+           '
+         ' |     Does PV exist?      | ---+      '
+         ' +-------------------------+    |      '
+         '   |                            |      '
+         '   | YES                        |      '
+         '   |                            |      '
++ - - - -    |                            |      '
+'            v                            |      '
+'          +-------------------------+    |      '
+'   +----- |     Does VG exist?      |    |      '
+'   |      +-------------------------+    |      '
+'   |        |                            |      '
+'   |        | YES                        |      '
+'   |        |                            |      '
+'   |        |                            |      +- - - +
+'   |        v                            |             '
+'   |      +-------------------------+    |             '
+'   |      |     Does LV exist?      | ---+---------+   '
+'   |      +-------------------------+    |         |   '
+'   | NO     |                            |         |   '
+'   |        | NO                         |         |   '
+'   |        v                            |         |   '
+'   |      +-------------------------+    |         |   '
+'   |      |         Stop VG         |    | NO      |   '
+'   |      +-------------------------+    |         |   '
+'   |        |                            |         |   '
+'   |        |                            |         |   '
+'   |        v                            |         |   '
+'   |      +-------------------------+    |         |   '
+'   +----> |     prepare( RAID )     | <--+         |   '
+'          +-------------------------+              |   '
+'            |                                      |   '
++ - - - -    |                                      |   '
+         '   |                                      |   '
+         '   |                                      |   '
+         '   v                                      |   '
+         ' +-------------------------+              |   '
+         ' |        Create PV        |              |   '
+         ' +-------------------------+              |   '
+         '   |                                      |   '
+         '   |                                      |   '
+         '   v                                      |   '
+         ' +-------------------------+              |   '
+         ' |        Create VG        |              |   '
+         ' +-------------------------+              |   '
+         '   |                                      |   '
+         '   |                                      |   '
+         '   v                                      |   '
+         ' +-------------------------+   YES        |   '
+         ' |        Create LV        | <------------+   '
+         ' +-------------------------+                  '
+         '   H                                          '
+         '   H                          - - - - - - - - +
+         '   H                         '
+         '   H                         '
+         '   v                         '
+         '                             '
+         '                             '
+         '                             '
+         '                             '
+         +- - - - - - - - - - - - - - -+
+]]
 local function lvm_logical_volume_add( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -299,51 +469,55 @@ local function lvm_logical_volume_add( inputs, data )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
 
+	local device = data.logicals[ logical_id ].device
+	lvm.restore()
+
 	local return_code = nil
 	local result = nil
 
-	local function find_physical_volume_by_device( device, physical_volumes )
-		if not physical_volumes then
-			physical_volumes = lvm.PhysicalVolume.list()
-		end
-		for _, physical_volume in ipairs( physical_volumes ) do
+	local volume_group_found = nil
+	for _, volume_group in ipairs( data.volume_groups ) do
+		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
 			if physical_volume.device == device then
-				return physical_volume
+				volume_group_found = volume_group
 			end
 		end
-		return nil
 	end
 
-	local volume_group = nil
-	local physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device,
-	                                                                 data.physical_volumes )
-	if physical_volume_existing then
-		if physical_volume_existing.volume_group and
-		   not lvm.PhysicalVolume.is_orphan( physical_volume_existing ) then
-			for _, volume_group_inner in ipairs( data.volume_groups ) do
-				if volume_group_inner.name == physical_volume_existing.volume_group then
-					volume_group = volume_group_inner
-				end
-			end
-		else
-			return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume_existing } )
-			if return_code then
-				lvm.PhysicalVolume.rescan()
-				lvm.VolumeGroup.rescan()
-			else
-				return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
+	local create_from_scratch = true
+	if volume_group_found then
+		for _, logical_volume in ipairs( data.logical_volumes ) do
+			if logical_volume.volume_group == volume_group_found.name then
+				create_from_scratch = false
 			end
 		end
-	else
-		return_code, result = pcall( lvm.PhysicalVolume.create, data.logicals[ logical_id ].device )
+		if create_from_scratch then
+			lvm.VolumeGroup.disable( volume_group_found )
+		end
+	end
+
+	if create_from_scratch then
+		local function find_physical_volume_by_device( device, physical_volumes )
+			if not physical_volumes then
+				physical_volumes = lvm.PhysicalVolume.list()
+			end
+			for _, physical_volume in ipairs( physical_volumes ) do
+				if physical_volume.device == device then
+					return physical_volume
+				end
+			end
+			return nil
+		end
+
+		return_code, result = pcall( lvm.PhysicalVolume.create, device )
 		if not return_code then
 			return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
 		end
 		lvm.PhysicalVolume.rescan()
 
-		physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device )
+		local physical_volume = find_physical_volume_by_device( device )
 
-		return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume_existing } )
+		return_code, result = pcall( lvm.VolumeGroup.create, { physical_volume } )
 		if return_code then
 			lvm.PhysicalVolume.rescan()
 			lvm.VolumeGroup.rescan()
@@ -351,17 +525,15 @@ local function lvm_logical_volume_add( inputs, data )
 			return index_with_error( i18n("Failed to create VolumeGroup on logical disk") .. ": " .. result )
 		end
 
-		physical_volume_existing = find_physical_volume_by_device( data.logicals[ logical_id ].device )
+		physical_volume = find_physical_volume_by_device( device )
+		volume_group_found = lvm.VolumeGroup.list( { physical_volume } )[1]
 	end
 
-	if not volume_group then
-		volume_group = lvm.VolumeGroup.list( { physical_volume_existing } )[1]
-	end
-	assert( volume_group,
-		"unable to find corresponding volume group" )
+	assert( volume_group_found,
+	        "unable to find corresponding volume group" )
 
 	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-	                                   volume_group,
+	                                   volume_group_found,
 	                                   logical_volume_name,
 	                                   logical_volume_size )
 	if not return_code then
@@ -374,6 +546,38 @@ local function find_logical_volume_name_in_data_by_hash( logical_volume_name_has
 	return find_by_hash( logical_volume_name_hash, common.keys( common.unique_keys( "name", data.logical_volumes ) ) )
 end
 
+--[[
+                      + - - - - - - - - - - - - - - +
+                      ' Deletion of LogicalVolume   '
+                      '                             '
+                      '                             '
+                      '                             '
+                      '                             '
+                      '   H                         '
+                      '   H                         '
+                      '   H                         '
++ - - - - - - - - - -     H                         '
+'                         v                         '
+' +-----------+  NO     +-------------------------+ '
+' | Delete LV | <------ |     Is it last LV?      | '
+' +-----------+         +-------------------------+ '
+'                         |                         '
++ - - - - - - - - - -     |                         '
+                      '   |                         '
+                      '   | YES                     '
+                      '   v                         '
+                      ' +-------------------------+ '
+                      ' |         Stop VG         | '
+                      ' +-------------------------+ '
+                      '   |                         '
+                      '   |                         '
+                      '   v                         '
+                      ' +-------------------------+ '
+                      ' |     prepare( RAID )     | '
+                      ' +-------------------------+ '
+                      '                             '
+                      + - - - - - - - - - - - - - - +
+]]
 local function lvm_logical_volume_remove( inputs, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -385,12 +589,35 @@ local function lvm_logical_volume_remove( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local return_code, result = pcall( lvm.LogicalVolume.remove,
-	                                   { volume_group = { name = volume_group_name },
-	                                     name = logical_volume_name } )
-	if not return_code then
-		message_error = i18n("Failed to remove logical volume") .. ": " .. result
+	local is_last = true
+	for _, logical_volume in ipairs( data.logical_volumes ) do
+		if logical_volume.volume_group == volume_group_name and
+		   logical_volume.name ~= logical_volume_name then
+			is_last = false
+		end
 	end
+
+	local return_code = nil
+	local result = nil
+	if is_last then
+		for _, volume_group in ipairs( data.volume_groups ) do
+			if volume_group.name == volume_group_name then
+				lvm.VolumeGroup.disable( volume_group )
+				for _, physical_volume in ipairs( volume_group.physical_volumes ) do
+					lvm.PhysicalVolume.prepare( physical_volume.device )
+				end
+			end
+		end
+	else
+		local return_code, result = pcall( lvm.LogicalVolume.remove,
+						   { volume_group = { name = volume_group_name },
+						     name = logical_volume_name } )
+		if not return_code then
+			return index_with_error( i18n("Failed to remove logical volume") .. ": " .. result )
+		end
+
+	end
+
 	return index_with_error( message_error )
 end
 
