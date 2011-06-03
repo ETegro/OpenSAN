@@ -70,7 +70,7 @@ table {
 	background-image: url( '../../resources/cbi/add.gif' );
 	}
 .icon-unbind {
-	background-image: url( '../../resources/cbi/up.gif' );
+	background-image: url( '../../resources/cbi/down.gif' );
 	}
 .icon-remove {
 	background-image: url( '../../resources/cbi/remove.gif' );
@@ -92,6 +92,9 @@ table {
 	}
 
 /* Main table */
+table.matrix {
+	border-width: 0;
+	}
 table.matrix > tbody > tr > td,
 table.matrix fieldset {
 	padding: .5em;
@@ -120,6 +123,7 @@ table.matrix table.access_pattern_information {
 	}
 table.matrix table.access_pattern_information input[ type = "text" ] {
 	width: 100%;
+	background-color: inherit;
 	}
 
 /* Bottom table with forms */
