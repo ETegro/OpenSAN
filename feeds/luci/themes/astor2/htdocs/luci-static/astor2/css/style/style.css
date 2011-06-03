@@ -10,6 +10,7 @@ html {
 body {
 	color: #ffffff;
 	background-color: #4a6b7c;
+	background-color: #4a6b7c;
 	background-position: bottom center;
 	background-repeat: repeat-x;
 	font-family: Verdana, Arial, sans-serif;
@@ -44,7 +45,7 @@ ul.tabmenu {
 div.tabmenu2 {
 	background-color: #FFF;
 /*	background-image: url(tabbg.png);*/
-	background-repeat: repeat-x;
+/*	background-repeat: repeat-x;*/
 	margin-top: -1px;
 	border: 1px solid #444444;
 	border-bottom: none;
@@ -55,7 +56,7 @@ div.tabmenu4,
 div.tabmenu5 {
 	background-color: #FFF;
 /*	background-image: url(tabbg.png);*/
-	background-repeat: repeat-x;
+/*	background-repeat: repeat-x;*/
 	border: none;
 }
 
