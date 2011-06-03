@@ -80,15 +80,12 @@ table {
 	}
 .icon-fieldadd {
 	background-image: url( '../../resources/cbi/fieldadd.gif' );
-	text-decoration: none;
 	}
 .icon-reload {
 	background-image: url( '../../resources/cbi/reload.gif' );
-	text-decoration: none;
 	}
 .icon-edit {
 	background-image: url( '../../resources/cbi/edit.gif' );
-	text-decoration: none;
 	}
 
 /* Main table */
