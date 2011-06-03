@@ -42,7 +42,7 @@ ul.tabmenu {
 }
 
 div.tabmenu2 {
-	background-color: #AAAAAA;
+	background-color: #FFF;
 /*	background-image: url(tabbg.png);*/
 	background-repeat: repeat-x;
 	margin-top: -1px;
@@ -53,7 +53,7 @@ div.tabmenu2 {
 div.tabmenu3,
 div.tabmenu4,
 div.tabmenu5 {
-	background-color: #AAAAAA;
+	background-color: #FFF;
 /*	background-image: url(tabbg.png);*/
 	background-repeat: repeat-x;
 	border: none;
