@@ -25,7 +25,7 @@
 				<td width="25%">
 					<input id="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 					       class="logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
-						      <% if line.logical_volume.highlight.background_color then %>logical_volume-background-color-<%= line.logical_volume.highlight.background_color %><% end %>
+							<%+san/logical_volume/background-class%>
 						      noborder"
 					       name="san.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 					       readonly="readonly"
