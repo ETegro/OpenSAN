@@ -309,3 +309,6 @@ msgstr "свободный"
 
 msgid "initializing"
 msgstr "инициализирующийся"
+
+msgid "rebuilding"
+msgstr "пересборка"
