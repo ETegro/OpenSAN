@@ -292,3 +292,6 @@ msgstr ""
 
 msgid "initializing"
 msgstr ""
+
+msgid "rebuilding"
+msgstr ""
