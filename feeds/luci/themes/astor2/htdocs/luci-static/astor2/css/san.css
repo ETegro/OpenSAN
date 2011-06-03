@@ -134,9 +134,6 @@ width:100%;
 }
 
 /* Bottom table with forms */
-table.bottom_forms > tbody > tr > td {
-width:25%;
-}
 
 table.bottom_forms fieldset div.form input[ type = "submit" ] {
 float:right;
@@ -144,6 +141,13 @@ float:right;
 
 table.bottom_forms fieldset {
 padding:.5em;
+}
+
+/* Legend colors */
+.legend_color {
+border:1px solid #000;
+height:1.5em;
+width:90%;
 }
 
 /* Sliders */
