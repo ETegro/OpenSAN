@@ -278,7 +278,7 @@ msgid "State"
 msgstr "Состояние"
 
 msgid "Take snapshot"
-msgstr "Взять снимок"
+msgstr "Сделать снимок"
 
 msgid "Target driver"
 msgstr "Целевой драйвер"
