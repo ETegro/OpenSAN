@@ -17,6 +17,5 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<% highlight = line.logical.highlight %>
-<%+san/class_highlight%>
-<%+san/logical/background-class%>
+<% if highlight.color then %>logical-background-color-light<%= highlight.color %><% end %>
+logical-state-<%= line.logical.state %>
