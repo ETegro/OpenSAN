@@ -123,6 +123,9 @@ msgstr ""
 msgid "LUN"
 msgstr ""
 
+msgid "Legend"
+msgstr ""
+
 msgid "Logical disk is not selected"
 msgstr ""
 
@@ -273,4 +276,19 @@ msgid "Unbind access pattern"
 msgstr ""
 
 msgid "Unknown action specified"
+msgstr ""
+
+msgid "degraded"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "failed"
+msgstr ""
+
+msgid "free"
+msgstr ""
+
+msgid "initializing"
 msgstr ""
