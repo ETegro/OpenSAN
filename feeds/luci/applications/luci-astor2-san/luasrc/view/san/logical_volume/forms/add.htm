@@ -38,7 +38,11 @@
 				<td>
 					<input id="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
 					       class="new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>
-						      logical-background-state-<%= line.logical.state %>
+							<% local highlight = line.logical.highlight %>
+							<% if highlight.color then %>
+								logical-background-color-light<%= highlight.color %>
+							<% end %>
+					              logical-state-<%= line.logical.state %>
 						      noborder"
 					       name="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
 					       readonly="readonly"
