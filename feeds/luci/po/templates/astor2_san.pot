@@ -123,9 +123,6 @@ msgstr ""
 msgid "LUN"
 msgstr ""
 
-msgid "Legend"
-msgstr ""
-
 msgid "Logical disk can not contain equally named logical volumes"
 msgstr ""
 
@@ -261,6 +258,9 @@ msgid "Snapshot size has to be bigger than it's current size"
 msgstr ""
 
 msgid "State"
+msgstr ""
+
+msgid "States"
 msgstr ""
 
 msgid "Take snapshot"
