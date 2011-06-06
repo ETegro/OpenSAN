@@ -16,7 +16,7 @@ module("luci.controller.admin.services", package.seeall)
 function index()
 	luci.i18n.loadc("base")
 	local i18n = luci.i18n.translate
-
+--[[
 	local page  = node("admin", "services", "crontab")
 	page.target = form("admin_services/crontab")
 	page.title  = i18n("Scheduled Tasks")
@@ -27,4 +27,5 @@ function index()
 	page.title  = i18n("Services")
 	page.order  = 40
 	page.index  = true
+]]--
 end
