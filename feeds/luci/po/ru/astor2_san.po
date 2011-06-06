@@ -313,5 +313,8 @@ msgstr "свободный"
 msgid "initializing"
 msgstr "инициализирующийся"
 
+msgid "normal"
+msgstr "нормальный"
+
 msgid "rebuilding"
 msgstr "пересборка"
