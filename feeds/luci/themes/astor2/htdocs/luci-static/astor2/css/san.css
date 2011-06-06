@@ -47,14 +47,27 @@ border:0;
 }
 
 /* Icons for buttons */
-.icon-remove,.icon-bind,
-.icon-unbind,.icon-reload,
-.icon-fieldadd,.icon-edit {
+.icon-remove,
+.icon-bind,
+.icon-unbind,
+.icon-reload,
+.icon-fieldadd,
+.icon-edit {
+background-color: transparent;
 background-position:center center;
 background-repeat:no-repeat;
 border:0;
 height:16px;
 width:16px;
+}
+
+.icon-remove:hover,
+.icon-bind:hover,
+.icon-unbind:hover,
+.icon-reload:hover,
+.icon-fieldadd:hover,
+.icon-edit:hover {
+background-color: transparent;
 }
 
 .icon-add-wide,.icon-apply-wide {
