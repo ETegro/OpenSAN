@@ -12,7 +12,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
@@ -20,9 +20,10 @@
 <script type="text/javascript">
 
 jQuery.noConflict();
-(function($){
+( function( $ ) {
 	var slider_name = '#logical_volume_resize_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
 	var slider_input_name = '.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
+	var slider_input_name_view = '.logical_volume_resize_slider_size_view-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
 	$( slider_name ).slider( {
 		orientation: 'horizontal',
 		min: <%= line.logical_volume.volume_group.extent %>,
@@ -32,11 +33,13 @@ jQuery.noConflict();
 		value: <%= line.logical_volume.size_mib %>,
 		slide: function( event, ui ) {
 			$( slider_input_name ).val( ui.value );
+			$( slider_input_name_view ).val( ui.value + " <%: MiB %>" );
 		}
 	} );
-	$( slider_input_name )
-		.val( $( slider_name )
-		.slider( 'value' ) );
+	$( slider_input_name ).
+		val( $( slider_name ).slider( 'value' ) );
+	$( slider_input_name_view ).
+		val( $( slider_name ).slider( 'value' ) + " <%: MiB %>" );
 
 	var resize_submit = '#submit_logical_volume_resize-<%= hash( line.logical_volume.volume_group.name ) %>-lv<%= hash( line.logical_volume.name ) %>';
 	var resize_input = '.logical_volume_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
@@ -52,6 +55,6 @@ jQuery.noConflict();
 			if ( !confirm( message ) ) return false;
 		}
 	} );
-})(jQuery);
+} )(jQuery);
 
 </script>
