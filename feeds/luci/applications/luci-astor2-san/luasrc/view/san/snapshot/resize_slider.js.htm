@@ -20,10 +20,11 @@
 <script type="text/javascript">
 
 jQuery.noConflict();
-(function($){
+( function( $ ) {
 	var slider_name = '#logical_volume_snapshot_resize_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
 	var slider_input_name = '.logical_volume_snapshot_resize_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
-	$( slider_name ).slider({
+	var slider_input_name_view = '.logical_volume_snapshot_resize_slider_size_view-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
+	$( slider_name ).slider( {
 		orientation: 'horizontal',
 		min: <%= line.logical_volume.size_mib %>,
 		max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
@@ -32,11 +33,13 @@ jQuery.noConflict();
 		value: <%= line.logical_volume.size_mib %>,
 		slide: function( event, ui ) {
 			$( slider_input_name ).val( ui.value );
+			$( slider_input_name_view ).val( ui.value + " <%: MiB %>" );
 		}
-	});
+	} );
 	$( slider_input_name )
-		.val( $( slider_name )
-		.slider( 'value' ) );
-})(jQuery);
+		.val( $( slider_name ).slider( 'value' ) );
+	$( slider_input_name_view )
+		.val( $( slider_name ).slider( 'value' ) + " <%: MiB %>" );
+} ) (jQuery);
 
 </script>
