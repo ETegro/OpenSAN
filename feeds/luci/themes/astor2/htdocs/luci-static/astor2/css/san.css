@@ -81,35 +81,35 @@ padding-left:17px;
 }
 
 .icon-apply-wide {
-background-image:url( '../../resources/cbi/apply.gif' );
+background-image:url( 'style/images/apply.gif' );
 }
 
 .icon-add-wide {
-background-image:url( '../../resources/cbi/add.gif' );
+background-image:url( 'style/images/add.gif' );
 }
 
 .icon-unbind {
-background-image:url( '../../resources/cbi/down.gif' );
+background-image:url( 'style/images/down.gif' );
 }
 
 .icon-remove {
-background-image:url( '../../resources/cbi/remove.gif' );
+background-image:url( 'style/images/remove.gif' );
 }
 
 .icon-bind {
-background-image:url( '../../resources/cbi/link.gif' );
+background-image:url( 'style/images/link.gif' );
 }
 
 .icon-fieldadd {
-background-image:url( '../../resources/cbi/fieldadd.gif' );
+background-image:url( 'style/images/fieldadd.gif' );
 }
 
 .icon-reload {
-background-image:url( '../../resources/cbi/reload.gif' );
+background-image:url( 'style/images/reload.gif' );
 }
 
 .icon-edit {
-background-image:url( '../../resources/cbi/edit.gif' );
+background-image:url( 'style/images/edit.gif' );
 }
 
 /* Main table */
