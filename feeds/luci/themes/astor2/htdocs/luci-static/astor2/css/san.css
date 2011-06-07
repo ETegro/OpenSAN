@@ -81,35 +81,35 @@ padding-left:17px;
 }
 
 .icon-apply-wide {
-background-image:url( 'style/images/apply.gif' );
+background-image:url( 'style/images/apply.png' );
 }
 
 .icon-add-wide {
-background-image:url( 'style/images/add.gif' );
+background-image:url( 'style/images/add.png' );
 }
 
 .icon-unbind {
-background-image:url( 'style/images/down.gif' );
+background-image:url( 'style/images/down.png' );
 }
 
 .icon-remove {
-background-image:url( 'style/images/remove.gif' );
+background-image:url( 'style/images/remove.png' );
 }
 
 .icon-bind {
-background-image:url( 'style/images/link.gif' );
+background-image:url( 'style/images/link.png' );
 }
 
 .icon-fieldadd {
-background-image:url( 'style/images/fieldadd.gif' );
+background-image:url( 'style/images/fieldadd.png' );
 }
 
 .icon-reload {
-background-image:url( 'style/images/reload.gif' );
+background-image:url( 'style/images/reload.png' );
 }
 
 .icon-edit {
-background-image:url( 'style/images/edit.gif' );
+background-image:url( 'style/images/edit.png' );
 }
 
 /* Main table */
