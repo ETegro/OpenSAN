@@ -46,6 +46,10 @@ display:inline-block;
 border:0;
 }
 
+#maincontent > form {
+background-color: #fff;
+}
+
 /* Icons for buttons */
 .icon-remove,
 .icon-bind,
@@ -191,7 +195,7 @@ border:1px solid #2A2E92;
 }
 
 .highlight-border-color-darkgreen .fillbar .fillbar_background {
-background-color:#7AE368;
+background-color:#9EF98A;
 }
 
 .highlight-border-color-darkblue .fillbar .fillbar_background {
@@ -238,7 +242,7 @@ border-color:#2A2E92;
 
 /* Physicals */
 .physical-background-color-lightgreen {
-background-color:#B6F7AB;
+background-color:#C8FCB1;
 }
 
 .physical-background-color-lightblue {
@@ -246,7 +250,7 @@ background-color:#BCD2FB;
 }
 
 .physical-background-color-green {
-background-color:#7AE368;
+background-color:#9EF98A;
 }
 
 .physical-background-color-blue {
@@ -264,7 +268,7 @@ background-color:#CCC;
 
 /* Logicals */
 .logical-background-color-lightgreen {
-background-color:#B6F7AB;
+background-color:#C8FCB1;
 }
 
 .logical-background-color-lightblue {
@@ -286,11 +290,11 @@ background-color:#FC2;
 
 /* Logicals volumes */
 .logical_volume-background-color-lightgreen {
-background-color:#B6F7AB;
+background-color:#C8FCB1;
 }
 
 .logical_volume-background-color-green {
-background-color:#7AE368;
+background-color:#9EF98A;
 }
 
 .logical_volume-background-color-lightblue {
@@ -303,11 +307,11 @@ background-color:#93B8F6;
 
 /* Access patterns */
 .access_pattern-background-color-lightgreen {
-background-color:#B6F7AB;
+background-color:#C8FCB1;
 }
 
 .access_pattern-background-color-green {
-background-color:#7AE368;
+background-color:#9EF98A;
 }
 
 .access_pattern-background-color-lightblue {

@@ -268,9 +268,12 @@ html #menubar a:visited.warning {
 textarea#syslog {
 	width: 98%;
 	min-height: 500px;
-	border: 3px solid #cccccc;
+/*	border: 3px solid #cccccc;*/
+	border: 3px solid #006B3F;
 	padding: 5px;
 	font-family: monospace;
+	background-color: #000;
+	color: #eee;
 }
 
 #maincontainer {
@@ -282,6 +285,7 @@ textarea#syslog {
 #maincontent {
 	padding: 0.5em;
 	background: #f5f5f5;
+/*	background: #ECFEDC;*/
 	color: #000000;
 	font-size: 80%;
 	border-width: 0 1px 1px 1px;
@@ -297,6 +301,7 @@ textarea#syslog {
 	border-bottom: 1px solid;
 	padding-top: 10px;
 	padding-bottom: 4px;
+	color: #006B3F;
 }
 
 #maincontent h3 {
@@ -305,7 +310,8 @@ textarea#syslog {
 	font-weight: bold;
 	font-style: italic;
 	font-family: Trebuchet MS, Verdana, sans-serif;
-	color: #27408B;
+/*	color: #27408B;*/
+	color: #006B3F;
 }
 
 #maincontent p {
@@ -315,7 +321,9 @@ textarea#syslog {
 .cbi-section {
 	margin-bottom: 0.5em;
 	padding: 0.5em 1em;
-	border: 1px dotted #555555;
+/*	border: 1px dotted #555555;*/
+	border: 1px solid #006B3F;
+/*	border: none;*/
 	background-color: #ffffff;
 	color: #000000;
 }
@@ -324,9 +332,11 @@ textarea#syslog {
 	font-size: 110%;
 	font-weight: bold;
 	height: 1em;
-	padding: 0 0.25em;
-	background-color: transparent;
-	color: #555555;
+	padding: 0.25em 0.5em;
+/*	background-color: transparent;*/
+/*	background: #B6F7AB;*/
+	background: #fff;
+	color: #006B3F;
 }
 
 .cbi-section h2 {
@@ -376,7 +386,8 @@ input[type=button] {
 select,
 input,
 textarea {
-	background: #eeeeee;
+/*	background: #eeeeee;*/
+	background: #fff;
 	color: #000000;
 	border-width: 1px;
 	border-color: #000000;
@@ -566,6 +577,7 @@ table.smalltext tr td {
 table.cbi-section-table .cbi-rowstyle-1,
 table.cbi-section-table .cbi-rowstyle-1>* {
 	background-color: #eeeeff;
+/*	background-color: #E4FCCF;*/
 	color: #000000;
 }
 
@@ -587,6 +599,7 @@ div.cbi-value {
 
 div.cbi-value:hover {
 	background: #f8f8f8;
+/*	background: #ECFEDC;*/
 	color: #000000;
 }
 
@@ -640,9 +653,9 @@ div.cbi-section-remove {
 
 .cbi-section-node {
 	clear: both;
-	border-top: 1px dotted #bbbbbb;
-	border-left: 1px dotted #bbbbbb;
-	border-right: 1px dotted #bbbbbb;
+	border-top: 1px solid #eee;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
 	border-bottom: none;
 	padding-bottom: 0;
 }
