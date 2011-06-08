@@ -24,7 +24,7 @@ function index()
 	end
 
 	local page   = node("admin")
-	page.target  = alias("admin", "status")
+	page.target  = alias("admin", "san")
 	page.title   = i18n("Administration")
 	page.order   = 10
 	page.sysauth = "root"
