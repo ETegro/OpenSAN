@@ -10,12 +10,3 @@ diff -urN astor2-einarc-svn1882/src/raid/software.rb astor2-einarc-svn1882-usb-f
  				target = phys_to_scsi(device.gsub(/^\/dev\//, ''))
  				d = { :state => 'unknown' }
  				d[:vendor] = physical_read_file(device, "device/vendor") or ""
-@@ -459,7 +459,7 @@
- 
- 		def usb_device?(device)
- 			name = device.gsub(/^\/dev\//, '')
--			return (not [File.read("/sys/block/#{name}/uevent")].grep(/usb/).empty?)
-+			return File.readlink( "/sys/block/#{name}" ) =~ /usb/
- 		end
- 
- 		def active?(device)
