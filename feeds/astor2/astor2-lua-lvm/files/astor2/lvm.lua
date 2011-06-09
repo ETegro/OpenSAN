@@ -155,7 +155,9 @@ function M.VolumeGroup:new( attrs )
 end
 
 function M.VolumeGroup.next_vg_name()
-	return "vg" .. tostring( os.time() )
+	return "vg" ..
+	        tostring( math.ceil( math.random() * 10^4 ) ) ..
+	        tostring( os.time() )
 end
 
 --- Create VolumeGroup
