@@ -27,6 +27,7 @@ function TestClearing:test_clearing()
 			ap:delete()
 		end
 	end
+	scst.Daemon.apply()
 	lvm.restore()
 	for _, pv in ipairs( lvm.PhysicalVolume.list() ) do
 		for _, vg in ipairs( lvm.VolumeGroup.list( { pv } ) ) do
