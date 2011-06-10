@@ -21,9 +21,6 @@ TestClearing = {}
 function TestClearing:test_clearing()
 	while #scst.AccessPattern.list() > 0 do
 		for _, ap in ipairs( scst.AccessPattern.list() ) do
-			if ap:is_binded() then
-				ap:unbind()
-			end
 			ap:delete()
 		end
 	end
