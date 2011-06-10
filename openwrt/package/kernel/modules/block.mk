@@ -607,3 +607,19 @@ define KernelPackage/scsi-generic
 endef
 
 $(eval $(call KernelPackage,scsi-generic))
+
+
+define KernelPackage/mptsas
+  SUBMENU:=$(BLOCK_MENU)
+  TITLE:=Fusion MPT SAS driver
+  DEPENDS:=@TARGET_x86
+  FILES:= \
+	$(LINUX_DIR)/drivers/message/fusion/mptbase.ko \
+	$(LINUX_DIR)/drivers/message/fusion/mptsas.ko \
+	$(LINUX_DIR)/drivers/message/fusion/mptscsih.ko
+  AUTOLOAD:= \
+	$(call AutoLoad,30,mptbase mptscsih) \
+	$(call AutoLoad,31,mptsas)
+endef
+
+$(eval $(call KernelPackage,mptsas))
