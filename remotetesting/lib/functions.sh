@@ -40,8 +40,11 @@ einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 scst = require( "astor2.scst" )
 __EOF__
-	cat
-	echo "LuaUnit:run()"
+	for_decision=`mktemp`
+	cat > $for_decision
+	cat $for_decision
+	grep -q "LuaUnit:run" $for_decision || echo "LuaUnit:run()"
+	rm -f $for_decision
 }
 
 CMD_SSH()

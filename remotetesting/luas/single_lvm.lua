@@ -18,26 +18,57 @@
 ]]
 
 TestCreate = {}
-function TestCreate:test_create()
+
+PS_IDS = nil
+function TestCreate:test_get_physicals()
 	local ps = einarc.Physical.list()
-	local ps_ids = common.keys( ps )
-	einarc.Logical.add( "0", { ps_ids[1], ps_ids[2] } )
-	local l = einarc.Logical.list()[0]
+	PS_IDS = common.keys( ps )
+	assert( #PS_IDS > 0 )
+end
 
-	lvm.PhysicalVolume.create( l.device )
+LOGICAL = nil
+function TestCreate:test_create_logical()
+	einarc.Logical.add( "0", PS_IDS )
+	local logicals = einarc.Logical.list()
+	assertEquals( #common.keys( logicals ), 1 )
+	assert( logicals[0] )
+	LOGICAL = logicals[0]
+end
+
+PHYSICAL_VOLUMES = nil
+function TestCreate:test_create_physical_volume()
+	lvm.PhysicalVolume.create( LOGICAL.device )
 	lvm.PhysicalVolume.rescan()
-	local pv = lvm.PhysicalVolume.list()[1]
+	PHYSICAL_VOLUMES = lvm.PhysicalVolume.list()
+	assertEquals( #PHYSICAL_VOLUMES, 1 )
+end
 
-	lvm.VolumeGroup.create( { pv } )
+VOLUME_GROUP = nil
+function TestCreate:test_create_volume_group()
+	lvm.VolumeGroup.create( PHYSICAL_VOLUMES )
 	lvm.PhysicalVolume.rescan()
 	lvm.VolumeGroup.rescan()
-	pv = lvm.PhysicalVolume.list()[1]
-	local vg = lvm.VolumeGroup.list( { pv } )[1]
+	PHYSICAL_VOLUMES = lvm.PhysicalVolume.list()
+	VOLUME_GROUP = lvm.VolumeGroup.list( PHYSICAL_VOLUMES )[1]
+	assert( VOLUME_GROUP )
+	assertEquals( PHYSICAL_VOLUMES[1].volume_group,
+	              VOLUME_GROUP.name )
+end
 
-	vg:logical_volume( "foobar", 1 * vg.extent )
+local function random_name()
+	return tostring( math.ceil( math.random() * 10^4 ) )
+end
+
+LOGICAL_VOLUME = nil
+function TestCreate:test_create_logical_volume()
+	VOLUME_GROUP:logical_volume( random_name(),
+	                             1 * VOLUME_GROUP.extent )
 	lvm.LogicalVolume.rescan()
-	local lv = lvm.LogicalVolume.list( { vg } )[1]
+	LOGICAL_VOLUME = lvm.LogicalVolume.list( { VOLUME_GROUP } )[1]
+	assert( LOGICAL_VOLUME )
+end
 
+function TestCreate:test_create_iqn()
 	local ap = scst.AccessPattern:new( {
 		name = "foobar",
 		targetdriver = "iscsi",
@@ -46,6 +77,15 @@ function TestCreate:test_create()
 		readonly = false
 	} )
 	ap:save()
-	ap:bind( lv.device )
+	ap:bind( LOGICAL_VOLUME.device )
 	scst.Daemon.apply()
 end
+
+LuaUnit:run(
+	"TestCreate:test_get_physicals",
+	"TestCreate:test_create_logical",
+	"TestCreate:test_create_physical_volume",
+	"TestCreate:test_create_volume_group",
+	"TestCreate:test_create_logical_volume",
+	"TestCreate:test_create_iqn"
+)
