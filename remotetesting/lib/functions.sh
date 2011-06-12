@@ -35,6 +35,7 @@ prepare_lua()
 {
 	cat <<__EOF__
 require( "luaunit" )
+require( "uci" )
 common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
