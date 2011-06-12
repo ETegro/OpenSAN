@@ -40,6 +40,11 @@ common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 scst = require( "astor2.scst" )
+
+local random_name = function()
+	return tostring( math.ceil( math.random() * 10^4 ) )
+end
+
 __EOF__
 	for_decision=`mktemp`
 	cat > $for_decision

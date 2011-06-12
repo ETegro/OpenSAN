@@ -55,10 +55,6 @@ function TestCreate:test_create_volume_group()
 	              VOLUME_GROUP.name )
 end
 
-local function random_name()
-	return tostring( math.ceil( math.random() * 10^4 ) )
-end
-
 LOGICAL_VOLUME = nil
 function TestCreate:test_create_logical_volume()
 	VOLUME_GROUP:logical_volume( random_name(),
