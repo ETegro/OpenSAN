@@ -134,6 +134,5 @@ dd_run()
 log_save()
 {
 	local substage=$1
-	mkdir -p $RESULT_DIR
 	tee -a $RESULT_DIR/$substage
 }
