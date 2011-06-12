@@ -25,3 +25,12 @@ failed()
 	fi
 	exit 1
 }
+
+_exit_handler()
+{
+	local rc=$?
+	trap - EXIT
+	type exit_handler >/dev/null 2>&1 && exit_handler || true
+	exit $rc
+}
+trap _exit_handler HUP PIPE INT QUIT TERM EXIT
