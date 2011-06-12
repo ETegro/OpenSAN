@@ -73,7 +73,7 @@ run_lua()
 
 run_clearing()
 {
-	run_lua $WORK_DIR/lib/clearing
+	run_lua clearing
 }
 
 iqns_get()
