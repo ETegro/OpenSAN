@@ -57,14 +57,14 @@ CMD_SCP()
 run_lua()
 {
 	local luasrc_orig="$1".lua
-	local luasrc="`mktemp`".lua
+	local luasrc=`mktemp --suffix=.lua`
 	local luasrc_name=`basename "$luasrc"`
 	prepare_lua $luasrc_orig > $luasrc
 	CMD_SCP "$luasrc" /tmp/"$luasrc_name"
 	CMD_SCP $WORK_DIR/lib/luaunit.lua /usr/lib/lua/luaunit.lua
 	CMD_SSH PATH=/bin:/sbin:/usr/bin:/usr/sbin lua /tmp/"$luasrc_name"
 	CMD_SSH rm /tmp/"$luasrc_name"
-	rm -f $luasrc `basename $luasrc .lua`
+	rm -f $luasrc
 }
 
 run_clearing()
