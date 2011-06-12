@@ -93,10 +93,8 @@ end
 
 function M.AccessPattern:save()
 	assert( self, "unable to get self object" )
-	local ucicur = uci.cursor()
 	if self.section_name then
-		ucicur:delete( M.UCI_CONFIG_NAME,
-		               self.section_name )
+		self:delete()
 	end
 	local access_pattern_new = M.AccessPattern:new( {
 		name = self.name,
@@ -107,6 +105,7 @@ function M.AccessPattern:save()
 		readonly = self.readonly
 	} )
 
+	local ucicur = uci.cursor()
 	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
 	                                 M.AccessPattern.UCI_TYPE_NAME )
 	access_pattern_new.section_name = section_name
