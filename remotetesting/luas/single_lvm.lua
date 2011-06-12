@@ -70,7 +70,7 @@ end
 
 function TestCreate:test_create_iqn()
 	local ap = scst.AccessPattern:new( {
-		name = "foobar",
+		name = random_name(),
 		targetdriver = "iscsi",
 		lun = 1,
 		enabled = true,
