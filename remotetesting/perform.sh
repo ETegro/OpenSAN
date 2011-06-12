@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 # aStor2 -- storage area network configurable via Web-interface
 # Copyright (C) 2009-2011 ETegro Technologies, PLC
 #                         Sergey Matveev <stargrave@stargrave.org>
@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 . ./config
-. lib/common.sh
+. lib/functions.sh
 
 WORK_DIR=`echo $0 | sed "s/\/perform.sh$//"`
 pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
