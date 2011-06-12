@@ -26,6 +26,11 @@ popdq()
 	popd 2>&1 >/dev/null
 }
 
+message()
+{
+	perl -e 'print join "\n", ( "", "=" x 80, $ARGV[0], "=" x 80, "" )' "$@"
+}
+
 prepare_lua()
 {
 	cat <<__EOF__
