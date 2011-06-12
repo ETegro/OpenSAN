@@ -92,8 +92,8 @@ iqn_logout()
 {
 	local portal=$1
 	local iqn=$2
-	$ISCSIADM --mode node --targetname $iqn --portal $portal --logout
-	$ISCSIADM --mode node --targetname $iqn --portal $portal -o delete
+	$ISCSIADM --mode node --targetname $iqn --portal $portal --logout || true
+	$ISCSIADM --mode node --targetname $iqn --portal $portal -o delete || true
 }
 
 iqns_get_local()
