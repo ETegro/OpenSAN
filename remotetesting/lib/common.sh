@@ -63,7 +63,7 @@ run_lua()
 	CMD_SCP "$luasrc" /tmp/"$luasrc_name"
 	CMD_SCP $WORK_DIR/lib/luaunit.lua /usr/lib/lua/luaunit.lua
 	CMD_SSH PATH=/bin:/sbin:/usr/bin:/usr/sbin lua /tmp/"$luasrc_name"
-	CMD_SSH rm /tmp/"$luasrc_name"
+	CMD_SSH rm -f /tmp/"$luasrc_name"
 	rm -f $luasrc
 }
 
