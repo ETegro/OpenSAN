@@ -22,6 +22,7 @@
 WORK_DIR=`echo $0 | sed "s/\/perform.sh$//"`
 pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 export WORK_DIR
+export LC_ALL=C
 
 test_start="`date '+%F_%R'`"
 for test_dir in tests/*; do
