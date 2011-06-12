@@ -91,6 +91,22 @@ function M.AccessPattern.find_by_name( name )
 	return M.AccessPattern.find_by( "name", name )
 end
 
+function M.AccessPattern.delete_by_name( name )
+	local ucicur = uci.cursor()
+	ucicur:foreach(
+		M.UCI_CONFIG_NAME,
+		M.AccessPattern.UCI_TYPE_NAME,
+		function( section )
+			if section.name == name then
+				ucicur:delete( M.UCI_CONFIG_NAME,
+				               section[".name"] )
+			end
+		end
+	)
+	ucicur:save( M.UCI_CONFIG_NAME )
+	ucicur:commit( M.UCI_CONFIG_NAME )
+end
+
 function M.AccessPattern:save()
 	assert( self, "unable to get self object" )
 	if self.section_name then
@@ -144,11 +160,7 @@ end
 
 function M.AccessPattern:delete()
 	assert( self, "unable to get self object" )
-	local ucicur = uci.cursor()
-	ucicur:delete( M.UCI_CONFIG_NAME,
-	               self.section_name )
-	ucicur:save( M.UCI_CONFIG_NAME )
-	ucicur:commit( M.UCI_CONFIG_NAME )
+	M.AccessPattern.delete_by_name( self.name )
 end
 
 function M.AccessPattern:bind( filename )
