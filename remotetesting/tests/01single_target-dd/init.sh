@@ -25,8 +25,10 @@ run_lua single_lvm || failed "single_lvm failed"
 iqns_start_all || failed "iqns start failed"
 
 dd_result=`mktemp`
-dd_run `devs_get` >$dd_result 2>&1 || failed "dd failed"
+dd_run `devs_get` >$dd_result 2>&1 || true
+[ -s $dd_result ] || failed "dd failed"
 log_save dd_result < $dd_result
+grep -q "No space left on device" $dd_result || failed "dd failed"
 rm -f $dd_result
 
 iqns_stop_all
