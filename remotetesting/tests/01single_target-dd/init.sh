@@ -19,6 +19,12 @@
 . $WORK_DIR/config
 . $WORK_DIR/lib/functions-test.sh
 
+exit_handler()
+{
+	[ -f "$dd_result" ] && rm -f $dd_result
+	iqns_stop_all
+}
+
 iqns_stop_all
 run_clearing || failed "clearing failed"
 run_lua single_lvm || failed "single_lvm failed"
@@ -29,7 +35,3 @@ dd_run `devs_get` >$dd_result 2>&1 || true
 [ -s $dd_result ] || failed "dd failed"
 log_save dd_result < $dd_result
 grep -q "No space left on device" $dd_result || failed "dd failed"
-rm -f $dd_result
-
-iqns_stop_all
-exit 0
