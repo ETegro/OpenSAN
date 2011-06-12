@@ -21,6 +21,7 @@ TestClearing = {}
 function TestClearing:test_clearing()
 	while #scst.AccessPattern.list() > 0 do
 		for _, ap in ipairs( scst.AccessPattern.list() ) do
+			print( "Deleting AccessPattern: " .. ap.name )
 			ap:delete()
 		end
 	end
@@ -28,11 +29,14 @@ function TestClearing:test_clearing()
 	lvm.restore()
 	for _, pv in ipairs( lvm.PhysicalVolume.list() ) do
 		for _, vg in ipairs( lvm.VolumeGroup.list( { pv } ) ) do
+			print( "Disabling VolumeGroup: " .. vg.name )
 			vg:disable()
 		end
+		print( "Preparing device: " .. pv.device )
 		lvm.PhysicalVolume.prepare( pv.device )
 	end
 	for _, l in pairs( einarc.Logical.list() ) do
+		print( "Deleting Logical: " .. l.id )
 		l:delete()
 	end
 end
