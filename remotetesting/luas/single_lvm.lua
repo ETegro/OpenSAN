@@ -76,7 +76,7 @@ function TestCreate:test_create_iqn()
 		enabled = true,
 		readonly = false
 	} )
-	ap:save()
+	ap = ap:save()
 	ap:bind( LOGICAL_VOLUME.device )
 	scst.Daemon.apply()
 end

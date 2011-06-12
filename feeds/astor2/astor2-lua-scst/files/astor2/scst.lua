@@ -109,6 +109,7 @@ function M.AccessPattern:save()
 
 	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
 	                                 M.AccessPattern.UCI_TYPE_NAME )
+	access_pattern_new.section_name = section_name
 	ucicur:set( M.UCI_CONFIG_NAME,
 		    section_name,
 		    "name",
