@@ -14,4 +14,5 @@
    :maxdepth: 1
 
    directories
+   test-format
    api
