@@ -74,9 +74,10 @@ run_lua()
 	local run_result=`mktemp`
 	CMD_SSH PATH=/bin:/sbin:/usr/bin:/usr/sbin lua /tmp/"$luasrc_name" |
 		tee $run_result
-	grep -q "^Failed" $run_result && return 1 || true
+	grep -q "^Failed" $run_result && is_failed=1 || true
 	CMD_SSH rm -f /tmp/"$luasrc_name"
 	rm -f $luasrc $run_result
+	[ "$is_failed" = "" ] || return 1
 }
 
 run_clearing()
