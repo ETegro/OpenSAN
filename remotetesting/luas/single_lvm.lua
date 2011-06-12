@@ -34,8 +34,7 @@ function TestCreate:test_create()
 	pv = lvm.PhysicalVolume.list()[1]
 	local vg = lvm.VolumeGroup.list( { pv } )[1]
 
-	--vg:logical_volume( "foobar", l.capacity * 0.05 )
-	vg:logical_volume( "foobar", 500 )
+	vg:logical_volume( "foobar", 1 * vg.extent )
 	lvm.LogicalVolume.rescan()
 	local lv = lvm.LogicalVolume.list( { vg } )[1]
 

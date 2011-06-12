@@ -26,9 +26,13 @@ popdq()
 	popd 2>&1 >/dev/null
 }
 
+message()
+{
+	perl -e 'print join "\n", ( "", "=" x 80, $ARGV[0], "=" x 80, "" )' "$@"
+}
+
 prepare_lua()
 {
-	local code=$1
 	cat <<__EOF__
 require( "luaunit" )
 common = require( "astor2.common" )
@@ -36,10 +40,8 @@ einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 scst = require( "astor2.scst" )
 __EOF__
-	cat $code
-	cat <<__EOF__
-LuaUnit:run()
-__EOF__
+	cat
+	echo "LuaUnit:run()"
 }
 
 CMD_SSH()
@@ -54,22 +56,33 @@ CMD_SCP()
 	$SCP "$src" ${REMOTE_USER}@${REMOTE_HOST}:"$dst"
 }
 
-run_lua()
+retreive_lua()
 {
 	local luasrc_orig="$1".lua
-	local luasrc="`mktemp`".lua
+	[ -s "$luasrc_orig" ] || luasrc_orig=$WORK_DIR/luas/$luasrc_orig
+	cat $luasrc_orig
+}
+
+run_lua()
+{
+	local luasrc_path="$1"
+	local luasrc=`mktemp --suffix=.lua`
 	local luasrc_name=`basename "$luasrc"`
-	prepare_lua $luasrc_orig > $luasrc
+	retreive_lua $luasrc_path | prepare_lua > $luasrc
 	CMD_SCP "$luasrc" /tmp/"$luasrc_name"
 	CMD_SCP $WORK_DIR/lib/luaunit.lua /usr/lib/lua/luaunit.lua
-	CMD_SSH PATH=/bin:/sbin:/usr/bin:/usr/sbin lua /tmp/"$luasrc_name"
-	CMD_SSH rm /tmp/"$luasrc_name"
-	rm -f $luasrc `basename $luasrc .lua`
+	local run_result=`mktemp`
+	CMD_SSH PATH=/bin:/sbin:/usr/bin:/usr/sbin lua /tmp/"$luasrc_name" |
+		tee $run_result
+	grep -q "^Failed" $run_result && is_failed=1 || true
+	CMD_SSH rm -f /tmp/"$luasrc_name"
+	rm -f $luasrc $run_result
+	[ "$is_failed" = "" ] || return 1
 }
 
 run_clearing()
 {
-	run_lua $WORK_DIR/lib/clearing
+	run_lua clearing
 }
 
 iqns_get()
@@ -88,8 +101,8 @@ iqn_logout()
 {
 	local portal=$1
 	local iqn=$2
-	$ISCSIADM --mode node --targetname $iqn --portal $portal --logout
-	$ISCSIADM --mode node --targetname $iqn --portal $portal -o delete
+	$ISCSIADM --mode node --targetname $iqn --portal $portal --logout || true
+	$ISCSIADM --mode node --targetname $iqn --portal $portal -o delete || true
 }
 
 iqns_get_local()

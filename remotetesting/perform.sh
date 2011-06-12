@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 # aStor2 -- storage area network configurable via Web-interface
 # Copyright (C) 2009-2011 ETegro Technologies, PLC
 #                         Sergey Matveev <stargrave@stargrave.org>
@@ -17,15 +17,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 . ./config
-. lib/common.sh
+. lib/functions.sh
 
 WORK_DIR=`echo $0 | sed "s/\/perform.sh$//"`
 pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
+export WORK_DIR
+export LC_ALL=C
 
 test_start="`date '+%F_%R'`"
 for test_dir in tests/*; do
 	pushdq $test_dir
+
 	test_name="`echo $test_dir | awk -F/ '{print $NF}'`"
-	RESULT_DIR="$WORK_DIR/results/$test_start/$test_name" . ./init.sh
+	result_dir="$WORK_DIR/results/$test_start"
+	mkdir -p $result_dir
+
+	message "Running $test_name test"
+	if RESULT_DIR="$result_dir/$test_name" ./init.sh 4>$result_dir/comment; then
+		message "Succeeded"
+		[ -s $result_dir/comment ] || rm -f $result_dir/comment
+	else
+		message "Failed"
+		echo "$test_name" > $result_dir/failed
+		exit 1
+	fi
+
 	popdq
 done

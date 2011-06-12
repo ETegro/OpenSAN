@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -ex
 # aStor2 -- storage area network configurable via Web-interface
 # Copyright (C) 2009-2011 ETegro Technologies, PLC
 #                         Sergey Matveev <stargrave@stargrave.org>
@@ -16,16 +16,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+. $WORK_DIR/config
+. $WORK_DIR/lib/functions-test.sh
+
+exit_handler()
+{
+	[ -f "$jobfile" ] && rm -f $dd_result
+	iqns_stop_all
+}
+
 iqns_stop_all
-run_clearing
-run_lua single_lvm
-iqns_start_all
+run_clearing || failed "clearing failed"
+run_lua single_lvm || failed "single_lvm failed"
+iqns_start_all || failed "iqns start failed"
 
 jobfile=`mktemp`
 cat jobfile.fio > $jobfile
 dev=`devs_get`
 echo "filename=$dev" >> $jobfile
-$FIO $jobfile | log_save fio_result
-rm -f $jobfile
-
-iqns_stop_all
+$FIO $jobfile | log_save fio_result || failed "fio failed"
