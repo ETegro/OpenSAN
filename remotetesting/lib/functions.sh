@@ -65,7 +65,7 @@ CMD_SCP()
 	$SCP "$src" ${REMOTE_USER}@${REMOTE_HOST}:"$dst"
 }
 
-retreive_lua()
+retrieve_lua()
 {
 	local luasrc_orig="$1".lua
 	[ -s "$luasrc_orig" ] || luasrc_orig=$WORK_DIR/luas/$luasrc_orig
@@ -77,7 +77,7 @@ run_lua()
 	local luasrc_path="$1"
 	local luasrc=`mktemp --suffix=.lua`
 	local luasrc_name=`basename "$luasrc"`
-	retreive_lua $luasrc_path | prepare_lua > $luasrc
+	retrieve_lua $luasrc_path | prepare_lua > $luasrc
 	CMD_SCP "$luasrc" /tmp/"$luasrc_name"
 	CMD_SCP $WORK_DIR/lib/luaunit.lua /usr/lib/lua/luaunit.lua
 	local run_result=`mktemp`
