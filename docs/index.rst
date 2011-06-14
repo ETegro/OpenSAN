@@ -12,5 +12,6 @@
    openwrt/index
    luci/index
    scst/index
+   remotetesting/index
 
 * :ref:`search`

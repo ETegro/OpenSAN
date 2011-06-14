@@ -156,12 +156,12 @@ terminal --timeout=2 console serial
 default 0
 timeout 5
 
-title   OpenWrt
+title   OpenSAN
 root    (hd0,0)
 kernel  /boot/$CURRENT_KERNEL root=$FUTURE_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
 boot
 
-title	OpenWrt (failsafe)
+title	OpenSAN (failsafe)
 root	(hd0,0)
 kernel  /boot/$FUTURE_KERNEL root=$CURRENT_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
 boot

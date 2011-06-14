@@ -15,6 +15,7 @@
    common
    log_messages
    copyright_adding
+   shell
    lua
    luadoc
 
