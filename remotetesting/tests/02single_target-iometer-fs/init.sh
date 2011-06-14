@@ -21,7 +21,7 @@
 
 exit_handler()
 {
-	[ -f "$jobfile" ] && rm -f $dd_result
+	[ -f "$jobfile" ] && rm -f $jobfile
 	iqns_stop_all
 }
 
