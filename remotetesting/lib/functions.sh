@@ -81,7 +81,7 @@ run_lua()
 	CMD_SCP "$luasrc" /tmp/"$luasrc_name"
 	CMD_SCP $WORK_DIR/lib/luaunit.lua /usr/lib/lua/luaunit.lua
 	local run_result=`mktemp`
-	CMD_SSH PATH=/bin:/sbin:/usr/bin:/usr/sbin lua /tmp/"$luasrc_name" |
+	CMD_SSH "PATH=/bin:/sbin:/usr/bin:/usr/sbin lua /tmp/$luasrc_name 2>&1" |
 		tee $run_result
 	grep -q "^Failed" $run_result && is_failed=1 || true
 	CMD_SSH rm -f /tmp/"$luasrc_name"
