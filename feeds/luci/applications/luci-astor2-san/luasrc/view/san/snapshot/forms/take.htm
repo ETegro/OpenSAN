@@ -22,17 +22,21 @@
 	<table class="form">
 		<tbody>
 			<tr>
-				<td width="25%">
+				<td width="30%">
 					<input id="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
-					       class="new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
+					       class="new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+					       name="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
+					       readonly="readonly"
+					       type="hidden"
+					       value="0" />
+					<input class="new_snapshot_slider_size_view-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>
 					              <%+san/logical_volume/background-class%>
 					              noborder"
-					       name="san.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"
 					       readonly="readonly"
 					       type="text"
 					       value="0" />
 				</td>
-				<td width="75%">
+				<td width="70%">
 					<div id="new_snapshot_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>"></div>
 				</td>
 			</tr>
