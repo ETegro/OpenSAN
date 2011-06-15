@@ -147,6 +147,12 @@ function toggle_edit_access_patterns() {
 	} );
 };
 
+function pulsate_bind_access_patterns() {
+	$( 'form input[ name ^= "san.logical_volume_select" ]' ).click( function() {
+		$( '.icon-bind' ).show( 'pulsate' );
+	} );
+};
+
 function setup_plunger(){
 	$( "#plunger_show" ).click( function(){
 		$( "#plunger" ).show();
@@ -166,6 +172,7 @@ toggle_resize_logical_volume();
 toggle_resize_snapshot();
 toggle_snapshot_creation();
 toggle_edit_access_patterns();
+pulsate_bind_access_patterns();
 setup_plunger();
 
 });

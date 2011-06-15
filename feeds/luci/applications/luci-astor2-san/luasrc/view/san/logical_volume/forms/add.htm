@@ -22,12 +22,12 @@
 	<table class="form">
 		<tbody>
 			<tr>
-				<td width="25%">
+				<td width="30%">
 					<label for="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>">
 						<%: Name %>:
 					</label>
 				</td>
-				<td width="75%">
+				<td width="70%">
 					<input id="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
 					       name="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
 					       type="text"
@@ -37,14 +37,17 @@
 			<tr>
 				<td>
 					<input id="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
-					       class="new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>
+					       class="new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
+					       name="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
+					       readonly="readonly"
+					       type="hidden"
+					       value="0" />
+					<input class="new_volume_slider_size_view-<%= hash( tostring( line.logical.id ) ) %>
 					              <% highlight = line.logical.highlight %>
 					              <%+san/logical/background-class%>
 					              noborder"
-					       name="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
 					       readonly="readonly"
 					       type="text"
-					       class="inline"
 					       value="0" />
 				</td>
 				<td>

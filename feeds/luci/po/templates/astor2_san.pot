@@ -123,9 +123,6 @@ msgstr ""
 msgid "LUN"
 msgstr ""
 
-msgid "Legend"
-msgstr ""
-
 msgid "Logical disk can not contain equally named logical volumes"
 msgstr ""
 
@@ -263,6 +260,9 @@ msgstr ""
 msgid "State"
 msgstr ""
 
+msgid "States"
+msgstr ""
+
 msgid "Take snapshot"
 msgstr ""
 
@@ -294,6 +294,9 @@ msgid "free"
 msgstr ""
 
 msgid "initializing"
+msgstr ""
+
+msgid "normal"
 msgstr ""
 
 msgid "rebuilding"
