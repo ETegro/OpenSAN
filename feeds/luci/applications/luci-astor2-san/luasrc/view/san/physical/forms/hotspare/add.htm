@@ -35,7 +35,7 @@
 		<% end %>
 		<input type="hidden"
 		       name="san.physical_size-<%= hash( line.physical.id ) %>"
-		       value="<%= line.physical.size %>" />
+		       value="<%= line.physical.size_mib %>" />
 	</div>
 	<div class="inline">
 		<input id="san.submit_logical_hotspare_add-<%= hash( line.physical.id ) %>"
