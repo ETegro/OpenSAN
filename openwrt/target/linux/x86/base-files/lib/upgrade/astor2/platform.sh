@@ -190,6 +190,7 @@ platform_copy_config()
 	mkdir -p $mountpoint
 	mount $FUTURE_ROOT $mountpoint
 	cp "$CONF_TAR" $mountpoint
+	rm -f $mountpoint/etc/uci-defaults/*
 	umount $mountpoint
 	rmdir $mountpoint
 	sync
