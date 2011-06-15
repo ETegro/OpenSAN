@@ -345,6 +345,9 @@ local function einarc_logical_hotspare_add( inputs, data )
 		message_error = i18n("Newly added dedicated hotspare disk is bigger than needed")
 	end
 
+	lvm.restore()
+	disable_non_raid_volume_groups( data )
+
 	-- Let's call einarc at last
 	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
 	if not return_code then
