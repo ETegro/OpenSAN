@@ -110,7 +110,7 @@ end
 function M.AccessPattern:save()
 	assert( self, "unable to get self object" )
 	if self.section_name then
-		self:delete()
+		M.AccessPattern.delete_by_name( self.name )
 	end
 	local access_pattern_new = M.AccessPattern:new( {
 		name = self.name,
