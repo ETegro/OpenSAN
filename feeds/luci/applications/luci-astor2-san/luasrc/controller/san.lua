@@ -137,6 +137,22 @@ end
 '                                   '
 + - - - - - - - - - - - - - - - - - +
 ]]
+local function disable_non_raid_volume_groups( data )
+	for _, volume_group in ipairs( lvm.VolumeGroup.list( lvm.PhysicalVolume.list() ) ) do
+		local is_not_busy = true
+		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
+			for _, logical in ipairs( data.logicals ) do
+				if logical.device == physical_volume.device then
+					is_not_busy = false
+				end
+			end
+		end
+		if is_not_busy then
+			lvm.VolumeGroup.disable( volume_group )
+		end
+	end
+end
+
 local function einarc_logical_add( inputs, drives, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -171,20 +187,7 @@ local function einarc_logical_add( inputs, drives, data )
 	end
 
 	lvm.restore()
-
-	for _, volume_group in ipairs( lvm.VolumeGroup.list( lvm.PhysicalVolume.list() ) ) do
-		local is_not_busy = true
-		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
-			for _, logical in ipairs( data.logicals ) do
-				if logical.device == physical_volume.device then
-					is_not_busy = false
-				end
-			end
-		end
-		if is_not_busy then
-			lvm.VolumeGroup.disable( volume_group )
-		end
-	end
+	disable_non_raid_volume_groups( data )
 
 	local return_code, result = pcall( einarc.Logical.add, raid_level, drives )
 	if not return_code then
