@@ -743,8 +743,14 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 	                                     name = logical_volume_name },
 	                                   snapshot_size_new )
 	if not return_code then
-		message_error = i18n("Failed to resize snapshot") .. ": " .. result
+		return index_with_error( i18n("Failed to resize snapshot") .. ": " .. result )
 	end
+
+	return_code, result = pcall( scst.Daemon.apply )
+	if not return_code then
+		return index_with_error( i18n("Failed to apply iSCSI configuration") .. ": " .. result )
+	end
+
 	return index_with_error( message_error )
 end
 
