@@ -5,16 +5,16 @@
                           Sergey Matveev <stargrave@stargrave.org>
   
   This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Affero General Public License as
-  published by the Free Software Foundation, either version 3 of the
-  License, or (at your option) any later version.
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
   
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU Affero General Public License for more details.
+  GNU General Public License for more details.
   
-  You should have received a copy of the GNU Affero General Public License
+  You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
@@ -24,8 +24,6 @@ common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 scst = require( "astor2.scst" )
-
-mime = require( "mime" )
 
 function M.gcd( x, y )
 	if y == 0 then return math.abs( x ) end
@@ -40,6 +38,7 @@ end
 function M.overall( data )
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
+	local access_patterns = data.access_patterns or {}
 	local physicals_free = common.deepcopy( physicals )
 	local matrix = {}
 	local current_line = 1
@@ -53,10 +52,31 @@ function M.overall( data )
 		local physicals_quantity = #common.keys( logical.physicals )
 		local logical_volumes_quantity = #common.keys( logical.logical_volumes or {} )
 		local lines_quantity = physicals_quantity
+
+		-- Bind access patterns to logical volumes and find maximal
+		-- patterns quantity in single logical volume
+		local access_patterns_quantity_max = 1
+		for logical_volume_device, logical_volume in pairs( logical.logical_volumes or {} ) do
+			local quantity = 0
+			for _, access_pattern in ipairs( access_patterns ) do
+				if access_pattern.filename == logical_volume_device then
+					if not logical_volume.access_patterns then
+						logical_volume.access_patterns = {}
+					end
+					logical_volume.access_patterns[ access_pattern.name ] = access_pattern
+					quantity = quantity + 1
+				end
+			end
+			if access_patterns_quantity_max < quantity then
+				access_patterns_quantity_max = quantity
+			end
+		end
+
+		-- Overall lines quantity will be LCM( PVs, APs*LVs )
 		if logical_volumes_quantity ~= 0 then
 			lines_quantity = M.lcm(
 				physicals_quantity,
-				logical_volumes_quantity
+				logical_volumes_quantity * access_patterns_quantity_max
 			)
 		end
 		local future_line = current_line + lines_quantity
@@ -72,11 +92,24 @@ function M.overall( data )
 
 		-- Fillup physicals
 		for physical_id, physical in pairs( logical.physicals ) do
-			if physicals[ physical_id ].state == tostring( logical_id ) then
-				physicals[ physical_id ].state = "allocated"
+			if physicals[ physical_id ] then
+				if physicals[ physical_id ].state == tostring( logical_id ) then
+					physicals[ physical_id ].state = "allocated"
+				end
+				physicals_free[ physical_id ] = nil
+			else
+				-- We have got failed disk
+				physicals[ physical_id ] = einarc.Physical:new( {
+					id = physical_id,
+					model = "unknown",
+					revision = "unknown",
+					serial = "unknown",
+					size = 1,
+					state = "failed"
+				} )
+				physicals[ physical_id ].size = 0
 			end
 			logical.physicals[ physical_id ] = physicals[ physical_id ]
-			physicals_free[ physical_id ] = nil
 		end
 		local physical_rowspan = lines_quantity / physicals_quantity
 		for i, physical in ipairs( einarc.Physical.sort( logical.physicals ) ) do
@@ -86,22 +119,76 @@ function M.overall( data )
 		end
 
 		-- Fillup logical volumes
-		local logical_volume_names = common.keys( logical.logical_volumes or {} )
-		table.sort( logical_volume_names )
+		local logical_volume_devices = common.keys( logical.logical_volumes or {} )
+		table.sort(
+			logical_volume_devices,
+			function( a, b )
+				local snapshot_regexp = "(.+).%d%d%d%d.%d%d.%d%d.%d%d.%d%d.%d%d"
+				local a_snapshot = string.match( a, snapshot_regexp )
+				local b_snapshot = string.match( b, snapshot_regexp )
+
+				if a_snapshot == b then return false end
+				if a == b_snapshot then return true end
+				if a_snapshot and not b_snapshot then return a_snapshot < b end
+				if not a_snapshot and b_snapshot then return a < b_snapshot end
+
+				return a < b
+			end
+		)
+
 		local logical_volume_rowspan = lines_quantity / logical_volumes_quantity
-		for i, logical_volume_name in ipairs( logical_volume_names ) do
+		for i, logical_volume_device in ipairs( logical_volume_devices ) do
 			local offset = current_line + ( i - 1 ) * logical_volume_rowspan
-			matrix[ offset ].logical_volume = logical.logical_volumes[ logical_volume_name ]
+			local logical_volume = logical.logical_volumes[ logical_volume_device ]
+			matrix[ offset ].logical_volume = logical_volume
 			matrix[ offset ].logical_volume.rowspan = logical_volume_rowspan
+
+			if logical_volume.access_patterns then
+				local access_pattern_names = common.keys( logical_volume.access_patterns )
+				local access_pattern_rowspan = logical_volume_rowspan / #access_pattern_names
+				table.sort( access_pattern_names )
+
+				for ap_i = 1, #access_pattern_names do
+					ap_offset = offset + ( ap_i - 1 ) * access_pattern_rowspan
+					if not matrix[ ap_offset ] then
+						matrix[ ap_offset ] = {}
+					end
+					matrix[ ap_offset ].access_pattern = logical_volume.access_patterns[ access_pattern_names[ ap_i ] ]
+					matrix[ ap_offset ].access_pattern.rowspan = access_pattern_rowspan
+				end
+			end
 		end
 
 		current_line = future_line
 	end
+	local final_line = current_line
 
 	for _, physical in pairs( einarc.Physical.sort( physicals_free ) ) do
 		matrix[ current_line ] = { physical = physical }
 		matrix[ current_line ].physical.rowspan = 1
 		current_line = current_line + 1
+	end
+
+	current_line = final_line
+	local access_pattern_names = common.unique_keys( "name", access_patterns )
+	local access_pattern_names_sort = common.keys( access_pattern_names )
+	table.sort( access_pattern_names_sort )
+	for _, access_pattern_name in ipairs( access_pattern_names_sort ) do
+		local access_pattern = access_patterns[ access_pattern_names[ access_pattern_name ][1] ]
+		if not access_pattern.filename then
+			if not matrix[ current_line ] then
+				matrix[ current_line ] = {}
+			end
+			matrix[ current_line ].access_pattern = access_pattern
+			if matrix[ current_line ].physical then
+				matrix[ current_line ].access_pattern.colspan = 2
+				matrix[ current_line ].access_pattern.rowspan = 1
+			else
+				matrix[ current_line ].access_pattern.colspan = 3
+				matrix[ current_line ].access_pattern.rowspan = 1
+			end
+			current_line = current_line + 1
+		end
 	end
 
 	return matrix
@@ -159,8 +246,26 @@ function M.filter_borders_highlight( matrix )
 			end
 			if logical_volumes_quantity ~= 0 then
 				for i = current_line, future_line - 1, logical_volume_rowspan do
-					lines[ i ].logical_volume = check_highlights_attribute( lines[ i ].logical_volume )
-					lines[ i ].logical_volume.highlight.right = true
+					local logical_volume = lines[ i ].logical_volume
+					logical_volume = check_highlights_attribute( logical_volume )
+					if logical_volume.access_patterns then
+						local access_patterns_names = common.keys( logical_volume.access_patterns )
+						local access_pattern_rowspan = logical_volume_rowspan / #access_patterns_names
+						for ap_i, access_pattern_name in ipairs( access_patterns_names ) do
+							local access_pattern = lines[ i + ( ap_i - 1 ) * access_pattern_rowspan ].access_pattern
+							check_highlights_attribute( access_pattern )
+							access_pattern.highlight.right = true
+							if ap_i == 1 then
+								access_pattern.highlight.top = true
+							end
+							if ap_i == #access_patterns_names then
+								access_pattern.highlight.bottom = true
+							end
+						end
+						lines[ i ].logical_volume.highlight.right = false
+					else
+						lines[ i ].logical_volume.highlight.right = true
+					end
 				end
 			end
 			lines[ future_line - physical_rowspan ].physical.highlight.bottom = true
@@ -175,7 +280,7 @@ end
 
 function M.filter_alternation_border_colors( matrix, colors_array )
 	if not colors_array then
-		colors_array = { "black", "blue", "green", "orange", "red", "yellow" }
+		colors_array = { "green", "blue" }
 	end
 	local color_number = 1
 	local lines = matrix.lines
@@ -192,8 +297,13 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 				physical.highlight.color = color
 			end
 			if line.logical.logical_volumes then
-				for _, logical_volumes in pairs( line.logical.logical_volumes ) do
-					logical_volumes.highlight.color = color
+				for _, logical_volume in pairs( line.logical.logical_volumes ) do
+					logical_volume.highlight.color = color
+					if logical_volume.access_patterns then
+						for _, access_pattern in pairs( logical_volume.access_patterns ) do
+							access_pattern.highlight.color = color
+						end
+					end
 				end
 			end
 		end
@@ -203,23 +313,47 @@ end
 
 function M.filter_highlight_snapshots( matrix, colors_array )
 	if not colors_array then
-		colors_array = { "lime", "yellow", "orange" }
+		colors_array = { "normal_color", "light_color" }
 	end
 	local color_number = 1
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
 		local color = colors_array[ color_number ]
-		if line.logical_volume then
-			if not line.logical_volume.is_snapshot() then
-				if color_number == #colors_array then
-					color_number = 1
-				else
-					color_number = color_number + 1
+		if line.logical_volume and
+		   not line.logical_volume.is_snapshot() then
+			if color_number == #colors_array then
+				color_number = 1
+			else
+				color_number = color_number + 1
+			end
+			lines[ current_line ].logical_volume.highlight.background_color = color
+			if #line.logical_volume.snapshots ~= 0 then
+				for _, snapshot in ipairs( line.logical_volume.snapshots ) do
+					snapshot.highlight.background_color = color
 				end
-				lines[ current_line ].logical_volume.highlight.background_color = color
-				if #line.logical_volume.snapshots ~= 0 then
-					for _, snapshot in ipairs( line.logical_volume.snapshots ) do
-						snapshot.highlight.background_color = color
+			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_highlight_accesss_patterns( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical_volume and
+		   not line.logical_volume.is_snapshot() then
+			if line.logical_volume.access_patterns then
+				for _, access_pattern in pairs( line.logical_volume.access_patterns ) do
+					access_pattern.highlight.background_color = line.logical_volume.highlight.background_color
+				end
+			end
+			if #line.logical_volume.snapshots ~= 0 then
+				for _, snapshot in ipairs( line.logical_volume.snapshots ) do
+					--snapshot.highlight.background_color = color
+					if snapshot.access_patterns then
+						for _, access_pattern in pairs( snapshot.access_patterns ) do
+							access_pattern.highlight.background_color = snapshot.highlight.background_color
+						end
 					end
 				end
 			end
@@ -259,7 +393,7 @@ local function filter_mib2tib( matrix )
 				line.logical.volume_group.total = M.mib2tib( line.logical.volume_group.total )
 			else
 				line.logical.volume_group = {}
-				line.logical.volume_group.extent = 4
+				line.logical.volume_group.extent = lvm.VolumeGroup.PE_DEFAULT_SIZE
 				line.logical.volume_group.allocated_mib = 0
 				line.logical.volume_group.allocated = 0
 				line.logical.volume_group.total_mib = line.logical.capacity_mib
@@ -281,56 +415,6 @@ local function filter_add_logical_id_to_physical( matrix )
 			for _, physical in pairs( line.logical.physicals ) do
 				physical.logical_id = line.logical.id
 			end
-		end
-	end
-	return matrix
-end
-
-function M.filter_add_access_patterns( matrix, access_patterns )
-	access_patterns = access_patterns or scst.AccessPattern.list()
-	local access_patterns_named_hash = common.unique_keys( "name", access_patterns )
-	local access_patterns_names = common.keys( access_patterns_named_hash  )
-	table.sort( access_patterns_names )
-
-	local lines = matrix.lines
-	-- Fillup matrix with AccessPatterns
-	for current_line, access_pattern_name in ipairs( access_patterns_names ) do
-		access_pattern = access_patterns[ access_patterns_named_hash[ access_pattern_name ][1] ]
-		if not lines[ current_line ] then
-			lines[ current_line ] = {}
-		end
-		lines[ current_line ][ "access_pattern" ] = access_pattern
-	end
-
-	-- Calculate AccessPatterns-related TD's colspan
-	local logical_scope = 0
-	for current_line, line in ipairs( lines ) do
-		if line.logical then
-			local logical_volumes_names = common.keys( line.logical.logical_volumes or {} )
-			if #logical_volumes_names > 0 then
-				for i = current_line, current_line -1 + line.logical.logical_volumes[ logical_volumes_names[1] ].rowspan * #logical_volumes_names do
-					if lines[ i ].access_pattern then
-						lines[ i ].access_pattern.colspan = 1
-					end
-				end
-			end
-			for i = current_line, current_line + line.logical.rowspan -1 do
-				if lines[ i ].access_pattern and not lines[ i ].access_pattern.colspan then
-					lines[ i ].access_pattern.colspan = 2
-				end
-			end
-			logical_scope = line.logical.rowspan
-		end
-		if line.access_pattern and logical_scope == 0 then
-			-- We are outside logical's scope
-			if line.physical then
-				lines[ current_line ].access_pattern.colspan = 3
-			else
-				lines[ current_line ].access_pattern.colspan = 4
-			end
-		end
-		if logical_scope > 0 then
-			logical_scope = logical_scope - 1
 		end
 	end
 	return matrix
@@ -380,8 +464,20 @@ function filter_serialize( matrix )
 	return matrix
 end
 
+-- Lua 5.1+ base64 v3.0 (c) 2009 by Alex Kloss <alexthkloss@web.de>
+-- licensed under the terms of the LGPL2
 local function b64encode( data )
-	return (mime.b64( data ))
+	local b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+	return ( ( data:gsub( ".", function(x)
+		local r, b = "", x:byte()
+		for i = 8, 1, -1 do r = r .. ( b % 2^i - b % 2^( i - 1 ) > 0 and "1" or "0" ) end
+		return r;
+	end ) .. "0000" ):gsub( "%d%d%d?%d?%d?%d?", function(x)
+		if( #x < 6 ) then return "" end
+		local c = 0
+		for i = 1, 6 do c = c + ( x:sub( i, i ) == "1" and 2^( 6 - i ) or 0 ) end
+		return b:sub( c + 1, c + 1 )
+	end ) .. ({ "", '==', "=" })[ #data % 3 + 1 ] )
 end
 
 function filter_base64encode( matrix )
@@ -402,22 +498,23 @@ local function logical_volume_group( logical, volume_groups )
 end
 
 local function snapshots_to_outer( logical_volumes )
-	for _, logical_volume_name in ipairs( common.keys( logical_volumes ) ) do
-		local logical_volume = logical_volumes[ logical_volume_name ]
+	local processed = {}
+	for logical_volume_device, logical_volume in pairs( logical_volumes ) do
+		processed[ logical_volume_device ] = logical_volume
 		if logical_volume.snapshots then
 			for _, snapshot in ipairs( logical_volume.snapshots ) do
-				logical_volumes[ snapshot.name ] = snapshot
+				processed[ snapshot.device ] = snapshot
 			end
 		end
 	end
-	return logical_volumes
+	return processed
 end
 
 local function logical_logical_volumes( logical, logical_volumes )
 	local logical_volumes_needed = {}
 	for _, logical_volume in ipairs( logical_volumes ) do
 		if logical_volume.volume_group.physical_volumes[1].device == logical.device then
-			logical_volumes_needed[ logical_volume.name ] = logical_volume
+			logical_volumes_needed[ logical_volume.device ] = logical_volume
 		end
 	end
 	return snapshots_to_outer( logical_volumes_needed )
@@ -427,9 +524,12 @@ function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 	local logicals_for_serialization = {}
+
+	lvm.restore()
 	local physical_volumes = lvm.PhysicalVolume.list()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
+	local access_patterns = scst.AccessPattern.list()
 
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
@@ -453,25 +553,26 @@ function M.caller()
 	local matrix = {
 		lines = M.overall( {
 			physicals = physicals,
-			logicals = logicals } ),
+			logicals = logicals,
+			access_patterns = access_patterns } ),
 		logicals = logicals_for_serialization,
 		physicals = physicals,
 		physical_volumes = physical_volumes,
 		volume_groups = volume_groups,
-		logical_volumes = logical_volumes_for_serialization
+		logical_volumes = logical_volumes_for_serialization,
+		access_patterns = access_patterns
 	}
 	local FILTERS = {
 		M.filter_borders_highlight,
 		M.filter_alternation_border_colors,
 		M.filter_highlight_snapshots,
+		M.filter_highlight_accesss_patterns,
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
-		M.filter_add_access_patterns,
 		M.filter_calculate_hotspares,
 		filter_mib2tib,
 		filter_serialize,
 		filter_base64encode
-		-- filter_overall_fields_counter (for hiding)
 	}
 	for _,filter in ipairs( FILTERS ) do
 		matrix = filter( matrix )

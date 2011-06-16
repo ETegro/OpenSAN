@@ -1,4 +1,3 @@
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -13,34 +12,31 @@ msgstr ""
 "X-Generator: Translate Toolkit 1.1.1\n"
 
 msgid "(%d minute window, %d second interval)"
-msgstr ""
+msgstr "(%d минутное окно, %d секунд интервал)"
 
-#, fuzzy
 msgid "(%s available)"
-msgstr " (%s available)"
+msgstr "(%s доступно)"
 
 msgid "(empty)"
-msgstr ""
+msgstr "(пусто)"
 
-#, fuzzy
 msgid "(no interfaces attached)"
-msgstr "Ignore interface"
+msgstr "(нет привязанных интерфейсов)"
 
 msgid "-- Additional Field --"
 msgstr "-- Дополнительная вкладка --"
 
 msgid "-- Please choose --"
-msgstr "-- Пожалуйста выберете --"
+msgstr "-- Пожалуйста выберите --"
 
-#, fuzzy
 msgid "-- custom --"
 msgstr "-- выборочный --"
 
 msgid "1 Minute Load:"
-msgstr ""
+msgstr "Нагрузка за 1 минуту:"
 
 msgid "15 Minute Load:"
-msgstr ""
+msgstr "Нагрузка за 15 минут:"
 
 msgid "40MHz 2nd channel above"
 msgstr ""
@@ -49,7 +45,7 @@ msgid "40MHz 2nd channel below"
 msgstr ""
 
 msgid "5 Minute Load:"
-msgstr ""
+msgstr "Нагрузка за 5 минут:"
 
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 msgstr ""
@@ -58,7 +54,7 @@ msgid ""
 "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/"
 "prefix"
 msgstr ""
-"<abbr title=\"Беcклассовая адресация\">CIDR</abbr>-Обозначение: адрес/префикс"
+"<abbr title=\"Безклассовая адресация\">CIDR</abbr>-Обозначение: адрес/префикс"
 
 msgid "<abbr title=\"Domain Name System\">DNS</abbr> query port"
 msgstr ""
@@ -75,7 +71,7 @@ msgid "<abbr title=\"Domain Name System\">DNS</abbr>-Server"
 msgstr "<abbr title=\"Служба Доменных Имён\">DNS</abbr>-Сервер"
 
 msgid "<abbr title=\"Encrypted\">Encr.</abbr>"
-msgstr "<abbr title=\"Зашифрованно\">Шифрование</abbr>"
+msgstr "<abbr title=\"Зашифровано\">Шифрование</abbr>"
 
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr ""
@@ -119,16 +115,15 @@ msgid ""
 msgstr ""
 "<abbr title=\"Lua Конфигурационный Интерфейс\">LuCI</abbr> это свободное Lua "
 "програмное обеспечение включая <abbr title=\"Model-View-Controller\">MVC</"
-"abbr>-Вебфреймворк и веб интерфейс встраиваемый в устройства. <abbr title="
+"abbr>-webframework и web интерфейс встраиваемый в устройства. <abbr title="
 "\"Lua Конфигурационный Интерфейс\">LuCI</abbr> распространяется под "
 "лицензией Apache-License."
 
 msgid "<abbr title=\"Media Access Control\">MAC</abbr>-Address"
 msgstr "<abbr title=\"Управление доступом к носителю\">MAC</abbr>-Адрес"
 
-#, fuzzy
 msgid "<abbr title=\"Point-to-Point Tunneling Protocol\">PPTP</abbr>-Server"
-msgstr "<abbr title=\"Hypertext Transfer Protocol\">HTTP</abbr>-Сервер"
+msgstr ""
 
 msgid "<abbr title=\"Secure Shell\">SSH</abbr>-Keys"
 msgstr "<abbr title=\"Secure Shell\">SSH</abbr>-Ключи"
@@ -163,6 +158,9 @@ msgstr ""
 msgid "AR Support"
 msgstr ""
 
+msgid "ARP ping retries"
+msgstr ""
+
 msgid "ATM Bridges"
 msgstr ""
 
@@ -187,18 +185,20 @@ msgstr ""
 msgid "About"
 msgstr "О программе"
 
+msgid "Accept Router Advertisements"
+msgstr ""
+
 msgid "Access Point"
 msgstr "Точка доступа"
 
-#, fuzzy
 msgid "Access point (APN)"
-msgstr "Активен"
+msgstr "Точка доступа (APN)"
 
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
 msgid "Actions"
-msgstr ""
+msgstr "Действия"
 
 msgid "Active <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Routes"
 msgstr ""
@@ -211,13 +211,16 @@ msgstr ""
 "Маршрутизации"
 
 msgid "Active Connections"
-msgstr ""
+msgstr "Активные соединения"
+
+msgid "Active IP Connections"
+msgstr "Активно IP соединений"
 
 msgid "Active Leases"
-msgstr "Active Leases"
+msgstr ""
 
 msgid "Ad-Hoc"
-msgstr "Ad-Hoc"
+msgstr ""
 
 msgid "Add"
 msgstr "Добавить"
@@ -226,7 +229,7 @@ msgid "Add local domain suffix to names served from hosts files"
 msgstr ""
 
 msgid "Add new interface..."
-msgstr ""
+msgstr "Добавить новый интерфейс..."
 
 msgid "Additional Hosts files"
 msgstr ""
@@ -235,10 +238,10 @@ msgid "Additional pppd options"
 msgstr ""
 
 msgid "Address"
-msgstr ""
+msgstr "Адрес"
 
 msgid "Addresses"
-msgstr "Адрес"
+msgstr "Адреса"
 
 msgid "Admin Password"
 msgstr "Пароль администратора"
@@ -246,9 +249,8 @@ msgstr "Пароль администратора"
 msgid "Administration"
 msgstr "Управление"
 
-#, fuzzy
 msgid "Advanced Settings"
-msgstr "Начальные Установки"
+msgstr ""
 
 msgid "Advertise IPv6 on network"
 msgstr ""
@@ -257,7 +259,7 @@ msgid "Advertised network ID"
 msgstr ""
 
 msgid "Alert"
-msgstr ""
+msgstr "Тревога"
 
 msgid "Alias"
 msgstr ""
@@ -275,19 +277,21 @@ msgstr ""
 msgid "Allow localhost"
 msgstr ""
 
+msgid "Allow remote hosts to connect to local SSH forwarded ports"
+msgstr "Разрешать удалённым хостам присоединяться к локальным перенаправленным SSH портам"
+
+msgid "Allow root logins with password"
+msgstr "Допускать вход root по паролю"
+
+msgid "Allow the <em>root</em> user to login with password"
+msgstr "Разрешать <em>root</em> пользователю авторизовываться по паролю"
+
 msgid ""
 "Allow upstream responses in the 127.0.0.0/8 range, e.g. for RBL services"
 msgstr ""
 
 msgid "Allowed range is 1 to FFFF"
 msgstr ""
-
-msgid ""
-"Also kernel or service logfiles can be viewed here to get an overview over "
-"their current state."
-msgstr ""
-"А так же ядра или сервисов, системный журнал может быть так же просмотрен "
-"здесь для того что бы получить полный обзор текущего состояния системы."
 
 msgid "An additional network will be created if you leave this unchecked."
 msgstr ""
@@ -302,13 +306,13 @@ msgid "Apply"
 msgstr "Принять"
 
 msgid "Applying changes"
-msgstr ""
+msgstr "Применяются изменения"
 
 msgid "Associated Stations"
 msgstr ""
 
 msgid "Authentication"
-msgstr ""
+msgstr "Аутентификация"
 
 msgid "Authentication Realm"
 msgstr "Аутентификационная область"
@@ -323,19 +327,19 @@ msgid "Automatic Disconnect"
 msgstr "Automatic Disconnect"
 
 msgid "Available"
-msgstr "Доступно\""
+msgstr "Доступно"
 
 msgid "Available packages"
-msgstr ""
+msgstr "Доступные пакеты"
 
 msgid "Average:"
-msgstr ""
+msgstr "Среднее:"
 
 msgid "BSSID"
 msgstr ""
 
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 msgid "Back to Overview"
 msgstr ""
@@ -350,7 +354,7 @@ msgid "Background Scan"
 msgstr ""
 
 msgid "Backup / Restore"
-msgstr "Резервирование / Восстановление"
+msgstr "Резервное копирование / Восстановление"
 
 msgid "Backup Archive"
 msgstr "Архив восстановления"
@@ -364,19 +368,20 @@ msgstr ""
 msgid "Bitrate"
 msgstr ""
 
-#, fuzzy
 msgid "Bridge"
-msgstr "Мост"
+msgstr ""
 
-#, fuzzy
 msgid "Bridge Port"
-msgstr "Мост"
+msgstr ""
 
 msgid "Bridge interfaces"
 msgstr "Мост"
 
 msgid "Bridge unit number"
 msgstr ""
+
+msgid "Buffered"
+msgstr "Буферизировано"
 
 msgid "Buttons"
 msgstr ""
@@ -385,13 +390,16 @@ msgid "CPU"
 msgstr ""
 
 msgid "CPU usage (%)"
-msgstr ""
+msgstr "Использование ЦПУ (%)"
+
+msgid "Cached"
+msgstr "Закэшировано"
 
 msgid "Cancel"
-msgstr "Cancel"
+msgstr "Отменить"
 
 msgid "Chain"
-msgstr ""
+msgstr "Цепь"
 
 msgid ""
 "Change the password of the system administrator (User <code>root</code>)"
@@ -404,14 +412,17 @@ msgstr "Изменения"
 msgid "Changes applied."
 msgstr "Изменения приняты."
 
+msgid "Changes the administrator password for accessing the device"
+msgstr "Изменение пароля администратора для доступа к устройству"
+
 msgid "Channel"
 msgstr "Канал"
 
 msgid "Check"
-msgstr ""
+msgstr "Проверить"
 
 msgid "Checksum"
-msgstr "Checksum"
+msgstr "Контрольная сумма"
 
 msgid ""
 "Choose the firewall zone you want to assign to this interface. Select "
@@ -433,40 +444,39 @@ msgid "Client + WDS"
 msgstr ""
 
 msgid "Collecting data..."
-msgstr ""
+msgstr "Сбор данных..."
 
 msgid "Command"
-msgstr ""
+msgstr "Команда"
 
 msgid "Common Configuration"
-msgstr ""
+msgstr "Общая конфигурация"
 
 msgid "Compression"
-msgstr ""
+msgstr "Сжатие"
 
 msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "Configuration / Apply"
-msgstr ""
+msgstr "Конфигурация / Применить"
 
 msgid "Configuration / Changes"
-msgstr ""
+msgstr "Конфигурация / Изменения"
 
 msgid "Configuration / Revert"
-msgstr ""
+msgstr "Конфигурация / Возвратить"
 
 msgid "Configuration applied."
-msgstr ""
+msgstr "Конфигурация применена."
 
 msgid "Configuration file"
 msgstr "Файл конфигурации"
 
-#, fuzzy
 msgid ""
 "Configure the local DNS server to use the name servers adverticed by the PPP "
 "peer"
-msgstr "Перед. / Получ."
+msgstr "Сконфигурировать локальный DNS сервер на использование серверов имён сообщённых PPP соединением"
 
 msgid "Configures this mount as overlay storage for block-extroot"
 msgstr ""
@@ -474,9 +484,11 @@ msgstr ""
 msgid "Confirmation"
 msgstr "Подтверждение"
 
-#, fuzzy
 msgid "Connect script"
-msgstr "Ошибок"
+msgstr "Сценарий соединения"
+
+msgid "Connected"
+msgstr "Подсоединён"
 
 msgid "Connection Limit"
 msgstr "Ограничение соединений"
@@ -488,46 +500,46 @@ msgid "Contributing Developers"
 msgstr "Помогавшие в разработке"
 
 msgid "Country"
-msgstr ""
+msgstr "Страна"
 
 msgid "Country Code"
 msgstr "Код страны"
 
 msgid "Cover the following interface"
-msgstr ""
+msgstr "Покрыть следующий интерфейс"
 
 msgid "Cover the following interfaces"
-msgstr ""
+msgstr "Покрыть следующие интерфейсы"
 
 msgid "Create / Assign firewall-zone"
 msgstr "Создать / Добавить Файрвол-зону"
 
 msgid "Create Interface"
-msgstr ""
+msgstr "Создать интерфейс"
 
 msgid "Create Network"
-msgstr ""
+msgstr "Создать сеть"
 
 msgid "Create a bridge over multiple interfaces"
-msgstr ""
+msgstr "Создать мост поверх нескольких интерфейсов"
 
 msgid "Create backup"
 msgstr "Создать резервную копию"
 
 msgid "Critical"
-msgstr ""
+msgstr "Критичность"
 
 msgid "Cron Log Level"
-msgstr ""
+msgstr "Уровень информативности Cron"
 
 msgid "Custom Files"
-msgstr ""
+msgstr "Выборочные файлы"
 
 msgid "Custom Interface"
-msgstr ""
+msgstr "Выборочный интерфейс"
 
 msgid "Custom files"
-msgstr ""
+msgstr "Выборочные файлы"
 
 msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
@@ -542,17 +554,26 @@ msgstr ""
 msgid "DHCP Server"
 msgstr ""
 
+msgid "DHCP and DNS"
+msgstr ""
+
 msgid "DHCP assigned"
 msgstr ""
 
 msgid "DHCP-Options"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 msgid "DNS forwardings"
 msgstr ""
 
 msgid "Debug"
-msgstr ""
+msgstr "Отладка"
+
+msgid "Default"
+msgstr "По умолчанию"
 
 msgid "Default state"
 msgstr ""
@@ -570,25 +591,25 @@ msgid "Delete"
 msgstr "Удалить"
 
 msgid "Delete this interface"
-msgstr ""
+msgstr "Удалить данный интерфейс"
 
 msgid "Delete this network"
-msgstr ""
+msgstr "Удалить данную сеть"
 
 msgid "Description"
 msgstr "Описание"
 
 msgid "Design"
-msgstr "Создание"
+msgstr "Внешний вид"
 
 msgid "Destination"
-msgstr ""
+msgstr "Назначение"
 
 msgid "Detected Files"
-msgstr ""
+msgstr "Обнаруженные файлы"
 
 msgid "Detected files"
-msgstr ""
+msgstr "Обнаруженные файлы"
 
 msgid "Device"
 msgstr "Устройство"
@@ -597,6 +618,9 @@ msgid "Device Configuration"
 msgstr ""
 
 msgid "Diagnostics"
+msgstr "Диагностика"
+
+msgid "Directory"
 msgstr ""
 
 msgid ""
@@ -607,12 +631,14 @@ msgstr ""
 msgid "Disable HW-Beacon timer"
 msgstr ""
 
+msgid "Disabled"
+msgstr "Выключено"
+
 msgid "Discard upstream RFC1918 responses"
 msgstr ""
 
-#, fuzzy
 msgid "Disconnect script"
-msgstr "Создать / Добавить Файрвол-зону"
+msgstr "Сценарий рассоединения"
 
 msgid "Distance Optimization"
 msgstr ""
@@ -649,7 +675,7 @@ msgid "Document root"
 msgstr "Корневая папка"
 
 msgid "Domain required"
-msgstr "Domain required"
+msgstr "Требуется домен"
 
 msgid "Domain whitelist"
 msgstr ""
@@ -663,6 +689,9 @@ msgstr ""
 
 msgid "Download and install package"
 msgstr "Загрузить и установить пакеты"
+
+msgid "Dropbear Instance"
+msgstr ""
 
 msgid ""
 "Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access "
@@ -687,27 +716,28 @@ msgid "Edit"
 msgstr "Редактировать"
 
 msgid "Edit package lists and installation targets"
-msgstr "Изменить листинг пакетов и путей установки"
+msgstr "Изменить список пакетов и путей установки"
 
 msgid "Edit this interface"
-msgstr ""
+msgstr "Редактировать данный интерфейс"
 
 msgid "Edit this network"
 msgstr ""
 
 msgid "Emergency"
-msgstr ""
+msgstr "Неотложность"
 
 msgid "Enable 4K VLANs"
-msgstr ""
+msgstr "Включить 4K VLAN-ы"
 
-#, fuzzy
 msgid "Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
-msgstr "<abbr title=\"Hypertext Transfer Protocol\">HTTP</abbr>-Сервер"
+msgstr "Включить <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
 
-#, fuzzy
 msgid "Enable IPv6 on PPP link"
-msgstr "Активен"
+msgstr "Включить IPv6 на PPP соединении"
+
+msgid "Enable Jumbo Frame passthrough"
+msgstr ""
 
 msgid "Enable Keep-Alive"
 msgstr ""
@@ -730,11 +760,14 @@ msgstr ""
 msgid "Enable this switch"
 msgstr ""
 
+msgid "Enable/Disable"
+msgstr "Включить/Выключить"
+
 msgid "Enabled"
-msgstr ""
+msgstr "Включено"
 
 msgid "Enables the Spanning Tree Protocol on this bridge"
-msgstr ""
+msgstr "Включить Spanning Tree Protocol на данном мосте"
 
 msgid "Encapsulation mode"
 msgstr ""
@@ -746,11 +779,10 @@ msgid "Error"
 msgstr "Ошибка"
 
 msgid "Ethernet Adapter"
-msgstr ""
+msgstr "Ethernet адаптер"
 
-#, fuzzy
 msgid "Ethernet Bridge"
-msgstr "Мост"
+msgstr "Мост Ethernet"
 
 msgid "Ethernet Switch"
 msgstr ""
@@ -758,18 +790,24 @@ msgstr ""
 msgid "Expand hosts"
 msgstr ""
 
+msgid "Expires"
+msgstr ""
+
 msgid ""
 "Expiry time of leased addresses, minimum is 2 Minutes (<code>2m</code>)."
 msgstr ""
 
 msgid "External system log server"
-msgstr ""
+msgstr "Внешний сервер системного журнала"
 
 msgid "External system log server port"
-msgstr ""
+msgstr "Порт внешнего сервера системного журнала"
 
 msgid "Fast Frames"
 msgstr ""
+
+msgid "File"
+msgstr "Файл"
 
 msgid "Filename of the boot image advertised to clients"
 msgstr ""
@@ -796,39 +834,42 @@ msgid "Find package"
 msgstr "Найти пакет"
 
 msgid "Finish"
-msgstr ""
+msgstr "Закончить"
 
 msgid "Firewall"
 msgstr ""
 
-#, fuzzy
 msgid "Firewall Settings"
 msgstr ""
-"Здесь вы можете найти информацию о текущей статистики системы вроде частоты "
-"процессора, использования памяти или сетевого интерфейса."
 
-#, fuzzy
 msgid "Firewall Status"
 msgstr ""
-"Здесь вы можете найти информацию о текущей статистики системы вроде частоты "
-"процессора, использования памяти или сетевого интерфейса."
+
+msgid "Firmware Version"
+msgstr "Версия прошивки"
 
 msgid "Firmware image"
-msgstr "Firmware image"
+msgstr "Образ прошивки"
 
 msgid "Fixed source port for outbound DNS queries"
 msgstr ""
 
 msgid "Flags"
-msgstr ""
+msgstr "Флаги"
 
 msgid "Flash Firmware"
-msgstr "Flash Firmware"
+msgstr "Перепрошивка"
 
 msgid "Force"
-msgstr "Force"
+msgstr ""
 
 msgid "Force DHCP on this network even if another server is detected."
+msgstr ""
+
+msgid "Forward DHCP"
+msgstr ""
+
+msgid "Forward broadcasts"
 msgstr ""
 
 msgid "Forwarding mode"
@@ -840,21 +881,32 @@ msgstr ""
 msgid "Frame Bursting"
 msgstr ""
 
+msgid "Free"
+msgstr "Свободно"
+
 msgid "Free space"
-msgstr ""
+msgstr "Свободное пространство"
 
 msgid "Frequency Hopping"
 msgstr ""
+
+msgid "Gateway"
+msgstr "Шлюз"
+
+msgid "Gateway ports"
+msgstr "Порты шлюза"
 
 msgid "General"
 msgstr "Основной"
 
 msgid "General Settings"
-msgstr ""
+msgstr "Основные настройки"
 
-#, fuzzy
 msgid "General Setup"
-msgstr "Основной"
+msgstr "Базовая установка"
+
+msgid "Given password confirmation did not match, password not changed!"
+msgstr "Введённые пароли не совпадают, пароль не изменён!"
 
 msgid "Go to relevant configuration page"
 msgstr "Перейти к странице конфигурации"
@@ -872,14 +924,14 @@ msgid "Handler"
 msgstr ""
 
 msgid "Hang Up"
-msgstr ""
+msgstr "Повесить"
 
 msgid ""
 "Here you can backup and restore your router configuration and - if possible "
 "- reset the router to the default settings."
 msgstr ""
-"Здесь вы можете сделать резевную копию и воссановить конфигурацию вашего "
-"роутера, если это возможно, или установить настройки по умолчанию."
+"Здесь вы можете сделать резервную копию и восстановить конфигурацию вашего "
+"маршрутизатора, если это возможно, или выставить настройки по умолчанию."
 
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
@@ -896,14 +948,6 @@ msgstr ""
 "Конфигурационный Интерфейс\">LuCI</abbr>."
 
 msgid ""
-"Here you can find information about the current system status like <abbr "
-"title=\"Central Processing Unit\">CPU</abbr> clock frequency, memory usage "
-"or network interface data."
-msgstr ""
-"Здесь вы можете найти информацию о текущей статистики системы вроде частоты "
-"процессора, использования памяти или сетевого интерфейса."
-
-msgid ""
 "Here you can paste public <abbr title=\"Secure Shell\">SSH</abbr>-Keys (one "
 "per line) for <abbr title=\"Secure Shell\">SSH</abbr> public-key "
 "authentication."
@@ -912,10 +956,18 @@ msgstr ""
 "Ключ для <abbr title=\"Secure Shell\">SSH</abbr> публичной-ключевой "
 "аутентификации."
 
+msgid ""
+"Here you can paste public SSH-Keys (one per line) for SSH public-key "
+"authentication."
+msgstr "Здесь вы можете вставить публичные SSH-ключи (по одному на строку) для SSH public-key авторизации."
+
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "Скрыть <abbr title=\"Расширенный идентификатор сети\">ESSID</abbr>"
 
 msgid "Host entries"
+msgstr ""
+
+msgid "Host expiry timeout"
 msgstr ""
 
 msgid "Host-<abbr title=\"Internet Protocol Address\">IP</abbr> or Network"
@@ -925,17 +977,16 @@ msgid "Hostname"
 msgstr "Имя хоста"
 
 msgid "Hostnames"
-msgstr ""
+msgstr "Имена хостов"
 
-#, fuzzy
 msgid "ID"
-msgstr "Мост"
+msgstr ""
 
 msgid "IP Configuration"
-msgstr ""
+msgstr "Настройки IP"
 
 msgid "IP address"
-msgstr ""
+msgstr "IP адрес"
 
 msgid "IP-Aliases"
 msgstr ""
@@ -945,6 +996,9 @@ msgstr ""
 
 msgid "IPv4 Firewall"
 msgstr ""
+
+msgid "IPv4 WAN Status"
+msgstr "Статус IPv4 WAN"
 
 msgid "IPv4-Address"
 msgstr ""
@@ -956,6 +1010,9 @@ msgid "IPv6 Firewall"
 msgstr ""
 
 msgid "IPv6 Setup"
+msgstr ""
+
+msgid "IPv6 WAN Status"
 msgstr ""
 
 msgid "Identity"
@@ -995,52 +1052,55 @@ msgid "Ignore resolve file"
 msgstr "Ignore resolvfile"
 
 msgid "In"
-msgstr ""
+msgstr "В"
 
 msgid "Inbound:"
-msgstr ""
+msgstr "Входящий:"
 
 msgid "Info"
-msgstr ""
+msgstr "Информация"
+
+msgid "Initscript"
+msgstr "Сценарий запуска"
+
+msgid "Initscripts"
+msgstr "Сценарии запуска"
 
 msgid "Install"
 msgstr "Установка"
 
 msgid "Installation targets"
-msgstr "Путь установки"
+msgstr "Цель установки"
 
 msgid "Installed packages"
-msgstr ""
+msgstr "Установленные пакеты"
 
 msgid "Interface"
 msgstr "Интерфейс"
 
 msgid "Interface Configuration"
-msgstr ""
+msgstr "Настройки интерфейса"
 
 msgid "Interface Overview"
-msgstr ""
+msgstr "Обзор интерфейсов"
 
-#, fuzzy
 msgid "Interface Status"
-msgstr ""
-"Здесь вы можете найти информацию о текущей статистики системы вроде частоты "
-"процессора, использования памяти или сетевого интерфейса."
+msgstr "Состояние интерфейса"
 
 msgid "Interface is reconnecting..."
-msgstr ""
+msgstr "Интерфейс переподключается..."
 
 msgid "Interface is shutting down..."
-msgstr ""
+msgstr "Интерфейс выключается..."
 
 msgid "Interface not present or not connected yet."
-msgstr ""
+msgstr "Интерфейс не присутствует или ещё не подключён."
 
 msgid "Interface reconnected"
-msgstr ""
+msgstr "Интерфейс переподключён"
 
 msgid "Interface shut down"
-msgstr ""
+msgstr "Остановить отключён"
 
 msgid "Interfaces"
 msgstr "Интерфейсы"
@@ -1057,14 +1117,11 @@ msgstr "Неверный логин и/или пароль! Пожалуйста
 msgid ""
 "It appears that you try to flash an image that does not fit into the flash "
 "memory, please verify the image file!"
-msgstr ""
-"It appears that you try to flash an image that does not fit into the flash "
-"memory, please verify the image file!"
+msgstr "Похоже что вы попытались перепрошить образ не умещающийся на flash память, пожалуйста проверьте файл образа!"
 
 msgid "Java Script required!"
-msgstr ""
+msgstr "Требуется поддержка JavaScript"
 
-#, fuzzy
 msgid "Join Network"
 msgstr "Сеть"
 
@@ -1078,16 +1135,19 @@ msgid "KB"
 msgstr ""
 
 msgid "Keep configuration files"
-msgstr "Keep configuration files"
+msgstr "Сохранить конфигурационные файлы"
 
 msgid "Keep-Alive"
 msgstr "Keep-Alive"
 
 msgid "Kernel"
-msgstr ""
+msgstr "Ядро"
 
 msgid "Kernel Log"
-msgstr "Kernel log"
+msgstr "Журнал ядра"
+
+msgid "Kernel Version"
+msgstr "Версия ядра"
 
 msgid "Key"
 msgstr "Ключ"
@@ -1096,7 +1156,7 @@ msgid "Key #%d"
 msgstr ""
 
 msgid "Kill"
-msgstr ""
+msgstr "Убить"
 
 msgid "LLC"
 msgstr ""
@@ -1108,42 +1168,39 @@ msgid "Language"
 msgstr "Язык"
 
 msgid "Language and Style"
-msgstr ""
+msgstr "Язык и стиль"
 
 msgid "Lead Development"
 msgstr "Ведущие разработчики"
 
 msgid "Leasefile"
-msgstr "Leasefile"
+msgstr ""
 
 msgid "Leasetime"
-msgstr "Leasetime"
+msgstr ""
 
 msgid "Leasetime remaining"
-msgstr "Leasetime remaining"
+msgstr ""
 
 msgid "Legend:"
-msgstr ""
+msgstr "Легенда:"
 
 msgid ""
 "Let pppd replace the current default route to use the PPP interface after "
 "successful connect"
 msgstr ""
 
-#, fuzzy
 msgid "Let pppd run this script after establishing the PPP link"
 msgstr "Перед. / Получ."
 
-#, fuzzy
 msgid "Let pppd run this script before tearing down the PPP link"
 msgstr "Этот интерфейс не принадлежит ни к одной Файрвол-зоне."
 
 msgid "Limit"
 msgstr "Предел"
 
-#, fuzzy
 msgid "Link"
-msgstr "Связь включена"
+msgstr "Соединение"
 
 msgid "Link On"
 msgstr "Связь включена"
@@ -1156,20 +1213,29 @@ msgstr ""
 msgid "List of domains to allow RFC1918 responses for"
 msgstr ""
 
+msgid "Listen only on the given interface or, if unspecified, on all"
+msgstr "Слушать только на заданном интерфейсе или, если не указано, на всех"
+
 msgid "Listening port for inbound DNS queries"
 msgstr ""
 
 msgid "Load"
 msgstr "Загрузка"
 
+msgid "Load Average"
+msgstr "Средняя нагрузка"
+
 msgid "Loading"
 msgstr ""
+
+msgid "Local Startup"
+msgstr "Локальный запуск"
 
 msgid "Local Time"
 msgstr "Локальное время"
 
 msgid "Local domain"
-msgstr ""
+msgstr "Локальный домен"
 
 msgid ""
 "Local domain specification. Names matching this domain are never forwared "
@@ -1180,7 +1246,7 @@ msgid "Local domain suffix appended to DHCP names and hosts file entries"
 msgstr ""
 
 msgid "Local server"
-msgstr ""
+msgstr "Локальный сервер"
 
 msgid ""
 "Localise hostname depending on the requesting subnet if multiple IPs are "
@@ -1188,16 +1254,16 @@ msgid ""
 msgstr ""
 
 msgid "Localise queries"
-msgstr "Localise queries"
+msgstr ""
 
 msgid "Log output level"
-msgstr ""
+msgstr "Уровень информативности журнала"
 
 msgid "Log queries"
 msgstr "Log queries"
 
 msgid "Logging"
-msgstr ""
+msgstr "Журналирование"
 
 msgid "Login"
 msgstr "Вход"
@@ -1212,20 +1278,19 @@ msgid "MAC"
 msgstr ""
 
 msgid "MAC Address"
-msgstr ""
+msgstr "MAC адрес"
 
 msgid "MAC-Address"
-msgstr ""
+msgstr "MAC-адрес"
 
 msgid "MAC-Address Filter"
-msgstr ""
+msgstr "Фильтр MAC-адреса"
 
-#, fuzzy
 msgid "MAC-Filter"
-msgstr "Фильтр"
+msgstr "MAC-фильтр"
 
 msgid "MAC-List"
-msgstr ""
+msgstr "Список MAC-ов"
 
 msgid "MTU"
 msgstr ""
@@ -1264,7 +1329,7 @@ msgid "Memory"
 msgstr "Память"
 
 msgid "Memory usage (%)"
-msgstr ""
+msgstr "Использование ОЗУ (%)"
 
 msgid "Metric"
 msgstr "Метрика"
@@ -1278,12 +1343,11 @@ msgstr ""
 msgid "Mode"
 msgstr "Режим"
 
-#, fuzzy
 msgid "Modem device"
-msgstr "Automatic Disconnect"
+msgstr "Модем"
 
 msgid "Monitor"
-msgstr "Monitor"
+msgstr ""
 
 msgid ""
 "Most of them are network servers, that offer a certain service for your "
@@ -1302,9 +1366,8 @@ msgstr ""
 msgid "Mount Point"
 msgstr "Точка присоединения"
 
-#, fuzzy
 msgid "Mount Points"
-msgstr "Точка присоединения"
+msgstr "Точки присоединения"
 
 msgid "Mount Points - Mount Entry"
 msgstr ""
@@ -1329,10 +1392,10 @@ msgid "Mounted file systems"
 msgstr "Монтированные файловые системы\""
 
 msgid "Move down"
-msgstr ""
+msgstr "Вниз"
 
 msgid "Move up"
-msgstr ""
+msgstr "Наверх"
 
 msgid "Multicast Rate"
 msgstr ""
@@ -1340,25 +1403,27 @@ msgstr ""
 #, fuzzy
 msgid "NAS ID"
 msgstr ""
-"Название сети (<abbr title=\"Расширенный идентификатор сети\">ESSID</abbr>)"
 
 msgid "Name"
 msgstr "Имя"
 
 msgid "Name of the new interface"
-msgstr ""
+msgstr "Название нового интерфейса"
 
 msgid "Name of the new network"
-msgstr ""
+msgstr "Название новой сети"
 
 msgid "Navigation"
-msgstr ""
+msgstr "Навигация"
+
+msgid "Netmask"
+msgstr "Маска сети"
 
 msgid "Network"
 msgstr "Сеть"
 
 msgid "Network Utilities"
-msgstr ""
+msgstr "Сетевые утилиты"
 
 msgid "Network boot image"
 msgstr ""
@@ -1367,10 +1432,10 @@ msgid "Networks"
 msgstr "Сети"
 
 msgid "Next »"
-msgstr ""
+msgstr "Далее »"
 
 msgid "No address configured on this interface."
-msgstr ""
+msgstr "Ни одного адреса не настроено на данном интерфейсе."
 
 msgid "No chains in this table"
 msgstr ""
@@ -1388,19 +1453,19 @@ msgid "No network configured on this device"
 msgstr ""
 
 msgid "No password set!"
-msgstr ""
+msgstr "Пароль не задан!"
 
 msgid "No rules in this chain"
 msgstr ""
 
 msgid "Noise"
-msgstr ""
+msgstr "Шум"
 
 msgid "None"
 msgstr ""
 
 msgid "Normal"
-msgstr ""
+msgstr "Нормально"
 
 msgid "Not associated"
 msgstr ""
@@ -1411,24 +1476,23 @@ msgstr ""
 msgid ""
 "Note: If you choose an interface here which is part of another network, it "
 "will be moved into this network."
-msgstr ""
+msgstr "Заметка: если вы выберите здесь интерфейс который является частью другой сети, то он будет перемещён в данную сеть."
 
 msgid "Notice"
-msgstr ""
+msgstr "Уведомление"
 
 msgid "Number of failed connection tests to initiate automatic reconnect"
 msgstr ""
 "Количество неудачных соединений для инициализации переподсоединения к серверу"
 
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 msgid "OPKG error code %i"
-msgstr ""
+msgstr "Код ошибки OPKG %i"
 
 msgid "OPKG-Configuration"
-msgstr ""
-"<abbr title=\"Openmoko Package Management System\">OPKG</abbr>-Настройка"
+msgstr "OPKG-настройки"
 
 msgid "Off-State Delay"
 msgstr ""
@@ -1453,33 +1517,36 @@ msgid "On-State Delay"
 msgstr ""
 
 msgid "One or more fields contain invalid values!"
-msgstr ""
+msgstr "Одно или более полей содержат неправильные значения!"
 
 msgid "One or more required fields have no value!"
-msgstr ""
+msgstr "Одно или более обязательных полей не заданы!"
 
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 msgid "Option changed"
-msgstr ""
+msgstr "Опция изменена"
 
 msgid "Option removed"
-msgstr ""
+msgstr "Опция удалена"
 
 msgid "Options"
 msgstr "Опции"
 
 msgid "Other:"
-msgstr ""
+msgstr "Другие:"
 
 msgid "Out"
-msgstr ""
+msgstr "Из"
 
 msgid "Outbound:"
-msgstr ""
+msgstr "Исходящий:"
 
 msgid "Outdoor Channels"
+msgstr ""
+
+msgid "Override Gateway"
 msgstr ""
 
 msgid ""
@@ -1491,24 +1558,22 @@ msgid "Overview"
 msgstr "Обзор"
 
 msgid "Owner"
-msgstr ""
+msgstr "Владелец"
 
 msgid "PID"
 msgstr ""
 
-#, fuzzy
 msgid "PIN code"
-msgstr "PPPoA Encapsulation"
+msgstr "PIN код"
 
-#, fuzzy
 msgid "PPP Settings"
-msgstr "Настройки"
+msgstr "PPP настройки"
 
 msgid "PPPoA Encapsulation"
 msgstr "PPPoA Encapsulation"
 
 msgid "Package libiwinfo required!"
-msgstr ""
+msgstr "Требуется libiwinfo пакет!"
 
 msgid "Package lists"
 msgstr "Листинг пакетов"
@@ -1520,7 +1585,7 @@ msgid "Package name"
 msgstr "Имя пакета"
 
 msgid "Packets"
-msgstr ""
+msgstr "Пакеты"
 
 msgid "Password"
 msgstr "Пароль"
@@ -1529,10 +1594,13 @@ msgid "Password authentication"
 msgstr "Аутентификация по паролю"
 
 msgid "Password of Private Key"
-msgstr ""
+msgstr "Пароль приватного ключа"
 
 msgid "Password successfully changed"
 msgstr "Пароль успешно изменён"
+
+msgid "Password successfully changed!"
+msgstr "Пароль успешно изменён!"
 
 msgid "Path to CA-Certificate"
 msgstr ""
@@ -1544,24 +1612,23 @@ msgid "Path to executable which handles the button event"
 msgstr ""
 
 msgid "Peak:"
-msgstr ""
+msgstr "Пиковая:"
 
 msgid "Perform reboot"
 msgstr "Выполнить перезагрузку"
 
 #, fuzzy
 msgid "Physical Settings"
-msgstr "Начальные Установки"
+msgstr "Установки"
 
-#, fuzzy
 msgid "Pkts."
-msgstr "Порты"
+msgstr "Пакетов"
 
 msgid "Please enter your username and password."
 msgstr "Пожалуйста, введите логин и пароль."
 
 msgid "Please wait: Device rebooting..."
-msgstr "Позалуйста подождите: Устройство перезагружается..."
+msgstr "Пожалуйста подождите: устройство перезагружается..."
 
 msgid "Plugin path"
 msgstr ""
@@ -1573,7 +1640,7 @@ msgid "Port"
 msgstr "Порт"
 
 msgid "Port %d"
-msgstr ""
+msgstr "Порт %d"
 
 msgid "Port %d is untagged in multiple VLANs!"
 msgstr ""
@@ -1590,27 +1657,26 @@ msgid "Ports"
 msgstr "Порты"
 
 msgid "Post-commit actions"
-msgstr "Запуск команд"
+msgstr "Действия после применения изменений"
 
 msgid "Power"
-msgstr "Мощьность"
+msgstr "Мощность"
 
-#, fuzzy
 msgid "Prevents client-to-client communication"
 msgstr "Не позволяет клиентам обмениваться друг с другом информацией"
 
 msgid "Primary"
-msgstr ""
+msgstr "Первичный"
 
 msgid "Proceed"
-msgstr ""
+msgstr "Продолжить"
 
 msgid "Proceed reverting all settings and resetting to firmware defaults?"
 msgstr ""
-"Перейти к возврашению всех настроек и установить настройки по умолчанию?"
+"Перейти к возвращению всех настроек и выставить настройки по умолчанию?"
 
 msgid "Processes"
-msgstr ""
+msgstr "Процессы"
 
 msgid "Processor"
 msgstr "Процессор"
@@ -1640,11 +1706,10 @@ msgid "RX"
 msgstr ""
 
 msgid "Radius-Port"
-msgstr "Radius-Port"
+msgstr "Порт RADIUS"
 
-#, fuzzy
 msgid "Radius-Server"
-msgstr "RadiusServer"
+msgstr "RADIUS сервер"
 
 msgid ""
 "Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
@@ -1671,13 +1736,13 @@ msgid ""
 msgstr ""
 
 msgid "Realtime Connections"
-msgstr ""
+msgstr "Соединения в реальном времени"
 
 msgid "Realtime Load"
-msgstr ""
+msgstr "Нагрузка в реальном времени"
 
 msgid "Realtime Traffic"
-msgstr ""
+msgstr "Трафик в реальном времени"
 
 msgid "Rebind protection"
 msgstr ""
@@ -1695,15 +1760,21 @@ msgid "Receiver Antenna"
 msgstr ""
 
 msgid "Reconnect this interface"
-msgstr ""
+msgstr "Переподключить данный интерфейс"
 
 msgid "Reconnecting interface"
-msgstr ""
+msgstr "Переподключение интерфейса"
 
 msgid "References"
-msgstr ""
+msgstr "Ссылки"
 
 msgid "Regulatory Domain"
+msgstr ""
+
+msgid "Relay Settings"
+msgstr ""
+
+msgid "Relay between networks"
 msgstr ""
 
 msgid "Remove"
@@ -1739,6 +1810,9 @@ msgstr ""
 msgid "Resolve file"
 msgstr ""
 
+msgid "Restart"
+msgstr "Перезапуск"
+
 msgid "Restart Firewall"
 msgstr ""
 
@@ -1746,7 +1820,7 @@ msgid "Restore backup"
 msgstr "Восстановить резервную копию"
 
 msgid "Reveal/hide password"
-msgstr ""
+msgstr "Показать/скрыть пароль"
 
 msgid "Revert"
 msgstr "Вернуть"
@@ -1757,9 +1831,17 @@ msgstr ""
 msgid "Root directory for files served via TFTP"
 msgstr ""
 
-#, fuzzy
+msgid "Router Model"
+msgstr "Модель маршрутизатора"
+
+msgid "Router Name"
+msgstr "Имя маршрутизатора"
+
+msgid "Router Password"
+msgstr "Пароль маршрутизатора"
+
 msgid "Routes"
-msgstr "Маршрут"
+msgstr "Маршруты"
 
 msgid ""
 "Routes specify over which interface and gateway a certain host or network "
@@ -1768,8 +1850,11 @@ msgstr ""
 "Маршрутизация служит для определения через какой интерфейс и шлюз можно "
 "пройти к определённому хосту или сегменту сети."
 
+msgid "Routing table ID"
+msgstr "ID таблицы маршрутизации"
+
 msgid "Rule #"
-msgstr ""
+msgstr "Правило #"
 
 msgid "Run a filesystem check before mounting the device"
 msgstr ""
@@ -1777,30 +1862,32 @@ msgstr ""
 msgid "Run filesystem check"
 msgstr ""
 
+msgid "SSH Access"
+msgstr "SSH доступ"
+
+msgid "SSH-Keys"
+msgstr "SSH-ключи"
+
 msgid "SSID"
 msgstr ""
 
-#, fuzzy
 msgid "STP"
-msgstr "Мост"
+msgstr ""
 
 msgid "Save"
 msgstr "Сохранить"
 
 msgid "Save & Apply"
-msgstr "Сохранить & Принять"
+msgstr "Сохранить и принять"
 
 msgid "Save &#38; Apply"
-msgstr ""
+msgstr "Сохранить и принять"
 
 msgid "Scan"
 msgstr ""
 
 msgid "Scheduled Tasks"
-msgstr ""
-
-msgid "Search file..."
-msgstr ""
+msgstr "Запланированные задачи"
 
 #, fuzzy
 msgid ""
@@ -1808,12 +1895,15 @@ msgid ""
 msgstr "передано / получено"
 
 msgid "Section added"
-msgstr ""
+msgstr "Секция добавлена"
 
 msgid "Section removed"
-msgstr ""
+msgstr "Секция удалена"
 
 msgid "See \"mount\" manpage for details"
+msgstr ""
+
+msgid "Send Router Solicitiations"
 msgstr ""
 
 msgid "Separate Clients"
@@ -1822,16 +1912,14 @@ msgstr ""
 msgid "Separate WDS"
 msgstr ""
 
-msgid "Server"
-msgstr ""
-
 msgid "Server IPv4-Address"
 msgstr ""
 
-#, fuzzy
+msgid "Server Settings"
+msgstr "Настройки сервера"
+
 msgid "Service type"
-msgstr ""
-"<abbr title=\"протокол передачи кадров PPP через Тоннель\">PPTP</abbr>-Сервер"
+msgstr "Тип службы"
 
 msgid "Services"
 msgstr "Сервисы"
@@ -1842,21 +1930,20 @@ msgstr "Сервисы и демоны выполняющие определён
 msgid "Settings"
 msgstr "Настройки"
 
-#, fuzzy
 msgid "Setup wait time"
-msgstr "Трафик"
+msgstr "Время ожидания настройки"
 
 msgid "Shutdown this interface"
-msgstr ""
+msgstr "Отключить данный интерфейс"
 
 msgid "Signal"
-msgstr ""
+msgstr "Сигнал"
 
 msgid "Size"
 msgstr "Размер"
 
 msgid "Skip"
-msgstr ""
+msgstr "Пропустить"
 
 msgid "Skip to content"
 msgstr ""
@@ -1871,26 +1958,27 @@ msgid "Software"
 msgstr "Программное обеспечение"
 
 msgid "Some fields are invalid, cannot save values!"
-msgstr ""
+msgstr "Некоторые поля не верны, не могу сохранить значения!"
 
 msgid ""
 "Sorry. OpenWrt does not support a system upgrade on this platform.<br /> You "
 "need to manually flash your device."
-msgstr ""
-"Sorry. OpenWrt does not support a system upgrade on this platform.<br /> You "
-"need to manually flash your device."
+msgstr "Извините. OpenWrt не поддерживает обновление системы на данной платформе.<br />Вы должны вручную перепрошить важе устройство."
 
 msgid "Sort"
-msgstr ""
+msgstr "Сортировка"
 
 msgid "Source"
-msgstr ""
+msgstr "Источник"
 
 msgid "Specifies the button state to handle"
 msgstr ""
 
 msgid "Specifies the directory the device is attached to"
 msgstr ""
+
+msgid "Specifies the listening port of this <em>Dropbear</em> instance"
+msgstr "Указывает порт на котором должен слушать <em>Dropbear</em>"
 
 msgid "Specify additional command line arguments for pppd here"
 msgstr ""
@@ -1899,7 +1987,13 @@ msgid "Specify the secret encryption key here."
 msgstr ""
 
 msgid "Start"
-msgstr "Старт"
+msgstr "Запуск"
+
+msgid "Start priority"
+msgstr "Приоритет запуска"
+
+msgid "Startup"
+msgstr "Запуск"
 
 msgid "Static IPv4 Routes"
 msgstr "Статическая маршрутизация IPv4"
@@ -1908,7 +2002,7 @@ msgid "Static IPv6 Routes"
 msgstr "Статическая маршрутизация IPv6"
 
 msgid "Static Leases"
-msgstr "Static Leases"
+msgstr ""
 
 msgid "Static Routes"
 msgstr "Статическая маршрутизация"
@@ -1925,8 +2019,11 @@ msgstr ""
 msgid "Status"
 msgstr "Статус"
 
+msgid "Stop"
+msgstr "Остановить"
+
 msgid "Strict order"
-msgstr "Strict order"
+msgstr "Жёсткий порядок"
 
 msgid "Submit"
 msgstr "Отправить"
@@ -1935,10 +2032,10 @@ msgid "Swap Entry"
 msgstr ""
 
 msgid "Switch"
-msgstr "Свитч"
+msgstr "Коммутатор"
 
 msgid "Switch %q"
-msgstr ""
+msgstr "Коммутатор %q"
 
 msgid "System"
 msgstr "Система"
@@ -1947,10 +2044,10 @@ msgid "System Log"
 msgstr "Системный журнал"
 
 msgid "System Properties"
-msgstr ""
+msgstr "Параметры системы"
 
 msgid "System log buffer size"
-msgstr ""
+msgstr "Размер системного буфера журнала"
 
 msgid "TCP:"
 msgstr ""
@@ -1968,13 +2065,13 @@ msgid "TX"
 msgstr ""
 
 msgid "Table"
-msgstr ""
+msgstr "Таблица"
 
 msgid "Target"
 msgstr "Цель"
 
 msgid "Terminate"
-msgstr ""
+msgstr "Завершить"
 
 msgid "Thanks To"
 msgstr "Благодаря"
@@ -1993,9 +2090,9 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
+"The allowed characters are: <code>a-z</code>, <code>a-z</code>, <code>0-9</"
 "code> and <code>_</code>"
-msgstr ""
+msgstr "Допустимые символы: <code>a-z</code>, <code>a-z</code>, <code>0-9</code> и <code>_</code>"
 
 msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
@@ -2004,10 +2101,8 @@ msgstr ""
 "Устройство или раздел (<abbr title=\"for example\">пример</abbr> <code>/dev/"
 "sda1</code>)"
 
-#, fuzzy
 msgid "The device node of your modem, e.g. /dev/ttyUSB0"
-msgstr ""
-"Время (в сек.) после которого неиспользованное соединение будет закрыто"
+msgstr "Устройство вашего модема, например /dev/ttyUSB0"
 
 msgid ""
 "The filesystem that was used to format the memory (<abbr title=\"for example"
@@ -2021,10 +2116,10 @@ msgid ""
 "The flash image was uploaded. Below is the checksum and file size listed, "
 "compare them with the original file to ensure data integrity.<br /> Click "
 "\"Proceed\" below to start the flash procedure."
-msgstr ""
+msgstr "Образ прошивки загружен. Ниже представлена контрольная сумма и размер файла, сравните их с оригинальным файлом чтобы убедиться в целостности данных.<br /> Нажмите \"Продолжить\" чтобы начать процедуру перепрошивки."
 
 msgid "The following changes have been committed"
-msgstr ""
+msgstr "Следующие изменения приняты"
 
 msgid "The following changes have been reverted"
 msgstr "Данные изменения были отвергнуты"
@@ -2032,10 +2127,10 @@ msgstr "Данные изменения были отвергнуты"
 msgid ""
 "The following files are detected by the system and will be kept "
 "automatically during sysupgrade"
-msgstr ""
+msgstr "Следующие файлы обнаружены системой и будут автоматически сохранены во время sysupgrade"
 
 msgid "The following rules are currently active on this system."
-msgstr ""
+msgstr "Следующие правила сейчас активны на данной системе"
 
 msgid ""
 "The hardware is not multi-SSID capable and existing configuration will be "
@@ -2074,26 +2169,24 @@ msgstr ""
 msgid ""
 "The uploaded image file does not contain a supported format. Make sure that "
 "you choose the generic image format for your platform."
-msgstr ""
-"The uploaded image file does not contain a supported format. Make sure that "
-"you choose the generic image format for your platform."
+msgstr "Загруженный образ не содержит поддерживаемый формат. Убедитесь что вы выбрали правильный формат образа для вашей платформы."
 
 msgid "There are no active leases."
 msgstr ""
 
 msgid "There are no pending changes to apply!"
-msgstr ""
+msgstr "Нет ждущих изменений для применения!"
 
 msgid "There are no pending changes to revert!"
-msgstr ""
+msgstr "Нет ждущих изменений для возврата!"
 
 msgid "There are no pending changes!"
-msgstr ""
+msgstr "Нет ждущих изменений!"
 
 msgid ""
 "There is no password set on this router. Please configure a root password to "
 "protect the web interface and enable SSH."
-msgstr ""
+msgstr "Пароль для данного маршрутизатора не задан. Пожалуйста задайте пароль root для защиты web интерфейса и включения SSH."
 
 msgid ""
 "These commands will be executed automatically when a given <abbr title="
@@ -2107,7 +2200,12 @@ msgstr ""
 msgid ""
 "This is a list of shell glob patterns for matching files and directories to "
 "include during sysupgrade"
-msgstr ""
+msgstr "Это список shell glob шаблонов для указания какие файлы и директории должны быть сохранены во время sysupgrade"
+
+msgid ""
+"This is the content of /etc/rc.local. Insert your own commands here (in "
+"front of 'exit 0') to execute them at the end of the boot process."
+msgstr "Это содержание /etc/rc.local. Вставьте ваши собственные команды (перед 'exit 0') для их выполнения во время окончания процесса загрузки."
 
 msgid ""
 "This is the only <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
@@ -2117,37 +2215,40 @@ msgstr ""
 "локальной сети"
 
 msgid "This is the system crontab in which scheduled tasks can be defined."
-msgstr ""
+msgstr "Здесь (в системном crontab-е) можно запланировать задачи."
 
 msgid ""
 "This list gives an overview over currently running system processes and "
 "their status."
-msgstr ""
+msgstr "Данный список даёт общую картину о текущих запущенных процессов в системе и их состояния."
 
 msgid "This page allows the configuration of custom button actions"
 msgstr ""
 
 msgid "This page gives an overview over currently active network connections."
-msgstr ""
+msgstr "Эта страница даёт общую картину о текущей активности сетевых соединений."
 
 msgid "This section contains no values yet"
 msgstr "Эта секция пока не содержит значений"
 
 msgid "Time (in seconds) after which an unused connection will be closed"
 msgstr ""
-"Время (в сек.) после которого неиспользованное соединение будет закрыто"
+"Время (в секундах после которого неиспользованное соединение будет закрыто"
 
 msgid "Time Server (rdate)"
-msgstr ""
+msgstr "Сервер времени (rdate)"
 
 msgid "Timezone"
 msgstr "Временная зона"
+
+msgid "Total Available"
+msgstr "Всего доступно"
 
 msgid "Traffic"
 msgstr "Трафик"
 
 msgid "Transfer"
-msgstr ""
+msgstr "Передача"
 
 msgid "Transmission Rate"
 msgstr ""
@@ -2182,29 +2283,35 @@ msgstr "Тип"
 msgid "UDP:"
 msgstr ""
 
+msgid "USB Device"
+msgstr ""
+
 msgid "UUID"
 msgstr ""
 
 msgid "Unknown Error"
 msgstr "Неизвестная ошибка"
 
+msgid "Unknown Error, password not changed!"
+msgstr "Неизвестная ошибка, пароль не изменён!"
+
 msgid "Unsaved Changes"
 msgstr "Непринятые изменения"
 
 msgid "Update package lists"
-msgstr "Обновить листинг пакетов"
+msgstr "Обновить список пакетов"
 
 msgid "Upgrade installed packages"
 msgstr "Заменить установленные пакеты"
 
 msgid "Upload an OpenWrt image file to reflash the device."
-msgstr "Upload an OpenWrt image file to reflash the device."
+msgstr "Загрузить файл образа OpenWrt для перепрошивки устройства."
 
 msgid "Upload image"
-msgstr "Upload image"
+msgstr "Загрузить образ"
 
 msgid "Uploaded File"
-msgstr ""
+msgstr "Загруженный файл"
 
 msgid "Uptime"
 msgstr "Время работы"
@@ -2218,9 +2325,8 @@ msgstr ""
 msgid "Use as root filesystem"
 msgstr ""
 
-#, fuzzy
 msgid "Use peer DNS"
-msgstr "Перед. / Получ."
+msgstr ""
 
 msgid ""
 "Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</"
@@ -2230,7 +2336,7 @@ msgid ""
 msgstr ""
 
 msgid "Used"
-msgstr "Использованно\""
+msgstr "Использовано"
 
 msgid "Used Key Slot"
 msgstr ""
@@ -2254,7 +2360,7 @@ msgid "Version"
 msgstr "Версия"
 
 msgid "WDS"
-msgstr "WDS"
+msgstr ""
 
 msgid "WEP Open System"
 msgstr ""
@@ -2277,10 +2383,10 @@ msgid ""
 msgstr ""
 
 msgid "Waiting for router..."
-msgstr ""
+msgstr "Ожидание маршрутизатора..."
 
 msgid "Warning"
-msgstr ""
+msgstr "Предупреждение"
 
 msgid "Warning: There are unsaved changes that will be lost while rebooting!"
 msgstr ""
@@ -2290,21 +2396,22 @@ msgid "Web <abbr title=\"User Interface\">UI</abbr>"
 msgstr "Web <abbr title=\"Интерфейс пользователя\">UI</abbr>"
 
 msgid "Wifi"
-msgstr "Wi-Fi"
+msgstr ""
 
 msgid "Wifi networks in your local environment"
 msgstr "Обзор существующих Wi-Fi сетей"
 
+msgid "Wireless"
+msgstr ""
+
 msgid "Wireless Adapter"
 msgstr ""
 
-#, fuzzy
 msgid "Wireless Network"
-msgstr "Локальная сеть"
+msgstr "Беспроводная сеть"
 
-#, fuzzy
 msgid "Wireless Overview"
-msgstr "Обзор"
+msgstr "Обзор беспроводной сети"
 
 msgid "Wireless Security"
 msgstr ""
@@ -2319,13 +2426,19 @@ msgid "XR Support"
 msgstr ""
 
 msgid ""
+"You can enable or disable installed init scripts here. Changes will applied "
+"after a device reboot.<br /><strong>Warning: If you disable essential init "
+"scripts like \"network\", your device might become inaccesable!</strong>"
+msgstr "Здесь вы можете включить или выключить установленные сценарии запуска. Изменения будут применены после перезапуска устройства. <br /><strong>Осторожно: если вы отключите необходимые сценарии, такие как \"сеть\", ваше устройсто может стать недоступно!</strong>"
+
+msgid ""
 "You can specify multiple DNS servers here, press enter to add a new entry. "
 "Servers entered here will override automatically assigned ones."
-msgstr ""
+msgstr "Здесь вы можете указать несколько DNS серверов, нажмите enter для добавления новой записи. Указанные здесь серверы перезапишут автоматически присвоенные."
 
 msgid ""
 "You must enable Java Script in your browser or LuCI will not work properly."
-msgstr ""
+msgstr "Вы должны включить поддержку JavaScript в вашем броузере или LuCI не будет работать должным образом"
 
 #, fuzzy
 msgid ""
@@ -2334,13 +2447,13 @@ msgid ""
 msgstr "Ошибок"
 
 msgid "any"
-msgstr ""
+msgstr "любой"
 
 msgid "auto"
-msgstr ""
+msgstr "авто"
 
 msgid "back"
-msgstr ""
+msgstr "назад"
 
 msgid "bridged"
 msgstr ""
@@ -2374,16 +2487,16 @@ msgid "free"
 msgstr ""
 
 msgid "help"
-msgstr ""
+msgstr "помощь"
 
 msgid "if target is a network"
-msgstr "если сеть"
+msgstr "если цель это сеть"
 
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
 msgstr "Локальный <abbr title=\"Служба доменных имён\">DNS</abbr> файл"
 
 msgid "no"
-msgstr ""
+msgstr "нет"
 
 msgid "none"
 msgstr "ничего"
@@ -2398,25 +2511,40 @@ msgid "static"
 msgstr "статический"
 
 msgid "tagged"
-msgstr ""
+msgstr "помеченный"
 
 msgid "unlimited"
-msgstr ""
+msgstr "безлимитно"
 
 msgid "unspecified"
-msgstr ""
+msgstr "не указано"
 
 msgid "unspecified -or- create:"
-msgstr ""
+msgstr "не указан -или- создать:"
 
 msgid "untagged"
-msgstr ""
+msgstr "не помеченный"
 
 msgid "yes"
-msgstr ""
+msgstr "да"
 
 msgid "« Back"
-msgstr ""
+msgstr "« Назад"
+
+#~ msgid ""
+#~ "Also kernel or service logfiles can be viewed here to get an overview "
+#~ "over their current state."
+#~ msgstr ""
+#~ "А так же ядра или сервисов, системный журнал может быть так же просмотрен "
+#~ "здесь для того что бы получить полный обзор текущего состояния системы."
+
+#~ msgid ""
+#~ "Here you can find information about the current system status like <abbr "
+#~ "title=\"Central Processing Unit\">CPU</abbr> clock frequency, memory "
+#~ "usage or network interface data."
+#~ msgstr ""
+#~ "Здесь вы можете найти информацию о текущей статистики системы вроде "
+#~ "частоты процессора, использования памяти или сетевого интерфейса."
 
 #~ msgid ""
 #~ "<abbr title=\"Lua Configuration Interface\">LuCI</abbr> is a free, "

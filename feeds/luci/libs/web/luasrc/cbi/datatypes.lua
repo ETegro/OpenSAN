@@ -9,7 +9,7 @@ You may obtain a copy of the License at
 
         http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: datatypes.lua 6887 2011-02-12 19:39:54Z soma $
+$Id: datatypes.lua 6983 2011-04-13 00:33:42Z soma $
 
 ]]--
 
@@ -17,8 +17,8 @@ local fs = require "nixio.fs"
 local ip = require "luci.ip"
 local math = require "math"
 local util = require "luci.util"
+local tonumber, type = tonumber, type
 
-local tonumber = tonumber
 
 module "luci.cbi.datatypes"
 
@@ -66,12 +66,26 @@ function ipaddr(val)
 	return ip4addr(val) or ip6addr(val)
 end
 
+function neg_ipaddr(v)
+	if type(v) == "string" then
+		v = v:gsub("^%s*!", "")
+	end
+	return v and ipaddr(v)
+end
+
 function ip4addr(val)
 	if val then
 		return ip.IPv4(val) and true or false
 	end
 
 	return false
+end
+
+function neg_ip4addr(v)
+	if type(v) == "string" then
+		v = v:gsub("^%s*!", "")
+	end
+		return v and ip4addr(v)
 end
 
 function ip4prefix(val)
@@ -94,7 +108,7 @@ end
 
 function port(val)
 	val = tonumber(val)
-	return ( val and val >= 1 and val <= 65535 )
+	return ( val and val >= 0 and val <= 65535 )
 end
 
 function portrange(val)

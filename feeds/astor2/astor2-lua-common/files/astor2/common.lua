@@ -5,16 +5,16 @@
                           Vladimir Petukhov <vladimir.petukhov@etegro.com>
   
   This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Affero General Public License as
-  published by the Free Software Foundation, either version 3 of the
-  License, or (at your option) any later version.
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
   
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU Affero General Public License for more details.
+  GNU General Public License for more details.
   
-  You should have received a copy of the GNU Affero General Public License
+  You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
@@ -74,7 +74,9 @@ end
 
 function M.system_succeed( cmdline )
 	local result = M.system( cmdline )
-	if result.return_code ~= 0 then error( "system() does not succeed" ) end
+	if result.return_code ~= 0 then
+		error( "system() does not succeed: " .. M.ppt( result ) )
+	end
 	return result.stdout
 end
 
@@ -135,6 +137,14 @@ end
 function M.is_positive( n )
 	assert( M.is_number( n ), "non-number argument" )
 	return n > 0
+end
+
+--- Remove leading and trailing whitespaces from the string
+-- @param str String where whitespaces should be removed
+-- @return String without leading and trailing whitespaces
+function M.strip( str )
+	assert( M.is_string( str ), "non-string argument" )
+	return string.match( str, "^%s*(%S.*%S)%s*$" )
 end
 
 --- Get keys from hash
@@ -202,31 +212,46 @@ end
 -- @param table1 First table to compare
 -- @param table2 Second table to compare
 -- @return true/false
-function M.compare_tables( table1, table2 )
+function M.compare_tables( table1, table2, debug )
 	assert( M.is_table( table1 ) and M.is_table( table2 ),
 	        "attempt to compare non-table values" )
-	if table1 == table2 then return true end
+
+	if table1 == table2 then
+		if debug then print( "compare_tables: tables are identical" ) end
+		return true
+	end
 
 	-- Check tables keys equality
 	local keys1 = M.keys( table1 )
 	local keys2 = M.keys( table2 )
 	table.sort( keys1 )
 	table.sort( keys2 )
-	if #keys1 ~= #keys2 then return false end
+	if #keys1 ~= #keys2 then
+		if debug then print( "compare_tables: FAIL: different quantity of keys" ) end
+		return false
+	end
 	for i, v in ipairs( keys1 ) do
-		if v ~= keys2[ i ] then return false end
+		if v ~= keys2[ i ] then
+			if debug then print( "compare_tables: FAIL: key:\"" .. tostring( v ) .. "\" != key\"" .. tostring( keys2[ i ] ) .. "\"" ) end
+			return false
+		end
 	end
 
 	for k, v in pairs( table1 ) do
 		if M.is_table( v ) then
 			if not M.is_table( table2[ k ] ) then
+				if debug then print( "compare_tables: FAIL: \"" .. tostring( v ) .. "\" is table, but \"" .. tostring( table2[ k ] ) .. "\" is not" ) end
 				return false
 			end
-			if not M.compare_tables( v, table2[ k ] ) then
+			if not M.compare_tables( v, table2[ k ], debug ) then
+				if debug then print( "compare_tables: FAIL: table:\"" .. M.ppt( v, 2 ) .. "\" != table:\"" .. M.ppt( table2[ k ], 2 ) .. "\"" ) end
 				return false
 			end
 		else
-			if v ~= table2[ k ] then return false end
+			if v ~= table2[ k ] then
+				if debug then print( "compare_tables: FAIL: \"" .. tostring( v ) .. "\" != \"" .. tostring( table2[ k ] ) .. "\"" ) end
+				return false
+			end
 		end
 	end
 	return true

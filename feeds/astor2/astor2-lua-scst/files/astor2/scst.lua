@@ -4,16 +4,16 @@
                           Sergey Matveev <stargrave@stargrave.org>
   
   This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Affero General Public License as
-  published by the Free Software Foundation, either version 3 of the
-  License, or (at your option) any later version.
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
   
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU Affero General Public License for more details.
+  GNU General Public License for more details.
   
-  You should have received a copy of the GNU Affero General Public License
+  You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
@@ -74,21 +74,43 @@ function M.AccessPattern.list()
 	return access_patterns
 end
 
-function M.AccessPattern.find_by_section_name( section_name )
+function M.AccessPattern.find_by( attribute, value )
 	for _, access_pattern in ipairs( M.AccessPattern.list() ) do
-		if access_pattern.section_name == section_name then
+		if access_pattern[ attribute ] == value then
 			return access_pattern
 		end
 	end
 	return nil
 end
 
+function M.AccessPattern.find_by_section_name( section_name )
+	return M.AccessPattern.find_by( "section_name", section_name )
+end
+
+function M.AccessPattern.find_by_name( name )
+	return M.AccessPattern.find_by( "name", name )
+end
+
+function M.AccessPattern.delete_by_name( name )
+	local ucicur = uci.cursor()
+	ucicur:foreach(
+		M.UCI_CONFIG_NAME,
+		M.AccessPattern.UCI_TYPE_NAME,
+		function( section )
+			if section.name == name then
+				ucicur:delete( M.UCI_CONFIG_NAME,
+				               section[".name"] )
+			end
+		end
+	)
+	ucicur:save( M.UCI_CONFIG_NAME )
+	ucicur:commit( M.UCI_CONFIG_NAME )
+end
+
 function M.AccessPattern:save()
 	assert( self, "unable to get self object" )
-	local ucicur = uci.cursor()
 	if self.section_name then
-		ucicur:delete( M.UCI_CONFIG_NAME,
-		               self.section_name )
+		M.AccessPattern.delete_by_name( self.name )
 	end
 	local access_pattern_new = M.AccessPattern:new( {
 		name = self.name,
@@ -99,8 +121,10 @@ function M.AccessPattern:save()
 		readonly = self.readonly
 	} )
 
+	local ucicur = uci.cursor()
 	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
 	                                 M.AccessPattern.UCI_TYPE_NAME )
+	access_pattern_new.section_name = section_name
 	ucicur:set( M.UCI_CONFIG_NAME,
 		    section_name,
 		    "name",
@@ -136,11 +160,7 @@ end
 
 function M.AccessPattern:delete()
 	assert( self, "unable to get self object" )
-	local ucicur = uci.cursor()
-	ucicur:delete( M.UCI_CONFIG_NAME,
-	               self.section_name )
-	ucicur:save( M.UCI_CONFIG_NAME )
-	ucicur:commit( M.UCI_CONFIG_NAME )
+	M.AccessPattern.delete_by_name( self.name )
 end
 
 function M.AccessPattern:bind( filename )
@@ -176,7 +196,7 @@ function M.AccessPattern:iqn()
 	assert( hostname, "unable to retreive hostname" )
 
 	-- Retreive LogicalVolume's name
-	local logical_volume_name = string.match( self.filename, "^/dev/vg%d+/(.+)$" )
+	local volume_group_name, logical_volume_name = string.match( self.filename, "^/dev/(.+)/(.+)$" )
 	assert( logical_volume_name, "unable to retreive logical volume name" )
 
 	-- This may be useful later
@@ -195,6 +215,7 @@ function M.AccessPattern:iqn()
 	]]
 	return "iqn.2011-03.org.opensan:" ..
 	       hostname .. ":" ..
+	       volume_group_name .. "_" ..
 	       logical_volume_name
 end
 
@@ -218,6 +239,7 @@ function M.Configuration.dump()
 	if #access_patterns_enabled == 0 then return "" end
 
 	local configuration = ""
+	local devices = {}
 
 	-- Create HANDLERs
 	local blockios = {}
@@ -225,10 +247,12 @@ function M.Configuration.dump()
 	configuration = configuration .. "HANDLER vdisk_blockio {\n"
 	for _, access_pattern in ipairs( access_patterns_enabled  ) do
 		blockios[ access_pattern.filename ] = blockio_counter
-		configuration = configuration .. "\tDEVICE blockio" .. blockio_counter .. " {\n"
+		local device = "blockio" .. blockio_counter
+		configuration = configuration .. "\tDEVICE " .. device .. " {\n"
 		configuration = configuration .. "\t\tfilename " .. access_pattern.filename .. "\n"
 		configuration = configuration .. "\t}\n"
 		blockio_counter = blockio_counter + 1
+		devices[ #devices + 1 ] = device
 	end
 	configuration = configuration .. "}\n"
 
@@ -255,13 +279,13 @@ function M.Configuration.dump()
 						" {\n" ..
 						"\t\t\tread_only " .. read_only .. "\n" ..
 						"\t\t}\n"
-				configuration = configuration .. "\t}\n"
+				configuration = configuration .. "\t\tenabled 1\n\t}\n"
 			end
-			configuration = configuration .. "}\n"
+			configuration = configuration .. "\tenabled 1\n}\n"
 		end
 	end
 
-	return configuration
+	return configuration, devices
 end
 
 function M.Configuration.write( configuration, where )
@@ -287,7 +311,7 @@ function M.Daemon.check( configuration )
 				      configuration_path )
 	if result.return_code ~= 0 then
 		os.remove( configuration_path )
-		error( "scst:Daemon:apply() check failed: " .. table.concat( result.stdout, "\n" ) )
+		error( "scst:Daemon:check() failed: " .. table.concat( result.stdout, "\n" ) )
 	end
 	local succeeded = false
 	for _, line in ipairs( result.stdout ) do
@@ -297,20 +321,26 @@ function M.Daemon.check( configuration )
 	end
 	if not succeeded then
 		os.remove( configuration_path )
-		error( "scst:Daemon:apply() check failed: " .. table.concat( result.stdout, "\n" ) )
+		error( "scst:Daemon:check() failed: " .. table.concat( result.stdout, "\n" ) )
 	end
 	os.remove( configuration_path )
 end
 
 function M.Daemon.apply()
-	local configuration = M.Configuration.dump()
+	local configuration, devices = M.Configuration.dump()
 	if #configuration == 0 then return end
 	M.Daemon.check( configuration )
 	M.Configuration.write( configuration,
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
 	common.system_succeed( M.Daemon.SCSTADMIN_PATH ..
+	                       " -force" ..
+	                       " -noprompt" ..
 	                       " -config " ..
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
+	for _, device in ipairs( devices ) do
+		common.system( M.Daemon.SCSTADMIN_PATH ..
+		               " -resync_dev " .. device )
+	end
 end
 
 return M

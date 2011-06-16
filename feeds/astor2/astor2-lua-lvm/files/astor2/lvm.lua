@@ -4,16 +4,16 @@
                           Sergey Matveev <stargrave@stargrave.org>
   
   This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Affero General Public License as
-  published by the Free Software Foundation, either version 3 of the
-  License, or (at your option) any later version.
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
   
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU Affero General Public License for more details.
+  GNU General Public License for more details.
   
-  You should have received a copy of the GNU Affero General Public License
+  You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
@@ -61,12 +61,20 @@ function M.PhysicalVolume:new( attrs )
 	return setmetatable( attrs, PhysicalVolume_mt )
 end
 
+--- Prepare disk for working with (first sectors cleaning up)
+-- @param disk Disk for preparation
+function M.PhysicalVolume.prepare( disk )
+	assert( is_disk( disk ),
+	        "incorrect disk specified" )
+	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=4" )
+end
+
 --- Create PhysicalVolume on a disk
 -- @param disk Disk on which volume must be created
 function M.PhysicalVolume.create( disk )
 	assert( is_disk( disk ),
 	        "incorrect disk specified" )
-	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=1" )
+	M.PhysicalVolume.prepare( disk )
 	common.system_succeed( "lvm pvcreate " .. disk )
 end
 
@@ -129,6 +137,7 @@ end
 --------------------------------------------------------------------------
 M.VolumeGroup = {}
 local VolumeGroup_mt = common.Class( M.VolumeGroup )
+M.VolumeGroup.PE_DEFAULT_SIZE = 64 -- MiB
 
 function M.VolumeGroup:new( attrs )
 	assert( common.is_number( attrs.extent ),
@@ -146,7 +155,9 @@ function M.VolumeGroup:new( attrs )
 end
 
 function M.VolumeGroup.next_vg_name()
-	return "vg" .. tostring( os.time() )
+	return "vg" ..
+	        tostring( math.ceil( math.random() * 10^4 ) ) ..
+	        tostring( os.time() )
 end
 
 --- Create VolumeGroup
@@ -170,6 +181,7 @@ function M.VolumeGroup.create( physical_volumes )
 	end
 
 	common.system_succeed( "lvm vgcreate " ..
+	                       "-s " .. tostring( M.VolumeGroup.PE_DEFAULT_SIZE ) .. " " ..
 	                       name .. " " ..
 	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
 end
@@ -179,6 +191,13 @@ function M.VolumeGroup:remove()
 	assert( self.name and common.is_string( self.name ),
 	        "unable to get self object" )
 	common.system_succeed( "lvm vgremove " .. self.name )
+end
+
+--- Disable (de-activate) VolumeGroup
+function M.VolumeGroup:disable()
+	assert( self.name and common.is_string( self.name ),
+	        "unable to get self object" )
+	common.system_succeed( "lvm vgchange -a n " .. self.name )
 end
 
 --- Rescan all VolumeGroups on a system
@@ -257,7 +276,28 @@ end
 M.LogicalVolume = {}
 local LogicalVolume_mt = common.Class( M.LogicalVolume )
 
-M.LogicalVolume.NAME_VALID_RE = "[A-Za-z0-9\-_#%%:]+"
+--- Check LogicalVolume's name validness
+-- @param name Name to validate
+-- @return true/false
+function M.LogicalVolume.name_is_valid( name )
+	assert( common.is_string( name ), "no name specified" )
+	if name == "snapshot" or
+	   name == "pvmove" then
+		return false
+	end
+	if string.match( name, "_mlog" ) or
+	   string.match( name, "_mimage" ) then
+		return false
+	end
+	if string.match( name, '^-' ) or
+	   string.match( name, '^%.' ) then
+		return false
+	end
+	if not string.match( name, "^[a-zA-Z0-9+_.-]+$" ) then
+		return false
+	end
+	return true
+end
 
 function M.LogicalVolume:new( attrs )
 	assert( common.is_string( attrs.name ),
@@ -267,7 +307,7 @@ function M.LogicalVolume:new( attrs )
 	assert( common.is_table( attrs.volume_group ),
 	        "no volume group assigned to" )
 	assert( common.is_positive( attrs.size ) )
-	if not string.match( attrs.name, "^" .. M.LogicalVolume.NAME_VALID_RE .. "$" ) then
+	if not M.LogicalVolume.name_is_valid( attrs.name ) then
 		error("lvm:LogicalVolume:new() incorrect name supplied")
 	end
 	if not attrs.snapshots then
@@ -324,6 +364,10 @@ function M.LogicalVolume:snapshot( size )
 	end
 end
 
+local function vglv_device( volume_group_name, logical_volume_name )
+	return "/dev/" .. volume_group_name .. "/" .. logical_volume_name
+end
+
 --- List all LogicalVolumes on specified VolumeGroup
 -- @param volume_groups VolumeGroups to check
 -- @return { LogicalVolume, LogicalVolume }
@@ -332,29 +376,40 @@ function M.LogicalVolume.list( volume_groups )
 	local volume_groups_by_name = common.unique_keys( "name", volume_groups )
 	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
 		local splitted = common.split_by( line, " " )
+		local splitted_name = splitted[1]
+		local splitted_volume_group = splitted[2]
+		local splitted_size = tonumber( string.sub( splitted[3], 1, -2 ) )
+		local device = vglv_device( splitted_volume_group, splitted_name )
+		local splitted_possible_logical_volume = splitted[4]
 		if splitted[1] == "LV" and splitted[2] == "VG" then
 			-- Do nothing
-		elseif splitted[4] and result[ splitted[4] ] then
+		elseif splitted_possible_logical_volume and result[ vglv_device( splitted_volume_group, splitted_possible_logical_volume ) ] then
 			-- Skip if it is not needed VolumeGroup
-			if common.is_in_array( splitted[2], common.keys( volume_groups_by_name ) ) then
+			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
 				local snapshot = M.Snapshot:new({
-					name = splitted[1],
-					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_groups[ volume_groups_by_name[ splitted[2] ][1] ],
-					size = tonumber( string.sub( splitted[3], 1, -2 ) ),
-					logical_volume = splitted[4],
+					name = splitted_name,
+					device = device,
+					volume_group = volume_groups[ volume_groups_by_name[ splitted_volume_group ][1] ],
+					size = splitted_size,
+					logical_volume = splitted_possible_logical_volume,
 					allocated = tonumber( splitted[5] )
 				})
-				result[ splitted[4] ].snapshots[ #result[ splitted[4] ].snapshots + 1 ] = snapshot
+				result[
+					vglv_device( splitted_volume_group, splitted_possible_logical_volume )
+				].snapshots[
+					#result[
+						vglv_device( splitted_volume_group, splitted_possible_logical_volume )
+					].snapshots + 1
+				] = snapshot
 			end
 		else
 			-- Skip if it is not needed VolumeGroup
-			if common.is_in_array( splitted[2], common.keys( volume_groups_by_name ) ) then
-				result[ splitted[1] ] = M.LogicalVolume:new({
-					name = splitted[1],
-					device = "/dev/" .. splitted[2] .. "/" .. splitted[1],
-					volume_group = volume_groups[ volume_groups_by_name[ splitted[2] ][1] ],
-					size = tonumber( string.sub( splitted[3], 1, -2 ) )
+			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
+				result[ device ] = M.LogicalVolume:new({
+					name = splitted_name,
+					device = device,
+					volume_group = volume_groups[ volume_groups_by_name[ splitted_volume_group ][1] ],
+					size = splitted_size
 				})
 			end
 		end
@@ -457,7 +512,7 @@ M.is_running = function()
 end
 
 --- Perform rescan of all LVM-related objects
-local function restore_lvm()
+M.restore = function()
 	M.PhysicalVolume.rescan()
 	M.VolumeGroup.rescan()
 	M.LogicalVolume.rescan()
@@ -468,7 +523,7 @@ M.start = function()
 	if M.is_running() then return end
 	local succeeded, result = pcall( load_modules )
 	if not succeeded then error( "lvm:start() failed: " .. result ) end
-	restore_lvm()
+	M.restore()
 end
 
 return M

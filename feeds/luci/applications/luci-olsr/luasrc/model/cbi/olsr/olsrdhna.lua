@@ -9,28 +9,36 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: olsrdhna.lua 6204 2010-07-01 11:42:16Z acinonyx $
+$Id: olsrdhna.lua 7070 2011-05-17 23:06:12Z soma $
 ]]--
 
 mh = Map("olsrd", translate("OLSR - HNA-Announcements"))
 
 
-hna4 = mh:section(TypedSection, "Hna4", "Hna4")
+hna4 = mh:section(TypedSection, "Hna4", translate("Hna4"), translate("Both values must use the dotted decimal notation."))
 hna4.addremove = true
 hna4.anonymous = true
 hna4.template  = "cbi/tblsection"
 
 net4 = hna4:option(Value, "netaddr", translate("Network address"))
+net4.datatype = "ip4addr"
+net4.placeholder = "15.15.0.0"
 msk4 = hna4:option(Value, "netmask", translate("Netmask"))
+msk4.datatype = "ip4addr"
+msk4.placeholder = "255.255.255.0"
 
-
-hna6 = mh:section(TypedSection, "Hna6", "Hna6")
+hna6 = mh:section(TypedSection, "Hna6", translate("Hna6"), translate("IPv6 network must be given in full notation, " ..
+	"prefix must be in CIDR notation."))
 hna6.addremove = true
 hna6.anonymous = true
 hna6.template  = "cbi/tblsection"
 
 net6 = hna6:option(Value, "netaddr", translate("Network address"))
+net6.datatype = "ip6addr"
+net6.placeholder = "fec0:2200:106:0:0:0:0:0"
 msk6 = hna6:option(Value, "prefix", translate("Prefix"))
+msk6.datatype = "range(0,128)"
+msk6.placeholder = "48"
 
 
 return mh

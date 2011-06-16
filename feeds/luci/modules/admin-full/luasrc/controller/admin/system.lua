@@ -10,7 +10,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: system.lua 6562 2010-11-27 04:55:38Z jow $
+$Id: system.lua 7026 2011-05-04 21:37:41Z jow $
 ]]--
 
 module("luci.controller.admin.system", package.seeall)
@@ -21,11 +21,10 @@ function index()
 
 	entry({"admin", "system"}, alias("admin", "system", "system"), i18n("System"), 30).index = true
 	entry({"admin", "system", "system"}, cbi("admin_system/system"), i18n("System"), 1)
-	entry({"admin", "system", "packages"}, call("action_packages"), i18n("Software"), 10)
+	entry({"admin", "system", "admin"}, cbi("admin_system/admin"), i18n("Administration"), 2)
+--	entry({"admin", "system", "packages"}, call("action_packages"), i18n("Software"), 10)
 	entry({"admin", "system", "packages", "ipkg"}, form("admin_system/ipkg"))
-	entry({"admin", "system", "passwd"}, form("admin_system/passwd"), i18n("Admin Password"), 20)
-	entry({"admin", "system", "sshkeys"}, form("admin_system/sshkeys"), i18n("<abbr title=\"Secure Shell\">SSH</abbr>-Keys"), 30)
-	entry({"admin", "system", "processes"}, form("admin_system/processes"), i18n("Processes"), 45)
+	entry({"admin", "system", "startup"}, form("admin_system/startup"), i18n("Startup"), 45)
 
 	if nixio.fs.access("/etc/config/fstab") then
 		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), i18n("Mount Points"), 50)
@@ -33,9 +32,11 @@ function index()
 		entry({"admin", "system", "fstab", "swap"},  cbi("admin_system/fstab/swap"),  nil).leaf = true
 	end
 
+--[[
 	if nixio.fs.access("/sys/class/leds") then
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), i18n("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
+]]
 
 	entry({"admin", "system", "backup"}, call("action_backup"), i18n("Backup / Restore"), 70)
 	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("Flash Firmware"), 80)

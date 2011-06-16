@@ -1,10 +1,265 @@
-msgid "Check"
+#, fuzzy
+msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-05-30 17:21+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Access pattern"
+msgstr "Шаблон доступа"
+
+msgid "Access pattern's name already exists"
+msgstr "Такое название шаблона доступа уже существует"
+
+msgid "Access pattern's name is not set"
+msgstr "Название шаблона доступа не задано"
+
+msgid "Access patterns"
+msgstr "Шаблоны доступа"
+
+msgid "Add"
+msgstr "Добавить"
+
+msgid "Add access pattern"
+msgstr "Добавить шаблон доступа"
+
+msgid "Add dedicated hotspare"
+msgstr "Добавить выделенный hotspare"
+
+msgid "Add logical drive"
+msgstr "Добавить логический диск"
+
+msgid "Add logical volume"
+msgstr "Добавить логический том"
+
+msgid "Add snapshot"
+msgstr "Добавить снимок"
+
+msgid "Bind access pattern"
+msgstr "Прикрепить шаблон доступа"
+
+msgid ""
+"Decreasing logical volumes size may corrupt your data! Are you sure you want "
+"to do this?"
+msgstr ""
+"Уменьшение размера логического тома может повлечь искажение ваших данных. Вы "
+"уверены что хотите сделать это?"
+
+msgid "Dedicated hotspare"
+msgstr "Выделенный hotspare"
+
+msgid "Delete access pattern"
+msgstr "Удалить шаблон доступа"
+
+msgid "Drives are not selected"
+msgstr "Жёсткие диски не выбраны"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Edit access pattern"
+msgstr "Редактировать шаблон доступа"
+
+msgid "Enabled"
+msgstr "Активен"
+
+msgid "Failed to add dedicated hotspare disk"
+msgstr "Невозможно добавить выделенный hotspare диск"
+
+msgid "Failed to add logical volume"
+msgstr "Невозможно добавить логический том"
+
+msgid "Failed to apply iSCSI configuration"
+msgstr "Невозможно применить конфигурацию iSCSI"
+
+msgid "Failed to bind access pattern"
+msgstr "Невозможно прикрепить шаблон доступа"
+
+msgid "Failed to create PhysicalVolume on logical disk"
+msgstr "Невозможно создать PhysicalVolume на логическом диске"
+
+msgid "Failed to create VolumeGroup on logical disk"
+msgstr "Невозможно создать VolumeGroup на логическом диске"
+
+msgid "Failed to create access pattern"
+msgstr "Невозможно создать шаблон доступа"
+
+msgid "Failed to create logical disk"
+msgstr "Невозможно создать логический диск"
+
+msgid "Failed to create snapshot"
+msgstr "Невозможно создать снимок"
+
+msgid "Failed to delete access pattern"
+msgstr "Невозможно удалить шаблон доступа"
+
+msgid "Failed to delete dedicated hotspare disk"
+msgstr "Невозможно удалить выделенный hotspare диск"
+
+msgid "Failed to delete logical disk"
+msgstr "Невозможно удалить логический диск"
+
+msgid "Failed to remove logical volume"
+msgstr "Невозможно удалить логический том"
+
+msgid "Failed to resize logical volume"
+msgstr "Невозможно изменить размер логического тома"
+
+msgid "Failed to resize snapshot"
+msgstr "Невозможно изменить размер снимка"
+
+msgid "Failed to save config"
+msgstr "Невозможно сохранить конфигурацию"
+
+msgid "Failed to unbind access pattern"
+msgstr "Невозможно открепить шаблон доступа"
 
 msgid "ID"
 msgstr ""
 
-msgid "RAID level"
+msgid "IQN"
+msgstr ""
+
+msgid "Incorrect RAID level"
+msgstr "Неправильный уровень RAID"
+
+msgid "Invalid logical volume name"
+msgstr "Неправильное название логического тома"
+
+msgid "LUN"
+msgstr ""
+
+msgid "Logical disk can not contain equally named logical volumes"
+msgstr "Логический диск не может содержать одноимённые логические тома"
+
+msgid "Logical disk is not selected"
+msgstr "Логический диск не выбран"
+
+msgid "Logical drive"
+msgstr "Логический диск"
+
+msgid "Logical drives"
+msgstr "Логические диски"
+
+msgid "Logical volume"
+msgstr "Логический том"
+
+msgid "Logical volume is not selected"
+msgstr "Логический том не выбран"
+
+msgid "Logical volume name is not set"
+msgstr "Название логического тома не задано"
+
+msgid "Logical volumes"
+msgstr "Логические тома"
+
+msgid "MiB"
+msgstr ""
+
+msgid "Model"
+msgstr "Модель"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Newly added dedicated hotspare disk is bigger than needed"
+msgstr ""
+"Добавленный выделенный hotspare диск имеет больший размер, чем требуется"
+
+msgid "Only single model hard drives should be used"
+msgstr "Жёсткие диски только одной модели желательно должны использоваться"
+
+msgid "Physical drives"
+msgstr "Физические диски"
+
+msgid "RAID"
+msgstr ""
+
+msgid "RAID 0 level requires two or more drives"
+msgstr "RAID уровень 0 требует два или более жёстких диска"
+
+msgid "RAID 1 level requries odd number of two or more drives"
+msgstr "RAID уровень 1 требует чётное количество двух или более жёстких дисков"
+
+msgid "RAID 10 level requires odd number of four or more drives"
+msgstr ""
+"RAID уровень 10 требует чётное количество четырёх или более жёстких дисков"
+
+msgid "RAID 5 level requires three or more drives"
+msgstr "RAID уровень 5 требует три или более жёстких дисков"
+
+msgid "RAID 6 level requires odd number of four or more drives"
+msgstr ""
+"RAID уровень 6 требует чётное количество четырёх или более жёстких дисков"
+
+msgid "RAID level is not selected"
+msgstr "Уровень RAID не выбран"
+
+msgid "RAID linear level requires at least one drive"
+msgstr "RAID уровень linear требует хотя бы одного жёсткого диска"
+
+msgid "RAID passthrough level requries exactly single drive"
+msgstr "RAID уровень passthrough требует исключительно одного жёсткого диска"
+
+msgid "Readonly"
+msgstr "Только для чтения"
+
+msgid "Really delete access pattern?"
+msgstr "Действительно удалить шаблон доступа?"
+
+msgid "Really delete dedicated hotspare drive?"
+msgstr "Действительно удалить выделенный hotspare жёсткий диск?"
+
+msgid "Really delete logical drive?"
+msgstr "Действительно удалить логический диск?"
+
+msgid ""
+"Really remove logical volume? This will delete all corresponding snapshots "
+"as well!"
+msgstr ""
+"Действительно удалить логический том? Это также удалит и связанные снимки"
+
+msgid "Really remove snapshot?"
+msgstr "Действительно удалить снимок?"
+
+msgid "Really resize logical volume?"
+msgstr "Действительно изменить размер логического тома?"
+
+msgid "Really resize snapshot?"
+msgstr "Действительно изменить размер снимка?"
+
+msgid "Remove dedicated hotspare"
+msgstr "Удалить выделенный hotspare"
+
+msgid "Remove logical drive"
+msgstr "Удалить логический диск"
+
+msgid "Remove logical volume"
+msgstr "Удалить логический том"
+
+msgid "Remove snapshot"
+msgstr "Удалить снимок"
+
+msgid "Resize"
+msgstr "Изменить размер"
+
+msgid "Resize logical volume"
+msgstr "Изменить размер логического тома"
+
+msgid "Resize snapshot"
+msgstr "Изменить размер снимка"
+
+msgid "Revision"
+msgstr "Ревизия"
+
+msgid "S/N"
 msgstr ""
 
 msgid "SAN"
@@ -13,5 +268,53 @@ msgstr ""
 msgid "Size"
 msgstr "Размер"
 
+msgid "Snapshot"
+msgstr "Снимок"
+
+msgid "Snapshot size has to be bigger than it's current size"
+msgstr "Размер снимка должен быть больше своего текущего размера"
+
 msgid "State"
 msgstr "Состояние"
+
+msgid "States"
+msgstr "Состояния"
+
+msgid "Take snapshot"
+msgstr "Сделать снимок"
+
+msgid "Target driver"
+msgstr "Целевой драйвер"
+
+msgid "This is LUN is busy, please choose another one"
+msgstr "Этот LUN занят, пожалуйста выберите другой"
+
+msgid "TiB"
+msgstr ""
+
+msgid "Unbind access pattern"
+msgstr "Открепить шаблон доступа"
+
+msgid "Unknown action specified"
+msgstr "Неизвестное действие задано"
+
+msgid "degraded"
+msgstr "деградированный"
+
+msgid "disabled"
+msgstr "выключенный"
+
+msgid "failed"
+msgstr "отказавший"
+
+msgid "free"
+msgstr "свободный"
+
+msgid "initializing"
+msgstr "инициализирующийся"
+
+msgid "normal"
+msgstr "нормальный"
+
+msgid "rebuilding"
+msgstr "пересборка"

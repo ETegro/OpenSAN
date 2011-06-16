@@ -1,66 +1,70 @@
 <%#
- aStor2 -- storage area network configurable via Web-interface
- Copyright (C) 2009-2011 ETegro Technologies, PLC
-                         Vladimir Petukhov (vladimir.petukhov@etegro.com)
-                         Sergey Matveev (stargrave@stargrave.org)
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as
- published by the Free Software Foundation, either version 3 of the
- License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
- 
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see http://www.gnu.org/licenses/.
+  aStor2 -- storage area network configurable via Web-interface
+  Copyright (C) 2009-2011 ETegro Technologies, PLC
+                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                          Sergey Matveev (stargrave@stargrave.org)
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<form method="post" action="<%= luci.dispatcher.build_url( "san", "perform" ) %>">
+<form method="post" action="<%= luci.dispatcher.build_url( "admin", "san", "perform" ) %>">
+	<%+san/serialized_data%>
+	<table class="matrix" border="1px" cellpadding="0" cellspacing="0" width="100%">
+		<tbody>
+			<tr>
+				<th scope="col" width="20%"><%: Physical drives %></th>
+				<th scope="col" width="20%"><%: Logical drives %></th>
+				<th scope="col" width="25%"><%: Logical volumes %></th>
+				<th scope="col" width="35%"><a href="#div_access_pattern_new" id="access_patterns"><%: Access patterns %></a></th>
+			</tr>
+			<% for _, line_local in ipairs( matrix_overall.lines ) do %>
+				<%# Our templates must be able to access locally scoped line_local %>
+				<% line = line_local %>
+				<tr>
+					<% if line.physical then %>
+						<%+san/physical/index%>
+					<% end %>
+					<% if line.logical then %>
+						<%+san/logical/index%>
+					<% end %>
+					<% if line.logical_volume and line.logical_volume.is_snapshot() == true then %>
+						<%+san/snapshot/index%>
+					<% end %>
+					<% if line.logical_volume and line.logical_volume.is_snapshot() == false then %>
+						<%+san/logical_volume/index%>
+					<% end %>
+					<% if line.access_pattern then %>
+						<%+san/access_pattern/index%>
+					<% end %>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+	<table class="bottom_forms">
+		<tbody>
+			<tr>
+				<td width="25%">
+					<%+san/logical/forms/add%>
+				</td>
+				<td width="50%" valign="top">
+					<%+san/legend%>
+				</td>
+				<td width="25%">
+					<%+san/access_pattern/forms/add%>
+				</td>
+			</tr>
 
-<p>
-	<input type="button" name="hide_all" value="Hide all information" />
-	<input type="button" name="show_all" value="Show all information" />
-	<input type="reset" name="reset_form" value="Reset all form" /> 
-</p>
-
-<%+san/serialized_data%>
-
-<table border="1px" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-		<td><%: Physical drives %></td>
-		<td><%: Logical drives %></td>
-		<td><%: Logical volumes %></td>
-		<td><%: Access patterns %></td>
-	</tr>
-	<% for _, line_local in ipairs( matrix_overall.lines ) do %>
-
-	<%# Our templates must be able to access locally scoped line_local %>
-	<% line = line_local %>
-
-	<tr>
-		<% if line.physical then %>
-			<%+san/matrix_physical%>
-		<% end %>
-		<% if line.logical then %>
-			<%+san/matrix_logical%>
-		<% end %>
-		<% if line.logical_volume and line.logical_volume.is_snapshot() == true then %>
-			<%+san/matrix_logical_volume_snapshot%>
-		<% end %>
-		<% if line.logical_volume and line.logical_volume.is_snapshot() == false then %>
-			<%+san/matrix_logical_volume%>
-		<% end %>
-		<% if line.access_pattern then %>
-			<%+san/matrix_access_pattern%>
-		<% end %>
-	</tr>
-	<% end %>
-</table>
-
-<%+san/form_logical_add%>
-<%+san/form_access_pattern_add%>
-
+		</tbody>
+	</table>
 </form>

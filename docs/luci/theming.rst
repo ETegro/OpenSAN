@@ -7,8 +7,8 @@
 В исходном коде
 ===============
 :Шаблоны:
- * /feeds/luci/themes/astor2/luasrc/view/astor2/header.htm
- * /feeds/luci/themes/astor2/luasrc/view/astor2/footer.htm
+ * /feeds/luci/themes/astor2/luasrc/view/themes/astor2/header.htm
+ * /feeds/luci/themes/astor2/luasrc/view/themes/astor2/footer.htm
  * /feeds/luci/applications/luci-astor2-san/luasrc/view/san.htm
  * /feeds/luci/applications/luci-astor2-san/luasrc/view/san/\*
 :Статические файлы:

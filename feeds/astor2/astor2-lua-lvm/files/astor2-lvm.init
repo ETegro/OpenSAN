@@ -2,15 +2,15 @@
 START=50
 
 EINARC_STARTED_FLAG="/tmp/einarc-started"
+LVM_STARTED_FLAG="/tmp/lvm-started"
 
 start()
 {
 	( # We have to daemonize this process to prevent deadlocks
 	while [ ! -e $EINARC_STARTED_FLAG ]; do sleep 1; done
 	echo 'lvm = require "astor2.lvm";
-	      lvm.PhysicalVolume.rescan();
-	      lvm.VolumeGroup.rescan();
-	      lvm.LogicalVolume.rescan()' | lua -
+	      lvm.restore()' | lua -
+	touch $LVM_STARTED_FLAG
 	)&
 }
 

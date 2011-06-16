@@ -111,16 +111,16 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
-<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/../openwrt.org/cascade.css" />
-<!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie6.css" /><![endif]-->
-<!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie7.css" /><![endif]-->
-<!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/ie8.css" /><![endif]-->
+<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/style.css" />
+<!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/ie6.css" /><![endif]-->
+<!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/ie7.css" /><![endif]-->
+<!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/ie8.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
 <!--aStor2-theme-insert--> 
 <link rel="stylesheet" href="<%=media%>/css/jquery-ui/jquery.ui.all.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="<%=media%>/css/san.css" type="text/css" media="screen" />
-<script type="text/javascript" src="<%=media%>/js/jquery-1.5.2.js"></script>
+<script type="text/javascript" src="<%=media%>/js/jquery-1.6.1.js"></script>
 <script type="text/javascript" src="<%=media%>/js/jquery-ui-1.8.11.js"></script>
 <script type="text/javascript" src="<%=media%>/js/san.js"></script>
 <!--end-of-aStor2-theme-insert-->
@@ -136,21 +136,21 @@ require("luci.http").prepare_content("application/xhtml+xml")
 
 <div id="menubar">
 <h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
-
-<div class="hostinfo">
+<div class="etegro_logo inline" title="ETegro Technologies"><img src="<%=media%>/css/style/images/etegro_logo.png" alt="ETegro Technologies" /></div>
+<div class="hostinfo inline">
 	<%=hostname%> | <%=luci.version.distversion%> |
 	<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%>
 </div>
-
-<ul id="modemenu"><%
-for k,node in pairs(tree.nodes) do
-	if node.title and not node.hidden then %>
-<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(node.title)%></a></li><%
+<!--<div>
+	<ul id="modemenu"><%
+	for k,node in pairs(tree.nodes) do
+		if node.title and not node.hidden then %>
+	<li><a<% if request[1] == k then %> class="active"<%end%> href="<%=controller%>/<%=k%>/"><%=striptags(node.title)%></a></li><%
+		end
 	end
-end
-%>
-</ul>
-
+	%>
+	</ul>
+</div>-->
 <%
 if tree.nodes[category] and tree.nodes[category].ucidata then
 	local ucic = 0

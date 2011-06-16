@@ -4,39 +4,27 @@
                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
 
  This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as
- published by the Free Software Foundation, either version 3 of the
- License, or (at your option) any later version.
-
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program. If not, see http://www.gnu.org/licenses/.
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 $.noConflict();
 jQuery(document).ready( function($) {
 
 function hide_all_to_hide_elements() {
-	$( '[ class ^= "to_hide" ]' ).hide();
+	$( '[ class *= "to_hide" ]' ).hide();
 };
 
-function hide_all_button() {
-	$( 'input[ name = "hide_all" ]' ).click( function() {
-		$( '[ class ^= "to_hide" ]' ).fadeOut();
-	} );
-};
-
-function show_all_button() {
-	$( 'input[ name = "show_all" ]' ).click( function() {
-		$( '[ class ^= "to_hide" ]' ).fadeIn();
-	} );
-};
-
-function create_raid_form_toggle() {
+function toggle_create_raid_form() {
 	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
 
 	$( physicals_select ).click( function() {
@@ -76,9 +64,20 @@ function create_raid_form_toggle() {
 	} );
 };
 
-function drives_information_toggle(){
-	$( 'form a[ id *= "ical_info-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+function toggle_access_pattern_creation() {
+	$( '#access_patterns' ).click( function() {
+		var parent_selector = $( '#div_access_pattern_new' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+	} );
+};
+
+function toggle_drives_information() {
+	$( 'form a[ id ^= "physical_info-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
 		} else {
@@ -88,8 +87,32 @@ function drives_information_toggle(){
 	} );
 };
 
-function access_patterns_edit_toggle() {
-	$( 'form a[ id ^= "access_pattern_edit-" ]' ).click( function() {
+function toggle_logical_volume_creation() {
+	$( 'form input[ name ^= "logical_volume_creation-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function toggle_resize_logical_volume() {
+	$( 'form input[ name ^= "logical_volume_resize_button-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function toggle_snapshot_creation() {
+	$( 'form input[ name ^= "snapshot_creation-" ]' ).click( function() {
 		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		if ( parent_selector.is( ':hidden' ) ) {
 			parent_selector.fadeIn( 'fast' );
@@ -97,6 +120,36 @@ function access_patterns_edit_toggle() {
 			parent_selector.fadeOut( 'fast' );
 		}
 		return false;
+	} );
+};
+
+function toggle_resize_snapshot() {
+	$( 'form input[ name ^= "snapshot_resize_button-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function toggle_edit_access_patterns() {
+	$( 'form input[ name ^= "access_pattern_edit-" ]' ).click( function() {
+		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		if ( parent_selector.is( ':hidden' ) ) {
+			parent_selector.fadeIn( 'fast' );
+		} else {
+			parent_selector.fadeOut( 'fast' );
+		}
+		return false;
+	} );
+};
+
+function pulsate_bind_access_patterns() {
+	$( 'form input[ name ^= "san.logical_volume_select" ]' ).click( function() {
+		$( '.icon-bind' ).show( 'pulsate' );
 	} );
 };
 
@@ -111,11 +164,15 @@ function setup_plunger(){
 };
 
 hide_all_to_hide_elements();
-hide_all_button();
-show_all_button();
-create_raid_form_toggle();
-drives_information_toggle();
-access_patterns_edit_toggle();
+toggle_access_pattern_creation();
+toggle_create_raid_form();
+toggle_drives_information();
+toggle_logical_volume_creation();
+toggle_resize_logical_volume();
+toggle_resize_snapshot();
+toggle_snapshot_creation();
+toggle_edit_access_patterns();
+pulsate_bind_access_patterns();
 setup_plunger();
 
 });

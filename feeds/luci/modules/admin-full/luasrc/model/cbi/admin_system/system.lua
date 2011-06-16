@@ -10,7 +10,7 @@ You may obtain a copy of the License at
 
 	http://www.apache.org/licenses/LICENSE-2.0
 
-$Id: system.lua 6884 2011-02-12 19:30:59Z soma $
+$Id: system.lua 7082 2011-05-19 23:58:20Z jow $
 ]]--
 
 require("luci.sys")
@@ -37,7 +37,7 @@ s.addremove = false
 
 s:tab("general",  translate("General Settings"))
 s:tab("logging",  translate("Logging"))
-s:tab("language", translate("Language and Style"))
+s:tab("language", translate("Language"))
 
 
 --
@@ -162,7 +162,7 @@ function o.write(self, section, value)
 	m.uci:set("luci", "main", "lang", value)
 end
 
-
+--[[
 o = s:taboption("language", ListValue, "_mediaurlbase", translate("Design"))
 for k, v in pairs(luci.config.themes) do
 	if k:sub(1, 1) ~= "." then
@@ -177,6 +177,7 @@ end
 function o.write(self, section, value)
 	m.uci:set("luci", "main", "mediaurlbase", value)
 end
+]]
 
 
 --
@@ -264,4 +265,4 @@ c.write = function(self, section, value)
 end
 
 
-return m, m3, m2
+return m, m3 or m2, m3 and m2

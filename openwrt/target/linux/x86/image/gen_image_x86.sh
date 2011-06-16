@@ -16,10 +16,10 @@ rm -f "$OUTPUT"
 
 head=16
 sect=63
-cyl=$(( ($KERNELSIZE + $ROOTFSSIZE) * 1024 * 1024 / ($head * $sect * 512)))
+cyl=$(( ($KERNELSIZE + 2 * $ROOTFSSIZE) * 1024 * 1024 / ($head * $sect * 512)))
 
 # create partition table
-set `ptgen -o "$OUTPUT" -h $head -s $sect -p ${KERNELSIZE}m -p ${ROOTFSSIZE}m`
+set `ptgen -o "$OUTPUT" -h $head -s $sect -p ${KERNELSIZE}m -p ${ROOTFSSIZE}m -p ${ROOTFSSIZE}m`
 
 KERNELOFFSET="$(($1 / 512))"
 KERNELSIZE="$(($2 / 512))"
@@ -28,7 +28,7 @@ ROOTFSSIZE="$(($4 / 512))"
 
 BLOCKS="$((($KERNELSIZE / 2) - 1))"
 
-[ -n "$PADDING" ] && dd if=/dev/zero of="$OUTPUT" bs=512 seek="$ROOTFSOFFSET" conv=notrunc count="$ROOTFSSIZE"
+dd if=/dev/zero of="$OUTPUT" bs=512 seek="$ROOTFSOFFSET" conv=notrunc count="$(( 2 * $ROOTFSSIZE ))"
 dd if="$ROOTFSIMAGE" of="$OUTPUT" bs=512 seek="$ROOTFSOFFSET" conv=notrunc
 
 [ -n "$NOGRUB" ] && exit 0

@@ -1,5 +1,5 @@
 config system
-	option hostname	OpenWrt
+	option hostname	OpenSAN
 	option timezone	UTC
 
 config rdate
