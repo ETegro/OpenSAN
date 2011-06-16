@@ -1,22 +1,39 @@
 .. _index:
+.. title:: OpenSAN project
+.. include:: logo.rst
 
-=======
-OpenSAN
-=======
+About
+=====
+OpenSAN_ is a `free software`_ project realizing Storage Area Network
+system.  This is small firmware that turns server (having at least one
+hard drive) into an iSCSI_ target accessible through the Ethernet
+interface.
 
-Here will be project's description.
+It is intended to be easy configurable using user-friendly
+Web-interface. Nearly everything related to SAN can be configured from
+single Web-interface's page.
 
-Maillists
-=========
-* OpenSAN's general discussion
-  (`information <https://groups.google.com/group/opensan-discuss>`__,
-  `subscribe <mailto:opensan-discuss+subscribe@googlegroups.com?subject=subscribe>`__,
-  `posting <mailto:opensan-discuss@googlegroups.com>`__)
-* OpenSAN's commits
-  (`information <https://groups.google.com/group/opensan-commits>`__,
-  `subscribe <mailto:opensan-commits+subscribe@googlegroups.com?subject=subscribe>`__)
+Project is sponsored and developed under the hood of `ETegro
+Technologies`_ company. It's some kind of codename is *aStor2*.
 
-.. .. toctree::
-      :maxdepth: 1
-   
-      maillists
+.. _OpenSAN: http://www.opensan.org/
+.. _free software: http://www.gnu.org/philosophy/free-sw.html
+.. _iSCSI: https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network
+.. _ETegro Technologies: http://www.etegro.com/
+
+.. toctree::
+   :maxdepth: 1
+
+   licence
+   features
+   translations
+   source_code
+   overview
+   roadmap
+   team
+   maillists
+
+Contacting us
+=============
+Please send all question, suggestions and bug reports to our :ref:`general
+discussion <maillists>` mailing list.
