@@ -2,6 +2,7 @@
 START=50
 
 EINARC_STARTED_FLAG="/tmp/einarc-started"
+LVM_STARTED_FLAG="/tmp/lvm-started"
 
 start()
 {
@@ -9,6 +10,7 @@ start()
 	while [ ! -e $EINARC_STARTED_FLAG ]; do sleep 1; done
 	echo 'lvm = require "astor2.lvm";
 	      lvm.restore()' | lua -
+	touch $LVM_STARTED_FLAG
 	)&
 }
 
