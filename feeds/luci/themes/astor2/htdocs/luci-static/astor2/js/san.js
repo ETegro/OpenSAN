@@ -26,7 +26,6 @@ function hide_all_to_hide_elements() {
 
 function toggle_create_raid_form() {
 	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
-
 	$( physicals_select ).click( function() {
 		if ( $( this ).is( ':checked' ) ) {
 			$( '#div_raid_create' ).fadeIn( 'fast' );
@@ -39,7 +38,8 @@ function toggle_create_raid_form() {
 		}
 
 		// RAID validator
-		var num = $( 'form input:checkbox[ name = "san.physical_id" ]:checked:' ).length;
+		var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' );
+		var num = selected_physicals.length;
 		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
 		var restrictions = { min : { 'passthrough' : 1,
 					     'linear' : 1,
