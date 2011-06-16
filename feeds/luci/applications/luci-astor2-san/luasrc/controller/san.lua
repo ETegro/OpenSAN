@@ -175,17 +175,6 @@ local function einarc_logical_add( inputs, drives, data )
 		return index_with_error( message )
 	end
 
-	-- Check that there are no different models of hard drives for adding
-	local found_models = {}
-	for _, physical in pairs( data.physicals ) do
-		if common.is_in_array( physical.id, drives ) then
-			found_models[ physical.model ] = 1
-		end
-	end
-	if #common.keys( found_models ) ~= 1 then
-		message_error = i18n("Only single model hard drives should be used")
-	end
-
 	lvm.restore()
 	disable_non_raid_volume_groups( data )
 
