@@ -676,8 +676,14 @@ local function lvm_logical_volume_resize( inputs, data )
 					     size = logical_volume_found.size },
 	                                   logical_volume_size )
 	if not return_code then
-		message_error = i18n("Failed to resize logical volume") .. ": " .. result
+		return index_with_error( i18n("Failed to resize logical volume") .. ": " .. result )
 	end
+
+	return_code, result = pcall( scst.Daemon.apply )
+	if not return_code then
+		return index_with_error( i18n("Failed to apply iSCSI configuration") .. ": " .. result )
+	end
+
 	return index_with_error( message_error )
 end
 
