@@ -22,28 +22,6 @@ while [ "$got_ref" != 1 ]; do
 	[ -d ".git" ] && got_ref=1 || cd ../
 done
 
-corresponding_tag()
-{
-	local commit=$1
-	cd .git/refs/tags
-	for tag in *; do
-		mtag=`cat $tag`
-		if [ "$mtag" = "$commit" ]; then
-			echo $tag
-			return
-		fi
-	done
-	echo ""
-}
-
-ref=`awk '{print $2}' < .git/HEAD`
-if [ "$ref" = "" ]; then
-	commit=`cat .git/HEAD`
-	echo `corresponding_tag $commit`
-else
-	commit=`cat .git/$ref`
-	tag=`corresponding_tag $commit`
-	[ "$tag" = "" ] && echo $commit || echo $tag
-fi
-
+commit=`git show-ref HEAD | awk '{print $1}'`
+git describe --tags $commit 2>/dev/null || echo $commit
 git show $commit | sed -n "s/^Date: *\(.*\)$/\1/p"
