@@ -27,6 +27,7 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
    licence
    features
    translations
+   screenshots/index
    downloads
    overview
    roadmap
@@ -36,5 +37,5 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
 
 Contacting us
 =============
-Please send all question, suggestions and bug reports to our :ref:`general
-discussion <maillists>` mailing list.
+Please send all question, suggestions and bug reports to our **general
+discussion** :ref:`mailing list <maillists>`.
