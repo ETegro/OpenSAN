@@ -167,14 +167,14 @@ msgid "Model"
 msgstr "Модель"
 
 msgid "Name"
-msgstr "Имя"
+msgstr "Название"
 
 msgid "Newly added dedicated hotspare disk is bigger than needed"
 msgstr ""
 "Добавленный выделенный hotspare диск имеет больший размер, чем требуется"
 
 msgid "Only single model hard drives should be used"
-msgstr "Жёсткие диски только одной модели желательно должны использоваться"
+msgstr "Желательно использовать жёсткие диски только одной модели"
 
 msgid "Physical drives"
 msgstr "Физические диски"
@@ -296,7 +296,7 @@ msgid "Unbind access pattern"
 msgstr "Открепить шаблон доступа"
 
 msgid "Unknown action specified"
-msgstr "Неизвестное действие задано"
+msgstr "Задано неизвестное действие"
 
 msgid "degraded"
 msgstr "деградированный"
