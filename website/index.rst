@@ -27,7 +27,7 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
    licence
    features
    translations
-   source_code
+   downloads
    overview
    roadmap
    publickey

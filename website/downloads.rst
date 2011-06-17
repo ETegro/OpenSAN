@@ -1,6 +1,11 @@
-.. _source_code:
+.. _downloads:
 
-===========
+=========
+Downloads
+=========
+Latest pre-built raw images and firmware updates can be found `here
+<http://www.opensan.org/output/>`__.
+
 Source code
 ===========
 Source code is always available on `Git-repository
