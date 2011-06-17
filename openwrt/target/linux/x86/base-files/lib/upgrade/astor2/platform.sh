@@ -189,7 +189,8 @@ platform_copy_config()
 	local mountpoint=`mktemp -d`
 	mkdir -p $mountpoint
 	mount $FUTURE_ROOT $mountpoint
-	tar -xz -f "$CONF_TAR" -C $mountpoint
+	cp "$CONF_TAR" $mountpoint
+	rm -f $mountpoint/etc/uci-defaults/*
 	umount $mountpoint
 	rmdir $mountpoint
 	sync

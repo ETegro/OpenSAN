@@ -110,7 +110,7 @@ end
 function M.AccessPattern:save()
 	assert( self, "unable to get self object" )
 	if self.section_name then
-		self:delete()
+		M.AccessPattern.delete_by_name( self.name )
 	end
 	local access_pattern_new = M.AccessPattern:new( {
 		name = self.name,
@@ -239,6 +239,7 @@ function M.Configuration.dump()
 	if #access_patterns_enabled == 0 then return "" end
 
 	local configuration = ""
+	local devices = {}
 
 	-- Create HANDLERs
 	local blockios = {}
@@ -246,10 +247,12 @@ function M.Configuration.dump()
 	configuration = configuration .. "HANDLER vdisk_blockio {\n"
 	for _, access_pattern in ipairs( access_patterns_enabled  ) do
 		blockios[ access_pattern.filename ] = blockio_counter
-		configuration = configuration .. "\tDEVICE blockio" .. blockio_counter .. " {\n"
+		local device = "blockio" .. blockio_counter
+		configuration = configuration .. "\tDEVICE " .. device .. " {\n"
 		configuration = configuration .. "\t\tfilename " .. access_pattern.filename .. "\n"
 		configuration = configuration .. "\t}\n"
 		blockio_counter = blockio_counter + 1
+		devices[ #devices + 1 ] = device
 	end
 	configuration = configuration .. "}\n"
 
@@ -282,7 +285,7 @@ function M.Configuration.dump()
 		end
 	end
 
-	return configuration
+	return configuration, devices
 end
 
 function M.Configuration.write( configuration, where )
@@ -308,7 +311,7 @@ function M.Daemon.check( configuration )
 				      configuration_path )
 	if result.return_code ~= 0 then
 		os.remove( configuration_path )
-		error( "scst:Daemon:apply() check failed: " .. table.concat( result.stdout, "\n" ) )
+		error( "scst:Daemon:check() failed: " .. table.concat( result.stdout, "\n" ) )
 	end
 	local succeeded = false
 	for _, line in ipairs( result.stdout ) do
@@ -318,13 +321,13 @@ function M.Daemon.check( configuration )
 	end
 	if not succeeded then
 		os.remove( configuration_path )
-		error( "scst:Daemon:apply() check failed: " .. table.concat( result.stdout, "\n" ) )
+		error( "scst:Daemon:check() failed: " .. table.concat( result.stdout, "\n" ) )
 	end
 	os.remove( configuration_path )
 end
 
 function M.Daemon.apply()
-	local configuration = M.Configuration.dump()
+	local configuration, devices = M.Configuration.dump()
 	if #configuration == 0 then return end
 	M.Daemon.check( configuration )
 	M.Configuration.write( configuration,
@@ -334,6 +337,10 @@ function M.Daemon.apply()
 	                       " -noprompt" ..
 	                       " -config " ..
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
+	for _, device in ipairs( devices ) do
+		common.system( M.Daemon.SCSTADMIN_PATH ..
+		               " -resync_dev " .. device )
+	end
 end
 
 return M
