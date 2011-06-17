@@ -1,0 +1,17 @@
+.. _screenshots-index:
+
+===========
+Screenshots
+===========
+
++---------------------------------+------------------------------+-------------------------------------+
+| OpenSAN's console after booting | Main OpenSAN's window        | Different toggled forms             |
++---------------------------------+------------------------------+-------------------------------------+
+| .. image:: console.png          | .. image:: main.png          | .. image:: toggled.png              |
+|    :scale: 70                   |    :scale: 30                |    :scale: 30                       |
++---------------------------------+------------------------------+-------------------------------------+
+| Different add and edit forms    | Various logical drive states | Arrays are rebuilding after failure |
++---------------------------------+------------------------------+-------------------------------------+
+| .. image:: edits.png            | .. image:: states.png        | .. image:: rebuilding.png           |
+|    :scale: 30                   |    :scale: 30                |    :scale: 30                       |
++---------------------------------+------------------------------+-------------------------------------+
