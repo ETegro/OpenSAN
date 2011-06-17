@@ -23,11 +23,17 @@
 		       type="checkbox"
 		       value="<%= line.physical.id %>" />
 	<% end %>
-	<input name="san.physical_model-<%= line.physical.id %>"
+	<input name="physical_model-<%= hash( line.physical.id ) %>"
 	       class="physical_model"
 	       type="hidden"
-	       value="<%= line.physical.model %>" />
-	<a href="#" id="physical_info-<%= line.physical.id %>">
+	       value="<%= hash( line.physical.model ) %>" />
+	<% if line.physical.logical_id then %>
+		<input name="physical_in_logical-<%= hash( line.physical.logical_id ) %>"
+		       class="physical_in_logical"
+		       type="hidden"
+		       value="<%= line.physical.logical_id %>" />
+	<% end %>
+	<a href="#" id="physical_info-<%= hash( line.physical.id ) %>">
 		<%: ID %>: <%= line.physical.id %>;
 		<%= line.physical.model %>;
 		<span title="<%= line.physical.size_mib %> <%: MiB %>">
