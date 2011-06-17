@@ -25,6 +25,8 @@ OpenSAN is based on several other free software projects:
 :SCST_:
  framework for creating iSCSI targets
 
+:Smartmontools_:
+ utility programs to control and monitor storage systems using SMART
 :jQuery_:
  is used to make different pretty outlooking interface interactions
 
@@ -37,4 +39,5 @@ language.
 .. _Einarc: http://www.inquisitor.ru/doc/einarc/
 .. _LVM2: http://sourceware.org/lvm2/
 .. _SCST: http://scst.sourceforge.net/index.html
+.. _Smartmontools: http://sourceforge.net/apps/trac/smartmontools/wiki
 .. _jQuery: http://jquery.com/
