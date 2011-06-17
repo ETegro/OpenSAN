@@ -30,6 +30,7 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
    source_code
    overview
    roadmap
+   publickey
    team
    maillists
 
