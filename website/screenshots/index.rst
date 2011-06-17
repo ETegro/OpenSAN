@@ -4,6 +4,9 @@
 Screenshots
 ===========
 
+:OpenSAN's console after booting:
+ .. image:: console.png
+    :align: center
 :Main OpenSAN's window:
  .. image:: main.png
     :align: center
