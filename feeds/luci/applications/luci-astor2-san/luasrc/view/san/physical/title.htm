@@ -23,6 +23,10 @@
 		       type="checkbox"
 		       value="<%= line.physical.id %>" />
 	<% end %>
+	<input name="san.physical_model-<%= line.physical.id %>"
+	       class="physical_model"
+	       type="hidden"
+	       value="<%= line.physical.model %>" />
 	<a href="#" id="physical_info-<%= line.physical.id %>">
 		<%: ID %>: <%= line.physical.id %>;
 		<%= line.physical.model %>;
