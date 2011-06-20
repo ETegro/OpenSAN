@@ -199,7 +199,7 @@ function M.round_mib( size )
 end
 
 function M.mib2tib( size )
-	return string.sub( string.format( "%0.3f", size / 2^20 ), 1, -2 )
+	return string.sub( string.format( "%0.3f", tonumber( size ) / 2^20 ), 1, -2 )
 end
 
 local function check_highlights_attribute( obj )
