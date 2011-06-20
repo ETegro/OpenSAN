@@ -4,7 +4,7 @@
 
 About
 =====
-OpenSAN_ is a `free software`_ project realizing Storage Area Network
+OpenSAN_ is a `free software`_ project realizing `Storage Area Network`_
 system.  This is small firmware that turns server (having at least one
 hard drive) into an iSCSI_ target accessible through the Ethernet
 interface.
@@ -18,7 +18,8 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
 
 .. _OpenSAN: http://www.opensan.org/
 .. _free software: http://www.gnu.org/philosophy/free-sw.html
-.. _iSCSI: https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network
+.. _iSCSI: https://secure.wikimedia.org/wikipedia/en/wiki/iSCSI
+.. _Storage Area Network: https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network
 .. _ETegro Technologies: http://www.etegro.com/
 
 .. toctree::
