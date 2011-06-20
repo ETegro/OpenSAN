@@ -2141,12 +2141,12 @@ TestFilterHighlightSnapshots = {}
 		assertEquals( got[ 2 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 3 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 4 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 5 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 6 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 1
+		local color = 1
 		local line = 1
 		for i = 1, max_logical_volumes do
 			local step = 1 + max_snapshots
@@ -2281,7 +2281,7 @@ TestFilterHighlightSnapshots = {}
 		assertEquals( got[ 3 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 4 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 5 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
 		local color = 1 --normal_color
@@ -2396,17 +2396,17 @@ TestFilterHighlightSnapshots = {}
 		assertEquals( got[ 2 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 3 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 4 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 5 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 6 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 1 --normal_color
+		local color = 1 --normal_color
 		assertEquals( got[ 7 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 8 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 9 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 11 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 12 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 13 ].logical_volume.highlight.background_color, colors_array[ color ] )
