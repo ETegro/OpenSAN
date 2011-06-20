@@ -12,7 +12,7 @@ Roadmap
  :ref:`DONED <features>`
 :1.1:
 
-    * SMART information retrieving support
+    * x64 architecture support 
 
 :1.2:
 
@@ -21,8 +21,7 @@ Roadmap
 
 :1.3:
 
-    * Configurable RAID creation: RAID5/6 algorithms selection, chunk
-      size specifying
+    * Network interfaces bonding
 
 :1.4:
 
@@ -31,30 +30,34 @@ Roadmap
 
 :1.5:
 
-    * HTTPS protocol support for Web-interface
+    * More options for iSCSI target
 
 :1.6:
 
-    * Full IPv6 with `NDP <http://tools.ietf.org/html/rfc4861>`_
-      protocol support
+    * HTTPS protocol support for Web-interface
 
 2.x version
 ===========
 :2.0:
 
-    * Network interfaces bonding
+    * FibreChannel transport support
 
 :2.1:
 
-    * MPIO drives access support
+    * Configurable RAID creation: RAID5/6 algorithms selection, chunk
+      size specifying
 
 :2.2:
 
-    * FibreChannel transport support
+    * MPIO drives access support
 
 3.x version
 ===========
 * Disk groups support
+* SMART information retrieving support
 * Einarc's adaptec and lsi modules adding for hardware RAID controllers
   supporting
 * Storing configuration on hard drives
+* Full IPv6 with `NDP <http://tools.ietf.org/html/rfc4861>`_
+  protocol support
+* InfiniBand transport support
