@@ -1865,21 +1865,25 @@ TestFilterAlternationBorderColors = {}
 		)[ "lines" ]
 
 		--print( common.ppt( { got } ) )
-		assertEquals( got[ 1 ].logical.highlight.color, "black" )
-		assertEquals( got[ 1 ].physical.highlight.color, "black" )
-		assertEquals( got[ 1 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 4 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 7 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 10 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 13 ].logical.highlight.color, "blue" )
-		assertEquals( got[ 13 ].physical.highlight.color, "blue" )
-		assertEquals( got[ 13 ].logical_volume.highlight.color, "blue" )
-		assertEquals( got[ 25 ].logical.highlight.color, "green" )
-		assertEquals( got[ 25 ].physical.highlight.color, "green" )
-		assertEquals( got[ 25 ].logical_volume.highlight.color, "green" )
-		assertEquals( got[ 37 ].logical.highlight.color, "black" )
-		assertEquals( got[ 37 ].physical.highlight.color, "black" )
-		assertEquals( got[ 37 ].logical_volume.highlight.color, "black" )
+		local color = colors_array[ 1 ] --black
+		assertEquals( got[ 1 ].logical.highlight.color, color )
+		assertEquals( got[ 1 ].physical.highlight.color, color )
+		assertEquals( got[ 1 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 4 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 7 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 10 ].logical_volume.highlight.color, color )
+		local color = colors_array[ 2 ] --blue
+		assertEquals( got[ 13 ].logical.highlight.color, color )
+		assertEquals( got[ 13 ].physical.highlight.color, color )
+		assertEquals( got[ 13 ].logical_volume.highlight.color, color )
+		local color = colors_array[ 3 ] --green
+		assertEquals( got[ 25 ].logical.highlight.color, color )
+		assertEquals( got[ 25 ].physical.highlight.color, color )
+		assertEquals( got[ 25 ].logical_volume.highlight.color, color )
+		local color = colors_array[ 1 ] --black
+		assertEquals( got[ 37 ].logical.highlight.color, color )
+		assertEquals( got[ 37 ].physical.highlight.color, color )
+		assertEquals( got[ 37 ].logical_volume.highlight.color, color )
 
 		local color = 1
 		local line = 1
@@ -1994,28 +1998,32 @@ TestFilterAlternationBorderColors = {}
 		)[ "lines" ]
 
 		--print( common.ppt( { got } ) )
-		assertEquals( got[ 1 ].logical.highlight.color, "black" )
-		assertEquals( got[ 1 ].physical.highlight.color, "black" )
-		assertEquals( got[ 1 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 1 ].access_pattern.highlight.color, "black" )
-		assertEquals( got[ 4 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 4 ].access_pattern.highlight.color, "black" )
-		assertEquals( got[ 7 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 7 ].access_pattern.highlight.color, "black" )
-		assertEquals( got[ 10 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 10 ].access_pattern.highlight.color, "black" )
-		assertEquals( got[ 13 ].logical.highlight.color, "blue" )
-		assertEquals( got[ 13 ].access_pattern.highlight.color, "blue" )
-		assertEquals( got[ 13 ].physical.highlight.color, "blue" )
-		assertEquals( got[ 13 ].logical_volume.highlight.color, "blue" )
-		assertEquals( got[ 25 ].logical.highlight.color, "green" )
-		assertEquals( got[ 25 ].physical.highlight.color, "green" )
-		assertEquals( got[ 25 ].logical_volume.highlight.color, "green" )
-		assertEquals( got[ 25 ].access_pattern.highlight.color, "green" )
-		assertEquals( got[ 37 ].logical.highlight.color, "black" )
-		assertEquals( got[ 37 ].physical.highlight.color, "black" )
-		assertEquals( got[ 37 ].logical_volume.highlight.color, "black" )
-		assertEquals( got[ 37 ].access_pattern.highlight.color, "black" )
+		local color = colors_array[ 1 ] --black
+		assertEquals( got[ 1 ].logical.highlight.color, color )
+		assertEquals( got[ 1 ].physical.highlight.color, color )
+		assertEquals( got[ 1 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 1 ].access_pattern.highlight.color, color )
+		assertEquals( got[ 4 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 4 ].access_pattern.highlight.color, color )
+		assertEquals( got[ 7 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 7 ].access_pattern.highlight.color, color )
+		assertEquals( got[ 10 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 10 ].access_pattern.highlight.color, color )
+		local color = colors_array[ 2 ] --blue
+		assertEquals( got[ 13 ].logical.highlight.color, color )
+		assertEquals( got[ 13 ].access_pattern.highlight.color, color )
+		assertEquals( got[ 13 ].physical.highlight.color, color )
+		assertEquals( got[ 13 ].logical_volume.highlight.color, color )
+		local color = colors_array[ 3 ] --green
+		assertEquals( got[ 25 ].logical.highlight.color, color )
+		assertEquals( got[ 25 ].physical.highlight.color, color )
+		assertEquals( got[ 25 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 25 ].access_pattern.highlight.color, color )
+		local color = colors_array[ 1 ] --black
+		assertEquals( got[ 37 ].logical.highlight.color, color )
+		assertEquals( got[ 37 ].physical.highlight.color, color )
+		assertEquals( got[ 37 ].logical_volume.highlight.color, color )
+		assertEquals( got[ 37 ].access_pattern.highlight.color, color )
 
 		local color = 1
 		local line = 1
@@ -2141,12 +2149,12 @@ TestFilterHighlightSnapshots = {}
 		assertEquals( got[ 2 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 3 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 4 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 5 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 6 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 1
+		local color = 1
 		local line = 1
 		for i = 1, max_logical_volumes do
 			local step = 1 + max_snapshots
@@ -2281,7 +2289,7 @@ TestFilterHighlightSnapshots = {}
 		assertEquals( got[ 3 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 4 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 5 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
 		local color = 1 --normal_color
@@ -2396,17 +2404,17 @@ TestFilterHighlightSnapshots = {}
 		assertEquals( got[ 2 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 3 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 4 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 5 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 6 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 1 --normal_color
+		local color = 1 --normal_color
 		assertEquals( got[ 7 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 8 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 9 ].logical_volume.highlight.background_color, colors_array[ color ] )
 
-		color = 2 --light_color
+		local color = 2 --light_color
 		assertEquals( got[ 11 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 12 ].logical_volume.highlight.background_color, colors_array[ color ] )
 		assertEquals( got[ 13 ].logical_volume.highlight.background_color, colors_array[ color ] )
