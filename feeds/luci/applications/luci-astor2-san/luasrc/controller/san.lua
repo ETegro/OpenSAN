@@ -616,8 +616,8 @@ local function lvm_logical_volume_remove( inputs, data )
 		end
 	else
 		local return_code, result = pcall( lvm.LogicalVolume.remove,
-						   { volume_group = { name = volume_group_name },
-						     name = logical_volume_name } )
+		                                   { volume_group = { name = volume_group_name },
+		                                     name = logical_volume_name } )
 		if not return_code then
 			return index_with_error( i18n("Failed to remove logical volume") .. ": " .. result )
 		end
@@ -657,12 +657,12 @@ local function lvm_logical_volume_resize( inputs, data )
 
 	local logical_volume_found = find_lv_by_name_and_vg_name( logical_volume_name,
 	                                                          volume_group_name,
-								  data.logical_volumes )
+	                                                          data.logical_volumes )
 
 	local return_code, result = pcall( lvm.LogicalVolume.resize,
 	                                   { volume_group = { name = volume_group_name },
 	                                     name = logical_volume_name,
-					     size = logical_volume_found.size },
+	                                     size = logical_volume_found.size },
 	                                   logical_volume_size )
 	if not return_code then
 		return index_with_error( i18n("Failed to resize logical volume") .. ": " .. result )
@@ -774,10 +774,10 @@ local function scst_access_pattern_new( inputs )
 	local access_pattern_readonly = inputs[ "access_pattern_new-readonly" ]
 
 	local access_pattern_attributes = { name = access_pattern_name,
-		                            targetdriver = access_pattern_targetdriver,
-		                            lun = access_pattern_lun,
-		                            enabled = access_pattern_enabled,
-		                            readonly = access_pattern_readonly }
+	                                    targetdriver = access_pattern_targetdriver,
+	                                    lun = access_pattern_lun,
+	                                    enabled = access_pattern_enabled,
+	                                    readonly = access_pattern_readonly }
 
 	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
 	if not return_code then
@@ -807,7 +807,7 @@ local function scst_access_pattern_delete( inputs )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 
 	local return_code, result = pcall( scst.AccessPattern.delete,
-		                           scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
+	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
 	if not return_code then
 		message_error = i18n("Failed to delete access pattern") .. ": " .. result
 	end
@@ -846,7 +846,7 @@ local function scst_access_pattern_bind( inputs )
 
 	local access_pattern = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
 	local return_code, result = pcall( scst.AccessPattern.bind,
-					   access_pattern,
+	                                   access_pattern,
 	                                   logical_volume_device )
 	if not return_code then
 		return index_with_error( i18n("Failed to bind access pattern") .. ": " .. result )
