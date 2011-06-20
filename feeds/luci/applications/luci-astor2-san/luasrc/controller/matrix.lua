@@ -194,6 +194,10 @@ function M.overall( data )
 	return matrix
 end
 
+function M.round_mib( size )
+	return string.format( "%0.0f", tostring( size ) )
+end
+
 function M.mib2tib( size )
 	return string.sub( string.format( "%0.3f", size / 2^20 ), 1, -2 )
 end
@@ -408,6 +412,16 @@ local function filter_mib2tib( matrix )
 	return matrix
 end
 
+local function filter_round_mib( matrix )
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
+		if line.physical then
+			line.physical.size_mib = M.round_mib( line.physical.size_mib )
+		end
+	end
+	return matrix
+end
+
 local function filter_add_logical_id_to_physical( matrix )
 	local lines = matrix.lines
 	for _, line in ipairs( lines ) do
@@ -571,6 +585,7 @@ function M.caller()
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
 		filter_mib2tib,
+		filter_round_mib,
 		filter_serialize,
 		filter_base64encode
 	}
