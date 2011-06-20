@@ -5,32 +5,25 @@ Technical overview
 ==================
 OpenSAN is based on several other free software projects:
 
-:OpenWRT_:
- with own modified version of Linux is used as a base providing all
- necessary libraries, building framework and utilities to create
- lightweight, highly customized, easily upgradable environment for the
- following subsystems
+OpenWRT_  with own modified version of Linux is used as a base providing all
+necessary libraries, building framework and utilities to create
+lightweight, highly customized, easily upgradable environment for the
+following subsystems
 
-:LuCI_:
- is used as MVC-framework for the overall Web-interface configuration
- management
+LuCI_ is used as MVC-framework for the overall Web-interface configuration
+management
 
-:Einarc_:
- with software module enabled -- all configuration related to physical
- and logical drives management is performed through it
+Einarc_  with software module enabled -- all configuration related to physical
+and logical drives management is performed through it
 
-:LVM2_:
- for logical volumes with snapshots management
+LVM2_ for logical volumes with snapshots management
 
-:SCST_:
- framework for creating iSCSI targets
+SCST_ framework for creating iSCSI targets
 
-:Smartmontools_:
- utility programs to control and monitor storage systems using SMART
-:jQuery_:
- is used to make different pretty outlooking interface interactions
+Smartmontools_ utility programs to control and monitor storage systems using SMART
+jQuery_ is used to make different pretty outlooking interface interactions
 
-All interaction with Einarc, LVM2 and SCST subsystems is going through
+All interaction with Einarc_, LVM2_ and SCST_ subsystems is going through
 the self-written API (*astor2.* libraries) on Lua programming
 language.
 
