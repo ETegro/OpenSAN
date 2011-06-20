@@ -353,7 +353,6 @@ function M.filter_highlight_accesss_patterns( matrix )
 			end
 			if #line.logical_volume.snapshots ~= 0 then
 				for _, snapshot in ipairs( line.logical_volume.snapshots ) do
-					--snapshot.highlight.background_color = color
 					if snapshot.access_patterns then
 						for _, access_pattern in pairs( snapshot.access_patterns ) do
 							access_pattern.highlight.background_color = snapshot.highlight.background_color
