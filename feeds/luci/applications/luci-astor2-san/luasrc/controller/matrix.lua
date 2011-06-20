@@ -195,7 +195,7 @@ function M.overall( data )
 end
 
 function M.round_mib( size )
-	return string.format( "%0.0f", tostring( size ) )
+	return string.format( "%0.0f", tonumber( size ) )
 end
 
 function M.mib2tib( size )
