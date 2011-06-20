@@ -12,7 +12,7 @@ Roadmap
  :ref:`DONED <features>`
 :1.1:
 
-    * x64 architecture support 
+    * x64 architecture support
 
 :1.2:
 
