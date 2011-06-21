@@ -30,7 +30,7 @@ jQuery.noConflict();
 		max: <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
 		range: 'min',
 		step: <%= line.logical_volume.volume_group.extent %>,
-		value: 1,
+		value: <%= line.logical_volume.volume_group.extent %>,
 		slide: function( event, ui ) {
 			$( slider_input_name ).val( ui.value );
 			$( slider_input_name_view ).val( ui.value + " <%: MiB %>" );
