@@ -18,7 +18,7 @@
 */
 
 $.noConflict();
-jQuery(document).ready( function($) {
+jQuery( document ).ready( function( $ ) {
 
 function hide_all_to_hide_elements() {
 	$( '[ class *= "to_hide" ]' ).hide();
@@ -175,4 +175,4 @@ toggle_edit_access_patterns();
 pulsate_bind_access_patterns();
 setup_plunger();
 
-});
+} );
