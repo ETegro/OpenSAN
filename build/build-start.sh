@@ -69,3 +69,20 @@ cleanup()
 update_repository
 call_build
 cleanup
+
+cd $WORK_DIR
+for tag in `git tag | grep "^V"`; do
+	if ls "$WORK_DIR"/output/ | grep -q "[-]${tag}.\?$"; then
+		true
+	else
+		$GIT checkout HEAD .
+		$GIT checkout $tag
+
+		BRANCH="$tag"
+		BUILD_LOG=`mktemp`
+		time_start=`date`
+
+		call_build
+		cleanup
+	fi
+done
