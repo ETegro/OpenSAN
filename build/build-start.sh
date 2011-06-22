@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+export LC_ALL=C
+
 [ -n "$1" ] && BRANCH="$1" || BRANCH="master"
 
 WORK_DIR=`echo $0 | sed "s/\/build-start.sh$//"`
