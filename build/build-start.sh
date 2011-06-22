@@ -48,6 +48,7 @@ send_email()
 	mailx -s "[`whoami`] failed astor2 build" $MAILTO <<__EOF__
 Started: $time_start
 Finished: $time_finish
+Branch: $BRANCH
 
 -----BEGIN LOG-----
 `cat $BUILD_LOG`
