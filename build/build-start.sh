@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+export LC_ALL=C
+
 [ -n "$1" ] && BRANCH="$1" || BRANCH="master"
 
 WORK_DIR=`echo $0 | sed "s/\/build-start.sh$//"`
@@ -46,6 +48,7 @@ send_email()
 	mailx -s "[`whoami`] failed astor2 build" $MAILTO <<__EOF__
 Started: $time_start
 Finished: $time_finish
+Branch: $BRANCH
 
 -----BEGIN LOG-----
 `cat $BUILD_LOG`
@@ -69,3 +72,20 @@ cleanup()
 update_repository
 call_build
 cleanup
+
+cd $WORK_DIR
+for tag in `git tag | grep "^V"`; do
+	if ls "$WORK_DIR"/output/ | grep -q "[-]${tag}.\?$"; then
+		true
+	else
+		$GIT checkout HEAD .
+		$GIT checkout $tag
+
+		BRANCH="$tag"
+		BUILD_LOG=`mktemp`
+		time_start=`date`
+
+		call_build
+		cleanup
+	fi
+done
