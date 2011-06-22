@@ -69,6 +69,7 @@ perform_cleaning()
 perform_building()
 {
 	mmake -j$JOBS V=99 >"$OUTPUT_DIR"/output.log 2>&1
+	gzip -9 "$OUTPUT_DIR"/output.log
 }
 
 copy_bins()
