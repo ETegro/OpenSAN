@@ -90,12 +90,12 @@ update_feeds()
 	popd
 }
 
+create_output_directory
 perform_unittesting
 update_openwrt_config
 remove_dl_directory
 perform_cleaning
 create_dl_directory
-create_output_directory
 update_feeds
 update_openwrt_config
 perform_building
