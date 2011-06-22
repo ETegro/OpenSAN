@@ -1,5 +1,5 @@
 BOARDNAME:=aStor2
-FEATURES:=squashfs pci usb
+FEATURES:=pci usb
 DEFAULT_PACKAGES += kmod-via-velocity kmod-ata-artop kmod-ata-nvidia-sata \
                     kmod-ata-piix kmod-ata-sil kmod-ata-sil24 kmod-ata-via-sata \
                     kmod-ide-core kmod-ide-aec62xx kmod-ide-generic kmod-ide-it821x \
