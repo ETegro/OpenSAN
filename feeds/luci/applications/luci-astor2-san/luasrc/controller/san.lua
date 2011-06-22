@@ -650,7 +650,9 @@ local function lvm_logical_volume_resize( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" .. volume_group_name_hash .. "-" .. logical_volume_name_hash ]
+	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" ..
+	                                    volume_group_name_hash .. "-" ..
+	                                    logical_volume_name_hash ]
 	logical_volume_size = tonumber( logical_volume_size )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
@@ -687,7 +689,9 @@ local function lvm_logical_volume_snapshot_add( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local snapshot_size = inputs[ "new_snapshot_slider_size-" .. volume_group_name_hash .. "-" .. logical_volume_name_hash ]
+	local snapshot_size = inputs[ "new_snapshot_slider_size-" ..
+	                              volume_group_name_hash .. "-" ..
+	                              logical_volume_name_hash ]
 	snapshot_size = tonumber( snapshot_size )
 	assert( common.is_positive( snapshot_size ),
 	        "incorrect non-positive snapshot's size" )
@@ -713,7 +717,9 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" .. volume_group_name_hash .. "-" .. logical_volume_name_hash ]
+	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" ..
+	                                  volume_group_name_hash .. "-" ..
+	                                  logical_volume_name_hash ]
 	snapshot_size_new = tonumber( snapshot_size_new )
 	assert( common.is_positive( snapshot_size_new ),
 	        "incorrect non-positive snapshot's size" )
