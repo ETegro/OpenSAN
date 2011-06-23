@@ -39,5 +39,8 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
 
 Contacting us
 =============
+
+.. include:: sponsoring.rst
+
 Please send all question, suggestions and bug reports to our **general
 discussion** :ref:`mailing list <maillists>`.
