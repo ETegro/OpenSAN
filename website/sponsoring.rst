@@ -3,6 +3,7 @@
    :height: 70
    :alt: Sponsored by ETegro Technologies
    :align: right
+   :target: http://www.etegro.com/
 
 .. image:: images/vcss.png
    :width: 88
