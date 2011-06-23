@@ -1,4 +1,5 @@
 .. _index:
+.. include:: meta.rst
 .. title:: OpenSAN project
 .. include:: logo.rst
 
