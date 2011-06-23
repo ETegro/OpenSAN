@@ -23,6 +23,8 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
 .. _Storage Area Network: https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network
 .. _ETegro Technologies: http://www.etegro.com/
 
+.. include:: sponsoring.rst
+
 .. toctree::
    :maxdepth: 1
 
@@ -39,8 +41,5 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
 
 Contacting us
 =============
-
-.. include:: sponsoring.rst
-
 Please send all question, suggestions and bug reports to our **general
 discussion** :ref:`mailing list <maillists>`.
