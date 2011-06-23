@@ -42,6 +42,11 @@ _templates:
 clean:
 	-rm -rf $(BUILDDIR)/*
 
+REMOTE_HOST=etegro2
+REMOTE_PATH=/var/www/opensan/
+sync:
+	rsync -avz --progress --rsh=ssh _build/html/ $(REMOTE_HOST):$(REMOTE_PATH)
+
 html: _static _templates
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
