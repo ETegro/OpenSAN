@@ -59,7 +59,7 @@ config TARGET_IMAGES_PAD
 config TARGET_KERNEL_PARTSIZE
 	int "Kernel partition size (in MB)"
 	depends OLPC_BOOTSCRIPT_IMAGES || X86_GRUB_IMAGES
-	default 4
+	default 10
 
 config TARGET_ROOTFS_PARTNAME
 	string "Root partition on target device"
