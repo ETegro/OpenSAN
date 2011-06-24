@@ -28,7 +28,8 @@ DEFAULT_PACKAGES += \
 	kmod-tg3 \
 	kmod-via-rhine \
 	kmod-mptsas \
-	kmod-igb
+	kmod-igb \
+	luci-app-astor2-san
 
 define Target/Description
 	Build firmware images for aStor2 project
