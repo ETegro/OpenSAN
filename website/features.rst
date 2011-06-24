@@ -19,6 +19,7 @@ Features
 * Comprehensive controller code **unittesting** and small so-called
   **remotetesting** framework to perform exhaustive benchmarking and
   testing of different system components and subsystems
+* Text-mode console is also available on RS232 **serial port**
 * **Firmware updating** through Web-interface form
 * Command-line interface (CLI) accessibility via **SSH 2.0** (with SCP
   support)
