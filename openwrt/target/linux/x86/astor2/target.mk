@@ -31,6 +31,7 @@ DEFAULT_PACKAGES += \
 	kmod-igb \
 	dash \
 	gnu-cpio \
+	uhttpd \
 	luci-app-astor2-san
 
 define Target/Description
