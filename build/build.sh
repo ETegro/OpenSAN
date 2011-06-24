@@ -26,6 +26,11 @@ DL_DIR="$TARGET_DIR"/dl
 BIN_DIR="$TARGET_DIR"/bin/x86
 [ -n "$JOBS" ] || JOBS=1
 
+perform_unittesting()
+{
+	./unittesting.sh "$OUTPUT_DIR"/output.log || exit 1
+}
+
 mmake()
 {
 	yes "" | $MAKE -C "$TARGET_DIR" $@
@@ -68,7 +73,8 @@ perform_cleaning()
 
 perform_building()
 {
-	mmake -j$JOBS V=99 >"$OUTPUT_DIR"/output.log 2>&1
+	mmake -j$JOBS V=99 >> "$OUTPUT_DIR"/output.log 2>&1
+	gzip -9 "$OUTPUT_DIR"/output.log
 }
 
 copy_bins()
@@ -85,11 +91,12 @@ update_feeds()
 	popd
 }
 
+create_output_directory
+perform_unittesting
 update_openwrt_config
 remove_dl_directory
 perform_cleaning
 create_dl_directory
-create_output_directory
 update_feeds
 update_openwrt_config
 perform_building

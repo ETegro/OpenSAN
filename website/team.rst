@@ -3,7 +3,7 @@
 ============
 OpenSAN team
 ============
-OpenSAN's development team currently consists of:
+Our development team currently consists of:
 
 * Andrew Sapronov
 * `Sergey Matveev <http://stargrave.tel/>`_
