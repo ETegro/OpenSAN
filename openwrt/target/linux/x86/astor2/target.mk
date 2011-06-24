@@ -29,6 +29,8 @@ DEFAULT_PACKAGES += \
 	kmod-via-rhine \
 	kmod-mptsas \
 	kmod-igb \
+	dash \
+	gnu-cpio \
 	luci-app-astor2-san
 
 define Target/Description
