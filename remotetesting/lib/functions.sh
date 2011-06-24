@@ -99,7 +99,8 @@ run_clearing()
 
 iqns_get()
 {
-	$ISCSIADM --mode discovery --type sendtargets --portal $REMOTE_HOST
+	$ISCSIADM --mode discovery --type sendtargets --portal $REMOTE_HOST |
+		grep "^${REMOTE_HOST}:"
 }
 
 iqn_login()
