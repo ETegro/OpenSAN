@@ -16,6 +16,7 @@ Features
   * **Snapshots** support
 
 * **iSCSI** targets management
+* **iSCSI-3** `persistent reservation <http://publib.boulder.ibm.com/infocenter/clresctr/vxrx/topic/com.ibm.cluster.gpfs32.diagnosis.doc/bl1pdg_understandpr.html>`__ technology support
 * Comprehensive controller code **unittesting** and small so-called
   **remotetesting** framework to perform exhaustive benchmarking and
   testing of different system components and subsystems
