@@ -38,10 +38,9 @@ mmake()
 
 . "$WORK_DIR"/build.conf
 
-update_openwrt_config()
+cleanup_openwrt_config()
 {
 	rm -f "$TARGET_DIR"/.config
-	git checkout HEAD "$TARGET_DIR"/.config
 }
 
 remove_dl_directory()
@@ -93,11 +92,11 @@ update_feeds()
 
 create_output_directory
 perform_unittesting
-update_openwrt_config
+cleanup_openwrt_config
 remove_dl_directory
 perform_cleaning
 create_dl_directory
 update_feeds
-update_openwrt_config
+cleanup_openwrt_config
 perform_building
 copy_bins
