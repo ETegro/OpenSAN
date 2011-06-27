@@ -30,9 +30,7 @@ function toggle_create_raid_form() {
 		if ( $( this ).is( ':checked' ) ) {
 			$( '#div_raid_create' ).fadeIn( 'fast' );
 		} else {
-			if ( physicals_select.is( ':checked' ) ) {
-				//
-			} else {
+			if ( !physicals_select.is( ':checked' ) ) {
 				$( '#div_raid_create' ).fadeOut( 'fast' );
 			}
 		}
