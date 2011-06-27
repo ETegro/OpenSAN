@@ -27,7 +27,15 @@
 			<%+san/snapshot/title%>
 			<div class="control">
 				<% if #matrix_overall.access_patterns > 0 then %>
-					<%+san/snapshot/bind%>
+					<% local display_bind = false %>
+					<% for _,access_patterns in pairs( matrix_overall.access_patterns ) do %>
+						<% if not access_patterns:is_binded() then %>
+							<% display_bind = true %>
+						<% end %>
+					<% end %>
+					<% if display_bind then %>
+						<%+san/snapshot/bind%>
+					<% end %>
 				<% end %>
 				<%+san/snapshot/resize-control%>
 				<% if not line.logical_volume.access_patterns then %>
