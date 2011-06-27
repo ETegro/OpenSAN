@@ -25,21 +25,21 @@ function hide_all_to_hide_elements() {
 };
 
 function toggle_create_raid_form() {
-	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
-	$( physicals_select ).click( function() {
+	var physicals = $( 'form input:checkbox[ name = "san.physical_id" ]' );
+	$( physicals ).click( function() {
 		if ( $( this ).is( ':checked' ) ) {
 			$( '#div_raid_create' ).fadeIn( 'fast' );
 		} else {
-			if ( !physicals_select.is( ':checked' ) ) {
+			if ( !physicals.is( ':checked' ) ) {
 				$( '#div_raid_create' ).fadeOut( 'fast' );
 			}
 		}
 
 		// RAID validator
-		var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' );
-		var num = selected_physicals.length;
-		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
-		var restrictions = { max : { 'passthrough' : 1 },
+		var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' ),
+		    num = selected_physicals.length,
+		    raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' ),
+		    restrictions = { max : { 'passthrough' : 1 },
 		                     min : { 'passthrough' : 1,
 					     'linear' : 1,
 					     '0' : 2,
@@ -50,9 +50,9 @@ function toggle_create_raid_form() {
 				   };
 
 		$( raidlevels ).each( function() {
-			var radio = $( this );
-			var min = restrictions.min[ radio.val() ] || 0;
-			var max = restrictions.max[ radio.val() ] || 1000;
+			var radio = $( this ),
+			    min = restrictions.min[ radio.val() ] || 0,
+			    max = restrictions.max[ radio.val() ] || 1000;
 			if ( num >= min && num <= max ) {
 				$( this ).removeAttr( 'disabled' );
 			} else {
