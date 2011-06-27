@@ -1,4 +1,5 @@
 .. _index:
+.. include:: meta.rst
 .. title:: OpenSAN project
 .. include:: logo.rst
 
@@ -21,6 +22,8 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
 .. _iSCSI: https://secure.wikimedia.org/wikipedia/en/wiki/iSCSI
 .. _Storage Area Network: https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network
 .. _ETegro Technologies: http://www.etegro.com/
+
+.. include:: sponsoring.rst
 
 .. toctree::
    :maxdepth: 1

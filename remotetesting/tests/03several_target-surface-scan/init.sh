@@ -32,8 +32,8 @@ run_lua several_lvm || failed "several_lvm failed"
 iqns_start_all || failed "iqns start failed"
 
 inc=0
+jobfile=`mktemp`
 for dev in `devs_get`; do
-	jobfile=`mktemp`
 	cat jobfile.fio | sed "s:DEV:$dev:" > $jobfile
 	$FIO $jobfile | log_save "fio_result$inc" || "fio $inc for $dev failed" &
 	inc=$(( $inc + 1 ))
