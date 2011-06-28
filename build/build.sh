@@ -41,6 +41,7 @@ mmake()
 cleanup_openwrt_config()
 {
 	rm -f "$TARGET_DIR"/.config
+	mmake defconfig
 }
 
 remove_dl_directory()
