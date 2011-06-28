@@ -21,9 +21,9 @@
 
 jQuery.noConflict();
 ( function( $ ) {
-	var slider_name = '#new_snapshot_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
-	var slider_input_name = '.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
-	var slider_input_name_view = '.new_snapshot_slider_size_view-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
+	var slider_name = '#new_snapshot_slider-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>',
+	    slider_input_name = '.new_snapshot_slider_size-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>',
+	    slider_input_name_view = '.new_snapshot_slider_size_view-<%= hash( line.logical_volume.volume_group.name ) %>-<%= hash( line.logical_volume.name ) %>';
 	$( slider_name ).slider( {
 		orientation: 'horizontal',
 		min: <%= line.logical_volume.volume_group.extent %>,
