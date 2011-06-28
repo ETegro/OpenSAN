@@ -1827,7 +1827,7 @@ msgid ""
 "Sorry. OpenWrt does not support a system upgrade on this platform.<br /> You "
 "need to manually flash your device."
 msgstr ""
-"Sorry. OpenWrt does not support a system upgrade on this platform.<br /> You "
+"Sorry. OpenSAN does not support a system upgrade on this platform.<br /> You "
 "need to manually flash your device."
 
 msgid "Source"
@@ -2149,7 +2149,7 @@ msgid "Upgrade installed packages"
 msgstr "Upgrade installed packages"
 
 msgid "Upload an OpenWrt image file to reflash the device."
-msgstr "Upload an OpenWrt image file to reflash the device."
+msgstr "Upload an OpenSAN image file to reflash the device."
 
 msgid "Upload image"
 msgstr "Upload image"
