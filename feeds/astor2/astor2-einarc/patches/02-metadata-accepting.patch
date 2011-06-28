@@ -1,0 +1,11 @@
+diff -ur astor2-einarc-svn1882/src/raid/software.rb astor2-einarc-svn1882-metadata-accepting/src/raid/software.rb
+--- astor2-einarc-svn1882/src/raid/software.rb	2011-06-15 12:11:27.000000000 +0400
++++ astor2-einarc-svn1882-metadata-accepting/src/raid/software.rb	2011-06-28 12:07:41.000000000 +0400
+@@ -492,7 +492,6 @@
+ 			for l in File.readlines(MDSTAT_LOCATION)
+ 				# md0 : active raid0 sdb[1] sdc[0]
+ 				(res[$1.to_i] = "/dev/md#{$1}" and id_last = $1.to_i) if l =~ MDSTAT_PATTERN
+-				res.delete_at(id_last) if l =~ /\ssuper\s/ # mdadm 3.x has unsupported "container" type
+ 			end
+ 			return res.compact
+ 		end
