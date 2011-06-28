@@ -1,18 +1,16 @@
-Only in mdadm-2.6.7.2: .prepared_52c8003c1cfc25b1e96897208f1a6856
-Only in mdadm-2.6.7.2.orig/: .prepared_b70de0be5a277506820fdcd9a21e9deb
-diff -ur mdadm-2.6.7.2.orig/Makefile mdadm-2.6.7.2/Makefile
---- mdadm-2.6.7.2.orig/Makefile	2008-11-21 18:21:35.000000000 +0100
-+++ mdadm-2.6.7.2/Makefile	2008-11-21 19:13:54.000000000 +0100
-@@ -52,7 +52,7 @@
- CONFFILE2 = $(SYSCONFDIR)/mdadm/mdadm.conf
- MAILCMD =/usr/sbin/sendmail -t
- CONFFILEFLAGS = -DCONFFILE=\"$(CONFFILE)\" -DCONFFILE2=\"$(CONFFILE2)\"
--CFLAGS = $(CWFLAGS) $(CXFLAGS) -DSendmail=\""$(MAILCMD)"\" $(CONFFILEFLAGS)
-+#CFLAGS = $(CWFLAGS) $(CXFLAGS) -DSendmail=\""$(MAILCMD)"\" $(CONFFILEFLAGS)
+diff -ur mdadm-3.1.5.orig/Makefile mdadm-3.1.5/Makefile
+--- mdadm-3.1.5.orig/Makefile	2011-03-23 04:19:09.000000000 +0300
++++ mdadm-3.1.5/Makefile	2011-06-28 13:09:05.000000000 +0400
+@@ -73,7 +73,7 @@
+ MDMON_DIR = /dev/.mdadm
+ DIRFLAGS = -DMAP_DIR=\"$(MAP_DIR)\" -DMAP_FILE=\"$(MAP_FILE)\"
+ DIRFLAGS += -DMDMON_DIR=\"$(MDMON_DIR)\"
+-CFLAGS = $(CWFLAGS) $(CXFLAGS) -DSendmail=\""$(MAILCMD)"\" $(CONFFILEFLAGS) $(DIRFLAGS)
++#CFLAGS = $(CWFLAGS) $(CXFLAGS) -DSendmail=\""$(MAILCMD)"\" $(CONFFILEFLAGS) $(DIRFLAGS)
  
- # If you want a static binary, you might uncomment these
- # LDFLAGS = -static
-@@ -124,7 +124,7 @@
+ # The glibc TLS ABI requires applications that call clone(2) to set up
+ # TLS data structures, use pthreads until mdmon implements this support
+@@ -175,7 +175,7 @@
  
  mdassemble : $(ASSEMBLE_SRCS) mdadm.h
  	rm -f $(OBJS)
@@ -21,4 +19,3 @@ diff -ur mdadm-2.6.7.2.orig/Makefile mdadm-2.6.7.2/Makefile
  
  mdassemble.static : $(ASSEMBLE_SRCS) mdadm.h
  	rm -f $(OBJS)
-Only in mdadm-2.6.7.2: mdadm
