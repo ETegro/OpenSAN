@@ -56,7 +56,7 @@ for build in *; do
 			mv "$image" "`echo $image | sed 's/openwrt-x86-//'`"
 	done
 	$SHA256 * > checksums.sha256
-	$GPG --default-key=$PGP_SIGN_KEYID --sign --armor --output=- checksums.sha256 > checksums.sha256.sign
+	$GPG --default-key=$PGP_SIGN_KEYID --sign --armor --comment="See http://www.opensan.org/publickey.html" --output=- checksums.sha256 > checksums.sha256.sign
 	popd
 done
 
