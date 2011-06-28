@@ -20,41 +20,112 @@
 $.noConflict();
 jQuery( document ).ready( function( $ ) {
 
+function toggleFade( fade_element ) {
+	if ( fade_element.is( ':hidden' ) ) {
+		fade_element.fadeIn( 'fast' );
+	} else {
+		fade_element.fadeOut( 'fast' );
+	}
+	return false;
+}
+
+function toggleFadeSingleElement( fadeObject ) {
+	var click_element = $( fadeObject.click_selector ),
+	    fade_element = $( fadeObject.fade_selector );
+	click_element.click( function() {
+		toggleFade( fade_element );
+	} );
+}
+
+function toggleFadeParentElement( fadeObject ) {
+	var click_element = $( fadeObject.click_selector );
+	click_element.click( function() {
+		if ( fadeObject.next ) {
+			var fade_element = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
+		} else {
+			var fade_element = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
+		}
+		toggleFade( fade_element );
+	} );
+}
+
+function toggle_access_pattern_creation() {
+	var object = { click_selector : '#access_patterns',
+	               fade_selector : '#div_access_pattern_new' };
+	toggleFadeSingleElement( object );
+}
+
+function toggle_drives_information() {
+	var object = { click_selector : 'form a[ id ^= "physical_info-" ]' }
+	toggleFadeParentElement( object );
+}
+
+function toggle_snapshot_creation() {
+	var object = { click_selector : 'form input[ name ^= "snapshot_creation-" ]' };
+	toggleFadeParentElement( object );
+}
+
+function toggle_resize_snapshot() {
+	var object = { click_selector : 'form input[ name ^= "snapshot_resize_button-" ]' };
+	toggleFadeParentElement( object );
+}
+
+function toggle_edit_access_patterns() {
+	var object = { click_selector : 'form input[ name ^= "access_pattern_edit-" ]' };
+	toggleFadeParentElement( object );
+}
+
+function toggle_logical_volume_creation() {
+	var object = { click_selector : 'form input[ name ^= "logical_volume_creation-" ]' };
+	object.next = {};
+	toggleFadeParentElement( object );
+}
+
+function toggle_resize_logical_volume() {
+	var object = { click_selector : 'form input[ name ^= "logical_volume_resize_button-" ]' };
+	object.next = {};
+	toggleFadeParentElement( object );
+}
+
 function hide_all_to_hide_elements() {
 	$( '[ class *= "to_hide" ]' ).hide();
-};
+}
+
+function pulsate_bind_access_patterns() {
+	$( 'form input[ name ^= "san.logical_volume_select" ]' ).click( function() {
+		$( '.icon-bind' ).show( 'pulsate' );
+	} );
+}
 
 function toggle_create_raid_form() {
-	var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
-	$( physicals_select ).click( function() {
+	var physicals = $( 'form input:checkbox[ name = "san.physical_id" ]' );
+	$( physicals ).click( function() {
 		if ( $( this ).is( ':checked' ) ) {
 			$( '#div_raid_create' ).fadeIn( 'fast' );
 		} else {
-			if ( physicals_select.is( ':checked' ) ) {
-				//
-			} else {
+			if ( !physicals.is( ':checked' ) ) {
 				$( '#div_raid_create' ).fadeOut( 'fast' );
 			}
 		}
 
 		// RAID validator
-		var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' );
-		var num = selected_physicals.length;
-		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
-		var restrictions = { min : { 'passthrough' : 1,
+		var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' ),
+		    num = selected_physicals.length,
+		    raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' ),
+		    restrictions = { max : { 'passthrough' : 1 },
+		                     min : { 'passthrough' : 1,
 					     'linear' : 1,
 					     '0' : 2,
 					     '1' : 2,
 					     '5' : 3,
 					     '6' : 4,
-					     '10' : 4 },
-				     max : { 'passthrough' : 1 }
+					     '10' : 4 }
 				   };
 
-		$( raidlevels ).each( function() {
-			var radio = $( this );
-			var min = restrictions.min[ radio.val() ] || 0;
-			var max = restrictions.max[ radio.val() ] || 1000;
+		raidlevels.each( function() {
+			var radio = $( this ),
+			    min = restrictions.min[ radio.val() ] || 0,
+			    max = restrictions.max[ radio.val() ] || 1000;
 			if ( num >= min && num <= max ) {
 				$( this ).removeAttr( 'disabled' );
 			} else {
@@ -62,117 +133,30 @@ function toggle_create_raid_form() {
 			}
 		} );
 	} );
-};
+}
 
-function toggle_access_pattern_creation() {
-	$( '#access_patterns' ).click( function() {
-		var parent_selector = $( '#div_access_pattern_new' );
-		if ( parent_selector.is( ':hidden' ) ) {
-			parent_selector.fadeIn( 'fast' );
-		} else {
-			parent_selector.fadeOut( 'fast' );
-		}
-	} );
-};
-
-function toggle_drives_information() {
-	$( 'form a[ id ^= "physical_info-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-		if ( parent_selector.is( ':hidden' ) ) {
-			parent_selector.fadeIn( 'fast' );
-		} else {
-			parent_selector.fadeOut( 'fast' );
-		}
+function setup_hypnorobo() {
+	$( '#hypnorobo_show' ).click( function() {
+		$( '#hypnorobo' ).show();
+		setInterval( function() { $( '#hypnorobo' ).html( $.map( '32 32 32 32 79 32 112 32 101 32 110 32 83 32 65 32 78 32 10 32 32 32 32 32 32 32 92 95 95 95 95 47 32 32 32 32 32 10 32 32 32 32 32 32 32 47 32 32 32 32 92 32 32 32 32 32 10 32 32 32 32 32 32 47 32 79 32 32 111 32 92 32 32 32 32 10 32 34 111 39 32 40 41 32 92 95 95 47 32 40 41 32 32 32 10 32 32 32 92 47 32 92 95 95 95 95 95 95 47 32 92 32 32 10 32 32 32 32 32 32 32 124 95 124 124 95 124 32 32 32 79 32 10'.split(' '), function( n, i ) { return String.fromCharCode( n ) } ).join('') ) }, 250 );
+		setInterval( function() { $( '#hypnorobo' ).html( $.map( '32 32 32 32 79 32 32 32 101 32 32 32 83 32 32 32 78 32 10 32 32 32 32 32 32 32 92 95 95 95 95 47 32 32 32 32 32 10 32 32 32 32 32 32 32 47 32 32 32 32 92 32 32 32 32 32 10 32 32 111 32 32 32 47 32 79 32 32 111 32 92 32 32 32 32 10 32 34 45 39 32 40 41 32 92 95 95 47 32 40 41 32 32 32 10 32 32 32 92 47 32 92 95 95 95 85 95 95 47 32 92 32 32 10 32 32 32 32 32 32 32 124 95 124 124 95 124 32 32 32 79 32 10'.split(' '), function( n, i ) { return String.fromCharCode( n ) } ).join('') ) }, 500 );
+		setInterval( function() { $( '#hypnorobo' ).html( $.map( '32 32 32 32 32 32 112 32 32 32 110 32 32 32 65 32 32 32 10 32 32 32 32 32 32 32 92 95 95 95 95 47 32 32 32 32 32 10 32 32 111 32 32 32 32 47 32 32 32 32 92 32 32 32 32 32 10 32 32 32 32 32 32 47 32 111 32 32 79 32 92 32 32 32 32 10 32 34 45 39 32 40 41 32 92 95 95 47 32 40 41 32 32 32 10 32 32 32 92 47 32 92 95 95 117 95 95 95 47 32 92 32 32 10 32 32 32 32 32 32 32 124 95 124 124 95 124 32 32 32 79 32 10'.split(' '), function( n, i ) { return String.fromCharCode( n ) } ).join('') ) }, 750 );
+		setInterval( function() { $( '#hypnorobo' ).html( $.map( '32 32 32 32 79 32 32 32 101 32 32 32 83 32 32 32 78 32 10 32 32 32 32 32 32 32 92 95 95 95 95 47 32 32 32 32 32 10 32 32 32 32 32 32 32 47 32 32 32 32 92 32 32 32 32 32 10 32 32 111 32 32 32 47 32 111 32 32 79 32 92 32 32 32 32 10 32 34 95 39 32 40 41 32 92 95 95 47 32 40 41 32 32 32 10 32 32 32 92 47 32 92 95 95 95 95 95 95 47 32 92 32 32 10 32 32 32 32 32 32 32 124 95 124 124 95 124 32 32 32 79 32 10'.split(' '), function( n, i ) { return String.fromCharCode( n ) } ).join('') ) }, 1000 );
 		return false;
 	} );
-};
+	$( '#hypnorobo' ).hide();
+}
 
-function toggle_logical_volume_creation() {
-	$( 'form input[ name ^= "logical_volume_creation-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
-		if ( parent_selector.is( ':hidden' ) ) {
-			parent_selector.fadeIn( 'fast' );
-		} else {
-			parent_selector.fadeOut( 'fast' );
-		}
-		return false;
-	} );
-};
-
-function toggle_resize_logical_volume() {
-	$( 'form input[ name ^= "logical_volume_resize_button-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
-		if ( parent_selector.is( ':hidden' ) ) {
-			parent_selector.fadeIn( 'fast' );
-		} else {
-			parent_selector.fadeOut( 'fast' );
-		}
-		return false;
-	} );
-};
-
-function toggle_snapshot_creation() {
-	$( 'form input[ name ^= "snapshot_creation-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-		if ( parent_selector.is( ':hidden' ) ) {
-			parent_selector.fadeIn( 'fast' );
-		} else {
-			parent_selector.fadeOut( 'fast' );
-		}
-		return false;
-	} );
-};
-
-function toggle_resize_snapshot() {
-	$( 'form input[ name ^= "snapshot_resize_button-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-		if ( parent_selector.is( ':hidden' ) ) {
-			parent_selector.fadeIn( 'fast' );
-		} else {
-			parent_selector.fadeOut( 'fast' );
-		}
-		return false;
-	} );
-};
-
-function toggle_edit_access_patterns() {
-	$( 'form input[ name ^= "access_pattern_edit-" ]' ).click( function() {
-		var parent_selector = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
-		if ( parent_selector.is( ':hidden' ) ) {
-			parent_selector.fadeIn( 'fast' );
-		} else {
-			parent_selector.fadeOut( 'fast' );
-		}
-		return false;
-	} );
-};
-
-function pulsate_bind_access_patterns() {
-	$( 'form input[ name ^= "san.logical_volume_select" ]' ).click( function() {
-		$( '.icon-bind' ).show( 'pulsate' );
-	} );
-};
-
-function setup_plunger(){
-	$( "#plunger_show" ).click( function(){
-		$( "#plunger" ).show();
-		setInterval( function(){$("#plunger").html( $.map( "32 32 32 32 32 32 32 46 45 46 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 46 32 32 32 32 32 124 124 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 44 96 32 32 32 32 32 10 32 32 32 32 32 32 32 124 46 124 32 32 96 44 32 32 32 32 32 32 10 32 96 46 32 32 32 32 124 46 124 32 32 32 46 96 32 32 32 44 96 10 32 44 96 32 32 32 32 124 32 124 32 32 46 96 32 32 32 44 32 32 10 96 44 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 44 96 32 10 32 32 39 32 32 32 32 124 95 124 32 32 32 32 32 32 44 96 32 32 10 32 32 32 32 32 44 78 78 78 78 78 44 32 32 32 32 32 32 32 32 10 32 32 32 32 105 78 78 78 78 78 78 78 105 32 32 32 32 32 32 32 10 32 32 32 32 73 109 109 109 109 109 109 109 73 32 32 32 32 32 32 32 10".split(" "), function( n, i ){ return String.fromCharCode( n ) } ).join("") )}, 500 );
-		setInterval( function(){$("#plunger").html( $.map( "10 32 32 32 32 32 32 32 46 45 46 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 46 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 32 32 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 32 96 44 32 32 32 32 32 10 32 32 32 32 32 32 32 124 124 124 32 32 96 44 32 32 32 32 32 32 10 32 96 46 32 32 32 32 124 46 124 32 32 32 96 46 32 32 32 44 96 10 32 96 44 32 32 32 32 124 46 124 32 32 96 46 32 32 32 44 32 32 10 44 96 32 32 32 32 32 124 32 124 32 32 32 32 32 32 32 96 44 32 10 32 39 32 32 32 32 32 124 95 124 32 32 32 32 32 32 44 96 32 32 10 32 32 32 32 32 44 78 78 78 78 78 44 32 32 32 32 32 32 32 32 10 32 32 32 32 105 78 78 78 78 78 78 78 105 32 32 32 32 32 32 32 10 32 32 32 73 109 109 109 109 109 109 109 109 109 73 32 32 32 32 32 32 32 10".split(" "), function( n, i ){ return String.fromCharCode( n ) } ).join("") )}, 1000 );
-		return false;
-	});
-	$( "#plunger" ).hide();
-};
-
-hide_all_to_hide_elements();
 toggle_access_pattern_creation();
-toggle_create_raid_form();
 toggle_drives_information();
+toggle_snapshot_creation();
+toggle_resize_snapshot();
+toggle_edit_access_patterns();
 toggle_logical_volume_creation();
 toggle_resize_logical_volume();
-toggle_resize_snapshot();
-toggle_snapshot_creation();
-toggle_edit_access_patterns();
+hide_all_to_hide_elements();
 pulsate_bind_access_patterns();
-setup_plunger();
+toggle_create_raid_form();
+setup_hypnorobo();
 
 } );
