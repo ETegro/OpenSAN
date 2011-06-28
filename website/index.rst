@@ -41,5 +41,6 @@ Technologies`_ company. It's some kind of codename is *aStor2*.
 
 Contacting us
 =============
-Please send all question, suggestions and bug reports to our **general
-discussion** :ref:`mailing list <maillists>`.
+You are always welcome in our general discussion :ref:`mailing list
+<maillists>`. Also, you can contact our team directly by sending email
+to *team at opensan dot org*.
