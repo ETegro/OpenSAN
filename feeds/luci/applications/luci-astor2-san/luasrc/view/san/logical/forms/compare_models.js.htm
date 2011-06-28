@@ -20,16 +20,17 @@
 <script type="text/javascript">
 	jQuery.noConflict();
 	( function( $ ) {
-		var input_button = 'input[ name = "san.submit_logical_add" ]';
-		var physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' );
-		var onclick_text = "if ( !confirm( '<%: Only single model hard drives should be used %>' ) ) return false; return true;"
+		var input_button = 'input[ name = "san.submit_logical_add" ]',
+		    physicals_select = $( 'form input:checkbox[ name = "san.physical_id" ]' ),
+		    onclick_text = "if ( !confirm( '<%: Only single model hard drives should be used %>' ) ) return false; return true;";
 		$( physicals_select ).click( function() {
-			var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' );
-			var models = selected_physicals.next( 'input.physical_model' );
-			var first_model = $( models[0] ).val();
+			var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' ),
+			    models = selected_physicals.next( 'input.physical_model' ),
+			    first_model = $( models[0] ).val(),
+			    this_model = "";
 			$( input_button ).removeAttr( 'onclick' );
 			$.each( models, function() {
-				var this_model = $( this ).val();
+				this_model = $( this ).val();
 				if ( this_model != first_model ) {
 					$( input_button ).attr( 'onclick', onclick_text );
 				}
