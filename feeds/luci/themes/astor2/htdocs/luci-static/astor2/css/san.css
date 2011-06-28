@@ -210,6 +210,12 @@ top:0;
 width:100%;
 }
 
+#hypnorobo {
+	position:absolute;
+	bottom:0;
+	right:0;
+}
+
 .fillbar .fillbar_text {
 padding:.2em;
 }
