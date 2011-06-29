@@ -21,6 +21,15 @@ pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 PROJECT_DIR="$WORK_DIR"/..
 OUTPUT_LOG="$1"
 
+exit_handler()
+{
+	local rc=$?
+	trap - EXIT
+	[ -d "$TEST_DIR" ] && rm -rf "$TEST_DIR"
+	exit $rc
+}
+trap exit_handler HUP PIPE INT QUIT TERM EXIT
+
 ASTOR2_LUCI_PATH=feeds/luci/applications/luci-astor2-san/luasrc/controller
 
 create_test_directory()
@@ -87,11 +96,6 @@ unittesting()
 	grep -q "^Failed" $OUTPUT_LOG && exit 1 || true
 }
 
-remove_test_directory()
-{
-	rm -rf "$TEST_DIR"
-}
-
 create_test_directory
 create_libraries_directory
 make_astor2_libraries_links
@@ -102,4 +106,3 @@ create_lua_tests_directory
 make_astor2_tests_links
 make_matrix_tests_links
 unittesting
-remove_test_directory
