@@ -194,12 +194,38 @@ function M.overall( data )
 	return matrix
 end
 
-function M.round_mib( size )
+------------------------------------------------------------------------
+-- Sizes humanization
+------------------------------------------------------------------------
+function M.size_round( size )
 	return string.format( "%0.0f", tonumber( size ) )
 end
 
 function M.mib2tib( size )
 	return string.sub( string.format( "%0.3f", tonumber( size ) / 2^20 ), 1, -2 )
+end
+
+function M.mib_humanize( size )
+	local rules = {
+		[ function( size ) return size < 1024 end ] =
+			function( size )
+				return { value = M.size_round( size ), unit = "MiB" }
+			end,
+		[ function( size ) return (size < 1024^2) and (size >= 1024) end ] =
+			function( size )
+				return { value = M.size_round( size / 1024.0 ), unit = "GiB" }
+			end,
+		[ function( size ) return size >= 1024^2 end ] =
+			function( size )
+				return { value = M.mib2tib( size ), unit = "TiB" }
+			end
+	}
+	for check, resulter in pairs( rules ) do
+		if check( size ) then
+			return resulter( size )
+		end
+	end
+	return { value = tostring( size ), unit = "MiB" }
 end
 
 local function check_highlights_attribute( obj )
@@ -379,43 +405,43 @@ function M.filter_volume_group_percentage( matrix )
 	return matrix
 end
 
-local function filter_mib2tib( matrix )
+local function filter_mib_humanize( matrix )
 	local lines = matrix.lines
 	for _, line in ipairs( lines ) do
 		if line.physical then
 			line.physical.size_mib = line.physical.size
-			line.physical.size = M.mib2tib( line.physical.size )
+			line.physical.size = M.mib_humanize( line.physical.size )
 		end
 		if line.logical then
 			line.logical.capacity_mib = line.logical.capacity
-			line.logical.capacity = M.mib2tib( line.logical.capacity )
+			line.logical.capacity = M.mib_humanize( line.logical.capacity )
 			if line.logical.volume_group then
 				line.logical.volume_group.allocated_mib = line.logical.volume_group.allocated
-				line.logical.volume_group.allocated = M.mib2tib( line.logical.volume_group.allocated )
+				line.logical.volume_group.allocated = M.mib_humanize( line.logical.volume_group.allocated )
 				line.logical.volume_group.total_mib = line.logical.volume_group.total
-				line.logical.volume_group.total = M.mib2tib( line.logical.volume_group.total )
+				line.logical.volume_group.total = M.mib_humanize( line.logical.volume_group.total )
 			else
 				line.logical.volume_group = {}
 				line.logical.volume_group.extent = lvm.VolumeGroup.PE_DEFAULT_SIZE
 				line.logical.volume_group.allocated_mib = 0
-				line.logical.volume_group.allocated = 0
+				line.logical.volume_group.allocated = M.mib_humanize( 0 )
 				line.logical.volume_group.total_mib = line.logical.capacity_mib
-				line.logical.volume_group.total = line.logical.capacity
+				line.logical.volume_group.total = M.mib_humanize( line.logical.capacity_mib )
 			end
 		end
 		if line.logical_volume then
 			line.logical_volume.size_mib = line.logical_volume.size
-			line.logical_volume.size = M.mib2tib( line.logical_volume.size )
+			line.logical_volume.size = M.mib_humanize( line.logical_volume.size )
 		end
 	end
 	return matrix
 end
 
-local function filter_round_mib( matrix )
+local function filter_size_round( matrix )
 	local lines = matrix.lines
 	for _, line in ipairs( lines ) do
 		if line.physical then
-			line.physical.size_mib = M.round_mib( line.physical.size_mib )
+			line.physical.size_mib = M.size_round( line.physical.size_mib )
 		end
 	end
 	return matrix
@@ -583,8 +609,8 @@ function M.caller()
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
-		filter_mib2tib,
-		filter_round_mib,
+		filter_mib_humanize,
+		filter_size_round,
 		filter_serialize,
 		filter_base64encode
 	}

@@ -22,9 +22,9 @@
 	<div class="fillbar_background" style="width:<%= line.logical.volume_group.percentage or "0" %>%;">
 		<div class="fillbar_info">
 			<div class="fillbar_text" title="<%= line.logical.volume_group.allocated_mib %> <%: MiB %> / <%= line.logical.volume_group.total_mib %> <%: MiB %> (<%= line.logical.volume_group.percentage or "0" %> %)">
-			<%= line.logical.volume_group.allocated %> <%: TiB %>
+			<%= line.logical.volume_group.allocated.value %> <%= line.logical.volume_group.allocated.unit %>
 			/
-			<%= line.logical.volume_group.total %> <%: TiB %>
+			<%= line.logical.volume_group.total.value %> <%= line.logical.volume_group.total.unit %>
 			(<%= line.logical.volume_group.percentage or "0" %>%)
 			</div>
 		</div>

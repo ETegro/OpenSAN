@@ -39,7 +39,7 @@
 			<td><%: Size %>:</td>
 			<td>
 				<span title="<%= line.physical.size_mib %> (<%: MiB %>)">
-					<%= line.physical.size %> (<%: TiB %>)
+					<%= line.physical.size.value %> (<%= line.physical.size.unit %>)
 				</span>
 			</td>
 		</tr>
