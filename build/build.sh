@@ -98,5 +98,6 @@ remove_dl_directory
 perform_cleaning
 create_dl_directory
 update_feeds
+cleanup_openwrt_config
 perform_building
 copy_bins
