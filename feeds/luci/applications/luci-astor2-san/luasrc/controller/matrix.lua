@@ -424,9 +424,9 @@ local function filter_mib_humanize( matrix )
 				line.logical.volume_group = {}
 				line.logical.volume_group.extent = lvm.VolumeGroup.PE_DEFAULT_SIZE
 				line.logical.volume_group.allocated_mib = 0
-				line.logical.volume_group.allocated = 0
+				line.logical.volume_group.allocated = M.mib_humanize( 0 )
 				line.logical.volume_group.total_mib = line.logical.capacity_mib
-				line.logical.volume_group.total = line.logical.capacity
+				line.logical.volume_group.total = M.mib_humanize( line.logical.capacity )
 			end
 		end
 		if line.logical_volume then
