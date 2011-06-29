@@ -22,40 +22,40 @@ matrix = require( "matrix" )
 
 TestTrueMib = {}
 	function TestTrueMib:test_int_value_negative()
-		assertEquals( matrix.round_mib( -1 ), "-1" )
+		assertEquals( matrix.size_round( -1 ), "-1" )
 	end
 	function TestTrueMib:test_float_value_negative()
-		assertEquals( matrix.round_mib( -1.0 ), "-1" )
+		assertEquals( matrix.size_round( -1.0 ), "-1" )
 	end
 	function TestTrueMib:test_int_value_zero()
-		assertEquals( matrix.round_mib( 0 ), "0" )
+		assertEquals( matrix.size_round( 0 ), "0" )
 	end
 	function TestTrueMib:test_float_value_zero()
-		assertEquals( matrix.round_mib( 0.0 ), "0" )
+		assertEquals( matrix.size_round( 0.0 ), "0" )
 	end
 	function TestTrueMib:test_int_value_one()
-		assertEquals( matrix.round_mib( 1 ), "1" )
+		assertEquals( matrix.size_round( 1 ), "1" )
 	end
 	function TestTrueMib:test_float_value_one()
-		assertEquals( matrix.round_mib( 1.0 ), "1" )
+		assertEquals( matrix.size_round( 1.0 ), "1" )
 	end
 	function TestTrueMib:test_value_float_number_1()
-		assertEquals( matrix.round_mib( 30.1234567 ), "30" )
+		assertEquals( matrix.size_round( 30.1234567 ), "30" )
 	end
 	function TestTrueMib:test_value_float_number_2()
-		assertEquals( matrix.round_mib( 0.123 ), "0" )
+		assertEquals( matrix.size_round( 0.123 ), "0" )
 	end
 	function TestTrueMib:test_value_float_number_3()
-		assertEquals( matrix.round_mib( 0.123456789 ), "0" )
+		assertEquals( matrix.size_round( 0.123456789 ), "0" )
 	end
 	function TestTrueMib:test_value_float_number_4()
-		assertEquals( matrix.round_mib( 1234567890.123456789 ), "1234567890" )
+		assertEquals( matrix.size_round( 1234567890.123456789 ), "1234567890" )
 	end
 	function TestTrueMib:test_value_float_number_5()
-		assertEquals( matrix.round_mib( 1E3 ), "1000" )
+		assertEquals( matrix.size_round( 1E3 ), "1000" )
 	end
 	function TestTrueMib:test_value_float_number_6()
-		assertEquals( matrix.round_mib( 5E3 + 0.000000000123 ), "5000" )
+		assertEquals( matrix.size_round( 5E3 + 0.000000000123 ), "5000" )
 	end
 
 LuaUnit:run()
