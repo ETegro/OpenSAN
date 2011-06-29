@@ -21,6 +21,8 @@ pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 PROJECT_DIR="$WORK_DIR"/..
 OUTPUT_LOG="$1"
 
+ASTOR2_LUCI_PATH=feeds/luci/applications/luci-astor2-san/luasrc/controller
+
 create_test_directory()
 {
 	TEST_DIR=`mktemp -d`
@@ -62,12 +64,12 @@ make_astor2_tests_links()
 
 make_matrix_links()
 {
-	ln -f -s "$PROJECT_DIR"/feeds/luci/applications/luci-astor2-san/luasrc/controller/matrix.lua "$TEST_DIR"/matrix.lua
+	ln -f -s "$PROJECT_DIR"/"$ASTOR2_LUCI_PATH"/matrix.lua "$TEST_DIR"/matrix.lua
 }
 
 make_matrix_tests_links()
 {
-	local tests_path="$PROJECT_DIR"/feeds/luci/applications/luci-astor2-san/luasrc/controller/tests
+	local tests_path="$PROJECT_DIR"/"$ASTOR2_LUCI_PATH"/tests
 	for lua_test in $tests_path/*.lua_; do
 		link_name=`basename "$lua_test" .lua_`
 		ln -f -s $lua_test "$TEST_DIR"/tests/"$link_name".lua
