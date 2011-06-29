@@ -1,0 +1,38 @@
+--[[
+  aStor2 -- storage area network configurable via Web-interface
+  Copyright (C) 2009-2011 ETegro Technologies, PLC
+                          Sergey Matveev <stargrave@stargrave.org>
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+]]
+
+require( "luaunit" )
+common = require( "astor2.common" )
+matrix = require( "matrix" )
+
+TestSizesHumanization = {}
+	function TestSizesHumanization:test_less_than_gig()
+		assertEquals( matrix.mib_humanize( 123 )[ "value" ], "123" )
+		assertEquals( matrix.mib_humanize( 123 )[ "unit" ], "MiB" )
+	end
+	function TestSizesHumanization:test_less_than_tib()
+		assertEquals( matrix.mib_humanize( 123666 )[ "value" ], "121" )
+		assertEquals( matrix.mib_humanize( 123666 )[ "unit" ], "GiB" )
+	end
+	function TestSizesHumanization:test_more_than_tib()
+		assertEquals( matrix.mib_humanize( 1236669 )[ "value" ], "1.17" )
+		assertEquals( matrix.mib_humanize( 1236669 )[ "unit" ], "TiB" )
+	end
+
+LuaUnit:run()

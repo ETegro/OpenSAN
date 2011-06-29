@@ -194,12 +194,38 @@ function M.overall( data )
 	return matrix
 end
 
+------------------------------------------------------------------------
+-- Sizes humanization
+------------------------------------------------------------------------
 function M.size_round( size )
 	return string.format( "%0.0f", tonumber( size ) )
 end
 
 function M.mib2tib( size )
 	return string.sub( string.format( "%0.3f", tonumber( size ) / 2^20 ), 1, -2 )
+end
+
+function M.mib_humanize( size )
+	local rules = {
+		[ function( size ) return size < 1024 end ] =
+			function( size )
+				return { value = M.size_round( size ), unit = "MiB" }
+			end,
+		[ function( size ) return (size < 1024^2) and (size >= 1024) end ] =
+			function( size )
+				return { value = M.size_round( size / 1024.0 ), unit = "GiB" }
+			end,
+		[ function( size ) return size >= 1024^2 end ] =
+			function( size )
+				return { value = M.mib2tib( size ), unit = "TiB" }
+			end
+	}
+	for check, resulter in pairs( rules ) do
+		if check( size ) then
+			return resulter( size )
+		end
+	end
+	return { value = tostring( size ), unit = "MiB" }
 end
 
 local function check_highlights_attribute( obj )
