@@ -29,8 +29,6 @@ DEFAULT_PACKAGES += \
 	kmod-via-rhine \
 	kmod-mptsas \
 	kmod-igb \
-	kmod-ipmi \
-	ipmitool \
 	dash \
 	gnu-cpio \
 	uhttpd \

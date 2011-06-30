@@ -16,7 +16,7 @@ define Package/astor2-luci-bwc-ipmi
 	CATEGORY:=aStor2
 	TITLE:=IPMI LuCI BWC-like daemon
 	URL:=http://www.opensan.org/
-	DEPENDS:=+perl
+	DEPENDS:=+perl +ipmitool +kmod-ipmi
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
