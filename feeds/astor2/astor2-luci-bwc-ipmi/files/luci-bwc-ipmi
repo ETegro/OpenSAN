@@ -25,8 +25,8 @@ my $STEP_TIME = 1;
 my $STEP_COUNT = 60;
 my $IPMITOOL = "/usr/sbin/ipmitool";
 
-my $SENSORS_CONFIG = "/tmp/sensors";
-my $DB_PATH = "/tmp/luci-bwc-ipmi-db";
+my $SENSORS_CONFIG = "/usr/lib/lua/luci/controller/san_monitoring_configuration.lua";
+my $DB_PATH = "/tmp/lib/luci-bwc-ipmi";
 
 my $BIN_TEMPLATE = "Nnnn";
 my @SENSORS;
@@ -35,7 +35,7 @@ my %DATA;
 sub config_read {
 	open SENSORS_FD, "< $SENSORS_CONFIG" or
 		die "Unable to read sensors config: $!";
-	map { push @SENSORS, { name => $_ } } grep { chop } <SENSORS_FD>;
+	map { /\["(.*)"\]/ and push @SENSORS, { name => $1 } } <SENSORS_FD>;
 	close SENSORS_FD;
 };
 
