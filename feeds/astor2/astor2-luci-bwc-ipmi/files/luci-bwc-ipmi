@@ -1,0 +1,115 @@
+#!/usr/bin/perl
+# aStor2 -- storage area network configurable via Web-interface
+# Copyright (C) 2009-2011 ETegro Technologies, PLC
+#                         Sergey Matveev <sergey.matveev@etegro.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+
+use POSIX qw( setsid );
+
+my $STEP_TIME = 1;
+my $STEP_COUNT = 60;
+my $IPMITOOL = "/usr/sbin/ipmitool";
+
+my $SENSORS_CONFIG = "/tmp/sensors";
+my $DB_PATH = "/tmp/luci-bwc-ipmi-db";
+
+my $BIN_TEMPLATE = "Nnnn";
+my @SENSORS;
+my %DATA;
+
+sub config_read {
+	open SENSORS_FD, "< $SENSORS_CONFIG" or
+		die "Unable to read sensors config: $!";
+	map { push @SENSORS, { name => $_ } } grep { chop } <SENSORS_FD>;
+	close SENSORS_FD;
+};
+
+sub data_dump {
+	foreach my $sensor_name (keys %DATA) {
+		open SENSOR_DATA, "> ${DB_PATH}/$sensor_name" or
+			die "Unable to open sensor data: $!";
+		foreach my $step (reverse @{ $DATA{ $sensor_name } }) {
+			print SENSOR_DATA pack $BIN_TEMPLATE, (
+				$$step{zeit},
+				$$step{value},
+				$$step{lower},
+				$$step{upper}
+			);
+		};
+		close SENSOR_DATA;
+	};
+};
+
+sub cycling { while(1){
+	foreach my $sensor (@SENSORS) {
+		my $sensor_name = $$sensor{name};
+		$DATA{ $sensor_name } = [] unless defined $DATA{ $sensor_name };
+		open IPMI, "$IPMITOOL sensor get \"$sensor_name\" |";
+		my $value;
+		my $lower;
+		my $upper;
+		while(<IPMI>){
+			$value = $1 if /Sensor Reading\s*:\s*(\d+)\s*/;
+			$lower = $1 if /Lower Non-Critical\s*:\s*(\w+)\s*/;
+			$upper = $1 if /Upper Non-Critical\s*:\s*(\w+)\s*/;
+		};
+		close IPMI;
+		next unless $value;
+		$value = 0 if $value eq "na";
+		$lower = 0 if $lower eq "na";
+		$upper = 0 if $upper eq "na";
+		unshift @{ $DATA{ $sensor_name } }, {
+			zeit  => time,
+			value => $value,
+			lower => $lower,
+			upper => $upper
+		};
+		$#{ $DATA{ $sensor_name } } = $STEP_COUNT - 1 if
+			$#{ $DATA{ $sensor_name } } == $STEP_COUNT;
+	};
+	data_dump;
+	sleep $STEP_TIME;
+}; };
+
+sub daemonize {
+	chdir "/" or die "Unable chdir to /: $!";
+	umask 0;
+	open STDIN, ">/dev/null" or die "Unable read /dev/null: $!";
+	open STDOUT, ">/dev/null" or die "Unable write to /dev/null: $!";
+	open STDERR, ">/dev/null" or die "Unable write to /dev/null: $!";
+	my $pid = fork;
+	exit if $pid;
+	setsid or die "Unable start a new session: $!";
+};
+
+sub data_show {
+	my $sensor_name = shift;
+	open SENSOR_DATA, "< ${DB_PATH}/$sensor_name" or
+		die "Unable to find sensor $sensor_name: $!";
+	while( not eof SENSOR_DATA ){
+		my $step;
+		read( SENSOR_DATA, $step, 4 + 2 + 2 + 2 );
+		print "[ ", join( ", ", unpack( $BIN_TEMPLATE, $step ) ), " ],\n";
+	};
+	close SENSOR_DATA;
+};
+
+exit 0 unless defined $ARGV[0];
+config_read;
+daemonize and cycling if $ARGV[0] eq "-d";
+data_show shift @ARGV;
