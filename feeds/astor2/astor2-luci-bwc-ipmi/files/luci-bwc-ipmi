@@ -98,18 +98,19 @@ sub daemonize {
 };
 
 sub data_show {
-	my $sensor_name = shift;
+	my ($sensor_name, $only_last) = @_;
 	open SENSOR_DATA, "< ${DB_PATH}/$sensor_name" or
 		die "Unable to find sensor $sensor_name: $!";
+	my $step;
 	while( not eof SENSOR_DATA ){
-		my $step;
 		read( SENSOR_DATA, $step, 4 + 2 + 2 + 2 );
-		print "[ ", join( ", ", unpack( $BIN_TEMPLATE, $step ) ), " ],\n";
+		print "[ ", join( ", ", unpack( $BIN_TEMPLATE, $step ) ), " ],\n" unless $only_last;
 	};
+	print join " ", unpack( $BIN_TEMPLATE, $step ), "\n" if $only_last;
 	close SENSOR_DATA;
 };
 
 exit 0 unless defined $ARGV[0];
 config_read;
 daemonize and cycling if $ARGV[0] eq "-d";
-data_show shift @ARGV;
+data_show @ARGV;
