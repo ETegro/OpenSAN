@@ -29,6 +29,11 @@ function index()
 	                 i18n("Monitoring"),
 	                 11 )
 	e.i18n = "astor2_san"
+	local e = entry( { "admin", "san", "mon", "svg" },
+	                 call( "svg" ),
+	                 nil,
+	                 11 )
+	e.leaf = true
 end
 
 local function index_with_error( message_error )
@@ -41,4 +46,9 @@ end
 function monitoring_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "mon", { message_error = message_error } )
+end
+
+function svg()
+	luci.http.prepare_content( "image/svg+xml" )
+	luci.template.render("mon2", { foo = "bar" })
 end
