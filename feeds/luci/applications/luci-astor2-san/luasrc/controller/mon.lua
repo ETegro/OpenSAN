@@ -50,5 +50,5 @@ end
 
 function svg()
 	luci.http.prepare_content( "image/svg+xml" )
-	luci.template.render("mon2", { foo = "bar" })
+	luci.template.render("mb.svg", { foo = "bar" })
 end
