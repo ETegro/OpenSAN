@@ -35,7 +35,7 @@ function index()
 	local e = entry( { "admin", "san", "monitoring", "render", "front" },
 	                 call( "render_front" ), nil, 11 )
 	e.leaf = true
-	local e = entry( { "admin", "san", "monitoring", "render", "back" },
+	local e = entry( { "admin", "san", "monitoring", "render", "rear" },
 	                 call( "render_front" ), nil, 11 )
 	e.leaf = true
 	local e = entry( { "admin", "san", "monitoring", "render", "motherboard" },
@@ -75,8 +75,8 @@ function render_front()
 	return render_svg( "front", bwc_data_get( "front" ) )
 end
 
-function render_back()
-	return render_svg( "back", bwc_data_get( "back" ) )
+function render_rear()
+	return render_svg( "rear", bwc_data_get( "rear" ) )
 end
 
 function render_motherboard()
