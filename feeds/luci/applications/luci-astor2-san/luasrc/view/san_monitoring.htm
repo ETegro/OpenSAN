@@ -22,6 +22,13 @@
 
 <h2><%: Monitoring %></h2>
 
-<embed style="width: 100%; height:100%;" src="<%= luci.dispatcher.build_url( "admin", "san", "mon", "svg" ) %>" />
+<embed style="width: 100%; height:100%;"
+       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render", "front" ) %>" />
+<br/>
+<embed style="width: 100%; height:100%;"
+       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render", "back" ) %>" />
+<br/>
+<embed style="width: 100%; height:100%;"
+       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render", "motherboard" ) %>" />
 
 <%+footer%>
