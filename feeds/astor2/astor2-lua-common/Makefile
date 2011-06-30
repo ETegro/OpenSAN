@@ -15,7 +15,7 @@ define Package/astor2-lua-common
 	SECTION:=astor2
 	CATEGORY:=aStor2
 	TITLE:=Common Lua bindings for aStor2 project
-	URL:=http://github.com/astor2-team/astor2
+	URL:=http://www.opensan.org/
 	DEPENDS:=+lua
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
