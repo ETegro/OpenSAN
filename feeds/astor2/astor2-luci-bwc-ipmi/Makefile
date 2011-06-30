@@ -11,25 +11,22 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/luci-bwc-ipmi/Default
-	SUBMENU:=luci-bwc-ipmi
+define Package/astor2-luci-bwc-ipmi
 	SECTION:=astor2
 	CATEGORY:=aStor2
 	TITLE:=IPMI LuCI BWC-like daemon
 	URL:=http://www.opensan.org/
+	DEPENDS:=+perl +ipmitool +kmod-ipmi
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
-define Package/astor2-luci-bwc-ipmi
-$(call Package/astor2-luci-bwc-ipmi/Default)
-	TITLE:=IPMI LuCI BWC-like daemon
-	DEPENDS:=+perl +ipmitool +kmod-ipmi
-endef
-
 define Package/astor2-luci-bwc-ipmi-rs230g3
-$(call Package/astor2-luci-bwc-ipmi/Default)
-	TITLE:+= (RS230 G3 profile)
+	SECTION:=astor2
+	CATEGORY:=aStor2
+	TITLE:=IPMI LuCI BWC-like daemon RS230 G3 profile
+	URL:=http://www.opensan.org/
 	DEPENDS:=+astor2-luci-bwc-ipmi
+	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
 define Build/Prepare
@@ -60,3 +57,4 @@ define Package/astor2-luci-bwc-ipmi-rs230g3/install
 endef
 
 $(eval $(call BuildPackage,astor2-luci-bwc-ipmi))
+$(eval $(call BuildPackage,astor2-luci-bwc-ipmi-rs230g3))
