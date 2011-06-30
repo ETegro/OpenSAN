@@ -32,13 +32,7 @@ endef
 CONFIGURE_ARGS += \
 	--enable-static=no \
 	--enable-internal-md5 \
-	--enable-intf-lan=no \
-	--enable-intf-lanplus=no \
-	--enable-intf-free=no \
-	--enable-intf-open=no \
-	--enable-intf-imb=yes \
-	--enable-intf-lipmi=no \
-	--enable-intf-bmc=no
+	--enable-intf-imb
 
 define Package/ipmitool/install
 	$(INSTALL_DIR) $(1)/usr/sbin
