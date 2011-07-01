@@ -32,13 +32,13 @@ function index()
 	                 i18n("Monitoring"),
 	                 11 )
 	e.i18n = "astor2_san"
-	local e = entry( { "admin", "san", "monitoring", "render", "front" },
+	local e = entry( { "admin", "san", "monitoring", "render_front" },
 	                 call( "render_front" ), nil, 11 )
 	e.leaf = true
-	local e = entry( { "admin", "san", "monitoring", "render", "rear" },
+	local e = entry( { "admin", "san", "monitoring", "render_rear" },
 	                 call( "render_rear" ), nil, 11 )
 	e.leaf = true
-	local e = entry( { "admin", "san", "monitoring", "render", "motherboard" },
+	local e = entry( { "admin", "san", "monitoring", "render_motherboard" },
 	                 call( "render_motherboard" ), nil, 11 )
 	e.leaf = true
 end
@@ -62,7 +62,7 @@ end
 
 local function bwc_data_get( what )
 	local data = {}
-	for ipmi_id, template_id in pairs( ASTOR2_MONITORING_CONFIGURATION[ what ] ) do
+	for ipmi_id, template_id in pairs( luci.controller.san_monitoring_configuration.configuration[ what ] ) do
 		local bwc = io.popen("luci-bwc-ipmi \"" .. ipmi_id .. "\" last 2>/dev/null")
 		local result = common.split_by( bwc:read("*l"), " " )
 		bwc:close()
