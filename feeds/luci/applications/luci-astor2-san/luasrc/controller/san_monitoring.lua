@@ -36,10 +36,10 @@ function index()
 	                 call( "render_front" ), nil, 11 )
 	e.leaf = true
 	local e = entry( { "admin", "san", "monitoring", "render", "rear" },
-	                 call( "render_front" ), nil, 11 )
+	                 call( "render_rear" ), nil, 11 )
 	e.leaf = true
 	local e = entry( { "admin", "san", "monitoring", "render", "motherboard" },
-	                 call( "render_front" ), nil, 11 )
+	                 call( "render_motherboard" ), nil, 11 )
 	e.leaf = true
 end
 
