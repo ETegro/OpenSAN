@@ -54,13 +54,39 @@ local function render_svg( svg_filename, data )
 	luci.template.render( "san_monitoring/" .. svg_filename .. ".svg", { data = data } )
 end
 
+--[[
++------+-------+-------------+---------+------------+--------+
+| 1    | 2     | 3           | 4       | 5          | 6      |
+|------+-------+-------------+---------+------------+--------|
+| time | value | low non-crt | low crt | up non-crt | up-crt |
++------+-------+-------------+---------+------------+--------+
+--]]
+local function determine_color( result )
+	if result[2] > result[3] and
+	   result[2] < result[5] then
+		return "green"
+	end
+	if result[2] > result[4] and
+	   result[2] < result[3] then
+		return "orange"
+	end
+	if result[2] > result[5] and
+	   result[2] < result[6] then
+		return "orange"
+	end
+	return "red"
+end
+
 local function bwc_data_get( what )
 	local data = {}
 	for ipmi_id, template_id in pairs( luci.controller.san_monitoring_configuration.configuration[ what ] ) do
 		local bwc = io.popen("luci-bwc-ipmi \"" .. ipmi_id .. "\" last 2>/dev/null")
 		local result = common.split_by( bwc:read("*l"), " " )
 		bwc:close()
-		data[ template_id ] = result[2]
+		data[ template_id ] = {
+			value = result[2],
+			color = determine_color( result )
+		}
 	end
 	return data
 end
