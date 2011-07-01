@@ -51,10 +51,7 @@ define Package/astor2-luci-bwc-ipmi-rs230g3/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/san_monitoring
 
 	$(INSTALL_CONF) ./files/rs230g3/configuration.lua $(1)/usr/lib/lua/luci/controller/san_monitoring_configuration.lua
-	$(INSTALL_DATA) ./files/rs230g3/index.htm $(1)/usr/lib/lua/luci/view/san_monitoring
-	$(INSTALL_DATA) ./files/rs230g3/front.svg.htm $(1)/usr/lib/lua/luci/view/san_monitoring
-	$(INSTALL_DATA) ./files/rs230g3/rear.svg.htm $(1)/usr/lib/lua/luci/view/san_monitoring
-	$(INSTALL_DATA) ./files/rs230g3/motherboard.svg.htm $(1)/usr/lib/lua/luci/view/san_monitoring
+	$(INSTALL_DATA) ./files/rs230g3/*.htm $(1)/usr/lib/lua/luci/view/san_monitoring
 endef
 
 $(eval $(call BuildPackage,astor2-luci-bwc-ipmi))
