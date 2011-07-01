@@ -33,7 +33,7 @@ function index()
 	                 11 )
 	e.i18n = "astor2_san"
 	local e = entry( { "admin", "san", "monitoring", "render" },
-	                 call( "render_front" ), nil, 11 )
+	                 call( "render" ), nil, 11 )
 	e.leaf = true
 end
 
