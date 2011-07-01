@@ -83,6 +83,9 @@ TestStrip = {}
 	function TestStrip:test_tabd()
 		assertEquals( common.strip( "	foobar	" ), "foobar" )
 	end
+	function TestStrip:test_strip_single_character()
+		assertEquals( common.strip( "B" ), "B" )
+	end
 
 TestGetKeys = {}
         function TestGetKeys:setUp()

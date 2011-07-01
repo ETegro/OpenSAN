@@ -144,7 +144,7 @@ end
 -- @return String without leading and trailing whitespaces
 function M.strip( str )
 	assert( M.is_string( str ), "non-string argument" )
-	return string.match( str, "^%s*(%S.*%S)%s*$" )
+	return string.match( str, "^%s*(%S?.*%S)%s*$" )
 end
 
 --- Get keys from hash
