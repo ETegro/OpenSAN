@@ -21,7 +21,7 @@ use warnings;
 
 use POSIX qw( setsid );
 
-my $STEP_TIME = 1;
+my $STEP_TIME = 30;
 my $STEP_COUNT = 60;
 my $IPMITOOL = "/usr/sbin/ipmitool";
 
