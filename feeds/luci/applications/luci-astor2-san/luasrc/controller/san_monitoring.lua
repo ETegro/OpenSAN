@@ -32,14 +32,8 @@ function index()
 	                 i18n("Monitoring"),
 	                 11 )
 	e.i18n = "astor2_san"
-	local e = entry( { "admin", "san", "monitoring", "render_front" },
+	local e = entry( { "admin", "san", "monitoring", "render" },
 	                 call( "render_front" ), nil, 11 )
-	e.leaf = true
-	local e = entry( { "admin", "san", "monitoring", "render_rear" },
-	                 call( "render_rear" ), nil, 11 )
-	e.leaf = true
-	local e = entry( { "admin", "san", "monitoring", "render_motherboard" },
-	                 call( "render_motherboard" ), nil, 11 )
 	e.leaf = true
 end
 
@@ -71,14 +65,7 @@ local function bwc_data_get( what )
 	return data
 end
 
-function render_front()
-	return render_svg( "front", bwc_data_get( "front" ) )
-end
-
-function render_rear()
-	return render_svg( "rear", bwc_data_get( "rear" ) )
-end
-
-function render_motherboard()
-	return render_svg( "motherboard", bwc_data_get( "motherboard" ) )
+function render()
+	local what = luci.http.formvalue( "what" )
+	return render_svg( what, bwc_data_get( what ) )
 end
