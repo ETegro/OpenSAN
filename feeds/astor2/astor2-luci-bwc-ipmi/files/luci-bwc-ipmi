@@ -28,7 +28,7 @@ my $IPMITOOL = "/usr/sbin/ipmitool";
 my $SENSORS_CONFIG = "/usr/lib/lua/luci/controller/san_monitoring_configuration.lua";
 my $DB_PATH = "/tmp/lib/luci-bwc-ipmi";
 
-my $BIN_TEMPLATE = "Nnnn";
+my $BIN_TEMPLATE = "Nnnnnn";
 my @SENSORS;
 my %DATA;
 
@@ -47,7 +47,9 @@ sub data_dump {
 			print SENSOR_DATA pack $BIN_TEMPLATE, (
 				$$step{zeit},
 				$$step{value},
+				$$step{lower_non},
 				$$step{lower},
+				$$step{upper_non},
 				$$step{upper}
 			);
 		};
@@ -62,22 +64,30 @@ sub cycling { while(1){
 		open IPMI, "$IPMITOOL sensor get \"$sensor_name\" |";
 		my $value;
 		my $lower;
+		my $lower_non;
 		my $upper;
+		my $upper_non;
 		while(<IPMI>){
 			$value = $1 if /Sensor Reading\s*:\s*(\d+)\s*/;
-			$lower = $1 if /Lower Non-Critical\s*:\s*(\w+)\s*/;
-			$upper = $1 if /Upper Non-Critical\s*:\s*(\w+)\s*/;
+			$lower = $1 if /Lower Critical\s*:\s*(\w+)\s*/;
+			$lower_non = $1 if /Lower Non-Critical\s*:\s*(\w+)\s*/;
+			$upper = $1 if /Upper Critical\s*:\s*(\w+)\s*/;
+			$upper_non = $1 if /Upper Non-Critical\s*:\s*(\w+)\s*/;
 		};
 		close IPMI;
 		next unless $value;
 		$value = 0 if $value eq "na";
 		$lower = 0 if $lower eq "na";
+		$lower_non = 0 if $lower eq "na";
 		$upper = 0 if $upper eq "na";
+		$upper_non= 0 if $upper eq "na";
 		unshift @{ $DATA{ $sensor_name } }, {
 			zeit  => time,
 			value => $value,
 			lower => $lower,
-			upper => $upper
+			lower_non => $lower_non,
+			upper => $upper,
+			upper_non => $upper_non
 		};
 		$#{ $DATA{ $sensor_name } } = $STEP_COUNT - 1 if
 			$#{ $DATA{ $sensor_name } } == $STEP_COUNT;
@@ -103,7 +113,7 @@ sub data_show {
 		die "Unable to find sensor $sensor_name: $!";
 	my $step;
 	while( not eof SENSOR_DATA ){
-		read( SENSOR_DATA, $step, 4 + 2 + 2 + 2 );
+		read( SENSOR_DATA, $step, 4 + 2 + 2*2 + 2*2 );
 		print "[ ", join( ", ", unpack( $BIN_TEMPLATE, $step ) ), " ],\n" unless $only_last;
 	};
 	print join " ", unpack( $BIN_TEMPLATE, $step ), "\n" if $only_last;
