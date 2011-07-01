@@ -153,6 +153,9 @@ msgstr ""
 msgid "Model"
 msgstr ""
 
+msgid "Monitoring"
+msgstr ""
+
 msgid "Name"
 msgstr ""
 
@@ -270,9 +273,6 @@ msgid "Target driver"
 msgstr ""
 
 msgid "This is LUN is busy, please choose another one"
-msgstr ""
-
-msgid "TiB"
 msgstr ""
 
 msgid "Unbind access pattern"
