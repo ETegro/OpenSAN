@@ -256,9 +256,9 @@ function M.VolumeGroup:logical_volume( name, size )
 	local output = common.system( "lvm lvcreate -n " ..
 	                              name ..
 	                              " -L " ..
-				      tostring( size ) ..
-				      " " ..
-				      self.name )
+	                              tostring( size ) ..
+	                              " " ..
+	                              self.name )
 	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
 		if string.match( line, "Logical volume \".+\" created" ) then
@@ -350,9 +350,9 @@ function M.LogicalVolume:snapshot( size )
 	local output = common.system( "lvm lvcreate -s -n " ..
 	                              name ..
 	                              " -L " ..
-				      tostring( size ) ..
-				      " " ..
-				      self.device )
+	                              tostring( size ) ..
+	                              " " ..
+	                              self.device )
 	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
 		if string.match( line, "Logical volume \".+\" created" ) then
