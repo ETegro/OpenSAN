@@ -62,6 +62,12 @@ end
 +------+-------+-------------+---------+------------+--------+
 --]]
 local function determine_color( result )
+	local numberized = {}
+	for _, v in ipairs( result ) do
+		numberized[ #numberized + 1 ] = tonumber( v )
+	end
+	result = numberized
+
 	if result[2] > result[3] and
 	   result[2] < result[5] then
 		return "green"
