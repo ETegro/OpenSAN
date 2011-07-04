@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mdadm
-PKG_VERSION:=2.6.7.2
+PKG_VERSION:=3.1.5
 PKG_RELEASE:=1
-PKG_MD5SUM:=e4badb4a8ded4344ba0fa785883955d8
+PKG_MD5SUM:=f3cb0cc93bd0b428aeb3a197b5abb574
 
 PKG_SOURCE_URL:=@KERNEL/linux/utils/raid/mdadm
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz

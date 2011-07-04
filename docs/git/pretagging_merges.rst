@@ -25,7 +25,7 @@
 
 * перед этим действием можно создать tag::
 
-  % git tag foobar `cat .git/$( cat .git/HEAD | cut -d" " -f2 )`
+  % git tag foobar
 
 * затем произвести merge
 * если всё в порядке, то удалить tag::

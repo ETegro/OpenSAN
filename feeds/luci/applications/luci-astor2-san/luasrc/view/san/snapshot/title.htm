@@ -22,6 +22,6 @@
 		<%= line.logical_volume.name %>;
 	</span>
 	<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
-		<%= line.logical_volume.size %> <%: TiB %>
+		<%= line.logical_volume.size.value %> <%= line.logical_volume.size.unit %>
 	</span>
 </div>

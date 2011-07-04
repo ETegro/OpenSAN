@@ -9,7 +9,7 @@ Roadmap
 1.x version
 ===========
 :1.0:
- :ref:`DONED <features>`
+ :ref:`DONE <features>`
 :1.1:
 
     * x86-64 architecture support
