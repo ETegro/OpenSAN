@@ -20,6 +20,7 @@
 
 <%
 NETWORK_SPEED_COLORMAP = {
+	[0] = "gray",
 	[10] = "red",
 	[100] = "orange",
 	[1000] = "green"
@@ -32,11 +33,8 @@ for template_id,_ in pairs( data ) do
 		entity.unit = true
 	end
 
-	if entity.link then
-		entity.color = NETWORK_SPEED_COLORMAP[ entity.speed ]
-	end
-	if entity.link == false then
-		entity.color = "gray"
+	if entity.link ~= nil then
+		entity.color = NETWORK_SPEED_COLORMAP[ entity.speed or 0 ]
 	end
 end
 %>
