@@ -19,6 +19,13 @@
 -->
 
 <%
+--TODO: replace colors with their RGB values
+ENTITY_STATE_COLORMAP = {
+	green = "green",
+	orange = "orange",
+	red = "red"
+}
+
 NETWORK_SPEED_COLORMAP = {
 	[0] = "gray",
 	[10] = "red",
@@ -29,6 +36,7 @@ NETWORK_SPEED_COLORMAP = {
 for template_id,_ in pairs( data ) do
 	local entity = data[ template_id ]
 	entity.opacity = "0.3"
+	entity.color = ENTITY_STATE_COLORMAP[ entity.color ]
 	if entity.link ~= nil then
 		entity.color = NETWORK_SPEED_COLORMAP[ entity.speed or 0 ]
 	end
