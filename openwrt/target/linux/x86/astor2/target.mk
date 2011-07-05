@@ -34,7 +34,8 @@ DEFAULT_PACKAGES += \
 	dash \
 	gnu-cpio \
 	uhttpd \
-	luci-app-astor2-san
+	luci-app-astor2-san \
+	sg3_utils
 
 define Target/Description
 	Build firmware images for aStor2 project
