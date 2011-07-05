@@ -25,7 +25,7 @@ define Package/astor2-luci-bwc-ipmi-rs230g3
 	CATEGORY:=aStor2
 	TITLE:=IPMI LuCI BWC-like daemon RS230 G3 profile
 	URL:=http://www.opensan.org/
-	DEPENDS:=+astor2-luci-bwc-ipmi
+	DEPENDS:=+astor2-luci-bwc-ipmi +luci-astor2-san-monitoring
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
