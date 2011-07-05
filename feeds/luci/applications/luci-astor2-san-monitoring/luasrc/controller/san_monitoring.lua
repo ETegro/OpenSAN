@@ -89,12 +89,7 @@ local function bwc_data_get( what )
 		local bwc = io.popen("luci-bwc-ipmi \"" .. ipmi_id .. "\" last 2>/dev/null")
 		local result = common.split_by( bwc:read("*l"), " " )
 		bwc:close()
-		if #result == 0 then
-			data[ template_id ] = {
-				value = "N/A",
-				color = "gray"
-			}
-		else
+		if #result ~= 0 then
 			data[ template_id ] = {
 				value = result[2],
 				color = determine_color( result )

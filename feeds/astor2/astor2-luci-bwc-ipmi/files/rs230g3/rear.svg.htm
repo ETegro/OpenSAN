@@ -1161,7 +1161,7 @@
            x="168.54106"
            y="163.18903"
            id="ASTOR2_MONITORING-PSU0-POWER"
-           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><%= data.PSU0.value %><% if data.PSU0.unit then %> W<% end %></tspan></text>
+           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.PSU0 then %><%= data.PSU0.value %> W<% else %>N/A<% end %></tspan></text>
 </g></g><g
      id="ASTOR2_MONITORING-PSU1"><g
        transform="matrix(2,0,0,2,-166.85355,-360.58406)"
@@ -1510,7 +1510,7 @@
            x="168.54106"
            y="163.18903"
            id="ASTOR2_MONITORING-PSU1-POWER"
-           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><%= data.PSU1.value %><% if data.PSU1.unit then %> W<% end %></tspan></text>
+           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.PSU1 then %><%= data.PSU1.value %> W<% else %>N/A<% end %></tspan></text>
 </g></g><g
      id="ASTOR2_MONITORING-ETH0"><g
        transform="translate(206.32435,-127.47539)"
@@ -2061,7 +2061,7 @@
            x="945.69934"
            y="62.740677"
            id="ASTOR2_MONITORING-FAN0-RPM"
-           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><%= data.FAN0.value %><% if data.FAN0.unit then %> RPM<% end %></tspan></text>
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.FAN0 then %><%= data.FAN0.value %> RPM<% else %>N/A<% end %></tspan></text>
 </g></g><g
      id="ASTOR2_MONITORING-FAN1"><g
        transform="matrix(2,0,0,2,-166.85355,-360.58406)"
@@ -2110,7 +2110,7 @@
            x="943.69934"
            y="62.740677"
            id="ASTOR2_MONITORING-FAN1-RPM"
-           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><%= data.FAN1.value %><% if data.FAN1.unit then %> RPM<% end %></tspan></text>
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.FAN1 then %><%= data.FAN1.value %> RPM<% else %>N/A<% end %></tspan></text>
 </g></g><g
      id="ASTOR2_MONITORING-FAN2"><g
        transform="matrix(2,0,0,2,-358.85355,-360.58406)"
@@ -2159,7 +2159,7 @@
            x="943.69934"
            y="62.740677"
            id="tspan8572"
-           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><%= data.FAN2.value %><% if data.FAN2.unit then %> RPM<% end %></tspan></text>
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.FAN2 then %><%= data.FAN2.value %> RPM<% else %>N/A<% end %></tspan></text>
 </g></g><text
    x="866.55554"
    y="189.68361"
@@ -2169,5 +2169,5 @@
      x="866.55554"
      y="239.68361"
      id="tspan3338"
-     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">Back panel: <%= data.BP.value %><% if data.BP.unit then %>°C<% end %></tspan></text>
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">Back panel: <% if data.BP then %><%= data.BP.value %>°C<% else %>N/A<% end %></tspan></text>
 </svg>

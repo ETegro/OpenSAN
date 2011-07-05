@@ -29,10 +29,6 @@ NETWORK_SPEED_COLORMAP = {
 for template_id,_ in pairs( data ) do
 	local entity = data[ template_id ]
 	entity.opacity = "0.3"
-	if entity.value ~= "N/A" then
-		entity.unit = true
-	end
-
 	if entity.link ~= nil then
 		entity.color = NETWORK_SPEED_COLORMAP[ entity.speed or 0 ]
 	end

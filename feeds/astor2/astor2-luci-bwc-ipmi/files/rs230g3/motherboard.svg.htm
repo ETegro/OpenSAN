@@ -208,7 +208,7 @@
          x="388.47104"
          y="334.45813"
          id="tspan4376"
-         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><%= data.CPU0.value %><% if data.CPU0[ "unit" ] then %>°C<% end %></tspan></text>
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><% if data.CPU0 then %><%= data.CPU0.value %>°C<% else %>N/A<% end %></tspan></text>
 </g><g
      transform="matrix(2,0,0,2,-464.94206,-469.40181)"
      id="CPU1"><g
@@ -327,7 +327,7 @@
          x="434.89957"
          y="474.80383"
          id="tspan4737"
-         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><%= data.CPU1.value %><% if data.CPU1[ "unit" ] then %>°C<% end %></tspan></text>
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><% if data.CPU1 then %><%= data.CPU1.value %>°C<% else %>N/A<% end %></tspan></text>
 </g><g
      transform="matrix(2,0,0,2,-464.94206,-469.40181)"
      id="SB"
@@ -1147,7 +1147,7 @@
            x="242.53305"
            y="449.98215"
            id="tspan3976"
-           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><%= data[ "MEM-BLOCK" ].value %><% if data[ "MEM-BLOCK" ][ "unit" ] then %>°C<% end %></tspan></text>
+           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><% if data["MEM-BLOCK"] then %><%= data[ "MEM-BLOCK" ].value %>°C<% else %>N/A<% end %></tspan></text>
 </g></g><g
      id="MEM-BLOCK1"><g
        transform="matrix(2,0,0,2,-464.94206,-469.40181)"
@@ -1701,7 +1701,7 @@
            x="242.53305"
            y="449.98215"
            id="tspan3963"
-           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><%= data[ "MEM-BLOCK" ].value %><% if data[ "MEM-BLOCK" ][ "unit" ] then %>°C<% end %></tspan></text>
+           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><% if data["MEM-BLOCK"] then %><%= data[ "MEM-BLOCK" ].value %>°C<% else %>N/A<% end %></tspan></text>
 </g></g><text
      x="12.327468"
      y="209.54897"
@@ -1711,5 +1711,5 @@
        x="302.327468"
        y="629.54897"
        id="tspan4415"
-       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono">Motherboard: <%= data.MB.value %><% if data.MB.unit then %>°C<% end %></tspan></text>
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono">Motherboard: <% if data.MB then %><%= data.MB.value %>°C<% else %>N/A<% end %></tspan></text>
 </svg>
