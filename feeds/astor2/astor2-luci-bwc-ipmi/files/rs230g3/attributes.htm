@@ -1,0 +1,39 @@
+<!--
+  aStor2 - storage area network configurable via Web-interface
+  Copyright (C) 2009-2011 ETegro Technologies, PLC
+                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                          Sergey Matveev (stargrave@stargrave.org)
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<%
+for template_id,_ in pairs( data ) do
+	data[ template_id ].opacity = "0.3"
+	if data[ template_id ].value ~= "N/A" then
+		data[ template_id ].unit = true
+	end
+
+	if data[ template_id ].link then
+		data[ template_id ].color = ({
+			[10] = "red",
+			[100] = "orange",
+			[1000] = "green"
+		})[ data[ template_id ].speed ]
+	end
+	if data[ template_id ].link == false then
+		data[ template_id ].color = "gray"
+	end
+end
+%>

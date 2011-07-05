@@ -18,17 +18,13 @@
 -->
 
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-<% for template_id,_ in pairs( data ) do
-	data[ template_id ].opacity = "0.3"
-	if data[ template_id ].value ~= "N/A" then
-		data[ template_id ].unit = true
-	end
-end %>
 
 <% --[[
    width="545.03729"
    height="593.01447"
 ]] %>
+
+<%+san_monitoring/attributes%>
 
 <svg
    xmlns:svg="http://www.w3.org/2000/svg"
