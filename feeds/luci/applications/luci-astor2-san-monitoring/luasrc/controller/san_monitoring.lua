@@ -104,7 +104,33 @@ local function bwc_data_get( what )
 	return data
 end
 
+local function network_data_get( data )
+	for eth_id, template_id in pairs( luci.controller.san_monitoring_configuration.network ) do
+		data[ template_id ] = {}
+		for _, line in ipairs( common.system_succeed( "ethtool " .. eth_id ) ) do
+			local link_detected = string.match( line, "^%s*Link detected: (%w+)$" )
+			if link_detected then
+				data[ template_id ][ "link" ] = ({
+					["yes"] = true,
+					["no"] = false
+				})[ link_detected ]
+			end
+
+			local speed = string.match( line, "^%s*Speed: (%d+).*$" )
+			if speed then
+				data[ template_id ][ "speed" ] = tonumber( speed )
+			end
+		end
+	end
+	return data
+end
+
 function render()
 	local what = luci.http.formvalue( "what" )
-	return render_svg( what, bwc_data_get( what ) )
+	local network = luci.http.formvalue( "network" )
+
+	local data = bwc_data_get( what )
+	if network then data = network_data_get( data ) end
+
+	return render_svg( what, data )
 end
