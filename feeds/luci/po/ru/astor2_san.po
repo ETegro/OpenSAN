@@ -166,6 +166,9 @@ msgstr ""
 msgid "Model"
 msgstr "Модель"
 
+msgid "Monitoring"
+msgstr "Мониторинг"
+
 msgid "Name"
 msgstr "Название"
 
@@ -288,9 +291,6 @@ msgstr "Целевой драйвер"
 
 msgid "This is LUN is busy, please choose another one"
 msgstr "Этот LUN занят, пожалуйста выберите другой"
-
-msgid "TiB"
-msgstr ""
 
 msgid "Unbind access pattern"
 msgstr "Открепить шаблон доступа"

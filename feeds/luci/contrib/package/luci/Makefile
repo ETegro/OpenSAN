@@ -301,10 +301,15 @@ $(eval $(call application,astor2-san,aStor2 SAN,\
 	+PACKAGE_luci-app-astor2-san:astor2-lua-einarc \
 	+PACKAGE_luci-app-astor2-san:astor2-lua-lvm \
 	+PACKAGE_luci-app-astor2-san:astor2-lua-scst \
+	+PACKAGE_luci-app-astor2-san:astor2-luci-bwc-ipmi \
 	+PACKAGE_luci-app-astor2-san:luasha2 \
 	+PACKAGE_luci-app-astor2-san:luci-theme-astor2 \
 	+PACKAGE_luci-app-astor2-san:luci-i18n-russian \
 	+PACKAGE_luci-app-astor2-san:luci-mod-admin-full ))
+
+$(eval $(call application,astor2-san-monitoring,aStor2 SAN monitoring,\
+	+PACKAGE_luci-app-astor2-san:luci-app-astor2-san \
+	+PACKAGE_luci-app-astor2-san:ethtool ))
 
 ### Hello World - luci application ###
 $(eval $(call application,helloworld,This is hello world application,\
