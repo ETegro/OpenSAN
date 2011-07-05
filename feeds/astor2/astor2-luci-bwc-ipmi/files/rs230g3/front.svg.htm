@@ -18,13 +18,22 @@
 -->
 
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+<% for template_id,_ in pairs( data ) do
+	data[ template_id ].opacity = "0.3"
+	if data[ template_id ].value ~= "N/A" then
+		data[ template_id ].unit = true
+	end
+end %>
+
+<% --[[
+   width="1155.0"
+   height="212.38313"
+]] %>
 
 <svg
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   width="1154.432"
-   height="212.38313"
    id="rs230"
    xml:space="preserve"
    style="display:inline"><defs
@@ -94,7 +103,7 @@
          x="117.32579"
          y="303.36612"
          id="rect6860"
-         style="fill:white;fill-opacity:1;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" /><rect
+         style="fill:<%= data.FP.color %>;fill-opacity:<%= data.FP.opacity %>;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" /><rect
          width="24.39517"
          height="65.760941"
          ry="3.9642785"
@@ -5050,4 +5059,13 @@
            style="fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /><path
            d="m 149.02548,371.00391 c -1.96874,-0.20308 -2.87108,-2.70216 -2.87108,-2.70216"
            id="path6674"
-           style="fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></g></g></g></svg>
+           style="fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></g></g></g><text
+   x="866.55554"
+   y="189.68361"
+   id="text3336"
+   xml:space="preserve"
+   style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"><tspan
+     x="866.55554"
+     y="239.68361"
+     id="tspan3338"
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">Front panel: <%= data.FP.value %><% if data.FP.unit then %>°C<% end %></tspan></text></svg>
