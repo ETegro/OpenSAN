@@ -9,3 +9,9 @@ configuration = {
 		["DIMM Temp"] = "MEM-BLOCK1"
 	}
 }
+
+network = {
+	eth0 = "ETH0",
+	eth1 = "ETH1",
+	eth2 = "ETH2"
+}
