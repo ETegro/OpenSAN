@@ -20,20 +20,21 @@
 
 <%
 for template_id,_ in pairs( data ) do
-	data[ template_id ].opacity = "0.3"
-	if data[ template_id ].value ~= "N/A" then
-		data[ template_id ].unit = true
+	local entity = data[ template_id ]
+	entity.opacity = "0.3"
+	if entity.value ~= "N/A" then
+		entity.unit = true
 	end
 
-	if data[ template_id ].link then
-		data[ template_id ].color = ({
+	if entity.link then
+		entity.color = ({
 			[10] = "red",
 			[100] = "orange",
 			[1000] = "green"
-		})[ data[ template_id ].speed ]
+		})[ entity.speed ]
 	end
-	if data[ template_id ].link == false then
-		data[ template_id ].color = "gray"
+	if entity.link == false then
+		entity.color = "gray"
 	end
 end
 %>
