@@ -32,7 +32,8 @@ DEFAULT_PACKAGES += \
 	dash \
 	gnu-cpio \
 	uhttpd \
-	luci-app-astor2-san
+	luci-app-astor2-san \
+	astor2-luci-bwc-ipmi-rs230g3
 
 define Target/Description
 	Build firmware images for aStor2 project
