@@ -308,7 +308,7 @@ $(eval $(call application,astor2-san,aStor2 SAN,\
 	+PACKAGE_luci-app-astor2-san:luci-mod-admin-full ))
 
 $(eval $(call application,astor2-san-monitoring,aStor2 SAN monitoring,\
-	+PACKAGE_luci-app-astor2-san:luci-astor2-san \
+	+PACKAGE_luci-app-astor2-san:luci-app-astor2-san \
 	+PACKAGE_luci-app-astor2-san:ethtool ))
 
 ### Hello World - luci application ###
