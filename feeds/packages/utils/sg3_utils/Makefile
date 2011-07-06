@@ -36,6 +36,7 @@ define Package/sg3_utils/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/.libs/sg_start $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/.libs/sg_ses $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/.libs/sg_inq $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/.libs/sg_map $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/.libs/sginfo $(1)/usr/bin
 
 	$(INSTALL_DIR) $(1)/usr/lib
