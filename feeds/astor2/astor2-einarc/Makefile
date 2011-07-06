@@ -26,7 +26,8 @@ define Package/astor2-einarc
 		+udev +mdadm +smartmontools \
 		+kmod-md-mod +kmod-md-linear \
 		+kmod-md-raid0 +kmod-md-raid1 \
-		+kmod-md-raid10 +kmod-md-raid456
+		+kmod-md-raid10 +kmod-md-raid456 \
+		+sdparm +sg3_utils
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
