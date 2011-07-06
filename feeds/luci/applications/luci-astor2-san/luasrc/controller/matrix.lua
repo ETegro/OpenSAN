@@ -559,10 +559,31 @@ local function logical_logical_volumes( logical, logical_volumes )
 	return snapshots_to_outer( logical_volumes_needed )
 end
 
+local function logical_states_sanity_check( logicals, physicals )
+	local logicals_failed = {}
+	for logical_id, logical in pairs( logicals ) do
+		local unexistent_drives = 0
+		for _, physical_in_logical in ipairs( logical.drives ) do
+			if physicals[ physical_in_logical ] == nil then
+				unexistent_drives = unexistent_drives + 1
+			end
+		end
+		if unexistent_drives == #logical.drives then
+			logicals_failed[ #logicals_failed + 1 ] = logical_id
+		end
+	end
+	for _, logical_id in ipairs( logicals_failed ) do
+		logicals[ logical_id ].state = "failed"
+	end
+	return logicals
+end
+
 function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 	local logicals_for_serialization = {}
+
+	logicals = logical_states_sanity_check( logicals, physicals )
 
 	lvm.restore()
 	local physical_volumes = lvm.PhysicalVolume.list()
