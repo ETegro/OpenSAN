@@ -46,7 +46,7 @@ end
 
 function monitoring_overall()
 	local message_error = luci.http.formvalue( "message_error" )
-	luci.template.render( "san_monitoring", { message_error = message_error } )
+	luci.template.render( "san_monitoring", { data = {} } )
 end
 
 local function render_svg( svg_filename, data )
