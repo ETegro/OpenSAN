@@ -26,11 +26,20 @@ for _, svg_template in pairs( embed_size ) do
 end
 %>
 
-<embed style="width: 1155px; height:262px; padding: 20px;"
-       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front" />
-<br/>
-<embed style="width: 1159px; height:261px; padding: 20px;"
-       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&network=1" />
-<br/>
-<embed style="width: 545px; height: 643px; padding: 20px;"
-       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard" />
+<table width="100%">
+	<tbody>
+		<tr>
+			<td>
+				<embed style="<%= embed_size.front.style %> padding: 20px;"
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front" />
+				<br />
+				<embed style="<%= embed_size.rear.style %> padding: 20px;"
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&network=1" />
+			</td>
+			<td>
+				<embed style="<%= embed_size.motherboard.style %> padding: 20px;"
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard" />
+			</td>
+		</tr>
+	</tbody>
+</table>
