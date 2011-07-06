@@ -19,6 +19,8 @@
 -->
 
 <%
+common = require "astor2.common"
+
 --TODO: replace colors with their RGB values
 ENTITY_STATE_COLORMAP = {
 	green = "green",
@@ -34,14 +36,16 @@ NETWORK_SPEED_COLORMAP = {
 }
 
 DEFAULT_OPACITY = "0.3"
-DEFAULT_NA_COLOR = "gray"
+data[ "DEFAULT_NA_COLOR" ] = "gray"
 
 for template_id,_ in pairs( data ) do
 	local entity = data[ template_id ]
-	entity.opacity = DEFAULT_OPACITY
-	entity.color = ENTITY_STATE_COLORMAP[ entity.color ]
-	if entity.link ~= nil then
-		entity.color = NETWORK_SPEED_COLORMAP[ entity.speed or 0 ]
+	if common.is_table( entity ) then
+		entity.opacity = DEFAULT_OPACITY
+		entity.color = ENTITY_STATE_COLORMAP[ entity.color ]
+		if entity.link ~= nil then
+			entity.color = NETWORK_SPEED_COLORMAP[ entity.speed or 0 ]
+		end
 	end
 end
 %>
