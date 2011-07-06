@@ -294,6 +294,10 @@ background-color:#EF4;
 background-color:#FC2;
 }
 
+.logical-state-failed {
+background-color:#F21;
+}
+
 /* Logicals volumes */
 .logical_volume-background-color-lightgreen {
 background-color:#C8FCB1;
