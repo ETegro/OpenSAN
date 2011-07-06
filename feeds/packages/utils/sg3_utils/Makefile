@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sg3_utils
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+kmod-usb-storage +kmod-scsi-generic
+  DEPENDS:=+kmod-scsi-generic
   TITLE:=sg3 scsi utilities
   URL:=http://sg.danny.cz/sg/sg3_utils.html
 endef
