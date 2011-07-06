@@ -44,8 +44,11 @@ for template_id,_ in pairs( data ) do
 	if common.is_table( entity ) then
 		entity.opacity = DEFAULT_OPACITY
 		entity.color = ENTITY_STATE_COLORMAP[ entity.color ]
+		if entity.link == false then
+			entity.speed = 0
+		end
 		if entity.link ~= nil then
-			entity.color = NETWORK_SPEED_COLORMAP[ entity.speed or 0 ]
+			entity.color = NETWORK_SPEED_COLORMAP[ entity.speed ]
 		end
 	end
 end
