@@ -1,3 +1,31 @@
+<%+san_monitoring/attributes%>
+
+<%
+local embed_size = {
+	front = { width = 1155, height = 262 },
+	rear = { width = 1159, 	height = 261 },
+	motherboard = { width = 545, height = 643 }
+}
+
+local function svg_scaling( svg_template )
+	for property_name, property in pairs( svg_template ) do
+		svg_template[ property_name ] = property * tonumber( data.SVG_SCALE )
+	end
+	return svg_template
+end
+
+local function embed_style( svg_template )
+	local width = svg_template.width
+	local height = svg_template.height
+	return "width: " .. width .. "px; height: " .. height .. "px;"
+end
+
+for _, svg_template in pairs( embed_size ) do
+	local scaling = svg_scaling( svg_template )
+	svg_template.style = embed_style( scaling )
+end
+%>
+
 <embed style="width: 1155px; height:262px; padding: 20px;"
        src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front" />
 <br/>
