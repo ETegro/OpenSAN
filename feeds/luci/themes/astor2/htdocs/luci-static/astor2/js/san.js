@@ -26,7 +26,6 @@ function toggleFade( fade_element ) {
 	} else {
 		fade_element.fadeOut( 'fast' );
 	}
-	return false;
 }
 
 function toggleFadeSingleElement( fadeObject ) {
@@ -46,6 +45,7 @@ function toggleFadeParentElement( fadeObject ) {
 			var fade_element = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		}
 		toggleFade( fade_element );
+		return false;
 	} );
 }
 
