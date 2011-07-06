@@ -32,7 +32,9 @@
    version="1.1"
    id="svg2881"
    xml:space="preserve"
-   style="display:inline"><defs
+   style="display:inline">
+   <g transform="scale(<%= data.SVG_SCALE %>)">
+   <defs
      id="defs2885"><clipPath
    id="clipPath25191"><path
      d="m 745,5835.67 978,0 0,-764 -978,0 0,764 z"
@@ -2170,4 +2172,5 @@
      y="239.68361"
      id="tspan3338"
      style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">Back panel: <% if data.BP then %><%= data.BP.value %>°C<% else %>N/A<% end %></tspan></text>
+   </g>
 </svg>

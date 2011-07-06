@@ -32,7 +32,9 @@
    version="1.1"
    id="rs230g3-motherboard"
    xml:space="preserve"
-   style="display:inline"><defs
+   style="display:inline">
+   <g transform="scale(<%= data.SVG_SCALE %>)">
+   <defs
      id="defs2883"><clipPath
    id="clipPath12255"><path
      d="m 592,3092.67 0,-120 51,0 0,120 -51,0 z m 255,0 0,-120 46,0 0,120 -46,0 z"
@@ -1712,4 +1714,5 @@
        y="629.54897"
        id="tspan4415"
        style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono">Motherboard: <% if data.MB then %><%= data.MB.value %>°C<% else %>N/A<% end %></tspan></text>
+   </g>
 </svg>
