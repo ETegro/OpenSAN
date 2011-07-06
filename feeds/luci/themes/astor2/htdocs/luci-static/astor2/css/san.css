@@ -47,7 +47,7 @@ table {
 }
 
 #maincontent > form {
-	background-color:  #fff;
+	background-color: #fff;
 }
 
 /* Icons for buttons */
@@ -57,7 +57,7 @@ table {
 .icon-reload,
 .icon-fieldadd,
 .icon-edit {
-	background-color:  transparent;
+	background-color: transparent;
 	background-position: center center;
 	background-repeat: no-repeat;
 	border: 0;
@@ -71,7 +71,7 @@ table {
 .icon-reload: hover,
 .icon-fieldadd: hover,
 .icon-edit: hover {
-	background-color:  transparent;
+	background-color: transparent;
 }
 
 .icon-add-wide,.icon-apply-wide {
