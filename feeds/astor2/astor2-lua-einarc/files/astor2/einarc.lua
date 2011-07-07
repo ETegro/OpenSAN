@@ -308,6 +308,15 @@ function M.Physical:is_hotspare()
 	return output[1] == "1"
 end
 
+--- Try to get physical's enclosure
+-- @return enclosure's number
+function M.Physical:enclosure()
+	assert( self.id, "unable to get self object" )
+	local output = self:get( "enclosure" )
+	if not output then return nil end
+	return tonumber( output[1] )
+end
+
 ------------------------------------------------------------------------
 -- Task
 ------------------------------------------------------------------------
