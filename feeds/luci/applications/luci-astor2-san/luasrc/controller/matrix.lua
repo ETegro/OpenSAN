@@ -641,4 +641,30 @@ function M.caller()
 	return matrix
 end
 
+function M.caller_minimalistic()
+	local logicals = einarc.Logical.list()
+	local physicals = einarc.Physical.list()
+
+	logicals = logical_states_sanity_check( logicals, physicals )
+
+	for logical_id, logical in pairs( logicals ) do
+		logicals[ logical_id ]:physical_list()
+	end
+
+	local matrix = {
+		lines = M.overall( {
+			physicals = physicals,
+			logicals = logicals } ),
+		physicals = physicals
+	}
+	local FILTERS = {
+		M.filter_borders_highlight,
+		M.filter_alternation_border_colors
+	}
+	for _,filter in ipairs( FILTERS ) do
+		matrix = filter( matrix )
+	end
+	return matrix
+end
+
 return M
