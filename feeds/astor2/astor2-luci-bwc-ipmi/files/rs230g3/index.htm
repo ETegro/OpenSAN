@@ -51,7 +51,7 @@ end
 		<tr>
 			<td>
 				<embed style="<%= embed_size.front.style %> padding: 20px;"
-				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front" />
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&enclosures=1" />
 				<br />
 				<embed style="<%= embed_size.rear.style %> padding: 20px;"
 				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&network=1" />
