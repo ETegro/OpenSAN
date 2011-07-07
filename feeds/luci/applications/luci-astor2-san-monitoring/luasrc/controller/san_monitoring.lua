@@ -134,7 +134,8 @@ function render()
 	if matrix_needed then
 		data.matrix = matrix.caller_minimalistic( {
 			matrix.filter_borders_highlight,
-			matrix.filter_alternation_border_colors
+			matrix.filter_alternation_border_colors,
+			matrix.filter_physical_enclosures
 		} )
 	end
 
