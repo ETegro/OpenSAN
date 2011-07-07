@@ -303,7 +303,7 @@ end
 -- @return true/false
 function M.Physical:is_hotspare()
 	assert( self.id, "unable to get self object" )
-	local output = M.Physical:get( self.id, "hotspare" )
+	local output = self:get( "hotspare" )
 	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
 	return output[1] == "1"
 end
