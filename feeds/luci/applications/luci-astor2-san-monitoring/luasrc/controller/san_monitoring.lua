@@ -21,7 +21,9 @@
 module( "luci.controller.san_monitoring", package.seeall )
 
 common = require( "astor2.common" )
-require "luci.controller.san_monitoring_configuration"
+require( "luci.controller.san_monitoring_configuration" )
+matrix = require( "luci.controller.matrix" )
+einarc = require( "astor2.einarc" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -125,9 +127,11 @@ end
 function render()
 	local what = luci.http.formvalue( "what" )
 	local network = luci.http.formvalue( "network" )
+	local matrix_needed = luci.http.formvalue( "matrix" )
 
 	local data = bwc_data_get( what )
 	if network then data = network_data_get( data ) end
+	if matrix_needed then data.matrix = matrix.caller_minimalistic() end
 
 	return render_svg( what, data )
 end
