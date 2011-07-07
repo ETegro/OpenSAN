@@ -93,8 +93,6 @@ function M.Logical:new( attrs )
 	        "non-number ID" )
 	assert( common.is_string( attrs.level ),
 	        "empty level" )
-	assert( common.is_array( attrs.drives ),
-	        "no drives" )
 	assert( common.is_positive( attrs.capacity ),
 	        "non-positive capacity" )
 	assert( common.is_string( attrs.device ),
@@ -117,11 +115,11 @@ function M.Logical.list()
 		assert( id, "unable to retreive an ID" )
 		logicals[ id ] = M.Logical:new( {
 			id = id,
-			level = string.match( line, "^%d+\t(.+)\t[%d:,]+\t.*\t.*\t.*$" ) or "",
-			drives = common.split_by( string.match( line, "^%d+\t.+\t([%d:,]+)\t.*\t.*\t.*$" ), "," ) or {},
-			capacity = tonumber( string.match( line, "^%d+\t.+\t[%d:,]+\t([%d\.]+)\t.*\t.*$" ) ) or 0,
-			device = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t(.*)\t.*$" ) or "",
-			state = string.match( line, "^%d+\t.+\t[%d:,]+\t.*\t.*\t(.*)$" ) or ""
+			level = string.match( line, "^%d+\t(.+)\t[%d:,]*\t.*\t.*\t.*$" ) or "",
+			drives = common.split_by( string.match( line, "^%d+\t.+\t([%d:,]*)\t.*\t.*\t.*$" ), "," ) or {},
+			capacity = tonumber( string.match( line, "^%d+\t.+\t[%d:,]*\t([%d\.]+)\t.*\t.*$" ) ) or 0,
+			device = string.match( line, "^%d+\t.+\t[%d:,]*\t.*\t(.*)\t.*$" ) or "",
+			state = string.match( line, "^%d+\t.+\t[%d:,]*\t.*\t.*\t(.*)$" ) or ""
 		} )
 	end
 	return logicals
