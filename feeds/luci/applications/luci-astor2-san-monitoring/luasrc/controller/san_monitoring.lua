@@ -127,16 +127,42 @@ end
 function render()
 	local what = luci.http.formvalue( "what" )
 	local network = luci.http.formvalue( "network" )
-	local matrix_needed = luci.http.formvalue( "matrix" )
+	local enclosures = luci.http.formvalue( "enclosures" )
 
 	local data = bwc_data_get( what )
 	if network then data = network_data_get( data ) end
-	if matrix_needed then
-		data.matrix = matrix.caller_minimalistic( {
+	if enclosures then
+		matrix_data = matrix.caller_minimalistic( {
 			matrix.filter_borders_highlight,
 			matrix.filter_alternation_border_colors,
 			matrix.filter_physical_enclosures
 		} )
+		-- Postprocess enclosures
+		enclosures = {}
+		for _, line in ipairs( matrix_data.lines ) do
+			if line.physical and line.physical.enclosure_id then
+				local physical = line.physical
+				local enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ physical.enclosure_id ]
+				enclosures[ enclosure_id ] = { physical_id = physical.id }
+				local color_prefix = "light"
+				if physical.state == "hotspare" then
+					color_prefix = "dark"
+				end
+				enclosures[ enclosure_id ].color = color_prefix .. (physical.highlight.color or "gray")
+			end
+		end
+		for _, line in ipairs( matrix_data.lines ) do
+			if line.logical then
+				for physical_id,_ in pairs( line.logical.physicals ) do
+					for enclosure_id, enclosure in pairs( enclosures ) do
+						if enclosure.physical_id == physical_id then
+							enclosure.logical_id = line.logical.id
+						end
+					end
+				end
+			end
+		end
+		data.enclosures = enclosures
 	end
 
 	return render_svg( what, data )
