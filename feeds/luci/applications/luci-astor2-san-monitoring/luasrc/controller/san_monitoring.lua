@@ -104,7 +104,7 @@ end
 local function network_data_get( data )
 	for eth_id, template_id in pairs( luci.controller.san_monitoring_configuration.network ) do
 		data[ template_id ] = {}
-		for _, line in ipairs( common.system_succeed( "ethtool " .. eth_id ) ) do
+		for _, line in ipairs( common.system( "ethtool " .. eth_id ).stdout ) do
 			local link_detected = string.match( line, "^%s*Link detected: (%w+)$" )
 			if link_detected then
 				data[ template_id ][ "link" ] = ({
