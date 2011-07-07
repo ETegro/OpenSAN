@@ -192,10 +192,21 @@ function action_shutdown()
 	local shutdown = luci.http.formvalue( "shutdown" )
 	luci.template.render( "admin_system/shutdown", { shutdown = shutdown } )
 	if shutdown then
-		local sysfs_fd = io.open( "/proc/sys/kernel/sysrq", "w" )
+		-- Shutdown SCST subsystem
+		luci.sys.exec( "/etc/init.d/scst stop" )
+
+		-- Dump all buffers
+		luci.sys.exec( "sync" )
+		local sysfs_fd = io.open( "/proc/sys/vm/drop_caches", "w" )
+		sysfs_fd:write( "3" )
+		sysfs_fd:close()
+
+		-- Allow SysRq
+		sysfs_fd = io.open( "/proc/sys/kernel/sysrq", "w" )
 		sysfs_fd:write( "1" )
 		sysfs_fd:close()
 
+		-- Halt the system
 		sysfs_fd = io.open( "/proc/sysrq-trigger", "w" )
 		sysfs_fd:write( "o" )
 		sysfs_fd:close()
