@@ -41,6 +41,7 @@ function index()
 	entry({"admin", "system", "backup"}, call("action_backup"), i18n("Backup / Restore"), 70)
 	entry({"admin", "system", "upgrade"}, call("action_upgrade"), i18n("Flash Firmware"), 80)
 	entry({"admin", "system", "reboot"}, call("action_reboot"), i18n("Reboot"), 90)
+	entry({"admin", "system", "shutdown"}, call("action_shutdown"), i18n("Shutdown"), 100)
 end
 
 function action_packages()
@@ -184,6 +185,20 @@ function action_reboot()
 	luci.template.render("admin_system/reboot", {reboot=reboot})
 	if reboot then
 		luci.sys.reboot()
+	end
+end
+
+function action_shutdown()
+	local shutdown = luci.http.formvalue( "shutdown" )
+	luci.template.render( "admin_system/shutdown", { shutdown = shutdown } )
+	if shutdown then
+		local sysfs_fd = io.open( "/proc/sys/kernel/sysrq", "w" )
+		sysfs_fd:write( "1" )
+		sysfs_fd:close()
+
+		sysfs_fd = io.open( "/proc/sysrq-trigger", "w" )
+		sysfs_fd:write( "o" )
+		sysfs_fd:close()
 	end
 end
 
