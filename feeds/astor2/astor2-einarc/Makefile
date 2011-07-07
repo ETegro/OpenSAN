@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=astor2-einarc
-PKG_REV:=1906
+PKG_REV:=1907
 PKG_VERSION:=svn$(PKG_REV)
 PKG_RELEASE:=1
 
