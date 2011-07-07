@@ -6,7 +6,7 @@
 local c = require("luci.model.uci").cursor():changes()
 if c and next(c) then
 -%>
-	<p class="warning"><%:Warning: There are unsaved changes that will be lost after shutdown!%></p> 
+	<p class="warning"><%:Warning: There are unsaved changes that will be lost after shutdown!%></p>
 <%-
 end
 if not shutdown then
