@@ -290,7 +290,7 @@ end
 -- @param property "hotspare"
 -- @return { "0" }
 function M.Physical:get( property )
-	assert( self.id and M.Physical.is_id( id ),
+	assert( self.id and M.Physical.is_id( self.id ),
 	        "unable to get self object" )
 	assert( property and common.is_string( property ),
 	        "empty property" )
