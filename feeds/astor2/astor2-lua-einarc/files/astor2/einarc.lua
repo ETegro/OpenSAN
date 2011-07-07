@@ -302,7 +302,7 @@ end
 --- Is physical disk a hotspare
 -- @return true/false
 function M.Physical:is_hotspare()
-        assert( self.id, "unable to get self object" )
+	assert( self.id, "unable to get self object" )
 	local output = M.Physical:get( self.id, "hotspare" )
 	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
 	return output[1] == "1"
