@@ -641,6 +641,24 @@ function M.caller()
 	return matrix
 end
 
+function M.filter_physical_enclosures( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.physical then
+			local physical = einarc.Physical:new( {
+				id = line.physical.id,
+				model = line.physical.model,
+				revision = line.physical.revision,
+				serial = line.physical.serial or "",
+				size = 1, -- dummy for failed disks
+				state = line.physical.state
+			} )
+			line.physical.enclosure_id = physical:enclosure()
+		end
+	end
+	return matrix
+end
+
 function M.caller_minimalistic( filters )
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
