@@ -131,7 +131,12 @@ function render()
 
 	local data = bwc_data_get( what )
 	if network then data = network_data_get( data ) end
-	if matrix_needed then data.matrix = matrix.caller_minimalistic() end
+	if matrix_needed then
+		data.matrix = matrix.caller_minimalistic( {
+			matrix.filter_borders_highlight,
+			matrix.filter_alternation_border_colors
+		} )
+	end
 
 	return render_svg( what, data )
 end

@@ -641,7 +641,7 @@ function M.caller()
 	return matrix
 end
 
-function M.caller_minimalistic()
+function M.caller_minimalistic( filters )
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 
@@ -657,11 +657,7 @@ function M.caller_minimalistic()
 			logicals = logicals } ),
 		physicals = physicals
 	}
-	local FILTERS = {
-		M.filter_borders_highlight,
-		M.filter_alternation_border_colors
-	}
-	for _,filter in ipairs( FILTERS ) do
+	for _,filter in ipairs( filters ) do
 		matrix = filter( matrix )
 	end
 	return matrix
