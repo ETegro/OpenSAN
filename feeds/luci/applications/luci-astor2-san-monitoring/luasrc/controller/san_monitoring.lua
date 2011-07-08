@@ -144,11 +144,15 @@ function render()
 				local physical = line.physical
 				local enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ physical.enclosure_id ]
 				enclosures[ enclosure_id ] = { physical_id = physical.id }
-				local color_prefix = "light"
-				if physical.state == "hotspare" then
-					color_prefix = "dark"
+
+				local color = "gray"
+				if physical.highlight.color then
+					color = physical.highlight.color
+					if physical.state == "hotspare" then
+						color = "dark" .. color
+					end
 				end
-				enclosures[ enclosure_id ].color = color_prefix .. (physical.highlight.color or "gray")
+				enclosures[ enclosure_id ].color = color
 			end
 		end
 		for _, line in ipairs( matrix_data.lines ) do
@@ -163,7 +167,7 @@ function render()
 			end
 		end
 		for template_id, enclosure in pairs( enclosures ) do
-			data.template_id = enclosure
+			data[ template_id ] = enclosure
 		end
 	end
 
