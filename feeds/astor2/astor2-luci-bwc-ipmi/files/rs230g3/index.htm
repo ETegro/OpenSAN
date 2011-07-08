@@ -41,9 +41,13 @@ local function embed_style( svg_template )
 	return "width: " .. width .. "px; height: " .. height .. "px;"
 end
 
-for _, svg_template in pairs( EMBED_SIZE ) do
-	local scaling = svg_scaling( svg_template )
-	svg_template.style = embed_style( scaling )
+for svg_template_name, svg_template in pairs( EMBED_SIZE ) do
+	if svg_template_name ~= "legend" then
+		local scaling = svg_scaling( svg_template )
+		svg_template.style = embed_style( scaling )
+	else
+		svg_template.style = embed_style( svg_template )
+	end
 end
 %>
 
