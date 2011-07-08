@@ -162,7 +162,9 @@ function render()
 				end
 			end
 		end
-		data.enclosures = enclosures
+		for template_id, enclosure in pairs( enclosures ) do
+			data.template_id = enclosure
+		end
 	end
 
 	return render_svg( what, data )
