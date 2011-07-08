@@ -163,7 +163,7 @@ function render()
 			end
 		end
 		for template_id, enclosure in pairs( enclosures ) do
-			data.template_id = enclosure
+			data[ template_id ] = enclosure
 		end
 	end
 
