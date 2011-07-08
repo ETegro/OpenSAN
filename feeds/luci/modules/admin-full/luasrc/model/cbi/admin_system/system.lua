@@ -47,8 +47,9 @@ s:tab("language", translate("Language"))
 local system, model, memtotal, memcached, membuffers, memfree = luci.sys.sysinfo()
 local uptime = luci.sys.uptime()
 
-s:taboption("general", DummyValue, "_system", translate("System")).value = system
-s:taboption("general", DummyValue, "_cpu", translate("Processor")).value = model
+-- TODO: model and system are swapped, because of their real values
+s:taboption("general", DummyValue, "_system", translate("System")).value = model
+s:taboption("general", DummyValue, "_cpu", translate("Processor")).value = system
 
 s:taboption("general", DummyValue, "_kernel", translate("Kernel")).value =
  luci.util.exec("uname -r") or "?"
