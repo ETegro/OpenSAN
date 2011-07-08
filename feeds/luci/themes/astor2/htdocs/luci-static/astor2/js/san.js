@@ -117,6 +117,7 @@ function toggle_create_raid_form() {
 					     'linear' : 1,
 					     '0' : 2,
 					     '1' : 2,
+					     '4' : 3,
 					     '5' : 3,
 					     '6' : 4,
 					     '10' : 4 }
