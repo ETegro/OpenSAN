@@ -51,14 +51,14 @@ end
 		<tr>
 			<td>
 				<embed style="<%= embed_size.front.style %> padding: 20px;"
-				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&enclosures=1" />
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&bwc=1&enclosures=1" />
 				<br />
 				<embed style="<%= embed_size.rear.style %> padding: 20px;"
-				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&network=1" />
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&bwc=1&network=1" />
 			</td>
 			<td>
 				<embed style="<%= embed_size.motherboard.style %> padding: 20px;"
-				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard" />
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard&bwc=1" />
 			</td>
 		</tr>
 	</tbody>
