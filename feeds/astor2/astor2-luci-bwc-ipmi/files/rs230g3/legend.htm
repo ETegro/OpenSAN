@@ -17,13 +17,133 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<table width="100%">
-	<tbody>
-		<tr>
-			<td>
-				<embed style="<%= EMBED_SIZE.legend.style %> padding: 20px;"
-				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=legend" />
-			</td>
-		</tr>
-	</tbody>
-</table>
+<%+san_monitoring/attributes%>
+
+<%
+local enclosure_colors = {
+	in_array = { "blue", "green" },
+	hotspare = { "darkblue", "darkgreen" },
+	free = { "gray" },
+	none = { "white" }
+}
+
+local network_colors = {
+	[10] = "red",
+	[100] = "orange",
+	[1000] = "green"
+}
+
+local common_statuses = {
+	critical = "red",
+	non_critical = "orange",
+	normal = "green"
+}
+
+local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
+%>
+
+<fieldset class="monitoring_legend">
+        <legend><%: States %></legend>
+        <table class="legend" width="100%">
+		<tbody>
+			<tr>
+				<th colspan="2" scope="col" width="50%"><%: Enclosures %></th>
+		<!--		<th scope="col" width="25%"></th>-->
+				<th scope="col" width="25%"><%: Network interfaces %></th>
+				<th scope="col" width="25%"><%: Common statuses %></th>
+			</tr>
+				<td>
+					<embed style="<%= EMBED_SIZE.legend.style %> padding: 20px;"
+					       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=legend" />
+				</td>
+				<td>
+					<table>
+						<tr>
+							<td width="20%">
+								<% for _,color in ipairs( enclosure_colors.in_array ) do %>
+									<div style="<%= div_legend_style %>;
+										    background-color: <%= data.COLORS[ color ] %>">
+									</div>
+								<% end %>
+							</td>
+							<td width="80%" style="padding:10px;">
+								&#8211; <%: in array %>
+							</td>
+						</tr>
+						<tr>
+							<td width="20%">
+								<% for _,color in pairs( enclosure_colors.hotspare ) do %>
+									<div style="<%= div_legend_style %>;
+										    background-color: <%= data.COLORS[ color ] %>">
+									</div>
+								<% end %>
+							</td>
+							<td width="80%" style="padding:10px;">
+								&#8211; <%: dedicated hotspare %>
+							</td>
+						</tr>
+						<tr>
+							<td width="20%">
+								<% for _,color in pairs( enclosure_colors.free ) do %>
+									<div style="<%= div_legend_style %>;
+										    background-color: <%= data.COLORS[ color ] %>">
+									</div>
+								<% end %>
+							</td>
+							<td width="80%" style="padding:10px;">
+								&#8211; <%: not in array %>
+							</td>
+						</tr>
+						<tr>
+							<td width="20%">
+								<% for _,color in pairs( enclosure_colors.none ) do %>
+									<div style="<%= div_legend_style %>;
+										    background-color: <%= data.COLORS[ color ] %>">
+									</div>
+								<% end %>
+							</td>
+							<td width="80%" style="padding:10px;">
+								&#8211; <%: none %>
+							</td>
+						</tr>
+					</table>
+				</td>
+
+
+
+				<td>
+					<table>
+						<% for speed,color in pairs( network_colors ) do %>
+						<tr>
+							<td width="20%">
+								<div style="<%= div_legend_style %>;
+									    background-color: <%= data.COLORS[ color ] %>">
+								</div>
+							</td>
+							<td width="80%" style="padding:10px;">
+								&#8211; <%= speed .. "Mbps" %>
+							</td>
+						</tr>
+						<% end %>
+					</table>
+				</td>
+				<td>
+					<table>
+						<% for status,color in pairs( common_statuses ) do %>
+						<tr>
+							<td width="20%">
+								<div style="<%= div_legend_style %>;
+									    background-color: <%= data.COLORS[ color ] %>">
+								</div>
+							</td>
+							<td width="80%" style="padding:10px;">
+								&#8211; <%= status %>
+							</td>
+						</tr>
+						<% end %>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</fieldset>
