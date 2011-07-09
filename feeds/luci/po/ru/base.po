@@ -1933,6 +1933,12 @@ msgstr "Настройки"
 msgid "Setup wait time"
 msgstr "Время ожидания настройки"
 
+msgid "Shutdown"
+msgstr "Выключить"
+
+msgid "Shutdown your device"
+msgstr "Выключить ваше устройство"
+
 msgid "Shutdown this interface"
 msgstr "Отключить данный интерфейс"
 
