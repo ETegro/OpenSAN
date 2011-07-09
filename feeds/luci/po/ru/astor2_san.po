@@ -166,9 +166,6 @@ msgstr ""
 msgid "Model"
 msgstr "Модель"
 
-msgid "Monitoring"
-msgstr "Мониторинг"
-
 msgid "Name"
 msgstr "Название"
 
@@ -194,6 +191,9 @@ msgstr "RAID уровень 1 требует чётное количество �
 msgid "RAID 10 level requires odd number of four or more drives"
 msgstr ""
 "RAID уровень 10 требует чётное количество четырёх или более жёстких дисков"
+
+msgid "RAID 4 level requires three or more drives"
+msgstr "RAID уровень 4 требует три или более жёстких дисков"
 
 msgid "RAID 5 level requires three or more drives"
 msgstr "RAID уровень 5 требует три или более жёстких дисков"
