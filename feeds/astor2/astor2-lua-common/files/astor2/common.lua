@@ -21,6 +21,13 @@
 local M = {}
 
 local SHELL_PATH = "/bin/sh"
+local LOG_PATH = "/tmp/common.system.log"
+
+local function log_append( str )
+	local log_fd = io.open( LOG_PATH, "a" )
+	log_fd:write( tostring( os.date() ) .. ": " .. str .. "\n" )
+	log_fd:close()
+end
 
 --- Call external command
 -- Lua's built-in methods are capable either only about getting
@@ -42,6 +49,7 @@ function M.system( cmdline )
 	script_fd:write( cmdline .. "\n" )
 	script_fd:close()
 
+	log_append( cmdline )
 	local result = {}
 
 	-- Execute command and retreive return code

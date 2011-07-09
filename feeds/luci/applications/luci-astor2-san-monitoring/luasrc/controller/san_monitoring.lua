@@ -21,7 +21,9 @@
 module( "luci.controller.san_monitoring", package.seeall )
 
 common = require( "astor2.common" )
-require "luci.controller.san_monitoring_configuration"
+require( "luci.controller.san_monitoring_configuration" )
+matrix = require( "luci.controller.matrix" )
+einarc = require( "astor2.einarc" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -32,8 +34,8 @@ function index()
 	                 i18n("Monitoring"),
 	                 11 )
 	e.i18n = "astor2_san"
-	local e = entry( { "admin", "san", "monitoring", "render" },
-	                 call( "render" ), nil, 11 )
+	e = entry( { "admin", "san", "monitoring", "render" },
+	             call( "render" ), nil, 11 )
 	e.leaf = true
 end
 
@@ -46,7 +48,7 @@ end
 
 function monitoring_overall()
 	local message_error = luci.http.formvalue( "message_error" )
-	luci.template.render( "san_monitoring", { message_error = message_error } )
+	luci.template.render( "san_monitoring", { data = {} } )
 end
 
 local function render_svg( svg_filename, data )
@@ -90,10 +92,7 @@ local function bwc_data_get( what )
 		local result = common.split_by( bwc:read("*l"), " " )
 		bwc:close()
 		if #result == 0 then
-			data[ template_id ] = {
-				value = "N/A",
-				color = "gray"
-			}
+			data[ template_id ] = {}
 		else
 			data[ template_id ] = {
 				value = result[2],
@@ -107,7 +106,7 @@ end
 local function network_data_get( data )
 	for eth_id, template_id in pairs( luci.controller.san_monitoring_configuration.network ) do
 		data[ template_id ] = {}
-		for _, line in ipairs( common.system_succeed( "ethtool " .. eth_id ) ) do
+		for _, line in ipairs( common.system( "ethtool " .. eth_id ).stdout ) do
 			local link_detected = string.match( line, "^%s*Link detected: (%w+)$" )
 			if link_detected then
 				data[ template_id ][ "link" ] = ({
@@ -128,9 +127,51 @@ end
 function render()
 	local what = luci.http.formvalue( "what" )
 	local network = luci.http.formvalue( "network" )
+	local enclosures = luci.http.formvalue( "enclosures" )
+	local bwc = luci.http.formvalue( "bwc" )
 
-	local data = bwc_data_get( what )
+	local data = {}
+	if bwc then data = bwc_data_get( what ) end
 	if network then data = network_data_get( data ) end
+	if enclosures then
+		matrix_data = matrix.caller_minimalistic( {
+			matrix.filter_borders_highlight,
+			matrix.filter_alternation_border_colors,
+			matrix.filter_physical_enclosures
+		} )
+		-- Postprocess enclosures
+		enclosures = {}
+		for _, line in ipairs( matrix_data.lines ) do
+			if line.physical and line.physical.enclosure_id then
+				local physical = line.physical
+				local enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ physical.enclosure_id ]
+				enclosures[ enclosure_id ] = { physical_id = physical.id }
+
+				local color = "gray"
+				if physical.highlight.color then
+					color = physical.highlight.color
+					if physical.state == "hotspare" then
+						color = "dark" .. color
+					end
+				end
+				enclosures[ enclosure_id ].color = color
+			end
+		end
+		for _, line in ipairs( matrix_data.lines ) do
+			if line.logical then
+				for physical_id,_ in pairs( line.logical.physicals ) do
+					for enclosure_id, enclosure in pairs( enclosures ) do
+						if enclosure.physical_id == physical_id then
+							enclosure.logical_id = line.logical.id
+						end
+					end
+				end
+			end
+		end
+		for template_id, enclosure in pairs( enclosures ) do
+			data[ template_id ] = enclosure
+		end
+	end
 
 	return render_svg( what, data )
 end

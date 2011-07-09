@@ -25,3 +25,18 @@ network = {
 	eth1 = "ETH1",
 	eth2 = "ETH2"
 }
+
+enclosures = {
+	[1]  = "ENC1",
+	[2]  = "ENC2",
+	[3]  = "ENC3",
+	[4]  = "ENC4",
+	[5]  = "ENC5",
+	[6]  = "ENC6",
+	[7]  = "ENC7",
+	[8]  = "ENC8",
+	[9]  = "ENC9",
+	[10] = "ENC10",
+	[11] = "ENC11",
+	[12] = "ENC12"
+}

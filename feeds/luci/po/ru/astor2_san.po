@@ -45,6 +45,12 @@ msgstr "Добавить снимок"
 msgid "Bind access pattern"
 msgstr "Прикрепить шаблон доступа"
 
+msgid "Common"
+msgstr "Общее"
+
+msgid "Critical"
+msgstr "Критично"
+
 msgid ""
 "Decreasing logical volumes size may corrupt your data! Are you sure you want "
 "to do this?"
@@ -67,8 +73,14 @@ msgstr "Редактировать"
 msgid "Edit access pattern"
 msgstr "Редактировать шаблон доступа"
 
+msgid "Empty"
+msgstr "Пусто"
+
 msgid "Enabled"
 msgstr "Активен"
+
+msgid "Enclosures"
+msgstr "Лотки"
 
 msgid "Failed to add dedicated hotspare disk"
 msgstr "Невозможно добавить выделенный hotspare диск"
@@ -127,6 +139,9 @@ msgstr ""
 msgid "IQN"
 msgstr ""
 
+msgid "In array"
+msgstr "В массиве"
+
 msgid "Incorrect RAID level"
 msgstr "Неправильный уровень RAID"
 
@@ -172,9 +187,21 @@ msgstr "Мониторинг"
 msgid "Name"
 msgstr "Название"
 
+msgid "Network interfaces"
+msgstr "Сетевые интерфейсы"
+
 msgid "Newly added dedicated hotspare disk is bigger than needed"
 msgstr ""
 "Добавленный выделенный hotspare диск имеет больший размер, чем требуется"
+
+msgid "Non critical"
+msgstr "Не критично"
+
+msgid "Normal"
+msgstr "Нормально"
+
+msgid "Not in array"
+msgstr "Не в массиве"
 
 msgid "Only single model hard drives should be used"
 msgstr "Желательно использовать жёсткие диски только одной модели"
@@ -194,6 +221,9 @@ msgstr "RAID уровень 1 требует чётное количество �
 msgid "RAID 10 level requires odd number of four or more drives"
 msgstr ""
 "RAID уровень 10 требует чётное количество четырёх или более жёстких дисков"
+
+msgid "RAID 4 level requires three or more drives"
+msgstr "RAID уровень 4 требует три или более жёстких дисков"
 
 msgid "RAID 5 level requires three or more drives"
 msgstr "RAID уровень 5 требует три или более жёстких дисков"

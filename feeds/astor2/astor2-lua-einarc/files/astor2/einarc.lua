@@ -33,8 +33,8 @@ M.PHYSICAL_STATES = { "hotspare",
                       "free" }
 M.RAIDLEVELS = { "linear",
                  "passthrough",
-                 "0", "1", "5",
-                 "6", "10" }
+                 "0", "1", "4",
+                 "5", "6", "10" }
 M.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE = { "linear",
                                         "passthrough",
 					"0" }
@@ -290,7 +290,7 @@ end
 -- @param property "hotspare"
 -- @return { "0" }
 function M.Physical:get( property )
-	assert( self.id and M.Physical.is_id( id ),
+	assert( self.id and M.Physical.is_id( self.id ),
 	        "unable to get self object" )
 	assert( property and common.is_string( property ),
 	        "empty property" )
@@ -302,10 +302,19 @@ end
 --- Is physical disk a hotspare
 -- @return true/false
 function M.Physical:is_hotspare()
-        assert( self.id, "unable to get self object" )
-	local output = M.Physical:get( self.id, "hotspare" )
+	assert( self.id, "unable to get self object" )
+	local output = self:get( "hotspare" )
 	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
 	return output[1] == "1"
+end
+
+--- Try to get physical's enclosure
+-- @return enclosure's number
+function M.Physical:enclosure()
+	assert( self.id, "unable to get self object" )
+	local output = self:get( "enclosure" )
+	if not output then return nil end
+	return tonumber( output[1] )
 end
 
 ------------------------------------------------------------------------

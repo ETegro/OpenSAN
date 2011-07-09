@@ -1,0 +1,60 @@
+<%#
+  aStor2 - storage area network configurable via Web-interface
+  Copyright (C) 2009-2011 ETegro Technologies, PLC
+                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                          Sergey Matveev (stargrave@stargrave.org)
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
+<%
+common = require "astor2.common"
+
+ENTITY_STATE_COLORMAP = {
+	green = "#58E33A",
+	lightgreen = "#C8FCB1",
+	blue = "#93B8F6",
+	lightblue = "#BCD2FB",
+	gray = "#808080",
+	orange = "#FFA500",
+	red = "#F21",
+	white = "#FFF"
+}
+
+NETWORK_SPEED_COLORMAP = {
+	[0] = ENTITY_STATE_COLORMAP["gray"],
+	[10] = ENTITY_STATE_COLORMAP["red"],
+	[100] = ENTITY_STATE_COLORMAP["orange"],
+	[1000] = ENTITY_STATE_COLORMAP["green"]
+}
+
+DEFAULT_OPACITY = "0.3"
+data[ "COLORS" ] = ENTITY_STATE_COLORMAP
+data[ "DEFAULT_NA_COLOR" ] = ENTITY_STATE_COLORMAP["gray"]
+data[ "SVG_SCALE" ] = "0.6"
+
+for template_id,_ in pairs( data ) do
+	local entity = data[ template_id ]
+	if common.is_table( entity ) then
+		entity.opacity = DEFAULT_OPACITY
+		entity.color = ENTITY_STATE_COLORMAP[ entity.color ]
+		if entity.link == false then
+			entity.speed = 0
+		end
+		if entity.link ~= nil then
+			entity.color = NETWORK_SPEED_COLORMAP[ entity.speed ]
+		end
+	end
+end
+%>
