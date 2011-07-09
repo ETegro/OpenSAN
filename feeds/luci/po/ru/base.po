@@ -527,7 +527,7 @@ msgid "Create backup"
 msgstr "Создать резервную копию"
 
 msgid "Critical"
-msgstr "Критичность"
+msgstr "Критично"
 
 msgid "Cron Log Level"
 msgstr "Уровень информативности Cron"
