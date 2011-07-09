@@ -34,6 +34,12 @@ msgstr ""
 msgid "Bind access pattern"
 msgstr ""
 
+msgid "Common"
+msgstr ""
+
+msgid "Critical"
+msgstr ""
+
 msgid ""
 "Decreasing logical volumes size may corrupt your data! Are you sure you want "
 "to do this?"
@@ -54,7 +60,13 @@ msgstr ""
 msgid "Edit access pattern"
 msgstr ""
 
+msgid "Empty"
+msgstr ""
+
 msgid "Enabled"
+msgstr ""
+
+msgid "Enclosures"
 msgstr ""
 
 msgid "Failed to add dedicated hotspare disk"
@@ -114,6 +126,9 @@ msgstr ""
 msgid "IQN"
 msgstr ""
 
+msgid "In array"
+msgstr ""
+
 msgid "Incorrect RAID level"
 msgstr ""
 
@@ -159,7 +174,19 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+msgid "Network interfaces"
+msgstr ""
+
 msgid "Newly added dedicated hotspare disk is bigger than needed"
+msgstr ""
+
+msgid "Non critical"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Not in array"
 msgstr ""
 
 msgid "Only single model hard drives should be used"
@@ -178,6 +205,9 @@ msgid "RAID 1 level requries odd number of two or more drives"
 msgstr ""
 
 msgid "RAID 10 level requires odd number of four or more drives"
+msgstr ""
+
+msgid "RAID 4 level requires three or more drives"
 msgstr ""
 
 msgid "RAID 5 level requires three or more drives"
