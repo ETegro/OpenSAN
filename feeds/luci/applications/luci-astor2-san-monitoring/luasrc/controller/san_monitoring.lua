@@ -128,8 +128,10 @@ function render()
 	local what = luci.http.formvalue( "what" )
 	local network = luci.http.formvalue( "network" )
 	local enclosures = luci.http.formvalue( "enclosures" )
+	local bwc = luci.http.formvalue( "bwc" )
 
-	local data = bwc_data_get( what )
+	local data = {}
+	if bwc then data = bwc_data_get( what ) end
 	if network then data = network_data_get( data ) end
 	if enclosures then
 		matrix_data = matrix.caller_minimalistic( {
