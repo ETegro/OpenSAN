@@ -33,7 +33,7 @@ local network_colors = {
 	[1000] = "green"
 }
 
-local common_statuses = {
+local common = {
 	critical = "red",
 	non_critical = "orange",
 	normal = "green"
@@ -125,7 +125,7 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 				</td>
 				<td>
 					<table>
-						<% for status,color in pairs( common_statuses ) do %>
+						<% for status,color in pairs( common ) do %>
 						<tr>
 							<td width="20%">
 								<div style="<%= div_legend_style %>;
