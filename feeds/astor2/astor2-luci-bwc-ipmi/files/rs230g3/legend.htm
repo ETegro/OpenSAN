@@ -28,9 +28,9 @@ local enclosure_colors = {
 }
 
 local network_colors = {
-	[10] = "red",
-	[100] = "orange",
-	[1000] = "green"
+	{ speed = 10, color = "red" },
+	{ speed = 100, color = "orange" },
+	{ speed = 1000, color = "green" }
 }
 
 require( "luci.i18n" ).loadc( "astor2_san")
@@ -112,15 +112,15 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 				</td>
 				<td>
 					<table>
-						<% for speed,color in pairs( network_colors ) do %>
+						<% for _,pair in pairs( network_colors ) do %>
 						<tr>
 							<td width="20%">
 								<div style="<%= div_legend_style %>;
-								            background-color: <%= data.COLORS[ color ] %>">
+								            background-color: <%= data.COLORS[ pair.color ] %>">
 								</div>
 							</td>
 							<td width="80%" style="padding:10px;">
-								&#8211; <%= speed .. "Mbps" %>
+								&#8211; <%= pair.speed %> Mbps
 							</td>
 						</tr>
 						<% end %>
