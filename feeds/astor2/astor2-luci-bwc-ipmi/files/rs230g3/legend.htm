@@ -60,6 +60,7 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 				</td>
 				<td>
 					<table>
+						<tbody>
 						<tr>
 							<td width="20%">
 								<% for _,color in ipairs( enclosure_colors.in_array ) do %>
@@ -108,10 +109,12 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 								&#8211; <%: Empty %>
 							</td>
 						</tr>
+						</tbody>
 					</table>
 				</td>
 				<td>
 					<table>
+						<tbody>
 						<% for _,pair in pairs( network_colors ) do %>
 						<tr>
 							<td width="20%">
@@ -124,6 +127,7 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 							</td>
 						</tr>
 						<% end %>
+						</tbody>
 					</table>
 				</td>
 				<td>
