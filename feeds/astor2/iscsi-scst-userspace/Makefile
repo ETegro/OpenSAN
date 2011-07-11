@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=iscsi-scst-userspace
-PKG_REV:=3263
+PKG_REV:=3672
 PKG_VERSION:=svn$(PKG_REV)
 PKG_RELEASE:=1
 
