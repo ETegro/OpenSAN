@@ -185,6 +185,10 @@ function M.AccessPattern:is_binded()
 	end
 end
 
+local function strip_unallowed_characters( iqn )
+	return string.gsub( iqn, "[^-a-zA-Z0-9:.]", "." )
+end
+
 function M.AccessPattern:iqn()
 	assert( self, "unable to get self object" )
 	-- Retreive our hostname
@@ -213,10 +217,12 @@ function M.AccessPattern:iqn()
 	       table.concat( hostname_parts_reversed, "." ) ..
 	       ":" .. logical_volume_name
 	]]
-	return "iqn.2011-03.org.opensan:" ..
-	       hostname .. ":" ..
-	       volume_group_name .. "_" ..
-	       logical_volume_name
+	return strip_unallowed_characters(
+		"iqn.2011-03.org.opensan:" ..
+		hostname .. ":" ..
+		volume_group_name .. "." ..
+		logical_volume_name
+	)
 end
 
 ------------------------------------------------------------------------
