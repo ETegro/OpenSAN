@@ -185,6 +185,10 @@ function M.AccessPattern:is_binded()
 	end
 end
 
+local function strip_unallowed_characters( iqn )
+	return string.gsub( iqn, "[^-a-zA-Z0-9:.]", "." )
+end
+
 function M.AccessPattern:iqn()
 	assert( self, "unable to get self object" )
 	-- Retreive our hostname
@@ -213,10 +217,12 @@ function M.AccessPattern:iqn()
 	       table.concat( hostname_parts_reversed, "." ) ..
 	       ":" .. logical_volume_name
 	]]
-	return "iqn.2011-03.org.opensan:" ..
-	       hostname .. ":" ..
-	       volume_group_name .. "_" ..
-	       logical_volume_name
+	return strip_unallowed_characters(
+		"iqn.2011-03.org.opensan:" ..
+		hostname .. ":" ..
+		volume_group_name .. "." ..
+		logical_volume_name
+	)
 end
 
 ------------------------------------------------------------------------
@@ -256,35 +262,46 @@ function M.Configuration.dump()
 	end
 	configuration = configuration .. "}\n"
 
-	-- Create TARGET_DRIVERs
-	local access_patterns_target_drivers = common.unique_keys( "targetdriver", access_patterns_enabled )
-	for target_driver, access_patterns_indexes in pairs( access_patterns_target_drivers ) do
+	-- Cycle through transports
+	for target_driver,_ in pairs( common.unique_keys( "targetdriver", access_patterns_enabled ) ) do
 		if target_driver == "iscsi" then
 			configuration = configuration .. "TARGET_DRIVER iscsi {\n"
-			for _, access_patterns_index in ipairs( access_patterns_indexes ) do
-				access_pattern = access_patterns_enabled[ access_patterns_index ]
-				configuration = configuration .. "\tTARGET " ..
-				                access_pattern:iqn() .. " {\n"
-				local read_only = nil
-				if access_pattern.readonly then
-					read_only = "1"
-				else
-					read_only = "0"
+			-- Preprocess separate targets with corresponding LUNs
+			local targets = {}
+			for _, access_pattern in ipairs( access_patterns_enabled ) do
+				if access_pattern.targetdriver == target_driver then
+					local target = access_pattern:iqn()
+					if not targets[ target ] then
+						targets[ target ] = {}
+					end
+					targets[ target ][ tostring( access_pattern.lun ) ] = access_pattern
 				end
-				configuration = configuration ..
-				                "\t\tLUN " ..
-				                tostring( access_pattern.lun ) ..
-						" blockio" ..
-						tostring( blockios[ access_pattern.filename ] ) ..
-						" {\n" ..
-						"\t\t\tread_only " .. read_only .. "\n" ..
-						"\t\t}\n"
+			end
+			for target, luns in pairs( targets ) do
+				configuration = configuration .. "\tTARGET " ..
+					target .. " {\n" ..
+					"\t\tHeaderDigest CRC32C,None\n" ..
+					"\t\tDataDigest CRC32C,None\n"
+				for lun, access_pattern in pairs( luns ) do
+					local read_only = nil
+					if access_pattern.readonly then
+						read_only = "1"
+					else
+						read_only = "0"
+					end
+					configuration = configuration ..
+									"\t\tLUN " .. lun ..
+					                " blockio" ..
+					                tostring( blockios[ access_pattern.filename ] ) ..
+					                " {\n" ..
+					                "\t\t\tread_only " .. read_only .. "\n" ..
+					                "\t\t}\n"
+				end
 				configuration = configuration .. "\t\tenabled 1\n\t}\n"
 			end
 			configuration = configuration .. "\tenabled 1\n}\n"
 		end
 	end
-
 	return configuration, devices
 end
 

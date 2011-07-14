@@ -35,7 +35,7 @@ $(eval $(call KernelPackage,scst))
 define KernelPackage/iscsi-scst
 	SUBMENU:=$(SCST_MENU)
 	TITLE:=SCST iSCSI target
-	DEPENDS:=+kmod-scst
+	DEPENDS:=+kmod-scst +kmod-libcrc32c
 	KCONFIG:=CONFIG_TCP_ZERO_COPY_TRANSFER_COMPLETION_NOTIFICATION=y
 	FILES:=$(PKG_BUILD_DIR)/iscsi-scst/kernel/iscsi-scst.$(LINUX_KMOD_SUFFIX)
 	AUTOLOAD=$(call AutoLoad,71,iscsi-scst)
