@@ -13,7 +13,7 @@ gettext.  Соответственно необходимо что-то гене
 
 Сгенерировать POT-файл можно следующим образом::
 
-  ./build/i18n-scan.pl applications/luci-astor2-san > po/templates/astor2_san.pot
+  ./build/i18n-scan.pl applications/luci-astor2-san applications/luci-astor2-san-monitoring ../astor2/astor2-luci-bwc-ipmi/files/rs230g3 > po/templates/astor2_san.pot
 
 Обновить шаблон можно следующим образом::
 
