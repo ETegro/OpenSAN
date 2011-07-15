@@ -303,7 +303,7 @@ local function einarc_logical_delete( inputs, data )
 		end
 	end
 
-	lvm.PhysicalVolume.prepare( logical.device )
+	_,_ = pcall( lvm.PhysicalVolume.prepare, logical.device )
 
 	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
 	if not return_code then
