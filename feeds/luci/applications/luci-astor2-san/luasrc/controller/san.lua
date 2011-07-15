@@ -93,8 +93,8 @@ local function is_valid_raid_configuration( raid_level, drives )
 		          message = i18n("RAID 4 level requires three or more drives") },
 		["5"] = { validator = function( drives ) return #drives >= 3 end,
 		          message = i18n("RAID 5 level requires three or more drives") },
-		["6"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
-		          message = i18n("RAID 6 level requires odd number of four or more drives") },
+		["6"] = { validator = function( drives ) return #drives >= 4 end,
+		          message = i18n("RAID 6 level requires four or more drives") },
 		["10"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
 		           message = i18n("RAID 10 level requires odd number of four or more drives") }
 	}
