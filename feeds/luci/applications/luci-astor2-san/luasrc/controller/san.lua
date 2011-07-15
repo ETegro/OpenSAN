@@ -87,14 +87,14 @@ local function is_valid_raid_configuration( raid_level, drives )
 		                    message = i18n("RAID passthrough level requries exactly single drive") },
 		["0"] = { validator = function( drives ) return #drives >= 2 end,
 		          message = i18n("RAID 0 level requires two or more drives") },
-		["1"] = { validator = function( drives ) return #drives >= 2 and common.is_odd( #drives ) end,
-		          message = i18n("RAID 1 level requries odd number of two or more drives") },
+		["1"] = { validator = function( drives ) return #drives >= 2 end,
+		          message = i18n("RAID 1 level requries two or more drives") },
 		["4"] = { validator = function( drives ) return #drives >= 3 end,
 		          message = i18n("RAID 4 level requires three or more drives") },
 		["5"] = { validator = function( drives ) return #drives >= 3 end,
 		          message = i18n("RAID 5 level requires three or more drives") },
-		["6"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
-		          message = i18n("RAID 6 level requires odd number of four or more drives") },
+		["6"] = { validator = function( drives ) return #drives >= 4 end,
+		          message = i18n("RAID 6 level requires four or more drives") },
 		["10"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
 		           message = i18n("RAID 10 level requires odd number of four or more drives") }
 	}

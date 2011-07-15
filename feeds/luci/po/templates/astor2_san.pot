@@ -201,7 +201,7 @@ msgstr ""
 msgid "RAID 0 level requires two or more drives"
 msgstr ""
 
-msgid "RAID 1 level requries odd number of two or more drives"
+msgid "RAID 1 level requries two or more drives"
 msgstr ""
 
 msgid "RAID 10 level requires odd number of four or more drives"
@@ -213,7 +213,7 @@ msgstr ""
 msgid "RAID 5 level requires three or more drives"
 msgstr ""
 
-msgid "RAID 6 level requires odd number of four or more drives"
+msgid "RAID 6 level requires four or more drives"
 msgstr ""
 
 msgid "RAID level is not selected"
