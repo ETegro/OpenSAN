@@ -152,7 +152,7 @@ end
 -- @return true or false
 function M.is_non_negative( n )
 	assert( M.is_number( n ), "non-number argument" )
-	return not n < 0
+	return not (n < 0)
 end
 
 --- Remove leading and trailing whitespaces from the string
