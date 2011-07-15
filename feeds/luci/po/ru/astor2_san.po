@@ -215,8 +215,8 @@ msgstr ""
 msgid "RAID 0 level requires two or more drives"
 msgstr "RAID уровень 0 требует два или более жёстких диска"
 
-msgid "RAID 1 level requries odd number of two or more drives"
-msgstr "RAID уровень 1 требует чётное количество двух или более жёстких дисков"
+msgid "RAID 1 level requries two or more drives"
+msgstr "RAID уровень 1 требует два или более жёстких дисков"
 
 msgid "RAID 10 level requires odd number of four or more drives"
 msgstr ""
@@ -228,9 +228,8 @@ msgstr "RAID уровень 4 требует три или более жёстк
 msgid "RAID 5 level requires three or more drives"
 msgstr "RAID уровень 5 требует три или более жёстких дисков"
 
-msgid "RAID 6 level requires odd number of four or more drives"
-msgstr ""
-"RAID уровень 6 требует чётное количество четырёх или более жёстких дисков"
+msgid "RAID 6 level requires four or more drives"
+msgstr "RAID уровень 6 требует четыре или более жёстких дисков"
 
 msgid "RAID level is not selected"
 msgstr "Уровень RAID не выбран"
