@@ -25,6 +25,7 @@
 				<td>
 					<input name="<%= escape_html( line.access_pattern.name ) %>"
 					       type="text"
+					       readonly="readonly"
 					       class="noborder"
 					       title="<%= line.access_pattern:iqn() %>"
 					       value="<%= line.access_pattern:iqn() %>" />
