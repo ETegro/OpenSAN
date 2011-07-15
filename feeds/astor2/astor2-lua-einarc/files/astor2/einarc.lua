@@ -93,7 +93,7 @@ function M.Logical:new( attrs )
 	        "non-number ID" )
 	assert( common.is_string( attrs.level ),
 	        "empty level" )
-	assert( common.is_positive( attrs.capacity ),
+	assert( common.is_non_negative( attrs.capacity ),
 	        "non-positive capacity" )
 	assert( common.is_string( attrs.device ),
 	        "empty device" )
@@ -139,7 +139,7 @@ function M.Logical.add( raid_level, drives, size, properties )
 		cmd = cmd .. " " .. table.concat( drives, "," )
 	end
 	if size then
-		assert( common.is_positive( size ), "size has to be a positive number" )
+		assert( common.is_non_negative( size ), "size has to be a positive number" )
 		cmd = cmd .. " " .. tostring( size )
 	end
 	if properties then
@@ -250,7 +250,7 @@ function M.Physical:new( attrs )
 	        "empty revision" )
 	assert( common.is_string( attrs.serial ),
 	        "empty serial" )
-	assert( common.is_positive( attrs.size ),
+	assert( common.is_non_negative( attrs.size ),
 	        "non-positive size" )
 	assert( common.is_string( attrs.state ),
 	        "incorrect state" )

@@ -147,6 +147,14 @@ function M.is_positive( n )
 	return n > 0
 end
 
+--- Check if number is non-negative
+-- @param n Number to check
+-- @return true or false
+function M.is_non_negative( n )
+	assert( M.is_number( n ), "non-number argument" )
+	return not n < 0
+end
+
 --- Remove leading and trailing whitespaces from the string
 -- @param str String where whitespaces should be removed
 -- @return String without leading and trailing whitespaces

@@ -48,7 +48,7 @@ function M.PhysicalVolume:new( attrs )
 	        "non-number allocated" )
 	assert( common.is_number( attrs.volumes ),
 	        "non-number volumes" )
-	assert( common.is_positive( attrs.capacity ),
+	assert( common.is_non_negative( attrs.capacity ),
 	        "non-positive capacity" )
 	assert( common.is_number( attrs.unusable ),
 	        "non-number unusable" )
@@ -251,7 +251,7 @@ function M.VolumeGroup:logical_volume( name, size )
 	        "unable to get self object" )
 	assert( name and common.is_string( name ),
 	        "no name specified" )
-	assert( size and common.is_positive( size ),
+	assert( size and common.is_non_negative( size ),
 	        "non-positive size specified" )
 	local output = common.system( "lvm lvcreate -n " ..
 	                              name ..
@@ -306,7 +306,7 @@ function M.LogicalVolume:new( attrs )
 	        "empty device" )
 	assert( common.is_table( attrs.volume_group ),
 	        "no volume group assigned to" )
-	assert( common.is_positive( attrs.size ) )
+	assert( common.is_non_negative( attrs.size ) )
 	if not M.LogicalVolume.name_is_valid( attrs.name ) then
 		error("lvm:LogicalVolume:new() incorrect name supplied")
 	end
@@ -344,7 +344,7 @@ function M.LogicalVolume:snapshot( size )
 	        "unable to get self object" )
 	assert( common.is_string( self.device ),
 	        "empty self object's device" )
-	assert( common.is_positive( size ),
+	assert( common.is_non_negative( size ),
 	        "non-positive size specified" )
 	local name = self.name .. os.date("_%Y-%m-%d_%H-%M-%S")
 	local output = common.system( "lvm lvcreate -s -n " ..
@@ -437,7 +437,7 @@ end
 function M.LogicalVolume:resize( size )
 	assert( self.name,
 	        "unable to get self object" )
-	assert( common.is_positive( size ),
+	assert( common.is_non_negative( size ),
 	        "non-positive size specified" )
 	if size == self.size then return end
 	if not lvresize( size, self ) then
@@ -458,7 +458,7 @@ function M.Snapshot:new( attrs )
 	        "empty device" )
 	assert( common.is_table( attrs.volume_group ),
 	        "no volume group assigned to" )
-	assert( common.is_positive( attrs.size ),
+	assert( common.is_non_negative( attrs.size ),
 	        "non-positive size" )
 	assert( common.is_number( attrs.allocated ),
 	        "non-number allocated" )
@@ -479,7 +479,7 @@ M.Snapshot.remove = M.LogicalVolume.remove
 function M.Snapshot:resize( size )
 	assert( self.name,
 	        "unable to get self object" )
-	assert( common.is_positive( size ),
+	assert( common.is_non_negative( size ),
 	        "non-positive size specified" )
 	if size <= self.size then return end
 	if not lvresize( size, self ) then
