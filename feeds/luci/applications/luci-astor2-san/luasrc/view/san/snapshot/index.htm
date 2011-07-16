@@ -2,6 +2,7 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                          Sergey Matveev (stargrave@stargrave.org)
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -42,6 +43,10 @@
 					<%+san/snapshot/remove%>
 				<% end %>
 			</div>
+			<!-- TODO: use CSS/DOM to remove that ugly br-s -->
+			<br/>
+			<br/>
+			<%+san/snapshot/fillbar%>
 		</td>
 	</tr>
 	<tr class="to_hide">
