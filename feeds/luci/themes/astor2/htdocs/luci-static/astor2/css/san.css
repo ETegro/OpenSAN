@@ -211,9 +211,10 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 }
 
 #hypnorobo {
-	bottom: 0;
 	position: absolute;
+	bottom: 0;
 	right: 0;
+	background-color: #006B3F;
 }
 
 .fillbar .fillbar_text {
