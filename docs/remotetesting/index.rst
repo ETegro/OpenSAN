@@ -15,4 +15,5 @@
 
    directories
    test-format
+   lua-format
    api
