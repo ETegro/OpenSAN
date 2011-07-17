@@ -47,7 +47,7 @@ mkdir -p $TARGET_DIR
 pushd $SOURCE_DIR
 
 for build in *; do
-	[ -d $TARGET_DIR/$build ] && continue || true
+	[ -d $TARGET_DIR/nightly/$build -o -d $TARGET_DIR/tags/$build ] && continue || true
 	cp -av $build $TARGET_DIR/
 	pushd $TARGET_DIR/$build
 	rm -fr packages/ md5sums *vmlinuz *rootfs*
@@ -63,5 +63,19 @@ for build in *; do
 	     --output=- checksums.sha256 > checksums.sha256.sign
 	popd
 done
+
+# Do not mix tagged releases and nightly builds
+mkdir -p $TARGET_DIR/nightly
+find $TARGET_DIR \
+	-maxdepth 1 \
+	-type d \
+	-name "[0-9]*-*" \
+	-exec mv "{}" $TARGET_DIR/nightly \;
+
+mkdir -p $TARGET_DIR/tags
+find $TARGET_DIR/nightly \
+	-type d \
+	-name \*-V\*-\* \
+	-exec mv "{}" $TARGET_DIR/tags \; || true
 
 popd
