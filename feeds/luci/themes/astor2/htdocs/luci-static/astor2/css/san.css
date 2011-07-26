@@ -118,7 +118,7 @@ table.matrix {
 }
 
 table.matrix > tbody > tr > td,table.matrix fieldset {
-	padding: .5em;
+	padding: 0.5em;
 }
 
 table.matrix fieldset {
@@ -158,7 +158,7 @@ table.bottom_forms fieldset div.form input[ type = "submit" ] {
 }
 
 table.bottom_forms fieldset {
-	padding: .5em;
+	padding: 0.5em;
 }
 
 /* Legend colors */
@@ -173,7 +173,7 @@ div[ id *= "new_volume_slider-" ],
 div[ id *= "logical_volume_resize_slider-" ],
 div[ id *= "new_snapshot_slider-" ],
 div[ id *= "logical_volume_snapshot_resize_slider-" ] {
-	margin: .5em 0;
+	margin: 0.5em 0;
 }
 
 /* Fillbar */
@@ -220,7 +220,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 }
 
 .fillbar .fillbar_text {
-	padding: .2em;
+	padding: 0.2em;
 }
 
 /* Matri colors */
