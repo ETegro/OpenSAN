@@ -346,22 +346,37 @@ function M.LogicalVolume:snapshot( size )
 	        "empty self object's device" )
 	assert( common.is_non_negative( size ),
 	        "non-positive size specified" )
-	local name = self.name .. os.date("_%Y-%m-%d_%H-%M-%S")
-	local output = common.system( "lvm lvcreate -s -n " ..
-	                              name ..
-	                              " -L " ..
-	                              tostring( size ) ..
-	                              " " ..
-	                              self.device )
-	local succeeded = false
-	for _, line in ipairs( output.stdout ) do
-		if string.match( line, "Logical volume \".+\" created" ) then
-			succeeded = true
+
+	local not_passed = true
+	local name = self.name .. os.date("_%Y-%m-%d_%H-%M-")
+	local current_seconds = tonumber( os.date("%S") )
+	local function snapshot_create( current_seconds )
+		name = name .. string.format( "%02d", current_seconds )
+		local output = common.system(
+			"lvm lvcreate -s -n " ..
+			name ..
+			" -L " ..
+			tostring( size ) ..
+			" " ..
+			self.device
+		)
+		local succeeded = false
+		for _, line in ipairs( output.stderr ) do
+			if string.match( line, "already exists in volume group" ) then
+				return snapshot_create( current_seconds + 1 )
+			end
+		end
+		for _, line in ipairs( output.stdout ) do
+			if string.match( line, "Logical volume \".+\" created" ) then
+				succeeded = true
+			end
+		end
+		if not succeeded then
+			error("lvm:LogicalVolume:snapshot() failed: " ..
+				  table.concat( output.stdout, "\n" ) )
 		end
 	end
-	if not succeeded then
-		error("lvm:LogicalVolume:snapshot() failed: " .. table.concat( output.stdout, "\n" ) )
-	end
+	return snapshot_create( current_seconds )
 end
 
 local function vglv_device( volume_group_name, logical_volume_name )
