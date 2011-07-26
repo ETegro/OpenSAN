@@ -131,6 +131,7 @@ table.matrix fieldset table.form {
 
 table.matrix .title {
 	float: left;
+	margin-bottom: 0.5em;
 	overflow: auto;
 	width: 70%;
 }
@@ -177,7 +178,8 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 
 /* Fillbar */
 .fillbar {
-	margin: .5em 0;
+	clear: both;
+	margin-button: 0.5em;
 	position: relative;
 	width: 100%;
 }
