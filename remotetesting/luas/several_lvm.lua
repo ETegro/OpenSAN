@@ -96,9 +96,9 @@ function TestCreate:test_create_iqns()
 		access_pattern:bind( logical_volume.device )
 		scst.Daemon.apply()
 	end
-	local assecc_patterns = scst.AccessPattern.list()
-	assert( assecc_patterns )
-	assertEquals( #common.keys( assecc_patterns ), #common.keys( LOGICAL_VOLUMES ) )
+	local access_pattern = scst.AccessPattern.list()
+	assert( access_pattern )
+	assertEquals( #common.keys( access_pattern ), #common.keys( LOGICAL_VOLUMES ) )
 end
 
 LuaUnit:run(
