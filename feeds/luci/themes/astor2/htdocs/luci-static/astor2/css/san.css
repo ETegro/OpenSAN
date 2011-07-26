@@ -118,7 +118,7 @@ table.matrix {
 }
 
 table.matrix > tbody > tr > td,table.matrix fieldset {
-	padding: .5em;
+	padding: 0.5em;
 }
 
 table.matrix fieldset {
@@ -131,6 +131,7 @@ table.matrix fieldset table.form {
 
 table.matrix .title {
 	float: left;
+	margin-bottom: 0.5em;
 	overflow: auto;
 	width: 70%;
 }
@@ -157,7 +158,7 @@ table.bottom_forms fieldset div.form input[ type = "submit" ] {
 }
 
 table.bottom_forms fieldset {
-	padding: .5em;
+	padding: 0.5em;
 }
 
 /* Legend colors */
@@ -172,12 +173,13 @@ div[ id *= "new_volume_slider-" ],
 div[ id *= "logical_volume_resize_slider-" ],
 div[ id *= "new_snapshot_slider-" ],
 div[ id *= "logical_volume_snapshot_resize_slider-" ] {
-	margin: .5em 0;
+	margin: 0.5em 0;
 }
 
 /* Fillbar */
 .fillbar {
-	margin: .5em 0;
+	clear: both;
+	margin-button: 0.5em;
 	position: relative;
 	width: 100%;
 }
@@ -218,7 +220,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 }
 
 .fillbar .fillbar_text {
-	padding: .2em;
+	padding: 0.2em;
 }
 
 /* Matri colors */
