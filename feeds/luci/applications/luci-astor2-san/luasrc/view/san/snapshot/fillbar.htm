@@ -20,10 +20,10 @@
 <!-- This code is based on LuCI's administration interface status progressbars -->
 <div class="fillbar">
 	<div class="fillbar_background" style="width:<%= line.logical_volume.allocated or "0" %>%;">
-		<div class="fillbar_info">
-			<div class="fillbar_text">
-				<%= line.logical_volume.allocated %> %
-			</div>
+	</div>
+	<div class="fillbar_info">
+		<div class="fillbar_text">
+			<%= line.logical_volume.allocated %> %
 		</div>
 	</div>
 </div>

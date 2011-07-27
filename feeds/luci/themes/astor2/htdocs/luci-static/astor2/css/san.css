@@ -181,11 +181,13 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	clear: both;
 	margin-button: 0.5em;
 	position: relative;
+	text-align: left;
 	width: 100%;
 }
 
 .fillbar .fillbar_background {
 	height: 1.6em;
+	text-align: left;
 }
 
 .highlight-border-color-darkgreen .fillbar {
@@ -221,6 +223,7 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 
 .fillbar .fillbar_text {
 	padding: 0.2em;
+	text-align: center;
 }
 
 /* Matri colors */
