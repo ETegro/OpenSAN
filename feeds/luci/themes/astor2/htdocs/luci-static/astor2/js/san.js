@@ -109,22 +109,19 @@ function toggle_create_raid_form() {
 		}
 
 		// RAID validator
-		var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' )
-		var num = selected_physicals.length
-		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' )
+		var selected_physicals = $( 'form input:checkbox[ name = "san.physical_id" ]:checked' );
+		var num = selected_physicals.length;
+		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
 		var restrictions = {
-			max: {
-				'passthrough': 1
-			},
-			min: {
-				'passthrough': 1,
-				'linear': 1,
-				'0': 2,
-				'1': 2,
-				'4': 3,
-				'5': 3,
-				'6': 4,
-				'10': 4
+			max: { 'passthrough': 1 },
+			min: { 'passthrough': 1,
+			       'linear': 1,
+			       '0': 2,
+			       '1': 2,
+			       '4': 3,
+			       '5': 3,
+			       '6': 4,
+			       '10': 4
 			}
 		};
 
@@ -133,7 +130,18 @@ function toggle_create_raid_form() {
 			    min = restrictions.min[ radio.val() ] || 0,
 			    max = restrictions.max[ radio.val() ] || 1000;
 			if ( num >= min && num <= max ) {
-				$( this ).removeAttr( 'disabled' );
+				if ( $( this ).is( ':disabled' ) ) {
+					// .removeAttr() real working only in IE9 and other browser
+					//$( this ).removeAttr( 'disabled' );
+
+					// That is working in IE8 and other browser
+					var attr = { type : "radio",
+					             value : $( this ).val(),
+					             name : $( this ).attr( 'name' ) };
+					var new_radio = $( '<input type="' + attr.type + '" name="' + attr.name + '" value="' + attr.value + '" />' );
+					new_radio.insertAfter( $( this ) );
+					$( this ).remove();
+				}
 			} else {
 				$( this ).attr( 'disabled', 'disabled' );
 			}
