@@ -22,12 +22,12 @@
 	<table class="form">
 		<tbody>
 			<tr>
-				<td width="30%">
+				<td width="35%">
 					<label for="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>">
 						<%: Name %>:
 					</label>
 				</td>
-				<td width="70%">
+				<td width="65%">
 					<input id="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
 					       name="san.new_volume_name-<%= hash( tostring( line.logical.id ) ) %>"
 					       type="text"
@@ -35,7 +35,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td width="35%">
 					<input id="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
 					       class="new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
 					       name="san.new_volume_slider_size-<%= hash( tostring( line.logical.id ) ) %>"
@@ -50,7 +50,7 @@
 					       type="text"
 					       value="0" />
 				</td>
-				<td>
+				<td width="65%">
 					<div id="new_volume_slider-<%= hash( tostring( line.logical.id ) ) %>"></div>
 				</td>
 			</tr>
