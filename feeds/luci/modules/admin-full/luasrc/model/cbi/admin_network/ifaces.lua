@@ -96,9 +96,11 @@ if has_6to4  then p:value("6to4",  "6to4")    end
 if has_relay then p:value("relay", "Relay")   end
 p:value("none", translate("none"))
 
+--[[
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
 	p.description = translate("You need to install \"comgt\" for UMTS/GPRS, \"ppp-mod-pppoe\" for PPPoE, \"ppp-mod-pppoa\" for PPPoA or \"pptp\" for PPtP support")
 end
+]]
 
 br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
 br.enabled = "bridge"
