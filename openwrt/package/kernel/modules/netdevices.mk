@@ -321,6 +321,24 @@ endef
 
 $(eval $(call KernelPackage,igb))
 
+define KernelPackage/ixgbe
+  SUBMENU:=$(NETWORK_DEVICES_MENU)
+  TITLE:=Intel(R) 10GbE PCI Express
+  DEPENDS:=@PCIE_SUPPORT
+  KCONFIG:=CONFIG_NETDEV_10000 \
+    CONFIG_IXGBE
+  FILES:= \
+    $(LINUX_DIR)/drivers/net/ixgbe/ixgbe.ko \
+    $(LINUX_DIR)/drivers/net/mdio.ko
+  AUTOLOAD:=$(call AutoLoad,50,mdio ixgbe)
+endef
+
+define KernelPackage/ixgbe/description
+ Kernel module for Intel(R) 10GbE PCI Express adapters.
+endef
+
+$(eval $(call KernelPackage,ixgbe))
+
 define KernelPackage/b44
   TITLE:=Broadcom 44xx driver
   FILES:=$(LINUX_DIR)/drivers/net/b44.ko
