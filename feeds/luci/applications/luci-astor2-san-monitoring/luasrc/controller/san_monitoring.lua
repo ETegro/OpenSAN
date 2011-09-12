@@ -102,7 +102,7 @@ local function bwc_data_get( what )
 	end
 	return data
 end
-
+--[[
 local function network_data_get( data )
 	for eth_id, template_id in pairs( luci.controller.san_monitoring_configuration.network ) do
 		data[ template_id ] = {}
@@ -123,6 +123,61 @@ local function network_data_get( data )
 	end
 	return data
 end
+]]
+
+local function network_data_get( data )
+-- Macking eth-interfaces list
+	for _, line = common.system( "cat /proc/bus/pci/devices" ) do
+		--0700    808610d3    10          df6e0000                   0                dc01            df6dc000                   0                   0                   0               20000                   0                  20                4000                   0                   0                   0    e1000e
+		local slot_id, port_id, vender_id, device_id, device_driver = string.match( line, "^%d(%d)%d(%d)%s*(%w%w%w%w)(%w%w%w%w).*%s(%w[^%s]*)$" )
+		if device_driver then
+			device_driver = nil
+		end
+	end
+
+	-- Macking eth-interfaces list
+		--$ ifconfig -a | grep ^eth
+	--eth0      Link encap:Ethernet  HWaddr XX:XX:XX:XX:XX:XX
+	for _, line in ipairs( common.system( "ifconfig -a | grep '^eth'" ).stdout ) do
+		local eth_id = string.match( line, "^(eth%d*)%s.*$" )
+		if eth_id then
+			-- Detect driver, slot_id and port_id by eth_id
+				--$ ethtool -i eth0
+				--driver: e1000e
+				--version: 1.0.2-k2
+				--firmware-version: 1.8-0
+				--bus-info: 0000:07:00.0
+			for _, line in ipairs( common.system( "ethtool -i " .. eth_id ).stdout ) do
+				--verify construction "not ..."
+				local not device = string.match( line, "^.*([Nn]o such device)$" )
+				if device then
+					local device_driver = string.match( line, "^driver:%s(.*)" )
+					local slot_id, port_id = string.match( line, "^bus.info:%s%d+:(%d+):%d*.(%d*)$" )
+				end
+			end
+		end
+	end
+
+--	for eth_id, template_id in pairs( luci.controller.san_monitoring_configuration.network ) do
+		data[ template_id ] = {}
+		for _, line in ipairs( common.system( "ethtool " .. eth_id ).stdout ) do
+			local link_detected = string.match( line, "^%s*Link detected: (%w+)$" )
+			if link_detected then
+				data[ template_id ][ "link" ] = ({
+					["yes"] = true,
+					["no"] = false
+				})[ link_detected ]
+			end
+
+			local speed = string.match( line, "^%s*Speed: (%d+).*$" )
+			if speed then
+				data[ template_id ][ "speed" ] = tonumber( speed )
+			end
+		end
+	end
+	return data
+--end
+
 
 function render()
 	local what = luci.http.formvalue( "what" )
