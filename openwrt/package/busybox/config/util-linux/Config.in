@@ -360,7 +360,7 @@ config BUSYBOX_CONFIG_LOSETUP
 
 config BUSYBOX_CONFIG_LSPCI
 	bool "lspci"
-	default n
+	default y
 	help
 	  lspci is a utility for displaying information about PCI buses in the
 	  system and devices connected to them.
@@ -369,7 +369,7 @@ config BUSYBOX_CONFIG_LSPCI
 
 config BUSYBOX_CONFIG_LSUSB
 	bool "lsusb"
-	default n
+	default y
 	help
 	  lsusb is a utility for displaying information about USB buses in the
 	  system and devices connected to them.
