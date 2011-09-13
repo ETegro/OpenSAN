@@ -125,62 +125,80 @@ local function network_data_get( data )
 end
 ]]
 
-local function network_data_get( data )
--- Macking eth-interfaces list
-	for _, line = common.system( "cat /proc/bus/pci/devices" ) do
+local function pci_data_get( data )
+	for _, line in ipairs( common.system( "cat /proc/bus/pci/devices" ).stdout ) do
 		--0700    808610d3    10          df6e0000                   0                dc01            df6dc000                   0                   0                   0               20000                   0                  20                4000                   0                   0                   0    e1000e
-		local slot_id, port_id, vender_id, device_id, device_driver = string.match( line, "^%d(%d)%d(%d)%s*(%w%w%w%w)(%w%w%w%w).*%s(%w[^%s]*)$" )
-		if device_driver then
-			device_driver = nil
+		--0800    808610d3    10          df6e0000                   0                dc01            df6dc000                   0                   0                   0               20000                   0                  20                4000                   0                   0                   0
+		local pattern_chapter, step_string = "", "%s*%w*"
+		for n = 1, 15 do
+			pattern_chapter = pattern_chapter .. step_string
 		end
-	end
+		local pattern = "^(%d%d)(%d%d)%s*(%w%w%w%w)(%w%w%w%w)" .. pattern_chapter .. "%s*(%w*)$"
+		local slot_id, port_id, vendor_id, device_id, kernel_driver = string.match( line, pattern )
 
-	-- Macking eth-interfaces list
-		--$ ifconfig -a | grep ^eth
-	--eth0      Link encap:Ethernet  HWaddr XX:XX:XX:XX:XX:XX
-	for _, line in ipairs( common.system( "ifconfig -a | grep '^eth'" ).stdout ) do
-		local eth_id = string.match( line, "^(eth%d*)%s.*$" )
-		if eth_id then
-			-- Detect driver, slot_id and port_id by eth_id
-				--$ ethtool -i eth0
-				--driver: e1000e
-				--version: 1.0.2-k2
-				--firmware-version: 1.8-0
-				--bus-info: 0000:07:00.0
-			for _, line in ipairs( common.system( "ethtool -i " .. eth_id ).stdout ) do
-				--verify construction "not ..."
-				local not device = string.match( line, "^.*([Nn]o such device)$" )
-				if device then
-					local device_driver = string.match( line, "^driver:%s(.*)" )
-					local slot_id, port_id = string.match( line, "^bus.info:%s%d+:(%d+):%d*.(%d*)$" )
+		if slot_id and port_id then
+			slot_id, port_id = tonumber( slot_id ), tonumber( port_id )
+
+			data[ slot_id ] = {}
+			data[ slot_id ][ port_id ] = {}
+			if vendor_id and device_id then
+				data[ slot_id ][ port_id ] = {
+						[ "vendor_id" ] = vendor_id,
+						[ "device_id" ] = device_id
+				}
+				if kernel_driver and kernel_driver ~= "" then
+					data[ slot_id ][ port_id ][ "kernel_driver" ] = kernel_driver
 				end
 			end
 		end
 	end
+	return data
+end
 
---	for eth_id, template_id in pairs( luci.controller.san_monitoring_configuration.network ) do
-		data[ template_id ] = {}
-		for _, line in ipairs( common.system( "ethtool " .. eth_id ).stdout ) do
-			local link_detected = string.match( line, "^%s*Link detected: (%w+)$" )
-			if link_detected then
-				data[ template_id ][ "link" ] = ({
-					["yes"] = true,
-					["no"] = false
-				})[ link_detected ]
-			end
+local function network_data_get( data )
+	for _, line in ipairs( common.system( "ifconfig -a | grep '^eth'" ).stdout ) do
+		--$ ifconfig -a | grep ^eth
+		--eth0      Link encap:Ethernet  HWaddr XX:XX:XX:XX:XX:XX
+		local eth_id = string.match( line, "^(eth%d+)%s.*$" )
+		if eth_id then
+			--$ ethtool -i eth0
+			--driver: e1000e
+			--version: 1.0.2-k2
+			--firmware-version: 1.8-0
+			--bus-info: 0000:07:00.0
+			for _, line in ipairs( common.system( "ethtool -i " .. eth_id ).stdout ) do
+				--local kernel_driver = string.match( line, "^driver:%s(.*)$" )
+				local slot_id, port_id = string.match( line, "^bus.info:%s%d+:(%d+):%d+.(%d+)$" )
+				if slot_id and port_id then
+					slot_id, port_id = tonumber( slot_id ), tonumber( port_id )
+					if data[ slot_id ][ port_id ] then
+						data[ slot_id ][ port_id ][ "port_name" ] = eth_id
 
-			local speed = string.match( line, "^%s*Speed: (%d+).*$" )
-			if speed then
-				data[ template_id ][ "speed" ] = tonumber( speed )
+						for _, line in ipairs( common.system( "ethtool " .. eth_id ).stdout ) do
+							local link_detected = string.match( line, "^%s*Link%sdetected:%s(%w+)$" )
+							if link_detected then
+								data[ slot_id ][ port_id ][ "link" ] = ({
+									["yes"] = true,
+									["no"] = false
+								})[ link_detected ]
+							end
+
+							local speed = string.match( line, "^%s*Speed:%s(%d+).*$" )
+							if speed then
+								data[ slot_id ][ port_id ][ "speed" ] = tonumber( speed )
+							end
+						end
+					end
+				end
 			end
 		end
 	end
 	return data
---end
-
+end
 
 function render()
 	local what = luci.http.formvalue( "what" )
+	local pci = luci.http.formvalue( "pci" )
 	local network = luci.http.formvalue( "network" )
 	local enclosures = luci.http.formvalue( "enclosures" )
 	local bwc = luci.http.formvalue( "bwc" )
@@ -188,6 +206,7 @@ function render()
 	local data = {}
 	if bwc then data = bwc_data_get( what ) end
 	if network then data = network_data_get( data ) end
+	if pci then data = pci_data_get( data ) end
 	if enclosures then
 		matrix_data = matrix.caller_minimalistic( {
 			matrix.filter_borders_highlight,
