@@ -137,7 +137,7 @@ local function pci_data_get( data )
 		local slot_id, port_id, vendor_id, device_id, kernel_driver = string.match( line, pattern )
 
 		if slot_id and port_id then
-			slot_id, port_id = tonumber( slot_id ), tonumber( port_id )
+			slot_id, port_id = "SLOT" .. tonumber( slot_id ), "PORT" .. tonumber( port_id )
 
 			data[ slot_id ] = {}
 			data[ slot_id ][ port_id ] = {}
@@ -170,7 +170,7 @@ local function network_data_get( data )
 				--local kernel_driver = string.match( line, "^driver:%s(.*)$" )
 				local slot_id, port_id = string.match( line, "^bus.info:%s%d+:(%d+):%d+.(%d+)$" )
 				if slot_id and port_id then
-					slot_id, port_id = tonumber( slot_id ), tonumber( port_id )
+					slot_id, port_id = "SLOT" .. tonumber( slot_id ), "PORT" .. tonumber( port_id )
 					if data[ slot_id ][ port_id ] then
 						data[ slot_id ][ port_id ][ "port_name" ] = eth_id
 
@@ -246,6 +246,5 @@ function render()
 			data[ template_id ] = enclosure
 		end
 	end
-
 	return render_svg( what, data )
 end
