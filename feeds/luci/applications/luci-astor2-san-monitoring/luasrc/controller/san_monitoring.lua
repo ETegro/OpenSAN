@@ -143,8 +143,8 @@ local function pci_data_get( data )
 			data[ slot_id ][ port_id ] = {}
 			if vendor_id and device_id then
 				data[ slot_id ][ port_id ] = {
-						[ "vendor_id" ] = vendor_id,
-						[ "device_id" ] = device_id
+					[ "vendor_id" ] = vendor_id,
+					[ "device_id" ] = device_id
 				}
 				if kernel_driver and kernel_driver ~= "" then
 					data[ slot_id ][ port_id ][ "kernel_driver" ] = kernel_driver
