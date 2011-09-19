@@ -205,8 +205,8 @@ function render()
 
 	local data = {}
 	if bwc then data = bwc_data_get( what ) end
-	if network then data = network_data_get( data ) end
 	if pci then data = pci_data_get( data ) end
+	if network then data = network_data_get( data ) end
 	if enclosures then
 		matrix_data = matrix.caller_minimalistic( {
 			matrix.filter_borders_highlight,
