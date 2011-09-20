@@ -29,14 +29,16 @@ ENTITY_STATE_COLORMAP = {
 	gray = "#808080",
 	orange = "#FFA500",
 	red = "#F21",
-	white = "#FFF"
+	white = "#FFF",
+	yellow= "#FF0"
 }
 
 NETWORK_SPEED_COLORMAP = {
 	[0] = ENTITY_STATE_COLORMAP["gray"],
 	[10] = ENTITY_STATE_COLORMAP["red"],
 	[100] = ENTITY_STATE_COLORMAP["orange"],
-	[1000] = ENTITY_STATE_COLORMAP["green"]
+	[1000] = ENTITY_STATE_COLORMAP["yellow"],
+	[10000] = ENTITY_STATE_COLORMAP["green"]
 }
 
 DEFAULT_OPACITY = "0.3"
@@ -47,13 +49,17 @@ data[ "SVG_SCALE" ] = "0.6"
 for template_id,_ in pairs( data ) do
 	local entity = data[ template_id ]
 	if common.is_table( entity ) then
-		entity.opacity = DEFAULT_OPACITY
 		entity.color = ENTITY_STATE_COLORMAP[ entity.color ]
-		if entity.link == false then
-			entity.speed = 0
-		end
-		if entity.link ~= nil then
-			entity.color = NETWORK_SPEED_COLORMAP[ entity.speed ]
+		entity.opacity = DEFAULT_OPACITY
+		for port_id,port in pairs( entity ) do
+			if common.is_table( port ) then
+				if port.link == false then
+					port.speed = 0
+				end
+				if port.link ~= nil then
+					port.color = NETWORK_SPEED_COLORMAP[ port.speed ]
+				end
+			end
 		end
 	end
 end
