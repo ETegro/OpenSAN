@@ -151,12 +151,16 @@ local function pci_data_get( data )
 				}
 				if kernel_driver and kernel_driver ~= "" then
 					data[ slot_id ][ port_id ][ "kernel_driver" ] = kernel_driver
-					data[ slot_id ][ port_id ][ "device_class" ] = ( {
+					local device_class = ( {
 						[ "e1000e" ] = "ethernet",
 						[ "igb" ] = "ethernet",
 						[ "ixgbe" ] = "ethernet",
 						[ "mptsas" ] = "scsi"
 					} )[ kernel_driver ]
+					if not data[ slot_id ][ "device_class" ] then
+						data[ slot_id ][ "device_class" ] = device_class
+					end
+					data[ slot_id ][ port_id ][ "device_class" ] = device_class
 				end
 			end
 		end
