@@ -1465,7 +1465,7 @@ msgid "None"
 msgstr ""
 
 msgid "Normal"
-msgstr "Нормально"
+msgstr "Норма"
 
 msgid "Not associated"
 msgstr ""
