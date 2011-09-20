@@ -136,11 +136,13 @@ local function pci_data_get( data )
 		local pattern = "^(%d%d)(%d%d)%s*(%w%w%w%w)(%w%w%w%w)" .. pattern_chapter .. "%s*(%w*)$"
 		local slot_id, port_id, vendor_id, device_id, kernel_driver = string.match( line, pattern )
 
+		-- Checking for slot and port
 		if slot_id and port_id then
 			slot_id, port_id = "SLOT" .. tonumber( slot_id ), "PORT" .. tonumber( port_id )
 
 			data[ slot_id ] = {}
 			data[ slot_id ][ port_id ] = {}
+			-- Filling slots and ports
 			if vendor_id and device_id then
 				data[ slot_id ][ port_id ] = {
 					[ "vendor_id" ] = vendor_id,
@@ -177,10 +179,10 @@ local function network_data_get( data )
 						for _, line in ipairs( common.system( "ethtool " .. eth_id ).stdout ) do
 							local link_detected = string.match( line, "^%s*Link%sdetected:%s(%w+)$" )
 							if link_detected then
-								data[ slot_id ][ port_id ][ "link" ] = ({
-									["yes"] = true,
-									["no"] = false
-								})[ link_detected ]
+								data[ slot_id ][ port_id ][ "link" ] = ( {
+									[ "yes" ] = true,
+									[ "no" ] = false
+								} )[ link_detected ]
 							end
 
 							local speed = string.match( line, "^%s*Speed:%s(%d+).*$" )
