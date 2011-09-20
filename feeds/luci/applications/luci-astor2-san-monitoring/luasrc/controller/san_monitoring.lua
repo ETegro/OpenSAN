@@ -140,8 +140,9 @@ local function pci_data_get( data )
 		if slot_id and port_id then
 			slot_id, port_id = "SLOT" .. tonumber( slot_id ), "PORT" .. tonumber( port_id )
 
-			data[ slot_id ] = {}
-			data[ slot_id ][ port_id ] = {}
+			if not data[ slot_id ] then
+				data[ slot_id ] = {}
+			end
 			-- Filling slots and ports
 			if vendor_id and device_id then
 				data[ slot_id ][ port_id ] = {
