@@ -346,7 +346,7 @@ msgid "initializing"
 msgstr "инициализирующийся"
 
 msgid "normal"
-msgstr "нормальный"
+msgstr "норма"
 
 msgid "rebuilding"
 msgstr "пересборка"

@@ -170,12 +170,6 @@ function M.AccessPattern:bind( filename )
 	self:save()
 end
 
-function M.AccessPattern:unbind()
-	assert( self, "unable to get self object" )
-	self.filename = ""
-	self:save()
-end
-
 function M.AccessPattern:is_binded()
 	assert( self, "unable to get self object" )
 	if self.filename then
@@ -223,6 +217,13 @@ function M.AccessPattern:iqn()
 		volume_group_name .. "." ..
 		logical_volume_name
 	)
+end
+
+function M.AccessPattern:unbind()
+	assert( self, "unable to get self object" )
+	M.Daemon.session_detach( self:iqn() )
+	self.filename = ""
+	self:save()
 end
 
 ------------------------------------------------------------------------
@@ -357,6 +358,23 @@ function M.Daemon.apply()
 	for _, device in ipairs( devices ) do
 		common.system( M.Daemon.SCSTADMIN_PATH ..
 		               " -resync_dev " .. device )
+	end
+end
+
+function M.Daemon.session_detach( iqn )
+	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
+	                              " -list_sessions" )
+	for _, line in ipairs( result.stdout ) do
+		local driver, target = string.match( line, "^Driver/Target: (%w+)/(.*)$" )
+		if target == iqn then
+			common.system(
+				M.Daemon.SCSTADMIN_PATH ..
+				" -force" ..
+				" -noprompt" ..
+				" -rem_target " .. target ..
+				" -driver " .. driver
+			)
+		end
 	end
 end
 
