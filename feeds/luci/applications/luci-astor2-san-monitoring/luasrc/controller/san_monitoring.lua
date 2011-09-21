@@ -24,6 +24,7 @@ common = require( "astor2.common" )
 require( "luci.controller.san_monitoring_configuration" )
 matrix = require( "luci.controller.matrix" )
 einarc = require( "astor2.einarc" )
+require( "lfs" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
@@ -102,7 +103,7 @@ local function bwc_data_get( what )
 	end
 	return data
 end
-
+--[[
 local function network_data_get( data )
 	for eth_id, template_id in pairs( luci.controller.san_monitoring_configuration.network ) do
 		data[ template_id ] = {}
@@ -123,15 +124,100 @@ local function network_data_get( data )
 	end
 	return data
 end
+]]
+
+local function pci_data_get( data )
+	for _, line in ipairs( common.system( "cat /proc/bus/pci/devices" ).stdout ) do
+		--0700    808610d3    10          df6e0000                   0                dc01            df6dc000                   0                   0                   0               20000                   0                  20                4000                   0                   0                   0    e1000e
+		--0800    808610d3    10          df6e0000                   0                dc01            df6dc000                   0                   0                   0               20000                   0                  20                4000                   0                   0                   0
+		local pattern_chapter, step_string = "", "%s*%w*"
+		for n = 1, 15 do
+			pattern_chapter = pattern_chapter .. step_string
+		end
+		local pattern = "^(%d%d)(%d%d)%s*(%w%w%w%w)(%w%w%w%w)" .. pattern_chapter .. "%s*(%w*)$"
+		local slot_id, port_id, vendor_id, device_id, kernel_driver = string.match( line, pattern )
+
+		-- Checking for slot and port
+		if slot_id and port_id then
+			slot_id, port_id = "SLOT" .. tonumber( slot_id ), "PORT" .. tonumber( port_id )
+
+			if not data[ slot_id ] then
+				data[ slot_id ] = {}
+			end
+			-- Filling slots and ports
+			if vendor_id and device_id then
+				data[ slot_id ][ port_id ] = {
+					[ "vendor_id" ] = vendor_id,
+					[ "device_id" ] = device_id
+				}
+				if kernel_driver and kernel_driver ~= "" then
+					data[ slot_id ][ port_id ][ "kernel_driver" ] = kernel_driver
+					local device_class = ( {
+						[ "e1000e" ] = "ethernet",
+						[ "igb" ] = "ethernet",
+						[ "ixgbe" ] = "ethernet",
+						[ "mptsas" ] = "scsi"
+					} )[ kernel_driver ]
+					if not data[ slot_id ][ "device_class" ] then
+						data[ slot_id ][ "device_class" ] = device_class
+					end
+					data[ slot_id ][ port_id ][ "device_class" ] = device_class
+				end
+			end
+		end
+	end
+	return data
+end
+
+local function network_data_get( data )
+	for dir in lfs.dir( "/sys/class/net/" ) do
+		local eth_id = string.match( dir, "^(eth%d+)$" )
+		if eth_id then
+			--$ ethtool -i eth0
+			--driver: e1000e
+			--version: 1.0.2-k2
+			--firmware-version: 1.8-0
+			--bus-info: 0000:07:00.0
+			for _, line in ipairs( common.system( "ethtool -i " .. eth_id ).stdout ) do
+				--local kernel_driver = string.match( line, "^driver:%s(.*)$" )
+				local slot_id, port_id = string.match( line, "^bus.info:%s%d+:(%d+):%d+.(%d+)$" )
+				if slot_id and port_id then
+					slot_id, port_id = "SLOT" .. tonumber( slot_id ), "PORT" .. tonumber( port_id )
+					if data[ slot_id ][ port_id ] then
+						data[ slot_id ][ port_id ][ "port_name" ] = eth_id
+
+						for _, line in ipairs( common.system( "ethtool " .. eth_id ).stdout ) do
+							local link_detected = string.match( line, "^%s*Link%sdetected:%s(%w+)$" )
+							if link_detected then
+								data[ slot_id ][ port_id ][ "link" ] = ( {
+									[ "yes" ] = true,
+									[ "no" ] = false
+								} )[ link_detected ]
+							end
+
+							local speed = string.match( line, "^%s*Speed:%s(%d+).*$" )
+							if speed then
+								data[ slot_id ][ port_id ][ "speed" ] = tonumber( speed )
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return data
+end
 
 function render()
 	local what = luci.http.formvalue( "what" )
+	local pci = luci.http.formvalue( "pci" )
 	local network = luci.http.formvalue( "network" )
 	local enclosures = luci.http.formvalue( "enclosures" )
 	local bwc = luci.http.formvalue( "bwc" )
 
 	local data = {}
 	if bwc then data = bwc_data_get( what ) end
+	if pci then data = pci_data_get( data ) end
 	if network then data = network_data_get( data ) end
 	if enclosures then
 		matrix_data = matrix.caller_minimalistic( {
@@ -172,6 +258,5 @@ function render()
 			data[ template_id ] = enclosure
 		end
 	end
-
 	return render_svg( what, data )
 end

@@ -612,13 +612,30 @@
            id="rect16577-0"
            style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
            d="m 488.08834,192.15524 c -1.2921,0 -2.3125,1.0204 -2.3125,2.3125 l 0,10.59375 c 0,1.2921 1.0204,2.34375 2.3125,2.34375 l 120.34375,0 0,-15.25 -120.34375,0 z"
-           id="rect16584-2"
-           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
+           id="ASTOR2-MONITORING-SLOT2"
+           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><text
+         x="489.5181"
+         y="203.10487"
+         id="ASTOR2-MONITORING-SLOT2-TITLE"
+         xml:space="preserve"
+         style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold"><tspan
+           x="489.5181"
+           y="203.50487"
+           id="tspan3572"><% if data.SLOT2 then if data.SLOT2.device_class == "scsi" then %><%= data.SLOT2.device_class %><% elseif data.SLOT2.device_class == "ethernet" then %><%= data.SLOT2.device_class %><% for _, port in pairs( data.SLOT2 ) do if port.port_name then %> | <%= port.port_name %><% end end end end %></tspan></text><path
            d="m 488.08834,216.15524 c -1.2921,0 -2.3125,1.0204 -2.3125,2.3125 l 0,10.59375 c 0,1.2921 1.0204,2.34375 2.3125,2.34375 l 120.34375,0 0,-15.25 -120.34375,0 z"
-           id="path16589-9"
-           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
+           id="ASTOR2-MONITORING-SLOT3"
+           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold" /><text
+         x="489.5181"
+         y="227.10487"
+         id="ASTOR2-MONITORING-SLOT3-TITLE"
+         xml:space="preserve"
+         style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold"><tspan
+           x="489.5181"
+           y="227.10487"
+           id="tspan3573"><% if data.SLOT3 then if data.SLOT3.device_class == "scsi" then %><%= data.SLOT3.device_class %><% elseif data.SLOT3.device_class == "ethernet" then %><%= data.SLOT3.device_class %><% for _, port in pairs( data.SLOT3 ) do if port.port_name then %> | <%= port.port_name %><% end end end end %>
+	</tspan></text><path
            d="m 483.44771,243.99899 c -1.38094,0 -2.5,-1.11906 -2.5,-2.5 l 0,-2.09375 127,0 0,2.09375 c 0,1.38094 -1.11906,2.5 -2.5,2.5 l -122,0 z"
-           id="rect16591-3"
+           id="temp-back"
            style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /></g><g
          transform="matrix(2.5,0,0,-2.5,-373.25122,1856.1395)"
          id="g16607-6"
@@ -1516,12 +1533,12 @@
            id="ASTOR2_MONITORING-PSU1-POWER"
            style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.PSU1.value then %><%= data.PSU1.value %> W<% else %>N/A<% end %></tspan></text>
 </g></g><g
-     id="ASTOR2_MONITORING-ETH0"><g
+     id="ASTOR2_MONITORING-SLOT7-PORT0"><g
        transform="translate(206.32435,-127.47539)"
        id="g7591"
        style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><g
          transform="matrix(2,0,0,2,-373.1779,-233.10867)"
-         id="ASTOR2_MONITORING-ETH0-JACK"
+         id="ASTOR2_MONITORING-SLOT7-PORT0-JACK"
          style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><g
            transform="translate(0.18750001,0.6740959)"
            id="g4732"
@@ -1588,7 +1605,7 @@
            x="354.67679"
            y="259.98779"
            id="rect4701"
-           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:<%= data.ETH0.color %>;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
+           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:<% if data.SLOT7 then if data.SLOT7.PORT0 then %><%= data.SLOT7.PORT0.color %><% end else %>none<% end %>;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
            d="m 273.6875,83.6875 0,8.5625 14.4375,0 0,-8.5625 -3.71875,0 0,3.03125 -7,0 0,-3.03125 -3.71875,0 z"
            transform="translate(83.426775,180.29203)"
            id="rect4742"
@@ -1672,21 +1689,21 @@
            style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /></g></g><text
        x="542.57501"
        y="152.21771"
-       id="ASTOR2_MONITORING-ETH0-TITLE"
+       id="ASTOR2_MONITORING-SLOT7-PORT0-TITLE"
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"><tspan
          x="542.57501"
          y="152.21771"
          id="tspan7531"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">eth0 <%#= data.ETH0.color %></tspan></text>
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.SLOT7 then if data.SLOT7.PORT0 then %><%= data.SLOT7.PORT0.port_name %><% end end %></tspan></text>
 </g><g
      transform="translate(64,0)"
-     id="ASTOR2_MONITORING-ETH2"><g
+     id="ASTOR2_MONITORING-SLOT1-PORT1"><g
        transform="translate(206.32435,-127.47539)"
        id="g7595"
        style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><g
          transform="matrix(2,0,0,2,-373.1779,-233.10867)"
-         id="ASTOR2_MONITORING-ETH2-JACK"
+         id="ASTOR2_MONITORING-SLOT1-PORT1-JACK"
          style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><g
            transform="translate(0.18750001,0.6740959)"
            id="g7599"
@@ -1753,7 +1770,7 @@
            x="354.67679"
            y="259.98779"
            id="rect7617"
-           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:<%= data.ETH2.color %>;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
+           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:<% if data.SLOT1 then if data.SLOT1.PORT1 then %><%= data.SLOT1.PORT1.color %><% end else %>none<% end %>;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
            d="m 273.6875,83.6875 0,8.5625 14.4375,0 0,-8.5625 -3.71875,0 0,3.03125 -7,0 0,-3.03125 -3.71875,0 z"
            transform="translate(83.426775,180.29203)"
            id="path7619"
@@ -1837,21 +1854,21 @@
            style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /></g></g><text
        x="542.57501"
        y="152.21771"
-       id="ASTOR2_MONITORING-ETH2-TITLE"
+       id="ASTOR2_MONITORING-SLOT1-PORT1-TITLE"
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"><tspan
          x="542.57501"
          y="152.21771"
          id="tspan7651"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">eth2</tspan></text>
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.SLOT1 then if data.SLOT1.PORT1 then %><%= data.SLOT1.PORT1.port_name %><% end end %></tspan></text>
 </g><g
      transform="translate(124,0)"
-     id="ASTOR2_MONITORING-ETH1"><g
+     id="ASTOR2_MONITORING-SLOT1-PORT0"><g
        transform="translate(206.32435,-127.47539)"
        id="g7657"
        style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><g
          transform="matrix(2,0,0,2,-373.1779,-233.10867)"
-         id="ASTOR2_MONITORING-ETH1-JACK"
+         id="ASTOR2_MONITORING-SLOT1-PORT0-JACK"
          style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><g
            transform="translate(0.18750001,0.6740959)"
            id="g7661"
@@ -1918,7 +1935,7 @@
            x="354.67679"
            y="259.98779"
            id="rect7679"
-           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:<%= data.ETH1.color %>;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
+           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:<% if data.SLOT1 then if data.SLOT1.PORT0 then %><%= data.SLOT1.PORT0.color %><% end else %>none<% end %>;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
            d="m 273.6875,83.6875 0,8.5625 14.4375,0 0,-8.5625 -3.71875,0 0,3.03125 -7,0 0,-3.03125 -3.71875,0 z"
            transform="translate(83.426775,180.29203)"
            id="path7681"
@@ -2002,13 +2019,13 @@
            style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /></g></g><text
        x="542.57501"
        y="152.21771"
-       id="ASTOR2_MONITORING-ETH1-TITLE"
+       id="ASTOR2_MONITORING-SLOT1-PORT0-TITLE"
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"><tspan
          x="542.57501"
          y="152.21771"
          id="tspan7713"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">eth1</tspan></text>
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.SLOT1 then if data.SLOT1.PORT0 then %><%= data.SLOT1.PORT0.port_name %><% end end %></tspan></text>
 </g><text
      x="138.67047"
      y="238.24525"

@@ -20,12 +20,6 @@ configuration = {
 	}
 }
 
-network = {
-	eth0 = "ETH0",
-	eth1 = "ETH1",
-	eth2 = "ETH2"
-}
-
 enclosures = {
 	[1]  = "ENC1",
 	[2]  = "ENC2",

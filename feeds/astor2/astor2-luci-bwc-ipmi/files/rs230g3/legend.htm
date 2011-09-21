@@ -28,9 +28,11 @@ local enclosure_colors = {
 }
 
 local network_colors = {
+	{ speed = 0, color = "gray" },
 	{ speed = 10, color = "red" },
 	{ speed = 100, color = "orange" },
-	{ speed = 1000, color = "green" }
+	{ speed = 1000, color = "yellow" },
+	{ speed = 10000, color = "green" }
 }
 
 require( "luci.i18n" ).loadc( "astor2_san")
@@ -123,7 +125,11 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 							</div>
 						</td>
 						<td width="80%" style="padding:10px;">
-							&#8211; <%= pair.speed %> Mbps
+							<% if pair.speed ~= 0 then %>
+								&#8211; <%= pair.speed %> Mbps
+							<% else %>
+								&#8211; <%: No link %>
+							<% end %>
 						</td>
 					</tr>
 					<% end %>
