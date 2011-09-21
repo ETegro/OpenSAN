@@ -24,6 +24,7 @@ common = require( "astor2.common" )
 require( "luci.controller.san_monitoring_configuration" )
 matrix = require( "luci.controller.matrix" )
 einarc = require( "astor2.einarc" )
+require( "lfs" )
 
 require( "luci.i18n" ).loadc( "astor2_san")
 
