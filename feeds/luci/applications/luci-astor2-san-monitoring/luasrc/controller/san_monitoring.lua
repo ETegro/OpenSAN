@@ -170,10 +170,8 @@ local function pci_data_get( data )
 end
 
 local function network_data_get( data )
-	for _, line in ipairs( common.system( "ifconfig -a | grep '^eth'" ).stdout ) do
-		--$ ifconfig -a | grep ^eth
-		--eth0      Link encap:Ethernet  HWaddr XX:XX:XX:XX:XX:XX
-		local eth_id = string.match( line, "^(eth%d+)%s.*$" )
+	for dir in lfs.dir( "/sys/class/net/" ) do
+		local eth_id = string.match( dir, "^(eth%d+)$" )
 		if eth_id then
 			--$ ethtool -i eth0
 			--driver: e1000e
