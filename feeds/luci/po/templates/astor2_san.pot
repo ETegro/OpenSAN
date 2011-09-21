@@ -180,6 +180,9 @@ msgstr ""
 msgid "Newly added dedicated hotspare disk is bigger than needed"
 msgstr ""
 
+msgid "No link"
+msgstr ""
+
 msgid "Non critical"
 msgstr ""
 

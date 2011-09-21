@@ -194,6 +194,9 @@ msgid "Newly added dedicated hotspare disk is bigger than needed"
 msgstr ""
 "Добавленный выделенный hotspare диск имеет больший размер, чем требуется"
 
+msgid "No link"
+msgstr "Нет соединения"
+
 msgid "Non critical"
 msgstr "Не критично"
 
