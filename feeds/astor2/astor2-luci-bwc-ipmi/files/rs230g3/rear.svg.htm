@@ -650,8 +650,25 @@
 			<tspan
 				x="489.5181"
 				y="190"
-				id="tspan3572">NIC<% for _, port in pairs( data.SLOT2 ) do if port.port_name then %> | <%= port.port_name %><% end end %></tspan>
+				id="tspan3572">NIC</tspan>
 		</text>
+		<g
+			transform="matrix(0.46457655,0,0,0.59946415,110.91838,177.87132)"
+			id="ASTOR2-MONITORING-SLOT2-ETHPORTS">
+			<% local x, x_step = 842, 60 %>
+			<% local port_number = 0 %>
+			<% for _, port in pairs( data.SLOT2 ) do %>
+				<% if port.port_name then %>
+					<%#= port.port_name %>
+					<path
+						d="m <%= x %>,34.85665 38.59532,0 0,3.893082 -38.59532,0 z m -2.15248,-7.87721 42.90032,0 0,18.90649 -42.90032,0 z m -1.94492,-1.390804 46.63438,0 0,21.763061 -46.63438,0 z"
+						id="ASTOR2-MONITORING-SLOT2-ETHPORT<%= port_number %>"
+						style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+					<% x = x + x_step %>
+					<% port_number = port_number + 1 %>
+				<% end %>
+			<% end %>
+		</g>
 	<% end %>
 <% end %>
 <%# END %>
@@ -696,8 +713,25 @@
 			<tspan
 				x="489.5181"
 				y="215"
-				id="tspan3573">NIC<% for _, port in pairs( data.SLOT3 ) do if port.port_name then %> | <%= port.port_name %><% end end %></tspan>
+				id="tspan3573">NIC</tspan>
 		</text>
+		<g
+			transform="matrix(0.46457655,0,0,0.59946415,110.91838,201.96395)"
+			id="ASTOR2-MONITORING-SLOT3-ETHPORTS">
+			<% local x, x_step = 842, 60 %>
+			<% local port_number = 0 %>
+			<% for _, port in pairs( data.SLOT3 ) do %>
+				<% if port.port_name then %>
+					<%#= port.port_name %>
+					<path
+						d="m <%= x %>,34.85665 38.59532,0 0,3.893082 -38.59532,0 z m -2.15248,-7.87721 42.90032,0 0,18.90649 -42.90032,0 z m -1.94492,-1.390804 46.63438,0 0,21.763061 -46.63438,0 z"
+						id="ASTOR2-MONITORING-SLOT3-ETHPORT<%= port_number %>"
+						style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+					<% x = x + x_step %>
+					<% port_number = port_number + 1 %>
+				<% end %>
+			<% end %>
+		</g>
 	<% end %>
 <% end %>
 <%# END %>
