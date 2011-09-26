@@ -309,7 +309,8 @@ $(eval $(call application,astor2-san,aStor2 SAN,\
 
 $(eval $(call application,astor2-san-monitoring,aStor2 SAN monitoring,\
 	+PACKAGE_luci-app-astor2-san:luci-app-astor2-san \
-	+PACKAGE_luci-app-astor2-san:ethtool ))
+	+PACKAGE_luci-app-astor2-san:ethtool \
+	+PACKAGE_luci-app-astor2-san:luafilesystem ))
 
 ### Hello World - luci application ###
 $(eval $(call application,helloworld,This is hello world application,\
