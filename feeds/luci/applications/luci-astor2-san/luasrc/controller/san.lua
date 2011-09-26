@@ -143,7 +143,7 @@ local function disable_non_raid_volume_groups( data )
 	for _, volume_group in ipairs( lvm.VolumeGroup.list( lvm.PhysicalVolume.list() ) ) do
 		local is_not_busy = true
 		for _, physical_volume in ipairs( volume_group.physical_volumes ) do
-			for _, logical in ipairs( data.logicals ) do
+			for _, logical in pairs( data.logicals ) do
 				if logical.device == physical_volume.device then
 					is_not_busy = false
 				end
