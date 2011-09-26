@@ -608,32 +608,158 @@
          transform="matrix(2,0,0,2,-373.1779,-233.10867)"
          id="g20493"
          style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"><path
-           d="m 479.21334,188.84274 c -1.18232,0 -2.125,0.94269 -2.125,2.125 l 0,48.4375 131.375,0 0,-48.4375 c 0,-1.18231 -0.94269,-2.125 -2.125,-2.125 l -127.125,0 z"
+           d="m 479.21334,190.84274 c -1.18232,0 -2.125,0.94269 -2.125,2.125 l 0,46.4375 131.375,0 0,-46.4375 c 0,-1.18231 -0.94269,-2.125 -2.125,-2.125 z"
            id="rect16577-0"
            style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><path
            d="m 488.08834,192.15524 c -1.2921,0 -2.3125,1.0204 -2.3125,2.3125 l 0,10.59375 c 0,1.2921 1.0204,2.34375 2.3125,2.34375 l 120.34375,0 0,-15.25 -120.34375,0 z"
            id="ASTOR2-MONITORING-SLOT2"
-           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /><text
-         x="489.5181"
-         y="203.10487"
-         id="ASTOR2-MONITORING-SLOT2-TITLE"
-         xml:space="preserve"
-         style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold"><tspan
-           x="489.5181"
-           y="203.50487"
-           id="tspan3572"><% if data.SLOT2 then if data.SLOT2.device_class == "scsi" then %><%= data.SLOT2.device_class %><% elseif data.SLOT2.device_class == "ethernet" then %><%= data.SLOT2.device_class %><% for _, port in pairs( data.SLOT2 ) do if port.port_name then %> | <%= port.port_name %><% end end end end %></tspan></text><path
-           d="m 488.08834,216.15524 c -1.2921,0 -2.3125,1.0204 -2.3125,2.3125 l 0,10.59375 c 0,1.2921 1.0204,2.34375 2.3125,2.34375 l 120.34375,0 0,-15.25 -120.34375,0 z"
-           id="ASTOR2-MONITORING-SLOT3"
-           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold" /><text
-         x="489.5181"
-         y="227.10487"
-         id="ASTOR2-MONITORING-SLOT3-TITLE"
-         xml:space="preserve"
-         style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold"><tspan
-           x="489.5181"
-           y="227.10487"
-           id="tspan3573"><% if data.SLOT3 then if data.SLOT3.device_class == "scsi" then %><%= data.SLOT3.device_class %><% elseif data.SLOT3.device_class == "ethernet" then %><%= data.SLOT3.device_class %><% for _, port in pairs( data.SLOT3 ) do if port.port_name then %> | <%= port.port_name %><% end end end end %>
-	</tspan></text><path
+           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" />
+<%# TODO %>
+<% if data.SLOT2 then %>
+	<% if data.SLOT2.device_class == "scsi" then %>
+		<text
+			x="489.5181"
+			y="203.10487"
+			id="ASTOR2-MONITORING-SLOT2-TITLE"
+			xml:space="preserve"
+			style="font-size:7px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold">
+			<tspan
+				x="480"
+				y="190"
+				id="tspan3572">HBA</tspan>
+		</text>
+		<g
+			transform="matrix(0.46457655,0,0,0.59946415,110.91838,176.96395)"
+			id="ASTOR2-MONITORING-SLOT2-SASPORTS">
+			<path
+				d="m 839.66785,31.674862 39.39288,0 0,2.533972 -39.39288,0 z m -8.40241,-4.41807 55.24437,0 0,11.754123 -55.24437,0 z"
+				id="ASTOR2-MONITORING-SLOT2--SASPORT0"
+				style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+			<path
+				d="m 895.66785,31.674862 39.39288,0 0,2.533972 -39.39288,0 z m -7.79291,-4.41807 55.24436,0 0,11.754123 -55.24436,0 z"
+				id="ASTOR2-MONITORING-SLOT2-SASPORT1"
+				style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+		</g>
+	<% elseif data.SLOT2.device_class == "ethernet" then %>
+		<text
+			x="489.5181"
+			y="203.10487"
+			id="ASTOR2-MONITORING-SLOT2-TITLE"
+			xml:space="preserve"
+			style="font-size:7px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold">
+			<tspan
+				x="480"
+				y="190"
+				id="tspan3572">NIC</tspan>
+		</text>
+		<g
+			transform="matrix(0.46457655,0,0,0.59946415,110.91838,177.87132)"
+			id="ASTOR2-MONITORING-SLOT2-ETHPORTS">
+			<% local port_x, port_step_x = 842, 60 %>
+			<% local eth_x, eth_step_x = 845, 60 %>
+			<% local port_number = 0 %>
+			<% for _, port in pairs( data.SLOT2 ) do %>
+				<% if port.port_name then %>
+					<path
+						d="m <%= port_x %>,34.85665 38.59532,0 0,3.893082 -38.59532,0 z m -2.15248,-7.87721 42.90032,0 0,18.90649 -42.90032,0 z m -1.94492,-1.390804 46.63438,0 0,21.763061 -46.63438,0 z"
+						id="ASTOR2-MONITORING-SLOT2-ETHPORT<%= port_number %>"
+						style="opacity:1;fill:<% if port.color then %><%= port.color %><% else %>none<% end %>;fill-opacity:1;stroke:#000000;stroke-width:0.59974062;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+						<text
+							x="<%= eth_x %>"
+							y="33.6"
+							id="ASTOR2-MONITORING-SLOT3-ETHPORT<%= port_number %>"
+							xml:space="preserve"
+							style="font-size:16px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold">
+							<tspan
+								x="<%= eth_x %>"
+								y="60.5"
+								id="tspan3572<%= port_number %>"><%= port.port_name %></tspan>
+						</text>
+					<% port_x = port_x + port_step_x %>
+					<% eth_x = eth_x + eth_step_x %>
+					<% port_number = port_number + 1 %>
+				<% end %>
+			<% end %>
+		</g>
+	<% end %>
+<% end %>
+<%# END %>
+
+<path
+	d="m 488.08834,216.15524 c -1.2921,0 -2.3125,1.0204 -2.3125,2.3125 l 0,10.59375 c 0,1.2921 1.0204,2.34375 2.3125,2.34375 l 120.34375,0 0,-15.25 -120.34375,0 z"
+	id="ASTOR2-MONITORING-SLOT3"
+	style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold" />
+<%# TODO %>
+	<% if data.SLOT3 then %>
+		<% if data.SLOT3.device_class == "scsi" then %>
+		<text
+			x="489.5181"
+			y="227.10487"
+			id="ASTOR2-MONITORING-SLOT3-TITLE"
+			xml:space="preserve"
+			style="font-size:7px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold">
+			<tspan
+				x="480"
+				y="215"
+				id="tspan3573">HBA</tspan>
+		</text>
+		<g
+			transform="matrix(0.46457655,0,0,0.59946415,110.91838,201.33447)"
+			id="ASTOR2-MONITORING-SLOT3-SASPORTS">
+			<path
+				d="m 839.66785,31.674862 39.39288,0 0,2.533972 -39.39288,0 z m -8.40241,-4.41807 55.24437,0 0,11.754123 -55.24437,0 z"
+				id="ASTOR2-MONITORING-SLOT3-SASPORT0"
+				style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+			<path
+				d="m 895.66785,31.674862 39.39288,0 0,2.533972 -39.39288,0 z m -7.79291,-4.41807 55.24436,0 0,11.754123 -55.24436,0 z"
+				id="ASTOR2-MONITORING-SLOT3-SASPORT1"
+				style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+		</g>
+	<% elseif data.SLOT3.device_class == "ethernet" then %>
+		<text
+			x="489.5181"
+			y="230"
+			id="ASTOR2-MONITORING-SLOT3-TITLE"
+			xml:space="preserve"
+			style="font-size:7px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold">
+			<tspan
+				x="480"
+				y="215"
+				id="tspan3573">NIC</tspan>
+		</text>
+		<g
+			transform="matrix(0.46457655,0,0,0.59946415,110.91838,201.96395)"
+			id="ASTOR2-MONITORING-SLOT3-ETHPORTS">
+			<% local port_x, port_step_x = 842, 60 %>
+			<% local eth_x, eth_step_x = 845, 60 %>
+			<% local port_number = 0 %>
+			<% for _, port in pairs( data.SLOT3 ) do %>
+				<% if port.port_name then %>
+					<path
+						d="m <%= port_x %>,34.85665 38.59532,0 0,3.893082 -38.59532,0 z m -2.15248,-7.87721 42.90032,0 0,18.90649 -42.90032,0 z m -1.94492,-1.390804 46.63438,0 0,21.763061 -46.63438,0 z"
+						id="ASTOR2-MONITORING-SLOT3-ETHPORT<%= port_number %>"
+						style="opacity:1;fill:<% if port.color then %><%= port.color %><% else %>none<% end %>;fill-opacity:1;stroke:#000000;stroke-width:0.59974062;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+						<text
+							x="<%= eth_x %>"
+							y="73.6"
+							id="ASTOR2-MONITORING-SLOT3-ETHPORT-<%= port_number %>-TITLE"
+							xml:space="preserve"
+							style="font-size:16px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono Bold">
+							<tspan
+								x="<%= eth_x %>"
+								y="60.5"
+								id="tspan3572<%= port_number %>"><%= port.port_name %></tspan>
+						</text>
+					<% port_x = port_x + port_step_x %>
+					<% eth_x = eth_x + eth_step_x %>
+					<% port_number = port_number + 1 %>
+				<% end %>
+			<% end %>
+		</g>
+	<% end %>
+<% end %>
+<%# END %>
+<path
            d="m 483.44771,243.99899 c -1.38094,0 -2.5,-1.11906 -2.5,-2.5 l 0,-2.09375 127,0 0,2.09375 c 0,1.38094 -1.11906,2.5 -2.5,2.5 l -122,0 z"
            id="temp-back"
            style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;stroke:black;stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono" /></g><g
