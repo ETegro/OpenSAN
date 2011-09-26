@@ -663,7 +663,7 @@
 					<path
 						d="m <%= port_x %>,34.85665 38.59532,0 0,3.893082 -38.59532,0 z m -2.15248,-7.87721 42.90032,0 0,18.90649 -42.90032,0 z m -1.94492,-1.390804 46.63438,0 0,21.763061 -46.63438,0 z"
 						id="ASTOR2-MONITORING-SLOT2-ETHPORT<%= port_number %>"
-						style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+						style="opacity:1;fill:<% if port.color then %><%= port.color %><% else %>none<% end %>;fill-opacity:1;stroke:#000000;stroke-width:0.59974062;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
 						<text
 							x="<%= eth_x %>"
 							y="33.6"
@@ -738,7 +738,7 @@
 					<path
 						d="m <%= port_x %>,34.85665 38.59532,0 0,3.893082 -38.59532,0 z m -2.15248,-7.87721 42.90032,0 0,18.90649 -42.90032,0 z m -1.94492,-1.390804 46.63438,0 0,21.763061 -46.63438,0 z"
 						id="ASTOR2-MONITORING-SLOT3-ETHPORT<%= port_number %>"
-						style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+						style="opacity:1;fill:<% if port.color then %><%= port.color %><% else %>none<% end %>;fill-opacity:1;stroke:#000000;stroke-width:0.59974062;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
 						<text
 							x="<%= eth_x %>"
 							y="73.6"
