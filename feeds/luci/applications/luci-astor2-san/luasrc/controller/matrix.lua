@@ -435,7 +435,7 @@ local function filter_mib_humanize( matrix )
 				line.logical.volume_group.extent = lvm.VolumeGroup.PE_DEFAULT_SIZE
 				line.logical.volume_group.allocated_mib = 0
 				line.logical.volume_group.allocated = M.mib_humanize( 0 )
-				line.logical.volume_group.total_mib = line.logical.capacity_mib
+				line.logical.volume_group.total_mib = lvm.PhysicalVolume.expected_size( line.logical.capacity_mib, lvm.VolumeGroup.PE_DEFAULT_SIZE )
 				line.logical.volume_group.total = M.mib_humanize( line.logical.capacity_mib )
 			end
 		end

@@ -17,6 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
+local PE_DEFAULT_SIZE = 64 -- MiB
+
 local M = {}
 
 local common = require( "astor2.common" )
@@ -99,6 +101,13 @@ function M.PhysicalVolume:is_orphan()
 	end
 end
 
+--- Calculate expected PhysicalVolume's size
+function M.PhysicalVolume.expected_size( size, extent )
+	assert( common.is_number( size ),
+	        "non-number size" )
+	return size - ( size % (extent or PE_DEFAULT_SIZE) )
+end
+
 --- List all PhysicalVolumes
 -- @return { PhysicalVolume, PhysicalVolume }
 function M.PhysicalVolume.list()
@@ -112,9 +121,9 @@ function M.PhysicalVolume.list()
 		if extent == 0 then extent = 4096 end
 		extent = extent / 1024.0 -- Convert it to MiB immediately
 
-		capacity = tonumber( capacity ) * 0.5
-		capacity = capacity / 1024
+		capacity = tonumber( capacity ) * 512
 		unusable = capacity % extent
+		capacity = M.PhysicalVolume.expected_size( capacity, extent )
 
 		physical_volumes[ #physical_volumes + 1 ] = M.PhysicalVolume:new( {
 			total = tonumber( total ) * extent,
@@ -137,7 +146,7 @@ end
 --------------------------------------------------------------------------
 M.VolumeGroup = {}
 local VolumeGroup_mt = common.Class( M.VolumeGroup )
-M.VolumeGroup.PE_DEFAULT_SIZE = 64 -- MiB
+M.VolumeGroup.PE_DEFAULT_SIZE = PE_DEFAULT_SIZE
 
 function M.VolumeGroup:new( attrs )
 	assert( common.is_number( attrs.extent ),
