@@ -123,6 +123,7 @@ function M.PhysicalVolume.list()
 
 		capacity = tonumber( capacity ) * 512
 		unusable = capacity % extent
+		capacity = M.PhysicalVolume.expected_size( capacity, extent )
 
 		physical_volumes[ #physical_volumes + 1 ] = M.PhysicalVolume:new( {
 			total = tonumber( total ) * extent,
