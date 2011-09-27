@@ -487,7 +487,7 @@ function M.filter_calculate_hotspares( matrix )
 					end
 					if line.physical.size >= minimal_size then
 						hotspare_availability[ #hotspare_availability + 1 ] = line_inner.logical.id
-						hotspare_minimal_sizes[ line_inner.logical.id ] = minimal_size
+						hotspare_minimal_sizes[ line_inner.logical.id ] = tonumber( M.size_round( minimal_size ) )
 					end
 				end
 			end
