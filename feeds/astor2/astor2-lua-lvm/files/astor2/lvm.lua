@@ -114,8 +114,7 @@ function M.PhysicalVolume.list()
 		if extent == 0 then extent = 4096 end
 		extent = extent / 1024.0 -- Convert it to MiB immediately
 
-		capacity = tonumber( capacity ) * 0.5
-		capacity = capacity / 1024
+		capacity = tonumber( capacity ) * 512
 		unusable = capacity % extent
 
 		physical_volumes[ #physical_volumes + 1 ] = M.PhysicalVolume:new( {
