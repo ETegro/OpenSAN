@@ -17,6 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]
 
+local PE_DEFAULT_SIZE = 64 -- MiB
+
 local M = {}
 
 local common = require( "astor2.common" )
@@ -137,7 +139,7 @@ end
 --------------------------------------------------------------------------
 M.VolumeGroup = {}
 local VolumeGroup_mt = common.Class( M.VolumeGroup )
-M.VolumeGroup.PE_DEFAULT_SIZE = 64 -- MiB
+M.VolumeGroup.PE_DEFAULT_SIZE = PE_DEFAULT_SIZE
 
 function M.VolumeGroup:new( attrs )
 	assert( common.is_number( attrs.extent ),
