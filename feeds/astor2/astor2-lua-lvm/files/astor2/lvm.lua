@@ -101,6 +101,13 @@ function M.PhysicalVolume:is_orphan()
 	end
 end
 
+--- Calculate expected PhysicalVolume's size
+function M.PhysicalVolume.expected_size( size, extent )
+	assert( common.is_number( size ),
+	        "non-number size" )
+	return size - ( size % (extent or PE_DEFAULT_SIZE) )
+end
+
 --- List all PhysicalVolumes
 -- @return { PhysicalVolume, PhysicalVolume }
 function M.PhysicalVolume.list()
