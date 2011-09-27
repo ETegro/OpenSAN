@@ -254,6 +254,11 @@ msgstr ""
 msgid "Really resize snapshot?"
 msgstr ""
 
+msgid ""
+"Really unbind access pattern? This will terminate all related active iSCSI "
+"sessions!"
+msgstr ""
+
 msgid "Remove dedicated hotspare"
 msgstr ""
 

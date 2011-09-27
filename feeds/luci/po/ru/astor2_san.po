@@ -270,6 +270,11 @@ msgstr "Действительно изменить размер логичес�
 msgid "Really resize snapshot?"
 msgstr "Действительно изменить размер снимка?"
 
+msgid ""
+"Really unbind access pattern? This will terminate all related active iSCSI "
+"sessions!"
+msgstr "Действительно открепить шаблон доступа? Это так же заершит все связанные iSCSI сессии!"
+
 msgid "Remove dedicated hotspare"
 msgstr "Удалить выделенный hotspare"
 
