@@ -24,5 +24,6 @@
 .. toctree::
    :maxdepth: 1
 
+   branching
    commiting_rules
    merging_rules
