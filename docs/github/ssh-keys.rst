@@ -6,7 +6,7 @@
 
 SSH-ключи (astor2-id_rsa, astor2-id_rsa.pub) для
 astor2-team учётной записи находятся в manufacturing
-репозитории в **trunk/astor2-credentials** и на файл-сервере
+репозитории в **trunk/astor-keys** и на файл-сервере
 **//fileserver.etegro.local/RnD/astor2**. Их необходимо скопировать
 в **$HOME/.ssh** директорию и назначить соответствующие права доступа::
 
