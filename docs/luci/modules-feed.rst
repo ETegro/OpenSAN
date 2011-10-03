@@ -1,4 +1,7 @@
 .. _luci-modules-feed:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ========================
 Добавление feed-a в LuCI

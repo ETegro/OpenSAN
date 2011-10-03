@@ -1,4 +1,7 @@
 .. _coding-copyright_adding:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 =========================================
 Добавление информации об авторских правах

@@ -1,4 +1,7 @@
 .. _git-signing-key:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ====================================
 Указание PGP ключа для подписи tag-а

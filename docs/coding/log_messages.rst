@@ -1,4 +1,7 @@
 .. _coding-log_messages:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 =================================
 Написание комментариев к коммитам

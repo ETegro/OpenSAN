@@ -1,4 +1,7 @@
 .. _git-useful_documentation:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ================
 Полезные ресурсы

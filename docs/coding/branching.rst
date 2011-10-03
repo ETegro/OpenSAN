@@ -1,4 +1,7 @@
 .. _coding-branching:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ===========================================
 Ведение веток и тэгов в процессе разработки

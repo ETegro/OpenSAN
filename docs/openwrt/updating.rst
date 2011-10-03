@@ -1,4 +1,7 @@
 .. _openwrt-updating:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ==========
 Обновление

@@ -1,4 +1,7 @@
 .. _git-name_and_email:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 =======================
 Настройка имени и email
