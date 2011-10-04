@@ -1,4 +1,7 @@
 .. _luci-local_environment:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ===================================
 Настройка локального окружения LuCI

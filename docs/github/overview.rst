@@ -1,4 +1,7 @@
 .. _github-overview:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 =======================================
 Обзор и особенности работы с github.com

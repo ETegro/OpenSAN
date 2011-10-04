@@ -1,4 +1,7 @@
 .. _git-pretagging_merges:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ===================================
 Использование tag-ов при merge-инге

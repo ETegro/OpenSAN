@@ -1,4 +1,7 @@
 .. _documentation-adding:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ======================================
 Добавление новых разделов документации

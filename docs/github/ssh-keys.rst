@@ -1,4 +1,7 @@
 .. _github-ssh-keys:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 ================================
 Установка SSH-ключей astor2-team

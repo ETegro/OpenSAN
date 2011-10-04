@@ -1,4 +1,7 @@
 .. _luci-san_work_describing:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 =======================================
 Принципиальная схема работы контроллера

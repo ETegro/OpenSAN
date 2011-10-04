@@ -1,4 +1,7 @@
 .. _git-empty_directories:
+.. vim: syntax=rst
+.. vim: textwidth=72
+.. vim: spell spelllang=ru,en
 
 =================
 Пустые директории
