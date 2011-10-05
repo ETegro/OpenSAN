@@ -1,0 +1,55 @@
+{{{
+#!html
+<div style="float: right; padding-left: 1em; font-size: 60%">
+<pre>
+              \____/                                  
+              /    \                                  
+             / O  o \      _______    __    ___   ___ 
+  ____  "o' () \__/ ()    /______/|  /_/\  /__/\ /__/|
+ / __ \   \/ \______/ \  /   ____|/ /  \ \ |  \ |  | |
+| /  \ |_ __  |_||_|___O |  (____/\/    \ \|   \|  | |
+| |  | | '_ \ / _ \' _ \'\____   \/  /\  \ |  . `  | |
+| \__/ | |_) |  __/ | | |/____)     ____  \|  |\   | |
+ \____/|  __/ \___|_| |_|_______/__/'   \_____|'\__|/ 
+       | |                                            
+       |_|                                            
+</pre>
+</div>
+}}}
+
+[http://www.opensan.org/ OpenSAN] is a
+[http://www.gnu.org/philosophy/free-sw.html free software]
+project realizing
+[https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network Storage Area Network]
+system. This is small firmware that turns server (having at least one
+hard drive) into an
+[https://secure.wikimedia.org/wikipedia/en/wiki/iSCSI iSCSI]
+target accessible through the Ethernet interface.
+
+It is intended to be easy configurable using user-friendly
+Web-interface. Nearly everything related to SAN can be configured from
+single Web-interface's page.
+
+* [wiki:Licence]
+* [wiki:Features]
+* Translations
+  * English
+  * Russian
+* [wiki:Screenshots]
+* [wiki:Downloads]
+* [wiki:TechnicalOverview]
+* [wiki:Publickey]
+* [wiki:Team]
+* [wiki:Maillists]
+
+You are always welcome in our general discussion [wiki:Maillists].
+Also, you can contact our team directly by sending email to
+**team at opensan dot org**.
+
+[[Image(sponsor_etegro.png)]]
+
+Project is sponsored and developed under the hood of
+[http://www.etegro.com/ ETegro Technologies]
+company. It's some kind of codename is **aStor2**.
+
+Useful pages: [wiki:TitleIndex] [wiki:WikiFormatting]

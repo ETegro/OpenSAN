@@ -1,0 +1,5 @@
+Our development team currently consists of:
+
+* Andrew Sapronov
+* [http://stargrave.tel/ Sergey Matveev]
+* Vladimir Petukhov
