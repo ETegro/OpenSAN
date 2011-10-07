@@ -61,10 +61,14 @@ You are always welcome in our general discussion maillist:
 Also, you can contact our team directly by sending email to
 **team at opensan dot org**.
 
+----
+
 [[Image(sponsor_etegro.png)]]
 
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]
 company. It's some kind of codename is **aStor2**.
+
+----
 
 Useful pages: [wiki:TitleIndex] [wiki:WikiFormatting]
