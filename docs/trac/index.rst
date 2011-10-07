@@ -15,4 +15,5 @@
    repository
    wiki_usage
    notifications
+   email_api
 
