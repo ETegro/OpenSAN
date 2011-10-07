@@ -71,3 +71,32 @@ wiki тэг *[attachment:"ATTNAME"]*.
 **image/***, а *Content-Disposition* равный **inline**. Тогда строка в
 теле письма вида **<ATTNAME>** преобразуется в wiki тэг
 *[[Image(image)]]*.
+
+Отправка почты на opensan-trac.etegro.local
+===========================================
+Любой UNIX-like дистрибутив имеет локальный sendmail-совместимый
+почтовый сервер. Для настройки Postfix, чтобы он мог отправлять почту на
+opensan-track.etegro.local домен, достаточно сделать следующее:
+
+* добавить запись о том, что opensan-trac домен можно relay-ить, в
+  main.cf:
+
+  relay_domains = opensan-trac.etegro.local
+
+* добавить запись о том, что необходимо использовать собственные
+  транспорты для доступа к доменам, в main.cf:
+
+  transport_maps = hash:/etc/postfix/transport
+
+* собственно, описать эти карты транспортов в /etc/postfix/transport:
+
+  opensan-trac.etegro.local smtp:192.168.10.72
+
+* захэшировать карты транспортов (бинарный формат который использует
+  Postfix):
+
+  # postmap /etc/postfix/transport
+
+* обновить конфигурацию Postfix-а:
+
+  # /etc/init.d/postfix reload
