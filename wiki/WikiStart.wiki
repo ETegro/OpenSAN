@@ -39,7 +39,6 @@ single Web-interface's page.
 * [wiki:TechnicalOverview]
 * [wiki:Publickey]
 * [wiki:Team]
-* [wiki:Maillists]
 
 == Downloads ==
 Latest pre-built raw images and firmware updates can be found
@@ -53,7 +52,11 @@ You can clone it using the following command:
 % git clone git://github.com/astor2-team/astor2.git
 }}}
 
-You are always welcome in our general discussion [wiki:Maillists].
+== Maillists ==
+You are always welcome in our general discussion maillist:
+ Information:: https://groups.google.com/group/opensan-discuss
+ Subscribe:: Email to opensan-discuss+subscribe at googlegroups dot com with subject "subscribe"
+
 Also, you can contact our team directly by sending email to
 **team at opensan dot org**.
 
