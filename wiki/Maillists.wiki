@@ -1,4 +1,3 @@
 OpenSAN's general discussion maillist:
-* [https://groups.google.com/group/opensan-discuss information]
-* [mailto:opensan-discuss+subscribe@googlegroups.com?subject=subscribe subscribe]
-* [mailto:opensan-discuss@googlegroups.com posting]
+ Information:: https://groups.google.com/group/opensan-discuss
+ Subscribe:: Email to opensan-discuss+subscribe at googlegroups dot com with subject "subscribe"
