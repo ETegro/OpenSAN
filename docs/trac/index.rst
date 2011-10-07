@@ -14,4 +14,5 @@
    authentication
    repository
    wiki_usage
+   notifications
 
