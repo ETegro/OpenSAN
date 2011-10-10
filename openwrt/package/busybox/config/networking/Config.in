@@ -521,21 +521,21 @@ config BUSYBOX_CONFIG_IP
 
 config BUSYBOX_CONFIG_FEATURE_IP_ADDRESS
 	bool "ip address"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_IP
 	help
 	  Address manipulation support for the "ip" applet.
 
 config BUSYBOX_CONFIG_FEATURE_IP_LINK
 	bool "ip link"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_IP
 	help
 	  Configure network devices with "ip".
 
 config BUSYBOX_CONFIG_FEATURE_IP_ROUTE
 	bool "ip route"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_IP
 	help
 	  Add support for routing table management to "ip".
