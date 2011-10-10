@@ -346,7 +346,7 @@ config BUSYBOX_CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS
 
 config BUSYBOX_CONFIG_IFENSLAVE
 	bool "ifenslave"
-	default n
+	default y
 	help
 	  Userspace application to bind several interfaces
 	  to a logical interface (use with kernel bonding driver).
