@@ -313,6 +313,9 @@ msgstr ""
 msgid "This is LUN is busy, please choose another one"
 msgstr ""
 
+msgid "This option will be applied to the whole logical drive"
+msgstr ""
+
 msgid "Unbind access pattern"
 msgstr ""
 
