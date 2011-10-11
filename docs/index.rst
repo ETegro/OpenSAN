@@ -13,5 +13,6 @@
    luci/index
    scst/index
    remotetesting/index
+   trac/index
 
 * :ref:`search`
