@@ -311,6 +311,23 @@ function M.Physical:get( property )
 	return output
 end
 
+--- einarc physical set
+-- @param property "writecache"
+-- @param value "1"
+function M.Physical:set( property, value )
+	assert( self.id and M.Physical.is_id( self.id ),
+	        "unable to get self object" )
+	assert( value and common.is_string( value ),
+	        "empty value" )
+	local output = run(
+		"physical set " ..
+		self.id .. " " ..
+		property .. " " ..
+		value
+	)
+	if not output then error( "einarc:physical.set() failed" ) end
+end
+
 --- Is physical disk a hotspare
 -- @return true/false
 function M.Physical:is_hotspare()
