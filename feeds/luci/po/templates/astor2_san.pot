@@ -75,6 +75,9 @@ msgstr ""
 msgid "Failed to add logical volume"
 msgstr ""
 
+msgid "Failed to apply caching policies"
+msgstr ""
+
 msgid "Failed to apply iSCSI configuration"
 msgstr ""
 
