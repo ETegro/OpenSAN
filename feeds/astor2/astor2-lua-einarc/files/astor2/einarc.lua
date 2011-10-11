@@ -224,6 +224,45 @@ function M.Logical:progress_get()
 	return self.progress
 end
 
+--- einarc logical get
+-- @param property "raidlevels"
+-- @return { "0" }
+function M.Logical:get( property )
+	assert( self.id, "unable to get self object" )
+	assert( property and common.is_string( property ),
+	        "empty property" )
+	local output = run( "logical get " .. self.id .. " " .. property )
+	if not output then error( "einarc:logical.get() failed" ) end
+	return output
+end
+
+--- einarc logical set
+-- @param property "writecache"
+-- @param value "0"
+function M.Logical:set( property, value )
+	assert( self.id, "unable to get self object" )
+	assert( property and common.is_string( property ),
+	        "empty property" )
+	assert( value and common.is_string( value ),
+	        "empty value" )
+	local output = run(
+		"logical set " ..
+		self.id .. " " ..
+		property .. " " ..
+		value
+	)
+	if not output then error( "einarc:logical.set() failed" ) end
+end
+
+--- Is logical disk has WriteCache enabled
+-- @return true/false
+function M.Logical:is_writecache()
+	assert( self.id, "unable to get self object" )
+	local output = self:get( "writecache" )
+	if not output then error( "einarc:logical.is_writecache() failed" ) end
+	return output[1] == "1"
+end
+
 ------------------------------------------------------------------------
 -- Physical
 ------------------------------------------------------------------------
@@ -299,12 +338,29 @@ function M.Physical:get( property )
 	return output
 end
 
+--- einarc physical set
+-- @param property "writecache"
+-- @param value "1"
+function M.Physical:set( property, value )
+	assert( self.id and M.Physical.is_id( self.id ),
+	        "unable to get self object" )
+	assert( value and common.is_string( value ),
+	        "empty value" )
+	local output = run(
+		"physical set " ..
+		self.id .. " " ..
+		property .. " " ..
+		value
+	)
+	if not output then error( "einarc:physical.set() failed" ) end
+end
+
 --- Is physical disk a hotspare
 -- @return true/false
 function M.Physical:is_hotspare()
 	assert( self.id, "unable to get self object" )
 	local output = self:get( "hotspare" )
-	if not output then error( "einarc:physical.get.is_hotspare() failed" ) end
+	if not output then error( "einarc:physical.is_hotspare() failed" ) end
 	return output[1] == "1"
 end
 
@@ -315,6 +371,15 @@ function M.Physical:enclosure()
 	local output = self:get( "enclosure" )
 	if not output then return nil end
 	return tonumber( output[1] )
+end
+
+--- Is physical disk has WriteCache enabled
+-- @return true/false
+function M.Physical:is_writecache()
+	assert( self.id, "unable to get self object" )
+	local output = self:get( "writecache" )
+	if not output then error( "einarc:physical.is_writecache() failed" ) end
+	return output[1] == "1"
 end
 
 ------------------------------------------------------------------------
