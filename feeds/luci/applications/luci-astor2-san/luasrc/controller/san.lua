@@ -780,12 +780,14 @@ local function scst_access_pattern_new( inputs )
 
 	local access_pattern_enabled = inputs[ "access_pattern_new-enabled" ]
 	local access_pattern_readonly = inputs[ "access_pattern_new-readonly" ]
+	local access_pattern_writethrough = inputs[ "access_pattern_new-readonly" ]
 
 	local access_pattern_attributes = { name = access_pattern_name,
 	                                    targetdriver = access_pattern_targetdriver,
 	                                    lun = access_pattern_lun,
 	                                    enabled = access_pattern_enabled,
-	                                    readonly = access_pattern_readonly }
+	                                    readonly = access_pattern_readonly,
+										writethrough = access_pattern_writethrough }
 
 	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
 	if not return_code then
@@ -919,12 +921,14 @@ local function scst_access_pattern_edit( inputs )
 	local access_pattern_targetdriver = inputs[ "access_pattern_edit-targetdriver-" .. access_pattern_section_name_hash ]
 	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. access_pattern_section_name_hash ]
 	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. access_pattern_section_name_hash ]
+	local access_pattern_writethrough = inputs[ "access_pattern_edit-writethrough-" .. access_pattern_section_name_hash ]
 	access_pattern_attributes = { section_name = access_pattern.section_name,
 	                              name = access_pattern_name,
 	                              targetdriver = access_pattern_targetdriver,
 	                              lun = access_pattern_lun,
 	                              enabled = access_pattern_enabled,
-	                              readonly = access_pattern_readonly }
+	                              readonly = access_pattern_readonly,
+								  writethrough = access_pattern_writethrough }
 
 	local return_code, result = pcall( scst.AccessPattern.save, access_pattern_attributes )
 	if not return_code then
