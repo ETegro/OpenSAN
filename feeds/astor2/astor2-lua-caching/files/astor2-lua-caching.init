@@ -1,0 +1,18 @@
+#!/bin/sh /etc/rc.common
+START=50
+
+LVM_STARTED_FLAG="/tmp/lvm-started"
+
+start()
+{
+	( # We have to daemonize this process to prevent deadlocks
+	while [ ! -e $LVM_STARTED_FLAG ]; do sleep 1; done
+	echo 'caching = require "astor2.caching";
+	      caching.apply()' | lua -
+	)&
+}
+
+stop()
+{
+	true
+}
