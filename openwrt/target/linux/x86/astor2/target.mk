@@ -30,6 +30,7 @@ DEFAULT_PACKAGES += \
 	kmod-mptsas \
 	kmod-igb \
 	kmod-ixgbe \
+	kmod-fs-xfs \
 	dash \
 	gnu-cpio \
 	uhttpd \
@@ -37,7 +38,10 @@ DEFAULT_PACKAGES += \
 	luci-app-astor2-san \
 	astor2-luci-bwc-ipmi-rs230g3 \
 	sysstat \
-	luafilesystem
+	luafilesystem \
+	xfs-fsck \
+	xfs-growfs \
+	xfs-mkfs
 
 define Target/Description
 	Build firmware images for aStor2 project
