@@ -236,6 +236,24 @@ function M.Logical:get( property )
 	return output
 end
 
+--- einarc logical set
+-- @param property "writecache"
+-- @param value "0"
+function M.Logical:set( property, value )
+	assert( self.id, "unable to get self object" )
+	assert( property and common.is_string( property ),
+	        "empty property" )
+	assert( value and common.is_string( value ),
+	        "empty value" )
+	local output = run(
+		"logical set " ..
+		self.id .. " " ..
+		property .. " " ..
+		value
+	)
+	if not output then error( "einarc:logical.set() failed" ) end
+end
+
 ------------------------------------------------------------------------
 -- Physical
 ------------------------------------------------------------------------
