@@ -52,6 +52,11 @@ function M.AccessPattern:new( attrs )
 	else
 		attrs.readonly = false
 	end
+	if attrs.writethrough == "1" or attrs.writethrough == true then
+		attrs.writethrough = true
+	else
+		attrs.writethrough = false
+	end
 	return setmetatable( attrs, AccessPattern_mt )
 end
 
@@ -68,7 +73,8 @@ function M.AccessPattern.list()
 	                		lun = tonumber( section.lun ),
 	                		filename = section.filename,
 	                		enabled = section.enabled,
-	                		readonly = section.readonly
+	                		readonly = section.readonly,
+	                		writethrough = section.writethrough
 	                        } )
 			end )
 	return access_patterns
@@ -118,7 +124,8 @@ function M.AccessPattern:save()
 		lun = self.lun,
 		filename = self.filename,
 		enabled = self.enabled,
-		readonly = self.readonly
+		readonly = self.readonly,
+		writethrough = self.writethrough
 	} )
 
 	local ucicur = uci.cursor()
@@ -151,6 +158,12 @@ function M.AccessPattern:save()
 		ucicur:set( M.UCI_CONFIG_NAME,
 			    section_name,
 			    "readonly",
+			    "1" )
+	end
+	if access_pattern_new.writethrough == true then
+		ucicur:set( M.UCI_CONFIG_NAME,
+			    section_name,
+			    "writethrough",
 			    "1" )
 	end
 	ucicur:save( M.UCI_CONFIG_NAME )
