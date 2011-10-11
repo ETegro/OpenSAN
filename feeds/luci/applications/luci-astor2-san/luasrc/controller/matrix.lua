@@ -604,6 +604,7 @@ function M.caller()
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
 		logicals[ logical_id ]:progress_get()
+		logicals[ logical_id ].writecache = logicals[ logical_id ]:is_writecache()
 		logicals_for_serialization[ logical_id ] = common.deepcopy( logicals[ logical_id ] )
 		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
 		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
