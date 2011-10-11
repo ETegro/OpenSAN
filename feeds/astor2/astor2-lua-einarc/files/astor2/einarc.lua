@@ -224,6 +224,18 @@ function M.Logical:progress_get()
 	return self.progress
 end
 
+--- einarc logical get
+-- @param property "raidlevels"
+-- @return { "0" }
+function M.Logical:get( property )
+	assert( self.id, "unable to get self object" )
+	assert( property and common.is_string( property ),
+	        "empty property" )
+	local output = run( "logical get " .. self.id .. " " .. property )
+	if not output then error( "einarc:logical.get() failed" ) end
+	return output
+end
+
 ------------------------------------------------------------------------
 -- Physical
 ------------------------------------------------------------------------
