@@ -346,6 +346,9 @@ msgstr "Задано неизвестное действие"
 msgid "WriteThrough"
 msgstr "Сквозная запись"
 
+msgid "WriteThrough mode"
+msgstr "Режим сквозной записи"
+
 msgid "degraded"
 msgstr "деградированный"
 
