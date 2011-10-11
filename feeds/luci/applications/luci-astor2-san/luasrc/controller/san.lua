@@ -25,6 +25,7 @@ einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 matrix = require( "luci.controller.matrix" )
 scst = require( "astor2.scst" )
+caching = require( "astor2.caching" )
 
 ------------------------------------------------------------------------
 -- Hash related functions
@@ -863,7 +864,12 @@ local function scst_access_pattern_bind( inputs )
 	end
 
 	return_code, result = pcall( scst.Daemon.apply )
-	if not return_code then
+	if return_code then
+		return_code, result = pcall( caching.apply )
+		if not return_code then
+			message_error = i18n("Failed to apply caching policies") .. ": " .. result
+		end
+	else
 		message_error = i18n("Failed to apply iSCSI configuration") .. ": " .. result
 		scst.AccessPattern.unbind( scst.AccessPattern.find_by_name( access_pattern.name ) )
 		scst.Daemon.apply()
@@ -889,7 +895,12 @@ local function scst_access_pattern_unbind( inputs )
 
 	return_code, result = pcall( scst.Daemon.apply )
 	if not return_code then
-		message_error = i18n("Failed to apply iSCSI configuration") .. ": " .. result
+		index_with_error( i18n("Failed to apply iSCSI configuration") .. ": " .. result )
+	end
+
+	return_code, result = pcall( caching.apply )
+	if not return_code then
+		index_with_error( i18n("Failed to apply caching policies") .. ": " .. result )
 	end
 
 	return index_with_error( message_error )
