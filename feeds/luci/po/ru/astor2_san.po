@@ -273,7 +273,9 @@ msgstr "Действительно изменить размер снимка?"
 msgid ""
 "Really unbind access pattern? This will terminate all related active iSCSI "
 "sessions!"
-msgstr "Действительно открепить шаблон доступа? Это так же завершит все связанные iSCSI сессии!"
+msgstr ""
+"Действительно открепить шаблон доступа? Это так же завершит все связанные "
+"iSCSI сессии!"
 
 msgid "Remove dedicated hotspare"
 msgstr "Удалить выделенный hotspare"
@@ -329,11 +331,17 @@ msgstr "Целевой драйвер"
 msgid "This is LUN is busy, please choose another one"
 msgstr "Этот LUN занят, пожалуйста выберите другой"
 
+msgid "This option will be applied to the whole logical drive"
+msgstr "Данная опция будет применена ко всему логическому диску"
+
 msgid "Unbind access pattern"
 msgstr "Открепить шаблон доступа"
 
 msgid "Unknown action specified"
 msgstr "Задано неизвестное действие"
+
+msgid "WriteThrough"
+msgstr "Сквозная запись"
 
 msgid "degraded"
 msgstr "деградированный"

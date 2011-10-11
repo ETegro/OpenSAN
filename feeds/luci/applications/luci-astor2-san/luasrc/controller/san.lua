@@ -25,6 +25,7 @@ einarc = require( "astor2.einarc" )
 lvm = require( "astor2.lvm" )
 matrix = require( "luci.controller.matrix" )
 scst = require( "astor2.scst" )
+caching = require( "astor2.caching" )
 
 ------------------------------------------------------------------------
 -- Hash related functions
@@ -780,12 +781,14 @@ local function scst_access_pattern_new( inputs )
 
 	local access_pattern_enabled = inputs[ "access_pattern_new-enabled" ]
 	local access_pattern_readonly = inputs[ "access_pattern_new-readonly" ]
+	local access_pattern_writethrough = inputs[ "access_pattern_new-readonly" ]
 
 	local access_pattern_attributes = { name = access_pattern_name,
 	                                    targetdriver = access_pattern_targetdriver,
 	                                    lun = access_pattern_lun,
 	                                    enabled = access_pattern_enabled,
-	                                    readonly = access_pattern_readonly }
+	                                    readonly = access_pattern_readonly,
+										writethrough = access_pattern_writethrough }
 
 	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
 	if not return_code then
@@ -861,7 +864,12 @@ local function scst_access_pattern_bind( inputs )
 	end
 
 	return_code, result = pcall( scst.Daemon.apply )
-	if not return_code then
+	if return_code then
+		return_code, result = pcall( caching.apply )
+		if not return_code then
+			message_error = i18n("Failed to apply caching policies") .. ": " .. result
+		end
+	else
 		message_error = i18n("Failed to apply iSCSI configuration") .. ": " .. result
 		scst.AccessPattern.unbind( scst.AccessPattern.find_by_name( access_pattern.name ) )
 		scst.Daemon.apply()
@@ -887,7 +895,12 @@ local function scst_access_pattern_unbind( inputs )
 
 	return_code, result = pcall( scst.Daemon.apply )
 	if not return_code then
-		message_error = i18n("Failed to apply iSCSI configuration") .. ": " .. result
+		index_with_error( i18n("Failed to apply iSCSI configuration") .. ": " .. result )
+	end
+
+	return_code, result = pcall( caching.apply )
+	if not return_code then
+		index_with_error( i18n("Failed to apply caching policies") .. ": " .. result )
 	end
 
 	return index_with_error( message_error )
@@ -919,12 +932,14 @@ local function scst_access_pattern_edit( inputs )
 	local access_pattern_targetdriver = inputs[ "access_pattern_edit-targetdriver-" .. access_pattern_section_name_hash ]
 	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. access_pattern_section_name_hash ]
 	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. access_pattern_section_name_hash ]
+	local access_pattern_writethrough = inputs[ "access_pattern_edit-writethrough-" .. access_pattern_section_name_hash ]
 	access_pattern_attributes = { section_name = access_pattern.section_name,
 	                              name = access_pattern_name,
 	                              targetdriver = access_pattern_targetdriver,
 	                              lun = access_pattern_lun,
 	                              enabled = access_pattern_enabled,
-	                              readonly = access_pattern_readonly }
+	                              readonly = access_pattern_readonly,
+								  writethrough = access_pattern_writethrough }
 
 	local return_code, result = pcall( scst.AccessPattern.save, access_pattern_attributes )
 	if not return_code then
