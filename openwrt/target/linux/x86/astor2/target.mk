@@ -33,6 +33,7 @@ DEFAULT_PACKAGES += \
 	dash \
 	gnu-cpio \
 	uhttpd \
+	astor2-blockdev-parameters \
 	luci-app-astor2-san \
 	astor2-luci-bwc-ipmi-rs230g3 \
 	sysstat \
