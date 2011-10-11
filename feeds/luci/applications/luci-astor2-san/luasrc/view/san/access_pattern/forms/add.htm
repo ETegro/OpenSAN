@@ -75,7 +75,10 @@
 						<input name="san.access_pattern_new-writethrough"
 						       id="san.access_pattern_new-writethrough"
 						       type="checkbox"
-						       value="1" />
+						       value="1"
+						       onclick="if( this.checked ){
+						       	alert('<%: This option will be applied to the whole logical drive %>')
+						       }"/>
 					</td>
 				</tr>
 				<tr>
