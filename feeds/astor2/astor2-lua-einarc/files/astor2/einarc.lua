@@ -254,6 +254,15 @@ function M.Logical:set( property, value )
 	if not output then error( "einarc:logical.set() failed" ) end
 end
 
+--- Is logical disk has WriteCache enabled
+-- @return true/false
+function M.Logical:is_writecache()
+	assert( self.id, "unable to get self object" )
+	local output = self:get( "writecache" )
+	if not output then error( "einarc:logical.is_writecache() failed" ) end
+	return output[1] == "1"
+end
+
 ------------------------------------------------------------------------
 -- Physical
 ------------------------------------------------------------------------
@@ -362,6 +371,15 @@ function M.Physical:enclosure()
 	local output = self:get( "enclosure" )
 	if not output then return nil end
 	return tonumber( output[1] )
+end
+
+--- Is physical disk has WriteCache enabled
+-- @return true/false
+function M.Physical:is_writecache()
+	assert( self.id, "unable to get self object" )
+	local output = self:get( "writecache" )
+	if not output then error( "einarc:physical.is_writecache() failed" ) end
+	return output[1] == "1"
 end
 
 ------------------------------------------------------------------------
