@@ -294,8 +294,8 @@ function M.Configuration.dump()
 			for target, luns in pairs( targets ) do
 				configuration = configuration .. "\tTARGET " ..
 					target .. " {\n" ..
-					"\t\tHeaderDigest CRC32C,None\n" ..
-					"\t\tDataDigest CRC32C,None\n"
+					"\t\tHeaderDigest None,CRC32C\n" ..
+					"\t\tDataDigest None,CRC32C\n"
 				for lun, access_pattern in pairs( luns ) do
 					local read_only = nil
 					if access_pattern.readonly then
