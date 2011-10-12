@@ -35,16 +35,12 @@ function M.apply( logicals, physical_volumes, volume_groups, logical_volumes )
 
 	for logical_id, logical in pairs( logicals ) do
 		local writethrough_found = false
-		for _, physical_volume in ipairs( physical_volumes ) do
-			if physical_volume.device == logical.device then
-				for _, volume_group in ipairs( volume_groups ) do
-					if volume_group.name == physical_volume.volume_group then
-						for _, logical_volume in ipairs( logical_volumes ) do
-							local ap = scst.AccessPattern.find_by( "filename", logical_volume.device )
-							if ap and ap.writethrough then
-								writethrough_found = true
-							end
-						end
+		for _, logical_volume in ipairs( logical_volumes ) do
+			for _, physical_volume in ipairs( logical_volume.volume_group.physical_volumes ) do
+				if physical_volume.device == logical.device then
+					local ap = scst.AccessPattern.find_by( "filename", logical_volume.device )
+					if ap and ap.writethrough then
+						writethrough_found = true
 					end
 				end
 			end
