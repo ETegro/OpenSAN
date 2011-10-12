@@ -17,6 +17,7 @@
 </div>
 }}}
 
+== About ==
 [http://www.opensan.org/ OpenSAN] is a
 [http://www.gnu.org/philosophy/free-sw.html free software]
 project realizing
@@ -41,11 +42,12 @@ single Web-interface's page.
 * English
 * Russian
 
-== Downloads ==
-Latest pre-built raw images and firmware updates can be found
-[http://www.opensan.org/output/ here].
+== Releases ==
+Latest nightly built and release raw images and firmware updates can be
+found [http://www.opensan.org/output/ here].
+* [wiki:Release1.1 1.1]
 
-=== Source code ===
+== Source code ==
 Source code is always available on
 [https://github.com/astor2-team/astor2 Git-repository].
 You can clone it using the following command:
@@ -67,7 +69,7 @@ Also, you can contact our team directly by sending email to
 
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]
-company. It's some kind of codename is **aStor2**.
+company. It's some kind of codename there is **aStor2**.
 
 ----
 
