@@ -24,8 +24,8 @@ single Web-interface's page.
 * Russian
 
 == Releases ==
-Latest nightly built and release raw images and firmware updates can be
-found [http://www.opensan.org/output/ here].
+Latest release raw images and firmware updates can be
+[/download/ found here].
 * [wiki:Release1.1 1.1]
 
 == Source code ==
