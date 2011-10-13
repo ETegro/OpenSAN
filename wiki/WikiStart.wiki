@@ -21,7 +21,8 @@ single Web-interface's page.
 
 == Translations ==
 * English
-* Russian
+* Russian (russian documentation can be
+  [https://www.etegro.com/support/articles found here])
 
 == Releases ==
 Latest release raw images and firmware updates can be
