@@ -33,6 +33,6 @@ for i in `find . -maxdepth 1 -type d`; do
 	     --sign \
 	     --armor \
 	     --comment="See http://www.opensan.org/trac/wiki/Publickey" \
-	     --output=- checksums.sha256 > checksums.sha256.sign
+	     --output=- checksums.sha256 > checksums.sha256.asc
 	cd ../
 done
