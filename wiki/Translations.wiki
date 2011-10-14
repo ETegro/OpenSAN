@@ -1,0 +1,3 @@
+* English
+* Russian (russian documentation can be
+  [https://www.etegro.com/support/articles found here])

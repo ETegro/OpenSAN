@@ -19,29 +19,6 @@ single Web-interface's page.
 * [wiki:Publickey]
 * [wiki:Team]
 
-== Translations ==
-* English
-* Russian (russian documentation can be
-  [https://www.etegro.com/support/articles found here])
-
-== Releases ==
-Latest release raw images and firmware updates can be
-[/download/ found here].
-* [wiki:Release1.1 1.1]
-
-== Source code ==
-Source code is always available on
-[https://github.com/astor2-team/astor2 Git-repository].
-You can clone it using the following command:
-{{{
-% git clone git://github.com/astor2-team/astor2.git
-}}}
-
-== Maillists ==
-You are always welcome in our general discussion maillist:
- Information:: https://groups.google.com/group/opensan-discuss
- Subscribe:: Email to opensan-discuss+subscribe at googlegroups dot com with subject "subscribe"
-
 Also, you can contact our team directly by sending email to
 **team at opensan dot org**.
 
