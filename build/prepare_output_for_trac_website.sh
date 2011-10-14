@@ -24,6 +24,10 @@ DOWNLOAD_DIR=/var/www/download
 
 cd $DOWNLOAD_DIR
 
+for i in *; do
+	mv "$i" `echo "$i" | sed 's/^.*\(V[0-9]*\..*\)$/\1/'`
+done
+
 for i in `find . -maxdepth 1 -type d`; do
 	echo "$i" | grep -q "^\.$" && continue || true
 	cd $i
