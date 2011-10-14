@@ -48,6 +48,7 @@ foreach my $s (keys %ms){
 	@input = grep {
 		s/\[$s\]/[$ms{$s}]/g;
 		s/^\s{2}$s\./  $ms{$s}./g;
+		s/\/trac\/download/\/download/g;
 		$_ } @input;
 };
 
