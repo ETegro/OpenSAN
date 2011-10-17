@@ -414,6 +414,13 @@ function M.Configuration.dump()
 					target .. " {\n" ..
 					"\t\tHeaderDigest None,CRC32C\n" ..
 					"\t\tDataDigest None,CRC32C\n"
+				-- Configure authentication credentials
+				for _, auth_credential in ipairs( M.AuthCredential.list_for( luns["0"].filename ) ) do
+					configuration = configuration ..
+					                "\t\tIncomingUser \"" ..
+					                auth_credential.username .. " " ..
+					                auth_credential.password .. "\"\n"
+				end
 				for lun, access_pattern in pairs( luns ) do
 					local read_only = nil
 					if access_pattern.readonly then
@@ -422,7 +429,7 @@ function M.Configuration.dump()
 						read_only = "0"
 					end
 					configuration = configuration ..
-									"\t\tLUN " .. lun ..
+					                "\t\tLUN " .. lun ..
 					                " blockio" ..
 					                tostring( blockios[ access_pattern.filename ] ) ..
 					                " {\n" ..
