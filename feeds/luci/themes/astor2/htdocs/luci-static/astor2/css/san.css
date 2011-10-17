@@ -56,6 +56,7 @@ table {
 .icon-unbind,
 .icon-reload,
 .icon-fieldadd,
+.icon-add,
 .icon-edit {
 	background-color: transparent;
 	background-position: center center;
@@ -102,6 +103,10 @@ table {
 
 .icon-fieldadd {
 	background-image: url( 'style/images/fieldadd.png' );
+}
+
+.icon-add {
+	background-image: url( 'style/images/add.png' );
 }
 
 .icon-reload {
