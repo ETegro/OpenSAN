@@ -33,9 +33,17 @@ local AuthCredential_mt = common.Class( M.AuthCredential )
 M.AuthCredential.UCI_TYPE_NAME = "astor2-auth-credential"
 M.AuthCredential.PASSWORD_LENGTH = 12
 
+function M.AuthCredential.username_is_valid( username )
+	if string.match( username, "^[a-zA-Z0-9_.-]+$" ) then
+		return true
+	end
+end
+
 function M.AuthCredential:new( attrs )
 	assert( common.is_string( attrs.username ),
 	        "empty username" )
+	assert( M.AuthCredential.username_is_valid( attrs.username ),
+	        "invalid username" )
 	assert( common.is_string( attrs.password ),
 	        "empty password" )
 	assert( #attrs.password == M.AuthCredential.PASSWORD_LENGTH,
