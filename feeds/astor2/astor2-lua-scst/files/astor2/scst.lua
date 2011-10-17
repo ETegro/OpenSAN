@@ -25,6 +25,116 @@ local common = require( "astor2.common" )
 M.UCI_CONFIG_NAME = "scst"
 
 ------------------------------------------------------------------------
+-- AuthCredential
+------------------------------------------------------------------------
+M.AuthCredential = {}
+local AuthCredential_mt = common.Class( M.AuthCredential )
+
+M.AuthCredential.UCI_TYPE_NAME = "astor2-auth-credential"
+M.AuthCredential.PASSWORD_LENGTH = 12
+
+function M.AuthCredential.username_is_valid( username )
+	if string.match( username, "^[a-zA-Z0-9_.-]+$" ) then
+		return true
+	end
+end
+
+function M.AuthCredential:new( attrs )
+	assert( common.is_string( attrs.username ),
+	        "empty username" )
+	assert( M.AuthCredential.username_is_valid( attrs.username ),
+	        "invalid username" )
+	assert( common.is_string( attrs.password ),
+	        "empty password" )
+	assert( #attrs.password == M.AuthCredential.PASSWORD_LENGTH,
+	        "incorrect password length" )
+	assert( common.is_string( attrs.filename ),
+	        "empty filename" )
+	return setmetatable( attrs, AuthCredential_mt )
+end
+
+function M.AuthCredential.list()
+	local ucicur = uci.cursor()
+	local auth_credentials = {}
+	ucicur:foreach(
+		M.UCI_CONFIG_NAME,
+		M.AuthCredential.UCI_TYPE_NAME,
+		function( section )
+			auth_credentials[ #auth_credentials + 1 ] = M.AuthCredential:new( {
+				section_name = section[ ".name" ],
+				username = section.username,
+				password = section.password,
+				filename = section.filename
+			} )
+		end
+	)
+	return auth_credentials
+end
+
+function M.AuthCredential.list_for( filename )
+	local auth_credentials = {}
+	for _, auth_credential in ipairs( M.AuthCredential.list() ) do
+		if auth_credential.filename == filename then
+			auth_credentials[ #auth_credentials + 1 ] = auth_credential
+		end
+	end
+	return auth_credentials
+end
+
+function M.AuthCredential.delete_by_username_and_filename( username, filename )
+	local ucicur = uci.cursor()
+	ucicur:foreach(
+		M.UCI_CONFIG_NAME,
+		M.AuthCredential.UCI_TYPE_NAME,
+		function( section )
+			if section.username == username and section.filename == filename then
+				ucicur:delete( M.UCI_CONFIG_NAME,
+				               section[".name"] )
+			end
+		end
+	)
+	ucicur:save( M.UCI_CONFIG_NAME )
+	ucicur:commit( M.UCI_CONFIG_NAME )
+end
+
+function M.AuthCredential:save()
+	assert( self, "unable to get self object" )
+	if self.section_name then
+		M.AccessPattern.delete_by_username_and_filename( self.username, self.filename )
+	end
+	local auth_credential_new = M.AuthCredential:new( {
+		username = self.username,
+		password = self.password,
+		filename = self.filename,
+	} )
+
+	local ucicur = uci.cursor()
+	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
+	                                 M.AuthCredential.UCI_TYPE_NAME )
+	auth_credential_new.section_name = section_name
+	ucicur:set( M.UCI_CONFIG_NAME,
+		    section_name,
+		    "username",
+		    auth_credential_new.username )
+	ucicur:set( M.UCI_CONFIG_NAME,
+		    section_name,
+		    "password",
+		    auth_credential_new.password )
+	ucicur:set( M.UCI_CONFIG_NAME,
+		    section_name,
+		    "filename",
+		    auth_credential_new.filename )
+	ucicur:save( M.UCI_CONFIG_NAME )
+	ucicur:commit( M.UCI_CONFIG_NAME )
+	return access_pattern_new
+end
+
+function M.AuthCredential:delete()
+	assert( self, "unable to get self object" )
+	M.AuthCredential.delete_by_username_and_filename( self.username, self.filename )
+end
+
+------------------------------------------------------------------------
 -- AccessPattern
 ------------------------------------------------------------------------
 M.AccessPattern = {}
@@ -312,6 +422,13 @@ function M.Configuration.dump()
 					target .. " {\n" ..
 					"\t\tHeaderDigest None,CRC32C\n" ..
 					"\t\tDataDigest None,CRC32C\n"
+				-- Configure authentication credentials
+				for _, auth_credential in ipairs( M.AuthCredential.list_for( luns["0"].filename ) ) do
+					configuration = configuration ..
+					                "\t\tIncomingUser \"" ..
+					                auth_credential.username .. " " ..
+					                auth_credential.password .. "\"\n"
+				end
 				for lun, access_pattern in pairs( luns ) do
 					local read_only = nil
 					if access_pattern.readonly then
@@ -320,7 +437,7 @@ function M.Configuration.dump()
 						read_only = "0"
 					end
 					configuration = configuration ..
-									"\t\tLUN " .. lun ..
+					                "\t\tLUN " .. lun ..
 					                " blockio" ..
 					                tostring( blockios[ access_pattern.filename ] ) ..
 					                " {\n" ..
