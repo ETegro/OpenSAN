@@ -63,20 +63,22 @@ end
 function M.AccessPattern.list()
 	local ucicur = uci.cursor()
 	local access_patterns = {}
-	ucicur:foreach( M.UCI_CONFIG_NAME,
-	                M.AccessPattern.UCI_TYPE_NAME,
-	                function( section )
-	                	access_patterns[ #access_patterns + 1 ] = M.AccessPattern:new( {
-	                		section_name = section[ ".name" ],
-	                		name = section.name,
-	                		targetdriver = section.targetdriver,
-	                		lun = tonumber( section.lun ),
-	                		filename = section.filename,
-	                		enabled = section.enabled,
-	                		readonly = section.readonly,
-	                		writethrough = section.writethrough
-	                        } )
-			end )
+	ucicur:foreach(
+		M.UCI_CONFIG_NAME,
+		M.AccessPattern.UCI_TYPE_NAME,
+		function( section )
+			access_patterns[ #access_patterns + 1 ] = M.AccessPattern:new( {
+				section_name = section[ ".name" ],
+				name = section.name,
+				targetdriver = section.targetdriver,
+				lun = tonumber( section.lun ),
+				filename = section.filename,
+				enabled = section.enabled,
+				readonly = section.readonly,
+				writethrough = section.writethrough
+			} )
+		end
+	)
 	return access_patterns
 end
 
@@ -132,39 +134,53 @@ function M.AccessPattern:save()
 	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
 	                                 M.AccessPattern.UCI_TYPE_NAME )
 	access_pattern_new.section_name = section_name
-	ucicur:set( M.UCI_CONFIG_NAME,
-		    section_name,
-		    "name",
-		    access_pattern_new.name )
-	ucicur:set( M.UCI_CONFIG_NAME,
-		    section_name,
-		    "targetdriver",
-		    access_pattern_new.targetdriver )
-	ucicur:set( M.UCI_CONFIG_NAME,
-		    section_name,
-		    "lun",
-		    tostring( access_pattern_new.lun ) )
-	ucicur:set( M.UCI_CONFIG_NAME,
-		    section_name,
-		    "filename",
-		    access_pattern_new.filename or "" )
+	ucicur:set(
+		M.UCI_CONFIG_NAME,
+		section_name,
+		"name",
+		access_pattern_new.name
+	)
+	ucicur:set(
+		M.UCI_CONFIG_NAME,
+		section_name,
+		"targetdriver",
+		access_pattern_new.targetdriver
+	)
+	ucicur:set(
+		M.UCI_CONFIG_NAME,
+		section_name,
+		"lun",
+		tostring( access_pattern_new.lun )
+	)
+	ucicur:set(
+		M.UCI_CONFIG_NAME,
+		section_name,
+		"filename",
+		access_pattern_new.filename or ""
+	)
 	if access_pattern_new.enabled == true then
-		ucicur:set( M.UCI_CONFIG_NAME,
-			    section_name,
-			    "enabled",
-			    "1" )
+		ucicur:set(
+			M.UCI_CONFIG_NAME,
+			section_name,
+			"enabled",
+			"1"
+		)
 	end
 	if access_pattern_new.readonly == true then
-		ucicur:set( M.UCI_CONFIG_NAME,
-			    section_name,
-			    "readonly",
-			    "1" )
+		ucicur:set(
+			M.UCI_CONFIG_NAME,
+			section_name,
+			"readonly",
+			"1"
+		)
 	end
 	if access_pattern_new.writethrough == true then
-		ucicur:set( M.UCI_CONFIG_NAME,
-			    section_name,
-			    "writethrough",
-			    "1" )
+		ucicur:set(
+			M.UCI_CONFIG_NAME,
+			section_name,
+			"writethrough",
+			"1"
+		)
 	end
 	ucicur:save( M.UCI_CONFIG_NAME )
 	ucicur:commit( M.UCI_CONFIG_NAME )
