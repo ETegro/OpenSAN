@@ -27,3 +27,4 @@
    branching
    commiting_rules
    merging_rules
+   releasing

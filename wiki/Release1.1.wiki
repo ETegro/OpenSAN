@@ -1,0 +1,17 @@
+This release brings two important features:
+
+* **Caching policies** changing support: now, user can distinguish
+  between write back and write through logical drive's mode of
+  operation. Write back policy allows some buffering (caching) of write
+  operations, while write through performs writing directly to the hard
+  drives. This mode also forces disabling of all hard drive's internal
+  write caching.  User can switch to this mode by setting “WriteThrough
+  mode” in one of corresponding to logical disk access patterns. This
+  mode will be applied to the whole logical disk.
+* Disk subsystem **performance optimizations**: various fine tweaks of
+  I/O scheduler's (CFQ) queue behaviour, buffer sizes and read-ahead
+  support.
+
+=== Download ===
+You can download this release following [/download/V1.1/ this link].
+Always cryptographically [wiki:Publickey verify images]!

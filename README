@@ -1,8 +1,13 @@
-                    SVN checkouts and their versions
-+----------------+------------------------------------------+----------+
-| Path           | Subversion path                          | Revision |
-+----------------+------------------------------------------+----------+
-| openwrt        | svn://svn.openwrt.org/openwrt/trunk      | 25809    |
-| feeds/packages | svn://svn.openwrt.org/openwrt/packages   | 25804    |
-| feeds/luci     | http://svn.luci.subsignal.org/luci/trunk | 7083     |
-+----------------+------------------------------------------+----------+
+OpenSAN is a free software project realizing Storage Area Network
+system. This is small firmware that turns server (having at least one
+hard drive) into an iSCSI target accessible through the Ethernet
+interface.
+
+It is intended to be easy configurable using user-friendly
+Web-interface. Nearly everything related to SAN can be configured from
+single Web-interface's page.
+
+This software is licenced under GNU General Public License version 3 or
+any later version. See COPYING.
+
+See INSTALL for installation instructions.

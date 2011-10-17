@@ -1,8 +1,10 @@
+This is the first production-ready and stable release, bringing plenty
+of various features:
+
 * **Physical** drives and **logical** drives (either JBOD or RAID)
   management
   * Supported RAID levels: **0**, **1**, **5**, **6**, **10**
   * Dedicated **hotspare** drives support
-* WriteBack and WriteThrough caching policies switching
 * **Logical volumes** management
   * Virtually **unlimited** volumes quantity on single logical drive
   * Logical volume **resize** support
@@ -20,3 +22,7 @@
 * Network configuration can be doned using either **static IPv4**
   addressing and routing, **DHCP** or using **bridged** interfaces
 * Real-time load average, traffic and connections **monitoring**
+
+=== Download ===
+You can download this release following [/download/V1.0/ this link].
+Always cryptographically [wiki:Publickey verify images]!

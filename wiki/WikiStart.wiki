@@ -1,22 +1,3 @@
-{{{
-#!html
-<div style="float: right; padding-left: 1em; font-size: 60%">
-<pre>
-              \____/                                  
-              /    \                                  
-             / O  o \      _______    __    ___   ___ 
-  ____  "o' () \__/ ()    /______/|  /_/\  /__/\ /__/|
- / __ \   \/ \______/ \  /   ____|/ /  \ \ |  \ |  | |
-| /  \ |_ __  |_||_|___O |  (____/\/    \ \|   \|  | |
-| |  | | '_ \ / _ \' _ \'\____   \/  /\  \ |  . `  | |
-| \__/ | |_) |  __/ | | |/____)     ____  \|  |\   | |
- \____/|  __/ \___|_| |_|_______/__/'   \_____|'\__|/ 
-       | |                                            
-       |_|                                            
-</pre>
-</div>
-}}}
-
 [http://www.opensan.org/ OpenSAN] is a
 [http://www.gnu.org/philosophy/free-sw.html free software]
 project realizing
@@ -30,33 +11,18 @@ It is intended to be easy configurable using user-friendly
 Web-interface. Nearly everything related to SAN can be configured from
 single Web-interface's page.
 
-* [wiki:Licence]
+* [wiki:News]
 * [wiki:Features]
 * [wiki:Screenshots]
 * [wiki:TechnicalOverview]
 * [wiki:Publickey]
+* [/download/ Downloads]
+* [wiki:Releases]
+* [wiki:Translations]
+* [wiki:SourceCode]
+* [wiki:Maillists]
+* [wiki:Licence]
 * [wiki:Team]
-
-== Translations ==
-* English
-* Russian
-
-== Downloads ==
-Latest pre-built raw images and firmware updates can be found
-[http://www.opensan.org/output/ here].
-
-=== Source code ===
-Source code is always available on
-[https://github.com/astor2-team/astor2 Git-repository].
-You can clone it using the following command:
-{{{
-% git clone git://github.com/astor2-team/astor2.git
-}}}
-
-== Maillists ==
-You are always welcome in our general discussion maillist:
- Information:: https://groups.google.com/group/opensan-discuss
- Subscribe:: Email to opensan-discuss+subscribe at googlegroups dot com with subject "subscribe"
 
 Also, you can contact our team directly by sending email to
 **team at opensan dot org**.
@@ -67,7 +33,7 @@ Also, you can contact our team directly by sending email to
 
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]
-company. It's some kind of codename is **aStor2**.
+company. It's some kind of codename there is **aStor2**.
 
 ----
 

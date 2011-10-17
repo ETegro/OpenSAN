@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:py="http://genshi.edgewall.org/"
+      py:strip="">
+
+<body py:match="body" py:attrs="select('@*')">
+	<div py:match="div[@id='header']" py:attrs="select('@*')">
+		<div style="margin-bottom: -12em; font-size: 50%"><pre>
+              \____/                                  
+              /    \                                  
+             / O  o \      _______    __    ___   ___ 
+  ____  "o' () \__/ ()    /______/|  /_/\  /__/\ /__/|
+ / __ \   \/ \______/ \  /   ____|/ /  \ \ |  \ |  | |
+| /  \ |_ __  |_||_|___O |  (____/\/    \ \|   \|  | |
+| |  | | '_ \ / _ \' _ \'\____   \/  /\  \ |  . `  | |
+| \__/ | |_) |  __/ | | |/____)     ____  \|  |\   | |
+ \____/|  __/ \___|_| |_|_______/__/'   \_____|'\__|/ 
+       | |                                            
+       |_|                                            
+		</pre></div>
+	</div>
+	${select('*|text()')}
+</body>
+
+</html>

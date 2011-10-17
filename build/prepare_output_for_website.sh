@@ -59,7 +59,7 @@ for build in *; do
 	$GPG --default-key=$PGP_SIGN_KEYID \
 	     --sign \
 	     --armor \
-	     --comment="See http://www.opensan.org/publickey.html" \
+	     --comment="See http://www.opensan.org/trac/wiki/Publickey" \
 	     --output=- checksums.sha256 > checksums.sha256.sign
 	popd
 done
