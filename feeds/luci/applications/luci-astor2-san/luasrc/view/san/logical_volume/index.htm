@@ -64,7 +64,7 @@
 	<% if line.logical_volume.auth_credentials then %>
 		<%+san/logical_volume/credentials/info%>
 	<% end %>
-	<tr class="to_hide">
+	<tr class="to_hide" id="auth_credential_add_form-<%= hash( line.logical_volume.device ) %>">
 		<td>
 			<%+san/logical_volume/credentials/forms/add%>
 		</td>
