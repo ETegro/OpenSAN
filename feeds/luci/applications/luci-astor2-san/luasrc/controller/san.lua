@@ -1007,6 +1007,8 @@ local function scst_auth_credential_add( inputs, data )
 	return_code, result = pcall( scst.Daemon.apply )
 	if not return_code then
 		index_with_error( i18n("Failed to apply iSCSI configuration") .. ": " .. result )
+		scst.AuthCredential.delete_by_username_and_filename( auth_credential_username, logical_volume_device )
+		scst.Daemon.apply()
 	end
 
 	return index_with_error( message_error )
