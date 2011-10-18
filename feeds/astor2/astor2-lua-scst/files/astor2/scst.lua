@@ -97,6 +97,19 @@ function M.AuthCredential.delete_by_username_and_filename( username, filename )
 	ucicur:commit( M.UCI_CONFIG_NAME )
 end
 
+function M.AuthCredential.find_by( attribute, value )
+	for _, auth_credential in ipairs( M.AuthCredential.list() ) do
+		if auth_credential[ attribute ] == value then
+			return auth_credential
+		end
+	end
+	return nil
+end
+
+function M.AuthCredential.find_by_section_name( section_name )
+	return M.AuthCredential.find_by( "section_name", section_name )
+end
+
 function M.AuthCredential:save()
 	assert( self, "unable to get self object" )
 	if self.section_name then
