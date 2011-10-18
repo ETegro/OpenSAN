@@ -32,6 +32,7 @@ DEFAULT_PACKAGES += \
 	kmod-ixgbe \
 	kmod-fs-xfs \
 	kmod-bonding \
+	kmod-ipv6 \
 	dash \
 	gnu-cpio \
 	uhttpd \
