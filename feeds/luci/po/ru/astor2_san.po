@@ -30,6 +30,9 @@ msgstr "Добавить"
 msgid "Add access pattern"
 msgstr "Добавить шаблон доступа"
 
+msgid "Add authentication credential"
+msgstr "Добавить полномочие доступа"
+
 msgid "Add dedicated hotspare"
 msgstr "Добавить выделенный hotspare"
 
@@ -41,6 +44,12 @@ msgstr "Добавить логический том"
 
 msgid "Add snapshot"
 msgstr "Добавить снимок"
+
+msgid "Authentication credential"
+msgstr "Полномочие доступа"
+
+msgid "Available users"
+msgstr "Доступные пользователи"
 
 msgid "Bind access pattern"
 msgstr "Прикрепить шаблон доступа"
@@ -106,6 +115,9 @@ msgstr "Невозможно создать VolumeGroup на логическо�
 msgid "Failed to create access pattern"
 msgstr "Невозможно создать шаблон доступа"
 
+msgid "Failed to create authentication credential"
+msgstr "Невозможно создать полномочие доступа"
+
 msgid "Failed to create logical disk"
 msgstr "Невозможно создать логический диск"
 
@@ -114,6 +126,9 @@ msgstr "Невозможно создать снимок"
 
 msgid "Failed to delete access pattern"
 msgstr "Невозможно удалить шаблон доступа"
+
+msgid "Failed to delete authentication credential"
+msgstr "Невозможно удалить полномочие доступа"
 
 msgid "Failed to delete dedicated hotspare disk"
 msgstr "Невозможно удалить выделенный hotspare диск"
@@ -150,6 +165,9 @@ msgstr "Неправильный уровень RAID"
 
 msgid "Invalid logical volume name"
 msgstr "Неправильное название логического тома"
+
+msgid "Invalid username"
+msgstr "Неправильное имя пользователя"
 
 msgid "LUN"
 msgstr ""
@@ -212,6 +230,12 @@ msgstr "Не в массиве"
 msgid "Only single model hard drives should be used"
 msgstr "Желательно использовать жёсткие диски только одной модели"
 
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Password must be 12 characters long"
+msgstr "Пароль должен иметь длину 12 символов"
+
 msgid "Physical drives"
 msgstr "Физические диски"
 
@@ -252,6 +276,9 @@ msgstr "Только для чтения"
 msgid "Really delete access pattern?"
 msgstr "Действительно удалить шаблон доступа?"
 
+msgid "Really delete authentication credential?"
+msgstr "Действительно удалить полномочие доступа?"
+
 msgid "Really delete dedicated hotspare drive?"
 msgstr "Действительно удалить выделенный hotspare жёсткий диск?"
 
@@ -279,6 +306,9 @@ msgid ""
 msgstr ""
 "Действительно открепить шаблон доступа? Это так же завершит все связанные "
 "iSCSI сессии!"
+
+msgid "Remove authentication credential"
+msgstr "Удалить полномочие доступа"
 
 msgid "Remove dedicated hotspare"
 msgstr "Удалить выделенный hotspare"
@@ -325,6 +355,9 @@ msgstr "Состояние"
 msgid "States"
 msgstr "Состояния"
 
+msgid "Such username already exists in current logical volume"
+msgstr "Такое имя пользователя уже имеется в текущем логическом томе"
+
 msgid "Take snapshot"
 msgstr "Сделать снимок"
 
@@ -342,6 +375,12 @@ msgstr "Открепить шаблон доступа"
 
 msgid "Unknown action specified"
 msgstr "Задано неизвестное действие"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Username is not set"
+msgstr "Имя пользователя не задано"
 
 msgid "WriteThrough"
 msgstr "Сквозная запись"

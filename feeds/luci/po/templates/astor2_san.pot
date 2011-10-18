@@ -19,6 +19,9 @@ msgstr ""
 msgid "Add access pattern"
 msgstr ""
 
+msgid "Add authentication credential"
+msgstr ""
+
 msgid "Add dedicated hotspare"
 msgstr ""
 
@@ -29,6 +32,12 @@ msgid "Add logical volume"
 msgstr ""
 
 msgid "Add snapshot"
+msgstr ""
+
+msgid "Authentication credential"
+msgstr ""
+
+msgid "Available users"
 msgstr ""
 
 msgid "Bind access pattern"
@@ -93,6 +102,9 @@ msgstr ""
 msgid "Failed to create access pattern"
 msgstr ""
 
+msgid "Failed to create authentication credential"
+msgstr ""
+
 msgid "Failed to create logical disk"
 msgstr ""
 
@@ -100,6 +112,9 @@ msgid "Failed to create snapshot"
 msgstr ""
 
 msgid "Failed to delete access pattern"
+msgstr ""
+
+msgid "Failed to delete authentication credential"
 msgstr ""
 
 msgid "Failed to delete dedicated hotspare disk"
@@ -136,6 +151,9 @@ msgid "Incorrect RAID level"
 msgstr ""
 
 msgid "Invalid logical volume name"
+msgstr ""
+
+msgid "Invalid username"
 msgstr ""
 
 msgid "LUN"
@@ -198,6 +216,12 @@ msgstr ""
 msgid "Only single model hard drives should be used"
 msgstr ""
 
+msgid "Password"
+msgstr ""
+
+msgid "Password must be 12 characters long"
+msgstr ""
+
 msgid "Physical drives"
 msgstr ""
 
@@ -237,6 +261,9 @@ msgstr ""
 msgid "Really delete access pattern?"
 msgstr ""
 
+msgid "Really delete authentication credential?"
+msgstr ""
+
 msgid "Really delete dedicated hotspare drive?"
 msgstr ""
 
@@ -260,6 +287,9 @@ msgstr ""
 msgid ""
 "Really unbind access pattern? This will terminate all related active iSCSI "
 "sessions!"
+msgstr ""
+
+msgid "Remove authentication credential"
 msgstr ""
 
 msgid "Remove dedicated hotspare"
@@ -307,6 +337,9 @@ msgstr ""
 msgid "States"
 msgstr ""
 
+msgid "Such username already exists in current logical volume"
+msgstr ""
+
 msgid "Take snapshot"
 msgstr ""
 
@@ -323,6 +356,12 @@ msgid "Unbind access pattern"
 msgstr ""
 
 msgid "Unknown action specified"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Username is not set"
 msgstr ""
 
 msgid "WriteThrough"
