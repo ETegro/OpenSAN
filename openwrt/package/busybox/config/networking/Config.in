@@ -422,14 +422,14 @@ config BUSYBOX_CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN
 
 config BUSYBOX_CONFIG_FEATURE_IFUPDOWN_IPV4
 	bool "Support for IPv4"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_IFUPDOWN
 	help
 	  If you want ifup/ifdown to talk IPv4, leave this on.
 
 config BUSYBOX_CONFIG_FEATURE_IFUPDOWN_IPV6
 	bool "Support for IPv6"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_IFUPDOWN && BUSYBOX_CONFIG_FEATURE_IPV6
 	help
 	  If you need support for IPv6, turn this option on.
@@ -930,7 +930,7 @@ config BUSYBOX_CONFIG_TRACEROUTE
 
 config BUSYBOX_CONFIG_TRACEROUTE6
 	bool "traceroute6"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_FEATURE_IPV6 && BUSYBOX_CONFIG_TRACEROUTE
 	help
 	  Utility to trace the route of IPv6 packets.
