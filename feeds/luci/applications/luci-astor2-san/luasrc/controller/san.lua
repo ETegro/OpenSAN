@@ -373,7 +373,10 @@ end
 ------------------------------------------------------------------------
 
 local function find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
-	return find_by_hash( volume_group_name_hash, common.keys( common.unique_keys( "name", data.volume_groups ) ) )
+	return find_by_hash(
+		volume_group_name_hash,
+		common.keys( common.unique_keys( "name", data.volume_groups ) )
+	)
 end
 
 --[[
@@ -552,7 +555,10 @@ local function lvm_logical_volume_add( inputs, data )
 end
 
 local function find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
-	return find_by_hash( logical_volume_name_hash, common.keys( common.unique_keys( "name", data.logical_volumes ) ) )
+	return find_by_hash(
+		logical_volume_name_hash,
+		common.keys( common.unique_keys( "name", data.logical_volumes ) )
+	)
 end
 
 --[[
@@ -804,8 +810,10 @@ local function scst_access_pattern_new( inputs )
 end
 
 local function find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
-	return find_by_hash( access_pattern_section_name_hash,
-	                     common.keys( common.unique_keys( "section_name", scst.AccessPattern.list() ) ) )
+	return find_by_hash(
+		access_pattern_section_name_hash,
+		common.keys( common.unique_keys( "section_name", scst.AccessPattern.list() ) )
+	)
 end
 
 local function scst_access_pattern_delete( inputs )
@@ -949,7 +957,10 @@ local function scst_access_pattern_edit( inputs )
 end
 
 local function find_logical_volume_device_in_data_by_hash( logical_volume_device_hash, data )
-	return find_by_hash( logical_volume_device_hash, common.keys( common.unique_keys( "device", data.logical_volumes ) ) )
+	return find_by_hash(
+		logical_volume_device_hash,
+		common.keys( common.unique_keys( "device", data.logical_volumes ) )
+	)
 end
 
 local function scst_auth_credential_add( inputs, data )
@@ -1002,8 +1013,10 @@ local function scst_auth_credential_add( inputs, data )
 end
 
 local function find_auth_credential_section_name_by_hash( auth_credential_section_name_hash )
-	return find_by_hash( auth_credential_section_name_hash,
-	                     common.keys( common.unique_keys( "section_name", scst.AuthCredential.list() ) ) )
+	return find_by_hash(
+		auth_credential_section_name_hash,
+		common.keys( common.unique_keys( "section_name", scst.AuthCredential.list() ) )
+	)
 end
 
 local function scst_auth_credential_delete( inputs )
