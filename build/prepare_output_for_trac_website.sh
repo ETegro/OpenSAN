@@ -24,6 +24,7 @@ DOWNLOAD_DIR=/var/www/download
 
 cd $DOWNLOAD_DIR
 
+rm -fr V* *master*
 for i in *; do
 	mv "$i" `echo "$i" | sed 's/^.*\(V[0-9]*\..*\)$/\1/'`
 done
