@@ -948,6 +948,87 @@ local function scst_access_pattern_edit( inputs )
 	return index_with_error( message_error )
 end
 
+local function find_logical_volume_device_in_data_by_hash( logical_volume_device_hash, data )
+	return find_by_hash( logical_volume_device_hash, common.keys( common.unique_keys( "device", data.logical_volumes ) ) )
+end
+
+local function scst_auth_credential_add( inputs, data )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local logical_volume_device_hash = parse_inputs_by_re( inputs, {"^submit_auth_credential_add.(",hashre,")"} )
+	assert( logical_volume_device_hash, "unable to parse out logical volume's device" )
+	local logical_volume_device = find_logical_volume_device_in_data_by_hash( logical_volume_device_hash, data )
+
+	local auth_credential_username = inputs[ "new_auth_credential_username-" .. logical_volume_device_hash ]
+	if auth_credential_username == "" then
+		return index_with_error( i18n("Username is not set") )
+	end
+	if not scst.AuthCredential.username_is_valid( auth_credential_username ) then
+		return index_with_error( i18n("Invalid username") )
+	end
+	for _, auth_credential in ipairs( scst.AuthCredential.list_for( logical_volume_device ) ) do
+		if auth_credential.username == auth_credential_username then
+			return index_with_error( i18n("Such username already exists in current logical volume") )
+		end
+	end
+
+	local auth_credential_password = inputs[ "new_auth_credential_password-" .. logical_volume_device_hash ]
+	if #auth_credential_password ~= 12 then
+		return index_with_error( i18n("Password must be 12 characters long") )
+	end
+
+	local return_code, result = pcall(
+		scst.AuthCredential.new, {}, {
+			username = auth_credential_username,
+			password = auth_credential_password,
+			filename = logical_volume_device
+	} )
+	if not return_code then
+		return index_with_error( i18n("Failed to create authentication credential") .. ": " .. result )
+	end
+
+	return_code, result = pcall( scst.AuthCredential.save, result )
+	if not return_code then
+		message_error = i18n("Failed to save config") .. ": " .. result
+	end
+
+	return_code, result = pcall( scst.Daemon.apply )
+	if not return_code then
+		index_with_error( i18n("Failed to apply iSCSI configuration") .. ": " .. result )
+	end
+
+	return index_with_error( message_error )
+end
+
+local function find_auth_credential_section_name_by_hash( auth_credential_section_name_hash )
+	return find_by_hash( auth_credential_section_name_hash,
+	                     common.keys( common.unique_keys( "section_name", scst.AuthCredential.list() ) ) )
+end
+
+local function scst_auth_credential_delete( inputs )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local auth_credential_section_name_hash = parse_inputs_by_re( inputs, {"^submit_auth_credential_delete.(",hashre,")"} )
+	assert( auth_credential_section_name_hash,
+	        "unable to parse out section's name" )
+	local auth_credential_section_name = find_auth_credential_section_name_by_hash( auth_credential_section_name_hash )
+
+	local return_code, result = pcall( scst.AuthCredential.delete,
+	                                   scst.AuthCredential.find_by_section_name( auth_credential_section_name ) )
+	if not return_code then
+		index_with_error( i18n("Failed to delete authentication credential") .. ": " .. result )
+	end
+
+	return_code, result = pcall( scst.Daemon.apply )
+	if not return_code then
+		index_with_error( i18n("Failed to apply iSCSI configuration") .. ": " .. result )
+	end
+
+	return index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- Different common functions
 ------------------------------------------------------------------------
@@ -1015,7 +1096,9 @@ function perform()
 		access_pattern_delete = function() scst_access_pattern_delete( inputs ) end,
 		access_pattern_bind = function() scst_access_pattern_bind( inputs ) end,
 		access_pattern_unbind = function() scst_access_pattern_unbind( inputs ) end,
-		access_pattern_edit = function() scst_access_pattern_edit( inputs ) end
+		access_pattern_edit = function() scst_access_pattern_edit( inputs ) end,
+		auth_credential_add = function() scst_auth_credential_add( inputs, data ) end,
+		auth_credential_delete = function() scst_auth_credential_delete( inputs ) end
 	}
 
 	for _, submit in ipairs( common.keys( inputs ) ) do
