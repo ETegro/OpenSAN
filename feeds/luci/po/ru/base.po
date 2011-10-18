@@ -235,7 +235,7 @@ msgid "About"
 msgstr "О программе"
 
 msgid "Accept Router Advertisements"
-msgstr ""
+msgstr "Принимать оповещения маршрутизаторов"
 
 msgid "Access Point"
 msgstr "Точка доступа"
@@ -1059,7 +1059,7 @@ msgid "IPv6 Firewall"
 msgstr ""
 
 msgid "IPv6 Setup"
-msgstr ""
+msgstr "Настройка IPv6"
 
 msgid "IPv6 WAN Status"
 msgstr ""
@@ -1953,7 +1953,7 @@ msgid "See \"mount\" manpage for details"
 msgstr ""
 
 msgid "Send Router Solicitiations"
-msgstr ""
+msgstr "Посылать запросы оповещения маршрутизатора"
 
 msgid "Separate Clients"
 msgstr ""
