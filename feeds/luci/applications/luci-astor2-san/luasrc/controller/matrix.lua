@@ -487,7 +487,11 @@ local function filter_fillup_auth_credentials( matrix )
 					end
 				end
 			end
-			line.logical_volume.auth_credentials = auth_credentials_sorted
+			if #auth_credentials_sorted == 0 then
+				line.logical_volume.auth_credentials = nil
+			else
+				line.logical_volume.auth_credentials = auth_credentials_sorted
+			end
 		end
 	end
 	return matrix
