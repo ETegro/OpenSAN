@@ -2,6 +2,7 @@
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2011 ETegro Technologies, PLC
                           Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                          Sergey Matveev (stargrave@stargrave.org)
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -44,6 +45,7 @@
 				<% if not line.logical_volume.access_patterns then %>
 					<%+san/logical_volume/remove%>
 				<% end %>
+				<%+san/logical_volume/credentials/add%>
 			</div>
 		</td>
 	</tr>
@@ -57,6 +59,14 @@
 			<% if #line.logical_volume.snapshots == 0 then %>
 				<%+san/logical_volume/resize%>
 			<% end %>
+		</td>
+	</tr>
+	<% if line.logical_volume.auth_credentials then %>
+		<%+san/logical_volume/credentials/info%>
+	<% end %>
+	<tr class="to_hide" id="auth_credential_add_form-<%= hash( line.logical_volume.device ) %>">
+		<td>
+			<%+san/logical_volume/credentials/forms/add%>
 		</td>
 	</tr>
 </table>

@@ -469,6 +469,34 @@ local function filter_add_logical_id_to_physical( matrix )
 	return matrix
 end
 
+local function filter_fillup_auth_credentials( matrix )
+	local lines = matrix.lines
+	for _, line in ipairs( lines ) do
+		if line.logical_volume then
+			line.logical_volume.auth_credentials = scst.AuthCredential.list_for( line.logical_volume.device )
+			local usernames = {}
+			for _, auth_credential in ipairs( line.logical_volume.auth_credentials ) do
+				usernames[ #usernames + 1 ] = auth_credential.username
+			end
+			table.sort( usernames )
+			local auth_credentials_sorted = {}
+			for _, username in ipairs( usernames ) do
+				for _, auth_credential in ipairs( line.logical_volume.auth_credentials ) do
+					if auth_credential.username == username then
+						auth_credentials_sorted[ #auth_credentials_sorted + 1 ] = auth_credential
+					end
+				end
+			end
+			if #auth_credentials_sorted == 0 then
+				line.logical_volume.auth_credentials = nil
+			else
+				line.logical_volume.auth_credentials = auth_credentials_sorted
+			end
+		end
+	end
+	return matrix
+end
+
 function M.filter_calculate_hotspares( matrix )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
@@ -643,6 +671,7 @@ function M.caller()
 		M.filter_calculate_hotspares,
 		filter_mib_humanize,
 		filter_size_round,
+		filter_fillup_auth_credentials,
 		filter_serialize,
 		filter_base64encode
 	}
