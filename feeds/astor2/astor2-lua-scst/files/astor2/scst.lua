@@ -478,6 +478,13 @@ M.Daemon = {}
 local Daemon_mt = common.Class( M.Daemon )
 
 M.Daemon.SCSTADMIN_PATH = "/usr/sbin/scstadmin"
+local LOG_PATH = "/tmp/scst.daemon.log"
+
+local function log_append( str )
+	local log_fd = io.open( LOG_PATH, "a" )
+	log_fd:write( tostring( os.date() ) .. ": " .. str .. "\n" )
+	log_fd:close()
+end
 
 function M.Daemon.check( configuration )
 	local configuration_path = os.tmpname()
@@ -486,6 +493,10 @@ function M.Daemon.check( configuration )
 	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
 	                              " -check_config " ..
 				      configuration_path )
+	log_append(
+		table.concat( result.stdout, "\n" ) ..
+		table.concat( result.stderr, "\n" )
+	)
 	if result.return_code ~= 0 then
 		os.remove( configuration_path )
 		error( "scst:Daemon:check() failed: " .. table.concat( result.stdout, "\n" ) )
@@ -509,11 +520,14 @@ function M.Daemon.apply()
 	M.Daemon.check( configuration )
 	M.Configuration.write( configuration,
 	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
-	common.system_succeed( M.Daemon.SCSTADMIN_PATH ..
-	                       " -force" ..
-	                       " -noprompt" ..
-	                       " -config " ..
-	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
+	local result = common.system_succeed(
+		M.Daemon.SCSTADMIN_PATH ..
+		" -force" ..
+		" -noprompt" ..
+		" -config " ..
+		M.Configuration.SCSTADMIN_CONFIG_PATH
+	)
+	log_append( table.concat( result, "\n" ) )
 	for _, device in ipairs( devices ) do
 		common.system( M.Daemon.SCSTADMIN_PATH ..
 		               " -resync_dev " .. device )

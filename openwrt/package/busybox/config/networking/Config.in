@@ -359,7 +359,7 @@ config BUSYBOX_CONFIG_IFPLUGD
 
 config BUSYBOX_CONFIG_IFUPDOWN
 	bool "ifupdown"
-	default n
+	default y
 	help
 	  Activate or deactivate the specified interfaces. This applet makes
 	  use of either "ifconfig" and "route" or the "ip" command to actually
@@ -386,7 +386,7 @@ config BUSYBOX_CONFIG_IFUPDOWN_IFSTATE_PATH
 
 config BUSYBOX_CONFIG_FEATURE_IFUPDOWN_IP
 	bool "Use ip applet"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_IFUPDOWN
 	help
 	  Use the iproute "ip" command to implement "ifup" and "ifdown", rather
@@ -394,7 +394,7 @@ config BUSYBOX_CONFIG_FEATURE_IFUPDOWN_IP
 
 config BUSYBOX_CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN
 	bool "Use busybox ip applet"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_FEATURE_IFUPDOWN_IP
 	select BUSYBOX_CONFIG_IP
 	select BUSYBOX_CONFIG_FEATURE_IP_ADDRESS

@@ -1,3 +1,4 @@
 * [wiki:News_20111019T1028 Release 1.2]
+* [wiki:News_20111018T1350 Release 1.1.1]
 * [wiki:News_20111014T1303 Release 1.1]
 * [wiki:News_20111007T0200 First production-ready stable release]
