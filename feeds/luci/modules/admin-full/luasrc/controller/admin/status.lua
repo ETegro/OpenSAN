@@ -31,8 +31,10 @@ function index()
 	entry({"admin", "status", "bandwidth"}, template("admin_status/bandwidth"), i18n("Realtime Traffic"), 7).leaf = true
 	entry({"admin", "status", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
+	--[[
 	entry({"admin", "status", "connections"}, template("admin_status/connections"), i18n("Realtime Connections"), 8).leaf = true
 	entry({"admin", "status", "connections_status"}, call("action_connections")).leaf = true
+	]]--
 
 	entry({"admin", "status", "processes"}, cbi("admin_status/processes"), i18n("Processes"), 20)
 end
