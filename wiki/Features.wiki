@@ -2,7 +2,7 @@
   management
   * Supported RAID levels: **0**, **1**, **5**, **6**, **10**
   * Dedicated **hotspare** drives support
-* WriteBack and WriteThrough caching policies switching
+* !WriteBack and !WriteThrough caching policies switching
 * **Logical volumes** management
   * Virtually **unlimited** volumes quantity on single logical drive
   * Logical volume **resize** support
