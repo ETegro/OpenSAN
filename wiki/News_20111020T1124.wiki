@@ -1,5 +1,4 @@
 = Release 1.2 =
-We are pleased to announce new OpenSAN's version.
 
 == Release notes ==
 Appeared ability to **authenticate incoming** iSCSI connections on a
@@ -8,6 +7,6 @@ scheme. User can specify several authentication credentials per single
 iSCSI target. Each credential is just a pair of username and it's
 password.
 
-=== Download ===
+== Download ==
 You can download this release following [/download/V1.2/ this link].
 Always cryptographically [wiki:Publickey verify images]!
