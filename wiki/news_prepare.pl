@@ -35,13 +35,13 @@ for( ; $c < $#input; $c++ ){
 my %ms = ();
 $c = 1;
 map { ($ms{ $1 } = $c) and $c++ if /^\s{2}(\d+)\.\s.*$/ }
-	@input[ $cought_refs[-1]+26 .. $#input-4 ];
+	@input[ $cought_refs[-1]+25 .. $#input-4 ];
 map { print STDERR "MAP $_ -> $ms{$_}\n" } sort keys %ms;
 
 @input = (
 	@input[ $cought_hrs[0]+4 .. $cought_hrs[-1]-5 ],
 	@input[ $cought_refs[-1]-1 .. $cought_refs[-1]+1 ],
-	@input[ $cought_refs[-1]+26 .. $#input-4 ]
+	@input[ $cought_refs[-1]+25 .. $#input-4 ]
 );
 
 foreach my $s (keys %ms){
