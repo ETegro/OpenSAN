@@ -232,7 +232,6 @@ prepare_interface() {
 						}
 					}
 				}
-				return 1
 			}
 		;;
 	esac
@@ -270,11 +269,21 @@ setup_interface_static() {
 	config_get bcast "$config" broadcast
 	config_get metric "$config" metric
 
-	[ -z "$ipaddr" ] || $DEBUG ifconfig "$iface" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
-	[ -z "$ip6addr" ] || $DEBUG ifconfig "$iface" add "$ip6addr"
-	[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$iface"
-	[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$iface"
-	[ -z "$dns" ] || add_dns "$config" $dns
+	local iftype
+	config_get iftype "$config" type
+	[ "$iftype" == "bonding" ] && {
+		[ -z "$ipaddr" ] || $DEBUG ifconfig "$config" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
+		[ -z "$ip6addr" ] || $DEBUG ifconfig "$config" add "$ip6addr"
+		[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$config"
+		[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$config"
+		[ -z "$dns" ] || add_dns "$config" $dns
+	} || {
+		[ -z "$ipaddr" ] || $DEBUG ifconfig "$iface" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
+		[ -z "$ip6addr" ] || $DEBUG ifconfig "$iface" add "$ip6addr"
+		[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$iface"
+		[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$iface"
+		[ -z "$dns" ] || add_dns "$config" $dns
+	}
 
 	config_get type "$config" TYPE
 	[ "$type" = "alias" ] && return 0
