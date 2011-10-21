@@ -34,7 +34,10 @@ local has_6in4   = fs.access("/lib/network/6in4.sh")
 local has_6to4   = fs.access("/lib/network/6to4.sh")
 local has_relay  = fs.access("/lib/network/relay.sh")
 
+--[[
 m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bridge several interfaces by ticking the \"bridge interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
+]]
+m = Map("network", translate("Interfaces") .. " - " .. arg[1]:upper(), translate("On this page you can configure the network interfaces. You can bond several interfaces by ticking the \"bonding interfaces\" field and enter the names of several network interfaces separated by spaces. You can also use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation <samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: <samp>eth0.1</samp>)."))
 m:chain("wireless")
 
 if has_firewall then
@@ -100,7 +103,6 @@ p:value("none", translate("none"))
 if not ( has_pppd and has_pppoe and has_pppoa and has_3g and has_pptp ) then
 	p.description = translate("You need to install \"comgt\" for UMTS/GPRS, \"ppp-mod-pppoe\" for PPPoE, \"ppp-mod-pppoa\" for PPPoA or \"pptp\" for PPtP support")
 end
-]]
 
 br = s:taboption("physical", Flag, "type", translate("Bridge interfaces"), translate("creates a bridge over specified interface(s)"))
 br.enabled = "bridge"
@@ -108,16 +110,40 @@ br.rmempty = true
 br:depends("proto", "static")
 br:depends("proto", "dhcp")
 br:depends("proto", "none")
+]]
+bn = s:taboption("physical", Flag, "type", translate("Bonding interfaces"), translate("creates a bonding over specified interface(s)"))
+bn.enabled = "bonding"
+bn.rmempty = true
+bn:depends("proto", "static")
+bn:depends("proto", "dhcp")
+bn:depends("proto", "none")
 
+bondmode = s:taboption("physical", ListValue, "mode", translate("The bonding mode"))
+bondmode.override_scheme = true
+bondmode:depends("type", "bonding")
+bondmode.default = "1"
+bondmode:value("balance-rr", "balance-rr")
+bondmode:value("active-backup", "active-backup")
+bondmode:value("balance-xor", "balance-xor")
+bondmode:value("broadcast", "broadcast")
+bondmode:value("802.3ad", "802.3ad")
+bondmode:value("balance-tlb", "balance-tlb")
+bondmode:value("balance-alb", "balance-alb")
+
+--[[
 stp = s:taboption("physical", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
 	translate("Enables the Spanning Tree Protocol on this bridge"))
 stp:depends("type", "bridge")
 stp.rmempty = true
+]]
 
 ifname_single = s:taboption("physical", Value, "ifname_single", translate("Interface"))
 ifname_single.template = "cbi/network_ifacelist"
 ifname_single.widget = "radio"
+--[[
 ifname_single.nobridges = true
+]]
+ifname_single.nobonds = true
 ifname_single.network = arg[1]
 ifname_single.rmempty = true
 ifname_single:depends({ type = "", proto = "static" })
@@ -151,10 +177,16 @@ end
 
 ifname_multi = s:taboption("physical", Value, "ifname_multi", translate("Interface"))
 ifname_multi.template = "cbi/network_ifacelist"
+--[[
 ifname_multi.nobridges = true
+]]
+ifname_multi.nobonds = true
 ifname_multi.network = arg[1]
 ifname_multi.widget = "checkbox"
+--[[
 ifname_multi:depends("type", "bridge")
+]]
+ifname_multi:depends("type", "bonding")
 ifname_multi.cfgvalue = ifname_single.cfgvalue
 ifname_multi.write = ifname_single.write
 
@@ -295,7 +327,10 @@ if has_6to4 then
 	advi.default = "lan"
 	advi.template = "cbi/network_netlist"
 	advi.nocreate = true
+	--[[
 	advi.nobridges = true
+	]]
+	advi.nobonds = true
 	advi:depends("proto", "6to4")
 
 	advn = s:taboption("general", Value, "adv_subnet", translate("Advertised network ID"), translate("Allowed range is 1 to FFFF"))
@@ -318,7 +353,10 @@ if has_relay then
 	rnet.exclude = arg[1]
 	rnet.template = "cbi/network_netlist"
 	rnet.nocreate = true
+	--[[
 	rnet.nobridges = true
+	]]
+	rnet.nobonds = true
 	rnet:depends("proto", "relay")
 end
 
