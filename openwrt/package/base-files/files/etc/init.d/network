@@ -4,7 +4,7 @@
 START=40
 STOP=90
 
-boot() {
+boot_() {
 	setup_switch() { return 0; }
 
 	include /lib/network
