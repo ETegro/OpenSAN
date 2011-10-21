@@ -199,6 +199,42 @@ prepare_interface() {
 				return 1
 			}
 		;;
+		# Setup bonding
+		bonding)
+			[ -x /sbin/ifenslave -a -x /sbin/lsmod -a -x /sbin/insmod ] && {
+				local max_bonds=0
+				local bond_numbers=$(
+					sed -n "s/^config .interface. .bond\([0-9]\{1,\}\).$/\1/p" < /etc/config/network |
+					sort -n |
+					sed -n '$p'
+				)
+				max_bonds=$(( $bond_numbers + 1 ))
+				/sbin/lsmod | grep -q 'bonding' || {
+					local miimon=50
+					local kernel_release=$(uname -r)
+					/sbin/insmod \
+						/lib/modules/"$kernel_release"/bonding.ko \
+						max_bonds="$max_bonds" \
+						miimon="$miimon"
+					sleep 1
+				}
+				grep -q "$config" /sys/class/net/bonding_masters && {
+					grep -q "^Slave Interface: $iface$" /proc/net/bonding/"$config" || {
+						ifconfig "$config" down >/dev/null 2>&1
+						[ -w /sys/class/net/"$config"/bonding/mode ] && {
+							local bond_mode
+							config_get bond_mode "$config" mode
+							echo "$bond_mode" >/sys/class/net/"$config"/bonding/mode
+						}
+						ifconfig "$config" up >/dev/null 2>&1
+						ifconfig "$iface" >/dev/null 2>&1 && {
+							ifenslave "$config" "$iface"
+						}
+					}
+				}
+				return 1
+			}
+		;;
 	esac
 	return 0
 }
