@@ -250,7 +250,7 @@ msgid "Administration"
 msgstr "Управление"
 
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Расширенные настройки"
 
 msgid "Advertise IPv6 on network"
 msgstr ""
