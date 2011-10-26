@@ -262,7 +262,7 @@ msgid "Alert"
 msgstr "Тревога"
 
 msgid "Alias"
-msgstr ""
+msgstr "Дополнительный"
 
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
@@ -989,7 +989,7 @@ msgid "IP address"
 msgstr "IP адрес"
 
 msgid "IP-Aliases"
-msgstr ""
+msgstr "Дополнительный IP"
 
 msgid "IPv4"
 msgstr ""
