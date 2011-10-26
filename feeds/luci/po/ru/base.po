@@ -858,7 +858,7 @@ msgid "Flags"
 msgstr "Флаги"
 
 msgid "Flash Firmware"
-msgstr "Перепрошивка"
+msgstr "Обновление"
 
 msgid "Force"
 msgstr ""
