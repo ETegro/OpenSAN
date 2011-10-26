@@ -22,28 +22,54 @@ m = SimpleForm("network", translate("Create Interface"))
 
 newnet = m:field(Value, "_netname", translate("Name of the new interface"),
 	translate("The allowed characters are: <code>A-Z</code>, <code>a-z</code>, " ..
-		"<code>0-9</code> and <code>_</code>"
-	))
+		"<code>0-9</code> and <code>_</code>") ..
+	"<br />" ..
+	translate("For bonding-intefaces use") .. ": bondXX."
+)
 
 newnet:depends("_attach", "")
 newnet.default = arg[1] and "net_" .. arg[1]:gsub("[^%w_]+", "_")
 newnet.datatype = "uciname"
+newnet.rmempty = false
 
 --[[
 netbridge = m:field(Flag, "_bridge", translate("Create a bridge over multiple interfaces"))
 ]]
-netbond = m:field(Flag, "_bond", translate("Create a bonding from multiple interfaces"))
+net_bond = m:field(Flag, "_bond", translate("Create a bonding from multiple interfaces"),
+	translate("Up to 16 (0..15) interfaces can be created."))
 
-bondmode = m:field(ListValue, "_bondmode", translate("The bonding mode"))
-bondmode:depends("_bond", "1")
-bondmode.default = "1"
-bondmode:value("0", "balance-rr")
-bondmode:value("1", "active-backup")
-bondmode:value("2", "balance-xor")
-bondmode:value("3", "broadcast")
-bondmode:value("4", "802.3ad")
-bondmode:value("5", "balance-tlb")
-bondmode:value("6", "balance-alb")
+bond_mode = m:field(ListValue, "_bond-mode", translate("Mode"),
+	translate("Default bonding policy is \"balance-rr\"."))
+bond_mode:depends("_bond", "1")
+bond_mode:value("balance-rr", "balance-rr")
+bond_mode:value("active-backup", "active-backup")
+bond_mode:value("balance-xor", "balance-xor")
+bond_mode:value("broadcast", "broadcast")
+bond_mode:value("802.3ad", "802.3ad")
+bond_mode:value("balance-tlb", "balance-tlb")
+bond_mode:value("balance-alb", "balance-alb")
+bond_mode.default = "balance-rr"
+
+bond_miimon = m:field(Value, "_bond-miimon", translate("MII link monitoring frequency"),
+	translate("ms") .. " (0 - 3000). " .. translate("Default value is") .. " 50.")
+bond_miimon:depends("_bond", "1")
+bond_miimon.rmempty = false
+bond_miimon.datatype = "range(0,3000)"
+bond_miimon.default = "50"
+
+bond_downdelay = m:field(Value, "_bond-downdelay", translate("Time to wait before disabling slave-interface after link failure"),
+	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
+bond_downdelay:depends("_bond", "1")
+bond_downdelay.datatype = "range(0,3000)"
+bond_downdelay.default = "0"
+bond_downdelay.rmempty = false
+
+bond_updelay = m:field(Value, "_bond-updelay", translate("Time to wait before enabling slave-interface after link recover"),
+	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
+bond_updelay:depends("_bond", "1")
+bond_updelay.datatype = "range(0,3000)"
+bond_updelay.default = "0"
+bond_updelay.rmempty = false
 
 sifname = m:field(Value, "_ifname", translate("Cover the following interface"),
 	translate("Note: If you choose an interface here which is part of another network, it will be moved into this network."))
@@ -54,7 +80,7 @@ sifname.template = "cbi/network_ifacelist"
 sifname.nobridges = true
 sifname:depends("_bridge", "")
 ]]
-sifname.nobonds = true
+sifname.nobondings = true
 sifname:depends("_bond", "")
 
 
@@ -67,7 +93,7 @@ mifname.template = "cbi/network_ifacelist"
 mifname.nobridges = true
 mifname:depends("_bridge", "1")
 ]]
-mifname.nobonds = true
+mifname.nobondings = true
 mifname:depends("_bond", "1")
 
 function newnet.write(self, section, value)
@@ -75,10 +101,34 @@ function newnet.write(self, section, value)
 	local bridge = netbridge:formvalue(section) == "1"
 	local ifaces = bridge and mifname:formvalue(section) or sifname:formvalue(section)
 	]]
-	local bond = netbond:formvalue(section) == "1"
-	local bondmode = bondmode:formvalue(section)
+	local bond = {
+		use = net_bond:formvalue( section ) == "1" ,
+		type = "bonding",
+		mode = bond_mode:formvalue( section ),
+		miimon = bond_miimon:formvalue( section ),
+		downdelay = bond_downdelay:formvalue( section ),
+		updelay = bond_updelay:formvalue( section )
+	}
+	local bond_default = {
+			mode = "balance-rr",
+			miimon = "50",
+			downdelay = "0",
+			updelay = "0"
+	}
 
-	local ifaces = bond and mifname:formvalue(section) or sifname:formvalue(section)
+	local ifaces = bond.use and mifname:formvalue(section) or sifname:formvalue(section)
+
+	if bond.use then
+		local bond_name, num = string.match( value, "^(bond(%d+))$" )
+		if bond_name then
+			num = tonumber( num )
+			if not ( ( num >= 0 ) and ( num <= 15 ) ) then
+				value = nil
+			end
+		else
+			value = nil
+		end
+	end
 
 	local nn = nw:add_network(value, { proto = "none" })
 	if nn then
@@ -87,30 +137,15 @@ function newnet.write(self, section, value)
 			nn:set("type", "bridge")
 		end
 		]]
-
-	local nn = nw:add_network(value, { proto = "none" })
-		if bond then
-			nn:set( "type", "bonding" )
-			if bondmode == "0" then
-				nn:set( "mode", "balance-rr" )
-			end
-			if bondmode == "1" then
-				nn:set( "mode", "active-backup" )
-			end
-			if bondmode == "2" then
-				nn:set( "mode", "balance-xor" )
-			end
-			if bondmode == "3" then
-				nn:set( "mode", "broadcast" )
-			end
-			if bondmode == "4" then
-				nn:set( "mode", "802.3ad" )
-			end
-			if bondmode == "5" then
-				nn:set( "mode", "balance-tlb" )
-			end
-			if bondmode == "6" then
-				nn:set( "mode", "balance-alb" )
+		if bond.use then
+			for option,value in pairs(bond) do
+				if option ~= "use" then
+					if value == "" then
+						nn:set( option, bond_default[ option ] )
+					else
+						nn:set( option, value )
+					end
+				end
 			end
 		end
 

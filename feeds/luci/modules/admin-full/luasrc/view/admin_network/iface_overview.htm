@@ -124,7 +124,6 @@ $Id: iface_overview.htm 7011 2011-05-03 03:20:15Z jow $
 							if (ifc.ifname)
 							{
 								a.innerHTML = '';
-
 								if (ifc.ipaddrs && ifc.ipaddrs.length)
 								{
 									a.innerHTML += '<strong><%:IPv4%>: </strong>';
@@ -134,22 +133,21 @@ $Id: iface_overview.htm 7011 2011-05-03 03:20:15Z jow $
 											'%s%s/%d',
 											j ? ', ' : '',
 											ifc.ipaddrs[j].addr,
-											ifc.ipaddrs[j].prefix
-										);
+										ifc.ipaddrs[j].prefix
+									);
 
 									a.innerHTML += '<br />';
 								}
+							if (ifc.ip6addrs && ifc.ip6addrs.length)
+							{
+								a.innerHTML += '<strong><%:IPv6%>: </strong>';
 
-								if (ifc.ip6addrs && ifc.ip6addrs.length)
-								{
-									a.innerHTML += '<strong><%:IPv6%>: </strong>';
-
-									for (var j = 0; j < ifc.ip6addrs.length; j++)
-										a.innerHTML += String.format(
-											'%s%s/%d',
-											j ? ', ' : '',
-											ifc.ip6addrs[j].addr.toUpperCase(),
-											ifc.ip6addrs[j].prefix
+								for (var j = 0; j < ifc.ip6addrs.length; j++)
+									a.innerHTML += String.format(
+										'%s%s/%d',
+										j ? ', ' : '',
+										ifc.ip6addrs[j].addr.toUpperCase(),
+										ifc.ip6addrs[j].prefix
 										);
 
 									a.innerHTML += '<br />';

@@ -226,6 +226,21 @@ prepare_interface() {
 							config_get bond_mode "$config" mode
 							echo "$bond_mode" >/sys/class/net/"$config"/bonding/mode
 						}
+						[ -w /sys/class/net/"$config"/bonding/mii_status ] && {
+							local bond_miimon
+							config_get bond_miimon "$config" miimon
+							echo "$bond_miimon" >/sys/class/net/"$config"/bonding/mii_status
+						}
+						[ -w /sys/class/net/"$config"/bonding/downdelay ] && {
+							local bond_downdelay
+							config_get bond_downdelay "$config" downdelay
+							echo "$bond_downdelay" >/sys/class/net/"$config"/bonding/downdelay
+						}
+						[ -w /sys/class/net/"$config"/bonding/updelay ] && {
+							local bond_updelay
+							config_get bond_updelay "$config" updelay
+							echo "$bond_updelay" >/sys/class/net/"$config"/bonding/updelay
+						}
 						ifconfig "$config" up >/dev/null 2>&1
 						ifconfig "$iface" >/dev/null 2>&1 && {
 							ifenslave "$config" "$iface"

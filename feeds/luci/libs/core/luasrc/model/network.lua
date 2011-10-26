@@ -17,8 +17,8 @@ limitations under the License.
 
 ]]--
 
-local type, next, pairs, ipairs, loadfile, table, tonumber, math, i18n
-	= type, next, pairs, ipairs, loadfile, table, tonumber, math, luci.i18n
+local type, next, pairs, ipairs, loadfile, table, tonumber, math, i18n, string
+	= type, next, pairs, ipairs, loadfile, table, tonumber, math, luci.i18n, string
 
 local nxo = require "nixio"
 local ipc = require "luci.ip"
@@ -30,7 +30,7 @@ local uci = require "luci.model.uci"
 module "luci.model.network"
 
 
-local ifs, brs, sws, uci_r, uci_s
+local ifs, brs, bns, sws, uci_r, uci_s
 
 function _list_del(c, s, o, r)
 	local val = uci_r:get(c, s, o)
@@ -161,11 +161,10 @@ end
 function _iface_ignore(x)
 	return (
 		x:match("^wmaster%d") or x:match("^wifi%d") or x:match("^hwsim%d") or
-		x:match("^imq%d") or x:match("^mon.wlan%d") or
+		x:match("^imq%d") or x:match("^mon.wlan%d") or x:match("^bond%d+$") or
 		x == "sit0" or x == "lo" or _iface_virtual(x)
 	)
 end
-
 
 function init(cursor)
 	uci_r = cursor or uci_r or uci.cursor()
@@ -173,6 +172,7 @@ function init(cursor)
 
 	ifs = { }
 	brs = { }
+	bns = { }
 	sws = { }
 
 	-- read interface information
@@ -227,6 +227,31 @@ function init(cursor)
 			elseif b then
 				b.ifnames[#b.ifnames+1] = ifs[r[2]]
 				b.ifnames[#b.ifnames].bridge = b
+			end
+		end
+	end
+
+	-- read bonding informaton
+	local bonding = {}
+	local bonds = string.gmatch( sys.exec( "cat /sys/class/net/bonding_masters" ), "%w+" )
+
+	for bond in bonds do
+		if bond then
+			local bond_mac = sys.exec( "cat /sys/class/net/" .. bond .. "/address" )
+			bonding = {
+				name = bond,
+				ifnames = {},
+				id = string.gsub( bond_mac, "[:]", "" )
+			}
+			for line in utl.execi( "cat /proc/net/bonding/" .. bond ) do
+				local ifname = string.match( line, "^Slave Interface: (%w+%d+)$" )
+				if ifname then
+					bonding.ifnames[ #bonding.ifnames + 1 ] = ifname
+					if bonding.ifnames[ ifname ] then
+						bonding.ifnames[ ifname ].bonding = bonding
+					end
+					bns[ ifname ] = bonding
+				end
 			end
 		end
 	end
@@ -512,6 +537,8 @@ function network.ifname(self)
 	local p = self:proto()
 	if self:is_bridge() then
 		return "br-" .. self.sid
+	elseif self:is_bonding() then
+		return self.sid
 	elseif self:proto() == "relay" then
 		return uci_s:get("network", self.sid, "up") == "1" and "lo" or nil
 	elseif self:is_virtual() then
@@ -646,6 +673,10 @@ end
 
 function network.is_bridge(self)
 	return (self:type() == "bridge")
+end
+
+function network.is_bonding(self)
+	return (self:type() == "bonding")
 end
 
 function network.is_virtual(self)
@@ -823,6 +854,8 @@ function interface.type(self)
 		return "wifi"
 	elseif brs[self.ifname] then
 		return "bridge"
+	elseif bns[self.ifname] then
+		return "bonding"
 	elseif sws[self.ifname] or self.ifname:match("%.") then
 		return "switch"
 	else
@@ -859,6 +892,8 @@ function interface.get_type_i18n(self)
 		return i18n.translate("Wireless Adapter")
 	elseif x == "bridge" then
 		return i18n.translate("Bridge")
+--	elseif x == "bonding" then
+--		return i18n.translate("Bonding")
 	elseif x == "switch" then
 		return i18n.translate("Ethernet Switch")
 	else
@@ -911,8 +946,16 @@ function interface.is_bridge(self)
 	return (self:type() == "bridge")
 end
 
+function interface.is_bonding(self)
+	return (self:type() == "bonding")
+end
+
 function interface.is_bridgeport(self)
 	return self.dev and self.dev.bridge and true or false
+end
+
+function interface.is_bondingport(self)
+	return self.dev and self.dev.bonding and true or false
 end
 
 function interface.tx_bytes(self)

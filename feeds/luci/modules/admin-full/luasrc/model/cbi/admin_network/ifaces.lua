@@ -111,24 +111,46 @@ br:depends("proto", "static")
 br:depends("proto", "dhcp")
 br:depends("proto", "none")
 ]]
-bn = s:taboption("physical", Flag, "type", translate("Bonding interfaces"), translate("creates a bonding over specified interface(s)"))
+bn = s:taboption("physical", Flag, "type", translate("Create a bonding from multiple interfaces"))
 bn.enabled = "bonding"
 bn.rmempty = true
 bn:depends("proto", "static")
 bn:depends("proto", "dhcp")
 bn:depends("proto", "none")
 
-bondmode = s:taboption("physical", ListValue, "mode", translate("The bonding mode"))
-bondmode.override_scheme = true
-bondmode:depends("type", "bonding")
-bondmode.default = "1"
-bondmode:value("balance-rr", "balance-rr")
-bondmode:value("active-backup", "active-backup")
-bondmode:value("balance-xor", "balance-xor")
-bondmode:value("broadcast", "broadcast")
-bondmode:value("802.3ad", "802.3ad")
-bondmode:value("balance-tlb", "balance-tlb")
-bondmode:value("balance-alb", "balance-alb")
+bond_mode = s:taboption("physical", ListValue, "mode", translate("Mode"),
+	translate("Default bonding policy is \"balance-rr\"."))
+bond_mode.override_scheme = true
+bond_mode:depends("type", "bonding")
+bond_mode:value("balance-rr", "balance-rr")
+bond_mode:value("active-backup", "active-backup")
+bond_mode:value("balance-xor", "balance-xor")
+bond_mode:value("broadcast", "broadcast")
+bond_mode:value("802.3ad", "802.3ad")
+bond_mode:value("balance-tlb", "balance-tlb")
+bond_mode:value("balance-alb", "balance-alb")
+
+bond_miimon = s:taboption("physical", Value, "miimon", translate("MII link monitoring frequency"),
+	translate("ms") .. " (0 - 3000). " .. translate("Default value is") .. " 50.")
+bond_miimon.override_scheme = true
+bond_miimon.rmempty = false
+bond_miimon:depends("type", "bonding")
+bond_miimon.datatype = "range(0,3000)"
+
+bond_downdelay = s:taboption("physical", Value, "downdelay", translate("Time to wait before disabling slave-interface after link failure"),
+	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
+bond_downdelay.override_scheme = true
+bond_downdelay.rmempty = false
+bond_downdelay:depends("type", "bonding")
+bond_downdelay.datatype = "range(0,3000)"
+
+bond_updelay = s:taboption("physical", Value, "updelay", translate("Time to wait before enabling slave-interface after link recover"),
+	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
+bond_updelay.override_scheme = true
+bond_updelay.rmempty = false
+bond_updelay:depends("type", "bonding")
+bond_updelay.datatype = "range(0,3000)"
+
 
 --[[
 stp = s:taboption("physical", Flag, "stp", translate("Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"),
@@ -143,7 +165,7 @@ ifname_single.widget = "radio"
 --[[
 ifname_single.nobridges = true
 ]]
-ifname_single.nobonds = true
+ifname_single.nobondings = true
 ifname_single.network = arg[1]
 ifname_single.rmempty = true
 ifname_single:depends({ type = "", proto = "static" })
@@ -180,7 +202,7 @@ ifname_multi.template = "cbi/network_ifacelist"
 --[[
 ifname_multi.nobridges = true
 ]]
-ifname_multi.nobonds = true
+ifname_multi.nobondings = true
 ifname_multi.network = arg[1]
 ifname_multi.widget = "checkbox"
 --[[
@@ -330,7 +352,7 @@ if has_6to4 then
 	--[[
 	advi.nobridges = true
 	]]
-	advi.nobonds = true
+	advi.nobondings = true
 	advi:depends("proto", "6to4")
 
 	advn = s:taboption("general", Value, "adv_subnet", translate("Advertised network ID"), translate("Allowed range is 1 to FFFF"))
@@ -356,7 +378,7 @@ if has_relay then
 	--[[
 	rnet.nobridges = true
 	]]
-	rnet.nobonds = true
+	rnet.nobondings = true
 	rnet:depends("proto", "relay")
 end
 

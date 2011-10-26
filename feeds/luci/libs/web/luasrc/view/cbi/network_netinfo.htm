@@ -16,8 +16,9 @@
 		<%
 			local empty = true
 			for _, iface in ipairs(net:get_interfaces()) do
-				if not iface:is_bridge() then
+				if not( iface:is_bridge() and iface:is_bonding() ) then
 					empty = false
+
 		 %>
 			<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
 		<% end end %>
