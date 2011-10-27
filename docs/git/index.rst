@@ -15,6 +15,7 @@
    color_highlighting
    pretagging_merges
    notes-using
+   tracking-branches
 
 Другие полезные ссылки
 ======================
