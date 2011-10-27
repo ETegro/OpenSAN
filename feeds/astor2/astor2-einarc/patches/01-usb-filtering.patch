@@ -1,7 +1,7 @@
-diff -urN astor2-einarc-svn1882/src/raid/software.rb astor2-einarc-svn1882-usb-filtering/src/raid/software.rb
---- astor2-einarc-svn1882/src/raid/software.rb	2011-03-25 14:28:07.000000000 +0300
-+++ astor2-einarc-svn1882-usb-filtering/src/raid/software.rb	2011-05-30 16:35:25.000000000 +0400
-@@ -293,7 +293,7 @@
+diff -urN astor2-einarc-svn1962/src/raid/software.rb astor2-einarc-svn1962-usb-filtering/src/raid/software.rb
+--- astor2-einarc-svn1962/src/raid/software.rb	2011-10-27 20:54:46.000000000 +0400
++++ astor2-einarc-svn1962-usb-filtering/src/raid/software.rb	2011-10-29 00:39:57.000000000 +0400
+@@ -296,7 +296,7 @@
  
  			for device in devices
  				# Possibility to skip USB mass storage devices
@@ -10,7 +10,7 @@ diff -urN astor2-einarc-svn1882/src/raid/software.rb astor2-einarc-svn1882-usb-f
  				target = phys_to_scsi(device.gsub(/^\/dev\//, ''))
  				d = { :state => 'unknown' }
  				d[:vendor] = physical_read_file(device, "device/vendor") or ""
-@@ -469,6 +469,10 @@
+@@ -566,6 +566,10 @@
  
  		def usb_device?(device)
  			name = device.gsub(/^\/dev\//, '')
@@ -18,6 +18,6 @@ diff -urN astor2-einarc-svn1882/src/raid/software.rb astor2-einarc-svn1882-usb-f
 +			File.read("/proc/cmdline") =~ /root=\/dev\/(...)/
 +			return true if $1 == name
 +
- 			return ((not [File.read("/sys/block/#{name}/uevent")].grep(/usb/).empty?) or
- 			       (File.readlink( "/sys/block/#{name}" ) =~ /usb/))
+ 			return ((not File.readlines("/sys/block/#{name}/uevent").grep(/usb/).empty?) or
+ 			       (File.readlink("/sys/block/#{name}" ) =~ /usb/))
  		end
