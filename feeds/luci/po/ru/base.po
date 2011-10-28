@@ -11,6 +11,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
+msgid "Bonding"
+msgstr "Связка"
+
+msgid "For bonding-intefaces use"
+msgstr "Для связываемых интерфейсов используйте"
+
+msgid "Create a bonding from multiple interfaces"
+msgstr "Создать связку из нескольких интерфейсов"
+
+msgid "Up to 16 (0..15) interfaces can be created."
+msgstr "Можно создать до 16 (0..15)."
+
+msgid "Default bonding policy is \"balance-rr\"."
+msgstr "Политика связывания по умолчанию \"balance-rr\"."
+
+msgid "MII link monitoring frequency"
+msgstr "Частота мониторинга состояния MII"
+
+msgid "ms"
+msgstr "мс"
+
+msgid "Default value is"
+msgstr "Значение по-умолчанию"
+
+msgid "Time to wait before disabling slave-interface after link failure"
+msgstr "Время ожидания перед отключением подчинённого интерфейса после нарушения соединения"
+
+msgid "Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple."
+msgstr "Время задержки должно быть кратно значению мониторинга MII; в противном случае, оно будет округлено до ближайшего."
+
+msgid "Time to wait before enabling slave-interface after link recover"
+msgstr "Время ожидания перед включением подчинённого интерфейса после восстановления соединения"
+
+msgid ""
+"On this page you can configure the network interfaces. You can bond "
+"several interfaces by ticking the \"bonding interfaces\" field and enter the "
+"names of several network interfaces separated by spaces. You can also use "
+"<abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation "
+"<samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: "
+"<samp>eth0.1</samp>)."
+msgstr ""
+"На этой страничке вы можете сконфигурировать сетевые интерфейсы. Вы можете "
+"связывать различные интерфейсы помечая их как \"Связка\" и "
+"добавлять имена различных сетей принадлежащих сетевым интерфейсам "
+"разделённые пробелом. Также вы можете использовать обозначения <abbr title="
+"\"Виртуальные локальные сети\">VLAN</abbr>&#39;ов например <samp>INTERFACE."
+"VLANNR</samp> (<abbr title=\"for example\">указывая как</abbr>: "
+"<samp>eth0.1</samp>)."
+
 msgid "(%d minute window, %d second interval)"
 msgstr "(%d минутное окно, %d секунд интервал)"
 
