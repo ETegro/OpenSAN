@@ -2096,7 +2096,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The allowed characters are: <code>a-z</code>, <code>a-z</code>, <code>0-9</"
+"The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
 "code> and <code>_</code>"
 msgstr "Допустимые символы: <code>a-z</code>, <code>a-z</code>, <code>0-9</code> и <code>_</code>"
 
