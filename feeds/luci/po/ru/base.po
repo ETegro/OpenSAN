@@ -691,7 +691,7 @@ msgid "Download and install package"
 msgstr "Загрузить и установить пакеты"
 
 msgid "Dropbear Instance"
-msgstr ""
+msgstr "Экземпляр Dropbear"
 
 msgid ""
 "Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access "
