@@ -22,6 +22,6 @@ while [ "$got_ref" != 1 ]; do
 	[ -d ".git" ] && got_ref=1 || cd ../
 done
 
-commit=`git show-ref HEAD | awk '{print $1}'`
+commit=`git show-ref --head | sed -n 's/^\([a-z0-9]*\) HEAD$/\1/p'`
 git describe --tags $commit 2>/dev/null || echo $commit
 git show $commit | sed -n "s/^Date: *\(.*\)$/\1/p"
