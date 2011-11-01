@@ -8,5 +8,6 @@ config interface lan
 	option ifname	eth0
 	option proto	static
 	option ipaddr	192.168.1.1
+	option ip6addr	FE80::1/64
 	option netmask	255.255.255.0
 
