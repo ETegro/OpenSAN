@@ -513,7 +513,7 @@ config BUSYBOX_CONFIG_FEATURE_INETD_RPC
 
 config BUSYBOX_CONFIG_IP
 	bool "ip"
-	default n
+	default y
 	help
 	  The "ip" applet is a TCP/IP interface configuration and routing
 	  utility. You generally don't need "ip" to use busybox with
