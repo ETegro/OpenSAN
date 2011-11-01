@@ -226,10 +226,10 @@ prepare_interface() {
 							config_get bond_mode "$config" mode
 							echo "$bond_mode" >/sys/class/net/"$config"/bonding/mode
 						}
-						[ -w /sys/class/net/"$config"/bonding/mii_status ] && {
+						[ -w /sys/class/net/"$config"/bonding/miimon ] && {
 							local bond_miimon
 							config_get bond_miimon "$config" miimon
-							echo "$bond_miimon" >/sys/class/net/"$config"/bonding/mii_status
+							echo "$bond_miimon" >/sys/class/net/"$config"/bonding/miimon
 						}
 						[ -w /sys/class/net/"$config"/bonding/downdelay ] && {
 							local bond_downdelay
