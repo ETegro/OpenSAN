@@ -5,4 +5,5 @@ Latest release raw images and firmware updates can be
 * [wiki:Release1.1.1 1.1.1]
 * [wiki:Release1.1.2 1.1.2]
 * [wiki:Release1.2 1.2]
+* [wiki:Release1.2.1 1.2.1]
 * [wiki:Release1.3 1.3]
