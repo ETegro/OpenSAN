@@ -15,7 +15,7 @@
 #include <linux/platform_device.h>
 #include <linux/delay.h>
 #include <linux/skbuff.h>
-#include <linux/rtl8366s.h>
+#include <linux/rtl8366.h>
 
 #include "rtl8366_smi.h"
 
@@ -25,7 +25,6 @@
 #define RTL8366S_PHY_NO_MAX	4
 #define RTL8366S_PHY_PAGE_MAX	7
 #define RTL8366S_PHY_ADDR_MAX	31
-#define RTL8366S_PHY_WAN	4
 
 /* Switch Global Configuration register */
 #define RTL8366S_SGCR				0x0000
@@ -251,7 +250,7 @@ static int rtl8366s_reset_chip(struct rtl8366_smi *smi)
 
 static int rtl8366s_hw_init(struct rtl8366_smi *smi)
 {
-	struct rtl8366s_platform_data *pdata;
+	struct rtl8366_platform_data *pdata;
 	int err;
 
 	pdata = smi->parent->platform_data;
@@ -656,6 +655,49 @@ static int rtl8366s_sw_set_blinkrate(struct switch_dev *dev,
 				val->value.i);
 }
 
+static int rtl8366s_sw_get_max_length(struct switch_dev *dev,
+					const struct switch_attr *attr,
+					struct switch_val *val)
+{
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	u32 data;
+
+	rtl8366_smi_read_reg(smi, RTL8366S_SGCR, &data);
+
+	val->value.i = ((data & (RTL8366S_SGCR_MAX_LENGTH_MASK)) >> 4);
+
+	return 0;
+}
+
+static int rtl8366s_sw_set_max_length(struct switch_dev *dev,
+					const struct switch_attr *attr,
+					struct switch_val *val)
+{
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	char length_code;
+
+	switch (val->value.i) {
+		case 0:
+			length_code = RTL8366S_SGCR_MAX_LENGTH_1522;
+			break;
+		case 1:
+			length_code = RTL8366S_SGCR_MAX_LENGTH_1536;
+			break;
+		case 2:
+			length_code = RTL8366S_SGCR_MAX_LENGTH_1552;
+			break;
+		case 3:
+			length_code = RTL8366S_SGCR_MAX_LENGTH_16000;
+			break;
+		default:
+			return -EINVAL;
+	}
+
+	return rtl8366_smi_rmwr(smi, RTL8366S_SGCR,
+			RTL8366S_SGCR_MAX_LENGTH_MASK,
+			length_code);
+}
+
 static int rtl8366s_sw_get_learning_enable(struct switch_dev *dev,
 					   const struct switch_attr *attr,
 					   struct switch_val *val)
@@ -864,6 +906,14 @@ static struct switch_attr rtl8366s_globals[] = {
 		.set = rtl8366s_sw_set_blinkrate,
 		.get = rtl8366s_sw_get_blinkrate,
 		.max = 5
+	}, {
+		.type = SWITCH_TYPE_INT,
+		.name = "max_length",
+		.description = "Get/Set the maximum length of valid packets"
+		" (0 = 1522, 1 = 1536, 2 = 1552, 3 = 16000 (9216?))",
+		.set = rtl8366s_sw_set_max_length,
+		.get = rtl8366s_sw_get_max_length,
+		.max = 3,
 	},
 };
 
@@ -946,7 +996,7 @@ static int rtl8366s_switch_init(struct rtl8366_smi *smi)
 	dev->ports = RTL8366S_NUM_PORTS;
 	dev->vlans = RTL8366S_NUM_VIDS;
 	dev->ops = &rtl8366_ops;
-	dev->devname = dev_name(smi->parent);
+	dev->alias = dev_name(smi->parent);
 
 	err = register_switch(dev, NULL);
 	if (err)
@@ -984,12 +1034,6 @@ static int rtl8366s_mii_write(struct mii_bus *bus, int addr, int reg, u16 val)
 	(void) rtl8366s_read_phy_reg(smi, addr, 0, reg, &t);
 
 	return err;
-}
-
-static int rtl8366s_mii_bus_match(struct mii_bus *bus)
-{
-	return (bus->read == rtl8366s_mii_read &&
-		bus->write == rtl8366s_mii_write);
 }
 
 static int rtl8366s_setup(struct rtl8366_smi *smi)
@@ -1060,7 +1104,7 @@ static struct rtl8366_smi_ops rtl8366s_smi_ops = {
 static int __devinit rtl8366s_probe(struct platform_device *pdev)
 {
 	static int rtl8366_smi_version_printed;
-	struct rtl8366s_platform_data *pdata;
+	struct rtl8366_platform_data *pdata;
 	struct rtl8366_smi *smi;
 	int err;
 
@@ -1111,36 +1155,6 @@ static int __devinit rtl8366s_probe(struct platform_device *pdev)
 	return err;
 }
 
-static int rtl8366s_phy_config_init(struct phy_device *phydev)
-{
-	if (!rtl8366s_mii_bus_match(phydev->bus))
-		return -EINVAL;
-
-	return 0;
-}
-
-static int rtl8366s_phy_config_aneg(struct phy_device *phydev)
-{
-	/* phy 4 might be connected to a second mac, allow aneg config */
-	if (phydev->addr == RTL8366S_PHY_WAN)
-		return genphy_config_aneg(phydev);
-
-	return 0;
-}
-
-static struct phy_driver rtl8366s_phy_driver = {
-	.phy_id		= 0x001cc960,
-	.name		= "Realtek RTL8366S",
-	.phy_id_mask	= 0x1ffffff0,
-	.features	= PHY_GBIT_FEATURES,
-	.config_aneg	= rtl8366s_phy_config_aneg,
-	.config_init    = rtl8366s_phy_config_init,
-	.read_status	= genphy_read_status,
-	.driver		= {
-		.owner = THIS_MODULE,
-	},
-};
-
 static int __devexit rtl8366s_remove(struct platform_device *pdev)
 {
 	struct rtl8366_smi *smi = platform_get_drvdata(pdev);
@@ -1166,26 +1180,12 @@ static struct platform_driver rtl8366s_driver = {
 
 static int __init rtl8366s_module_init(void)
 {
-	int ret;
-	ret = platform_driver_register(&rtl8366s_driver);
-	if (ret)
-		return ret;
-
-	ret = phy_driver_register(&rtl8366s_phy_driver);
-	if (ret)
-		goto err_platform_unregister;
-
-	return 0;
-
- err_platform_unregister:
-	platform_driver_unregister(&rtl8366s_driver);
-	return ret;
+	return platform_driver_register(&rtl8366s_driver);
 }
 module_init(rtl8366s_module_init);
 
 static void __exit rtl8366s_module_exit(void)
 {
-	phy_driver_unregister(&rtl8366s_phy_driver);
 	platform_driver_unregister(&rtl8366s_driver);
 }
 module_exit(rtl8366s_module_exit);

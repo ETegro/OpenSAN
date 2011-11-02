@@ -16,7 +16,7 @@
 #include <linux/platform_device.h>
 #include <linux/delay.h>
 #include <linux/skbuff.h>
-#include <linux/rtl8366rb.h>
+#include <linux/rtl8366.h>
 
 #include "rtl8366_smi.h"
 
@@ -26,7 +26,6 @@
 #define RTL8366RB_PHY_NO_MAX	4
 #define RTL8366RB_PHY_PAGE_MAX	7
 #define RTL8366RB_PHY_ADDR_MAX	31
-#define RTL8366RB_PHY_WAN	4
 
 /* Switch Global Configuration register */
 #define RTL8366RB_SGCR				0x0000
@@ -1117,7 +1116,7 @@ static int rtl8366rb_switch_init(struct rtl8366_smi *smi)
 	dev->ports = RTL8366RB_NUM_PORTS;
 	dev->vlans = RTL8366RB_NUM_VIDS;
 	dev->ops = &rtl8366_ops;
-	dev->devname = dev_name(smi->parent);
+	dev->alias = dev_name(smi->parent);
 
 	err = register_switch(dev, NULL);
 	if (err)
@@ -1155,12 +1154,6 @@ static int rtl8366rb_mii_write(struct mii_bus *bus, int addr, int reg, u16 val)
 	(void) rtl8366rb_read_phy_reg(smi, addr, 0, reg, &t);
 
 	return err;
-}
-
-static int rtl8366rb_mii_bus_match(struct mii_bus *bus)
-{
-	return (bus->read == rtl8366rb_mii_read &&
-		bus->write == rtl8366rb_mii_write);
 }
 
 static int rtl8366rb_setup(struct rtl8366_smi *smi)
@@ -1231,7 +1224,7 @@ static struct rtl8366_smi_ops rtl8366rb_smi_ops = {
 static int __devinit rtl8366rb_probe(struct platform_device *pdev)
 {
 	static int rtl8366_smi_version_printed;
-	struct rtl8366rb_platform_data *pdata;
+	struct rtl8366_platform_data *pdata;
 	struct rtl8366_smi *smi;
 	int err;
 
@@ -1282,36 +1275,6 @@ static int __devinit rtl8366rb_probe(struct platform_device *pdev)
 	return err;
 }
 
-static int rtl8366rb_phy_config_init(struct phy_device *phydev)
-{
-	if (!rtl8366rb_mii_bus_match(phydev->bus))
-		return -EINVAL;
-
-	return 0;
-}
-
-static int rtl8366rb_phy_config_aneg(struct phy_device *phydev)
-{
-	/* phy 4 might be connected to a second mac, allow aneg config */
-	if (phydev->addr == RTL8366RB_PHY_WAN)
-		return genphy_config_aneg(phydev);
-
-	return 0;
-}
-
-static struct phy_driver rtl8366rb_phy_driver = {
-	.phy_id		= 0x001cc960,
-	.name		= "Realtek RTL8366RB",
-	.phy_id_mask	= 0x1ffffff0,
-	.features	= PHY_GBIT_FEATURES,
-	.config_aneg	= rtl8366rb_phy_config_aneg,
-	.config_init    = rtl8366rb_phy_config_init,
-	.read_status	= genphy_read_status,
-	.driver		= {
-		.owner = THIS_MODULE,
-	},
-};
-
 static int __devexit rtl8366rb_remove(struct platform_device *pdev)
 {
 	struct rtl8366_smi *smi = platform_get_drvdata(pdev);
@@ -1337,26 +1300,12 @@ static struct platform_driver rtl8366rb_driver = {
 
 static int __init rtl8366rb_module_init(void)
 {
-	int ret;
-	ret = platform_driver_register(&rtl8366rb_driver);
-	if (ret)
-		return ret;
-
-	ret = phy_driver_register(&rtl8366rb_phy_driver);
-	if (ret)
-		goto err_platform_unregister;
-
-	return 0;
-
- err_platform_unregister:
-	platform_driver_unregister(&rtl8366rb_driver);
-	return ret;
+	return platform_driver_register(&rtl8366rb_driver);
 }
 module_init(rtl8366rb_module_init);
 
 static void __exit rtl8366rb_module_exit(void)
 {
-	phy_driver_unregister(&rtl8366rb_phy_driver);
 	platform_driver_unregister(&rtl8366rb_driver);
 }
 module_exit(rtl8366rb_module_exit);

@@ -39,12 +39,32 @@ brcm63xx_detect() {
 		brcm63xx_has_reset_button="true"
 		ifname=eth0
 		;;
-	"bcm63xx/96358GW "* | "bcm63xx/SPW500V "*)
+	"bcm63xx/SPW500V "*)
 		status_led="power:green"
 		brcm63xx_has_reset_button="true"
 		ifname=eth0
 		;;
+	"bcm63xx/AW4139 "*)
+		status_led="dsl-274xb:green:power"
+		brcm63xx_has_reset_button="true"
+		ifname=eth0
+		;;
+	"bcm63xx/96358-502V "*)
+		status_led="spw303v:green:power+adsl"
+		brcm63xx_has_reset_button="true"
+		ifname=eth0
+		;;
+	"bcm63xx/V2110 "*)
+		status_led="V2110:power:green"
+		brcm63xx_has_reset_button="true"
+		ifname=eth0
+		;;
 	"bcm63xx/CPVA642 "* )
+		status_led="power:green"
+		brcm63xx_has_reset_button="true"
+		ifname=eth0
+		;;
+	"bcm63xx/D-4P-W "*)
 		status_led="power:green"
 		brcm63xx_has_reset_button="true"
 		ifname=eth0

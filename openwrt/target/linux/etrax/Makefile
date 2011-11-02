@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,8 +10,8 @@ ARCH:=cris
 BOARD:=etrax
 MAINTAINER:=Claudio Mignanti <c.mignanti@gmail.com>
 BOARDNAME:=Axis ETRAX 100LX
-FEATURES:=squashfs jffs2 usb
-LINUX_VERSION:=2.6.32.29
+FEATURES:=squashfs jffs2 usb broken
+LINUX_VERSION:=2.6.32.33
 DEVICE_TYPE=
 
 include $(INCLUDE_DIR)/target.mk

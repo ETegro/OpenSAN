@@ -1,5 +1,5 @@
 # 6to4.sh - IPv6-in-IPv4 tunnel backend
-# Copyright (c) 2010 OpenWrt.org
+# Copyright (c) 2010-2011 OpenWrt.org
 
 find_6to4_wanif() {
 	local if=$(ip -4 r l e 0.0.0.0/0); if="${if#default* dev }"; if="${if%% *}"
@@ -18,9 +18,19 @@ find_6to4_prefix() {
 	printf "2002:%02x%02x:%02x%02x\n" $1 $2 $3 $4
 }
 
+test_6to4_rfc1918()
+{
+	local oIFS="$IFS"; IFS="."; set -- $1; IFS="$oIFS"
+	[ $1 -eq  10 ] && return 0
+	[ $1 -eq 192 ] && [ $2 -eq 168 ] && return 0
+	[ $1 -eq 172 ] && [ $2 -ge  16 ] && [ $2 -le  31 ] && return 0
+	return 1
+}
+
 set_6to4_radvd_interface() {
 	local cfgid="$1"
 	local lanif="${2:-lan}"
+	local ifmtu="${3:-1280}"
 	local ifsection=""
 
 	find_ifsection() {
@@ -46,6 +56,7 @@ set_6to4_radvd_interface() {
 	uci_set_state radvd "$ifsection" IgnoreIfMissing   1
 	uci_set_state radvd "$ifsection" AdvSendAdvert     1
 	uci_set_state radvd "$ifsection" MaxRtrAdvInterval 30
+	uci_set_state radvd "$ifsection" AdvLinkMTU        "$ifmtu"
 }
 
 set_6to4_radvd_prefix() {
@@ -53,6 +64,8 @@ set_6to4_radvd_prefix() {
 	local lanif="${2:-lan}"
 	local wanif="${3:-wan}"
 	local prefix="${4:-0:0:0:1::/64}"
+	local vlt="${5:-300}"
+	local plt="${6:-120}"
 	local pfxsection=""
 
 	find_pfxsection() {
@@ -77,8 +90,8 @@ set_6to4_radvd_prefix() {
 		uci_set_state radvd "$pfxsection" prefix               "$prefix"
 		uci_set_state radvd "$pfxsection" AdvOnLink            1
 		uci_set_state radvd "$pfxsection" AdvAutonomous        1
-		uci_set_state radvd "$pfxsection" AdvValidLifetime     300
-		uci_set_state radvd "$pfxsection" AdvPreferredLifetime 120
+		uci_set_state radvd "$pfxsection" AdvValidLifetime     "$vlt"
+		uci_set_state radvd "$pfxsection" AdvPreferredLifetime "$plt"
 		uci_set_state radvd "$pfxsection" Base6to4Interface    "$wanif"
 	}
 }
@@ -136,6 +149,11 @@ setup_interface_6to4() {
 		}
 	}
 
+	test_6to4_rfc1918 "$local4" && {
+		logger -t "$link" "Local wan ip $local4 is private - aborting"
+		return
+	}
+
 	[ -n "$local4" ] && {
 		logger -t "$link" "Starting ..."
 
@@ -160,7 +178,7 @@ setup_interface_6to4() {
 
 		[ "$defaultroute" = 1 ] && {
 			logger -t "$link" " * Adding default route"
-			ip -6 route add 2000::/3 via ::192.88.99.1 metric ${metric:-1} dev $link
+			ip -6 route add ::/0 via ::192.88.99.1 metric ${metric:-1} dev $link
 			uci_set_state network "$cfg" defaultroute 1
 		}
 
@@ -184,14 +202,19 @@ setup_interface_6to4() {
 				config_get adv_ifname "${adv_interface:-lan}" ifname
 
 				grep -qs "^ *$adv_ifname:" /proc/net/dev && {
+					local adv_valid_lifetime adv_preferred_lifetime
+					config_get adv_valid_lifetime     "$cfg" adv_valid_lifetime
+					config_get adv_preferred_lifetime "$cfg" adv_preferred_lifetime
+
 					local subnet6="$(printf "%s:%x::1/64" "$prefix6" $adv_subnet)"
 
 					logger -t "$link" " * Advertising IPv6 subnet $subnet6 on ${adv_interface:-lan} ($adv_ifname)"
 					ip -6 addr add $subnet6 dev $adv_ifname
 
-					set_6to4_radvd_interface "$sid" "$adv_interface"
+					set_6to4_radvd_interface "$sid" "$adv_interface" "$mtu"
 					set_6to4_radvd_prefix    "$sid" "$adv_interface" \
-						"$wancfg" "$(printf "0:0:0:%x::/64" $adv_subnet)"
+						"$wancfg" "$(printf "0:0:0:%x::/64" $adv_subnet)" \
+						"$adv_valid_lifetime" "$adv_preferred_lifetime"
 
 					adv_subnets="${adv_subnets:+$adv_subnets }$adv_ifname:$subnet6"
 					adv_subnet=$(($adv_subnet + 1))
@@ -238,9 +261,8 @@ stop_interface_6to4() {
 			done
 		}
 
-		[ "$defaultroute" = "1" ] && {
-			ip -6 route del 2000::/3 via ::192.88.99.1 dev $link metric 1
-		}
+		[ "$defaultroute" = "1" ] && \
+			ip -6 route del ::/0 via ::192.88.99.1 dev $link
 
 		ip addr del $local6 dev $link
 		ip link set $link down

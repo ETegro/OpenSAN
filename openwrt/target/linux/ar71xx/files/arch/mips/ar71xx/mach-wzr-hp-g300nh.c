@@ -12,7 +12,7 @@
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/partitions.h>
 #include <linux/nxp_74hc153.h>
-#include <linux/rtl8366s.h>
+#include <linux/rtl8366.h>
 
 #include <asm/mips_machine.h>
 #include <asm/mach-ar71xx/ar71xx.h>
@@ -20,7 +20,7 @@
 
 #include "machtype.h"
 #include "devices.h"
-#include "dev-ar913x-wmac.h"
+#include "dev-ar9xxx-wmac.h"
 #include "dev-gpio-buttons.h"
 #include "dev-leds-gpio.h"
 #include "dev-usb.h"
@@ -48,7 +48,8 @@
 #define WZRHPG300NH_GPIO_BTN_ROUTER_AUTO (WZRHPG300NH_GPIO_EXP_BASE + 6)
 #define WZRHPG300NH_GPIO_BTN_QOS_OFF	(WZRHPG300NH_GPIO_EXP_BASE + 7)
 
-#define WZRHPG300NH_BUTTONS_POLL_INTERVAL	20
+#define WZRHPG300NH_KEYS_POLL_INTERVAL	20	/* msecs */
+#define WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL (3 * WZRHPG300NH_KEYS_POLL_INTERVAL)
 
 #define WZRHPG300NH_MAC_OFFSET		0x20c
 
@@ -121,76 +122,76 @@ static struct platform_device wzrhpg300nh_flash_device = {
 
 static struct gpio_led wzrhpg300nh_leds_gpio[] __initdata = {
 	{
-		.name		= "wzr-hp-g300nh:orange:security",
+		.name		= "buffalo:orange:security",
 		.gpio		= WZRHPG300NH_GPIO_LED_SECURITY,
 		.active_low	= 1,
 	}, {
-		.name		= "wzr-hp-g300nh:green:wireless",
+		.name		= "buffalo:green:wireless",
 		.gpio		= WZRHPG300NH_GPIO_LED_WIRELESS,
 		.active_low	= 1,
 	}, {
-		.name		= "wzr-hp-g300nh:green:router",
+		.name		= "buffalo:green:router",
 		.gpio		= WZRHPG300NH_GPIO_LED_ROUTER,
 		.active_low	= 1,
 	}, {
-		.name		= "wzr-hp-g300nh:red:diag",
+		.name		= "buffalo:red:diag",
 		.gpio		= WZRHPG300NH_GPIO_LED_DIAG,
 		.active_low	= 1,
 	}, {
-		.name		= "wzr-hp-g300nh:blue:usb",
+		.name		= "buffalo:blue:usb",
 		.gpio		= WZRHPG300NH_GPIO_LED_USB,
 		.active_low	= 1,
 	}
 };
 
-static struct gpio_button wzrhpg300nh_gpio_buttons[] __initdata = {
+static struct gpio_keys_button wzrhpg300nh_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.threshold	= 3,
+		.debounce_interval = WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= WZRHPG300NH_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}, {
 		.desc		= "aoss",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
-		.threshold	= 3,
+		.debounce_interval = WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= WZRHPG300NH_GPIO_BTN_AOSS,
 		.active_low	= 1,
 	}, {
 		.desc		= "usb",
 		.type		= EV_KEY,
 		.code		= BTN_2,
-		.threshold	= 3,
+		.debounce_interval = WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= WZRHPG300NH_GPIO_BTN_USB,
 		.active_low	= 1,
 	}, {
 		.desc		= "qos_on",
 		.type		= EV_KEY,
 		.code		= BTN_3,
-		.threshold	= 3,
+		.debounce_interval = WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= WZRHPG300NH_GPIO_BTN_QOS_ON,
 		.active_low	= 0,
 	}, {
 		.desc		= "qos_off",
 		.type		= EV_KEY,
 		.code		= BTN_4,
-		.threshold	= 3,
+		.debounce_interval = WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= WZRHPG300NH_GPIO_BTN_QOS_OFF,
 		.active_low	= 0,
 	}, {
 		.desc		= "router_on",
 		.type		= EV_KEY,
 		.code		= BTN_5,
-		.threshold	= 3,
+		.debounce_interval = WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= WZRHPG300NH_GPIO_BTN_ROUTER_ON,
 		.active_low	= 0,
 	}, {
 		.desc		= "router_auto",
 		.type		= EV_KEY,
 		.code		= BTN_6,
-		.threshold	= 3,
+		.debounce_interval = WZRHPG300NH_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= WZRHPG300NH_GPIO_BTN_ROUTER_AUTO,
 		.active_low	= 0,
 	}
@@ -212,7 +213,7 @@ static struct platform_device wzrhpg300nh_74hc153_device = {
 	}
 };
 
-static struct rtl8366s_platform_data wzrhpg300nh_rtl8366s_data = {
+static struct rtl8366_platform_data wzrhpg300nh_rtl8366_data = {
 	.gpio_sda	= WZRHPG300NH_GPIO_RTL8366_SDA,
 	.gpio_sck	= WZRHPG300NH_GPIO_RTL8366_SCK,
 };
@@ -221,7 +222,15 @@ static struct platform_device wzrhpg300nh_rtl8366s_device = {
 	.name		= RTL8366S_DRIVER_NAME,
 	.id		= -1,
 	.dev = {
-		.platform_data	= &wzrhpg300nh_rtl8366s_data,
+		.platform_data	= &wzrhpg300nh_rtl8366_data,
+	}
+};
+
+static struct platform_device wzrhpg300nh_rtl8366rb_device = {
+	.name           = RTL8366RB_DRIVER_NAME,
+	.id             = -1,
+	.dev = {
+		.platform_data  = &wzrhpg300nh_rtl8366_data,
 	}
 };
 
@@ -229,17 +238,30 @@ static void __init wzrhpg300nh_setup(void)
 {
 	u8 *eeprom = (u8 *) KSEG1ADDR(0x1fff1000);
 	u8 *mac = eeprom + WZRHPG300NH_MAC_OFFSET;
+	bool hasrtl8366rb = false;
 
 	ar71xx_init_mac(ar71xx_eth0_data.mac_addr, mac, 0);
-	ar71xx_eth0_pll_data.pll_1000 = 0x1e000100;
-	ar71xx_eth0_data.mii_bus_dev = &wzrhpg300nh_rtl8366s_device.dev;
+	ar71xx_init_mac(ar71xx_eth1_data.mac_addr, mac, 1);
+
+	if (rtl8366_smi_detect(&wzrhpg300nh_rtl8366_data) == RTL8366_TYPE_RB)
+		hasrtl8366rb = true;
+
+	if (hasrtl8366rb) {
+		ar71xx_eth0_pll_data.pll_1000 = 0x1f000000;
+		ar71xx_eth0_data.mii_bus_dev = &wzrhpg300nh_rtl8366rb_device.dev;
+		ar71xx_eth1_pll_data.pll_1000 = 0x100;
+		ar71xx_eth1_data.mii_bus_dev = &wzrhpg300nh_rtl8366rb_device.dev;
+	} else {
+		ar71xx_eth0_pll_data.pll_1000 = 0x1e000100;
+		ar71xx_eth0_data.mii_bus_dev = &wzrhpg300nh_rtl8366s_device.dev;
+		ar71xx_eth1_pll_data.pll_1000 = 0x1e000100;
+		ar71xx_eth1_data.mii_bus_dev = &wzrhpg300nh_rtl8366s_device.dev;
+	}
+
 	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
 	ar71xx_eth0_data.speed = SPEED_1000;
 	ar71xx_eth0_data.duplex = DUPLEX_FULL;
 
-	ar71xx_init_mac(ar71xx_eth1_data.mac_addr, mac, 1);
-	ar71xx_eth1_pll_data.pll_1000 = 0x1e000100;
-	ar71xx_eth1_data.mii_bus_dev = &wzrhpg300nh_rtl8366s_device.dev;
 	ar71xx_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
 	ar71xx_eth1_data.phy_mask = 0x10;
 
@@ -247,18 +269,22 @@ static void __init wzrhpg300nh_setup(void)
 	ar71xx_add_device_eth(1);
 
 	ar71xx_add_device_usb();
-	ar913x_add_device_wmac(eeprom, NULL);
+	ar9xxx_add_device_wmac(eeprom, NULL);
 
 	platform_device_register(&wzrhpg300nh_74hc153_device);
 	platform_device_register(&wzrhpg300nh_flash_device);
-	platform_device_register(&wzrhpg300nh_rtl8366s_device);
+
+	if (hasrtl8366rb)
+		platform_device_register(&wzrhpg300nh_rtl8366rb_device);
+	else
+		platform_device_register(&wzrhpg300nh_rtl8366s_device);
 
 	ar71xx_add_device_leds_gpio(-1, ARRAY_SIZE(wzrhpg300nh_leds_gpio),
 					wzrhpg300nh_leds_gpio);
 
-	ar71xx_add_device_gpio_buttons(-1, WZRHPG300NH_BUTTONS_POLL_INTERVAL,
-					ARRAY_SIZE(wzrhpg300nh_gpio_buttons),
-					wzrhpg300nh_gpio_buttons);
+	ar71xx_register_gpio_keys_polled(-1, WZRHPG300NH_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(wzrhpg300nh_gpio_keys),
+					 wzrhpg300nh_gpio_keys);
 
 }
 

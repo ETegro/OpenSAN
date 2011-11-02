@@ -63,14 +63,15 @@ get_status_led() {
 	ls-sr71)
 		status_led="ubnt:green:d22"
 		;;
-	mzk-w04nu)
-		status_led="mzk-w04nu:green:status"
-		;;
+	mzk-w04nu | \
 	mzk-w300nh)
-		status_led="mzk-w300nh:green:status"
+		status_led="planex:green:status"
 		;;
 	nbg460n_550n_550nh)
 		status_led="nbg460n:green:power"
+		;;
+	om2p)
+		status_led="om2p:blue:power"
 		;;
 	pb44)
 		status_led="pb44:amber:jump1"
@@ -84,26 +85,26 @@ get_status_led() {
 	tew-632brp)
 		status_led="tew-632brp:green:status"
 		;;
-	tl-mr3220 | tl-mr3420)
-		status_led="tl-mr3x20:green:system"
-		;;
-	tl-wa901nd)
-		status_led="tl-wa901nd:green:system"
-		;;
-	tl-wr1043nd)
-		status_led="tl-wr1043nd:green:system"
-		;;
-	tl-wr741nd)
-		status_led="tl-wr741nd:green:system"
-		;;
-	tl-wr841n-v1)
-		status_led="tl-wr841n:green:system"
-		;;
+	tl-mr3220 | \
+	tl-mr3420 | \
+	tl-wa901nd | \
+	tl-wa901nd-v2 | \
+	tl-wr1043nd | \
+	tl-wr741nd | \
+	tl-wr741nd-v4 | \
+	tl-wr841n-v1 | \
 	tl-wr941nd)
-		status_led="tl-wr941nd:green:system"
+		status_led="tp-link:green:system"
+		;;
+	tl-wr703n)
+		status_led="tp-link:blue:system"
 		;;
 	unifi)
 		status_led="ubnt:green:dome"
+		;;
+	whr-hp-g300n | \
+	wzr-hp-g300nh)
+		status_led="buffalo:green:router"
 		;;
 	wndr3700 | wndr3700v2)
 		status_led="wndr3700:green:power"
@@ -119,9 +120,6 @@ get_status_led() {
 		;;
 	wrt160nl)
 		status_led="wrt160nl:blue:wps"
-		;;
-	wzr-hp-g300nh)
-		status_led="wzr-hp-g300nh:green:router"
 		;;
 	zcn-1523h-2 | zcn-1523h-5)
 		status_led="zcn-1523h:amber:init"

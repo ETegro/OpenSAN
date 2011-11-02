@@ -22,6 +22,8 @@ ifneq (,$(KERNEL_CC))
   KERNEL_MAKEOPTS += CC="$(KERNEL_CC)"
 endif
 
+export HOST_EXTRACFLAGS=-I$(STAGING_DIR_HOST)/include
+
 # defined in quilt.mk
 Kernel/Patch:=$(Kernel/Patch/Default)
 ifeq ($(strip $(CONFIG_EXTERNAL_KERNEL_TREE)),"")
@@ -76,14 +78,12 @@ ifeq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
 endif
 
 define Kernel/Configure/Default
-	$(LINUX_CONFCMD) > $(LINUX_DIR)/.config.target
+	$(LINUX_CONF_CMD) > $(LINUX_DIR)/.config.target
 # copy CONFIG_KERNEL_* settings over to .config.target
 	awk '/^(#[[:space:]]+)?CONFIG_KERNEL/{sub("CONFIG_KERNEL_","CONFIG_");print}' $(TOPDIR)/.config >> $(LINUX_DIR)/.config.target
 	echo "# CONFIG_KALLSYMS_EXTRA_PASS is not set" >> $(LINUX_DIR)/.config.target
 	echo "# CONFIG_KALLSYMS_ALL is not set" >> $(LINUX_DIR)/.config.target
 	echo "# CONFIG_KPROBES is not set" >> $(LINUX_DIR)/.config.target
-	$(SED) 's,.*CONFIG_AEABI.*,$(if $(CONFIG_EABI_SUPPORT),CONFIG_AEABI=y,# CONFIG_AEABI is not set),' $(LINUX_DIR)/.config.target
-	$(if $(CONFIG_EABI_SUPPORT),echo '# CONFIG_OABI_COMPAT is not set' >> $(LINUX_DIR)/.config.target)
 	$(SCRIPT_DIR)/metadata.pl kconfig $(TMP_DIR)/.packageinfo $(TOPDIR)/.config > $(LINUX_DIR)/.config.override
 	$(SCRIPT_DIR)/kconfig.pl 'm+' '+' $(LINUX_DIR)/.config.target /dev/null $(LINUX_DIR)/.config.override > $(LINUX_DIR)/.config
 	$(call Kernel/SetInitramfs)

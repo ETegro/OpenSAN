@@ -9,10 +9,10 @@ include $(TOPDIR)/rules.mk
 ARCH:=arm
 BOARD:=omap24xx
 BOARDNAME:=TI OMAP-24xx
-MAINTAINER:=Michael Buesch <mb@bu3sch.de>
+MAINTAINER:=Michael Buesch <m@bues.ch>
 FEATURES:=targz squashfs jffs2 usb usbgadget display gpio audio
 
-LINUX_VERSION:=2.6.37.1
+LINUX_VERSION:=3.1
 
 define Target/Description
 	TI OMAP-24xx

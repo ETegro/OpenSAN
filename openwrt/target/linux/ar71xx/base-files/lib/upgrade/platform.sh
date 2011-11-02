@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2011 OpenWrt.org
 #
 
 . /lib/ar71xx.sh
@@ -69,14 +69,26 @@ platform_check_image() {
 	[ "$ARGC" -gt 1 ] && return 1
 
 	case "$board" in
-	ap81 | ap83 | dir-600-a1 | dir-615-c1 | dir-825-b1 | mzk-w04nu | mzk-w300nh | tew-632brp | wrt400n | bullet-m | nanostation-m | rocket-m | wzr-hp-g300nh | nbg460n_550n_550nh | unifi )
+	all0258n )
+		platform_check_image_all0258n "$1" && return 0
+		return 1
+		;;
+	ap121 | ap121-mini | ap96 | db120 | zcn-1523h-2 | zcn-1523h-5)
+		[ "$magic_long" != "68737173" -a "$magic_long" != "19852003" ] && {
+			echo "Invalid image type."
+			return 1
+		}
+		return 0
+		;;
+	ap81 | ap83 | dir-600-a1 | dir-615-c1 | dir-825-b1 | mzk-w04nu | mzk-w300nh | tew-632brp | wrt400n | bullet-m | nanostation-m | rocket-m | wzr-hp-g300nh | wzr-hp-ag300h | whr-hp-g300n | nbg460n_550n_550nh | unifi )
 		[ "$magic" != "2705" ] && {
 			echo "Invalid image type."
 			return 1
 		}
 		return 0
 		;;
-	tl-mr3220 | tl-mr3420 | tl-wa901nd | tl-wr741nd | tl-wr841n-v1 | tl-wr941nd | tl-wr1043nd)
+	tl-mr3220 | tl-mr3420 | tl-wa901nd | tl-wa901nd-v2 | tl-wr703n | tl-wr741nd | tl-wr741nd-v4 | \
+	tl-wr841n-v1 | tl-wr941nd | tl-wr1043nd)
 		[ "$magic" != "0100" ] && {
 			echo "Invalid image type."
 			return 1
@@ -99,13 +111,6 @@ platform_check_image() {
 		;;
 	wrt160nl)
 		[ "$magic" != "4e4c" ] && {
-			echo "Invalid image type."
-			return 1
-		}
-		return 0
-		;;
-	zcn-1523h-2 | zcn-1523h-5)
-		[ "$magic" != "6873" -a "$magic" != "1985" ] && {
 			echo "Invalid image type."
 			return 1
 		}
@@ -140,6 +145,9 @@ platform_do_upgrade() {
 	case "$board" in
 	routerstation | routerstation-pro | ls-sr71 | eap7660d | ja76pf )
 		platform_do_upgrade_combined "$ARGV"
+		;;
+	all0258n )
+		platform_do_upgrade_all0258n "$ARGV"
 		;;
 	*)
 		default_do_upgrade "$ARGV"

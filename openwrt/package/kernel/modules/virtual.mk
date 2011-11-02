@@ -13,7 +13,7 @@ define KernelPackage/virtio-balloon
   TITLE:=VirtIO balloon driver
   DEPENDS:=@TARGET_x86_kvm_guest
   KCONFIG:=CONFIG_VIRTIO_BALLOON
-  FILES:=$(LINUX_DIR)/drivers/virtio/virtio_balloon.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/virtio/virtio_balloon.ko
   AUTOLOAD:=$(call AutoLoad,06,virtio-balloon)
 endef
 
@@ -29,7 +29,7 @@ define KernelPackage/virtio-net
   TITLE:=VirtIO network driver
   DEPENDS:=@TARGET_x86_kvm_guest
   KCONFIG:=CONFIG_VIRTIO_NET
-  FILES:=$(LINUX_DIR)/drivers/net/virtio_net.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/net/virtio_net.ko
   AUTOLOAD:=$(call AutoLoad,50,virtio_net)
 endef
 
@@ -45,7 +45,7 @@ define KernelPackage/virtio-random
   TITLE:=VirtIO Random Number Generator support
   DEPENDS:=@TARGET_x86_kvm_guest
   KCONFIG:=CONFIG_HW_RANDOM_VIRTIO
-  FILES:=$(LINUX_DIR)/drivers/char/hw_random/virtio-rng.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/char/hw_random/virtio-rng.ko
   AUTOLOAD:=$(call AutoLoad,09,virtio-rng)
 endef
 
@@ -166,7 +166,7 @@ $(eval $(call KernelPackage,xen-netdev))
 define KernelPackage/xen-pcidev
   SUBMENU:=$(VIRTUAL_MENU)
   TITLE:=Xen PCI device frontend
-  DEPENDS:=@TARGET_x86_xen_domu @LINUX_2_6_37||LINUX_2_6_38
+  DEPENDS:=@TARGET_x86_xen_domu @!LINUX_2_6_30&&!LINUX_2_6_31&&!LINUX_2_6_32&&!LINUX_2_6_36
   KCONFIG:=CONFIG_XEN_PCIDEV_FRONTEND
   FILES:=$(LINUX_DIR)/drivers/xen/platform-pci.ko
   AUTOLOAD:=$(call AutoLoad,10,xen-pcifront)

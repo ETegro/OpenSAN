@@ -94,7 +94,7 @@ sub update_index($)
 	-d "./feeds/$name.tmp" or mkdir "./feeds/$name.tmp" or return 1;
 	-d "./feeds/$name.tmp/info" or mkdir "./feeds/$name.tmp/info" or return 1;
 
-	system("$mk -s prepare-mk TMP_DIR=\"$ENV{TOPDIR}/feeds/$name.tmp\"");
+	system("$mk -s prepare-mk OPENWRT_BUILD= TMP_DIR=\"$ENV{TOPDIR}/feeds/$name.tmp\"");
 	system("$mk -s -f include/scan.mk IS_TTY=1 SCAN_TARGET=\"packageinfo\" SCAN_DIR=\"feeds/$name\" SCAN_NAME=\"package\" SCAN_DEPS=\"$ENV{TOPDIR}/include/package*.mk\" SCAN_DEPTH=5 SCAN_EXTRA=\"\" TMP_DIR=\"$ENV{TOPDIR}/feeds/$name.tmp\"");
 	system("ln -sf $name.tmp/.packageinfo ./feeds/$name.index");
 
@@ -117,6 +117,10 @@ my %update_method = (
 		'init_branch'	=> "git clone --depth 1 --branch '%s' '%s' '%s'",
 		'update'	=> "git pull",
 		'controldir'	=> ".git"},
+	'src-gitsvn' => {
+                'init'          => "git svn clone -r HEAD '%s' '%s'",
+                'update'        => "git svn rebase",
+                'controldir'    => ".git"},
 	'src-bzr' => {
 		'init'		=> "bzr checkout --lightweight '%s' '%s'",
 		'update'	=> "bzr update",
@@ -181,7 +185,7 @@ sub get_feed($) {
 }
 
 sub get_installed() {
-	system("$mk -s prepare-tmpinfo");
+	system("$mk -s prepare-tmpinfo OPENWRT_BUILD=");
 	clear_packages();
 	parse_package_metadata("./tmp/.packageinfo");
 	%installed = %package;
@@ -286,6 +290,7 @@ my %install_method = (
 	'src-cpy' => \&install_generic,
 	'src-link' => \&install_generic,
 	'src-git' => \&install_generic,
+	'src-gitsvn' => \&install_generic,
 	'src-bzr' => \&install_generic,
 	'src-hg' => \&install_generic,
 	'src-darcs' => \&install_generic,

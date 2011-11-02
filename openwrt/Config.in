@@ -227,6 +227,10 @@ menu "Global build settings"
 		bool "Compile the kernel with asynchronous IO support"
 		default n
 
+	config KERNEL_MAGIC_SYSRQ
+		bool "Compile the kernel with SysRq support"
+		default n
+
 	comment "Package build options"
 
 	config DEBUG
@@ -420,6 +424,19 @@ menuconfig DEVEL
 		  Enter a full pathname to a local reference git repository.
 		  In this instance, the --refererence option of git clone will
 		  be used thus creating a quick local clone of your repo.
+
+	config BUILD_LOG
+		bool "Enable log files during build process" if DEVEL
+		help
+		  If enabled log files will be written to the ./log directory
+
+	config SRC_TREE_OVERRIDE
+		bool "Enable package source tree override" if DEVEL
+		help
+		  If enabled, you can force a package to use a git tree as source
+		  code instead of the normal tarball. Create a symlink 'git-src'
+		  in the package directory, pointing to the .git tree that you want
+		  to pull the source code from
 
 menuconfig TARGET_OPTIONS
 	bool "Target Options"  if DEVEL

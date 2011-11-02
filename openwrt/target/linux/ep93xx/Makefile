@@ -10,9 +10,10 @@ ARCH:=arm
 BOARD:=ep93xx
 BOARDNAME:=Cirrus Logic EP93xx
 FEATURES:=squashfs jffs2 ext4 targz usb
-CFLAGS:=-Os -pipe -march=armv4t -funit-at-a-time
+CFLAGS:=-Os -pipe -march=armv4t -fno-caller-saves
+MAINTAINER:=Florian Fainelli <florian@openwrt.org>
 
-LINUX_VERSION:=2.6.36.4
+LINUX_VERSION:=2.6.39.4
 
 include $(INCLUDE_DIR)/target.mk
 

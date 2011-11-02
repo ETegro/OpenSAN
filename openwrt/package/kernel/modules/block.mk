@@ -25,7 +25,7 @@ $(eval $(call KernelPackage,aoe))
 define KernelPackage/ata-core
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=Serial and Parallel ATA support
-  DEPENDS:=@PCI_SUPPORT +kmod-scsi-core @(!TARGET_ubicom32||!TARGET_etrax||!TARGET_x86)
+  DEPENDS:=@PCI_SUPPORT +kmod-scsi-core @(!TARGET_ubicom32||!TARGET_etrax)
   KCONFIG:=CONFIG_ATA
   FILES:=$(LINUX_DIR)/drivers/ata/libata.ko
   AUTOLOAD:=$(call AutoLoad,21,libata,1)
@@ -36,7 +36,7 @@ $(eval $(call KernelPackage,ata-core))
 
 define AddDepends/ata
   SUBMENU:=$(BLOCK_MENU)
-  DEPENDS+=!TARGET_x86:kmod-ata-core $(1)
+  DEPENDS+=kmod-ata-core $(1)
 endef
 
 
@@ -214,7 +214,7 @@ define KernelPackage/md-mod
        CONFIG_BLK_DEV_MD=m \
        CONFIG_MD_AUTODETECT=y \
        CONFIG_MD_FAULTY=n
-  FILES:=$(LINUX_DIR)/drivers/md/md-mod.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/md/md-mod.ko
   AUTOLOAD:=$(call AutoLoad,27,md-mod)
 endef
 
@@ -236,7 +236,7 @@ define KernelPackage/md-linear
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID Linear Module
   KCONFIG:=CONFIG_MD_LINEAR=m
-  FILES:=$(LINUX_DIR)/drivers/md/linear.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/md/linear.ko
   AUTOLOAD:=$(call AutoLoad,28,linear)
 endef
 
@@ -251,7 +251,7 @@ define KernelPackage/md-raid0
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID0 Module
   KCONFIG:=CONFIG_MD_RAID0=m
-  FILES:=$(LINUX_DIR)/drivers/md/raid0.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/md/raid0.ko
   AUTOLOAD:=$(call AutoLoad,28,raid0)
 endef
 
@@ -266,7 +266,7 @@ define KernelPackage/md-raid1
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID1 Module
   KCONFIG:=CONFIG_MD_RAID1=m
-  FILES:=$(LINUX_DIR)/drivers/md/raid1.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/md/raid1.ko
   AUTOLOAD:=$(call AutoLoad,28,raid1)
 endef
 
@@ -281,7 +281,7 @@ define KernelPackage/md-raid10
 $(call KernelPackage/md/Depends,)
   TITLE:=RAID10 Module
   KCONFIG:=CONFIG_MD_RAID10=m
-  FILES:=$(LINUX_DIR)/drivers/md/raid10.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/md/raid10.ko
   AUTOLOAD:=$(call AutoLoad,28,raid10)
 endef
 
@@ -307,22 +307,22 @@ $(call KernelPackage/md/Depends,)
        CONFIG_MD_RAID456=m \
        CONFIG_MULTICORE_RAID456=n
   FILES:= \
-	$(LINUX_DIR)/crypto/xor.$(LINUX_KMOD_SUFFIX) \
-	$(LINUX_DIR)/crypto/async_tx/async_tx.$(LINUX_KMOD_SUFFIX) \
-	$(LINUX_DIR)/crypto/async_tx/async_memcpy.$(LINUX_KMOD_SUFFIX) \
-	$(LINUX_DIR)/crypto/async_tx/async_xor.$(LINUX_KMOD_SUFFIX) \
-	$(LINUX_DIR)/crypto/async_tx/async_pq.$(LINUX_KMOD_SUFFIX) \
-	$(LINUX_DIR)/crypto/async_tx/async_raid6_recov.$(LINUX_KMOD_SUFFIX) \
-	$(LINUX_DIR)/drivers/md/raid456.$(LINUX_KMOD_SUFFIX)
+	$(LINUX_DIR)/crypto/xor.ko \
+	$(LINUX_DIR)/crypto/async_tx/async_tx.ko \
+	$(LINUX_DIR)/crypto/async_tx/async_memcpy.ko \
+	$(LINUX_DIR)/crypto/async_tx/async_xor.ko \
+	$(LINUX_DIR)/crypto/async_tx/async_pq.ko \
+	$(LINUX_DIR)/crypto/async_tx/async_raid6_recov.ko \
+	$(LINUX_DIR)/drivers/md/raid456.ko
   # Additional files with kernel-dependent locations or presence
   # For Linux >= 2.6.36
   ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,2.6.36)), 1)
     FILES+= \
-	$(LINUX_DIR)/lib/raid6/raid6_pq.$(LINUX_KMOD_SUFFIX)
+	$(LINUX_DIR)/lib/raid6/raid6_pq.ko
   # For Linux < 2.6.36
   else
     FILES+= \
-	$(LINUX_DIR)/drivers/md/raid6_pq.$(LINUX_KMOD_SUFFIX)
+	$(LINUX_DIR)/drivers/md/raid6_pq.ko
   endif
   AUTOLOAD:=$(call AutoLoad,28, xor async_tx async_memcpy async_xor raid6_pq async_pq async_raid6_recov raid456)
 endef
@@ -348,7 +348,7 @@ define KernelPackage/md-multipath
 $(call KernelPackage/md/Depends,)
   TITLE:=MD Multipath Module
   KCONFIG:=CONFIG_MD_MULTIPATH=m
-  FILES:=$(LINUX_DIR)/drivers/md/multipath.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/drivers/md/multipath.ko
   AUTOLOAD:=$(call AutoLoad,29,multipath)
 endef
 
@@ -374,24 +374,10 @@ define KernelPackage/ide-core
 	CONFIG_BLK_DEV_IDEDMA_PCI=y \
 	CONFIG_BLK_DEV_IDEPCI=y
   FILES:= \
-	$(LINUX_DIR)/drivers/ide/ide-core.ko
+	$(LINUX_DIR)/drivers/ide/ide-core.ko \
+	$(LINUX_DIR)/drivers/ide/ide-gd_mod.ko
   AUTOLOAD:= \
-	$(call AutoLoad,20,ide-core,1)
-endef
-
-define KernelPackage/ide-core/2.4
-  FILES+= \
-	$(LINUX_DIR)/drivers/ide/ide-detect.ko \
-  	$(LINUX_DIR)/drivers/ide/ide-disk.ko
-  AUTOLOAD+= \
-	$(call AutoLoad,35,ide-detect,1) \
-	$(call AutoLoad,40,ide-disk,1)
-endef
-
-define KernelPackage/ide-core/2.6
-  FILES+= \
-  	$(LINUX_DIR)/drivers/ide/ide-gd_mod.ko
-  AUTOLOAD+= \
+	$(call AutoLoad,20,ide-core,1) \
 	$(call AutoLoad,40,ide-gd_mod,1)
 endef
 
@@ -399,8 +385,7 @@ define KernelPackage/ide-core/description
  Kernel support for IDE, useful for usb mass storage devices (e.g. on WL-HDD)
  Includes:
  - ide-core
- - ide-detect
- - ide-gd_mod (or ide-disk)
+ - ide-gd_mod
 endef
 
 $(eval $(call KernelPackage,ide-core))
@@ -417,21 +402,9 @@ define KernelPackage/ide-generic
   DEPENDS:=@PCI_SUPPORT
   TITLE:=Kernel support for generic PCI IDE chipsets
   KCONFIG:=CONFIG_BLK_DEV_GENERIC
+  FILES:=$(LINUX_DIR)/drivers/ide/ide-pci-generic.ko
+  AUTOLOAD:=$(call AutoLoad,30,ide-pci-generic,1)
   $(call AddDepends/ide)
-endef
-
-define KernelPackage/ide-generic/2.4
-  FILES+= \
-	$(LINUX_DIR)/drivers/ide/pci/generic.ko
-  AUTOLOAD+= \
-	$(call AutoLoad,30,generic,1)
-endef
-
-define KernelPackage/ide-generic/2.6
-  FILES+= \
-	$(LINUX_DIR)/drivers/ide/ide-pci-generic.ko
-  AUTOLOAD+= \
-	$(call AutoLoad,30,ide-pci-generic,1)
 endef
 
 $(eval $(call KernelPackage,ide-generic))
@@ -458,10 +431,6 @@ define KernelPackage/ide-aec62xx
   $(call AddDepends/ide)
 endef
 
-define KernelPackage/ide-aec62xx/2.4
-  FILES:=$(LINUX_DIR)/drivers/ide/pci/aec62xx.ko
-endef
-
 define KernelPackage/ide-aec62xx/description
  Support for Acard AEC62xx (Artop ATP8xx) IDE controllers.
 endef
@@ -476,10 +445,6 @@ define KernelPackage/ide-pdc202xx
   FILES:=$(LINUX_DIR)/drivers/ide/pdc202xx_old.ko
   AUTOLOAD:=$(call AutoLoad,30,pdc202xx_old,1)
   $(call AddDepends/ide)
-endef
-
-define KernelPackage/ide-pdc202xx/2.4
-  FILES:=$(LINUX_DIR)/drivers/ide/pci/pdc202xx_old.ko
 endef
 
 define KernelPackage/ide-pdc202xx/description
@@ -504,6 +469,70 @@ define KernelPackage/ide-it821x/description
 endef
 
 $(eval $(call KernelPackage,ide-it821x))
+
+
+define KernelPackage/cs5535
+  TITLE:=NSC/AMD CS5535 chipset support
+  DEPENDS:=@TARGET_x86
+  KCONFIG:=CONFIG_BLK_DEV_CS5535
+  FILES=$(LINUX_DIR)/drivers/ide/cs5535.ko
+  AUTOLOAD:=$(call AutoLoad,30,cs5535,1)
+  $(call AddDepends/ide)
+endef
+
+define KernelPackage/cs5535/description
+  Kernel module for the NSC/AMD CS5535 companion chip
+endef
+
+$(eval $(call KernelPackage,cs5535))
+
+
+define KernelPackage/cs5536
+  TITLE:=AMD CS5536 chipset support
+  DEPENDS:=@TARGET_x86
+  KCONFIG:=CONFIG_BLK_DEV_CS5536
+  FILES=$(LINUX_DIR)/drivers/ide/cs5536.ko
+  AUTOLOAD:=$(call AutoLoad,30,cs5536,1)
+  $(call AddDepends/ide)
+endef
+
+define KernelPackage/cs5536/description
+  Kernel module for the AMD CS5536 Geode LX companion chip
+endef
+
+$(eval $(call KernelPackage,cs5536))
+
+
+define KernelPackage/pata-cs5535
+  TITLE:=CS5535 PATA support
+  DEPENDS:=@TARGET_x86 @PCI_SUPPORT
+  KCONFIG:=CONFIG_PATA_CS5535
+  FILES=$(LINUX_DIR)/drivers/ata/pata_cs5535.ko
+  AUTOLOAD:=$(call AutoLoad,30,pata_cs5535,1)
+  $(call AddDepends/ata)
+endef
+
+define KernelPackage/pata-cs5535/description
+  Kernel module for the NSC/AMD CS5535 companion chip
+endef
+
+$(eval $(call KernelPackage,pata-cs5535))
+
+
+define KernelPackage/pata-cs5536
+  TITLE:=CS5536 PATA support
+  DEPENDS:=@TARGET_x86 @PCI_SUPPORT
+  KCONFIG:=CONFIG_PATA_CS5536
+  FILES=$(LINUX_DIR)/drivers/ata/pata_cs5536.ko
+  AUTOLOAD:=$(call AutoLoad,30,pata_cs5536,1)
+  $(call AddDepends/ata)
+endef
+
+define KernelPackage/pata-cs5536/description
+  Kernel module for the AMD CS5536 Geode LX companion chip
+endef
+
+$(eval $(call KernelPackage,pata-cs5536))
 
 
 define KernelPackage/libsas
@@ -583,7 +612,6 @@ $(eval $(call KernelPackage,nbd))
 define KernelPackage/scsi-core
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=SCSI device support
-  DEPENDS:=@!TARGET_x86
   KCONFIG:= \
 	CONFIG_SCSI \
 	CONFIG_BLK_DEV_SD
@@ -599,6 +627,7 @@ $(eval $(call KernelPackage,scsi-core))
 define KernelPackage/scsi-generic
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=Kernel support for SCSI generic
+  DEPENDS:=+kmod-scsi-core
   KCONFIG:= \
 	CONFIG_CHR_DEV_SG
   FILES:= \
@@ -607,3 +636,20 @@ define KernelPackage/scsi-generic
 endef
 
 $(eval $(call KernelPackage,scsi-generic))
+
+
+define KernelPackage/scsi-cdrom
+  SUBMENU:=$(BLOCK_MENU)
+  TITLE:=Kernel support for CD / DVD drives
+  DEPENDS:=+kmod-scsi-core
+  KCONFIG:= \
+    CONFIG_BLK_DEV_SR \
+    CONFIG_BLK_DEV_SR_VENDOR=n
+  FILES:= \
+    $(LINUX_DIR)/drivers/cdrom/cdrom.ko \
+    $(LINUX_DIR)/drivers/scsi/sr_mod.ko
+  AUTOLOAD:=$(call AutoLoad,30,cdrom) $(call AutoLoad,45,sr_mod)
+endef
+
+$(eval $(call KernelPackage,scsi-cdrom))
+

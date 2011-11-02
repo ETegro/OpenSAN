@@ -1,3 +1,4 @@
+# DO NOT EDIT. This file is generated from Config.src
 #
 # For a description of the syntax of this configuration file,
 # see scripts/kbuild/config-language.txt.
@@ -14,6 +15,7 @@ config BUSYBOX_CONFIG_MODINFO
 config BUSYBOX_CONFIG_MODPROBE_SMALL
 	bool "Simplified modutils"
 	default n
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Simplified modutils.
 
@@ -48,6 +50,7 @@ config BUSYBOX_CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE
 	bool "Accept module options on modprobe command line"
 	default n
 	depends on BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Allow insmod and modprobe take module options from command line.
 
@@ -62,6 +65,7 @@ config BUSYBOX_CONFIG_INSMOD
 	bool "insmod"
 	default y
 	depends on !BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  insmod is used to load specified modules in the running kernel.
 
@@ -69,6 +73,7 @@ config BUSYBOX_CONFIG_RMMOD
 	bool "rmmod"
 	default y
 	depends on !BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  rmmod is used to unload specified modules from the kernel.
 
@@ -76,6 +81,7 @@ config BUSYBOX_CONFIG_LSMOD
 	bool "lsmod"
 	default y
 	depends on !BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  lsmod is used to display a list of loaded modules.
 
@@ -83,6 +89,7 @@ config BUSYBOX_CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT
 	bool "Pretty output"
 	default y
 	depends on BUSYBOX_CONFIG_LSMOD
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  This option makes output format of lsmod adjusted to
 	  the format of module-init-tools for Linux kernel 2.6.
@@ -92,6 +99,7 @@ config BUSYBOX_CONFIG_MODPROBE
 	bool "modprobe"
 	default n
 	depends on !BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Handle the loading of modules, and their dependencies on a high
 	  level.
@@ -100,6 +108,7 @@ config BUSYBOX_CONFIG_FEATURE_MODPROBE_BLACKLIST
 	bool "Blacklist support"
 	default n
 	depends on BUSYBOX_CONFIG_MODPROBE
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Say 'y' here to enable support for the 'blacklist' command in
 	  modprobe.conf. This prevents the alias resolver to resolve
@@ -111,6 +120,7 @@ config BUSYBOX_CONFIG_DEPMOD
 	bool "depmod"
 	default n
 	depends on !BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  depmod generates modules.dep (and potentially modules.alias
 	  and modules.symbols) that contain dependency information
@@ -122,6 +132,7 @@ config BUSYBOX_CONFIG_FEATURE_2_4_MODULES
 	bool "Support version 2.2/2.4 Linux kernels"
 	default n
 	depends on BUSYBOX_CONFIG_INSMOD || BUSYBOX_CONFIG_RMMOD || BUSYBOX_CONFIG_LSMOD
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Support module loading for 2.2.x and 2.4.x Linux kernels.
 	  This increases size considerably. Say N unless you plan
@@ -131,6 +142,7 @@ config BUSYBOX_CONFIG_FEATURE_INSMOD_TRY_MMAP
 	bool "Try to load module from a mmap'ed area"
 	default n
 	depends on BUSYBOX_CONFIG_INSMOD || BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  This option causes module loading code to try to mmap
 	  module first. If it does not work (for example,
@@ -147,6 +159,7 @@ config BUSYBOX_CONFIG_FEATURE_INSMOD_VERSION_CHECKING
 	bool "Enable module version checking"
 	default n
 	depends on BUSYBOX_CONFIG_FEATURE_2_4_MODULES && (BUSYBOX_CONFIG_INSMOD || BUSYBOX_CONFIG_MODPROBE)
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Support checking of versions for modules. This is used to
 	  ensure that the kernel and module are made for each other.
@@ -155,6 +168,7 @@ config BUSYBOX_CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS
 	bool "Add module symbols to kernel symbol table"
 	default n
 	depends on BUSYBOX_CONFIG_FEATURE_2_4_MODULES && (BUSYBOX_CONFIG_INSMOD || BUSYBOX_CONFIG_MODPROBE)
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  By adding module symbols to the kernel symbol table, Oops messages
 	  occuring within kernel modules can be properly debugged. By enabling
@@ -166,6 +180,7 @@ config BUSYBOX_CONFIG_FEATURE_INSMOD_LOADINKMEM
 	bool "In kernel memory optimization (uClinux only)"
 	default n
 	depends on BUSYBOX_CONFIG_FEATURE_2_4_MODULES && (BUSYBOX_CONFIG_INSMOD || BUSYBOX_CONFIG_MODPROBE)
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  This is a special uClinux only memory optimization that lets insmod
 	  load the specified kernel module directly into kernel space, reducing
@@ -176,6 +191,7 @@ config BUSYBOX_CONFIG_FEATURE_INSMOD_LOAD_MAP
 	bool "Enable insmod load map (-m) option"
 	default n
 	depends on BUSYBOX_CONFIG_FEATURE_2_4_MODULES && BUSYBOX_CONFIG_INSMOD
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Enabling this, one would be able to get a load map
 	  output on stdout. This makes kernel module debugging
@@ -187,6 +203,7 @@ config BUSYBOX_CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL
 	bool "Symbols in load map"
 	default n
 	depends on BUSYBOX_CONFIG_FEATURE_INSMOD_LOAD_MAP && !BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Without this option, -m will only output section
 	  load map. With this option, -m will also output
@@ -196,6 +213,7 @@ config BUSYBOX_CONFIG_FEATURE_CHECK_TAINTED_MODULE
 	bool "Support tainted module checking with new kernels"
 	default y
 	depends on (BUSYBOX_CONFIG_LSMOD || BUSYBOX_CONFIG_FEATURE_2_4_MODULES) && !BUSYBOX_CONFIG_MODPROBE_SMALL
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Support checking for tainted modules. These are usually binary
 	  only modules that will make the linux-kernel list ignore your
@@ -206,6 +224,7 @@ config BUSYBOX_CONFIG_FEATURE_MODUTILS_ALIAS
 	bool "Support for module.aliases file"
 	default n
 	depends on BUSYBOX_CONFIG_DEPMOD || BUSYBOX_CONFIG_MODPROBE
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Generate and parse modules.alias containing aliases for bus
 	  identifiers:
@@ -222,6 +241,7 @@ config BUSYBOX_CONFIG_FEATURE_MODUTILS_SYMBOLS
 	bool "Support for module.symbols file"
 	default n
 	depends on BUSYBOX_CONFIG_DEPMOD || BUSYBOX_CONFIG_MODPROBE
+	select BUSYBOX_CONFIG_PLATFORM_LINUX
 	help
 	  Generate and parse modules.symbols containing aliases for
 	  symbol_request() kernel calls, such as:

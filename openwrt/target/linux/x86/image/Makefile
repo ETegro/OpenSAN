@@ -166,6 +166,13 @@ endif
 
 define Image/BuildKernel
 	$(CP) $(KDIR)/bzImage $(BIN_DIR)/$(IMG_PREFIX)-vmlinuz
+  ifneq ($(CONFIG_X86_ETHERBOOT_IMAGES),)
+	rm -f $(BIN_DIR)/$(IMG_PREFIX)-etherboot
+	$(STAGING_DIR_HOST)/bin/mkelfImage \
+		--append=$(CONFIG_X86_ETHERBOOT_BOOTOPTS) \
+		$(KDIR)/bzImage \
+		$(BIN_DIR)/$(IMG_PREFIX)-etherboot
+  endif
 endef
 
 define Image/Prepare
@@ -184,7 +191,7 @@ define Image/Build
   endif
 	$(CP) $(KDIR)/root.$(1) $(BIN_DIR)/$(IMG_PREFIX)-rootfs-$(1).img
 	$(CP) $(KDIR)/bzImage $(BIN_DIR)/$(IMG_PREFIX)-vmlinuz
-  ifeq ($(1),ext4)
+  ifneq (,$findstring($(1),ext4 jffs2))
 	gzip -f9 $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img
 	gzip -f9 $(BIN_DIR)/$(IMG_PREFIX)-rootfs-$(1).img
   endif

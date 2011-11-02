@@ -48,9 +48,9 @@ void ag71xx_phy_start(struct ag71xx *ag)
 
 	if (ag->phy_dev) {
 		phy_start(ag->phy_dev);
+	} else if (pdata->has_ar7240_switch) {
+		ag71xx_ar7240_start(ag);
 	} else {
-		if (pdata->has_ar7240_switch)
-			ag71xx_ar7240_start(ag);
 		ag->link = 1;
 		ag71xx_link_adjust(ag);
 	}
@@ -59,15 +59,19 @@ void ag71xx_phy_start(struct ag71xx *ag)
 void ag71xx_phy_stop(struct ag71xx *ag)
 {
 	struct ag71xx_platform_data *pdata = ag71xx_get_pdata(ag);
+	unsigned long flags;
 
-	if (ag->phy_dev) {
+	if (ag->phy_dev)
 		phy_stop(ag->phy_dev);
-	} else {
-		if (pdata->has_ar7240_switch)
+	else if (pdata->has_ar7240_switch)
 			ag71xx_ar7240_stop(ag);
+
+	spin_lock_irqsave(&ag->lock, flags);
+	if (ag->link) {
 		ag->link = 0;
 		ag71xx_link_adjust(ag);
 	}
+	spin_unlock_irqrestore(&ag->lock, flags);
 }
 
 static int ag71xx_phy_connect_fixed(struct ag71xx *ag)
@@ -217,7 +221,7 @@ int __devinit ag71xx_phy_connect(struct ag71xx *ag)
 	return ag71xx_phy_connect_fixed(ag);
 }
 
-void __devexit ag71xx_phy_disconnect(struct ag71xx *ag)
+void ag71xx_phy_disconnect(struct ag71xx *ag)
 {
 	struct ag71xx_platform_data *pdata = ag71xx_get_pdata(ag);
 

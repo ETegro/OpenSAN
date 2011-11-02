@@ -14,7 +14,7 @@
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/partitions.h>
 #include <linux/delay.h>
-#include <linux/rtl8366s.h>
+#include <linux/rtl8366.h>
 
 #include <linux/i2c.h>
 #include <linux/i2c-algo-bit.h>
@@ -25,7 +25,7 @@
 #include "machtype.h"
 #include "devices.h"
 #include "dev-m25p80.h"
-#include "dev-ar913x-wmac.h"
+#include "dev-ar9xxx-wmac.h"
 #include "dev-gpio-buttons.h"
 #include "dev-leds-gpio.h"
 
@@ -38,7 +38,9 @@
 /* Buttons */
 #define NBG460N_GPIO_BTN_WPS		12
 #define NBG460N_GPIO_BTN_RESET		21
-#define NBG460N_BUTTONS_POLL_INTERVAL	20
+
+#define NBG460N_KEYS_POLL_INTERVAL	20	/* msecs */
+#define NBG460N_KEYS_DEBOUNCE_INTERVAL	(3 * NBG460N_KEYS_POLL_INTERVAL)
 
 /* RTC chip PCF8563 I2C interface */
 #define NBG460N_GPIO_PCF8563_SDA	8
@@ -114,19 +116,19 @@ static struct gpio_led nbg460n_leds_gpio[] __initdata = {
 	}
 };
 
-static struct gpio_button nbg460n_gpio_buttons[] __initdata = {
+static struct gpio_keys_button nbg460n_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.threshold	= 3,
+		.debounce_interval = NBG460N_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= NBG460N_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}, {
 		.desc		= "wps",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
-		.threshold	= 3,
+		.debounce_interval = NBG460N_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= NBG460N_GPIO_BTN_WPS,
 		.active_low	= 1,
 	}
@@ -164,7 +166,7 @@ static void __devinit nbg460n_i2c_init(void)
 }
 
 
-static struct rtl8366s_platform_data nbg460n_rtl8366s_data = {
+static struct rtl8366_platform_data nbg460n_rtl8366s_data = {
 	.gpio_sda	= NBG460N_GPIO_RTL8366_SDA,
 	.gpio_sck	= NBG460N_GPIO_RTL8366_SCK,
 };
@@ -206,7 +208,7 @@ static void __init nbg460n_setup(void)
 	/* register flash */
 	ar71xx_add_device_m25p80(&nbg460n_flash_data);
 
-	ar913x_add_device_wmac(eeprom, mac);
+	ar9xxx_add_device_wmac(eeprom, mac);
 
 	/* register RTC chip */
 	nbg460n_i2c_init();
@@ -214,9 +216,9 @@ static void __init nbg460n_setup(void)
 	ar71xx_add_device_leds_gpio(-1, ARRAY_SIZE(nbg460n_leds_gpio),
 					nbg460n_leds_gpio);
 
-	ar71xx_add_device_gpio_buttons(-1, NBG460N_BUTTONS_POLL_INTERVAL,
-					ARRAY_SIZE(nbg460n_gpio_buttons),
-					nbg460n_gpio_buttons);
+	ar71xx_register_gpio_keys_polled(-1, NBG460N_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(nbg460n_gpio_keys),
+					 nbg460n_gpio_keys);
 }
 
 MIPS_MACHINE(AR71XX_MACH_NBG460N, "NBG460N", "Zyxel NBG460N/550N/550NH",
