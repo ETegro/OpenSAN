@@ -1,24 +1,35 @@
---- a/configure.ac
-+++ b/configure.ac
-@@ -17,7 +17,6 @@
+Index: libtorrent-0.12.6/scripts/checks.m4
+===================================================================
+--- libtorrent-0.12.6.orig/scripts/checks.m4
++++ libtorrent-0.12.6/scripts/checks.m4
+@@ -96,7 +96,7 @@ AC_DEFUN([TORRENT_CHECK_KQUEUE], [
+ AC_DEFUN([TORRENT_CHECK_KQUEUE_SOCKET_ONLY], [
+   AC_MSG_CHECKING(whether kqueue supports pipes and ptys)
  
- AM_INIT_AUTOMAKE
- AM_CONFIG_HEADER(config.h)
--AM_PATH_CPPUNIT(1.9.6)
- AC_DISABLE_STATIC
+-  AC_RUN_IFELSE(
++  AC_LINK_IFELSE(
+     [[#include <fcntl.h>
+       #include <stdlib.h>
+       #include <unistd.h>
+Index: libtorrent-0.12.6/scripts/common.m4
+===================================================================
+--- libtorrent-0.12.6.orig/scripts/common.m4
++++ libtorrent-0.12.6/scripts/common.m4
+@@ -184,7 +184,7 @@ AC_DEFUN([TORRENT_CHECK_MADVISE], [
+ AC_DEFUN([TORRENT_CHECK_EXECINFO], [
+   AC_MSG_CHECKING(for execinfo.h)
  
- AM_DISABLE_STATIC
-@@ -117,5 +116,4 @@
- 	src/protocol/Makefile
- 	src/tracker/Makefile
- 	src/utils/Makefile
--        test/Makefile
- ])
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -1,4 +1,4 @@
--SUBDIRS = src test
-+SUBDIRS = src
+-  AC_RUN_IFELSE(
++  AC_LINK_IFELSE(
+     [[#include <execinfo.h>
+       int main() { backtrace((void**)0, 0); backtrace_symbols((char**)0, 0); return 0;}
+     ]],
+@@ -199,7 +199,7 @@ AC_DEFUN([TORRENT_CHECK_EXECINFO], [
+ AC_DEFUN([TORRENT_CHECK_ALIGNED], [
+   AC_MSG_CHECKING(the byte alignment)
  
- pkgconfigdir = $(libdir)/pkgconfig
- pkgconfig_DATA = libtorrent.pc
+-  AC_RUN_IFELSE(
++  AC_LINK_IFELSE(
+     [[#include <inttypes.h>
+       int main() {
+         char buf[8] = { 0, 0, 0, 0, 1, 0, 0, 0 };

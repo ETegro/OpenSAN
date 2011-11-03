@@ -8,16 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.096
-PKG_RELEASE:=1
+PKG_VERSION:=0.098
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/znc
-PKG_MD5SUM:=38eec4f1911a68b4d2fc704170e7cbf6
+PKG_SOURCE_URL:=http://znc.in/releases
+PKG_MD5SUM:=5667b4acb1f01309d6eded77abac700c
 
 PKG_BUILD_PARALLEL:=1
 
-include $(INCLUDE_DIR)/package.mk
 
 define Package/znc/default
   SUBMENU:=Instant Messaging
@@ -25,6 +24,7 @@ define Package/znc/default
   CATEGORY:=Network
   TITLE:=ZNC
   URL:=http://en.znc.in/
+  MAINTAINER:=Jonas Gorski <jonas.gorski+openwrt@gmail.com>
 endef
 
 define Package/znc
@@ -44,28 +44,6 @@ define Package/znc/conffiles
 endef
 
 
-CONFIGURE_VARS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
-	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-	LIBS="-luClibc++ -lm -lssl -lcrypto $(LIBGCC_S) -lc"
-
-CONFIGURE_ARGS += \
-	--disable-c-ares \
-	--enable-extra \
-	--disable-perl
-
-MAKE_FLAGS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc"
-
-define Build/Configure
-	# webadmin doesn't compile
-	$(RM) $(PKG_BUILD_DIR)/modules/webadmin.cpp
-	$(call Build/Configure/Default,)
-	$(call libtool_disable_rpath)
-endef
-
 define Package/znc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/znc $(1)/usr/bin/
@@ -79,6 +57,7 @@ endef
 
 
 ZNC_MODULES :=
+ZNC_MODULE_TARGETS := extra/droproot.so
 
 define module
   define Package/znc-mod-$(strip $(1))
@@ -93,12 +72,59 @@ define module
 
   define Package/znc-mod-$(strip $(1))/install
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
+	# include webadmin page templates if existing
+	if [ -d $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))) ]; then \
+		$(INSTALL_DIR) $$(1)/usr/share/znc/ ;\
+		$(CP) -r $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))) $$(1)/usr/share/znc/ ;\
+	fi
   endef
 
   ZNC_MODULES += znc-mod-$(strip $(1))
+  $(if $(CONFIG_PACKAGE_znc-mod-$(strip $(1))),ZNC_MODULE_TARGETS += $(strip $(3))$(subst -,_,$(strip $(1))).so)
 endef
 
+define webadmin
+  define Package/znc-mod-webadmin
+    $(Package/znc/default)
+    TITLE+= (webadmin plugin)
+    DEPENDS:=znc
+  endef
+
+  define Package/znc-mod-webadmin/description
+   Allows you to add/remove/edit users and settings on the fly via a web browser.
+  endef
+
+  define Package/znc-mod-webadmin/install
+	$(INSTALL_DIR) $$(1)/usr/lib/znc/
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/webadmin.so $$(1)/usr/lib/znc/
+	$(INSTALL_DIR) $$(1)/usr/share/znc/
+	$(CP) -r $$(PKG_BUILD_DIR)/modules/webadmin $$(1)/usr/share/znc/
+	$(INSTALL_DIR) $$(1)/usr/share/znc/webskins/
+	$(CP) -r $$(PKG_BUILD_DIR)/webskins/_default_ $$(1)/usr/share/znc/webskins/
+  endef
+
+  ZNC_MODULES += znc-mod-webadmin
+  $(if $(CONFIG_PACKAGE_znc-mod-webadmin),ZNC_MODULE_TARGETS += webadmin.so)
+endef
+
+define webskin
+  define Package/znc-webskin-$(strip $(1))
+    $(Package/znc/default)
+    TITLE+= ($(strip $(1)) webskin)
+    DEPENDS:=znc-mod-webadmin
+  endef
+
+  define Package/znc-webskin-$(strip $(1))/description
+    $(strip $(1)) webskin for webadmin
+  endef
+
+  define Package/znc-webskin-$(strip $(1))/install
+	$(INSTALL_DIR) $$(1)/usr/share/znc/webskins/
+	$(CP) -r $$(PKG_BUILD_DIR)/webskins/$(strip $(1)) $$(1)/usr/share/znc/webskins/
+  endef
+  ZNC_MODULES += znc-webskin-$(strip $(1))
+endef
 
 , := ,
 
@@ -143,10 +169,6 @@ $(eval $(call module,disconkick,This module will kick your client from all \
 	channels where you are$(,) in case if ZNC disconnects from server.))
 
 $(eval $(call module,fail2ban,Block IPs for some time after a failed login.))
-
-$(eval $(call module,fixfreenode,This module blocks some freenode-specific \
-	feature which results in plus (+) and minus (-) signs being displayed in \
-	front of every message from a client.))
 
 $(eval $(call module,keepnick,Tries to get you your primary nick.))
 
@@ -220,7 +242,41 @@ $(eval $(call module,send-raw,Allows you to send raw traffic to IRC from \
 $(eval $(call module,shell,Have your unix shell in a query window right inside \
 	of your IRC client.,extra/))
 
-$(eval $(call BuildPackage,znc))
+$(eval $(call webadmin))
+
+$(eval $(call webskin,dark-clouds))
+$(eval $(call webskin,forest))
+$(eval $(call webskin,ice))
 
 PKG_CONFIG_DEPENDS := $(patsubst %,CONFIG_PACKAGE_%,$(ZNC_MODULES))
+
+include $(INCLUDE_DIR)/package.mk
+
+CONFIGURE_VARS += \
+	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
+	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+	LIBS="-luClibc++ -lm -lssl -lcrypto $(LIBGCC_S) -lc"
+
+CONFIGURE_ARGS += \
+	--disable-c-ares \
+	--enable-extra \
+	--disable-perl
+
+MAKE_FLAGS += \
+	CXX="$(STAGING_DIR)/host/bin/g++-uc"
+
+define Build/Configure
+	$(call Build/Configure/Default,)
+	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(call Build/Compile/Default,znc)
+	$(MAKE_VARS) $(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/modules \
+		$(MAKE_FLAGS) $(ZNC_MODULE_TARGETS)
+endef
+
+$(eval $(call BuildPackage,znc))
 $(foreach m,$(ZNC_MODULES),$(eval $(call BuildPackage,$(m))))

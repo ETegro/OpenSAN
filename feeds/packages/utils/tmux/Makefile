@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tmux
-PKG_VERSION:=1.4
-PKG_RELEASE:=1
+PKG_VERSION:=1.5
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/tmux
-PKG_MD5SUM:=0bfc7dd9a5bab192406167589c716a21
+PKG_MD5SUM:=3d4b683572af34e83bc8b183a8285263
 
 PKG_INSTALL:=1
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +24,7 @@ define Package/tmux
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Terminal multiplexer
-  DEPENDS:=+libncurses +libevent +libpthread
+  DEPENDS:=+libncurses +libevent2 +libpthread +librt
   URL:=http://tmux.sourceforge.net/
 endef
 
@@ -33,7 +34,7 @@ endef
 
 MAKE_FLAGS += \
 	PREFIX="/usr" \
-	TMUX_PLATFORM="Linux" \
+	PLATFORM="linux"
 
 define Package/tmux/install
 	$(INSTALL_DIR) $(1)/usr/bin

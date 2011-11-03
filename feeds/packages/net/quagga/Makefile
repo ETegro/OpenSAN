@@ -10,13 +10,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=quagga
 ifneq ($(CONFIG_QUAGGA_OLD),)
   PKG_VERSION:=0.98.6
-  PKG_RELEASE:=9
+  PKG_RELEASE:=10
   PKG_MD5SUM:=b0d4132039953a0214256873b7d23d68
   PATCH_DIR:=./patches-old
 else
-  PKG_VERSION:=0.99.17
-  PKG_RELEASE:=7
-  PKG_MD5SUM:=37b9022adca04b03863d2d79787e643f
+  PKG_VERSION:=0.99.20
+  PKG_RELEASE:=1
+  PKG_MD5SUM:=64cc29394eb8a4e24649d19dac868f64
 endif
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -35,7 +35,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_quagga-ripngd \
 	CONFIG_PACKAGE_quagga-vtysh
 PKG_BUILD_PARALLEL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -43,6 +43,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/quagga/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   DEPENDS:=quagga
   TITLE:=The Quagga Software Routing Suite
   URL:=http://www.quagga.net
@@ -165,8 +166,8 @@ CONFIGURE_ARGS+= \
 	--sysconfdir=/etc/quagga/ \
 	--enable-shared \
 	--disable-static \
-	--enable-user=quagga \
-	--enable-group=quagga \
+	--enable-user=network \
+	--enable-group=network \
 	--enable-pie=no \
 	--enable-multipath=8 \
 	$(call autoconf_bool,CONFIG_PACKAGE_quagga-libzebra,zebra) \
@@ -199,54 +200,6 @@ define Package/quagga/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/quagga $(1)/usr/sbin/quagga.init
 	$(INSTALL_BIN) ./files/quagga.init $(1)/etc/init.d/quagga
-endef
-
-define Package/quagga/postinst
-#!/bin/sh
-
-name=quagga
-id=51
-
-# do not change below
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	# create copies of passwd and group, if we use squashfs
-	rootfs=`mount |awk '/root/ { print $$5 }'`
-	if [ "$$rootfs" = "squashfs" ]; then
-		if [ -h /etc/group ]; then
-			rm /etc/group
-			cp /rom/etc/group /etc/group
-		fi
-		if [ -h /etc/passwd ]; then
-			rm /etc/passwd
-			cp /rom/etc/passwd /etc/passwd
-		fi
-	fi
-fi
-
-echo ""
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-	echo "adding group $$name to /etc/group"
-	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-fi
-
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-	echo "adding user $$name to /etc/passwd"
-	echo "$${name}:x:$${id}:$${id}:$${name}:/tmp/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
-fi
-
-grep -q '^zebra[[:space:]]*2601/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-if [ $$? -ne 0 ]; then
-echo "zebrasrv      2600/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "zebra         2601/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "ripd          2602/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "ripngd        2603/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "ospfd         2604/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "bgpd          2605/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "ospf6d        2606/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "ospfapi       2607/tcp" >>$${IPKG_INSTROOT}/etc/services
-echo "isisd         2608/tcp" >>$${IPKG_INSTROOT}/etc/services
-fi
 endef
 
 define Package/quagga-bgpd/install

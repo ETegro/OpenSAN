@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wshaper
-PKG_VERSION:=0.1
+PKG_VERSION:=0.2
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -41,9 +41,10 @@ define Build/Compile
 endef
 
 define Package/wshaper/install
-	$(INSTALL_DIR) $(1)/usr/sbin/ $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/usr/sbin/ $(1)/etc/init.d $(1)/etc/config
 	$(INSTALL_BIN) ./files/wshaper.htb $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/wshaper.init $(1)/etc/init.d/wshaper
+	$(INSTALL_DATA) ./files/wshaper.config $(1)/etc/config/wshaper
 endef
 
 $(eval $(call BuildPackage,wshaper))

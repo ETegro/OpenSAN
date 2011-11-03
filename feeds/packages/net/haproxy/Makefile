@@ -9,22 +9,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haproxy
-PKG_VERSION:=1.4.11
+PKG_VERSION:=1.4.18
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://haproxy.1wt.eu/download/1.4/src
-PKG_MD5SUM:=4f0638652d7800860838dc195da335d8
+PKG_MD5SUM:=4ac88bb1a76c4b84ed4f6131183bedbe
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/haproxy
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE:=The Reliable, High Performance TCP/HTTP Load Balancer
   URL:=http://haproxy.1wt.eu/
   DEPENDS:=+libpcre +libltdl
+  MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
 endef
 
 define Package/haproxy/conffiles
@@ -42,7 +43,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		LD="$(TARGET_CC)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		SMALL_OPTS="-DBUFSIZE=16384 -DMAXREWRITE=8192 -DSYSTEM_MAXCONN=65530" USE_LINUX_TPROXY=1 \
+		SMALL_OPTS="-DBUFSIZE=16384 -DMAXREWRITE=8192 -DSYSTEM_MAXCONN=65530" USE_LINUX_TPROXY=1 USE_LINUX_SPLICE=1 \
 		all install
 endef
 

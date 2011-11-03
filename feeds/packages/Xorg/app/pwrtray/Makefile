@@ -7,16 +7,21 @@
 
 include $(TOPDIR)/rules.mk
 
+#LOCAL_SRC:=1
+
 PKG_NAME:=pwrtray
-PKG_REV:=971ab4e53c62ace139405272272a7e5f224e5a92
-PKG_VERSION:=$(PKG_REV)
+PKG_REV:=f9b63119a568803fad582dc0796af91bb087919c
+PKG_VERSION:=2
 PKG_RELEASE:=1
 
+ifeq ($(LOCAL_SRC),)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=git://git.bu3sch.de/pwrtray.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
+endif
+
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
@@ -57,9 +62,7 @@ define Package/pwrtray/description
 endef
 
 EXTRA_CFLAGS:= \
-	-I$(PKG_BUILD_DIR)/tray/moc \
-	-I$(STAGING_DIR)/usr/include/QtCore \
-	-I$(STAGING_DIR)/usr/include/QtGui
+	-I$(PKG_BUILD_DIR)/tray/moc
 
 EXTRA_LDFLAGS:= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -68,11 +71,28 @@ EXTRA_LDFLAGS:= \
 MAKE_VARS+= \
 	MOC="$(STAGING_DIR_HOST)/bin/moc" \
 	STRIP="$(STRIP)" \
+	QT_INCDIR="$(STAGING_DIR)/usr/include" \
+	QT_LIBDIR="$(STAGING_DIR)/usr/lib" \
+	PREFIX=/usr \
 	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XLOCK=y,FEATURE_XLOCK=n) \
+	FEATURE_XEVREP=n \
 	$(if $(CONFIG_PACKAGE_pwrtray),FEATURE_TRAY=y,FEATURE_TRAY=n)
 
-#MAKE_FLAGS+= \
-#	V=1
+MAKE_FLAGS+= \
+	V=1
+
+define Build/Prepare
+	$(if $(LOCAL_SRC), \
+		$(CP) ./files/src/* $(PKG_BUILD_DIR)/ \
+	, \
+		$(call Build/Prepare/Default) \
+	)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) clean
+	$(call Build/Compile/Default)
+endef
 
 define Package/pwrtray-backend/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/bin $(1)/usr/share

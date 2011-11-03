@@ -33,9 +33,13 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_qt4-phonon \
 	CONFIG_PACKAGE_qt4-sqlite \
 	CONFIG_PACKAGE_qt4-mysql \
+	CONFIG_PACKAGE_qt4-webkit \
+	CONFIG_PACKAGE_qt4-script \
+	CONFIG_PACKAGE_qt4-scriptools \
 	CONFIG_PACKAGE_qt4-openssl
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 -include $(if $(DUMP),,./files/qmake.mk)
 
 # this should be moved to a more generic place later, as other packages are configured different as well depending on available nptl support
@@ -65,14 +69,13 @@ endef
 
 define Package/qt4
   $(call Package/qt4/Default)
-  DEPENDS:=+zlib +libstdcpp +libsqlite3
+  DEPENDS:=+zlib +libstdcpp @!LINUX_2_4
 endef
 
 define Package/qt4-gui
   $(call Package/qt4/Default)
   DEFAULT:=
   DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network \
-	+FEATURE_drawing-backend_DirectFB:directfb \
 	+FEATURE_drawing-backend_libX11:libX11 \
 	+FEATURE_drawing-backend_libX11:libXext @DISPLAY_SUPPORT
   TITLE+=(gui)
@@ -247,16 +250,16 @@ define Package/qt4-drivers-gfx-linuxfb
   TITLE+=linuxfb
 endef
 
+define Package/qt4-drivers-gfx-vnc
+  $(call Package/qt4-drivers-gfx/Default)
+  TITLE+=VNC
+endef
+
 ###
 define Package/qt4-drivers-kbd/Default
   $(call Package/qt4/Default)
   TITLE+=kbddrivers
   DEPENDS+=@QT4_WS_QWS
-endef
-
-define Package/qt4-drivers-kbd-linuxinput
-  $(call Package/qt4-drivers-kbd/Default)
-  TITLE+=linuxinput
 endef
 
 
@@ -297,6 +300,9 @@ define Build/Configure
 		TARGET_LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" \
 		TARGET_INCDIRS="$(TARGET_INCDIRS)" \
 		TARGET_LIBDIRS="$(TARGET_LIBDIRS)" \
+		CFLAGS= \
+		CXXFLAGS= \
+		LDFLAGS= \
 		STAGING_DIR="$(STAGING_DIR)" \
 		STAGING_DIR_HOST="$(STAGING_DIR)/../host" \
 		./configure \
@@ -311,6 +317,7 @@ define Build/Configure
 			-sysconfdir /etc/Qt \
 			-no-rpath \
 			-force-pkg-config \
+			-continue \
 			-nomake tools \
 			$(if $(CONFIG_PACKAGE_qt4-demos),-make,-nomake) demos \
 			$(if $(CONFIG_PACKAGE_qt4-examples),-make,-nomake) examples \
@@ -343,16 +350,16 @@ define Build/Configure
 			$(if $(CONFIG_PACKAGE_qt4-phonon),-phonon,-no-phonon) \
 			-no-phonon-backend \
 			$(if $(CONFIG_PACKAGE_qt4-svg),-svg,-no-svg) \
-			$(if $(NPTL),-webkit,-no-webkit) \
+			$(if $(CONFIG_PACKAGE_qt4-webkit),-webkit,-no-webkit) \
 			-no-javascript-jit \
-			$(if $(NPTL),-script,-no-script) \
-			$(if $(NPTL),-scripttools,-no-scripttools) \
+			$(if $(CONFIG_PACKAGE_qt4-script),-script,-no-script) \
+			$(if $(CONFIG_PACKAGE_qt4-scripttools),-scripttools,-no-scripttools) \
 			-no-accessibility \
-			$(if $(NPTL),-declarative,-no-declarative) \
+			$(if $(CONFIG_PACKAGE_qt4-declarative),-declarative,-no-declarative) \
 			$(if $(CONFIG_PACKAGE_qt4-openssl),-openssl -I $(STAGING_DIR)/usr/include,-no-openssl) \
 			-no-nis \
 			-no-cups \
-			-no-iconv \
+			-iconv \
 			$(if $(CONFIG_PACKAGE_qt4-dbus),-dbus,-no-dbus) \
 			-no-gtkstyle \
 			-no-nas-sound \
@@ -374,7 +381,7 @@ define Build/Configure
 			$(if $(CONFIG_PACKAGE_qt4-qt3support),-qt3support,-no-qt3support) \
 			-no-gfx-transformed \
 			-no-gfx-qvfb \
-			-no-gfx-vnc \
+			$(if $(CONFIG_PACKAGE_qt4-drivers-gfx-vnc),-plugin-gfx-vnc,-no-gfx-vnc) \
 			-no-gfx-multiscreen \
 			-no-gfx-qnx \
 			$(if $(CONFIG_PACKAGE_directfb),-plugin-gfx-directfb) \
@@ -388,7 +395,7 @@ define Build/Configure
 			-no-kbd-qvfb \
 			-no-kbd-qnx \
 			-qt-kbd-tty \
-			-plugin-kbd-linuxinput \
+			-qt-kbd-linuxinput \
 	)
 endef
 
@@ -734,16 +741,16 @@ define Package/qt4-drivers-gfx-linuxfb/install
 		$(1)/usr/lib/Qt/plugins/gfxdrivers/
 endef
 
-#  keyboard drivers
-define Package/qt4-drivers-kbd-linuxinput/install
+define Package/qt4-drivers-gfx-vnc/install
 	$(INSTALL_DIR) \
-		$(1)/usr/lib/Qt/plugins/kbddrivers
+		$(1)/usr/lib/Qt/plugins/gfxdrivers
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/kbddrivers/libqlinuxinputkbddriver.so \
-		$(1)/usr/lib/Qt/plugins/kbddrivers/
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/gfxdrivers/libqgfxvnc.so \
+		$(1)/usr/lib/Qt/plugins/gfxdrivers/
 endef
 
+#  keyboard drivers
 
 
 
@@ -779,5 +786,4 @@ $(eval $(call BuildPackage,qt4-drivers-mouse-tslibmousedriver))
 
 $(eval $(call BuildPackage,qt4-drivers-gfx-directfb))
 $(eval $(call BuildPackage,qt4-drivers-gfx-linuxfb))
-
-$(eval $(call BuildPackage,qt4-drivers-kbd-linuxinput))
+$(eval $(call BuildPackage,qt4-drivers-gfx-vnc))

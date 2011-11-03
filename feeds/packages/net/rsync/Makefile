@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
-PKG_VERSION:=3.0.7
-PKG_RELEASE:=1
+PKG_VERSION:=3.0.8
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync/src
-PKG_MD5SUM:=b53525900817cf1ba7ad3a516ab5bfe9
+PKG_MD5SUM:=0ee8346ce16bdfe4c88a236e94c752b4
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -23,9 +23,18 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rsync
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=File Transfer
   TITLE:=Fast remote file copy program (like rcp)
   DEPENDS:=+libpopt
   URL:=http://rsync.samba.org/
+endef
+
+define Package/rsyncd
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=File Transfer
+  TITLE:=Rsync daemon
+  DEPENDS:=+rsync
 endef
 
 define Package/rsync/description
@@ -52,4 +61,22 @@ define Package/rsync/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef
 
+define Package/rsyncd/description
+	rsyncd is a configuration file and initscript to
+	utilize rsync as a daemon. It uses the same binary
+	as rsync.
+endef
+
+define Package/rsyncd/conffiles
+/etc/rsyncd.conf
+endef
+
+define Package/rsyncd/install
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/rsyncd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/rsyncd.init $(1)/etc/init.d/rsyncd
+endef
+
 $(eval $(call BuildPackage,rsync))
+$(eval $(call BuildPackage,rsyncd))

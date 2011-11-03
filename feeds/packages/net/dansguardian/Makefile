@@ -23,6 +23,7 @@ define Package/dansguardian
   SECTION:=net
   DEPENDS:=+libpthread +uclibcxx +zlib
   CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
   TITLE:=DansGuardian
   URL:=http://dansguardian.org
 endef

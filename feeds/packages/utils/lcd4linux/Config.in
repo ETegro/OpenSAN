@@ -204,6 +204,11 @@ config LCD4LINUX_DRV_MilfordInstruments
 	prompt "MilfordInstruments"
 	select LCD4LINUX_HAS_AT_LEAST_ONE_DRIVER
 
+config LCD4LINUX_DRV_Newhaven
+	bool
+	prompt "Newhaven"
+	select LCD4LINUX_HAS_AT_LEAST_ONE_DRIVER
+
 config LCD4LINUX_DRV_Noritake
 	bool
 	prompt "Noritake"

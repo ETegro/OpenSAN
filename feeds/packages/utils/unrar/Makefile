@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unrar
-PKG_VERSION:=4.0.4
+PKG_VERSION:=4.0.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=unrarsrc-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.rarlab.com/rar
-PKG_MD5SUM:=203bc1e43935124db9635262cfd00b3f
+PKG_MD5SUM:=41b0a9bca945b4ae2608421afd8f606e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/unrar
 PKG_INSTALL:=1
@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/unrar
   SECTION:=utils
   CATEGORY:=Utilities
+  SUBMENU:=compression
   TITLE:=unrar application
   URL:=http://www.rarlab.com/
   DEPENDS:=+uclibcxx

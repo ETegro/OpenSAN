@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr
-PKG_VERSION:=1.4.2
+PKG_VERSION:=1.4.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
-PKG_MD5SUM:=4b00e8f70c067893d075577962656b35
+PKG_MD5SUM:=8b53f5a5669d0597f2da889a2f576eb6
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
+PKG_REMOVE_FILES:=aclocal.m4 build/ltmain.sh
 
 PKG_INSTALL:=1
 
@@ -24,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libapr
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +librt
   TITLE:=Apache Portable Runtime Library
   URL:=http://apr.apache.org/
 endef
@@ -41,6 +42,7 @@ CONFIGURE_VARS += \
 	apr_cv_process_shared_works=no \
 	apr_cv_mutex_robust_shared=no \
 	apr_cv_tcp_nodelay_with_cork=yes \
+	ac_cv_struct_rlimit=yes \
 	LDFLAGS="$$$$LDFLAGS -lpthread" \
 
 define Build/InstallDev

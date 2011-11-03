@@ -8,14 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mtr
-PKG_VERSION:=0.80
+PKG_VERSION:=0.81
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.bitwizard.nl/mtr
-PKG_MD5SUM:=fa68528eaec1757f52bacf9fea8c68a9
+PKG_MD5SUM:=b7a7914f1fc1b5a21ab10bdca44356e1
 
 PKG_INSTALL:=1
+
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,8 +43,8 @@ endef
 CONFIGURE_ARGS += \
 	--without-gtk \
 
-CONFIGURE_VARS += \
-	ac_cv_lib_resolv_res_mkquery=yes \
+#CONFIGURE_VARS += \
+#	ac_cv_lib_resolv_res_mkquery=no \
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \

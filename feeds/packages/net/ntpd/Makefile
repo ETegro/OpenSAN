@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntp
-PKG_VERSION:=4.2.6p2
-PKG_RELEASE:=1
+PKG_VERSION:=4.2.6p4
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/
-PKG_MD5SUM:=cf73cd85f248232c62f8029e6eb05938
+PKG_MD5SUM:=1447121a07b49361677ffda4f6e29527
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -92,26 +92,6 @@ define Package/ntpd/conffiles
 /etc/ntp.conf
 endef
 
-define Package/ntpd/Default/postinst
-#!/bin/sh
-grep -q '^ntp[[:space:]]*123/udp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-[ $$? -ne 0 ] && echo "ntp            123/udp     # Network Time Protocol" >>$${IPKG_INSTROOT}/etc/services || exit 0
-grep -q '^ntp[[:space:]]*123/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-[ $$? -ne 0 ] && echo "ntp            123/tcp     # Network Time Protocol" >>$${IPKG_INSTROOT}/etc/services || exit 0
-endef
-
-define Package/ntpdate/postinst
-$(call Package/ntpd/Default/postinst)
-endef
-
-define Package/ntpd/postinst
-$(call Package/ntpd/Default/postinst)
-endef
-
-define Package/ntp-utils/postinst
-$(call Package/ntpd/Default/postinst)
-endef
-
 TARGET_CPPFLAGS += \
 	-I$(STAGING_DIR)/usr/include/libelf
 
@@ -137,8 +117,8 @@ ifeq ($(BUILD_VARIANT),ssl)
 endif
 
 define Package/ntpd/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpd/ntpd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpd/ntpd $(1)/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/ntp.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -147,9 +127,20 @@ define Package/ntpd/install
 	$(INSTALL_BIN) ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
 endef
 
+define Package/ntpd/postinst
+#!/bin/sh
+[ -L "$${IPKG_INSTROOT}/usr/sbin/ntpd" ] && rm -f "$${IPKG_INSTROOT}/usr/sbin/ntpd"
+exit 0
+endef
+
+define Package/ntpd/postrm
+#!/bin/sh
+/bin/busybox ntpd -h 2>&1 | grep -q BusyBox && ln -sf ../../bin/busybox /usr/sbin/ntpd
+exit 0
+endef
+
 Package/ntpd-ssl/conffiles = $(Package/ntpd/conffiles)
 Package/ntpd-ssl/install = $(Package/ntpd/install)
-Package/ntpd-ssl/postinst = $(Package/ntpd/postinst)
 
 define Package/ntpdate/install
 	$(INSTALL_DIR) $(1)/usr/sbin

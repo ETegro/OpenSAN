@@ -23,7 +23,7 @@ define Package/atftp/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=TFTP
-  SUBMENU:=FTP
+  SUBMENU:=File Transfer
 endef
 
 define Package/atftp
@@ -36,17 +36,6 @@ define Package/atftpd
   $(call Package/atftp/Default)
   DEPENDS:=+libpcre +libpthread
   TITLE+= server
-endef
-
-define Package/atftpd/postinst
-#!/bin/sh
-grep -q '^tftp[[:space:]]*69/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-if [ $$? -ne 0 ]; then
-	echo "tftp            69/tcp" >>$${IPKG_INSTROOT}/etc/services
-	echo "tftp            69/udp" >>$${IPKG_INSTROOT}/etc/services
-	echo "tftp-mcast    1758/tcp" >>$${IPKG_INSTROOT}/etc/services
-	echo "tftp-mcast    1758/udp" >>$${IPKG_INSTROOT}/etc/services
-fi
 endef
 
 CONFIGURE_ARGS += \

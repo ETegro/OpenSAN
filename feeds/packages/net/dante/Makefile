@@ -20,6 +20,9 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_CFLAGS += -D_GNU_SOURCE
+CONFIGURE_ARGS += --without-upnp --without-pam
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
@@ -61,6 +64,7 @@ endef
 
 define Package/sockd
   $(call Package/dante/default)
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE+= Daemon
@@ -81,6 +85,7 @@ define Package/socksify
   $(call Package/dante/default)
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
   TITLE+= Client
 endef
 

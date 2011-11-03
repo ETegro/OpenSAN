@@ -1,0 +1,59 @@
+--- a/genconfig.sh
++++ b/genconfig.sh
+@@ -41,22 +41,22 @@ ${RM} ${CONFIGFILE}
+ 
+ # Detect if there are missing headers
+ # NOTE: This check only works with a normal distro
+-[ ! -e "/usr/include/sqlite3.h" ] && MISSING="libsqlite3 $MISSING"
+-[ ! -e "/usr/include/jpeglib.h" ] && MISSING="libjpeg $MISSING"
+-[ ! -e "/usr/include/libexif/exif-loader.h" ] && MISSING="libexif $MISSING"
+-[ ! -e "/usr/include/id3tag.h" ] && MISSING="libid3tag $MISSING"
+-[ ! -e "/usr/include/ogg/ogg.h" ] && MISSING="libogg $MISSING"
+-[ ! -e "/usr/include/vorbis/codec.h" ] && MISSING="libvorbis $MISSING"
+-[ ! -e "/usr/include/FLAC/metadata.h" ] && MISSING="libflac $MISSING"
+-[ ! -e "/usr/include/ffmpeg/avutil.h" -a \
+-  ! -e "/usr/include/libavutil/avutil.h" -a \
+-  ! -e "/usr/include/ffmpeg/libavutil/avutil.h" ] && MISSING="libavutil $MISSING"
+-[ ! -e "/usr/include/ffmpeg/avformat.h" -a \
+-  ! -e "/usr/include/libavformat/avformat.h" -a \
+-  ! -e "/usr/include/ffmpeg/libavformat/avformat.h" ] && MISSING="libavformat $MISSING"
+-[ ! -e "/usr/include/ffmpeg/avcodec.h" -a \
+-  ! -e "/usr/include/libavcodec/avcodec.h" -a \
+-  ! -e "/usr/include/ffmpeg/libavcodec/avcodec.h" ] && MISSING="libavcodec $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/sqlite3.h" ] && MISSING="libsqlite3 $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/jpeglib.h" ] && MISSING="libjpeg $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/libexif/exif-loader.h" ] && MISSING="libexif $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/id3tag.h" ] && MISSING="libid3tag $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/ogg/ogg.h" ] && MISSING="libogg $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/vorbis/codec.h" ] && MISSING="libvorbis $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/FLAC/metadata.h" ] && MISSING="libflac $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/ffmpeg/avutil.h" -a \
++  ! -e "${STAGING_DIR}/usr/include/libavutil/avutil.h" -a \
++  ! -e "${STAGING_DIR}/usr/include/ffmpeg/libavutil/avutil.h" ] && MISSING="libavutil $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/ffmpeg/avformat.h" -a \
++  ! -e "${STAGING_DIR}/usr/include/libavformat/avformat.h" -a \
++  ! -e "${STAGING_DIR}/usr/include/ffmpeg/libavformat/avformat.h" ] && MISSING="libavformat $MISSING"
++[ ! -e "${STAGING_DIR}/usr/include/ffmpeg/avcodec.h" -a \
++  ! -e "${STAGING_DIR}/usr/include/libavcodec/avcodec.h" -a \
++  ! -e "${STAGING_DIR}/usr/include/ffmpeg/libavcodec/avcodec.h" ] && MISSING="libavcodec $MISSING"
+ if [ -n "$MISSING" ]; then
+ 	echo -e "\nERROR!  Cannot continue."
+ 	echo -e "The following required libraries are either missing, or are missing development headers:\n"
+@@ -184,7 +184,7 @@ fi
+ echo "" >> ${CONFIGFILE}
+ 
+ echo "/* Enable if the system iconv.h exists.  ID3 tag reading in various character sets will not work properly otherwise. */" >> ${CONFIGFILE}
+-if [ -f /usr/include/iconv.h ]; then
++if [ -f ${ICONV_PREFIX}/include/iconv.h ]; then
+ echo "#define HAVE_ICONV_H" >> ${CONFIGFILE}
+ else
+ echo -e "\nWARNING!!  Iconv support not found.  ID3 tag reading may not work."
+@@ -193,7 +193,7 @@ fi
+ echo "" >> ${CONFIGFILE}
+ 
+ echo "/* Enable if the system libintl.h exists for NLS support. */" >> ${CONFIGFILE}
+-if [ -f /usr/include/libintl.h ]; then
++if [ -f ${INTL_PREFIX}/include/libintl.h ]; then
+ echo "#define ENABLE_NLS" >> ${CONFIGFILE}
+ else
+ echo "/*#define ENABLE_NLS*/" >> ${CONFIGFILE}

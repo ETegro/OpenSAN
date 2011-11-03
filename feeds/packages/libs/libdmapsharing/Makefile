@@ -10,12 +10,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdmapsharing
-PKG_VERSION:=2.1.13
+PKG_VERSION:=2.9.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=libdmapsharing-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/libdmapsharing/
-PKG_MD5SUM:=36c77d387bd521df9ce5500d73223e9b
+PKG_MD5SUM:=05aa705af3550107e7801b58735777ae
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libdmapsharing-$(PKG_VERSION)
 
@@ -30,8 +30,8 @@ TARGET_LDFLAGS+= \
 
 define Package/libdmapsharing
   SECTION:=libs
-  CATAGORY:=Libraries
-  DEPENDS:=+libsoup +mdnsresponder +gstreamer
+  CATEGORY:=Libraries
+  DEPENDS:=+libsoup +mdnsresponder +gstreamer +gst-plugins-base
   TITLE:=libdmapsharing
   URL:=http://www.flyn.org/projects/libdmapsharing/
   MAINTAINER:=W. Michael Petullo <mike@flyn.org>
@@ -44,7 +44,7 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/include/libdmapsharing-2.2/ \
+		$(PKG_INSTALL_DIR)/usr/include/libdmapsharing-3.0/ \
 		$(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) \

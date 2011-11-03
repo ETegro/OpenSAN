@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libupnp
-PKG_VERSION:=1.6.8
+PKG_VERSION:=1.6.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pupnp
-PKG_MD5SUM:=7e162895b9d0f9efcccd07973012cdff
+PKG_MD5SUM:=d48938efe69d07142be8aaaeaa9a2d3e
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -84,8 +84,8 @@ endef
 
 define Package/libupnp-sample/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/upnp_tv_device $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/upnp_tv_ctrlpt $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_device $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_ctrlpt $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/upnp-tvdevice/web
 	$(CP) $(PKG_BUILD_DIR)/upnp/sample/web/* $(1)/etc/upnp-tvdevice
 endef
