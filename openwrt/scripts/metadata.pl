@@ -171,6 +171,7 @@ sub target_config_features(@) {
 		/spe_fpu/ and $ret .= "\tselect HAS_SPE_FPU\n";
 		/ramdisk/ and $ret .= "\tselect USES_INITRAMFS\n";
 		/powerpc64/ and $ret .= "\tselect powerpc64\n";
+		/x86_64/ and $ret .= "\tselect x86_64\n";
 		/nommu/ and $ret .= "\tselect NOMMU\n";
 	}
 	return $ret;
