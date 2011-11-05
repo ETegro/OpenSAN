@@ -188,7 +188,7 @@ ifeq ($(DUMP),1)
     FEATURES:=$(sort $(FEATURES))
   endif
   DEFAULT_CFLAGS_i386=-O2 -pipe -march=i486 -fno-caller-saves
-  DEFAULT_CFLAGS_x86_64=-O2 -pipe -march=nocona -fno-caller-saves
+  DEFAULT_CFLAGS_x86_64=-O2 -pipe -march=nocona -fno-caller-saves -m64
   DEFAULT_CFLAGS_m68k=-Os -pipe -mcfv4e -fno-caller-saves
   DEFAULT_CFLAGS_mips=-Os -pipe -mips32 -mtune=mips32 -fno-caller-saves
   DEFAULT_CFLAGS_mipsel=$(DEFAULT_CFLAGS_mips)
