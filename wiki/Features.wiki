@@ -21,6 +21,6 @@
 * Command-line interface (CLI) accessibility via **SSH 2.0** (with SCP
   support)
 * Ability to **backup** overall configuration with restoring it later
-* Network configuration can be doned using either **static IPv4**
-  addressing and routing, **DHCP** or using **bridged** interfaces
+* Network configuration can be doned using either **static IPv4**, **static
+  IPv6** addressing and routing, **DHCP** or using **bonded** interfaces
 * Real-time load average, traffic and connections **monitoring**
