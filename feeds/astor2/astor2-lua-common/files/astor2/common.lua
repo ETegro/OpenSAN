@@ -88,6 +88,22 @@ function M.system_succeed( cmdline )
 	return result.stdout
 end
 
+--- Check file existence
+-- @param path Path to file
+-- @return False if does not exists, true if do, nil if unable to open file
+function M.file_exists( path )
+	assert( M.is_string( path ), "non-string path" )
+	local result = { io.open( path, "r" ) }
+	if #result == 1 then
+		io.close( result[1] )
+		return true
+	end
+	if string.match( result[2], "No such file" ) then
+		return false
+	end
+	return nil
+end
+
 --- Check if value is in array
 -- @param what Value to be checked
 -- @param array Array to search in

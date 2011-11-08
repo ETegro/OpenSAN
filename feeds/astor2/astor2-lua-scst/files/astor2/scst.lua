@@ -324,7 +324,7 @@ end
 
 function M.AccessPattern:is_binded()
 	assert( self, "unable to get self object" )
-	if self.filename then
+	if self.filename and common.file_exists( self.filename ) ~= false then
 		return true
 	else
 		return false

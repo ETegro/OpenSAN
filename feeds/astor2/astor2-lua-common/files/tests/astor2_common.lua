@@ -149,6 +149,17 @@ TestSplitting = {}
 		assert( common.compare_tables( common.split_by( "foo bar   baz", " " ), { "foo", "bar", "baz" } ) )
 	end
 
+TestFileExistence = {}
+	function TestFileExistence:test_existent()
+		assert( common.file_exists( "tests/astor2_common.lua" ) == true )
+	end
+	function TestFileExistence:test_nonexistent()
+		assert( common.file_exists( "tests/non_existent" ) == false )
+	end
+	function TestFileExistence:test_non_readable()
+		assert( common.file_exists( "/dev/sda" ) == nil )
+	end
+
 TestTableComparing = {}
 	function TestTableComparing:setUp()
 		self.table = {
