@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-START=50
+START=51
 
 EINARC_STARTED_FLAG="/tmp/einarc-started"
 LVM_STARTED_FLAG="/tmp/lvm-started"
