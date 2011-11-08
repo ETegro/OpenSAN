@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=astor2-einarc
-PKG_REV:=1962
+PKG_REV:=1968
 PKG_VERSION:=svn$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -27,7 +27,7 @@ define Package/astor2-einarc
 		+kmod-md-mod +kmod-md-linear \
 		+kmod-md-raid0 +kmod-md-raid1 \
 		+kmod-md-raid10 +kmod-md-raid456 \
-		+sdparm +sg3_utils
+		+sdparm +sg3_utils +hdparm
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 

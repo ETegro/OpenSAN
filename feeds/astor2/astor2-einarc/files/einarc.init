@@ -6,6 +6,7 @@ EINARC_STARTED_FLAG="/tmp/einarc-started"
 start()
 {
 	einarc -t software -a 0 adapter restart
+	einarc -t software -a 0 physical list
 	touch $EINARC_STARTED_FLAG
 }
 
