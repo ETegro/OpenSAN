@@ -203,12 +203,7 @@ prepare_interface() {
 		bonding)
 			[ -x /sbin/ifenslave -a -x /sbin/lsmod -a -x /sbin/insmod ] && {
 				local max_bonds=0
-				local bond_numbers=$(
-					sed -n "s/^config .interface. .bond\([0-9]\{1,\}\).$/\1/p" < /etc/config/network |
-					sort -n |
-					sed -n '$p'
-				)
-				max_bonds=$(( $bond_numbers + 1 ))
+				max_bonds=$(grep -c '^.*option .type. .bonding.' < /etc/config/network)
 				/sbin/lsmod | grep -q 'bonding' || {
 					local miimon=50
 					local kernel_release=$(uname -r)
@@ -218,33 +213,23 @@ prepare_interface() {
 						miimon="$miimon"
 					sleep 1
 				}
-				grep -q "$config" /sys/class/net/bonding_masters && {
-					grep -q "^Slave Interface: $iface$" /proc/net/bonding/"$config" || {
-						ifconfig "$config" down >/dev/null 2>&1
-						[ -w /sys/class/net/"$config"/bonding/mode ] && {
-							local bond_mode
-							config_get bond_mode "$config" mode
-							echo "$bond_mode" >/sys/class/net/"$config"/bonding/mode
-						}
-						[ -w /sys/class/net/"$config"/bonding/miimon ] && {
-							local bond_miimon
-							config_get bond_miimon "$config" miimon
-							echo "$bond_miimon" >/sys/class/net/"$config"/bonding/miimon
-						}
-						[ -w /sys/class/net/"$config"/bonding/downdelay ] && {
-							local bond_downdelay
-							config_get bond_downdelay "$config" downdelay
-							echo "$bond_downdelay" >/sys/class/net/"$config"/bonding/downdelay
-						}
-						[ -w /sys/class/net/"$config"/bonding/updelay ] && {
-							local bond_updelay
-							config_get bond_updelay "$config" updelay
-							echo "$bond_updelay" >/sys/class/net/"$config"/bonding/updelay
-						}
-						ifconfig "$config" up >/dev/null 2>&1
-						ifconfig "$iface" >/dev/null 2>&1 && {
-							ifenslave "$config" "$iface"
-						}
+				local bond_name
+				config_get bond_name "$config" bondname
+				[ -r /sys/class/net/bonding_masters ] && \
+				grep -q "$bond_name" /sys/class/net/bonding_masters && \
+				grep -q "^Slave Interface: $iface$" /proc/net/bonding/"$bond_name" || {
+					ifconfig "$bond_name" down >/dev/null 2>&1 && {
+						local option
+						for option in mode miimon downdelay updelay; do
+							[ -w /sys/class/net/"$bond_name"/bonding/"$option" ] && {
+								local bond_option
+								config_get bond_option "$config" "$option"
+								echo "$bond_option" >/sys/class/net/"$bond_name"/bonding/"$option"
+							}
+						done
+						ifconfig "$bond_name" up >/dev/null 2>&1 && \
+						ifconfig "$iface" >/dev/null 2>&1 && \
+						ifenslave "$bond_name" "$iface"
 					}
 				}
 			}
@@ -287,11 +272,13 @@ setup_interface_static() {
 	local iftype
 	config_get iftype "$config" type
 	[ "$iftype" == "bonding" ] && {
-		[ -z "$ipaddr" ] || $DEBUG ifconfig "$config" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
-		[ -z "$ip6addr" ] || $DEBUG ifconfig "$config" add "$ip6addr"
-		[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$config"
-		[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$config"
-		[ -z "$dns" ] || add_dns "$config" $dns
+		local bond_name
+		config_get bond_name "$config" bondname
+		[ -z "$ipaddr" ] || $DEBUG ifconfig "$bond_name" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
+		[ -z "$ip6addr" ] || $DEBUG ifconfig "$bond_name" add "$ip6addr"
+		[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$bond_name"
+		[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$bond_name"
+		[ -z "$dns" ] || add_dns "$bond_name" $dns
 	} || {
 		[ -z "$ipaddr" ] || $DEBUG ifconfig "$iface" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
 		[ -z "$ip6addr" ] || $DEBUG ifconfig "$iface" add "$ip6addr"
