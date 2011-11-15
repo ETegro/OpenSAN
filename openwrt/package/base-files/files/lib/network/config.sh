@@ -203,7 +203,7 @@ prepare_interface() {
 		bonding)
 			[ -x /sbin/ifenslave -a -x /sbin/lsmod -a -x /sbin/insmod ] && {
 				local max_bonds=0
-				max_bonds=$(grep -c '^.*option .type. .bonding.' < /etc/config/network)
+				max_bonds=$(uci show network | grep -c '^network\..*\.type=bonding$')
 				/sbin/lsmod | grep -q 'bonding' || {
 					local miimon=50
 					local kernel_release=$(uname -r)
