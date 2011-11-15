@@ -53,7 +53,6 @@ bond_mode.default = "balance-rr"
 bond_miimon = m:field(Value, "_bond-miimon", translate("MII link monitoring frequency"),
 	translate("ms") .. " (0 - 3000). " .. translate("Default value is") .. " 50.")
 bond_miimon:depends("_bond", "1")
-bond_miimon.rmempty = false
 bond_miimon.datatype = "range(0,3000)"
 bond_miimon.default = "50"
 
@@ -62,14 +61,12 @@ bond_downdelay = m:field(Value, "_bond-downdelay", translate("Time to wait befor
 bond_downdelay:depends("_bond", "1")
 bond_downdelay.datatype = "range(0,3000)"
 bond_downdelay.default = "0"
-bond_downdelay.rmempty = false
 
 bond_updelay = m:field(Value, "_bond-updelay", translate("Time to wait before enabling slave-interface after link recover"),
 	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
 bond_updelay:depends("_bond", "1")
 bond_updelay.datatype = "range(0,3000)"
 bond_updelay.default = "0"
-bond_updelay.rmempty = false
 
 sifname = m:field(Value, "_ifname", translate("Cover the following interface"),
 	translate("Note: If you choose an interface here which is part of another network, it will be moved into this network."))
