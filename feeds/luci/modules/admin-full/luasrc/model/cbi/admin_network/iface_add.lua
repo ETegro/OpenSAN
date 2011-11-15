@@ -17,6 +17,7 @@ local nw  = require "luci.model.network".init()
 local fw  = require "luci.model.firewall".init()
 local utl = require "luci.util"
 local uci = require "luci.model.uci".cursor()
+local sys = require "luci.sys"
 
 m = SimpleForm("network", translate("Create Interface"))
 
@@ -101,31 +102,22 @@ function newnet.write(self, section, value)
 	local bond = {
 		use = net_bond:formvalue( section ) == "1" ,
 		type = "bonding",
+		bondname = "bond" .. string.match(
+			sys.exec( "uci show network | grep -c '^network\..*\.type=bonding$'" ),
+			"^(%d+)" ),
 		mode = bond_mode:formvalue( section ),
 		miimon = bond_miimon:formvalue( section ),
 		downdelay = bond_downdelay:formvalue( section ),
 		updelay = bond_updelay:formvalue( section )
 	}
 	local bond_default = {
-			mode = "balance-rr",
-			miimon = "50",
-			downdelay = "0",
-			updelay = "0"
+		mode = "balance-rr",
+		miimon = "50",
+		downdelay = "0",
+		updelay = "0"
 	}
 
 	local ifaces = bond.use and mifname:formvalue(section) or sifname:formvalue(section)
-
-	if bond.use then
-		local bond_name, num = string.match( value, "^(bond(%d+))$" )
-		if bond_name then
-			num = tonumber( num )
-			if not ( ( num >= 0 ) and ( num <= 15 ) ) then
-				value = nil
-			end
-		else
-			value = nil
-		end
-	end
 
 	local nn = nw:add_network(value, { proto = "none" })
 	if nn then
