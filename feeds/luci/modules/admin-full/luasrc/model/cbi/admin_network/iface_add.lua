@@ -103,8 +103,12 @@ function newnet.write(self, section, value)
 		use = net_bond:formvalue( section ) == "1" ,
 		type = "bonding",
 		bondname = "bond" .. string.match(
-			sys.exec( "uci show network | grep -c '^network\..*\.type=bonding$'" ),
-			"^(%d+)" ),
+			sys.exec(
+				"uci show network | \
+				grep -c '^network\..*\.type=bonding$'"
+			),
+			"^(%d+)"
+		),
 		mode = bond_mode:formvalue( section ),
 		miimon = bond_miimon:formvalue( section ),
 		downdelay = bond_downdelay:formvalue( section ),
