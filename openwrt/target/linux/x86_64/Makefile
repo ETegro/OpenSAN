@@ -21,7 +21,3 @@ DEVICE_TYPE=
 include $(INCLUDE_DIR)/target.mk
 
 $(eval $(call BuildTarget))
-
-$(eval $(call $(if $(CONFIG_TARGET_ROOTFS_ISO),RequireCommand,Ignore),mkisofs, \
-   	Please install mkisofs. \
-))
