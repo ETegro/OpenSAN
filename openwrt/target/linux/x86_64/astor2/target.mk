@@ -1,5 +1,4 @@
 BOARDNAME:=aStor2
-FEATURES:=pci usb
 DEFAULT_PACKAGES += \
 	kmod-via-velocity \
 	kmod-ata-artop \
