@@ -12,7 +12,7 @@ ARCH:=i386
 BOARD:=x86
 BOARDNAME:=x86
 FEATURES:=ext4 vdi vmdk pcmcia targz
-SUBTARGETS=astor2 generic
+SUBTARGETS=astor2
 
 LINUX_VERSION:=2.6.39.4
 
