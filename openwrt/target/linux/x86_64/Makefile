@@ -8,10 +8,10 @@
 #
 include $(TOPDIR)/rules.mk
 
-ARCH:=i386
-BOARD:=x86
-BOARDNAME:=x86
-FEATURES:=ext4 vdi vmdk pcmcia targz
+ARCH:=x86_64
+BOARD:=x86_64
+BOARDNAME:=x86_64
+FEATURES:=ext4 targz pci usb x86_64
 SUBTARGETS=astor2
 
 LINUX_VERSION:=2.6.32.33
