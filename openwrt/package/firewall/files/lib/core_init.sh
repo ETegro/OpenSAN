@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 # Copyright (C) 2008 John Crispin <blogic@openwrt.org>
 
 FW_INITIALIZED=
@@ -66,16 +66,16 @@ fw_load_defaults() {
 	done
 	fw_sysctl_interface all
 
+	fw add i f INPUT   ACCEPT { -m conntrack --ctstate RELATED,ESTABLISHED }
+	fw add i f OUTPUT  ACCEPT { -m conntrack --ctstate RELATED,ESTABLISHED }
+	fw add i f FORWARD ACCEPT { -m conntrack --ctstate RELATED,ESTABLISHED }
+
 	[ $defaults_drop_invalid == 1 ] && {
-		fw add i f INPUT   DROP { -m state --state INVALID }
-		fw add i f OUTPUT  DROP { -m state --state INVALID }
-		fw add i f FORWARD DROP { -m state --state INVALID }
+		fw add i f INPUT   DROP { -m conntrack --ctstate INVALID }
+		fw add i f OUTPUT  DROP { -m conntrack --ctstate INVALID }
+		fw add i f FORWARD DROP { -m conntrack --ctstate INVALID }
 		FW_NOTRACK_DISABLED=1
 	}
-
-	fw add i f INPUT   ACCEPT { -m state --state RELATED,ESTABLISHED }
-	fw add i f OUTPUT  ACCEPT { -m state --state RELATED,ESTABLISHED }
-	fw add i f FORWARD ACCEPT { -m state --state RELATED,ESTABLISHED }
 
 	fw add i f INPUT  ACCEPT { -i lo }
 	fw add i f OUTPUT ACCEPT { -o lo }
@@ -195,7 +195,6 @@ fw_load_zone() {
 	fw add $mode f ${chain}_ACCEPT
 	fw add $mode f ${chain}_DROP
 	fw add $mode f ${chain}_REJECT
-	fw add $mode f ${chain}_MSSFIX
 
 	# TODO: Rename to ${chain}_input
 	fw add $mode f ${chain}
@@ -213,8 +212,11 @@ fw_load_zone() {
 
 	fw add $mode r ${chain}_notrack
 
-	[ $zone_mtu_fix == 1 ] && \
-		fw add $mode f FORWARD ${chain}_MSSFIX ^
+	[ $zone_mtu_fix == 1 ] && {
+		fw add $mode m ${chain}_MSSFIX
+		fw add $mode m FORWARD ${chain}_MSSFIX ^
+		uci_set_state firewall core ${zone_name}_tcpmss 1
+	}
 
 	[ $zone_custom_chains == 1 ] && {
 		[ $FW_ADD_CUSTOM_CHAINS == 1 ] || \
@@ -235,19 +237,31 @@ fw_load_zone() {
 			zone_log_limit="$zone_log_limit/minute"
 
 		local t
-		for t in REJECT DROP MSSFIX; do
+		for t in REJECT DROP; do
 			fw add $mode f ${chain}_${t} LOG ^ \
-				{ -m limit --limit $zone_log_limit --log-prefix "$t($zone_name): "  }
+				{ -m limit --limit $zone_log_limit --log-prefix "$t($zone_name): " }
 		done
+
+		[ $zone_mtu_fix == 1 ] && \
+			fw add $mode m ${chain}_MSSFIX LOG ^ \
+				{ -m limit --limit $zone_log_limit --log-prefix "MSSFIX($zone_name): " }
 	}
 
 	# NB: if MASQUERADING for IPv6 becomes available we'll need a family check here
 	if [ "$zone_masq" == 1 ]; then
 		local msrc mdst
 		for msrc in ${zone_masq_src:-0.0.0.0/0}; do
-			fw_get_negation msrc '-s' "$msrc"
+			case "$msrc" in
+				*.*) fw_get_negation msrc '-s' "$msrc" ;;
+				*)   fw_get_subnet4 msrc '-s' "$msrc" || break ;;
+			esac
+
 			for mdst in ${zone_masq_dest:-0.0.0.0/0}; do
-				fw_get_negation mdst '-d' "$mdst"
+				case "$mdst" in
+					*.*) fw_get_negation mdst '-d' "$mdst" ;;
+					*)   fw_get_subnet4 mdst '-d' "$mdst" || break ;;
+				esac
+
 				fw add $mode n ${chain}_nat MASQUERADE $ { $msrc $mdst }
 			done
 		done
@@ -271,8 +285,10 @@ fw_load_notrack_zone() {
 fw_load_include() {
 	local name="$1"
 
-	local path; config_get path ${name} path
-	[ -e $path ] && . $path
+	local path
+	config_get path ${name} path
+
+	[ -e $path ] && ( . $path )
 }
 
 

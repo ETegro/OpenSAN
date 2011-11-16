@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iputils
-PKG_VERSION:=20100418
-PKG_RELEASE:=2
+PKG_VERSION:=20101006
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-s$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.skbuff.net/iputils
-PKG_MD5SUM:=df6b0062118cdc5c62e3c810f831e976
+PKG_MD5SUM:=a36c25e9ec17e48be514dc0485e7376c
 
 PKG_BUILD_DEPENDS:=sysfsutils
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-s$(PKG_VERSION)
@@ -66,7 +66,7 @@ endef
 define Package/iputils-ping6
 $(call Package/iputils/Default)
   TITLE:=iputils - ping6
-  DEPENDS+= @IPV6 @BROKEN
+  DEPENDS+= @IPV6
 endef
 
 define Package/iputils-ping6/description
@@ -100,7 +100,7 @@ endef
 define Package/iputils-tracepath6
 $(call Package/iputils/Default)
   TITLE:=iputils - tracepath6
-  DEPENDS+= @IPV6 @BROKEN
+  DEPENDS+= @IPV6
 endef
 
 define Package/iputils-tracepath6/description
@@ -112,7 +112,7 @@ endef
 define Package/iputils-traceroute6
 $(call Package/iputils/Default)
   TITLE:=iputils - traceroute6
-  DEPENDS+= @IPV6 @BROKEN
+  DEPENDS+= @IPV6
 endef
 
 define Package/iputils-traceroute6/description
@@ -120,9 +120,14 @@ define Package/iputils-traceroute6/description
   Traces path to a network host (IPv6).
 endef
 
+ifeq ($(BOARD),brcm47xx)
+  TARGET_CFLAGS += -O2 
+endif
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS)" \
+	CONFIG_IPV6="$(CONFIG_IPV6)" \
+	CONFIG_USE_UCLIBC="$(CONFIG_USE_UCLIBC)" \
 
 define Package/iputils-arping/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -169,6 +174,6 @@ $(eval $(call BuildPackage,iputils-clockdiff))
 $(eval $(call BuildPackage,iputils-ping))
 $(eval $(call BuildPackage,iputils-tftpd))
 $(eval $(call BuildPackage,iputils-tracepath))
-#$(eval $(call BuildPackage,iputils-ping6))
-#$(eval $(call BuildPackage,iputils-tracepath6))
-#$(eval $(call BuildPackage,iputils-traceroute6))
+$(eval $(call BuildPackage,iputils-ping6))
+$(eval $(call BuildPackage,iputils-tracepath6))
+$(eval $(call BuildPackage,iputils-traceroute6))

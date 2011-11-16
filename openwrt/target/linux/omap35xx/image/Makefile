@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/image.mk
 JFFS2_BLOCKSIZE=128k
 JFFS2OPTS += --little-endian --pagesize=0x800 --no-cleanmarkers --pad
 
-UBIFS_OPTS = -m 2048 -e 126KiB -c 1996
+UBIFS_OPTS = -m 2048 -e 126KiB -c 1996 -U
 UBINIZE_OPTS = -m 2048 -p 128KiB -s 512
 
 define Image/BuildKernel
@@ -28,11 +28,5 @@ define Image/Build
 #	PADDING="true" PATH="$(TARGET_PATH)" ./gen_image.sh $(BIN_DIR)/$(IMG_PREFIX)-$(1).image 4 $(KDIR)/root.bootscript 240 $(KDIR)/root.$(1)
 	$(call Image/Build/$(1),$(1))
 endef
-
-ifdef CONFIG_TARGET_omap35xx_gumstix
-define Image/Prepare
-        $(CP) ../gumstix/base-files/lib/wifi/mac80211.sh $(TARGET_DIR)/lib/wifi
-endef
-endif
 
 $(eval $(call BuildImage))

@@ -17,9 +17,9 @@ PKG_SOURCE_SUBDIR:=transocks
 PKG_SOURCE_VERSION:=-DNOW
 PKG_SOURCE_PROTO:=cvs
 
-PKG_BUILD_DIR:=transocks
-
 include $(INCLUDE_DIR)/package.mk
+
+PKG_UNPACK:=gzip -dc $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xf -
 
 define Build/Compile
 	$(TARGET_CC) \
@@ -33,8 +33,9 @@ endef
 define Package/transocks
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
   TITLE:=Transparent SOCKSifying proxy
-  DEPENDS:=+libsocks +USE_UCLIBC:librpc
+  DEPENDS:=+libsocks $(LIBRPC_DEPENDS)
 endef
 
 define Package/transocks/install

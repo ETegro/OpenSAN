@@ -80,7 +80,7 @@ ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
   LIBCV:=$(call qstrip,$(CONFIG_LIBC_VERSION))
   REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-openwrt-linux$(if $(TARGET_SUFFIX),-$(TARGET_SUFFIX))
   GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-openwrt-linux
-  DIR_SUFFIX:=_$(LIBC)-$(LIBCV)$(if $(CONFIG_EABI_SUPPORT),_eabi)
+  DIR_SUFFIX:=_$(LIBC)-$(LIBCV)$(if $(CONFIG_arm),_eabi)
   BUILD_DIR:=$(BUILD_DIR_BASE)/target-$(ARCH)$(ARCH_SUFFIX)$(DIR_SUFFIX)$(if $(BUILD_SUFFIX),_$(BUILD_SUFFIX))
   STAGING_DIR:=$(TOPDIR)/staging_dir/target-$(ARCH)$(ARCH_SUFFIX)$(DIR_SUFFIX)
   BUILD_DIR_TOOLCHAIN:=$(BUILD_DIR_BASE)/toolchain-$(ARCH)$(ARCH_SUFFIX)_gcc-$(GCCV)$(DIR_SUFFIX)
@@ -110,14 +110,23 @@ TARGET_PATH:=$(STAGING_DIR_HOST)/bin:$(PATH)
 TARGET_CFLAGS:=$(TARGET_OPTIMIZATION)$(if $(CONFIG_DEBUG), -g3)
 TARGET_CPPFLAGS:=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
 TARGET_LDFLAGS:=-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
-LIBGCC_S=$(if $(wildcard $(TOOLCHAIN_DIR)/lib/libgcc_s.so),-L$(TOOLCHAIN_DIR)/lib -lgcc_s,$(wildcard $(TOOLCHAIN_DIR)/lib/gcc/*/*/libgcc.a))
+ifneq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
+LIBGCC_S_PATH=$(realpath $(wildcard $(call qstrip,$(CONFIG_LIBGCC_ROOT_DIR))/$(call qstrip,$(CONFIG_LIBGCC_FILE_SPEC))))
+LIBGCC_S=$(if $(LIBGCC_S_PATH),-L$(dir $(LIBGCC_S_PATH)) -lgcc_s)
+LIBGCC_A=$(realpath $(wildcard $(dir $(LIBGCC_S_PATH))/gcc/*/*/libgcc.a))
+else
+LIBGCC_A=$(wildcard $(TOOLCHAIN_DIR)/lib/gcc/*/*/libgcc.a)
+LIBGCC_S=$(if $(wildcard $(TOOLCHAIN_DIR)/lib/libgcc_s.so),-L$(TOOLCHAIN_DIR)/lib -lgcc_s,$(LIBGCC_A))
+endif
 ifdef CONFIG_USE_UCLIBC
 LIBRPC=-lrpc
 endif
+LIBRPC_DEPENDS=+USE_UCLIBC:librpc
 
 ifndef DUMP
   ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
     -include $(TOOLCHAIN_DIR)/info.mk
+    export GCC_HONOUR_COPTS:=0
     TARGET_CROSS:=$(if $(TARGET_CROSS),$(TARGET_CROSS),$(OPTIMIZE_FOR_CPU)-openwrt-linux$(if $(TARGET_SUFFIX),-$(TARGET_SUFFIX))-)
     TARGET_CFLAGS+= -fhonour-copts
     TARGET_CPPFLAGS+= -I$(TOOLCHAIN_DIR)/usr/include -I$(TOOLCHAIN_DIR)/include
@@ -139,6 +148,7 @@ ifndef DUMP
       ifneq ($(TOOLCHAIN_LIB_DIRS),)
         TARGET_LDFLAGS+= $(patsubst %,-L%,$(TOOLCHAIN_LIB_DIRS))
       endif
+      TOOLCHAIN_DIR:=$(TOOLCHAIN_ROOT_DIR)
     endif
   endif
 endif
@@ -153,7 +163,6 @@ endif
 
 export PATH:=$(TARGET_PATH)
 export STAGING_DIR
-export GCC_HONOUR_COPTS:=0
 export SH_FUNC:=. $(INCLUDE_DIR)/shell.sh;
 
 PKG_CONFIG:=$(STAGING_DIR_HOST)/bin/pkg-config
@@ -177,8 +186,6 @@ INSTALL_DATA:=install -m0644
 INSTALL_CONF:=install -m0600
 
 ifneq ($(CONFIG_CCACHE),)
-  # FIXME: move this variable to a better location
-  export CCACHE_DIR=$(STAGING_DIR)/ccache
   TARGET_CC:= ccache $(TARGET_CC)
   TARGET_CXX:= ccache $(TARGET_CXX)
 endif
@@ -212,7 +219,7 @@ else
   RSTRIP:= \
     NM="$(TARGET_CROSS)nm" \
     STRIP="$(STRIP)" \
-    STRIP_KMOD="$(TARGET_CROSS)strip --strip-unneeded --remove-section=.comment --remove-section=.pdr --remove-section=.mdebug.abi32" \
+    STRIP_KMOD="$(TARGET_CROSS)strip --strip-unneeded -R .comment -R .pdr -R .mdebug.abi32 -R .note.gnu.build-id -R .gnu.attributes -R .reginfo -x" \
     $(SCRIPT_DIR)/rstrip.sh
 endif
 
@@ -232,6 +239,10 @@ ifeq ($(CONFIG_TAR_VERBOSITY),y)
   TAR_OPTIONS:=-xvf -
 else
   TAR_OPTIONS:=-xf -
+endif
+
+ifeq ($(CONFIG_BUILD_LOG),y)
+  BUILD_LOG:=1
 endif
 
 define shvar

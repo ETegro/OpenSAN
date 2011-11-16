@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/updatedd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   MENU:=1
   TITLE:=A tool to update dynamic dns services
   URL:=http://savannah.nongnu.org/projects/updatedd/
@@ -43,6 +44,7 @@ endef
 define Package/updatedd-mod-changeip
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=changeip.com
 endef
@@ -50,6 +52,7 @@ endef
 define Package/updatedd-mod-dyndns
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=dyndns.org
 endef
@@ -57,6 +60,7 @@ endef
 define Package/updatedd-mod-eurodyndns
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=eurodyndns.org
 endef
@@ -64,6 +68,7 @@ endef
 define Package/updatedd-mod-hn
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=hn.org
 endef
@@ -71,6 +76,7 @@ endef
 define Package/updatedd-mod-noip
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=no-ip.com
 endef
@@ -78,6 +84,7 @@ endef
 define Package/updatedd-mod-ods
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=ods.org
 endef
@@ -85,6 +92,7 @@ endef
 define Package/updatedd-mod-ovh
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=ovh.com
 endef
@@ -92,6 +100,7 @@ endef
 define Package/updatedd-mod-regfish
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=regfish.com
 endef
@@ -99,6 +108,7 @@ endef
 define Package/updatedd-mod-tzo
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=tzo.com
 endef
@@ -106,6 +116,7 @@ endef
 define Package/updatedd-mod-zoneedit
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=updatedd
   TITLE:=zoneedit.com
 endef

@@ -66,17 +66,6 @@ COEF_TARGET:=ifx_bbd_fxs.bin
 COEF_FILE:=coef_voip_ifx.tar.gz
 
 FW_DIR:=lib/firmware
-ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_DANUBE_extract),y)
-  CONFIGURE_ARGS += --with-device=DANUBE
-  FW_TARGET:=danube_firmware.bin
-  FW_SOURCE:=danube_firmware.bin
-  FW_URL:=http://www.arcor.de/hilfe/files/pdf/
-  FW_FILE=arcor_A800_452CPW_FW_1.02.206(20081201).bin
-  FW_MD5SUM:=19d9af4e369287a0f0abaed415cdac10
-  COEF_TARGET:=danube_bbd_fxs.bin
-  COEF_FILE:=arcor_A800_452CPW_FW_1.02.206(20081201).bin
-  COEF_MD5SUM:=19d9af4e369287a0f0abaed415cdac10
-endif
 
 ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_DANUBE),y)
   CONFIGURE_ARGS += --with-device=DANUBE
@@ -84,9 +73,12 @@ ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_DANUBE),y)
   FW_TARGET:=danube_firmware.bin
   FW_FILE=fw_voip_danube-12.1.0.1.0.tar.gz
   FW_MD5SUM:=51868b88dee9dbc65d3dbba355ded91c
+  FW_DOWNLOAD:=1
+  COEF_SRC:=danube_bbd_fxs.bin
   COEF_TARGET:=danube_bbd_fxs.bin
   COEF_FILE:=coef_voip_danube-0.9.0.tar.gz
   COEF_MD5SUM:=c8ac6592b304b03829a8123560e15710
+  COEF_DOWNLOAD:=1
 endif
 
 ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_AR9),y)
@@ -94,18 +86,34 @@ ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_AR9),y)
   # TODO: add fw/coef
 endif
 
+COEF_SRC:=$(COEF_TARGET)
+
+ifeq ($(CONFIG_VOICE_VMMC_WITH_DEVICE_FALCON),y)
+  CONFIGURE_ARGS += --with-device=FALCON
+  FW_SOURCE:=voip_R1.1.0.6.0-enc.bin
+  FW_MD5SUM:=cd4366a52a8010b76793e3810a4f14b3
+  FW_TARGET:=falcon_voip_fw.bin
+  FW_FILE=fw_voip_falcon-1.1.0.6.0.tar.gz
+  FW_DOWNLOAD:=1
+  COEF_TARGET:=falcon_bbd.bin
+# FXS part
+ifeq ($(CONFIG_LTQ_VOICE_CPE_VMMC_COEF_FALCON_ETSI),y)
+	COEF_SRC:=ETSI_3_10.BIN
+endif
+ifeq ($(CONFIG_LTQ_VOICE_CPE_VMMC_COEF_FALCON_US600R),y)
+	COEF_SRC:=R600_3_10.BIN
+endif
+ifeq ($(CONFIG_LTQ_VOICE_CPE_VMMC_COEF_FALCON_USE_CUSTOM_FILE),y)
+	COEF_SRC:=$(CONFIG_LTQ_VOICE_CPE_VMMC_COEF_FALCON_CUSTOM_FILE)
+endif
+  COEF_FILE:=coef_voip_falcon.tar.gz
+  COEF_MD5SUM:=56c5a838f2bb9bd87d0e8dce271f810b
+  COEF_DOWNLOAD:=1
+endif
+
 ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_VR9),y)
   CONFIGURE_ARGS += --with-device=VR9
   # TODO: add fw/coef
-endif
-
-ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_DANUBE_extract),y)
-define Download/decode
-  FILE:=ifxmips_fw_decodev2.tar.bz2
-  URL:=http://downloads.openwrt.org/sources/
-  MD5SUM:=9f4ebfae5cb9d9e8fca46057a653ae27
-endef
-$(eval $(call Download,decode))
 endif
 
 define Download/firmware
@@ -113,14 +121,14 @@ define Download/firmware
   URL:=$(FW_URL)
   MD5SUM:=$(FW_MD5SUM)
 endef
-$(eval $(call Download,firmware))
+$(eval $(if $(FW_DOWNLOAD),$(call Download,firmware)))
 
 define Download/coef
   FILE:=$(COEF_FILE)
   URL:=$(FW_URL)
   MD5SUM:=$(COEF_MD5SUM)
 endef
-$(eval $(call Download,coef))
+$(eval $(if $(COEF_DOWNLOAD),$(call Download,coef)))
 
 define Build/Configure
 	rm -rf \
@@ -129,14 +137,8 @@ define Build/Configure
 	mkdir -p \
 		$(PKG_BUILD_DIR)/coef \
 		$(PKG_BUILD_DIR)/firmware
-ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_DANUBE_extract),y)
-	$(PLATFORM_DIR)/extract.sh $(DL_DIR) '$(FW_FILE)' 
-	$(CP) $(DL_DIR)/voip.bin $(PKG_BUILD_DIR)/firmware/$(FW_TARGET)
-	$(CP) $(DL_DIR)/voip_coef.bin $(PKG_BUILD_DIR)/coef/$(COEF_TARGET)
-else
 	$(TAR) -C $(PKG_BUILD_DIR)/firmware -xvzf $(DL_DIR)/$(FW_FILE)
 	$(TAR) -C $(PKG_BUILD_DIR)/coef -xvzf $(DL_DIR)/$(COEF_FILE)
-endif
 	(cd $(PKG_BUILD_DIR); aclocal && autoconf && automake)
 	$(call Build/Configure/Default)
 endef
@@ -152,7 +154,7 @@ define KernelPackage/ltq-vmmc/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/$(FW_DIR)
 	$(INSTALL_BIN) ./files/vmmc.init $(1)/etc/init.d/vmmc
 	$(CP) $(PKG_BUILD_DIR)/firmware/$(FW_SOURCE) $(1)/$(FW_DIR)/$(FW_TARGET)
-	$(CP) $(PKG_BUILD_DIR)/coef/$(COEF_TARGET) $(1)/$(FW_DIR)/$(COEF_TARGET)
+	$(CP) $(PKG_BUILD_DIR)/coef/$(COEF_SRC) $(1)/$(FW_DIR)/$(COEF_TARGET)
 endef
 
 $(eval $(call KernelPackage,ltq-vmmc))

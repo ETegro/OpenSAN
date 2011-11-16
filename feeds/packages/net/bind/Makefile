@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.7.2-P3
+PKG_VERSION:=9.8.0-P4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=b4537cbae38b2daef36775bf49f33db9
+PKG_MD5SUM:=13e36e3f28dc1ce7675b45a4192e8389
 
 PKG_FIXUP:=libtool
 
@@ -27,15 +27,14 @@ define Package/bind/Default
   DEPENDS:=+bind-libs +libopenssl
   TITLE:=bind
   URL:=https://www.isc.org/software/bind
-  SUBMENU:=DNS
+  SUBMENU:=IP Addresses and Names
 endef
 
 define Package/bind-libs
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=libs
+  CATEGORY:=Libraries
   TITLE:=bind shared libraries
   URL:=http://www.isc.org/sw/bind/
-  SUBMENU:=DNS
 endef
 
 define Package/bind-server

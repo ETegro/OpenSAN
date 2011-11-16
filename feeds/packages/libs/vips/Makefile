@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vips
-PKG_VERSION:=7.22.4
+PKG_VERSION:=7.26.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.22/
-PKG_MD5SUM:=852913223ce5dc115bc7088e7c9d1596
+PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.26/
+PKG_MD5SUM:=1fbf164ef0da8e835a036c56ff659e8e
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,7 +30,7 @@ define Package/vips
   $(call Package/vips/Default)
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libjpeg +glib2 +libxml2 +imagemagick +libfreetype $(INTL_DEPENDS)
+  DEPENDS:=+libjpeg +glib2 +libxml2 $(INTL_DEPENDS)
 endef
 
 define Package/vips/description
@@ -43,7 +43,8 @@ TARGET_LDFLAGS+= \
 CONFIGURE_ARGS += \
 	--disable-cxx \
 	--disable-threads \
-	--without-liboil
+	--without-liboil \
+	--without-magick
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/vips

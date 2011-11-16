@@ -26,7 +26,8 @@
 #define TL_WR741ND_GPIO_BTN_RESET	11
 #define TL_WR741ND_GPIO_BTN_QSS		12
 
-#define TL_WR741ND_BUTTONS_POLL_INTERVAL	20
+#define TL_WR741ND_KEYS_POLL_INTERVAL	20	/* msecs */
+#define TL_WR741ND_KEYS_DEBOUNCE_INTERVAL (3 * TL_WR741ND_KEYS_POLL_INTERVAL)
 
 #ifdef CONFIG_MTD_PARTITIONS
 static struct mtd_partition tl_wr741nd_partitions[] = {
@@ -65,29 +66,29 @@ static struct flash_platform_data tl_wr741nd_flash_data = {
 
 static struct gpio_led tl_wr741nd_leds_gpio[] __initdata = {
 	{
-		.name		= "tl-wr741nd:green:system",
+		.name		= "tp-link:green:system",
 		.gpio		= TL_WR741ND_GPIO_LED_SYSTEM,
 		.active_low	= 1,
 	}, {
-		.name		= "tl-wr741nd:green:qss",
+		.name		= "tp-link:green:qss",
 		.gpio		= TL_WR741ND_GPIO_LED_QSS,
 		.active_low	= 1,
 	}
 };
 
-static struct gpio_button tl_wr741nd_gpio_buttons[] __initdata = {
+static struct gpio_keys_button tl_wr741nd_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.threshold	= 3,
+		.debounce_interval = TL_WR741ND_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= TL_WR741ND_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}, {
 		.desc		= "qss",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
-		.threshold	= 3,
+		.debounce_interval = TL_WR741ND_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= TL_WR741ND_GPIO_BTN_QSS,
 		.active_low	= 1,
 	}
@@ -103,9 +104,9 @@ static void __init tl_wr741nd_setup(void)
 	ar71xx_add_device_leds_gpio(-1, ARRAY_SIZE(tl_wr741nd_leds_gpio),
 					tl_wr741nd_leds_gpio);
 
-	ar71xx_add_device_gpio_buttons(-1, TL_WR741ND_BUTTONS_POLL_INTERVAL,
-					ARRAY_SIZE(tl_wr741nd_gpio_buttons),
-					tl_wr741nd_gpio_buttons);
+	ar71xx_register_gpio_keys_polled(-1, TL_WR741ND_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(tl_wr741nd_gpio_keys),
+					 tl_wr741nd_gpio_keys);
 
 	ar71xx_eth1_data.has_ar7240_switch = 1;
 	ar71xx_init_mac(ar71xx_eth0_data.mac_addr, mac, 0);
@@ -115,6 +116,7 @@ static void __init tl_wr741nd_setup(void)
 	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;
 	ar71xx_eth0_data.speed = SPEED_100;
 	ar71xx_eth0_data.duplex = DUPLEX_FULL;
+	ar71xx_eth0_data.phy_mask = BIT(4);
 
 	/* LAN ports */
 	ar71xx_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;

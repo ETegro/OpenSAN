@@ -9,23 +9,29 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openl2tp
-PKG_VERSION:=1.7
+PKG_VERSION:=1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/openl2tp
-PKG_MD5SUM:=2fd12112cf50c67dc3c7d848beb34947
+PKG_MD5SUM:=e3d08dedfb9e6a9a1e24f6766f6dadd0
 
 PKG_BUILD_DEPENDS:=libreadline libncurses
 PKG_BUILD_PARALLEL:=1
-PPPD_VERSION:=2.4.4
+PPPD_VERSION:=2.4.5
 
 include $(INCLUDE_DIR)/package.mk
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	$(CP) ./src/*.[ch] $(PKG_BUILD_DIR)/
+endef
 
 define Package/openl2tp
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-pppol2tp +ppp +portmap +libreadline +libncurses @!LINUX_2_4
+  DEPENDS:=+ppp +kmod-pppol2tp +portmap +libreadline +libncurses \
+  	@!LINUX_2_4 $(LIBRPC_DEPENDS)
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.openl2tp.org/
   SUBMENU:=VPN
@@ -45,7 +51,9 @@ MAKE_FLAGS+= \
 	PPPD_VERSION="$(PKG_PPPD_VERSION)" \
 	READLINE_DIR="$(STAGING_DIR)/usr" \
 	PPPD_SRCDIR="$(STAGING_DIR)/usr/include" \
-	PPPD_LIBDIR="$(STAGING_DIR)/usr/lib"
+	PPPD_LIBDIR="$(STAGING_DIR)/usr/lib" \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
+	LIBS.dmalloc="-L$(STAGING_DIR)/usr/lib $(LIBRPC)"
 
 define Package/openl2tp/install
 	$(INSTALL_DIR) $(1)/usr/bin

@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openser
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   TITLE:=Configurable, free SIP server
   URL:=http://www.openser.org
   MENU:=1
@@ -36,7 +37,7 @@ define Package/openser-mod-acc
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Accounting support
-  MENU:=0
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-auth
@@ -44,6 +45,7 @@ define Package/openser-mod-auth
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Authentication support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-auth-db
@@ -51,6 +53,7 @@ define Package/openser-mod-auth-db
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Authentication with database support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-auth-radius
@@ -58,6 +61,7 @@ define Package/openser-mod-auth-radius
   CATEGORY:=Network
   DEPENDS:=openser +libradiusclient-ng
   TITLE:=Authentication with RADIUS support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-avp-radius
@@ -65,6 +69,7 @@ define Package/openser-mod-avp-radius
   CATEGORY:=Network
   DEPENDS:=openser +libradiusclient-ng
   TITLE:=AVP with RADIUS support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-avpops
@@ -72,6 +77,7 @@ define Package/openser-mod-avpops
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=AVP options support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-dispatcher
@@ -79,6 +85,7 @@ define Package/openser-mod-dispatcher
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Dispatcher support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-diversion
@@ -86,6 +93,7 @@ define Package/openser-mod-diversion
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Diversion support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-flatstore
@@ -93,6 +101,7 @@ define Package/openser-mod-flatstore
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Flatstore support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-gflags
@@ -100,6 +109,7 @@ define Package/openser-mod-gflags
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Gflags support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-group
@@ -107,6 +117,7 @@ define Package/openser-mod-group
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Group support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-group-radius
@@ -114,6 +125,7 @@ define Package/openser-mod-group-radius
   CATEGORY:=Network
   DEPENDS:=openser +libradiusclient-ng
   TITLE:=Group with RADIUS support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-lcr
@@ -121,6 +133,7 @@ define Package/openser-mod-lcr
   CATEGORY:=Network
   DEPENDS:=openser openser-mod-mysql
   TITLE:=Least Cost Routing support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-mediaproxy
@@ -128,6 +141,7 @@ define Package/openser-mod-mediaproxy
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Mediaproxy support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-msilo
@@ -135,6 +149,7 @@ define Package/openser-mod-msilo
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=MSilo support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-mysql
@@ -142,6 +157,7 @@ define Package/openser-mod-mysql
   CATEGORY:=Network
   DEPENDS:=openser +libmysqlclient
   TITLE:=MySQL support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-nathelper
@@ -149,6 +165,7 @@ define Package/openser-mod-nathelper
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=NAT helper support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-options
@@ -156,6 +173,7 @@ define Package/openser-mod-options
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Options support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-pdt
@@ -163,6 +181,7 @@ define Package/openser-mod-pdt
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=PDT support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-permissions
@@ -170,6 +189,7 @@ define Package/openser-mod-permissions
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Permissions support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-pike
@@ -177,6 +197,7 @@ define Package/openser-mod-pike
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=PIKE support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-sms
@@ -184,6 +205,7 @@ define Package/openser-mod-sms
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=SMS support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-speeddial
@@ -191,6 +213,7 @@ define Package/openser-mod-speeddial
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Speeddial supporte
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-uac
@@ -198,6 +221,7 @@ define Package/openser-mod-uac
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=UAC support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-uac-redirect
@@ -205,6 +229,7 @@ define Package/openser-mod-uac-redirect
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=UAC with redirect support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-uri
@@ -212,6 +237,7 @@ define Package/openser-mod-uri
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=URI support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-uri-db
@@ -219,6 +245,7 @@ define Package/openser-mod-uri-db
   CATEGORY:=Network
   DEPENDS:=openser +openser-mod-mysql
   TITLE:=URI with database support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-uri-radius
@@ -226,6 +253,7 @@ define Package/openser-mod-uri-radius
   CATEGORY:=Network
   DEPENDS:=openser +libradiusclient-ng
   TITLE:=URI with RADIUS support
+  SUBMENU:=Telephony
 endef
 
 define Package/openser-mod-xlog
@@ -233,6 +261,7 @@ define Package/openser-mod-xlog
   CATEGORY:=Network
   DEPENDS:=openser
   TITLE:=Advanced logging support
+  SUBMENU:=Telephony
 endef
 
 # Select here the modules for the ipk package

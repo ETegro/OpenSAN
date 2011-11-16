@@ -25,10 +25,10 @@ include $(INCLUDE_DIR)/package.mk
 define Package/hotplug2
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+udevtrigger
   VERSION:=1.0-beta-$(PKG_RELEASE)
   TITLE:=Version 1.0 Dynamic device management subsystem for embedded systems
   URL:=http://isteve.bofh.cz/~isteve/hotplug2/
+  DEPENDS:=+!USE_UCLIBC:libbsd
 endef
 
 define Package/hotplug2/description
@@ -45,10 +45,20 @@ MAKE_FLAGS += \
 	COPTS="$(TARGET_CFLAGS)" \
 	STATIC_WORKER="fork"
 
+ifneq ($(CONFIG_USE_EGLIBC)$(CONFIG_USE_GLIBC),)
+  TARGET_LDFLAGS += -lbsd
+endif
+
+define Build/Compile
+	$(call Build/Compile/Default)
+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o $(PKG_BUILD_DIR)/udevtrigger src/udevtrigger.c
+endef
+
 define Package/hotplug2/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/hotplug2.rules $(1)/etc/
 	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/udevtrigger $(1)/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hotplug2 $(1)/sbin/
 endef
 

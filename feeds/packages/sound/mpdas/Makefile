@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpdas
 PKG_VERSION:=0.3.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://50hz.ws/mpdas
@@ -28,7 +28,7 @@ endef
 
 define Package/mpdas/description
     mpdas is an AudioScrobbler client for MPD written in C++.
-    It supports the latest AudioScrobbler protocol (1.21).
+    It supports the latest AudioScrobbler protocol (2.0).
     In case of a downtime or connectivity problems, mpdas will 
     cache the played songs to ~/.mpdascache.
 endef

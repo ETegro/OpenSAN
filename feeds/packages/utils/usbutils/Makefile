@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usbutils
-PKG_VERSION:=001
+PKG_VERSION:=004
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/linux/utils/usb/usbutils
-PKG_MD5SUM:=40398698053f9f735550117322430e57
+PKG_MD5SUM:=fc69cde51b2094aa4bbd804c0ba97e35
 
 PKG_INSTALL:=1
 
@@ -22,14 +22,15 @@ include $(INCLUDE_DIR)/package.mk
 define Package/usbutils
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb-1.0 +zlib
+  DEPENDS:=+libusb-1.0 +zlib +librt +libpthread
   TITLE:=USB devices listing utilities
   URL:=http://www.linux-usb.org/
 endef
 
 define Package/usbutils/postinst
 #!/bin/sh
-(cd $${IPKG_INSTROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-usbids.sh)
+[ -z "$${IPKG_INSTROOT}" ] || \
+(cd $${IPKG_INSTROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-usbids.sh ; rm usb.ids.gz.old)
 exit 0
 endef
 

@@ -10,6 +10,15 @@ ar71xx_board_name() {
 	machine=$(awk 'BEGIN{FS="[ \t]+:[ \t]"} /machine/ {print $2}' /proc/cpuinfo)
 
 	case "$machine" in
+	*ALL0258N)
+		name="all0258n"
+		;;
+	*AP121)
+		name="ap121"
+		;;
+	*AP121-MINI)
+		name="ap121-mini"
+		;;
 	*AP81)
 		name="ap81"
 		;;
@@ -55,11 +64,17 @@ ar71xx_board_name() {
 	*"NBG460N/550N/550NH")
 		name="nbg460n_550n_550nh"
 		;;
+	*OM2P)
+		name="om2p"
+		;;
 	*PB42)
 		name="pb42"
 		;;
 	*PB44)
 		name="pb44"
+		;;
+	*PB92)
+		name="pb92"
 		;;
 	*"RouterBOARD 411/A/AH")
 		name="rb-411"
@@ -81,6 +96,9 @@ ar71xx_board_name() {
 		;;
 	*"RouterBOARD 493/AH")
 		name="rb-493"
+		;;
+	*"RouterBOARD 493G")
+		name="rb-493g"
 		;;
 	*"RouterBOARD 750")
 		name="rb-750"
@@ -112,14 +130,23 @@ ar71xx_board_name() {
 	*TL-WA901ND)
 		name="tl-wa901nd"
 		;;
+	*"TL-WA901ND v2")
+		name="tl-wa901nd-v2"
+		;;
 	*TL-WR741ND)
 		name="tl-wr741nd"
+		;;
+	*"TL-WR741ND v4")
+		name="tl-wr741nd-v4"
 		;;
 	*"TL-WR841N v1")
 		name="tl-wr841n-v1"
 		;;
 	*TL-WR941ND)
 		name="tl-wr941nd"
+		;;
+	*"TL-WR703N v1")
+		name="tl-wr703n"
 		;;
 	*UniFi)
 		name="unifi"
@@ -142,8 +169,14 @@ ar71xx_board_name() {
 	*WRT400N)
 		name="wrt400n"
 		;;
+	*WZR-HP-AG300H)
+		name="wzr-hp-ag300h"
+		;;
 	*WZR-HP-G300NH)
 		name="wzr-hp-g300nh"
+		;;
+	*WHR-HP-G300N)
+		name="whr-hp-g300n"
 		;;
 	*ZCN-1523H-2)
 		name="zcn-1523h-2"

@@ -6,8 +6,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=triggerhappy
-PKG_VERSION:=0.3.2
-PKG_REV:=c0cedabf8d5bd56ae4cb151ebe708d1ac6a3025d
+PKG_VERSION:=0.3.4
+PKG_REV:=cb3ed9ba849ff5926fa47fd1ae042fa0083edaf5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -32,7 +32,6 @@ define Package/triggerhappy/description
 endef
 
 MAKE_FLAGS += \
-	LINUX_INPUT_H=$(TOOLCHAIN_DIR)/usr/include/linux/input.h \
 	$(TARGET_CONFIGURE_OPTS) \
 	$(1)
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,11 +11,11 @@ BOARD:=atheros
 BOARDNAME:=Atheros AR231x/AR5312
 FEATURES:=squashfs jffs2
 
-LINUX_VERSION:=2.6.37.1
+LINUX_VERSION:=2.6.37.6
 
 include $(INCLUDE_DIR)/target.mk
 
-DEFAULT_PACKAGES += wpad-mini kmod-madwifi gpioctl swconfig
+DEFAULT_PACKAGES += wpad-mini kmod-ath5k gpioctl swconfig
 
 define Target/Description
 	Build firmware images for Atheros SoC boards

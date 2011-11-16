@@ -33,7 +33,7 @@
  source "arch/mips/bcm63xx/Kconfig"
 --- a/arch/mips/Makefile
 +++ b/arch/mips/Makefile
-@@ -296,6 +296,13 @@ cflags-$(CONFIG_SOC_AU1X00)	+= -I$(srctr
+@@ -298,6 +298,13 @@ cflags-$(CONFIG_SOC_AU1X00)	+= -I$(srctr
  
  
  #

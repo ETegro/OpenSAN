@@ -20,16 +20,14 @@ define Image/Prepare
 		clean install
 	echo -ne "\\x00" >> $(KDIR)/loader.gz
 	rm -f $(KDIR)/fs_mark
-	touch $(KDIR)/fs_mark
+	echo -ne '\xde\xad\xc0\xde' > $(KDIR)/fs_mark
 	$(call prepare_generic_squashfs,$(KDIR)/fs_mark)
 endef
 
-ifneq ($(KERNEL),2.4)
-  define Image/Build/wgt634u
+define Image/Build/wgt634u
 	dd if=$(KDIR)/loader.elf of=$(BIN_DIR)/openwrt-wgt634u-$(2).bin bs=131072 conv=sync
 	cat $(BIN_DIR)/$(IMG_PREFIX)-$(1).trx >> $(BIN_DIR)/openwrt-wgt634u-$(2).bin
-  endef
-endif
+endef
 
 define Image/Build/CyberTAN
 	$(STAGING_DIR_HOST)/bin/addpattern -4 -p $(3) -v v$(4) -i $(BIN_DIR)/$(IMG_PREFIX)-$(1).trx -o $(BIN_DIR)/openwrt-$(2)-$(5).bin $(if $(6),-s $(6))
@@ -75,9 +73,7 @@ define Image/Build/jffs2-128k
 	$(call Image/Build/CyberTAN,$(1),wrt54gs,W54S,4.80.1,$(patsubst jffs2-%,jffs2,$(1)))
 	$(call Image/Build/CyberTAN,$(1),wrtsl54gs,W54U,2.08.1,$(patsubst jffs2-%,jffs2,$(1)))
 	$(call Image/Build/trxV2,$(1),wrt54g3gv2-vf,3G2V,3.00.24,$(patsubst jffs2-%,jffs2,$(1)),6)
-  ifeq ($(KERNEL),2.6)
 	$(call Image/Build/wgt634u,$(1),$(patsubst jffs2-%,jffs2,$(1)))
-  endif
 endef
 
 define Image/Build/jffs2-64k
@@ -115,6 +111,7 @@ define Image/Build
 	$(call Image/Build/Motorola,$(1),wr850g,1,$(1))
 	$(call Image/Build/USR,$(1),usr5461,$(1))
 	$(call Image/Build/Chk,$(1),wnr834b_v2,U12H081T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
+#	$(call Image/Build/Chk,$(1),wndr3400_v1,U12H155T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
 #	$(call Image/Build/Chk,$(1),wgr614_v8,U12H072T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
 endef
 

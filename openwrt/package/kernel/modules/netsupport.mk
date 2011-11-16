@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -89,9 +89,13 @@ define KernelPackage/capi
 	CONFIG_ISDN_CAPI_CAPIFS
   FILES:= \
 	$(LINUX_DIR)/drivers/isdn/capi/kernelcapi.ko \
-	$(LINUX_DIR)/drivers/isdn/capi/capifs.ko \
 	$(LINUX_DIR)/drivers/isdn/capi/capi.ko
+ ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,3.0)),1)
+  AUTOLOAD:=$(call AutoLoad,30,kernelcapi capi)
+ else
+  FILES+= $(LINUX_DIR)/drivers/isdn/capi/capifs.ko
   AUTOLOAD:=$(call AutoLoad,30,kernelcapi capifs capi)
+ endif
 endef
 
 define KernelPackage/capi/description
@@ -177,7 +181,7 @@ IPSEC-m:= \
 define KernelPackage/ipsec
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=IPsec related modules (IPv4 and IPv6)
-  DEPENDS:=+kmod-crypto-core +kmod-crypto-des +kmod-crypto-hmac +kmod-crypto-md5 +kmod-crypto-sha1 +kmod-crypto-deflate +kmod-crypto-cbc
+  DEPENDS:=+kmod-crypto-authenc +kmod-crypto-iv +kmod-crypto-des +kmod-crypto-hmac +kmod-crypto-md5 +kmod-crypto-sha1 +kmod-crypto-deflate +kmod-crypto-cbc
   KCONFIG:= \
 	CONFIG_NET_KEY \
 	CONFIG_XFRM_USER \
@@ -370,8 +374,15 @@ $(eval $(call KernelPackage,ip6-tunnel))
 define KernelPackage/gre
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=GRE support
-  KCONFIG:=CONFIG_NET_IPGRE
-  FILES=$(LINUX_DIR)/net/ipv4/ip_gre.ko
+  DEPENDS:=+PACKAGE_kmod-ipv6:kmod-ipv6
+  KCONFIG:=CONFIG_NET_IPGRE CONFIG_NET_IPGRE_DEMUX
+ ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,2.6.37)),1)
+  FILES:=$(LINUX_DIR)/net/ipv4/ip_gre.ko $(LINUX_DIR)/net/ipv4/gre.ko
+  AUTOLOAD:=$(call AutoLoad,39,gre ip_gre)
+ else
+  FILES:=$(LINUX_DIR)/net/ipv4/ip_gre.ko
+  AUTOLOAD:=$(call AutoLoad,39,ip_gre)
+ endif
 endef
 
 define KernelPackage/gre/description
@@ -399,7 +410,7 @@ $(eval $(call KernelPackage,tun))
 define KernelPackage/ppp
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=PPP modules
-  DEPENDS:=+kmod-crc-ccitt
+  DEPENDS:=+kmod-lib-crc-ccitt
   KCONFIG:= \
 	CONFIG_PPP \
 	CONFIG_PPP_ASYNC \
@@ -467,12 +478,25 @@ endef
 
 $(eval $(call KernelPackage,pppoa))
 
+
+define KernelPackage/pptp
+  SUBMENU:=$(NETWORK_SUPPORT_MENU)
+  TITLE:=PPtP support
+  DEPENDS:=kmod-ppp +kmod-gre @!LINUX_2_6_30&&!LINUX_2_6_31&&!LINUX_2_6_32&&!LINUX_2_6_36
+  KCONFIG:=CONFIG_PPTP
+  FILES:=$(LINUX_DIR)/drivers/net/pptp.ko
+  AUTOLOAD:=$(call AutoLoad,41,pptp)
+endef
+
+$(eval $(call KernelPackage,pptp))
+	
+
 define KernelPackage/pppol2tp
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=PPPoL2TP support
-  DEPENDS:=kmod-ppp +kmod-pppoe +LINUX_2_6_35||LINUX_2_6_36||LINUX_2_6_37:kmod-l2tp
+  DEPENDS:=kmod-ppp +kmod-pppoe +!LINUX_2_6_30&&!LINUX_2_6_31&&!LINUX_2_6_32:kmod-l2tp
   KCONFIG:=CONFIG_PPPOL2TP
-  ifneq ($(CONFIG_LINUX_2_6_35)$(CONFIG_LINUX_2_6_36)$(CONFIG_LINUX_2_6_37),)
+  ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,2.6.35)),1)
     FILES:=$(LINUX_DIR)/net/l2tp/l2tp_ppp.ko
     AUTOLOAD:=$(call AutoLoad,40,l2tp_ppp)
   else
@@ -507,7 +531,7 @@ $(eval $(call KernelPackage,ipoa))
 define KernelPackage/mppe
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=Microsoft PPP compression/encryption
-  DEPENDS:=kmod-ppp +kmod-crypto-core +kmod-crypto-arc4 +kmod-crypto-sha1
+  DEPENDS:=kmod-ppp +kmod-crypto-core +kmod-crypto-arc4 +kmod-crypto-sha1 +kmod-crypto-ecb
   KCONFIG:= \
 	CONFIG_PPP_MPPE_MPPC \
 	CONFIG_PPP_MPPE
@@ -618,6 +642,7 @@ $(eval $(call KernelPackage,mp-alg))
 
 define KernelPackage/pktgen
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
+  DEPENDS:=@!TARGET_uml
   TITLE:=Network packet generator
   KCONFIG:=CONFIG_NET_PKTGEN
   FILES:=$(LINUX_DIR)/net/core/pktgen.ko
@@ -632,13 +657,13 @@ $(eval $(call KernelPackage,pktgen))
 
 define KernelPackage/l2tp
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
-  DEPENDS:=@LINUX_2_6_35||LINUX_2_6_36||LINUX_2_6_37
+  DEPENDS:=@!LINUX_2_6_30&&!LINUX_2_6_31&&!LINUX_2_6_32
   TITLE:=Layer Two Tunneling Protocol (L2TP)
   KCONFIG:=CONFIG_L2TP \
 	CONFIG_L2TP_V3=y \
 	CONFIG_L2TP_DEBUGFS=n
-  FILES:=$(LINUX_DIR)/net/l2tp/l2tp_core.$(LINUX_KMOD_SUFFIX) \
-	$(LINUX_DIR)/net/l2tp/l2tp_netlink.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/net/l2tp/l2tp_core.ko \
+	$(LINUX_DIR)/net/l2tp/l2tp_netlink.ko
   AUTOLOAD:=$(call AutoLoad,32,l2tp_core l2tp_netlink)
 endef
 
@@ -654,7 +679,7 @@ define KernelPackage/l2tp-eth
   TITLE:=L2TP ethernet pseudowire support for L2TPv3
   DEPENDS:=+kmod-l2tp
   KCONFIG:=CONFIG_L2TP_ETH
-  FILES:=$(LINUX_DIR)/net/l2tp/l2tp_eth.$(LINUX_KMOD_SUFFIX) 
+  FILES:=$(LINUX_DIR)/net/l2tp/l2tp_eth.ko
   AUTOLOAD:=$(call AutoLoad,33,l2tp_eth)
 endef
 
@@ -669,7 +694,7 @@ define KernelPackage/l2tp-ip
   TITLE:=L2TP IP encapsulation for L2TPv3
   DEPENDS:=+kmod-l2tp
   KCONFIG:=CONFIG_L2TP_IP
-  FILES:=$(LINUX_DIR)/net/l2tp/l2tp_ip.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(LINUX_DIR)/net/l2tp/l2tp_ip.ko
   AUTOLOAD:=$(call AutoLoad,33,l2tp_ip)
 endef
 
@@ -690,9 +715,9 @@ define KernelPackage/sctp
      CONFIG_SCTP_HMAC_NONE=n \
      CONFIG_SCTP_HMAC_SHA1=n \
      CONFIG_SCTP_HMAC_MD5=y
-  FILES:= $(LINUX_DIR)/net/sctp/sctp.$(LINUX_KMOD_SUFFIX)
+  FILES:= $(LINUX_DIR)/net/sctp/sctp.ko
   AUTOLOAD:= $(call AutoLoad,32,sctp)
-  DEPENDS:=+kmod-libcrc32c +kmod-crypto-md5 +kmod-crypto-hmac
+  DEPENDS:=+kmod-lib-crc32c +kmod-crypto-md5 +kmod-crypto-hmac
 endef
 
 define KernelPackage/sctp/description
@@ -701,4 +726,19 @@ endef
 
 $(eval $(call KernelPackage,sctp))
 
+
+define KernelPackage/netem
+  SUBMENU:=$(NETWORK_SUPPORT_MENU)
+  TITLE:=Network emulation functionality
+  DEPENDS:=+kmod-sched
+  KCONFIG:=CONFIG_NET_SCH_NETEM
+  FILES:=$(LINUX_DIR)/net/sched/sch_netem.ko
+  AUTOLOAD:=$(call AutoLoad,99,netem)
+endef
+
+define KernelPackage/netem/description
+  Kernel modules for emulating the properties of wide area networks
+endef
+
+$(eval $(call KernelPackage,netem))
 

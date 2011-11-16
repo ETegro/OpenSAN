@@ -1,10 +1,12 @@
 /*
  *  Atheros AR71xx SoC platform devices
  *
+ *  Copyright (C) 2010-2011 Jaiganesh Narayanan <jnarayanan@atheros.com>
  *  Copyright (C) 2008-2009 Gabor Juhos <juhosg@openwrt.org>
  *  Copyright (C) 2008 Imre Kaloz <kaloz@openwrt.org>
  *
- *  Parts of this file are based on Atheros' 2.6.15 BSP
+ *  Parts of this file are based on Atheros 2.6.15 BSP
+ *  Parts of this file are based on Atheros 2.6.31 BSP
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU General Public License version 2 as published
@@ -19,6 +21,7 @@
 #include <linux/serial_8250.h>
 
 #include <asm/mach-ar71xx/ar71xx.h>
+#include <asm/mach-ar71xx/ar933x_uart_platform.h>
 
 #include "devices.h"
 
@@ -55,10 +58,65 @@ static struct platform_device ar71xx_uart_device = {
 	},
 };
 
+static struct resource ar933x_uart_resources[] = {
+	{
+		.start  = AR933X_UART_BASE,
+		.end    = AR933X_UART_BASE + AR71XX_UART_SIZE - 1,
+		.flags  = IORESOURCE_MEM,
+	},
+	{
+		.start  = AR71XX_MISC_IRQ_UART,
+		.end    = AR71XX_MISC_IRQ_UART,
+		.flags  = IORESOURCE_IRQ,
+	},
+};
+
+static struct ar933x_uart_platform_data ar933x_uart_data;
+static struct platform_device ar933x_uart_device = {
+	.name           = "ar933x-uart",
+	.id             = -1,
+	.resource       = ar933x_uart_resources,
+	.num_resources  = ARRAY_SIZE(ar933x_uart_resources),
+	.dev = {
+		.platform_data  = &ar933x_uart_data,
+	},
+};
+
 void __init ar71xx_add_device_uart(void)
 {
-	ar71xx_uart_data[0].uartclk = ar71xx_ahb_freq;
-	platform_device_register(&ar71xx_uart_device);
+	struct platform_device *pdev;
+
+	switch (ar71xx_soc) {
+	case AR71XX_SOC_AR7130:
+	case AR71XX_SOC_AR7141:
+	case AR71XX_SOC_AR7161:
+	case AR71XX_SOC_AR7240:
+	case AR71XX_SOC_AR7241:
+	case AR71XX_SOC_AR7242:
+	case AR71XX_SOC_AR9130:
+	case AR71XX_SOC_AR9132:
+		pdev = &ar71xx_uart_device;
+		ar71xx_uart_data[0].uartclk = ar71xx_ahb_freq;
+		break;
+
+	case AR71XX_SOC_AR9330:
+	case AR71XX_SOC_AR9331:
+		pdev = &ar933x_uart_device;
+		ar933x_uart_data.uartclk = ar71xx_ref_freq;
+		break;
+
+	case AR71XX_SOC_AR9341:
+	case AR71XX_SOC_AR9342:
+	case AR71XX_SOC_AR9344:
+		pdev = &ar71xx_uart_device;
+		ar71xx_uart_data[0].uartclk = ar71xx_ref_freq;
+		break;
+
+	default:
+		BUG();
+	}
+
+	platform_device_register(pdev);
 }
 
 static struct resource ar71xx_mdio_resources[] = {
@@ -81,29 +139,6 @@ struct platform_device ar71xx_mdio_device = {
 		.platform_data = &ar71xx_mdio_data,
 	},
 };
-
-void __init ar71xx_add_device_mdio(u32 phy_mask)
-{
-	switch (ar71xx_soc) {
-	case AR71XX_SOC_AR7240:
-		ar71xx_mdio_data.is_ar7240 = 1;
-		break;
-	case AR71XX_SOC_AR7241:
-		ar71xx_mdio_data.is_ar7240 = 1;
-		ar71xx_mdio_resources[0].start = AR71XX_GE1_BASE;
-		ar71xx_mdio_resources[0].end = AR71XX_GE1_BASE + 0x200 - 1;
-		break;
-	case AR71XX_SOC_AR7242:
-		ar71xx_mdio_data.is_ar7240 = 1;
-		break;
-	default:
-		break;
-	}
-
-	ar71xx_mdio_data.phy_mask = phy_mask;
-
-	platform_device_register(&ar71xx_mdio_device);
-}
 
 static void ar71xx_set_pll(u32 cfg_reg, u32 pll_reg, u32 pll_val, u32 shift)
 {
@@ -132,6 +167,37 @@ static void ar71xx_set_pll(u32 cfg_reg, u32 pll_reg, u32 pll_val, u32 shift)
 		(unsigned int)(base + pll_reg), __raw_readl(base + pll_reg));
 
 	iounmap(base);
+}
+
+void __init ar71xx_add_device_mdio(u32 phy_mask)
+{
+	switch (ar71xx_soc) {
+	case AR71XX_SOC_AR7240:
+		ar71xx_mdio_data.is_ar7240 = 1;
+		break;
+	case AR71XX_SOC_AR7241:
+		ar71xx_mdio_data.is_ar7240 = 1;
+		ar71xx_mdio_resources[0].start = AR71XX_GE1_BASE;
+		ar71xx_mdio_resources[0].end = AR71XX_GE1_BASE + 0x200 - 1;
+		break;
+	case AR71XX_SOC_AR7242:
+		ar71xx_set_pll(AR71XX_PLL_REG_SEC_CONFIG,
+			       AR7242_PLL_REG_ETH0_INT_CLOCK, 0x62000000,
+			       AR71XX_ETH0_PLL_SHIFT);
+		break;
+	case AR71XX_SOC_AR9330:
+	case AR71XX_SOC_AR9331:
+		ar71xx_mdio_data.is_ar7240 = 1;
+		ar71xx_mdio_resources[0].start = AR71XX_GE1_BASE;
+		ar71xx_mdio_resources[0].end = AR71XX_GE1_BASE + 0x200 - 1;
+		break;
+	default:
+		break;
+	}
+
+	ar71xx_mdio_data.phy_mask = phy_mask;
+
+	platform_device_register(&ar71xx_mdio_device);
 }
 
 struct ar71xx_eth_pll_data ar71xx_eth0_pll_data;
@@ -196,6 +262,16 @@ static void ar724x_set_pll_ge1(int speed)
 	/* TODO */
 }
 
+static void ar7242_set_pll_ge0(int speed)
+{
+	u32 val = ar71xx_get_eth_pll(0, speed);
+	void __iomem *base;
+
+	base = ioremap_nocache(AR71XX_PLL_BASE, AR71XX_PLL_SIZE);
+	__raw_writel(val, base + AR7242_PLL_REG_ETH0_INT_CLOCK);
+	iounmap(base);
+}
+
 static void ar91xx_set_pll_ge0(int speed)
 {
 	u32 val = ar71xx_get_eth_pll(0, speed);
@@ -210,6 +286,16 @@ static void ar91xx_set_pll_ge1(int speed)
 
 	ar71xx_set_pll(AR91XX_PLL_REG_ETH_CONFIG, AR91XX_PLL_REG_ETH1_INT_CLOCK,
 			 val, AR91XX_ETH1_PLL_SHIFT);
+}
+
+static void ar933x_set_pll_ge0(int speed)
+{
+	/* TODO */
+}
+
+static void ar933x_set_pll_ge1(int speed)
+{
+	/* TODO */
 }
 
 static void ar71xx_ddr_flush_ge0(void)
@@ -240,6 +326,16 @@ static void ar91xx_ddr_flush_ge0(void)
 static void ar91xx_ddr_flush_ge1(void)
 {
 	ar71xx_ddr_flush(AR91XX_DDR_REG_FLUSH_GE1);
+}
+
+static void ar933x_ddr_flush_ge0(void)
+{
+	ar71xx_ddr_flush(AR933X_DDR_REG_FLUSH_GE0);
+}
+
+static void ar933x_ddr_flush_ge1(void)
+{
+	ar71xx_ddr_flush(AR933X_DDR_REG_FLUSH_GE1);
 }
 
 static struct resource ar71xx_eth0_resources[] = {
@@ -316,9 +412,17 @@ struct platform_device ar71xx_eth1_device = {
 #define AR724X_PLL_VAL_100	0x00001099
 #define AR724X_PLL_VAL_10	0x00991099
 
+#define AR7242_PLL_VAL_1000	0x16000000
+#define AR7242_PLL_VAL_100	0x00000101
+#define AR7242_PLL_VAL_10	0x00001616
+
 #define AR91XX_PLL_VAL_1000	0x1a000000
 #define AR91XX_PLL_VAL_100	0x13000a44
 #define AR91XX_PLL_VAL_10	0x00441099
+
+#define AR933X_PLL_VAL_1000	0x00110000
+#define AR933X_PLL_VAL_100	0x00001099
+#define AR933X_PLL_VAL_10	0x00991099
 
 static void __init ar71xx_init_eth_pll_data(unsigned int id)
 {
@@ -347,10 +451,15 @@ static void __init ar71xx_init_eth_pll_data(unsigned int id)
 
 	case AR71XX_SOC_AR7240:
 	case AR71XX_SOC_AR7241:
-	case AR71XX_SOC_AR7242:
 		pll_10 = AR724X_PLL_VAL_10;
 		pll_100 = AR724X_PLL_VAL_100;
 		pll_1000 = AR724X_PLL_VAL_1000;
+		break;
+
+	case AR71XX_SOC_AR7242:
+		pll_10 = AR7242_PLL_VAL_10;
+		pll_100 = AR7242_PLL_VAL_100;
+		pll_1000 = AR7242_PLL_VAL_1000;
 		break;
 
 	case AR71XX_SOC_AR9130:
@@ -359,6 +468,14 @@ static void __init ar71xx_init_eth_pll_data(unsigned int id)
 		pll_100 = AR91XX_PLL_VAL_100;
 		pll_1000 = AR91XX_PLL_VAL_1000;
 		break;
+
+	case AR71XX_SOC_AR9330:
+	case AR71XX_SOC_AR9331:
+		pll_10 = AR933X_PLL_VAL_10;
+		pll_100 = AR933X_PLL_VAL_100;
+		pll_1000 = AR933X_PLL_VAL_1000;
+		break;
+
 	default:
 		BUG();
 	}
@@ -442,17 +559,40 @@ void __init ar71xx_add_device_eth(unsigned int id)
 		pdata->has_gbit = 1;
 		break;
 
-	case AR71XX_SOC_AR7241:
 	case AR71XX_SOC_AR7242:
+		ar71xx_eth0_data.reset_bit |= AR724X_RESET_GE0_MDIO |
+					      RESET_MODULE_GE0_PHY;
+		ar71xx_eth1_data.reset_bit |= AR724X_RESET_GE1_MDIO |
+					      RESET_MODULE_GE1_PHY;
+		pdata->ddr_flush = id ? ar724x_ddr_flush_ge1
+				      : ar724x_ddr_flush_ge0;
+		pdata->set_pll =  id ? ar724x_set_pll_ge1
+				     : ar7242_set_pll_ge0;
+		pdata->has_gbit = 1;
+		pdata->is_ar724x = 1;
+
+		if (!pdata->fifo_cfg1)
+			pdata->fifo_cfg1 = 0x0010ffff;
+		if (!pdata->fifo_cfg2)
+			pdata->fifo_cfg2 = 0x015500aa;
+		if (!pdata->fifo_cfg3)
+			pdata->fifo_cfg3 = 0x01f00140;
+		break;
+
+	case AR71XX_SOC_AR7241:
 		ar71xx_eth0_data.reset_bit |= AR724X_RESET_GE0_MDIO;
 		ar71xx_eth1_data.reset_bit |= AR724X_RESET_GE1_MDIO;
 		/* fall through */
 	case AR71XX_SOC_AR7240:
+		ar71xx_eth0_data.reset_bit |= RESET_MODULE_GE0_PHY;
+		ar71xx_eth1_data.reset_bit |= RESET_MODULE_GE1_PHY;
 		pdata->ddr_flush = id ? ar724x_ddr_flush_ge1
 				      : ar724x_ddr_flush_ge0;
 		pdata->set_pll =  id ? ar724x_set_pll_ge1
 				     : ar724x_set_pll_ge0;
 		pdata->is_ar724x = 1;
+		if (ar71xx_soc == AR71XX_SOC_AR7240)
+			pdata->is_ar7240 = 1;
 
 		if (!pdata->fifo_cfg1)
 			pdata->fifo_cfg1 = 0x0010ffff;
@@ -477,6 +617,27 @@ void __init ar71xx_add_device_eth(unsigned int id)
 				      : ar91xx_set_pll_ge0;
 		pdata->is_ar91xx = 1;
 		pdata->has_gbit = 1;
+		break;
+
+	case AR71XX_SOC_AR9330:
+	case AR71XX_SOC_AR9331:
+		ar71xx_eth0_data.reset_bit = AR933X_RESET_GE0_MAC |
+					     AR933X_RESET_GE0_MDIO;
+		ar71xx_eth1_data.reset_bit = AR933X_RESET_GE1_MAC |
+					     AR933X_RESET_GE1_MDIO;
+		pdata->ddr_flush = id ? ar933x_ddr_flush_ge1
+				      : ar933x_ddr_flush_ge0;
+		pdata->set_pll =  id ? ar933x_set_pll_ge1
+				     : ar933x_set_pll_ge0;
+		pdata->has_gbit = 1;
+		pdata->is_ar724x = 1;
+
+		if (!pdata->fifo_cfg1)
+			pdata->fifo_cfg1 = 0x0010ffff;
+		if (!pdata->fifo_cfg2)
+			pdata->fifo_cfg2 = 0x015500aa;
+		if (!pdata->fifo_cfg3)
+			pdata->fifo_cfg3 = 0x01f00140;
 		break;
 
 	default:

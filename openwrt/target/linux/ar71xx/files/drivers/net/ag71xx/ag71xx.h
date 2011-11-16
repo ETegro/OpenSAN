@@ -25,6 +25,7 @@
 #include <linux/platform_device.h>
 #include <linux/ethtool.h>
 #include <linux/etherdevice.h>
+#include <linux/if_vlan.h>
 #include <linux/phy.h>
 #include <linux/skbuff.h>
 #include <linux/dma-mapping.h>
@@ -34,8 +35,6 @@
 
 #include <asm/mach-ar71xx/ar71xx.h>
 #include <asm/mach-ar71xx/platform.h>
-
-#define ETH_FCS_LEN	4
 
 #define AG71XX_DRV_NAME		"ag71xx"
 #define AG71XX_DRV_VERSION	"0.5.35"
@@ -50,18 +49,16 @@
 #define AG71XX_INT_POLL	(AG71XX_INT_RX | AG71XX_INT_TX)
 #define AG71XX_INT_INIT	(AG71XX_INT_ERR | AG71XX_INT_POLL)
 
-#define AG71XX_TX_FIFO_LEN	2048
 #define AG71XX_TX_MTU_LEN	1540
 #define AG71XX_RX_PKT_RESERVE	64
 #define AG71XX_RX_PKT_SIZE	\
-	(AG71XX_RX_PKT_RESERVE + ETH_HLEN + ETH_FRAME_LEN + ETH_FCS_LEN)
+	(AG71XX_RX_PKT_RESERVE + ETH_FRAME_LEN + ETH_FCS_LEN + VLAN_HLEN)
 
-#define AG71XX_TX_RING_SIZE	64
-#define AG71XX_TX_THRES_STOP	(AG71XX_TX_RING_SIZE - 4)
-#define AG71XX_TX_THRES_WAKEUP	\
-		(AG71XX_TX_RING_SIZE - (AG71XX_TX_RING_SIZE / 4))
+#define AG71XX_TX_RING_SIZE_DEFAULT	64
+#define AG71XX_RX_RING_SIZE_DEFAULT	128
 
-#define AG71XX_RX_RING_SIZE	128
+#define AG71XX_TX_RING_SIZE_MAX		256
+#define AG71XX_RX_RING_SIZE_MAX		256
 
 #ifdef CONFIG_AG71XX_DEBUG
 #define DBG(fmt, args...)	printk(KERN_DEBUG fmt, ## args)
@@ -91,7 +88,7 @@ struct ag71xx_buf {
 	struct sk_buff		*skb;
 	struct ag71xx_desc	*desc;
 	dma_addr_t		dma_addr;
-	u32			pad;
+	unsigned long		timestamp;
 };
 
 struct ag71xx_ring {
@@ -136,8 +133,6 @@ struct ag71xx_napi_stats {
 
 struct ag71xx_debug {
 	struct dentry		*debugfs_dir;
-	struct dentry		*debugfs_int_stats;
-	struct dentry		*debugfs_napi_stats;
 
 	struct ag71xx_int_stats int_stats;
 	struct ag71xx_napi_stats napi_stats;
@@ -153,6 +148,9 @@ struct ag71xx {
 	struct napi_struct	napi;
 	u32			msg_enable;
 
+	struct ag71xx_desc	*stop_desc;
+	dma_addr_t		stop_desc_dma;
+
 	struct ag71xx_ring	rx_ring;
 	struct ag71xx_ring	tx_ring;
 
@@ -165,6 +163,7 @@ struct ag71xx {
 	int			duplex;
 
 	struct work_struct	restart_work;
+	struct delayed_work	link_work;
 	struct timer_list	oom_timer;
 
 #ifdef CONFIG_AG71XX_DEBUG_FS
@@ -236,6 +235,10 @@ static inline int ag71xx_desc_pktlen(struct ag71xx_desc *desc)
 #define AG71XX_REG_RX_STATUS	0x0194
 #define AG71XX_REG_INT_ENABLE	0x0198
 #define AG71XX_REG_INT_STATUS	0x019c
+
+#define AG71XX_REG_FIFO_DEPTH	0x01a8
+#define AG71XX_REG_RX_SM	0x01b0
+#define AG71XX_REG_TX_SM	0x01b4
 
 #define MAC_CFG1_TXE		BIT(0)	/* Tx Enable */
 #define MAC_CFG1_STX		BIT(1)	/* Synchronize Tx Enable */
@@ -351,7 +354,8 @@ static inline void ag71xx_check_reg_offset(struct ag71xx *ag, unsigned reg)
 {
 	switch (reg) {
 	case AG71XX_REG_MAC_CFG1 ... AG71XX_REG_MAC_MFL:
-	case AG71XX_REG_MAC_IFCTL ... AG71XX_REG_INT_STATUS:
+	case AG71XX_REG_MAC_IFCTL ... AG71XX_REG_TX_SM:
+	case AG71XX_REG_MII_CFG:
 		break;
 
 	default:
@@ -502,5 +506,13 @@ void ag71xx_ar7240_start(struct ag71xx *ag);
 void ag71xx_ar7240_stop(struct ag71xx *ag);
 int ag71xx_ar7240_init(struct ag71xx *ag);
 void ag71xx_ar7240_cleanup(struct ag71xx *ag);
+
+int ag71xx_mdio_mii_read(struct ag71xx_mdio *am, int addr, int reg);
+void ag71xx_mdio_mii_write(struct ag71xx_mdio *am, int addr, int reg, u16 val);
+
+u16 ar7240sw_phy_read(struct mii_bus *mii, unsigned phy_addr,
+		      unsigned reg_addr);
+int ar7240sw_phy_write(struct mii_bus *mii, unsigned phy_addr,
+		       unsigned reg_addr, u16 reg_val);
 
 #endif /* _AG71XX_H */

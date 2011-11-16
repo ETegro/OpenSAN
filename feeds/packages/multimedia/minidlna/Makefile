@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2010 OpenWrt.org
+#
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=minidlna
-PKG_VERSION:=1.0.18
+PKG_VERSION:=1.0.22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION)_src.tar.gz
 PKG_SOURCE_URL:=@SF/minidlna
-PKG_MD5SUM:=8681b100242f0a2fef93cab7cdef061e
-PKG_BUILD_DIR:=$(BUILD_DIR)/minidlna
+PKG_MD5SUM:=3de2f6b54f43bb998dfad3c8fa75cef3
 
 PKG_BUILD_PARALLEL:=0
 
@@ -38,6 +37,10 @@ endef
 define Package/minidlna/description
   MiniDLNA (aka ReadyDLNA) is server software with the aim of
   being fully compliant with DLNA/UPnP-AV clients.
+endef
+
+define Package/minidlna/conffiles
+/etc/minidlna.conf
 endef
 
 define Package/minidlna/install

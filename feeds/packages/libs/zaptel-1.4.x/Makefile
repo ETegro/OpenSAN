@@ -31,20 +31,35 @@ endef
 
 define KernelPackage/zaptel14
   $(call KernelPackage/zaptel14/Default)
-  FILES:=$(PKG_BUILD_DIR)/kernel/zaptel.$(LINUX_KMOD_SUFFIX) \
-  	$(PKG_BUILD_DIR)/kernel/ztdummy.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,70,zaptel ztdummy)
+  TITLE:=Zaptel (kernel module)
+  FILES:=$(PKG_BUILD_DIR)/kernel/zaptel.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,70,zaptel)
 endef
 
 define KernelPackage/zaptel14/description
- This package contains the Zaptel core module and ztdummy driver.
+ This package contains the Zaptel core module.  No longer includes ztdummy
+ because it is not needed in all cases (and is in fact broken on x86).
+endef
+
+
+define KernelPackage/zaptel14-dummy
+  $(call KernelPackage/zaptel14/Default)
+  TITLE:=Zaptel Dummy (timer; kernel module)
+  DEPENDS += +kmod-zaptel14 @TARGET_x86:@BROKEN
+  FILES:=$(PKG_BUILD_DIR)/kernel/ztdummy.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,71,ztdummy)
+endef
+
+define KernelPackage/zaptel14/description
+ This package contains the Zaptel ztdummy driver.  Broken on x86 due to lack
+ of RTC on some hardware.
 endef
 
 define KernelPackage/zaptel14-wcusb
   $(call KernelPackage/zaptel14/Default)
   DEPENDS += +kmod-zaptel14
   FILES:=$(PKG_BUILD_DIR)/kernel/wcusb.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,71,wcusb)
+  AUTOLOAD:=$(call AutoLoad,72,wcusb)
 endef
 
 define KernelPackage/zaptel14-wcusb/description
@@ -55,7 +70,7 @@ define KernelPackage/zaptel14-wctdm
   $(call KernelPackage/zaptel14/Default)
   DEPENDS += +kmod-zaptel14
   FILES:=$(PKG_BUILD_DIR)/kernel/wctdm.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,71,wctdm)
+  AUTOLOAD:=$(call AutoLoad,72,wctdm)
 endef
 
 define KernelPackage/zaptel14-wctdm/description
@@ -67,7 +82,7 @@ define Package/zaptel14-util
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE+= utils
-  DEPENDS += +kmod-zaptel14
+  DEPENDS += +kmod-zaptel14 +zaptel14-libtonezone +libnewt
 endef
 
 define Package/zaptel14-util/description
@@ -85,6 +100,14 @@ endef
 define Package/zaptel14-libtonezone/description
  This package contains the libraries for accessing zaptel/dummy drivers.
 endef
+
+CONFIGURE_VARS += \
+	LDFLAGS="$$$$LDFLAGS -Wl,-rpath-link $(STAGING_DIR)/usr/lib"
+
+CONFIGURE_ARGS += \
+	--with-newt="$(STAGING_DIR)/usr" \
+	--without-curses \
+	--without-ncurses 
 
 MAKE_FLAGS:= \
 	ARCH="$(LINUX_KARCH)" \
@@ -106,7 +129,7 @@ define Build/Compile/user
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	        ARCH="$(LINUX_KARCH)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install-libs install-include zttest
+		install-libs install-include zttest ztcfg zttool ztdiag fxotune ztmonitor ztscan ztspeed fxstest
 endef
 
 define Build/Compile
@@ -124,6 +147,16 @@ endef
 define Package/zaptel14-util/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/zttest $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ztcfg $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/zttool $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ztdiag $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/fxotune $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/fxstest $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ztmonitor $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ztscan $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ztspeed $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/zaptel
+	$(INSTALL_DATA) ./files/10-create-device-node $(1)/etc/hotplug.d/zaptel/
 endef
 
 define Package/zaptel14-libtonezone/install
@@ -132,6 +165,7 @@ define Package/zaptel14-libtonezone/install
 endef
 
 $(eval $(call KernelPackage,zaptel14))
+$(eval $(call KernelPackage,zaptel14-dummy))
 $(eval $(call KernelPackage,zaptel14-wcusb))
 $(eval $(call KernelPackage,zaptel14-wctdm))
 $(eval $(call BuildPackage,zaptel14-util))

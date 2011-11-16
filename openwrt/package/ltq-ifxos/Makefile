@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=lib_ifxos
-PKG_VERSION:=1.5.12
+PKG_VERSION:=1.5.14
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_SOURCE_URL:=http://mirror2.openwrt.org/sources
-PKG_MD5SUM:=ba775356bdd5e1b73b3e11a152710ed6
+PKG_MD5SUM:=bc107f9d8ff6bed4c2760a2817bbb029
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,11 +39,13 @@ define Build/Configure
 	$(call Build/Configure/Default)
 endef
 
-define Build/InstallDev
+ifdef CONFIG_TARGET_lantiq
+  define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include/ifxos}
 	$(CP) $(PKG_BUILD_DIR)/src/include/* $(1)/usr/include/ifxos
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/src/libifxos.a $(1)/usr/lib/libifxos.a
-endef
+  endef
+endif
 
 $(eval $(call KernelPackage,ltq-ifxos))

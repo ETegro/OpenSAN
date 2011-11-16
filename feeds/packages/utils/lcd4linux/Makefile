@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=1143
+PKG_REV:=1159
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
@@ -62,6 +62,7 @@ define Package/lcd4linux
   TITLE:=LCD display utility
   URL:=http://lcd4linux.bulix.org/
   MENU:=1
+  MAINTAINER:=Jonathan McCrohan <jmccrohan@gmail.com>
 endef
 
 define Package/lcd4linux/config
@@ -104,6 +105,7 @@ LCD4LINUX_DRIVERS:= \
 	MatrixOrbital \
 	MatrixOrbitalGX \
 	MilfordInstruments \
+	Newhaven \
 	Noritake \
 	NULL \
 	Pertelian \

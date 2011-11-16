@@ -38,7 +38,8 @@
 #define UBNT_M_GPIO_LED_L4	7
 #define UBNT_M_GPIO_BTN_RESET	12
 
-#define UBNT_BUTTONS_POLL_INTERVAL	20
+#define UBNT_KEYS_POLL_INTERVAL		20	/* msecs */
+#define UBNT_KEYS_DEBOUNCE_INTERVAL	(3 * UBNT_KEYS_POLL_INTERVAL)
 
 static struct gpio_led ubnt_rs_leds_gpio[] __initdata = {
 	{
@@ -100,23 +101,23 @@ static struct gpio_led ubnt_m_leds_gpio[] __initdata = {
 	}
 };
 
-static struct gpio_button ubnt_gpio_buttons[] __initdata = {
+static struct gpio_keys_button ubnt_gpio_keys[] __initdata = {
 	{
 		.desc		= "sw4",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.threshold	= 3,
+		.debounce_interval = UBNT_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= UBNT_RS_GPIO_SW4,
 		.active_low	= 1,
 	}
 };
 
-static struct gpio_button ubnt_m_gpio_buttons[] __initdata = {
+static struct gpio_keys_button ubnt_m_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.threshold	= 3,
+		.debounce_interval = UBNT_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= UBNT_M_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}
@@ -126,9 +127,9 @@ static void __init ubnt_generic_setup(void)
 {
 	ar71xx_add_device_m25p80(NULL);
 
-	ar71xx_add_device_gpio_buttons(-1, UBNT_BUTTONS_POLL_INTERVAL,
-					ARRAY_SIZE(ubnt_gpio_buttons),
-					ubnt_gpio_buttons);
+	ar71xx_register_gpio_keys_polled(-1, UBNT_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(ubnt_gpio_keys),
+					 ubnt_gpio_keys);
 
 	pb42_pci_init();
 }
@@ -138,14 +139,14 @@ static void __init ubnt_generic_setup(void)
  * Do not increase Secondary MAC address by 1 but do workaround
  * with 'Locally Administrated' bit.
  */
-static void ubnt_init_secondary_mac(unsigned char *mac_base)
+static void __init ubnt_init_secondary_mac(unsigned char *mac_base)
 {
 	ar71xx_init_mac(ar71xx_eth1_data.mac_addr, mac_base, 0);
 	ar71xx_eth1_data.mac_addr[0] |= 0x02;
 }
 
-#define UBNT_RS_WAN_PHYMASK	(1 << 20)
-#define UBNT_RS_LAN_PHYMASK	((1 << 16) | (1 << 17) | (1 << 18) | (1 << 19))
+#define UBNT_RS_WAN_PHYMASK	BIT(20)
+#define UBNT_RS_LAN_PHYMASK	(BIT(16) | BIT(17) | BIT(18) | BIT(19))
 
 static void __init ubnt_rs_setup(void)
 {
@@ -174,8 +175,8 @@ static void __init ubnt_rs_setup(void)
 MIPS_MACHINE(AR71XX_MACH_UBNT_RS, "UBNT-RS", "Ubiquiti RouterStation",
 	     ubnt_rs_setup);
 
-#define UBNT_RSPRO_WAN_PHYMASK	(1 << 4)
-#define UBNT_RSPRO_LAN_PHYMASK	((1 << 0) | (1 << 1) | (1 << 2) | (1 << 3))
+#define UBNT_RSPRO_WAN_PHYMASK	BIT(4)
+#define UBNT_RSPRO_LAN_PHYMASK	(BIT(0) | BIT(1) | BIT(2) | BIT(3))
 
 static void __init ubnt_rspro_setup(void)
 {
@@ -213,7 +214,7 @@ static void __init ubnt_lsx_setup(void)
 
 MIPS_MACHINE(AR71XX_MACH_UBNT_LSX, "UBNT-LSX", "Ubiquiti LSX", ubnt_lsx_setup);
 
-#define UBNT_LSSR71_PHY_MASK	(1 << 1)
+#define UBNT_LSSR71_PHY_MASK	BIT(1)
 
 static void __init ubnt_lssr71_setup(void)
 {
@@ -234,6 +235,8 @@ static void __init ubnt_lssr71_setup(void)
 MIPS_MACHINE(AR71XX_MACH_UBNT_LSSR71, "UBNT-LS-SR71", "Ubiquiti LS-SR71",
 	     ubnt_lssr71_setup);
 
+#define UBNT_M_WAN_PHYMASK	BIT(4)
+
 static void __init ubnt_m_setup(void)
 {
 	u8 *mac1 = (u8 *) KSEG1ADDR(0x1fff0000);
@@ -242,16 +245,14 @@ static void __init ubnt_m_setup(void)
 
 	ar71xx_add_device_m25p80(NULL);
 
-	ar71xx_add_device_mdio(~0);
+	ar71xx_add_device_mdio(~UBNT_M_WAN_PHYMASK);
 
 	ar71xx_init_mac(ar71xx_eth0_data.mac_addr, mac1, 0);
 	ar71xx_init_mac(ar71xx_eth1_data.mac_addr, mac2, 0);
-	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
+	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;
 	ar71xx_eth0_data.speed = SPEED_100;
 	ar71xx_eth0_data.duplex = DUPLEX_FULL;
-	ar71xx_eth0_data.fifo_cfg1 = 0x0010ffff;
-	ar71xx_eth0_data.fifo_cfg2 = 0x015500aa;
-	ar71xx_eth0_data.fifo_cfg3 = 0x01f00140;
+	ar71xx_eth0_data.phy_mask = UBNT_M_WAN_PHYMASK;
 
 	ar71xx_add_device_eth(0);
 
@@ -260,9 +261,9 @@ static void __init ubnt_m_setup(void)
 	ar71xx_add_device_leds_gpio(-1, ARRAY_SIZE(ubnt_m_leds_gpio),
 					ubnt_m_leds_gpio);
 
-	ar71xx_add_device_gpio_buttons(-1, UBNT_BUTTONS_POLL_INTERVAL,
-					ARRAY_SIZE(ubnt_m_gpio_buttons),
-					ubnt_m_gpio_buttons);
+	ar71xx_register_gpio_keys_polled(-1, UBNT_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(ubnt_m_gpio_keys),
+					 ubnt_m_gpio_keys);
 }
 
 static void __init ubnt_rocket_m_setup(void)
@@ -286,9 +287,6 @@ static void __init ubnt_nano_m_setup(void)
 	ar71xx_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;
 	ar71xx_eth1_data.speed = SPEED_1000;
 	ar71xx_eth1_data.duplex = DUPLEX_FULL;
-	ar71xx_eth1_data.fifo_cfg1 = 0x0010ffff;
-	ar71xx_eth1_data.fifo_cfg2 = 0x015500aa;
-	ar71xx_eth1_data.fifo_cfg3 = 0x01f00140;
 
 	ar71xx_add_device_eth(1);
 }
@@ -315,12 +313,13 @@ static void __init ubnt_unifi_setup(void)
 
 	ar71xx_add_device_m25p80(NULL);
 
-	ar71xx_add_device_mdio(~0);
+	ar71xx_add_device_mdio(~UBNT_M_WAN_PHYMASK);
 
 	ar71xx_init_mac(ar71xx_eth0_data.mac_addr, mac, 0);
-	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
+	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;
 	ar71xx_eth0_data.speed = SPEED_100;
 	ar71xx_eth0_data.duplex = DUPLEX_FULL;
+	ar71xx_eth0_data.phy_mask = UBNT_M_WAN_PHYMASK;
 
 	ar71xx_add_device_eth(0);
 

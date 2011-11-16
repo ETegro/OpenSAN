@@ -1,3 +1,18 @@
+config X86_ETHERBOOT_IMAGES
+	bool "Build Etherboot image"
+	depends TARGET_x86 && TARGET_x86_thincan_DBE61
+	default y
+	help
+	  Builds network bootable image for ThinCan DBE61 (Etherboot BIOS)
+
+config X86_ETHERBOOT_BOOTOPTS
+	string "Extra kernel boot options"
+	depends X86_ETHERBOOT_IMAGES
+	default "ip=dhcp nbdport=2000 " if TARGET_ROOTFS_SQUASHFS
+	default "ip=dhcp root=/dev/nfs nfsroot=192.168.0.1:/srv/dbe61"
+	help
+	  Kernel arguments to pass to the kernel eg. NFS root location etc.
+
 config X86_GRUB_IMAGES
 	bool "Build GRUB images (Linux x86 or x86_64 host only)"
 	depends TARGET_x86 && !TARGET_x86_olpc
@@ -21,6 +36,7 @@ config X86_GRUB_BAUDRATE
 	int "Serial port baud rate"
 	depends X86_GRUB_IMAGES
 	default 19200 if TARGET_x86_generic_Soekris45xx || TARGET_x86_generic_Soekris48xx || TARGET_x86_net5501
+	default 38400 if TARGET_x86_alix2
 	default 115200 if TARGET_x86_geos
 	default 38400
 
@@ -34,14 +50,14 @@ config X86_GRUB_BOOTOPTS
 config X86_VDI_IMAGES
 	bool "Build VirtualBox image files (VDI)"
 	depends X86_GRUB_IMAGES
-	depends TARGET_x86_generic
+	depends TARGET_x86
 	depends TARGET_ROOTFS_EXT4FS
 	select PACKAGE_kmod-pcnet32
 
 config X86_VMDK_IMAGES
 	bool "Build VMware image files (VMDK)"
 	depends X86_GRUB_IMAGES
-	depends TARGET_x86_generic
+	depends TARGET_x86
 	depends TARGET_ROOTFS_EXT4FS
 	select PACKAGE_kmod-e1000
 
@@ -55,6 +71,7 @@ config OLPC_BOOTSCRIPT_IMAGES
 config TARGET_IMAGES_PAD
 	bool "Pad images to filesystem size (for JFFS2)"
 	depends OLPC_BOOTSCRIPT_IMAGES || X86_GRUB_IMAGES
+	default y
 
 config TARGET_KERNEL_PARTSIZE
 	int "Kernel partition size (in MB)"

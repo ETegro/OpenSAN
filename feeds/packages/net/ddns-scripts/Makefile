@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ddns-scripts
 PKG_VERSION:=1.0.0
-PKG_RELEASE:=13
+PKG_RELEASE:=16
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -11,6 +11,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ddns-scripts
 	SECTION:=net
 	CATEGORY:=Network
+        SUBMENU:=IP Addresses and Names
 	TITLE:=Dynamic DNS Scripts
 	PKGARCH:=all
 endef

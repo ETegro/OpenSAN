@@ -19,7 +19,7 @@ TARGET_LDFLAGS+= \
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -luClibc++ -lpthread -lgcc"
+	LIBS="-nodefaultlibs -luClibc++ -lpthread $(LIBGCC_S)"
 
 define Package/gnuplot
   SECTION:=utils
@@ -39,7 +39,8 @@ CONFIGURE_ARGS += \
 	--disable-mouse \
 	--without-tutorial \
 	--without-row-help \
-	--without-lisp-files
+	--without-lisp-files \
+	--disable-wxwidgets
 
 define Package/gnuplot/install
 	$(INSTALL_DIR) $(1)/usr/bin

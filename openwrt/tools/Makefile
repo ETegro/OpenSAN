@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,14 +11,14 @@ curdir:=tools
 # subdirectories to descend into
 tools-y :=
 ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN)$(CONFIG_GCC_LLVM),)
-tools-y += gmp mpfr
-tools-$(CONFIG_GCC_VERSION_4_5) += mpc libelf
+tools-y += gmp mpfr mpc libelf
 endif
 tools-y += m4 libtool autoconf automake flex bison pkg-config sed mklibs
 tools-y += sstrip ipkg-utils genext2fs e2fsprogs mtd-utils mkimage
-tools-y += firmware-utils patch-cmdline quilt yaffs2 flock
-tools-y += mm-macros xorg-macros missing-macros xz cmake
+tools-y += firmware-utils patch-cmdline quilt yaffs2 flock padjffs2
+tools-y += mm-macros xorg-macros xfce-macros missing-macros xz cmake
 tools-$(CONFIG_TARGET_orion_generic) += wrt350nv2-builder upslug2
+tools-$(CONFIG_powerpc) += upx
 tools-$(CONFIG_TARGET_x86) += qemu
 ifneq ($(CONFIG_TARGET_ar71xx),)
 tools-y += lzma-old squashfs 
@@ -38,7 +38,7 @@ $(curdir)/bison/compile := $(curdir)/flex/install
 $(curdir)/pkg-config/compile := $(curdir)/sed/install
 $(curdir)/libtool/compile := $(curdir)/sed/install
 $(curdir)/squashfs/compile := $(curdir)/lzma-old/install
-$(curdir)/squashfs4/compile := $(curdir)/lzma/install
+$(curdir)/squashfs4/compile := $(curdir)/xz/install
 $(curdir)/quilt/compile := $(curdir)/sed/install $(curdir)/autoconf/install
 $(curdir)/dtc/compile := $(curdir)/bison/install
 $(curdir)/autoconf/compile := $(curdir)/m4/install $(curdir)/libtool/install
@@ -54,6 +54,7 @@ $(curdir)/qemu/compile := $(curdir)/e2fsprogs/install
 $(curdir)/upslug2/compile := $(curdir)/automake/install
 $(curdir)/mm-macros/compile := $(curdir)/automake/install
 $(curdir)/xorg-macros/compile := $(curdir)/automake/install
+$(curdir)/xfce-macros/compile := $(curdir)/automake/install
 $(curdir)/missing-macros/compile := $(curdir)/automake/install
 $(curdir)/e2fsprogs/compile := $(curdir)/automake/install
 $(curdir)/libelf/compile := $(curdir)/automake/install
@@ -64,7 +65,7 @@ $(curdir)/builddirs-default := $(tools-y)
 ifndef DUMP_TARGET_DB
 define PrepareStaging
 	@for dir in $(1); do ( \
-		set -x; \
+		$(if $(QUIET),,set -x;) \
 		mkdir -p "$$dir"; \
 		cd "$$dir"; \
 		mkdir -p bin lib include stamp; \
@@ -79,8 +80,9 @@ $(STAGING_DIR)/.prepared: $(TMP_DIR)/.build
 
 $(STAGING_DIR_HOST)/.prepared: $(TMP_DIR)/.build
 	$(call PrepareStaging,$(STAGING_DIR_HOST))
-	mkdir -p $(BUILD_DIR_HOST)/stamp
+	mkdir -p $(BUILD_DIR_HOST)/stamp $(STAGING_DIR_HOST)/include/sys
 	$(INSTALL_DATA) $(TOPDIR)/tools/include/*.h $(STAGING_DIR_HOST)/include/
+	$(INSTALL_DATA) $(TOPDIR)/tools/include/sys/*.h $(STAGING_DIR_HOST)/include/sys/
 	touch $@
 
 

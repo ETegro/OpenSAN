@@ -12,10 +12,11 @@ PKG_VERSION:=$(call qstrip,$(CONFIG_UCLIBC_VERSION))
 ifeq ($(PKG_VERSION),0.9.32)
   PKG_SOURCE_URL:=git://git.busybox.net/uClibc
   PKG_SOURCE_PROTO:=git
-  PKG_SOURCE_VERSION:=9112a2398ec58b32cd1a1c6feae195bd8f9a46a2
+  PKG_SOURCE_VERSION:=9152c4d67c763fde5712e2d181d92c0d7e1e2ab9
   PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
   PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
-  LIBC_SO_VERSION:=$(PKG_VERSION)-rc2-git
+  PKG_MIRROR_MD5SUM:=723dfa4f1f766cbd675d2c9a8238abb0
+  LIBC_SO_VERSION:=$(PKG_VERSION).1-git
 else
   PKG_SOURCE_URL:=http://www.uclibc.org/downloads
   PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -59,7 +60,9 @@ endef
 GEN_CONFIG=$(SCRIPT_DIR)/kconfig.pl -n \
 	$(if $(wildcard $(CONFIG_DIR)/common),'+' $(CONFIG_DIR)/common) \
 	$(if $(CONFIG_UCLIBC_ENABLE_DEBUG),$(if $(wildcard $(CONFIG_DIR)/debug),'+' $(CONFIG_DIR)/debug)) \
-	$(CONFIG_DIR)/$(ARCH)$(if $(wildcard $(CONFIG_DIR)/$(ARCH).$(BOARD)),.$(BOARD))
+	$(CONFIG_DIR)/$(ARCH)$(strip \
+		$(if $(wildcard $(CONFIG_DIR)/$(ARCH).$(BOARD)),.$(BOARD), \
+			$(if $(CONFIG_HAS_SPE_FPU),$(if $(wildcard $(CONFIG_DIR)/$(ARCH).e500),.e500))))
 
 define Host/Prepare
 	$(call Host/Prepare/Default)
@@ -74,8 +77,6 @@ define Host/Prepare
 	$(SED) 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"$(BUILD_DIR_TOOLCHAIN)/linux-dev/include\",g' \
 		-e 's,^.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=$(if $(CONFIG_SOFT_FLOAT),n,y),g' \
 		-e 's,^.*UCLIBC_HAS_SOFT_FLOAT.*,UCLIBC_HAS_SOFT_FLOAT=$(if $(CONFIG_SOFT_FLOAT),y,n),g' \
-		-e 's,^.*CONFIG_ARM_EABI.*,CONFIG_ARM_EABI=$(if $(CONFIG_EABI_SUPPORT),y,n),g' \
-		-e 's,^.*CONFIG_ARM_OABI.*,CONFIG_ARM_OABI=$(if $(CONFIG_EABI_SUPPORT),n,y),g' \
 		-e 's,^.*UCLIBC_HAS_SHADOW.*,UCLIBC_HAS_SHADOW=$(if $(CONFIG_SHADOW_PASSWORDS),y,n),g' \
 		$(HOST_BUILD_DIR)/.config
 	$(MAKE) -C $(HOST_BUILD_DIR) oldconfig KBUILD_HAVE_NLS= HOSTCFLAGS="-DKBUILD_NO_NLS"

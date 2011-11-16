@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk18
-PKG_VERSION:=1.8.2.3
+PKG_VERSION:=1.8.7.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=e394b63dd71c07497620dc12883e0b80
+PKG_SOURCE_URL:=http://downloads.asterisk.org/pub/telephony/asterisk/releases/
+PKG_MD5SUM:=a732a608ce60fd523646be618e9da616
 
 PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/asterisk18/Default
-  SUBMENU:=asterisk18 (Complete Open Source PBX), v1.8.x
+  SUBMENU:=Telephony
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.asterisk.org/
@@ -37,7 +37,8 @@ endef
 
 define Package/asterisk18
 $(call Package/asterisk18/Default)
-  TITLE:=Complete open source PBX
+  TITLE:=Complete open source PBX, v1.8x
+  MENU:=1
   DEPENDS:= +libopenssl +libncurses +libpopt +libpthread +zlib @!TARGET_avr32
 endef
 
@@ -48,7 +49,7 @@ endef
 define Package/asterisk18-sounds
 $(call Package/asterisk18/Default)
   TITLE:=Sound files
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-sounds/description
@@ -60,7 +61,7 @@ endef
 define Package/asterisk18-voicemail
 $(call Package/asterisk18/Default)
   TITLE:=Voicemail support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-voicemail/description
@@ -71,7 +72,7 @@ endef
 define Package/asterisk18-app-meetme
 $(call Package/asterisk18/Default)
   TITLE:=conferencing support
-  DEPENDS:= +asterisk18 +dahdi-tools-libtonezone +kmod-dahdi-linux
+  DEPENDS:= asterisk18 +dahdi-tools-libtonezone +kmod-dahdi-linux
 endef
 
 define Package/asterisk18-app-meetme/description
@@ -83,7 +84,7 @@ endef
 define Package/asterisk18-chan-iax2
 $(call Package/asterisk18/Default)
   TITLE:=IAX support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18 +asterisk18-res-crypto
 endef
 
 define Package/asterisk18-chan-iax2/description
@@ -95,7 +96,7 @@ endef
 define Package/asterisk18-cdr
 $(call Package/asterisk18/Default)
   TITLE:=CDR support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-cdr/description
@@ -107,7 +108,7 @@ endef
 define Package/asterisk18-res-musiconhold
 $(call Package/asterisk18/Default)
   TITLE:=MOH support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-res-musiconhold/description
@@ -119,7 +120,7 @@ endef
 define Package/asterisk18-chan-gtalk
 $(call Package/asterisk18/Default)
   TITLE:=GTalk support
-  DEPENDS:= +asterisk18 +libiksemel
+  DEPENDS:= asterisk18 +libiksemel
 endef
 
 define Package/asterisk18-chan-gtalk/description
@@ -131,7 +132,7 @@ endef
 define Package/asterisk18-chan-mobile
 $(call Package/asterisk18/Default)
   TITLE:=Mobile channel support
-  DEPENDS:= +asterisk18 +bluez-libs
+  DEPENDS:= asterisk18 +bluez-libs
 endef
 
 define Package/asterisk18-chan-mobile/description
@@ -142,7 +143,7 @@ endef
 define Package/asterisk18-chan-mgcp
 $(call Package/asterisk18/Default)
   TITLE:=MGCP channel support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-chan-mgcp/description
@@ -150,10 +151,21 @@ $(call Package/asterisk18/Default/description)
  This package provides the channel chan_mgcp support to Asterisk.
 endef
 
+define Package/asterisk18-chan-skinny
+$(call Package/asterisk18/Default)
+  TITLE:=Skinny channel support
+  DEPENDS:= asterisk18
+endef
+
+define Package/asterisk18-chan-skinny/description
+$(call Package/asterisk18/Default/description)
+ This package provides the channel chan_skinny support to Asterisk.
+endef
+
 define Package/asterisk18-curl
 $(call Package/asterisk18/Default)
   TITLE:=CURL support
-  DEPENDS:= +asterisk18 +libcurl
+  DEPENDS:= asterisk18 +libcurl
 endef
 
 define Package/asterisk18-curl/description
@@ -161,11 +173,11 @@ $(call Package/asterisk18/Default/description)
  This package provides CURL
  support to Asterisk.
 endef
- 
+
 define Package/asterisk18-mysql
 $(call Package/asterisk18/Default)
   TITLE:=MySQL support
-  DEPENDS:= +asterisk18 +libmysqlclient
+  DEPENDS:= asterisk18 +PACKAGE_asterisk18-mysql:libmysqlclient
 endef
 
 define Package/asterisk18-mysql/description
@@ -173,7 +185,7 @@ $(call Package/asterisk18/Default/description)
  This package provides MySQL
  support to Asterisk.
 endef
- 
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-app-meetme),)
   CONFIGURE_ARGS+= \
 	--with-dahdi="$(STAGING_DIR)/usr"
@@ -247,13 +259,13 @@ CONFIGURE_ARGS+= \
 	--without-vorbis \
 	--without-vpb \
 	--with-z="$(STAGING_DIR)/usr" \
+	--with-sounds-cache="$(DL_DIR)" \
 	--disable-xmldoc
 
 EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
 EXTRA_LDFLAGS+= $(TARGET_LDFLAGS)
 
 define Build/Configure
-	-rm $(PKG_BUILD_DIR)/menuselect.makeopts
 	$(call Build/Configure/Default,,$(SITE_VARS))
 endef
 
@@ -266,12 +278,14 @@ define Build/Compile
 	ASTLDFLAGS="$(EXTRA_LDFLAGS)" \
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		ASTVARLIBDIR="/usr/lib/asterisk" \
+		ASTDATADIR="/usr/lib/asterisk" \
+		ASTKEYDIR="/usr/lib/asterisk" \
+		ASTDBDIR="/usr/lib/asterisk" \
 		NOISY_BUILD="1" \
 		DEBUG="" \
 		OPTIMIZE="" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install samples
-	$(SED) 's|/var/lib/asterisk|/usr/lib/asterisk|g' $(PKG_INSTALL_DIR)/etc/asterisk/musiconhold.conf
 endef
 
 define Build/InstallDev
@@ -321,7 +335,7 @@ endef
 
 define Package/asterisk18-sounds/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds/
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/asterisk/sounds/en/* $(1)/usr/lib/asterisk/sounds/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/* $(1)/usr/lib/asterisk/sounds/
 	rm -f $(1)/usr/lib/asterisk/sounds/vm-*
 	rm -f $(1)/usr/lib/asterisk/sounds/conf-*
 endef
@@ -337,8 +351,9 @@ define Package/asterisk18-voicemail/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/*voicemail.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_adsi.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_smdi.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds/
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/asterisk/sounds/en/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
 define Package/asterisk18-app-meetme/conffiles
@@ -352,7 +367,7 @@ define Package/asterisk18-app-meetme/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/app_meetme.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_dahdi.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds/
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/asterisk/sounds/en/conf-*.gsm $(1)/usr/lib/asterisk/sounds/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/conf-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
 define Package/asterisk18-chan-iax2/conffiles
@@ -431,6 +446,17 @@ define Package/asterisk18-chan-mgcp/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_mgcp.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk18-chan-skinny/conffiles
+/etc/asterisk/skinny.conf
+endef
+
+define Package/asterisk18-chan-skinny/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/skinny.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_skinny.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Package/asterisk18-curl/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/func_curl.so $(1)/usr/lib/asterisk/modules/
@@ -459,7 +485,7 @@ define Buildasterisk18ModuleTemplate
   define Package/asterisk18-$(subst _,-,$(1))
   $$(call Package/asterisk18/Default)
     TITLE:=$(2) support
-    DEPENDS:= +asterisk18
+    DEPENDS:= asterisk18 $(4)
   endef
 
   define Package/asterisk18-$(subst _,-,$(1))/description
@@ -485,6 +511,7 @@ $(eval $(call BuildPackage,asterisk18-res-musiconhold))
 $(eval $(call BuildPackage,asterisk18-chan-gtalk))
 $(eval $(call BuildPackage,asterisk18-chan-mobile))
 $(eval $(call BuildPackage,asterisk18-chan-mgcp))
+$(eval $(call BuildPackage,asterisk18-chan-skinny))
 $(eval $(call BuildPackage,asterisk18-curl))
 $(eval $(call BuildPackage,asterisk18-mysql))
 $(eval $(call Buildasterisk18ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))
@@ -497,17 +524,16 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_readexten,Extension to variable,
 $(eval $(call Buildasterisk18ModuleTemplate,app_read,Variable read,a trivial application to read a variable))
 $(eval $(call Buildasterisk18ModuleTemplate,app_sayunixtime,Say Unix time,an application to say Unix time))
 $(eval $(call Buildasterisk18ModuleTemplate,app_sms,SMS,SMS support (ETSI ES 201 912 protocol 1)))
-$(eval $(call Buildasterisk18ModuleTemplate,app_stack,Stack applications, stack applications Gosub Return etc.))
+$(eval $(call Buildasterisk18ModuleTemplate,app_stack,Stack applications, stack applications Gosub Return etc., +asterisk18-res-agi))
 $(eval $(call Buildasterisk18ModuleTemplate,app_system,System exec,support for executing system commands))
 $(eval $(call Buildasterisk18ModuleTemplate,app_talkdetect,File playback with audio detect,for file playback with audio detect))
 $(eval $(call Buildasterisk18ModuleTemplate,app_waituntil,Sleep,support sleeping until the given epoch))
 $(eval $(call Buildasterisk18ModuleTemplate,app_while,While loop,a while loop implementation))
 $(eval $(call Buildasterisk18ModuleTemplate,chan_agent,Agents proxy channel, an implementation of agents proxy channel))
 $(eval $(call Buildasterisk18ModuleTemplate,chan_local,Local proxy channel, an implementation of local proxy channel))
-$(eval $(call Buildasterisk18ModuleTemplate,codec_alaw,Signed linear to alaw translation,translation between signed linear and alaw codecs)) 
-$(eval $(call Buildasterisk18ModuleTemplate,codec_ulaw,Signed linear to ulaw translation,translation between signed linear and ulaw codecs))
+$(eval $(call Buildasterisk18ModuleTemplate,codec_alaw,Signed linear to alaw translation,translation between signed linear and alaw codecs))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_a_mu,Alaw to ulaw translation,translation between alaw and ulaw codecs))
-$(eval $(call Buildasterisk18ModuleTemplate,codec_g722,G.722,a high bit rate 48/56/64Kbps ITU standard codec)) 
+$(eval $(call Buildasterisk18ModuleTemplate,codec_g722,G.722,a high bit rate 48/56/64Kbps ITU standard codec))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_g726,Signed linear to G.726 translation,translation between signed linear and ITU G.726-32kbps codecs))
 $(eval $(call Buildasterisk18ModuleTemplate,format_g726,G.726,support for headerless G.726 16/24/32/40kbps data format))
 $(eval $(call Buildasterisk18ModuleTemplate,format_g729,G.729,support for raw headerless G729 data))
@@ -523,10 +549,16 @@ $(eval $(call Buildasterisk18ModuleTemplate,pbx_ael,Asterisk Extension Logic,sup
 $(eval $(call Buildasterisk18ModuleTemplate,res_ael_share,Shareable AEL code,support for shareable AEL code mainly between internal and external modules))
 $(eval $(call Buildasterisk18ModuleTemplate,pbx_spool,Call Spool,outgoing call spool support))
 $(eval $(call Buildasterisk18ModuleTemplate,res_agi,Asterisk Gateway Interface,support for the Asterisk Gateway Interface extension))
+$(eval $(call Buildasterisk18ModuleTemplate,res_crypto,Provide Crypto,Cryptographic Signature capability))
 $(eval $(call Buildasterisk18ModuleTemplate,app_alarmreceiver,Alarm receiver,Central Station Alarm receiver for Ademco Contact ID))
 $(eval $(call Buildasterisk18ModuleTemplate,app_setcallerid,Set callerid,support for setting callerid))
 $(eval $(call Buildasterisk18ModuleTemplate,app_verbose,Verbose logging,Verbose logging application))
 $(eval $(call Buildasterisk18ModuleTemplate,func_channel,Channel info,Channel info dialplan function))
-$(eval $(call Buildasterisk18ModuleTemplate,func_blacklist,Blacklist on callerid,looking up the callerid number, and see if it is blacklisted))
+$(eval $(call Buildasterisk18ModuleTemplate,func_blacklist,Blacklist on callerid,looking up the callerid number and see if it is blacklisted))
 $(eval $(call Buildasterisk18ModuleTemplate,app_originate,Originate a call,originating an outbound call and connecting it to a specified extension or application))
 $(eval $(call Buildasterisk18ModuleTemplate,func_uri,URI encoding and decoding,Encodes and decodes URI-safe strings))
+$(eval $(call Buildasterisk18ModuleTemplate,app_disa,Direct Inward System Access,Direct Inward System Access))
+$(eval $(call Buildasterisk18ModuleTemplate,app_senddtmf,Send DTMF digits,Sends arbitrary DTMF digits))
+$(eval $(call Buildasterisk18ModuleTemplate,func_cut,CUT function,CUT function))
+$(eval $(call Buildasterisk18ModuleTemplate,res_clioriginate,Calls via CLI,Originate calls via the CLI))
+$(eval $(call Buildasterisk18ModuleTemplate,app_mixmonitor,Record a call and mix the audio,record a call and mix the audio during the recording))

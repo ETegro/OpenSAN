@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.1.29
+PKG_VERSION:=0.2.2.33
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.torproject.org/dist
-PKG_MD5SUM:=1cd4feea84f2b066717b500d090bcf65
+PKG_SOURCE_URL:=https://www.torproject.org/dist \
+	https://archive.torproject.org/tor-package-archive
+PKG_MD5SUM:=ea99aba49694bb982d2fccc57a70d58e
 
 PKG_INSTALL:=1
 
@@ -22,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tor/Default
   SECTION:=net
   CATEGORY:=Network
-  URL:=http://www.torproject.org/
+  URL:=https://www.torproject.org/
 endef
 
 define Package/tor/Default/description
@@ -36,7 +37,7 @@ endef
 define Package/tor
 $(call Package/tor/Default)
   TITLE:=An anonymous Internet communication system
-  DEPENDS:=+libevent +libopenssl +libpthread
+  DEPENDS:=+libevent2 +libopenssl +libpthread +librt
 endef
 
 define Package/tor-geoip
@@ -87,13 +88,14 @@ endef
 CONFIGURE_ARGS += \
 	--with-libevent-dir="$(STAGING_DIR)/usr" \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
+	--disable-asciidoc
 
 CONFIGURE_VARS += \
-	CROSS_COMPILE="yes" \
+	CROSS_COMPILE="yes"
 
 # pass CFLAGS again to override -O2 set by configure
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)" \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Package/tor/install
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -106,7 +108,7 @@ endef
 
 define Package/tor-geoip/install
 	$(INSTALL_DIR) $(1)/usr/share/tor
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/tor/geoip $(1)/usr/share/tor
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/tor/geoip $(1)/usr/share/tor/
 endef
 
 $(eval $(call BuildPackage,tor))

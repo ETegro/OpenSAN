@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcmciautils
-PKG_VERSION:=015
-PKG_RELEASE:=2
+PKG_VERSION:=018
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/linux/utils/kernel/pcmcia
-PKG_MD5SUM:=9e12435c8b6cf7bf59894e90e480b4aa
+PKG_MD5SUM:=5d85669b3440baa4532363da6caaf1b4
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pcmciautils
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+sysfsutils @!LINUX_2_4 @PCMCIA_SUPPORT
+  DEPENDS:=+libsysfs @!LINUX_2_4 @PCMCIA_SUPPORT
   TITLE:=PCMCIA Utilities
   URL:=http://www.kernel.org/pub/linux/utils/kernel/pcmcia/pcmcia.html
 endef

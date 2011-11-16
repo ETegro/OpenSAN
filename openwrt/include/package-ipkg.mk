@@ -16,6 +16,7 @@ OPKG:= \
 	--force-depends \
 	--force-overwrite \
 	--force-postinstall \
+	--force-maintainer \
 	--add-dest root:/ \
 	--add-arch all:100 \
 	--add-arch $(if $(ARCH_PACKAGES),$(ARCH_PACKAGES),$(BOARD)):200
@@ -27,8 +28,10 @@ IPKG_BUILD:= \
 IPKG_STATE_DIR:=$(TARGET_DIR)/usr/lib/opkg
 
 define BuildIPKGVariable
+ifdef Package/$(1)/$(2)
   $(call shexport,Package/$(1)/$(2))
-  $(1)_COMMANDS += $(SH_FUNC) var2file "$(call shvar,Package/$(1)/$(2))" $(2);
+  $(1)_COMMANDS += var2file "$(call shvar,Package/$(1)/$(2))" $(2);
+endif
 endef
 
 PARENL :=(
@@ -110,7 +113,7 @@ ifeq ($(DUMP),)
 		echo -n "Description: "; $(SH_FUNC) getvar $(call shvar,Package/$(1)/description) | sed -e 's,^[[:space:]]*, ,g'; \
  	) > $$(IDIR_$(1))/CONTROL/control
 	chmod 644 $$(IDIR_$(1))/CONTROL/control
-	(cd $$(IDIR_$(1))/CONTROL; \
+	$(SH_FUNC) (cd $$(IDIR_$(1))/CONTROL; \
 		$($(1)_COMMANDS) \
 	)
 
@@ -120,7 +123,7 @@ ifeq ($(DUMP),)
 			for x in $$(KEEP_$(1)); do \
 				[ -f "$$(IDIR_$(1))/$$$$x" ] || keepfiles="$$$${keepfiles:+$$$$keepfiles }$$$$x"; \
 			done; \
-			[ -z "$keepfiles" ] || { \
+			[ -z "$$$$keepfiles" ] || { \
 				mkdir -p $$(IDIR_$(1))/lib/upgrade/keep.d; \
 				for x in $$$$keepfiles; do echo $$$$x >> $$(IDIR_$(1))/lib/upgrade/keep.d/$(1); done; \
 			}; \

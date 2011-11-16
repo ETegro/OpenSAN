@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=perl
 PKG_VERSION:=5.10.0
-PKG_RELEASE:=5
+PKG_RELEASE:=7
 PKG_MD5SUM:=d2c39b002ebfd2c3c5dba589365c5a71
 
 PKG_SOURCE_URL:=ftp://ftp.cpan.org/pub/CPAN/src/5.0 \
@@ -22,12 +22,18 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/perl/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
+ifneq ($(CONFIG_USE_EGLIBC)$(CONFIG_USE_GLIBC),)
+EXTRA_LIBS:=bsd
+EXTRA_LIBDIRS:=$(STAGING_DIR)/lib
+endif
+
 define Package/perl/Default
   SUBMENU:=Perl
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=The Perl intepreter
   URL:=http://www.perl.com/
+  DEPENDS:=+USE_EGLIBC:libbsd +USE_GLIBC:libbsd
 endef
 
 define Package/microperl
@@ -73,7 +79,6 @@ include perlmod.mk
 
 define Package/perl
 $(call Package/perl/Default)
-  MAINTAINER:=Peter Colberg <peter@petercolberg.org>
 endef
 
 define Package/perl/description
@@ -87,7 +92,7 @@ define Build/perl/Configure
 	@echo "===> Stage 1: Configure host perl"
 	@echo
 	mkdir -p $(PKG_BUILD_DIR)/host-perl
-	(cd $(PKG_BUILD_DIR)/host-perl && sh ../Configure -der -Dmksymlinks -Uusedl)
+	(cd $(PKG_BUILD_DIR)/host-perl && sh ../Configure -der -Dmksymlinks -Uusedl -Dotherlibdirs=$(PERL_LIB))
 
 	@echo
 	@echo "===> Stage 2: Build host perl binary with static extensions"
@@ -107,6 +112,8 @@ define Build/perl/Configure
 		-e 's!%%LDFLAGS%%!-rdynamic $(TARGET_LDFLAGS)!g' \
 		-e 's!%%LIBDIRS%%!$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib!g' \
 		-e 's!%%INCDIRS%%!$(STAGING_DIR)/include $(STAGING_DIR)/usr/include!g' \
+		-e 's!%%EXTRA_PERLLIBS%%!$(EXTRA_LIBS:%=-l%)!g' \
+		-e 's!%%EXTRA_PERLLIBDIRS%%!$(EXTRA_LIBDIRS:%=-L%)!g' \
 		files/config.sh-$(patsubst i386,i486,$(ARCH)).in \
 		> $(PKG_BUILD_DIR)/config.sh
 	(cd $(PKG_BUILD_DIR) && ./Configure -S)

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,8 +16,12 @@ define Profile/n810-base
 	kmod-fs-vfat kmod-fs-msdos \
 	kmod-input-evdev \
 	kmod-leds-gpio \
-	kmod-usb-tahvo kmod-usb-eth-gadget kmod-usb-net kmod-usb-net-cdc-ether \
-	kmod-n810bm maemo-kexec calvaria
+	kmod-usb-tahvo kmod-usb-eth-gadget \
+	kmod-usb-net kmod-usb-net-cdc-ether kmod-usb-net-pegasus kmod-usb-net-rndis \
+	kmod-usb-storage kmod-usb-hid \
+	kmod-bluetooth kmod-bluetooth-hci-h4p bluez-utils bluez-hcidump \
+	kmod-n810bm maemo-kexec calvaria \
+	schedtool
 endef
 
 define Profile/n810-base/Description

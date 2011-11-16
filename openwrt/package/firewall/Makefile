@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=firewall
 
 PKG_VERSION:=2
-PKG_RELEASE:=21
+PKG_RELEASE:=41
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,6 +51,8 @@ define Package/firewall/install
 	$(INSTALL_DATA) ./files/reflection.hotplug $(1)/etc/hotplug.d/firewall/10-nat-reflection
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/firewall.user $(1)/etc
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) ./files/firewall.upgrade $(1)/lib/upgrade/keep.d/firewall
 endef
 
 $(eval $(call BuildPackage,firewall))

@@ -22,7 +22,9 @@
 #include "dev-leds-gpio.h"
 #include "dev-m25p80.h"
 
-#define EAP7660D_BUTTONS_POLL_INTERVAL	20
+#define EAP7660D_KEYS_POLL_INTERVAL	20	/* msecs */
+#define EAP7660D_KEYS_DEBOUNCE_INTERVAL	(3 * EAP7660D_KEYS_POLL_INTERVAL)
+
 #define EAP7660D_GPIO_DS4		7
 #define EAP7660D_GPIO_DS5		2
 #define EAP7660D_GPIO_DS7		0
@@ -44,6 +46,7 @@ static char eap7660d_wmac1_mac[6];
 static u16 eap7660d_wmac0_eeprom[ATH5K_PLAT_EEP_MAX_WORDS];
 static u16 eap7660d_wmac1_eeprom[ATH5K_PLAT_EEP_MAX_WORDS];
 
+#ifdef CONFIG_PCI
 static struct ar71xx_pci_irq eap7660d_pci_irqs[] __initdata = {
 	{
 		.slot   = 0,
@@ -101,6 +104,12 @@ void __init eap7660d_pci_init(u8 *cal_data0, u8 *mac_addr0,
 	ar71xx_pci_plat_dev_init = eap7660d_pci_plat_dev_init;
 	ar71xx_pci_init(ARRAY_SIZE(eap7660d_pci_irqs), eap7660d_pci_irqs);
 }
+#else
+static inline void eap7660d_pci_init(u8 *cal_data0, u8 *mac_addr0,
+				     u8 *cal_data1, u8 *mac_addr1)
+{
+}
+#endif /* CONFIG_PCI */
 
 static struct gpio_led eap7660d_leds_gpio[] __initdata = {
 	{
@@ -125,12 +134,12 @@ static struct gpio_led eap7660d_leds_gpio[] __initdata = {
 	}
 };
 
-static struct gpio_button eap7660d_gpio_buttons[] __initdata = {
+static struct gpio_keys_button eap7660d_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.threshold	= 3,
+		.debounce_interval = EAP7660D_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= EAP7660D_GPIO_SW1,
 		.active_low	= 1,
 	},
@@ -138,7 +147,7 @@ static struct gpio_button eap7660d_gpio_buttons[] __initdata = {
 		.desc		= "wps",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
-		.threshold	= 3,
+		.debounce_interval = EAP7660D_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= EAP7660D_GPIO_SW3,
 		.active_low	= 1,
 	}
@@ -158,9 +167,9 @@ static void __init eap7660d_setup(void)
 	ar71xx_add_device_m25p80(NULL);
 	ar71xx_add_device_leds_gpio(-1, ARRAY_SIZE(eap7660d_leds_gpio),
 					eap7660d_leds_gpio);
-	ar71xx_add_device_gpio_buttons(-1, EAP7660D_BUTTONS_POLL_INTERVAL,
-					ARRAY_SIZE(eap7660d_gpio_buttons),
-					eap7660d_gpio_buttons);
+	ar71xx_register_gpio_keys_polled(-1, EAP7660D_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(eap7660d_gpio_keys),
+					 eap7660d_gpio_keys);
 	eap7660d_pci_init(boardconfig + EAP7660D_WMAC0_CALDATA_OFFSET,
 			boardconfig + EAP7660D_WMAC0_MAC_OFFSET,
 			boardconfig + EAP7660D_WMAC1_CALDATA_OFFSET,

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=2.21
-PKG_RELEASE:=2
+PKG_VERSION:=2.42
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=65a00e3423834121c274717bde2b4dd9
+PKG_MD5SUM:=2ade0818d465779bd956b8b72ea56b02
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -32,7 +32,7 @@ endef
 
 define Package/transmission-daemon
   $(call Package/transmission/template)
-  DEPENDS:=+libcurl +libopenssl +libpthread +libevent2
+  DEPENDS:=+libcurl +libopenssl +libpthread +libevent2 +librt
   MENU:=1
 endef
 
@@ -75,7 +75,7 @@ define Package/transmission-daemon/conffiles
 endef
 
 CONFIGURE_VARS += \
-	LIBEVENT_LIBS="$(STAGING_DIR)/usr/lib/libevent.so"
+	LIBEVENT_LIBS="$(STAGING_DIR)/usr/lib/libevent-2.0.so.5"
 
 CONFIGURE_ARGS += \
 	--enable-daemon \

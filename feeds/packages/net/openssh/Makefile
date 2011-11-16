@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2008 OpenWrt.org
+# Copyright (C) 2006,2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=5.8p1
+PKG_VERSION:=5.9p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://openbsd.wiretapped.net/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://ftp.belnet.be/packages/openbsd/OpenSSH/portable/ \
 		ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
-PKG_MD5SUM:=86f5e1c23b4c4845f23b9b7b493fb53d
+PKG_MD5SUM:=afe17eee7e98d3b8550cc349834a85d0
 
 PKG_BUILD_DEPENDS:=libopenssl
 
@@ -31,6 +31,17 @@ define Package/openssh/Default
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
 endef
+
+define Package/openssh-moduli
+  $(call Package/openssh/Default)
+  DEPENDS+= +openssh-server
+  TITLE+= moduli file
+endef
+
+define Package/openssh-moduli/description
+OpenSSH server moduli file.
+endef
+
 
 define Package/openssh-client
   $(call Package/openssh/Default)
@@ -133,6 +144,11 @@ define Build/Compile
 		all install
 endef
 
+define Package/openssh-moduli/install
+	$(INSTALL_DIR) $(1)/etc/ssh
+	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/moduli $(1)/etc/ssh/
+endef
+
 define Package/openssh-client/install
 	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
@@ -178,11 +194,6 @@ if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
 	echo "adding user $$name to /etc/passwd"
 	echo "$${name}:x:$${id}:$${id}:$${name}:/var/empty/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
 fi
-
-grep -q '^ssh[[:space:]]*22/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-if [ $$? -ne 0 ]; then
-echo "ssh           22/tcp" >>$${IPKG_INSTROOT}/etc/services
-fi
 endef
 
 define Package/openssh-sftp-client/install
@@ -198,6 +209,7 @@ define Package/openssh-sftp-server/install
 endef
 
 $(eval $(call BuildPackage,openssh-client))
+$(eval $(call BuildPackage,openssh-moduli))
 $(eval $(call BuildPackage,openssh-client-utils))
 $(eval $(call BuildPackage,openssh-keygen))
 $(eval $(call BuildPackage,openssh-server))

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba3
 PKG_VERSION:=3.0.24
-PKG_RELEASE:=7
+PKG_RELEASE:=8
 PKG_MD5SUM:=89273f67a6d8067cbbecefaa13747153
 
 PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/samba/old-versions/
@@ -22,6 +22,7 @@ TARGET_CFLAGS+=$(if $(CONFIG_SAMBA3_DEBUG),-DSAMBA_DEBUG)
 define Package/samba3
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   TITLE:=samba3
   DEPENDS:=+libpthread
   URL:=http://www.samba.org/

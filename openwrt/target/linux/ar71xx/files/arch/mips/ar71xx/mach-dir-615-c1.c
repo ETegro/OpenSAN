@@ -17,7 +17,7 @@
 #include "machtype.h"
 #include "devices.h"
 #include "dev-m25p80.h"
-#include "dev-ar913x-wmac.h"
+#include "dev-ar9xxx-wmac.h"
 #include "dev-gpio-buttons.h"
 #include "dev-leds-gpio.h"
 #include "nvram.h"
@@ -35,7 +35,8 @@
 #define DIR_615C1_GPIO_BTN_WPS		12
 #define DIR_615C1_GPIO_BTN_RESET	21
 
-#define DIR_615C1_BUTTONS_POLL_INTERVAL	20
+#define DIR_615C1_KEYS_POLL_INTERVAL	20	/* msecs */
+#define DIR_615C1_KEYS_DEBOUNCE_INTERVAL (3 * DIR_615C1_KEYS_POLL_INTERVAL)
 
 #define DIR_615C1_CONFIG_ADDR		0x1f020000
 #define DIR_615C1_CONFIG_SIZE		0x10000
@@ -54,11 +55,11 @@ static struct mtd_partition dir_615c1_partitions[] = {
 	}, {
 		.name		= "kernel",
 		.offset		= 0x030000,
-		.size		= 0x0d0000,
+		.size		= 0x0e0000,
 	}, {
 		.name		= "rootfs",
-		.offset		= 0x100000,
-		.size		= 0x2f0000,
+		.offset		= 0x110000,
+		.size		= 0x2e0000,
 	}, {
 		.name		= "art",
 		.offset		= 0x3f0000,
@@ -112,18 +113,18 @@ static struct gpio_led dir_615c1_leds_gpio[] __initdata = {
 
 };
 
-static struct gpio_button dir_615c1_gpio_buttons[] __initdata = {
+static struct gpio_keys_button dir_615c1_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.threshold	= 3,
+		.debounce_interval = DIR_615C1_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= DIR_615C1_GPIO_BTN_RESET,
 	}, {
 		.desc		= "wps",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
-		.threshold	= 3,
+		.debounce_interval = DIR_615C1_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= DIR_615C1_GPIO_BTN_WPS,
 	}
 };
@@ -163,11 +164,11 @@ static void __init dir_615c1_setup(void)
 	ar71xx_add_device_leds_gpio(-1, ARRAY_SIZE(dir_615c1_leds_gpio),
 					dir_615c1_leds_gpio);
 
-	ar71xx_add_device_gpio_buttons(-1, DIR_615C1_BUTTONS_POLL_INTERVAL,
-					ARRAY_SIZE(dir_615c1_gpio_buttons),
-					dir_615c1_gpio_buttons);
+	ar71xx_register_gpio_keys_polled(-1, DIR_615C1_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(dir_615c1_gpio_keys),
+					 dir_615c1_gpio_keys);
 
-	ar913x_add_device_wmac(eeprom, wlan_mac);
+	ar9xxx_add_device_wmac(eeprom, wlan_mac);
 }
 
 MIPS_MACHINE(AR71XX_MACH_DIR_615_C1, "DIR-615-C1", "D-Link DIR-615 rev. C1",
