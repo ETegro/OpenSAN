@@ -271,21 +271,17 @@ setup_interface_static() {
 
 	local iftype
 	config_get iftype "$config" type
+	local var_subst
 	[ "$iftype" == "bonding" ] && {
-		local bond_name
-		config_get bond_name "$config" bondname
-		[ -z "$ipaddr" ] || $DEBUG ifconfig "$bond_name" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
-		[ -z "$ip6addr" ] || $DEBUG ifconfig "$bond_name" add "$ip6addr"
-		[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$bond_name"
-		[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$bond_name"
-		[ -z "$dns" ] || add_dns "$bond_name" $dns
+		config_get var_subst "$config" bondname
 	} || {
-		[ -z "$ipaddr" ] || $DEBUG ifconfig "$iface" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
-		[ -z "$ip6addr" ] || $DEBUG ifconfig "$iface" add "$ip6addr"
-		[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$iface"
-		[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$iface"
-		[ -z "$dns" ] || add_dns "$config" $dns
+		var_subst="$iface"
 	}
+	[ -z "$ipaddr" ] || $DEBUG ifconfig "$var_subst" "$ipaddr" netmask "$netmask" broadcast "${bcast:-+}"
+	[ -z "$ip6addr" ] || $DEBUG ifconfig "$var_subst" add "$ip6addr"
+	[ -z "$gateway" ] || $DEBUG route add default gw "$gateway" ${metric:+metric $metric} dev "$var_subst"
+	[ -z "$ip6gw" ] || $DEBUG route -A inet6 add default gw "$ip6gw" ${metric:+metric $metric} dev "$var_subst"
+	[ -z "$dns" ] || add_dns "$var_subst" $dns
 
 	config_get type "$config" TYPE
 	[ "$type" = "alias" ] && return 0
