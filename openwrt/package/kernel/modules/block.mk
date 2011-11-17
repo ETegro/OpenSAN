@@ -473,7 +473,7 @@ $(eval $(call KernelPackage,ide-it821x))
 
 define KernelPackage/cs5535
   TITLE:=NSC/AMD CS5535 chipset support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_BLK_DEV_CS5535
   FILES=$(LINUX_DIR)/drivers/ide/cs5535.ko
   AUTOLOAD:=$(call AutoLoad,30,cs5535,1)
@@ -489,7 +489,7 @@ $(eval $(call KernelPackage,cs5535))
 
 define KernelPackage/cs5536
   TITLE:=AMD CS5536 chipset support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_BLK_DEV_CS5536
   FILES=$(LINUX_DIR)/drivers/ide/cs5536.ko
   AUTOLOAD:=$(call AutoLoad,30,cs5536,1)
@@ -505,7 +505,7 @@ $(eval $(call KernelPackage,cs5536))
 
 define KernelPackage/pata-cs5535
   TITLE:=CS5535 PATA support
-  DEPENDS:=@TARGET_x86 @PCI_SUPPORT
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 @PCI_SUPPORT
   KCONFIG:=CONFIG_PATA_CS5535
   FILES=$(LINUX_DIR)/drivers/ata/pata_cs5535.ko
   AUTOLOAD:=$(call AutoLoad,30,pata_cs5535,1)
@@ -521,7 +521,7 @@ $(eval $(call KernelPackage,pata-cs5535))
 
 define KernelPackage/pata-cs5536
   TITLE:=CS5536 PATA support
-  DEPENDS:=@TARGET_x86 @PCI_SUPPORT
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 @PCI_SUPPORT
   KCONFIG:=CONFIG_PATA_CS5536
   FILES=$(LINUX_DIR)/drivers/ata/pata_cs5536.ko
   AUTOLOAD:=$(call AutoLoad,30,pata_cs5536,1)
@@ -538,7 +538,7 @@ $(eval $(call KernelPackage,pata-cs5536))
 define KernelPackage/libsas
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=SAS Domain Transport Attributes
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_SCSI_SAS_LIBSAS \
 	CONFIG_SCSI_SAS_ATTRS \
 	CONFIG_SCSI_SAS_ATA=y \
@@ -577,7 +577,7 @@ $(eval $(call KernelPackage,loop))
 define KernelPackage/mvsas
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=Marvell 88SE6440 SAS/SATA driver
-  DEPENDS:=@TARGET_x86 +kmod-libsas
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 +kmod-libsas
   KCONFIG:=CONFIG_SCSI_MVSAS
   ifneq ($(CONFIG_LINUX_2_6_30),)
 	FILES:=$(LINUX_DIR)/drivers/scsi/mvsas.ko
@@ -641,7 +641,7 @@ $(eval $(call KernelPackage,scsi-generic))
 define KernelPackage/mptsas
   SUBMENU:=$(BLOCK_MENU)
   TITLE:=Fusion MPT SAS driver
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   FILES:= \
 	$(LINUX_DIR)/drivers/message/fusion/mptbase.ko \
 	$(LINUX_DIR)/drivers/message/fusion/mptsas.ko \

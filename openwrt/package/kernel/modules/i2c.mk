@@ -107,7 +107,7 @@ I2C_SCX200_MODULES:=\
 define KernelPackage/i2c-scx200
   $(call i2c_defaults,$(I2C_SCX200_MODULES),59)
   TITLE:=Geode SCx200 I2C using GPIO pins
-  DEPENDS:=@PCI_SUPPORT @TARGET_x86 +kmod-i2c-algo-bit
+  DEPENDS:=@PCI_SUPPORT @TARGET_x86||TARGET_x86_64 +kmod-i2c-algo-bit
   KCONFIG+= \
 	CONFIG_SCx200_I2C_SCL=12 \
 	CONFIG_SCx200_I2C_SDA=13
@@ -126,7 +126,7 @@ I2C_SCX200_ACB_MODULES:=\
 define KernelPackage/i2c-scx200-acb
   $(call i2c_defaults,$(I2C_SCX200_ACB_MODULES),59)
   TITLE:=Geode SCx200 ACCESS.bus support
-  DEPENDS:=@PCI_SUPPORT @TARGET_x86 +kmod-i2c-algo-bit
+  DEPENDS:=@PCI_SUPPORT @TARGET_x86||TARGET_x86_64 +kmod-i2c-algo-bit
 endef
 
 define KernelPackage/i2c-scx200-acb/description

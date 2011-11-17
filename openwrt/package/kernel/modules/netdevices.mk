@@ -10,7 +10,7 @@ NETWORK_DEVICES_MENU:=Network Devices
 define KernelPackage/sis190
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=SiS 190 Fast/Gigabit Ethernet support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_SIS190
   FILES:=$(LINUX_DIR)/drivers/net/sis190.ko
   AUTOLOAD:=$(call AutoLoad,50,sis190)
@@ -207,7 +207,7 @@ $(eval $(call KernelPackage,sky2))
 define KernelPackage/via-rhine
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=Via Rhine ethernet support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_VIA_RHINE \
     CONFIG_VIA_RHINE_MMIO=y
   FILES:=$(LINUX_DIR)/drivers/net/via-rhine.ko
@@ -224,7 +224,7 @@ $(eval $(call KernelPackage,via-rhine))
 define KernelPackage/via-velocity
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=VIA Velocity Gigabit Ethernet Adapter kernel support
-  DEPENDS:=@TARGET_ixp4xx||TARGET_mpc83xx||TARGET_x86 +kmod-lib-crc-ccitt
+  DEPENDS:=@TARGET_ixp4xx||TARGET_mpc83xx||TARGET_x86||TARGET_x86_64 +kmod-lib-crc-ccitt
   KCONFIG:=CONFIG_VIA_VELOCITY
   FILES:=$(LINUX_DIR)/drivers/net/via-velocity.ko
   AUTOLOAD:=$(call AutoLoad,50,via-velocity)
@@ -254,7 +254,7 @@ $(eval $(call KernelPackage,ixp4xx-eth))
 define KernelPackage/8139too
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=RealTek RTL-8139 PCI Fast Ethernet Adapter kernel support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_8139TOO \
     CONFIG_8139TOO_PIO=y \
     CONFIG_8139TOO_TUNE_TWISTER=n \
@@ -274,7 +274,7 @@ $(eval $(call KernelPackage,8139too))
 define KernelPackage/8139cp
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=RealTek RTL-8139C+ PCI Fast Ethernet Adapter kernel support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_8139CP
   FILES:=$(LINUX_DIR)/drivers/net/8139cp.ko
   AUTOLOAD:=$(call AutoLoad,50,8139cp)
@@ -308,7 +308,7 @@ $(eval $(call KernelPackage,r8169))
 define KernelPackage/ne2k-pci
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=ne2k-pci Ethernet Adapter kernel support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_NE2K_PCI
   FILES:= \
 	$(LINUX_DIR)/drivers/net/ne2k-pci.ko \
@@ -326,7 +326,7 @@ $(eval $(call KernelPackage,ne2k-pci))
 define KernelPackage/e100
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=Intel(R) PRO/100+ cards kernel support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_E100
   FILES:=$(LINUX_DIR)/drivers/net/e100.ko
   AUTOLOAD:=$(call AutoLoad,50,e100)
@@ -416,7 +416,7 @@ define KernelPackage/b44
   TITLE:=Broadcom 44xx driver
   FILES:=$(LINUX_DIR)/drivers/net/b44.ko
   KCONFIG:=CONFIG_B44
-  DEPENDS:=@TARGET_x86 +kmod-ssb
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 +kmod-ssb
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   AUTOLOAD:=$(call AutoLoad,50,b44)
 endef
@@ -431,7 +431,7 @@ $(eval $(call KernelPackage,b44))
 define KernelPackage/3c59x
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=3Com 3c590/3c900 series (592/595/597) Vortex/Boomerang
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_VORTEX
   FILES:=$(LINUX_DIR)/drivers/net/3c59x.ko
   AUTOLOAD:=$(call AutoLoad,50,3c59x)
@@ -453,7 +453,7 @@ $(eval $(call KernelPackage,3c59x))
 define KernelPackage/pcnet32
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=AMD PCnet32 PCI support
-  DEPENDS:=@(TARGET_x86||TARGET_malta)
+  DEPENDS:=@(TARGET_x86||TARGET_x86_64||TARGET_malta)
   KCONFIG:=CONFIG_PCNET32
   FILES:=$(LINUX_DIR)/drivers/net/pcnet32.ko
   AUTOLOAD:=$(call AutoLoad,50,pcnet32)
