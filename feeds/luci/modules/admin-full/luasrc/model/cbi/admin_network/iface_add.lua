@@ -94,24 +94,24 @@ mifname:depends("_bridge", "1")
 mifname.nobondings = true
 mifname:depends("_bond", "1")
 
-function bondname_filling()
-	-- TODO: remove shell code from Lua one
-	command = "uci show network | awk -F. '/bonding/ {print $2}'"
-	interfaces = string.gmatch( sys.exec( command ), '%w+' )
-
-	local bondnumber = 0
-	for i in interfaces do
-		local interface = string.match( i, "(%w*)" )
-		if interface then
-			local tn = nw:get_network( interface )
-			if tn then
-				local bondname = "bond" .. tostring( bondnumber )
-				tn:set( "bondname", bondname )
-				nw:save( "network" )
-				bondnumber = bondnumber + 1
+function generate_bondname()
+	local bond_interfaces = {}
+	uci:foreach( "network", "interface",
+		function( section )
+			if section[ "type" ] == "bonding" then
+				local bondnumber = #bond_interfaces
+				bond_interfaces[ bondnumber + 1 ] = section[ ".name" ]
+				local nn = nw:get_network( section[ ".name" ] )
+				if nn then
+					local bondname = "bond" .. tostring( bondnumber )
+					nn:set( "bondname", bondname )
+					nw:save( "network" )
+					bondnumber = bondnumber + 1
+				end
 			end
 		end
-	end
+	)
+	return #bond_interfaces
 end
 
 function newnet.write(self, section, value)
@@ -168,10 +168,12 @@ function newnet.write(self, section, value)
 			end
 		end
 
+		local bondname = "bond" .. tostring( generate_bondname() )
+		if bondname then
+			nn:set( "bondname", bondname )
+		end
 		nw:save("network")
 		nw:save("wireless")
-		bondname_filling()
-
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/network", nn:name()))
 	end
 end
