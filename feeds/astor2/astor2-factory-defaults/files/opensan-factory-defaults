@@ -1,0 +1,8 @@
+#!/bin/sh
+lua /usr/share/opensan-factory-defaults/clearing.lua
+rm -fr /etc/config/* /etc/dropbear/authorized_keys
+for key in dropbear_dss_host_key dropbear_rsa_host_key; do
+	cp /dev/null /etc/dropbear/$key
+done
+sed -i 's/^root:.*:\(.\):\(.\):\(.*\):\(.*\):\(.*\)$/root:!:\1:\2:\3:\4:\5/' /etc/passwd
+reboot
