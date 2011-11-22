@@ -3,4 +3,4 @@ config system
 	option timezone	UTC
 
 config rdate
-	option interface	wan
+	option interface	lan
