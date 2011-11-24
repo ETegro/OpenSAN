@@ -38,6 +38,7 @@ DEFAULT_PACKAGES += \
 	astor2-blockdev-parameters \
 	luci-app-astor2-san \
 	astor2-luci-bwc-ipmi-rs230g3 \
+	kmod-crypto-core \
 	sysstat \
 	luafilesystem \
 	xfs-fsck \
