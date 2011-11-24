@@ -313,10 +313,6 @@ $(eval $(call application,astor2-san-monitoring,aStor2 SAN monitoring,\
 	+PACKAGE_luci-app-astor2-san:ethtool \
 	+PACKAGE_luci-app-astor2-san:luafilesystem ))
 
-### Hello World - luci application ###
-$(eval $(call application,helloworld,This is hello world application,\
-	+PACKAGE_luci-app-helloworld:helloworld))
-
 $(eval $(call application,ffwizard,Freifunk configuration wizard,\
 	+luci-mod-freifunk))
 
