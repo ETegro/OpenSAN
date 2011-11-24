@@ -20,29 +20,29 @@ define Package/iscsi-scst-userspace
 	TITLE:=SCST iSCSI target userspace programs
 	URL:=http://scst.sourceforge.net/
 	DEPENDS:=+kmod-iscsi-scst \
-		 +perl \
-                 +perlbase-getopt \
-                 +perlbase-io \
-                 +perlbase-essential \
-                 +perlbase-class \
-                 +perlbase-fcntl \
-                 +perlbase-symbol \
-                 +perlbase-posix \
-                 +perlbase-config \
-                 +perlbase-text \
-                 +perlbase-cwd \
-                 +perlbase-xsloader \
-                 +perlbase-errno \
-                 +perlbase-ipc \
-                 +perlbase-locale \
-                 +perlbase-module \
-                 +perlbase-params \
-                 +perlbase-filehandle \
-                 +perlbase-file \
-                 +perlbase-tie \
-                 +perlbase-selectsaver \
-                 +perlbase-socket \
-                 +perlbase-autoloader
+		+perl \
+		+perlbase-getopt \
+		+perlbase-io \
+		+perlbase-essential \
+		+perlbase-class \
+		+perlbase-fcntl \
+		+perlbase-symbol \
+		+perlbase-posix \
+		+perlbase-config \
+		+perlbase-text \
+		+perlbase-cwd \
+		+perlbase-xsloader \
+		+perlbase-errno \
+		+perlbase-ipc \
+		+perlbase-locale \
+		+perlbase-module \
+		+perlbase-params \
+		+perlbase-filehandle \
+		+perlbase-file \
+		+perlbase-tie \
+		+perlbase-selectsaver \
+		+perlbase-socket \
+		+perlbase-autoloader
 endef
 
 define Build/Compile
