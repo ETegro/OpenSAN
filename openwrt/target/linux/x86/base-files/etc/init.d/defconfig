@@ -6,8 +6,6 @@
 START=05
 
 start() {
-	. /lib/soekris.sh
-
 	local board=astor2
 
 	[ ! -d /etc/defconfig/$board ] && board="net4826"
