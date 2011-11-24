@@ -2,12 +2,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=iscsi-scst-userspace
-PKG_REV:=3672
+PKG_REV:=3837
 PKG_VERSION:=svn$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://scst.svn.sourceforge.net/svnroot/scst/branches/2.0.0.x
+PKG_SOURCE_URL:=https://scst.svn.sourceforge.net/svnroot/scst/branches/2.1.0.x
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
