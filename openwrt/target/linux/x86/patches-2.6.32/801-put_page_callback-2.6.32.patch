@@ -1,5 +1,6 @@
---- a/include/linux/mm_types.h	2009-12-03 06:51:21.000000000 +0300
---- b/include/linux/mm_types.h	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/include/linux/mm_types.h linux-2.6.32.1/include/linux/mm_types.h
+--- linux-2.6.32.1/include/linux/mm_types.h	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/include/linux/mm_types.h	2009-12-16 15:22:16.000000000 +0300
 @@ -106,6 +106,18 @@ struct page {
  	 */
  	void *shadow;
@@ -19,8 +20,9 @@
  };
  
  /*
---- a/include/linux/net.h	2009-12-03 06:51:21.000000000 +0300
---- b/include/linux/net.h	2009-12-16 15:23:08.000000000 +0300
+diff -upkr linux-2.6.32.1/include/linux/net.h linux-2.6.32.1/include/linux/net.h
+--- linux-2.6.32.1/include/linux/net.h	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/include/linux/net.h	2009-12-16 15:23:08.000000000 +0300
 @@ -20,6 +20,7 @@
  
  #include <linux/socket.h>
@@ -74,8 +76,9 @@
 +
  #endif /* __KERNEL__ */
  #endif	/* _LINUX_NET_H */
---- a/net/core/dev.c	2009-12-03 06:51:21.000000000 +0300
---- b/net/core/dev.c	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/core/dev.c linux-2.6.32.1/net/core/dev.c
+--- linux-2.6.32.1/net/core/dev.c	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/core/dev.c	2009-12-16 15:22:16.000000000 +0300
 @@ -2516,7 +2516,7 @@ pull:
  		skb_shinfo(skb)->frags[0].size -= grow;
  
@@ -85,8 +88,9 @@
  			memmove(skb_shinfo(skb)->frags,
  				skb_shinfo(skb)->frags + 1,
  				--skb_shinfo(skb)->nr_frags);
---- a/net/core/skbuff.c	2009-12-03 06:51:21.000000000 +0300
---- b/net/core/skbuff.c	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/core/skbuff.c linux-2.6.32.1/net/core/skbuff.c
+--- linux-2.6.32.1/net/core/skbuff.c	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/core/skbuff.c	2009-12-16 15:22:16.000000000 +0300
 @@ -76,13 +76,13 @@ static struct kmem_cache *skbuff_fclone_
  static void sock_pipe_buf_release(struct pipe_inode_info *pipe,
  				  struct pipe_buffer *buf)
@@ -220,8 +224,9 @@
  			size = frag->size;
  
  			if (pos < offset) {
---- a/net/ipv4/ip_output.c	2009-12-03 06:51:21.000000000 +0300
---- b/net/ipv4/ip_output.c	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/ipv4/ip_output.c linux-2.6.32.1/net/ipv4/ip_output.c
+--- linux-2.6.32.1/net/ipv4/ip_output.c	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/ipv4/ip_output.c	2009-12-16 15:22:16.000000000 +0300
 @@ -1020,7 +1020,7 @@ alloc_new_skb:
  						err = -EMSGSIZE;
  						goto error;
@@ -240,8 +245,9 @@
  			skb_fill_page_desc(skb, i, page, offset, len);
  		} else {
  			err = -EMSGSIZE;
---- a/net/ipv4/Makefile	2009-12-03 06:51:21.000000000 +0300
---- b/net/ipv4/Makefile	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/ipv4/Makefile linux-2.6.32.1/net/ipv4/Makefile
+--- linux-2.6.32.1/net/ipv4/Makefile	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/ipv4/Makefile	2009-12-16 15:22:16.000000000 +0300
 @@ -49,6 +49,7 @@ obj-$(CONFIG_TCP_CONG_LP) += tcp_lp.o
  obj-$(CONFIG_TCP_CONG_YEAH) += tcp_yeah.o
  obj-$(CONFIG_TCP_CONG_ILLINOIS) += tcp_illinois.o
@@ -250,8 +256,9 @@
  
  obj-$(CONFIG_XFRM) += xfrm4_policy.o xfrm4_state.o xfrm4_input.o \
  		      xfrm4_output.o
---- a/net/ipv4/tcp.c	2009-12-03 06:51:21.000000000 +0300
---- b/net/ipv4/tcp.c	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/ipv4/tcp.c linux-2.6.32.1/net/ipv4/tcp.c
+--- linux-2.6.32.1/net/ipv4/tcp.c	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/ipv4/tcp.c	2009-12-16 15:22:16.000000000 +0300
 @@ -799,7 +799,7 @@ new_segment:
  		if (can_coalesce) {
  			skb_shinfo(skb)->frags[i - 1].size += copy;
@@ -282,8 +289,9 @@
  						TCP_PAGE(sk) = page;
  					}
  				}
---- a/net/ipv4/tcp_output.c	2009-12-03 06:51:21.000000000 +0300
---- b/net/ipv4/tcp_output.c	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/ipv4/tcp_output.c linux-2.6.32.1/net/ipv4/tcp_output.c
+--- linux-2.6.32.1/net/ipv4/tcp_output.c	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/ipv4/tcp_output.c	2009-12-16 15:22:16.000000000 +0300
 @@ -909,7 +909,7 @@ static void __pskb_trim_head(struct sk_b
  	k = 0;
  	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
@@ -293,8 +301,9 @@
  			eat -= skb_shinfo(skb)->frags[i].size;
  		} else {
  			skb_shinfo(skb)->frags[k] = skb_shinfo(skb)->frags[i];
---- a/net/ipv4/tcp_zero_copy.c	2009-12-08 17:41:11.000000000 +0300
---- b/net/ipv4/tcp_zero_copy.c	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/ipv4/tcp_zero_copy.c linux-2.6.32.1/net/ipv4/tcp_zero_copy.c
+--- linux-2.6.32.1/net/ipv4/tcp_zero_copy.c	2009-12-08 17:41:11.000000000 +0300
++++ linux-2.6.32.1/net/ipv4/tcp_zero_copy.c	2009-12-16 15:22:16.000000000 +0300
 @@ -0,0 +1,49 @@
 +/*
 + *	Support routines for TCP zero copy transmit
@@ -345,8 +354,9 @@
 +	return res;
 +}
 +EXPORT_SYMBOL(net_set_get_put_page_callbacks);
---- a/net/ipv6/ip6_output.c	2009-12-03 06:51:21.000000000 +0300
---- b/net/ipv6/ip6_output.c	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/ipv6/ip6_output.c linux-2.6.32.1/net/ipv6/ip6_output.c
+--- linux-2.6.32.1/net/ipv6/ip6_output.c	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/ipv6/ip6_output.c	2009-12-16 15:22:16.000000000 +0300
 @@ -1379,7 +1379,7 @@ alloc_new_skb:
  						err = -EMSGSIZE;
  						goto error;
@@ -356,8 +366,9 @@
  					skb_fill_page_desc(skb, i, page, sk->sk_sndmsg_off, 0);
  					frag = &skb_shinfo(skb)->frags[i];
  				}
---- a/net/Kconfig	2009-12-03 06:51:21.000000000 +0300
---- b/net/Kconfig	2009-12-16 15:22:16.000000000 +0300
+diff -upkr linux-2.6.32.1/net/Kconfig linux-2.6.32.1/net/Kconfig
+--- linux-2.6.32.1/net/Kconfig	2009-12-03 06:51:21.000000000 +0300
++++ linux-2.6.32.1/net/Kconfig	2009-12-16 15:22:16.000000000 +0300
 @@ -72,6 +72,18 @@ config INET
  
  	  Short answer: say Y.
