@@ -175,26 +175,6 @@ ifname_single:depends({ type = "", proto = "pppoe"  })
 ifname_single:depends({ type = "", proto = "pppoa"  })
 ifname_single:depends({ type = "", proto = "none"   })
 
-function generate_bondname()
-	local bond_interfaces = {}
-	uci:foreach( "network", "interface",
-		function( uci_section )
-			if uci_section[ "type" ] == "bonding" then
-				local bondnumber = #bond_interfaces
-				bond_interfaces[ bondnumber + 1 ] = uci_section[ ".name" ]
-				local nn = nw:get_network( uci_section[ ".name" ] )
-				if nn then
-					local bondname = "bond" .. tostring( bondnumber )
-					nn:set( "bondname", bondname )
-					nw:save( "network" )
-					bondnumber = bondnumber + 1
-				end
-			end
-		end
-	)
-	return #bond_interfaces
-end
-
 function ifname_single.cfgvalue(self, s)
 	return self.map.uci:get("network", s, "ifname")
 end
@@ -242,7 +222,7 @@ function ifname_single.write(self, s, val)
 						end
 					end
 				end
-				local bondname = "bond" .. tostring( generate_bondname() )
+				local bondname = "bond" .. tostring( nw.generate_bondname() )
 				if bondname then
 					n:set( "bondname", bondname )
 				end
