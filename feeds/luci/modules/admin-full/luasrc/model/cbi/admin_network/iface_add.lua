@@ -153,6 +153,10 @@ function newnet.write(self, section, value)
 					end
 				end
 			end
+			local bondname = "bond" .. tostring( generate_bondname() )
+			if bondname then
+				nn:set( "bondname", bondname )
+			end
 		end
 
 		local iface
@@ -168,10 +172,6 @@ function newnet.write(self, section, value)
 			end
 		end
 
-		local bondname = "bond" .. tostring( generate_bondname() )
-		if bondname then
-			nn:set( "bondname", bondname )
-		end
 		nw:save("network")
 		nw:save("wireless")
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/network", nn:name()))
