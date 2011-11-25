@@ -3,7 +3,6 @@ FEATURES:=pci usb
 DEFAULT_PACKAGES += \
 	kmod-via-velocity \
 	kmod-ata-artop \
-	kmod-ata-nvidia-sata \
 	kmod-ata-piix \
 	kmod-ata-sil \
 	kmod-ata-sil24 \
