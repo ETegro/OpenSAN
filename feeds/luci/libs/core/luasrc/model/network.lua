@@ -239,7 +239,9 @@ function init(cursor)
 		if bond then
 			local bond_mac = sys.exec( "cat /sys/class/net/" .. bond .. "/address" )
 			bonding = {
-				name = bond,
+				name = sys.exec( "uci show network | \
+				                  sed 's/^network." .. bond .. ".bondname\=\([a-zA-Z0-9]*\)/\1/'" ),
+				bondname = bond,
 				ifnames = {},
 				id = string.gsub( bond_mac, "[:]", "" )
 			}
