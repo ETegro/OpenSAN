@@ -40,6 +40,7 @@ DEFAULT_PACKAGES += \
 	astor2-luci-bwc-ipmi-rs230g3 \
 	astor2-factory-defaults \
 	sysstat \
+	apcupsd \
 	sgseraser \
 	luafilesystem \
 	xfs-fsck \
