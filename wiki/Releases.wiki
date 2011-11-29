@@ -11,3 +11,4 @@ Latest release raw images and firmware updates can be
 * [wiki:Release1.4 1.4]
 * [wiki:Release1.4.1 1.4.1]
 * [wiki:Release1.4.2 1.4.2]
+* [wiki:Release1.5 1.5]
