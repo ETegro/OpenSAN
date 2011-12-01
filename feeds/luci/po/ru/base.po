@@ -11,6 +11,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
+msgid "Perform a system shutdown"
+msgstr "Выключить систему"
+
+msgid "Please wait: device is shutting down..."
+msgstr "Пожалуйста подождите: устройство выключается..."
+
 msgid "Bonding"
 msgstr "Связка"
 
