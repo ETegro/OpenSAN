@@ -41,7 +41,7 @@ DEFAULT_PACKAGES += \
 	astor2-factory-defaults \
 	sysstat \
 	apcupsd \
-	sgseraser \
+	sgeraser \
 	luafilesystem \
 	xfs-fsck \
 	xfs-growfs \
