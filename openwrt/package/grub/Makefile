@@ -28,7 +28,7 @@ define Package/grub
   SECTION:=utils
   TITLE:=GRand Unified Bootloader
   URL:=http://www.gnu.org/software/grub/
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
 endef
 
 
