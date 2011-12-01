@@ -84,16 +84,16 @@ endif
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/grub $(1)/usr/lib/
+	$(CP) $(STAGING_DIR_HOST)/lib/grub $(1)/usr/lib/
 endef
 
 define Package/grub/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(STAGING_DIR_HOST)/bin/mbchk $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+	$(CP) $(STAGING_DIR_HOST)/lib/grub $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
+	$(CP) $(STAGING_DIR_HOST)/bin/grub* $(1)/usr/sbin/
 endef
 
 ifeq ($(HOST_ARCH),x86_64)
