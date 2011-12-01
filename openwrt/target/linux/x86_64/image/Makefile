@@ -75,10 +75,10 @@ ifneq ($(CONFIG_X86_GRUB_IMAGES),)
   define Image/Prepare/grub
 	# for the image builder
 	$(CP) \
-		$(STAGING_DIR)/usr/lib/grub/i386-openwrt/stage1 \
-		$(STAGING_DIR)/usr/lib/grub/i386-openwrt/stage2 \
-		$(STAGING_DIR)/usr/lib/grub/i386-openwrt/stage2_eltorito \
-		$(STAGING_DIR)/usr/lib/grub/i386-openwrt/e2fs_stage1_5 \
+		$(STAGING_DIR)/usr/lib/grub/x86_64-pc/stage1 \
+		$(STAGING_DIR)/usr/lib/grub/x86_64-pc/stage2 \
+		$(STAGING_DIR)/usr/lib/grub/x86_64-pc/stage2_eltorito \
+		$(STAGING_DIR)/usr/lib/grub/x86_64-pc/e2fs_stage1_5 \
 		$(KDIR)/
   endef
 
