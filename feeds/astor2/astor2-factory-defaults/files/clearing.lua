@@ -26,6 +26,7 @@ scst = require( "astor2.scst" )
 
 while #scst.AccessPattern.list() > 0 do
 	for _, ap in ipairs( scst.AccessPattern.list() ) do
+		ap:unbind()
 		ap:delete()
 	end
 end
