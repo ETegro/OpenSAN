@@ -107,5 +107,11 @@ $(eval $(call Require,working-gcc-m32, \
 	Please install 32 bit development files. (gcc-multilib on Debian/Ubuntu, gcc.i686, libgcc.i686, and glibc-devel.i686 on CentOS/Fedora/RHEL) \
 ))
 
+define Build/Compile
+endef
+
+define Build/Install
+endef
+
 $(eval $(call HostBuild))
 $(eval $(call BuildPackage,grub))
