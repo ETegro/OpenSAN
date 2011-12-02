@@ -23,9 +23,7 @@ m = SimpleForm("network", translate("Create Interface"))
 
 newnet = m:field(Value, "_netname", translate("Name of the new interface"),
 	translate("The allowed characters are: <code>A-Z</code>, <code>a-z</code>, " ..
-		"<code>0-9</code> and <code>_</code>") ..
-	"<br />" ..
-	translate("For bonding-intefaces use") .. ": bondXX."
+		"<code>0-9</code> and <code>_</code>")
 )
 
 newnet:depends("_attach", "")
@@ -36,8 +34,7 @@ newnet.rmempty = false
 --[[
 netbridge = m:field(Flag, "_bridge", translate("Create a bridge over multiple interfaces"))
 ]]
-net_bond = m:field(Flag, "_bond", translate("Create a bonding from multiple interfaces"),
-	translate("Up to 16 (0..15) interfaces can be created."))
+net_bond = m:field(Flag, "_bond", translate("Create a bonding from multiple interfaces"))
 
 bond_mode = m:field(ListValue, "_bond-mode", translate("Mode"),
 	translate("Default bonding policy is \"balance-rr\"."))
