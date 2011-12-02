@@ -222,7 +222,7 @@ function ifname_single.write(self, s, val)
 						end
 					end
 				end
-				local bondname = "bond" .. tostring( nw.generate_bondname() )
+				local bondname = nw.generate_bondname( s )
 				if bondname then
 					n:set( "bondname", bondname )
 				end

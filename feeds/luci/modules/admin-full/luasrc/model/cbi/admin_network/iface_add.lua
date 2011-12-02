@@ -133,7 +133,8 @@ function newnet.write(self, section, value)
 					end
 				end
 			end
-			local bondname = "bond" .. tostring( nw.generate_bondname() )
+			local section_name = newnet:formvalue( section )
+			local bondname = nw.generate_bondname( section_name )
 			if bondname then
 				nn:set( "bondname", bondname )
 			end
