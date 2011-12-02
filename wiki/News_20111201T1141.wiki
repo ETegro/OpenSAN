@@ -1,0 +1,11 @@
+= Release 1.5.1 =
+We are pleased to announce new OpenSAN's version.
+
+== Release notes ==
+This is minor bugfix release. The only noticeable for a user bugfix is
+real clearing of logical volumes with disks during opensan-factory-defaults
+command's work and when there are active iSCSI sessions.
+
+=== Download ===
+You can download this release following [/download/V1.5.1/ this link].
+Always cryptographically [wiki:Publickey verify images]!
