@@ -66,9 +66,12 @@ HOST_CONFIGURE_ARGS += $(MY_CONFIGURE_ARGS) \
 
 HOST_CONFIGURE_VARS += $(MY_CONFIGURE_VARS)
 
+REPLACEMENT=-R .comment -R .note -R .note.gnu.build-id
+
 define Host/Configure
 	(cd $(HOST_BUILD_DIR); aclocal && autoconf && automake)
 	$(call Host/Configure/Default)
+	for i in 1 2; do sed -i 's/^\(..(OBJCOPY) -O binary\) \(.. ..\)/\1 $(REPLACEMENT) \2/' $(HOST_BUILD_DIR)/stage$$$$i/Makefile; done
 endef
 
 ifeq ($(HOST_OS),Darwin)
