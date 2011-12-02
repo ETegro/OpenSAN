@@ -203,7 +203,14 @@ prepare_interface() {
 		bonding)
 			[ -x /sbin/ifenslave -a -x /sbin/lsmod -a -x /sbin/insmod ] && {
 				local max_bonds=0
-				max_bonds=$(uci show network | grep -c '^network\..*\.type=bonding$')
+				max_bonds=0
+				uci show network | grep -q '^network.*.bondname=bond[0-9]*$' && {
+					max_bonds=$(uci show network |
+					            sed -n "s/network\..*\.bondname=bond\([0-9]\{1,\}\)/\1/p" |
+					            sort -n |
+					            sed -n '$p')
+					max_bonds=$(( $max_bonds + 1 ))
+				}
 				/sbin/lsmod | grep -q 'bonding' || {
 					local miimon=50
 					local kernel_release=$(uname -r)
