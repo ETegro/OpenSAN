@@ -113,7 +113,7 @@ define KernelPackage/hwmon-pc87360
 	$(LINUX_DIR)/drivers/hwmon/hwmon-vid.ko \
 	$(LINUX_DIR)/drivers/hwmon/pc87360.ko
   AUTOLOAD:=$(call AutoLoad,50,hwmon-vid pc87360)
-  $(call AddDepends/hwmon,@TARGET_x86)
+  $(call AddDepends/hwmon,@TARGET_x86||TARGET_x86_64)
 endef
 
 define KernelPackage/hwmon-pc87360/description
@@ -132,7 +132,7 @@ define KernelPackage/hwmon-w83627hf
 	$(LINUX_DIR)/drivers/hwmon/hwmon-vid.ko \
 	$(LINUX_DIR)/drivers/hwmon/w83627hf.ko
   AUTOLOAD:=$(call AutoLoad,50,hwmon-vid w83627hf)
-$(call AddDepends/hwmon,@TARGET_rdc||TARGET_x86)
+$(call AddDepends/hwmon,@TARGET_rdc||TARGET_x86||TARGET_x86_64)
 endef
 
 define KernelPacakge/hwmon-w83627hf/description

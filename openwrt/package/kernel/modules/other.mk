@@ -80,7 +80,7 @@ $(eval $(call KernelPackage,bluetooth-hci-h4p))
 define KernelPackage/cpu-msr
   SUBMENU:=$(OTHER_MENU)
   TITLE:=x86 CPU MSR support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_X86_MSR
   FILES:=$(LINUX_DIR)/arch/x86/kernel/msr.ko
   AUTOLOAD:=$(call AutoLoad,20,msr)
@@ -142,7 +142,7 @@ $(eval $(call KernelPackage,eeprom-at25))
 define KernelPackage/gpio-cs5535
   SUBMENU:=$(OTHER_MENU)
   TITLE:=AMD CS5535/CS5536 GPIO driver
-  DEPENDS:=@TARGET_x86 @LINUX_2_6_30||LINUX_2_6_31||LINUX_2_6_32||LINUX_2_6_35||LINUX_2_6_36||LINUX_2_6_37
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 @LINUX_2_6_30||LINUX_2_6_31||LINUX_2_6_32||LINUX_2_6_35||LINUX_2_6_36||LINUX_2_6_37
   KCONFIG:=CONFIG_CS5535_GPIO
   FILES:=$(LINUX_DIR)/drivers/char/cs5535_gpio.ko
   AUTOLOAD:=$(call AutoLoad,50,cs5535_gpio)
@@ -158,7 +158,7 @@ $(eval $(call KernelPackage,gpio-cs5535))
 define KernelPackage/gpio-cs5535-new
   SUBMENU:=$(OTHER_MENU)
   TITLE:=AMD CS5535/CS5536 GPIO driver with improved sysfs support
-  DEPENDS:=@TARGET_x86 +kmod-cs5535-mfd @!(LINUX_2_6_30||LINUX_2_6_31||LINUX_2_6_32)
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 +kmod-cs5535-mfd @!(LINUX_2_6_30||LINUX_2_6_31||LINUX_2_6_32)
   KCONFIG:=CONFIG_GPIO_CS5535
 ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,3.1.0)),1)
   FILES:=$(LINUX_DIR)/drivers/gpio/gpio-cs5535.ko
@@ -195,7 +195,7 @@ $(eval $(call KernelPackage,gpio-dev))
 define KernelPackage/gpio-nsc
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Natsemi GPIO support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_NSC_GPIO
   FILES:=$(LINUX_DIR)/drivers/char/nsc_gpio.ko
   AUTOLOAD:=$(call AutoLoad,40,nsc_gpio)
@@ -211,7 +211,7 @@ $(eval $(call KernelPackage,gpio-nsc))
 define KernelPackage/gpio-pc8736x
   SUBMENU:=$(OTHER_MENU)
   TITLE:=PC8736x GPIO support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_PC8736x_GPIO
   FILES:=$(LINUX_DIR)/drivers/char/pc8736x_gpio.ko
   AUTOLOAD:=$(call AutoLoad,40,pc8736x_gpio)
@@ -227,7 +227,7 @@ $(eval $(call KernelPackage,gpio-pc8736x))
 define KernelPackage/gpio-scx200
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Natsemi SCX200 GPIO support
-  DEPENDS:=@TARGET_x86 +kmod-gpio-nsc
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 +kmod-gpio-nsc
   KCONFIG:=CONFIG_SCx200_GPIO
   FILES:=$(LINUX_DIR)/drivers/char/scx200_gpio.ko
   AUTOLOAD:=$(call AutoLoad,50,scx200_gpio)
@@ -592,7 +592,7 @@ $(eval $(call KernelPackage,wdt-geode))
 define KernelPackage/cs5535-clockevt
   SUBMENU:=$(OTHER_MENU)
   TITLE:=CS5535/CS5536 high-res timer (MFGPT) events
-  DEPENDS:=@TARGET_x86 +kmod-cs5535-mfgpt
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 +kmod-cs5535-mfgpt
   KCONFIG:=CONFIG_CS5535_CLOCK_EVENT_SRC
   FILES:=$(LINUX_DIR)/drivers/clocksource/cs5535-clockevt.ko
   AUTOLOAD:=$(call AutoLoad,50,cs5535-clockevt)
@@ -608,7 +608,7 @@ $(eval $(call KernelPackage,cs5535-clockevt))
 define KernelPackage/cs5535-mfgpt
   SUBMENU:=$(OTHER_MENU)
   TITLE:=CS5535/6 Multifunction General Purpose Timer
-  DEPENDS:=@TARGET_x86 +kmod-cs5535-mfd
+  DEPENDS:=@TARGET_x86||TARGET_x86_64 +kmod-cs5535-mfd
   KCONFIG:=CONFIG_CS5535_MFGPT
   FILES:=$(LINUX_DIR)/drivers/misc/cs5535-mfgpt.ko
   AUTOLOAD:=$(call AutoLoad,45,cs5535-mfgpt)
@@ -624,7 +624,7 @@ $(eval $(call KernelPackage,cs5535-mfgpt))
 define KernelPackage/cs5535-mfd
   SUBMENU:=$(OTHER_MENU)
   TITLE:=CS5535/6 Multifunction General Purpose Driver
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_MFD_CS5535
   FILES:= \
   	$(LINUX_DIR)/drivers/mfd/mfd-core.ko \
@@ -674,7 +674,7 @@ $(eval $(call KernelPackage,wdt-orion))
 define KernelPackage/wdt-sc520
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Natsemi SC520 Watchdog support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_SC520_WDT
   FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/sc520_wdt.ko
   AUTOLOAD:=$(call AutoLoad,50,sc520_wdt)
@@ -690,7 +690,7 @@ $(eval $(call KernelPackage,wdt-sc520))
 define KernelPackage/wdt-scx200
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Natsemi SCX200 Watchdog support
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_SCx200_WDT
   FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/scx200_wdt.ko
   AUTOLOAD:=$(call AutoLoad,50,scx200_wdt)

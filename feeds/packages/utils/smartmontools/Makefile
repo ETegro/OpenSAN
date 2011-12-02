@@ -82,7 +82,6 @@ define Package/smartd/install
 	$(INSTALL_DATA) ./files/smartd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/smartd.init $(1)/etc/init.d/smartd
->>>>>>> updates
 endef
 
 $(eval $(call BuildPackage,smartmontools))

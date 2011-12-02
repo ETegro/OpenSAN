@@ -269,7 +269,7 @@ sub gen_target_config() {
 	print <<EOF;
 choice
 	prompt "Target System"
-	default TARGET_x86
+	default TARGET_x86_64
 	reset if !DEVEL
 	
 EOF
