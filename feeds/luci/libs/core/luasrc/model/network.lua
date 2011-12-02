@@ -681,24 +681,36 @@ function network.is_bonding(self)
 	return (self:type() == "bonding")
 end
 
-function generate_bondname()
+function generate_bondname( section_name )
 	local bond_interfaces = {}
-	uci_s:foreach( "network", "interface",
-		function( uci_section )
-			if uci_section[ "type" ] == "bonding" then
-				local bondnumber = #bond_interfaces
-				bond_interfaces[ bondnumber + 1 ] = uci_section[ ".name" ]
-				local net = _M:get_network( uci_section[ ".name" ] )
-				if net then
-					local bondname = "bond" .. bondnumber
-					net:set( "bondname", bondname )
-					_M:save( "network" )
-					bondnumber = bondnumber + 1
+	for _,uci_c in pairs{ uci_r, uci_s } do
+		uci_c:foreach( "network", "interface",
+			function( uci_section )
+				if uci_section[ "type" ] == "bonding" then
+					for i,option in pairs( uci_section ) do
+						if type( option ) == 'string' then
+							if i == "bondname" then
+								number = uci_section.bondname:match( "^bond(%d+)$" )
+								bond_interfaces[ tonumber( number ) ] = uci_section[ ".name" ]
+							end
+						end
+					end
 				end
 			end
+		)
+	end
+	local bondnumber = 0
+	for i=0,127 do
+		local name = bond_interfaces[ tonumber( i ) ]
+		if name == section_name then
+			bondnumber = i
+			break
+		elseif not name then
+			bondnumber = i
+			break
 		end
-	)
-	return #bond_interfaces
+	end
+	return "bond" .. bondnumber
 end
 
 function network.is_virtual(self)
