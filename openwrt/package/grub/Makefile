@@ -28,7 +28,7 @@ define Package/grub
   SECTION:=utils
   TITLE:=GRand Unified Bootloader
   URL:=http://www.gnu.org/software/grub/
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@TARGET_x86||TARGET_x86_64
 endef
 
 
@@ -66,9 +66,12 @@ HOST_CONFIGURE_ARGS += $(MY_CONFIGURE_ARGS) \
 
 HOST_CONFIGURE_VARS += $(MY_CONFIGURE_VARS)
 
+REPLACEMENT=-R .comment -R .note -R .note.gnu.build-id
+
 define Host/Configure
 	(cd $(HOST_BUILD_DIR); aclocal && autoconf && automake)
 	$(call Host/Configure/Default)
+	for i in 1 2; do sed -i 's/^\(..(OBJCOPY) -O binary\) \(.. ..\)/\1 $(REPLACEMENT) \2/' $(HOST_BUILD_DIR)/stage$$$$i/Makefile; done
 endef
 
 ifeq ($(HOST_OS),Darwin)
@@ -84,16 +87,16 @@ endif
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/grub $(1)/usr/lib/
+	$(CP) $(STAGING_DIR_HOST)/lib/grub $(1)/usr/lib/
 endef
 
 define Package/grub/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(STAGING_DIR_HOST)/bin/mbchk $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+	$(CP) $(STAGING_DIR_HOST)/lib/grub $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
+	$(CP) $(STAGING_DIR_HOST)/bin/grub* $(1)/usr/sbin/
 endef
 
 ifeq ($(HOST_ARCH),x86_64)
@@ -106,6 +109,12 @@ endif
 $(eval $(call Require,working-gcc-m32, \
 	Please install 32 bit development files. (gcc-multilib on Debian/Ubuntu, gcc.i686, libgcc.i686, and glibc-devel.i686 on CentOS/Fedora/RHEL) \
 ))
+
+define Build/Compile
+endef
+
+define Build/Install
+endef
 
 $(eval $(call HostBuild))
 $(eval $(call BuildPackage,grub))
