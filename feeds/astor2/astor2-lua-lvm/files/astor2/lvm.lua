@@ -223,7 +223,7 @@ function M.VolumeGroup.list( physical_volumes )
 	for _, line in ipairs( common.system_succeed( "lvm vgdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
-		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*([^:]+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*([^:]+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d+:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 
 		extent = tonumber( extent )
 		extent = extent / 1024.0
