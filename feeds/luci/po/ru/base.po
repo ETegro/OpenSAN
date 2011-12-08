@@ -20,14 +20,8 @@ msgstr "Пожалуйста подождите: устройство выклю
 msgid "Bonding"
 msgstr "Связка"
 
-msgid "For bonding-intefaces use"
-msgstr "Для связываемых интерфейсов используйте"
-
 msgid "Create a bonding from multiple interfaces"
 msgstr "Создать связку из нескольких интерфейсов"
-
-msgid "Up to 16 (0..15) interfaces can be created."
-msgstr "Можно создать до 16 (0..15) интерфейсов"
 
 msgid "Default bonding policy is \"balance-rr\"."
 msgstr "Политика связывания по умолчанию \"balance-rr\"."

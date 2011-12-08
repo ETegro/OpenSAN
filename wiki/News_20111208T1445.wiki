@@ -1,0 +1,18 @@
+= Release 1.3.2 =
+We are pleased to announce new OpenSAN's version.
+
+== Release notes ==
+* Bonding's “downdelay”, “updelay”, “miimon”, “mode”
+  options are not necessary required.
+* Maximal number of network bondings is 128, so practically
+  there is not any limit.
+* Bonding interfaces can have any visible user-defined ASCII name
+  (as with all other interfaces).
+
+All users upgrading from 1.3.1 or earlier versions should not worry
+about new bonding-related configuration format. This version is fully
+compatible with it.
+
+=== Download ===
+You can download this release following [/download/V1.3.2/ this link].
+Always cryptographically [wiki:Publickey verify images]!

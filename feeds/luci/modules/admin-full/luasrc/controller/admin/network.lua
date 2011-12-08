@@ -224,7 +224,7 @@ function iface_status()
 			for _, info in ipairs(nixio.getifaddrs()) do
 				local name = info.name:match("[^:]+")
 				if net:is_bonding() then
-					name = info.name:match( iface )
+					dev = net:_get( "bondname" )
 				end
 				if name == dev then
 					if info.family == "packet" then
