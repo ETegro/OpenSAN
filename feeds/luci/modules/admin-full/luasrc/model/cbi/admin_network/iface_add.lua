@@ -94,6 +94,26 @@ mifname:depends("_bridge", "1")
 mifname.nobondings = true
 mifname:depends("_bond", "1")
 
+function bondname_filling()
+	-- TODO: remove shell code from Lua one
+	command = "uci show network | awk -F. '/bonding/ {print $2}'"
+	interfaces = string.gmatch( sys.exec( command ), '%w+' )
+
+	local bondnumber = 0
+	for i in interfaces do
+		local interface = string.match( i, "(%w*)" )
+		if interface then
+			local tn = nw:get_network( interface )
+			if tn then
+				local bondname = "bond" .. tostring( bondnumber )
+				tn:set( "bondname", bondname )
+				nw:save( "network" )
+				bondnumber = bondnumber + 1
+			end
+		end
+	end
+end
+
 function newnet.write(self, section, value)
 	--[[
 	local bridge = netbridge:formvalue(section) == "1"
@@ -102,13 +122,6 @@ function newnet.write(self, section, value)
 	local bond = {
 		use = net_bond:formvalue( section ) == "1" ,
 		type = "bonding",
-		bondname = "bond" .. string.match(
-			sys.exec(
-				"uci show network | \
-				grep -c '^network\..*\.type=bonding$'"
-			),
-			"^(%d+)"
-		),
 		mode = bond_mode:formvalue( section ),
 		miimon = bond_miimon:formvalue( section ),
 		downdelay = bond_downdelay:formvalue( section ),
@@ -157,6 +170,7 @@ function newnet.write(self, section, value)
 
 		nw:save("network")
 		nw:save("wireless")
+		bondname_filling()
 
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/network", nn:name()))
 	end
