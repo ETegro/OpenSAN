@@ -239,7 +239,9 @@ function init(cursor)
 		if bond then
 			local bond_mac = sys.exec( "cat /sys/class/net/" .. bond .. "/address" )
 			bonding = {
-				name = bond,
+				name = sys.exec( "uci show network | \
+				                  sed 's/^network." .. bond .. ".bondname\=\([a-zA-Z0-9]*\)/\1/'" ),
+				bondname = bond,
 				ifnames = {},
 				id = string.gsub( bond_mac, "[:]", "" )
 			}
@@ -677,6 +679,38 @@ end
 
 function network.is_bonding(self)
 	return (self:type() == "bonding")
+end
+
+function generate_bondname( section_name )
+	local bond_interfaces = {}
+	for _,uci_c in pairs{ uci_r, uci_s } do
+		uci_c:foreach( "network", "interface",
+			function( uci_section )
+				if uci_section[ "type" ] == "bonding" then
+					for i,option in pairs( uci_section ) do
+						if type( option ) == 'string' then
+							if i == "bondname" then
+								number = uci_section.bondname:match( "^bond(%d+)$" )
+								bond_interfaces[ tonumber( number ) ] = uci_section[ ".name" ]
+							end
+						end
+					end
+				end
+			end
+		)
+	end
+	local bondnumber = 0
+	for i=0,127 do
+		local name = bond_interfaces[ tonumber( i ) ]
+		if name == section_name then
+			bondnumber = i
+			break
+		elseif not name then
+			bondnumber = i
+			break
+		end
+	end
+	return "bond" .. bondnumber
 end
 
 function network.is_virtual(self)

@@ -17,6 +17,7 @@ local fs = require "nixio.fs"
 local ut = require "luci.util"
 local nw = require "luci.model.network"
 local fw = require "luci.model.firewall"
+local uci = require "luci.model.uci".cursor()
 
 arg[1] = arg[1] or ""
 
@@ -133,21 +134,21 @@ bond_mode:value("balance-alb", "balance-alb")
 bond_miimon = s:taboption("physical", Value, "miimon", translate("MII link monitoring frequency"),
 	translate("ms") .. " (0 - 3000). " .. translate("Default value is") .. " 50.")
 bond_miimon.override_scheme = true
-bond_miimon.rmempty = false
+bond_miimon.default = "50"
 bond_miimon:depends("type", "bonding")
 bond_miimon.datatype = "range(0,3000)"
 
 bond_downdelay = s:taboption("physical", Value, "downdelay", translate("Time to wait before disabling slave-interface after link failure"),
 	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
 bond_downdelay.override_scheme = true
-bond_downdelay.rmempty = false
+bond_downdelay.default = "0"
 bond_downdelay:depends("type", "bonding")
 bond_downdelay.datatype = "range(0,3000)"
 
 bond_updelay = s:taboption("physical", Value, "updelay", translate("Time to wait before enabling slave-interface after link recover"),
 	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
 bond_updelay.override_scheme = true
-bond_updelay.rmempty = false
+bond_updelay.default = "0"
 bond_updelay:depends("type", "bonding")
 bond_updelay.datatype = "range(0,3000)"
 
@@ -179,6 +180,21 @@ function ifname_single.cfgvalue(self, s)
 end
 
 function ifname_single.write(self, s, val)
+	local bond = {
+		use = bn:formvalue( s ),
+		miimon = {
+			default = "50",
+			value = bond_miimon:formvalue( s )
+		},
+		downdelay = {
+			default = "0",
+			value = bond_downdelay:formvalue( s )
+		},
+		updelay = {
+			default = "0",
+			value = bond_updelay:formvalue( s )
+		}
+	}
 	local n = nw:get_network(s)
 	if n then
 		local i
@@ -191,7 +207,25 @@ function ifname_single.write(self, s, val)
 
 			-- if this is not a bridge, only assign first interface
 			if self.option == "ifname_single" then
+				if not bond.use then
+					n:set( "bondname", "" )
+				end
 				break
+			end
+
+			-- if bond-options is empty, then default settings are applied
+			if bond.use then
+				for name, option in pairs( bond ) do
+					if name ~= "use" then
+						if option.value == "" then
+							n:set( name, option.default )
+						end
+					end
+				end
+				local bondname = nw.generate_bondname( s )
+				if bondname then
+					n:set( "bondname", bondname )
+				end
 			end
 		end
 	end
