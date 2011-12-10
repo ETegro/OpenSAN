@@ -207,10 +207,12 @@ function M.VolumeGroup.create( physical_volumes )
 		end
 	end
 
-	common.system_succeed( "lvm vgcreate " ..
-	                       "-s " .. tostring( M.VolumeGroup.PE_DEFAULT_SIZE ) .. " " ..
-	                       name .. " " ..
-	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
+	common.system_succeed(
+		"lvm vgcreate " ..
+		"-s " .. tostring( M.VolumeGroup.PE_DEFAULT_SIZE ) .. " " ..
+		name .. " " ..
+		table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " )
+	)
 end
 
 --- Remove VolumeGroup
@@ -280,12 +282,11 @@ function M.VolumeGroup:logical_volume( name, size )
 	        "no name specified" )
 	assert( size and common.is_non_negative( size ),
 	        "non-positive size specified" )
-	local output = common.system( "lvm lvcreate -n " ..
-	                              name ..
-	                              " -L " ..
-	                              tostring( size ) ..
-	                              " " ..
-	                              self.name )
+	local output = common.system(
+		"lvm lvcreate -n " .. name ..
+		" -L " .. tostring( size ) ..
+		" " .. self.name
+	)
 	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
 		if string.match( line, "Logical volume \".+\" created" ) then
@@ -353,9 +354,11 @@ function M.LogicalVolume:remove()
 	        "no volume group attached to" )
 	assert( self.name,
 	        "unable to get self object" )
-	common.system_succeed( "lvm lvremove -f " ..
-	                       self.volume_group.name .. "/" ..
-	                       self.name )
+	common.system_succeed(
+		"lvm lvremove -f " ..
+		self.volume_group.name .. "/" ..
+		self.name
+	)
 end
 
 --- Rescan all LogicalVolumes on a system
