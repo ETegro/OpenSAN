@@ -53,10 +53,12 @@ function M.system( cmdline )
 	local result = {}
 
 	-- Execute command and retreive return code
-	result.return_code = os.execute( SHELL_PATH .. " "
-	                                 .. script_path
-	                                 .. " >" .. stdout_path
-	                                 .. " 2>" .. stderr_path )
+	result.return_code = os.execute(
+		SHELL_PATH .. " "
+		.. script_path
+		.. " >" .. stdout_path
+		.. " 2>" .. stderr_path
+	)
 	os.remove( script_path )
 
 	-- Read it's stdout
@@ -343,10 +345,12 @@ function M.split_by( str, separator )
 	        "non-string separator specified" )
 	local words = {}
 	local pattern = string.format( "([^%s]+)", separator )
-	string.gsub( str,
-	             pattern,
-	             function( word ) words[ #words + 1 ] = word end )
-        return words
+	string.gsub(
+		str,
+		pattern,
+		function( word ) words[ #words + 1 ] = word end
+	)
+	return words
 end
 
 ------------------------------------------------------------------------
