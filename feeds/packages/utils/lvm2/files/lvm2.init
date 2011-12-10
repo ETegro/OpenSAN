@@ -3,6 +3,7 @@
 START=15
 
 start () {
+   rm -fr /etc/lvm/cache
    /sbin/lvm vgscan --ignorelockingfailure --mknodes || :
    /sbin/lvm vgchange -aly --ignorelockingfailure || return 2
 }
