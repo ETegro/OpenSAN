@@ -71,13 +71,31 @@ function M.PhysicalVolume.prepare( disk )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=4" )
 end
 
+local function unaligned_4kib_blockdevice( disk )
+	if tonumber( io.input( "/sys/block/" .. disk .. "/queue/physical_block_size" ):read() ) == 4096 and
+	   tonumber( io.input( "/sys/block/" .. disk .. "/alignment_offset" ):read() ) == -1 then
+		return true
+	else
+		return false
+	end
+end
+
 --- Create PhysicalVolume on a disk
 -- @param disk Disk on which volume must be created
 function M.PhysicalVolume.create( disk )
 	assert( is_disk( disk ),
 	        "incorrect disk specified" )
 	M.PhysicalVolume.prepare( disk )
-	common.system_succeed( "lvm pvcreate " .. disk )
+	local _, unaligned = pcall(
+		unaligned_4kib_blockdevice,
+		string.match( disk, "^.*\/\%w+$" )
+	)
+	local pvcreate_options = ""
+	if unaligned then
+		pvcreate_options = "--config 'devices {data_alignment_offset_detection=0}' "
+		pvcreate_options = pvcreate_options .. "--dataalignmentoffset 7s "
+	end
+	common.system_succeed( "lvm pvcreate " .. pvcreate_options .. disk )
 end
 
 --- Remove PhysicalVolume
