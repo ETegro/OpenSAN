@@ -11,6 +11,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
+msgid "Not connected"
+msgstr "Не подключён"
+
 msgid "Perform a system shutdown"
 msgstr "Выключить систему"
 
@@ -840,7 +843,7 @@ msgid "Expand hosts"
 msgstr ""
 
 msgid "Expires"
-msgstr ""
+msgstr "Истекает"
 
 msgid ""
 "Expiry time of leased addresses, minimum is 2 Minutes (<code>2m</code>)."
