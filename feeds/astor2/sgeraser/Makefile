@@ -16,7 +16,7 @@ define Package/sgeraser
 	CATEGORY:=aStor2
 	TITLE:=Zeroing and secure wiping disk utility
 	URL:=http://www.opensan.org/
-	DEPENDS:=+perlbase-fcntl +perlbase-digest +perlbase-posix
+	DEPENDS:=+perlbase-fcntl +perlbase-digest +perlbase-posix +perlbase-integer +perlbase-dynaloader
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
