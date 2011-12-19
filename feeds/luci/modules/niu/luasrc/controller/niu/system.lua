@@ -135,7 +135,7 @@ function upgrade()
 	end
 	
 	local function image_checksum()
-		return (util.exec("md5sum %q" % tmpfile):match("^([^%s]+)"))
+		return (util.exec("sha256sum %q" % tmpfile):match("^([^%s]+)"))
 	end
 	
 	local function storage_size()

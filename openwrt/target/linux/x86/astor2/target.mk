@@ -3,7 +3,6 @@ FEATURES:=pci usb
 DEFAULT_PACKAGES += \
 	kmod-via-velocity \
 	kmod-ata-artop \
-	kmod-ata-nvidia-sata \
 	kmod-ata-piix \
 	kmod-ata-sil \
 	kmod-ata-sil24 \
@@ -39,7 +38,10 @@ DEFAULT_PACKAGES += \
 	astor2-blockdev-parameters \
 	luci-app-astor2-san \
 	astor2-luci-bwc-ipmi-rs230g3 \
+	astor2-factory-defaults \
 	sysstat \
+	apcupsd \
+	sgeraser \
 	luafilesystem \
 	xfs-fsck \
 	xfs-growfs \

@@ -787,7 +787,7 @@ local function scst_access_pattern_new( inputs )
 
 	local access_pattern_enabled = inputs[ "access_pattern_new-enabled" ]
 	local access_pattern_readonly = inputs[ "access_pattern_new-readonly" ]
-	local access_pattern_writethrough = inputs[ "access_pattern_new-readonly" ]
+	local access_pattern_writethrough = inputs[ "access_pattern_new-writethrough" ]
 
 	local access_pattern_attributes = { name = access_pattern_name,
 	                                    targetdriver = access_pattern_targetdriver,

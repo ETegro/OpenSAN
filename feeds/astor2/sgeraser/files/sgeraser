@@ -1,0 +1,579 @@
+#!/usr/bin/perl
+# sgeraser -- zeroing and secure wiping disk utility
+# Copyright (C) 2011-2012 Sergey Matveev (stargrave@stargrave.org)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=pod
+
+=head1 NAME
+
+sgeraser -- zeroing and secure wiping disk utility. It saves own
+metainformation directly on the disk, gaining ability to continue
+interrupted zero or secure wipe process.
+
+=head1 SYNOPSIS
+
+    sgeraser command device [ offset ]
+
+=head1 ARGUMENTS
+
+=over 4
+
+=item command
+
+Command to perform:
+
+=over 8
+
+=item chck
+
+check status
+
+=item cont
+
+continue operation from OFFSET
+
+=item zero
+
+start zeroing
+
+=item wipe
+
+start wiping
+
+=item fnlz
+
+finish finalizing
+
+=back
+
+=item device
+
+Target device for clearing.
+
+=item offset
+
+Optional argument used only during continue process.
+
+=back
+
+=head1 OVERVIEW
+
+This utility can be used to either zero or secure wipe disk contents. As
+a rule it takes much time to perform those processes. If they are
+interrupted, then in most cases there is no way to resume them. One can
+use temporary separate, containing progress status, but it is too not
+portable solution.
+
+sgeraser saves own metainformation directly on hard drive. Even if
+process is interrupted, metainformation can help quickly determine where
+the process was stopped.
+
+=head1 DESCRIPTION
+
+All hard drive is splitted on several groups. Metainformation is stored
+in the beginning and end of hard drive, and also in the beginning of
+each completed group.
+
+The overall process is divided on three stages: preparation of
+zeroing/wiping, processing all groups (exactly that process can be
+interrupted and resumed), finalizing (complete removing of
+metainformation).
+
+=head2 Preparation stage
+
+At that stage, the very first and the very closest to the end of device
+groups will be processed. After that, metainformation is stored. This
+stage can not be interrupted (otherwise the process will start from the
+very beginning).
+
+User use B<zero> and B<wipe> commands to begin the process.
+
+=head2 Groups processing stage
+
+All disk is splitted on many groups. Each group is processed and after
+it has been completed, the special consistency signature is written at
+the beginning of that group. Those signatures are used to find and
+determine if the group is completed. Each group cryptographically
+dependent on the previous one.
+
+When interrupt occurs, then user can use B<chck> command to find where
+the process died. After that, he can use B<cont> command to resume
+groups processing. Only interrupted group are processed again.
+
+=head2 Finalizing stage
+
+That stage is intended to remove all left metainformation. This stage is
+rather fast. Its interruption leads to removing metainformation again.
+
+=head2 Status format
+
+B<chck> example command output:
+
+    NONE
+    ZERO -1 24 10 1048576
+    ZERO 0 24 10 1048576
+    ZERO 18 24 10 1048576 5
+    FNLZ
+
+I<NONE> status means that either no metainformation found or it is
+irrecoverably damaged.
+
+I<FNLZ> status means that all groups are processed and only finalizing
+is required. User can use B<fnlz> command to finish that process.
+
+Either I<ZERO> or I<WIPE> statuses mean that either zeroing or wiping
+process is/was going.
+
+=over 4
+
+=item *
+
+I<-1> means that preparation step is performing.
+
+=item *
+
+I<0> and I<18> means that first and 19th groups are processing now.
+Exactly that value is the offset that must be specified for B<cont> command.
+
+=item *
+
+I<24> Is total number of groups.
+
+=item *
+
+I<10> is group size in blocks.
+
+=item *
+
+I<1048576> is the block size in bytes.
+
+=item *
+
+I<5> (optionally) is the group processing speed in blocks per second.
+
+=back
+
+=head2 Secure wiping
+
+Bruce Schneier's secure wipe method is used in sgeraser:
+
+=over 4
+
+=item *
+
+Fill all 1s
+
+=item *
+
+5x fill with random data patterns.
+SHA256 function is used as a PRNG for random data patterns.
+
+=item *
+
+Fill all 0s
+
+=back
+
+You B<HAVE TO> use large enough groupsizes, to prevent caching of data
+written to disk.
+
+=head1 ENVIRONMENT VARIABLES
+
+=head2 LOG_FILE
+
+Instead of printing output to standard output, use log file. That will
+cause sgeraser to daemonize. Log file will have only the latest status.
+Absolute path should be used.
+
+=head2 PID_FILE
+
+If sgeraser is to be daemonized, then PID_FILE may contain path to the
+file where daemon's PID will be saved.
+Absolute path should be used.
+
+=head2 SHOW_SPEED
+
+If you define this variable, when not daemonized, sgeraser will show
+group processing speed in blocks per second, during the main phase.
+
+=head2 BLOCKSIZE
+
+Override default blocksize (1 MiB) to use, in bytes.
+
+=head2 GROUPSIZE
+
+Override default groupsize (1024 blocks) to use, in number of blocks.
+
+=head1 AUTHOR
+
+Sergey Matveev L<mailto:stargrave@stargrave.org>
+
+=head1 SEE ALSO
+
+L<schred|man:schred>, L<wipe|man:wipe>
+
+=cut
+
+use strict;
+use warnings;
+
+#use File::Sync qw( fsync );
+use POSIX qw( setsid ); # For daemonizing
+use Fcntl qw( SEEK_CUR SEEK_SET SEEK_END O_RDWR ); # Portable constants
+use Digest::SHA qw( sha256 ); # Consitency signatures and PRNG
+
+my $VERSION = "0.1";
+my $MAGIC = "SGER";
+my $META_SIZE = 4 * 5;
+my $SIGNATURE_SIZE = 32 + 4 + 4;
+
+my $BLOCKSIZE = 1024**2;
+my $GROUPSIZE = 1024;
+
+my $DEVICE;
+my $DEVICE_SIZE = 1;
+my $GROUPS_MAX;
+my $ZERO = pack "h", "00";
+my $ONE = pack "h", "FF";
+my $STATE;
+my $FUNC;
+my $DAEMON;
+my $WRITTEN;
+
+sub rn { return pack "N", int 10**8 * rand };
+
+sub dolog {
+	my $message = shift;
+	if( defined $ENV{LOG_FILE} ){
+		open LOG, "> $ENV{LOG_FILE}" or
+			die "Unable to open log: $!";
+		print LOG "$message\n";
+		close LOG;
+	} else {
+		print "$message\n";
+	};
+};
+
+sub fsync {
+	# Currently do nothing
+	# If groupsize is big enough, then data anyway will be synced
+};
+
+sub meta_create {
+	my $meta = "";
+	$meta .= $MAGIC;
+	$meta .= rn;
+	$meta .= $STATE;
+	$meta .= pack "N", $BLOCKSIZE;
+	$meta .= pack "N", $GROUPSIZE;
+
+	sysseek $DEVICE, 0, SEEK_SET;
+	$WRITTEN = syswrite $DEVICE, $meta;
+	die "Write error: $!" if not $WRITTEN or $WRITTEN != $META_SIZE;
+	fsync $DEVICE;
+
+	sysseek $DEVICE, - $META_SIZE, SEEK_END;
+	$WRITTEN = syswrite $DEVICE, $meta;
+	die "Write error: $!" if not $WRITTEN or $WRITTEN != $META_SIZE;
+	fsync $DEVICE;
+
+	return sha256 $meta;
+};
+
+sub group_zero {
+	my $hash_prev = shift;
+	my $iv = rn;
+	my $hash_next = sha256( $hash_prev . $iv );
+	my $zeros = $ZERO x $BLOCKSIZE;
+	for( my $block = 0 ; $block < $GROUPSIZE; $block++ ){
+		$WRITTEN = syswrite $DEVICE, $zeros;
+		die "Write error: $!" if not $WRITTEN or $WRITTEN != $BLOCKSIZE;
+	};
+	sysseek $DEVICE, - $BLOCKSIZE * $GROUPSIZE, SEEK_CUR;
+	$WRITTEN = syswrite $DEVICE, $MAGIC . $iv . $hash_next;
+	die "Write error: $!" if not $WRITTEN or $WRITTEN != $SIGNATURE_SIZE;
+	sysseek $DEVICE, $BLOCKSIZE * $GROUPSIZE - $SIGNATURE_SIZE, SEEK_CUR;
+	fsync $DEVICE;
+	return $hash_next;
+};
+
+sub group_wipe {
+	my $hash_prev = shift;
+	my $block;
+
+	# First pass
+	my $ones = $ONE x $BLOCKSIZE;
+	for( $block = 0 ; $block < $GROUPSIZE; $block++ ){
+		$WRITTEN = syswrite $DEVICE, $ones;
+		die "Write error: $!" if not $WRITTEN or $WRITTEN != $BLOCKSIZE;
+	};
+	sysseek $DEVICE, - $BLOCKSIZE * $GROUPSIZE, SEEK_CUR;
+	fsync $DEVICE;
+
+	# Second-sixth pass
+	for( my $rand_pass = 0; $rand_pass < 5; $rand_pass++ ){
+		my $data = sha256( $hash_prev . rn ) x ( $BLOCKSIZE / (256 / 8) );
+		for( $block = 0 ; $block < $GROUPSIZE; $block++ ){
+			$WRITTEN = syswrite $DEVICE, $data;
+			die "Write error: $!" if not $WRITTEN or $WRITTEN != $BLOCKSIZE;
+		};
+		sysseek $DEVICE, - $BLOCKSIZE * $GROUPSIZE, SEEK_CUR;
+		fsync $DEVICE;
+	};
+
+	# Last zero pass
+	return group_zero $hash_prev;
+};
+
+sub determine_consts {
+	sysseek $DEVICE, -1, SEEK_END;
+	$DEVICE_SIZE += sysseek $DEVICE, 0, SEEK_CUR;
+	sysseek $DEVICE, 0, SEEK_SET;
+	$GROUPS_MAX = int( ( $DEVICE_SIZE - $META_SIZE ) / ( $BLOCKSIZE * $GROUPSIZE ) );
+	$FUNC = $STATE eq "ZERO" ? \&group_zero : \&group_wipe;
+};
+
+sub process_continue {
+	my $hash_prev = shift;
+	my $started;
+	my $elapsed;
+	for( my $group = shift; $group < $GROUPS_MAX; $group++ ){
+		if( defined $ENV{SHOW_SPEED} ){ $started = time };
+		$hash_prev = &$FUNC( $hash_prev );
+		if( defined $ENV{SHOW_SPEED} ){
+			$elapsed = time - $started;
+			$elapsed = int( $GROUPSIZE / ($elapsed == 0 ? 1 : $elapsed) );
+		};
+		dolog "$STATE $group $GROUPS_MAX $GROUPSIZE $BLOCKSIZE" . ( $elapsed ? " $elapsed" : "" );
+	};
+};
+
+sub process_begin {
+	dolog "$STATE -1 $GROUPS_MAX $GROUPSIZE $BLOCKSIZE";
+	# TODO: reduce overlapping space processing
+	sysseek $DEVICE, - $BLOCKSIZE * $GROUPSIZE, SEEK_END;
+	&$FUNC( "dummy" );
+	sysseek $DEVICE, 0, SEEK_SET;
+	&$FUNC( "dummy" );
+	dolog "$STATE 0 $GROUPS_MAX $GROUPSIZE $BLOCKSIZE";
+
+	# Create metainformation
+	my $hash_prev = meta_create $STATE;
+	sysseek $DEVICE, $BLOCKSIZE * $GROUPSIZE, SEEK_SET;
+	fsync $DEVICE;
+
+	# Begin main procedure itself
+	process_continue $hash_prev, 1;
+};
+
+sub finalize {
+	$STATE = "FNLZ";
+	dolog "$STATE $GROUPS_MAX $GROUPS_MAX $GROUPSIZE $BLOCKSIZE";
+	sysseek $DEVICE, 4 * 2, SEEK_SET;
+	$WRITTEN = syswrite $DEVICE, "FNLZ";
+	die "Write error: $!" if not $WRITTEN or $WRITTEN != 4;
+	fsync $DEVICE;
+	sysseek $DEVICE, - ( 4 * 3 ), SEEK_END;
+	$WRITTEN = syswrite $DEVICE, "FNLZ";
+	die "Write error: $!" if not $WRITTEN or $WRITTEN != 4;
+	fsync $DEVICE;
+
+	sysseek $DEVICE, $BLOCKSIZE * $GROUPSIZE, SEEK_SET;
+	my $zeros = $ZERO x $SIGNATURE_SIZE;
+	for( my $group = 1; $group < $GROUPS_MAX; $group++ ){
+		$WRITTEN = syswrite $DEVICE, $zeros;
+		die "Write error: $!" if not $WRITTEN or $WRITTEN != $SIGNATURE_SIZE;
+		sysseek $DEVICE, $BLOCKSIZE * $GROUPSIZE - $SIGNATURE_SIZE, SEEK_CUR;
+		fsync $DEVICE;
+	};
+
+	$zeros = $ZERO x $META_SIZE;
+	sysseek $DEVICE, - $META_SIZE, SEEK_END;
+	$WRITTEN = syswrite $DEVICE, $zeros;
+	die "Write error: $!" if not $WRITTEN or $WRITTEN != $META_SIZE;
+	fsync $DEVICE;
+	$zeros = $ZERO x $SIGNATURE_SIZE;
+	sysseek $DEVICE, 0, SEEK_SET;
+	$WRITTEN = syswrite $DEVICE, $zeros;
+	die "Write error: $!" if not $WRITTEN or $WRITTEN != $SIGNATURE_SIZE;
+	fsync $DEVICE;
+};
+
+sub meta_read {
+	my $meta_end;
+	my $meta_start;
+	sysseek $DEVICE, - $META_SIZE, SEEK_END;
+	sysread $DEVICE, $meta_end, $META_SIZE;
+	sysseek $DEVICE, 0, SEEK_SET;
+	sysread $DEVICE, $meta_start, $META_SIZE;
+	sysseek $DEVICE, 0, SEEK_SET;
+	if( $meta_end ne $meta_start ){
+		$STATE = "NONE";
+		return $STATE;
+	};
+	if( $meta_start =~ /^$MAGIC(....)(....)(....)(....)/ ){
+		my( $rn, $state, $blocksize, $groupsize ) = ( $1, $2, $3, $4 );
+		$STATE = $state;
+		return "FNLZ" if $STATE eq "FNLZ";
+		my $hash_prev = sha256( $MAGIC . $rn . $STATE . $blocksize . $groupsize );
+		$BLOCKSIZE = unpack "N", $blocksize;
+		$GROUPSIZE = unpack "N", $groupsize;
+		determine_consts;
+		return $hash_prev;
+	};
+	$STATE = "NONE";
+	return $STATE;
+};
+
+sub check_state {
+	my $meta = meta_read;
+	return "$meta" if length( $meta ) == 4;
+	sysseek $DEVICE, $BLOCKSIZE * $GROUPSIZE, SEEK_SET;
+	my $hash_prev = $meta;
+	my $not_junk = 1;
+	my $group = 1;
+	my $data;
+	while( $not_junk and $group < $GROUPS_MAX ){
+		sysread $DEVICE, $data, $SIGNATURE_SIZE;
+		if( $data =~ /^$MAGIC(....)(.*)$/ ){
+			# Is signature valid
+			my( $iv, $hash_next ) = ( $1, $2 );
+			if( sha256( $hash_prev . $iv ) eq $hash_next ){
+				$hash_prev = $hash_next;
+			} else {
+				$not_junk--;
+			};
+		} else {
+			$not_junk--;
+		};
+		sysseek $DEVICE, $BLOCKSIZE * $GROUPSIZE - $SIGNATURE_SIZE, SEEK_CUR;
+		$group++;
+	};
+	sysseek $DEVICE, 0, SEEK_SET;
+	return $group - 1;
+};
+
+sub usage {
+	print "SGannon $VERSION Copyright (C) 2011-2012 Sergey Matveev (stargrave\@stargrave.org)
+Usage: $0 CMD DEVICE [ OFFSET ]
+
+Where CMD is one of:
+\tchck -- check state of DEVICE
+\tcont -- continue operation on DEVICE from OFFSET
+\tzero -- start zeroing DEVICE
+\twipe -- start wiping DEVICE
+\tfnlz -- finish finalizing DEVICE
+
+This program comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to redistribute it under terms and conditions of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or (at your option) any later version.
+";
+	exit;
+};
+
+sub daemonize {
+	chdir "/"  or die "Can not chdir to /: $!";
+	open STDIN, "< /dev/null" or die "Can not read /dev/null: $!";
+	open STDOUT, "> /dev/null" or die "Can not write to /dev/null: $!";
+	die "Can not fork: $!" unless defined( my $pid = fork );
+	if( $pid ){
+		if( defined $ENV{PID_FILE} ){
+			open PID, "> $ENV{PID_FILE}" or
+				die "Unable to open PID file: $!";
+			print PID "$pid\n";
+			close PID;
+		};
+		close $DEVICE;
+		exit;
+	};
+	die "Can not start a new session: $!" unless setsid != -1;
+	open STDERR, ">&STDOUT" or die "Can not dup stdout: $!";
+};
+
+sub cmd_chck {
+	daemonize if $DAEMON;
+	my $result = check_state;
+	length( $result ) == 4 ? dolog $STATE :
+		dolog "$STATE $GROUPSIZE $BLOCKSIZE $GROUPS_MAX $result";
+	close $DEVICE;
+	exit;
+};
+
+sub cmd_cont {
+	usage if $#ARGV != 2;
+	daemonize if $DAEMON;
+	meta_read;
+	my $offset = $ARGV[ $#ARGV ];
+
+	# Read previous hash at first
+	sysseek $DEVICE, ( $offset - 1 ) * $BLOCKSIZE * $GROUPSIZE, SEEK_SET;
+	my $data;
+	sysread $DEVICE, $data, $SIGNATURE_SIZE;
+	$data =~ /^$MAGIC....(.*)$/;
+	my $hash_prev = $1;
+	sysseek $DEVICE, $BLOCKSIZE * $GROUPSIZE - $SIGNATURE_SIZE, SEEK_CUR;
+
+	process_continue $hash_prev, $offset;
+	finalize;
+};
+
+sub cmd_zero {
+	$STATE = "ZERO";
+	determine_consts;
+	daemonize if $DAEMON;
+	process_begin;
+	finalize;
+};
+
+sub cmd_wipe {
+	$STATE = "WIPE";
+	determine_consts;
+	daemonize if $DAEMON;
+	process_begin;
+	finalize;
+};
+
+sub cmd_fnlz {
+	die "No metainformation\n" if meta_read ne "FNLZ";
+	determine_consts;
+	daemonize if $DAEMON;
+	finalize;
+};
+
+################################################################################
+# Main part
+################################################################################
+usage if $#ARGV <= 0;
+die "No such device: $ARGV[1]\n" unless -e $ARGV[1];
+sysopen( $DEVICE, $ARGV[1], O_RDWR ) or die "Can not open device: $!";
+
+if( defined $ENV{LOG_FILE} ){
+	dolog ""; # Test if log file can be used
+	$DAEMON++;
+};
+
+$BLOCKSIZE = int $ENV{BLOCKSIZE} if defined $ENV{BLOCKSIZE};
+$GROUPSIZE = int $ENV{GROUPSIZE} if defined $ENV{GROUPSIZE};
+
+for( $ARGV[0] ){
+	   if(/chck/){ cmd_chck }
+	elsif(/cont/){ cmd_cont }
+	elsif(/zero/){ cmd_zero }
+	elsif(/wipe/){ cmd_wipe }
+	elsif(/fnlz/){ cmd_fnlz }
+};
+close $DEVICE;

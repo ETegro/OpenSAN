@@ -635,7 +635,7 @@ config BUSYBOX_CONFIG_SHA1SUM
 
 config BUSYBOX_CONFIG_SHA256SUM
 	bool "sha256sum"
-	default n
+	default y
 	help
 	  Compute and check SHA256 message digest
 

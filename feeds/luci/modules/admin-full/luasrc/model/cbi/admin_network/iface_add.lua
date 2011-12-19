@@ -17,14 +17,13 @@ local nw  = require "luci.model.network".init()
 local fw  = require "luci.model.firewall".init()
 local utl = require "luci.util"
 local uci = require "luci.model.uci".cursor()
+local sys = require "luci.sys"
 
 m = SimpleForm("network", translate("Create Interface"))
 
 newnet = m:field(Value, "_netname", translate("Name of the new interface"),
 	translate("The allowed characters are: <code>A-Z</code>, <code>a-z</code>, " ..
-		"<code>0-9</code> and <code>_</code>") ..
-	"<br />" ..
-	translate("For bonding-intefaces use") .. ": bondXX."
+		"<code>0-9</code> and <code>_</code>")
 )
 
 newnet:depends("_attach", "")
@@ -35,8 +34,7 @@ newnet.rmempty = false
 --[[
 netbridge = m:field(Flag, "_bridge", translate("Create a bridge over multiple interfaces"))
 ]]
-net_bond = m:field(Flag, "_bond", translate("Create a bonding from multiple interfaces"),
-	translate("Up to 16 (0..15) interfaces can be created."))
+net_bond = m:field(Flag, "_bond", translate("Create a bonding from multiple interfaces"))
 
 bond_mode = m:field(ListValue, "_bond-mode", translate("Mode"),
 	translate("Default bonding policy is \"balance-rr\"."))
@@ -53,7 +51,6 @@ bond_mode.default = "balance-rr"
 bond_miimon = m:field(Value, "_bond-miimon", translate("MII link monitoring frequency"),
 	translate("ms") .. " (0 - 3000). " .. translate("Default value is") .. " 50.")
 bond_miimon:depends("_bond", "1")
-bond_miimon.rmempty = false
 bond_miimon.datatype = "range(0,3000)"
 bond_miimon.default = "50"
 
@@ -62,14 +59,12 @@ bond_downdelay = m:field(Value, "_bond-downdelay", translate("Time to wait befor
 bond_downdelay:depends("_bond", "1")
 bond_downdelay.datatype = "range(0,3000)"
 bond_downdelay.default = "0"
-bond_downdelay.rmempty = false
 
 bond_updelay = m:field(Value, "_bond-updelay", translate("Time to wait before enabling slave-interface after link recover"),
 	translate("ms") .. " (0 - 3000). " .. translate("Delay value should be a multiple of the MII monitoring value; if not, it will be rounded to the nearest multiple.") .. " " .. translate("Default value is") .. " 0.")
 bond_updelay:depends("_bond", "1")
 bond_updelay.datatype = "range(0,3000)"
 bond_updelay.default = "0"
-bond_updelay.rmempty = false
 
 sifname = m:field(Value, "_ifname", translate("Cover the following interface"),
 	translate("Note: If you choose an interface here which is part of another network, it will be moved into this network."))
@@ -110,25 +105,13 @@ function newnet.write(self, section, value)
 		updelay = bond_updelay:formvalue( section )
 	}
 	local bond_default = {
-			mode = "balance-rr",
-			miimon = "50",
-			downdelay = "0",
-			updelay = "0"
+		mode = "balance-rr",
+		miimon = "50",
+		downdelay = "0",
+		updelay = "0"
 	}
 
 	local ifaces = bond.use and mifname:formvalue(section) or sifname:formvalue(section)
-
-	if bond.use then
-		local bond_name, num = string.match( value, "^(bond(%d+))$" )
-		if bond_name then
-			num = tonumber( num )
-			if not ( ( num >= 0 ) and ( num <= 15 ) ) then
-				value = nil
-			end
-		else
-			value = nil
-		end
-	end
 
 	local nn = nw:add_network(value, { proto = "none" })
 	if nn then
@@ -147,6 +130,11 @@ function newnet.write(self, section, value)
 					end
 				end
 			end
+			local section_name = newnet:formvalue( section )
+			local bondname = nw.generate_bondname( section_name )
+			if bondname then
+				nn:set( "bondname", bondname )
+			end
 		end
 
 		local iface
@@ -164,7 +152,6 @@ function newnet.write(self, section, value)
 
 		nw:save("network")
 		nw:save("wireless")
-
 		luci.http.redirect(luci.dispatcher.build_url("admin/network/network", nn:name()))
 	end
 end

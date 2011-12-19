@@ -1,0 +1,11 @@
+= Release 1.5.2 =
+We are pleased to announce new OpenSAN's version.
+
+== Release notes ==
+This update release includes 1.4.3 and contains serious bugfix (bug can
+occur with manually created LVM VolumeGroups with slightly different
+format values).
+
+=== Download ===
+You can download this release following [/download/V1.5.2/ this link].
+Always cryptographically [wiki:Publickey verify images]!

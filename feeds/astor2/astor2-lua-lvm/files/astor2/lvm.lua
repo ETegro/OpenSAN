@@ -71,13 +71,31 @@ function M.PhysicalVolume.prepare( disk )
 	common.system_succeed( "dd if=/dev/zero of=" .. disk .. " bs=512 count=4" )
 end
 
+local function unaligned_4kib_blockdevice( disk )
+	if tonumber( io.input( "/sys/block/" .. disk .. "/queue/physical_block_size" ):read() ) == 4096 and
+	   tonumber( io.input( "/sys/block/" .. disk .. "/alignment_offset" ):read() ) == -1 then
+		return true
+	else
+		return false
+	end
+end
+
 --- Create PhysicalVolume on a disk
 -- @param disk Disk on which volume must be created
 function M.PhysicalVolume.create( disk )
 	assert( is_disk( disk ),
 	        "incorrect disk specified" )
 	M.PhysicalVolume.prepare( disk )
-	common.system_succeed( "lvm pvcreate " .. disk )
+	local _, unaligned = pcall(
+		unaligned_4kib_blockdevice,
+		string.match( disk, "^.*\/\%w+$" )
+	)
+	local pvcreate_options = ""
+	if unaligned then
+		pvcreate_options = "--config 'devices {data_alignment_offset_detection=0}' "
+		pvcreate_options = pvcreate_options .. "--dataalignmentoffset 7s "
+	end
+	common.system_succeed( "lvm pvcreate " .. pvcreate_options .. disk )
 end
 
 --- Remove PhysicalVolume
@@ -189,10 +207,12 @@ function M.VolumeGroup.create( physical_volumes )
 		end
 	end
 
-	common.system_succeed( "lvm vgcreate " ..
-	                       "-s " .. tostring( M.VolumeGroup.PE_DEFAULT_SIZE ) .. " " ..
-	                       name .. " " ..
-	                       table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " ) )
+	common.system_succeed(
+		"lvm vgcreate " ..
+		"-s " .. tostring( M.VolumeGroup.PE_DEFAULT_SIZE ) .. " " ..
+		name .. " " ..
+		table.concat( common.keys( common.unique_keys( "device", physical_volumes ) ), " " )
+	)
 end
 
 --- Remove VolumeGroup
@@ -223,7 +243,7 @@ function M.VolumeGroup.list( physical_volumes )
 	for _, line in ipairs( common.system_succeed( "lvm vgdisplay -c" ) ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
-		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*([^:]+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
+		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*([^:]+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d+:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
 
 		extent = tonumber( extent )
 		extent = extent / 1024.0
@@ -262,12 +282,11 @@ function M.VolumeGroup:logical_volume( name, size )
 	        "no name specified" )
 	assert( size and common.is_non_negative( size ),
 	        "non-positive size specified" )
-	local output = common.system( "lvm lvcreate -n " ..
-	                              name ..
-	                              " -L " ..
-	                              tostring( size ) ..
-	                              " " ..
-	                              self.name )
+	local output = common.system(
+		"lvm lvcreate -n " .. name ..
+		" -L " .. tostring( size ) ..
+		" " .. self.name
+	)
 	local succeeded = false
 	for _, line in ipairs( output.stdout ) do
 		if string.match( line, "Logical volume \".+\" created" ) then
@@ -335,9 +354,11 @@ function M.LogicalVolume:remove()
 	        "no volume group attached to" )
 	assert( self.name,
 	        "unable to get self object" )
-	common.system_succeed( "lvm lvremove -f " ..
-	                       self.volume_group.name .. "/" ..
-	                       self.name )
+	common.system_succeed(
+		"lvm lvremove -f " ..
+		self.volume_group.name .. "/" ..
+		self.name
+	)
 end
 
 --- Rescan all LogicalVolumes on a system

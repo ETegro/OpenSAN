@@ -24,20 +24,28 @@ local common = require( "astor2.common" )
 
 local EINARC_CMD = "einarc -t software -a 0 "
 
-M.LOGICAL_STATES = { "normal",
-                     "degraded",
-                     "initializing",
-                     "rebuilding" }
-M.PHYSICAL_STATES = { "hotspare",
-                      "failed",
-                      "free" }
-M.RAIDLEVELS = { "linear",
-                 "passthrough",
-                 "0", "1", "4",
-                 "5", "6", "10" }
-M.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE = { "linear",
-                                        "passthrough",
-					"0" }
+M.LOGICAL_STATES = {
+	"normal",
+	"degraded",
+	"initializing",
+	"rebuilding"
+}
+M.PHYSICAL_STATES = {
+	"hotspare",
+	"failed",
+	"free"
+}
+M.RAIDLEVELS = {
+	"linear",
+	"passthrough",
+	"0", "1", "4",
+	"5", "6", "10"
+}
+M.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE = {
+	"linear",
+	"passthrough",
+	"0"
+}
 
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"

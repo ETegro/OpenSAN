@@ -88,8 +88,10 @@ function M.AuthCredential.delete_by_username_and_filename( username, filename )
 		M.AuthCredential.UCI_TYPE_NAME,
 		function( section )
 			if section.username == username and section.filename == filename then
-				ucicur:delete( M.UCI_CONFIG_NAME,
-				               section[".name"] )
+				ucicur:delete(
+					M.UCI_CONFIG_NAME,
+					section[".name"]
+				)
 			end
 		end
 	)
@@ -122,21 +124,29 @@ function M.AuthCredential:save()
 	} )
 
 	local ucicur = uci.cursor()
-	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
-	                                 M.AuthCredential.UCI_TYPE_NAME )
+	local section_name = ucicur:add(
+		M.UCI_CONFIG_NAME,
+		M.AuthCredential.UCI_TYPE_NAME
+	)
 	auth_credential_new.section_name = section_name
-	ucicur:set( M.UCI_CONFIG_NAME,
-		    section_name,
-		    "username",
-		    auth_credential_new.username )
-	ucicur:set( M.UCI_CONFIG_NAME,
-		    section_name,
-		    "password",
-		    auth_credential_new.password )
-	ucicur:set( M.UCI_CONFIG_NAME,
-		    section_name,
-		    "filename",
-		    auth_credential_new.filename )
+	ucicur:set(
+		M.UCI_CONFIG_NAME,
+		section_name,
+		"username",
+		auth_credential_new.username
+	)
+	ucicur:set(
+		M.UCI_CONFIG_NAME,
+		section_name,
+		"password",
+		auth_credential_new.password
+	)
+	ucicur:set(
+		M.UCI_CONFIG_NAME,
+		section_name,
+		"filename",
+		auth_credential_new.filename
+	)
 	ucicur:save( M.UCI_CONFIG_NAME )
 	ucicur:commit( M.UCI_CONFIG_NAME )
 	return access_pattern_new
@@ -161,7 +171,7 @@ function M.AccessPattern:new( attrs )
 	assert( attrs.name,
 	        "empty name" )
 	assert( common.is_in_array( attrs.targetdriver,
-				    M.AccessPattern.ALLOWED_TARGETDRIVERS ),
+	        M.AccessPattern.ALLOWED_TARGETDRIVERS ),
 	        "unallowed targetdriver" )
 	assert( common.is_number( attrs.lun ),
 	        "no LUN" )
@@ -229,8 +239,10 @@ function M.AccessPattern.delete_by_name( name )
 		M.AccessPattern.UCI_TYPE_NAME,
 		function( section )
 			if section.name == name then
-				ucicur:delete( M.UCI_CONFIG_NAME,
-				               section[".name"] )
+				ucicur:delete(
+					M.UCI_CONFIG_NAME,
+					section[".name"]
+				)
 			end
 		end
 	)
@@ -254,8 +266,10 @@ function M.AccessPattern:save()
 	} )
 
 	local ucicur = uci.cursor()
-	local section_name = ucicur:add( M.UCI_CONFIG_NAME,
-	                                 M.AccessPattern.UCI_TYPE_NAME )
+	local section_name = ucicur:add(
+		M.UCI_CONFIG_NAME,
+		M.AccessPattern.UCI_TYPE_NAME
+	)
 	access_pattern_new.section_name = section_name
 	ucicur:set(
 		M.UCI_CONFIG_NAME,
@@ -340,9 +354,10 @@ function M.AccessPattern:iqn()
 	-- Retreive our hostname
 	local ucicur = uci.cursor()
 	local hostname = nil
-	ucicur:foreach( "system",
-	                "system",
-			function(s) hostname = s.hostname end )
+	ucicur:foreach(
+		"system",
+		"system",
+		function(s) hostname = s.hostname end )
 	assert( hostname, "unable to retreive hostname" )
 
 	-- Retreive LogicalVolume's name
@@ -488,11 +503,15 @@ end
 
 function M.Daemon.check( configuration )
 	local configuration_path = os.tmpname()
-	M.Configuration.write( configuration,
-	                       configuration_path )
-	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
-	                              " -check_config " ..
-				      configuration_path )
+	M.Configuration.write(
+		configuration,
+		configuration_path
+	)
+	local result = common.system(
+		M.Daemon.SCSTADMIN_PATH ..
+		" -check_config " ..
+		configuration_path
+	)
 	log_append(
 		table.concat( result.stdout, "\n" ) ..
 		table.concat( result.stderr, "\n" )
@@ -518,8 +537,10 @@ function M.Daemon.apply()
 	local configuration, devices = M.Configuration.dump()
 	if #configuration == 0 then return end
 	M.Daemon.check( configuration )
-	M.Configuration.write( configuration,
-	                       M.Configuration.SCSTADMIN_CONFIG_PATH )
+	M.Configuration.write(
+		configuration,
+		M.Configuration.SCSTADMIN_CONFIG_PATH
+	)
 	local result = common.system_succeed(
 		M.Daemon.SCSTADMIN_PATH ..
 		" -force" ..
@@ -529,14 +550,18 @@ function M.Daemon.apply()
 	)
 	log_append( table.concat( result, "\n" ) )
 	for _, device in ipairs( devices ) do
-		common.system( M.Daemon.SCSTADMIN_PATH ..
-		               " -resync_dev " .. device )
+		common.system(
+			M.Daemon.SCSTADMIN_PATH ..
+			" -resync_dev " .. device
+		)
 	end
 end
 
 function M.Daemon.session_detach( iqn )
-	local result = common.system( M.Daemon.SCSTADMIN_PATH ..
-	                              " -list_sessions" )
+	local result = common.system(
+		M.Daemon.SCSTADMIN_PATH ..
+		" -list_sessions"
+	)
 	for _, line in ipairs( result.stdout ) do
 		local driver, target = string.match( line, "^Driver/Target: (%w+)/(.*)$" )
 		if target == iqn then

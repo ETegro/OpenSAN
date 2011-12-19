@@ -157,7 +157,12 @@ TestFileExistence = {}
 		assert( common.file_exists( "tests/non_existent" ) == false )
 	end
 	function TestFileExistence:test_non_readable()
-		assert( common.file_exists( "/dev/sda" ) == nil )
+		local tmp = os.tmpname()
+		os.execute( "touch " .. tmp )
+		os.execute( "chmod 000 " .. tmp )
+		local return_value = common.file_exists( tmp )
+		os.execute( "rm -f " .. tmp )
+		assert( return_value == nil )
 	end
 
 TestTableComparing = {}
