@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # aStor2 -- storage area network configurable via Web-interface
-# Copyright (C) 2009-2011 ETegro Technologies, PLC
+# Copyright (C) 2009-2012 ETegro Technologies, PLC
 #                         Sergey Matveev <sergey.matveev@etegro.com>
 #
 # This program is free software: you can redistribute it and/or modify

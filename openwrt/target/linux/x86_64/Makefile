@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2006-2011 OpenWrt.org
-# Copyright (C) 2009-2011 ETegro Technologies, PLC
+# Copyright (C) 2011-2012 ETegro Technologies, PLC
 #                         Sergey Matveev <stargrave@stargrave.org>
 #
 # This is free software, licensed under the GNU General Public License v2.

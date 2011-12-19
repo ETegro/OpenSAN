@@ -11,7 +11,7 @@
 исходного кода необходимо добавлять информацию об авторском праве::
 
   aStor2 -- storage area network configurable via Web-interface
-  Copyright (C) 2009-2011 ETegro Technologies, PLC
+  Copyright (C) 2009-2012 ETegro Technologies, PLC
                           Name Surname <name.surname@etegro.com>
   
   This program is free software: you can redistribute it and/or modify
