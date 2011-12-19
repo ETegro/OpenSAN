@@ -8,8 +8,6 @@
 START=05
 
 start() {
-	. /lib/soekris.sh
-
 	local board=astor2
 
 	for f in $( ls /etc/defconfig/$board ); do
