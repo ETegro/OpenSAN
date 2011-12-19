@@ -1,3 +1,4 @@
+* [wiki:News_20111219T1106 Release 2.0]
 * [wiki:News_20111213T1654 Release 1.5.3]
 * [wiki:News_20111208T1937 Release 1.5.2]
 * [wiki:News_20111208T1900 Release 1.4.3]
