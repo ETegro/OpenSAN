@@ -20,6 +20,7 @@
 local M = {}
 
 require( "uci" )
+require( "lfs" )
 local common = require( "astor2.common" )
 
 M.UCI_CONFIG_NAME = "scst"
@@ -155,6 +156,51 @@ end
 function M.AuthCredential:delete()
 	assert( self, "unable to get self object" )
 	M.AuthCredential.delete_by_username_and_filename( self.username, self.filename )
+end
+
+------------------------------------------------------------------------
+-- Session
+------------------------------------------------------------------------
+M.Session = {}
+local Session_mt = common.Class( M.Session )
+
+M.Session.SYSFS_TARGETS_PATH = "/sys/kernel/scst_tgt/targets/"
+M.Session.ATTRIBUTES_REQUIRED = {
+	"initiator_name",
+	"sid"
+}
+
+function M.Session:new( attrs )
+	assert( attrs.name,
+	        "empty name" )
+	assert( attrs.initiator_name,
+	        "empty initiator_name" )
+	assert( attrs.sid,
+	        "empty sid" )
+	assert( attrs.targetdriver,
+	        "empty targetdriver" )
+	assert( attrs.target_iqn,
+	        "empty target_iqn" )
+	return setmetatable( attrs, Session_mt )
+end
+
+function M.Session:detach()
+	assert( self, "unable to get self object" )
+	common.system(
+		M.Daemon.SCSTADMIN_PATH ..
+		" -force" ..
+		" -noprompt" ..
+		" -rem_target " .. self.target_iqn ..
+		" -driver " .. self.targetdriver
+	)
+end
+
+function M.Session.list()
+	local sessions = {}
+	for _, access_pattern in ipairs( M.AccessPattern.list() ) do
+		sessions[ access_pattern.section_name ] = access_pattern:sessions()
+	end
+	return sessions
 end
 
 ------------------------------------------------------------------------
@@ -386,9 +432,53 @@ function M.AccessPattern:iqn()
 	)
 end
 
+function M.AccessPattern:sessions()
+	assert( self, "unable to get self object" )
+	if not self:is_binded() then return {} end
+	local sessions = {}
+	local targetdriver = self.targetdriver
+	local target_iqn = self:iqn()
+	local sysfs_path = M.Session.SYSFS_TARGETS_PATH ..
+	                   targetdriver .. "/" ..
+	                   target_iqn .. "/sessions"
+	if not ( common.file_exists( sysfs_path ) == true ) then return {} end
+	for dir_name in lfs.dir( sysfs_path ) do
+		local session = {
+			target_iqn = target_iqn,
+			targetdriver = targetdriver
+		}
+		if dir_name:sub( 1, 4 ) == "iqn." then
+			session.name = dir_name
+			session.path = sysfs_path .. "/" .. session.name
+			for attribute in lfs.dir( session.path ) do
+				if common.is_in_array( attribute, M.Session.ATTRIBUTES_REQUIRED ) or
+				   attribute:match( "^[A-Z]" ) then
+					local attribute_path = session.path .. "/".. attribute
+					--[[
+					if lfs.attributes( attribute_path ).mode == "directory" then
+						local ipv4 = string.match( attribute, "^%d+.%d+.%d+.%d+$" )
+						if ipv4 then
+							session[ "ipv4" ] = ipv4
+						end
+					end
+					]]
+					if ( lfs.attributes( attribute_path ).mode == "file" ) and
+					   ( common.file_exists( attribute_path ) == true ) then
+						session[ attribute ] = io.input( attribute_path ):read()
+					end
+				end
+			end
+			sessions[ session.name ] = M.Session:new( session )
+		end
+	end
+	return sessions
+end
+
 function M.AccessPattern:unbind()
 	assert( self, "unable to get self object" )
-	M.Daemon.session_detach( self:iqn() )
+	for _, session in pairs( self:sessions() ) do
+		session:detach()
+	end
 	self.filename = ""
 	self:save()
 end
@@ -557,23 +647,5 @@ function M.Daemon.apply()
 	end
 end
 
-function M.Daemon.session_detach( iqn )
-	local result = common.system(
-		M.Daemon.SCSTADMIN_PATH ..
-		" -list_sessions"
-	)
-	for _, line in ipairs( result.stdout ) do
-		local driver, target = string.match( line, "^Driver/Target: (%w+)/(.*)$" )
-		if target == iqn then
-			common.system(
-				M.Daemon.SCSTADMIN_PATH ..
-				" -force" ..
-				" -noprompt" ..
-				" -rem_target " .. target ..
-				" -driver " .. driver
-			)
-		end
-	end
-end
 
 return M
