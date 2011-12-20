@@ -52,8 +52,8 @@ for build in *; do
 	pushd $TARGET_DIR/$build
 	rm -fr packages/ md5sums *vmlinuz *rootfs*
 	for image in *; do
-		! echo $image | grep -q "openwrt-x86" ||
-			mv "$image" "`echo $image | sed 's/openwrt-x86-//'`"
+		! echo $image | grep -q "openwrt-x86_64" ||
+			mv "$image" "`echo $image | sed 's/openwrt-x86_64-//'`"
 	done
 	$SHA256 * > checksums.sha256
 	$GPG --default-key=$PGP_SIGN_KEYID \

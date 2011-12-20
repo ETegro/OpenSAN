@@ -23,7 +23,7 @@ pushd "$WORK_DIR"; WORK_DIR=`pwd`; popd
 TARGET_DIR="$WORK_DIR"/../openwrt
 OUTPUT_DIR="$WORK_DIR"/output/`date "+%Y-%m-%dT%H:%M"`-$BRANCH
 DL_DIR="$TARGET_DIR"/dl
-BIN_DIR="$TARGET_DIR"/bin/x86
+BIN_DIR="$TARGET_DIR"/bin/x86_64
 [ -n "$JOBS" ] || JOBS=1
 
 perform_unittesting()
