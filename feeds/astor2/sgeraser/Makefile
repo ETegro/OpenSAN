@@ -5,9 +5,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sgeraser
+PKG_REV:=40d73e0d937cd067f80fdd98f0a688d18f1e1f98
+PKG_VERSION=git$(PKG_REV)
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=git://github.com/stargrave/sgeraser.git
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -20,9 +26,6 @@ define Package/sgeraser
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
-define Build/Prepare
-endef
-
 define Build/Configure
 endef
 
@@ -31,7 +34,7 @@ endef
 
 define Package/sgeraser/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) ./files/sgeraser $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sgeraser $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,sgeraser))
