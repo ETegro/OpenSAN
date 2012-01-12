@@ -71,7 +71,7 @@ function M.overall( data )
 
 		-- Bind access patterns to logical volumes and find maximal
 		-- patterns quantity in single logical volume
-		local quantities = {}
+		local access_patterns_quantity_max = 1
 		for logical_volume_device, logical_volume in pairs( logical.logical_volumes or {} ) do
 			local quantity = 0
 			for _, access_pattern in ipairs( access_patterns ) do
@@ -84,18 +84,13 @@ function M.overall( data )
 				end
 			end
 			if quantity ~= 0 then
-				quantities[ #quantities + 1 ] = quantity
+				-- Maximum number of possible divisible without reminder number
+				-- of APs in LV is LCM between each of them
+				access_patterns_quantity_max = M.lcm(
+					quantity,
+					access_patterns_quantity_max
+				)
 			end
-		end
-
-		-- Maximum number of possible divisible without reminder number
-		-- of APs in LV is LCM between each of them
-		local access_patterns_quantity_max = 1
-		for _, quantity in ipairs( quantities ) do
-			access_patterns_quantity_max = M.lcm(
-				quantity,
-				access_patterns_quantity_max
-			)
 		end
 
 		-- Overall lines quantity will be LCM( PVs, APs*LVs )
