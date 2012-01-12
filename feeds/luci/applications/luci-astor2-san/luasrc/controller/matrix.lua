@@ -53,11 +53,13 @@ function M.overall( data )
 	for i, access_pattern in ipairs( access_patterns ) do
 		local ap_sessions = sessions[ access_pattern.section_name ]
 		if ap_sessions then
-			access_patterns_sessioned[ i ].sessions_avail = {}
 			local session_names = common.keys( ap_sessions )
-			table.sort( session_names )
-			for _,session_name in ipairs( session_names ) do
-				access_patterns_sessioned[ i ].sessions_avail[ #access_patterns_sessioned[ i ].sessions_avail + 1 ] = ap_sessions[ session_name ]
+			if #session_names > 0 then
+				table.sort( session_names )
+				access_patterns_sessioned[ i ].sessions_avail = {}
+				for _,session_name in ipairs( session_names ) do
+					access_patterns_sessioned[ i ].sessions_avail[ #access_patterns_sessioned[ i ].sessions_avail + 1 ] = ap_sessions[ session_name ]
+				end
 			end
 		end
 	end
@@ -183,6 +185,19 @@ function M.overall( data )
 					end
 					matrix[ ap_offset ].access_pattern = logical_volume.access_patterns[ access_pattern_names[ ap_i ] ]
 					matrix[ ap_offset ].access_pattern.rowspan = access_pattern_rowspan
+
+					if matrix[ ap_offset ].access_pattern.sessions_avail then
+						ap_sessions = matrix[ ap_offset ].access_pattern.sessions_avail
+						local session_rowspan = access_pattern_rowspan / #ap_sessions
+						for s_i = 1, #ap_sessions do
+							local s_offset = ap_offset + ( s_i - 1 ) * session_rowspan
+							if not matrix[ s_offset ] then
+								matrix[ s_offset ] = {}
+							end
+							matrix[ s_offset ].session = ap_sessions[ s_i ]
+							matrix[ s_offset ].session.rowspan = session_rowspan
+						end
+					end
 				end
 			end
 		end
