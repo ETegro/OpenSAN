@@ -1532,8 +1532,7 @@ TestMatrix = {}
 		} ) )
 	end
 
-	function TestMatrix:test_with_access_patterns_many()
-		-- Generate physicals
+	local function preparation_access_patterns_many()
 		local physicals = {}
 		for i = 1, 6 do
 			local physical_id = "0:" .. tonumber( i )
@@ -1575,6 +1574,12 @@ TestMatrix = {}
 			logicals[ logical_id ].physicals[ physical_id ] = logical_id
 		end
 
+		return physicals, logicals, logical_id
+	end
+
+	function TestMatrix:test_with_access_patterns_many()
+		local physicals, logicals, logical_id = preparation_access_patterns_many()
+
 		self.access_patterns[1].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
 		self.access_patterns[2].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
 		self.access_patterns[3].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
@@ -1606,9 +1611,18 @@ TestMatrix = {}
 		assertEquals( got[ 15 + 1 + 2 * 3 ].access_pattern.name, "foobar5" )
 		assertEquals( got[ 15 + 1 + 3 * 3 ].access_pattern.name, "foobaz1" )
 		assertEquals( got[ 15 + 1 + 4 * 3 ].access_pattern.name, "foobaz2" )
+	end
 
-		-- And also check highlighting
-		got = matrix.filter_borders_highlight( {
+	function TestMatrix:test_with_access_patterns_many_highlighting()
+		local physicals, logicals, logical_id = preparation_access_patterns_many()
+
+		self.access_patterns[1].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[2].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[3].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[4].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[5].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+
+		local got = matrix.filter_borders_highlight( {
 			lines = matrix.overall( {
 				physicals = physicals,
 				logicals = logicals,
@@ -1621,7 +1635,7 @@ TestMatrix = {}
 			right = false,
 			bottom = true
 		} ) )
-		assert( common.compare_tables( got[15 + 1].access_pattern.highlight, {
+		assert( common.compare_tables( got[15 + 1 + 0 * 3].access_pattern.highlight, {
 			left = false,
 			top = true,
 			right = true,
