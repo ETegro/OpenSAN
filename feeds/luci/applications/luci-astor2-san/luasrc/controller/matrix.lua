@@ -179,7 +179,7 @@ function M.overall( data )
 				table.sort( access_pattern_names )
 
 				for ap_i = 1, #access_pattern_names do
-					ap_offset = offset + ( ap_i - 1 ) * access_pattern_rowspan
+					local ap_offset = offset + ( ap_i - 1 ) * access_pattern_rowspan
 					if not matrix[ ap_offset ] then
 						matrix[ ap_offset ] = {}
 					end
