@@ -72,6 +72,7 @@ function M.overall( data )
 		-- Bind access patterns to logical volumes and find maximal
 		-- patterns quantity in single logical volume
 		local access_patterns_quantity_max = 1
+		local sessions_quantity_max = 1
 		for logical_volume_device, logical_volume in pairs( logical.logical_volumes or {} ) do
 			local quantity = 0
 			for _, access_pattern in ipairs( access_patterns ) do
@@ -81,6 +82,12 @@ function M.overall( data )
 					end
 					logical_volume.access_patterns[ access_pattern.name ] = access_pattern
 					quantity = quantity + 1
+					if access_pattern.sessions_avail and #access_pattern.sessions_avail > 0 then
+						sessions_quantity_max = M.lcm(
+							#access_pattern.sessions_avail,
+							sessions_quantity_max
+						)
+					end
 				end
 			end
 			if quantity ~= 0 then
@@ -93,11 +100,11 @@ function M.overall( data )
 			end
 		end
 
-		-- Overall lines quantity will be LCM( PVs, APs*LVs )
+		-- Overall lines quantity will be LCM( PVs, APs*LVs*Ss )
 		if logical_volumes_quantity ~= 0 then
 			lines_quantity = M.lcm(
 				physicals_quantity,
-				logical_volumes_quantity * access_patterns_quantity_max
+				logical_volumes_quantity * access_patterns_quantity_max * sessions_quantity_max
 			)
 		end
 		local future_line = current_line + lines_quantity
