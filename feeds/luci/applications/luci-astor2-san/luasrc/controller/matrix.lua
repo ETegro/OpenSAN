@@ -39,6 +39,7 @@ function M.overall( data )
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
 	local access_patterns = data.access_patterns or {}
+	local sessions = data.sessions or {}
 	local physicals_free = common.deepcopy( physicals )
 	local matrix = {}
 	local current_line = 1
@@ -710,6 +711,7 @@ function M.caller()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
 	local access_patterns = scst.AccessPattern.list()
+	local sessions = scst.Session.list()
 
 	unknown_access_patterns_filename_unbind( access_patterns, logical_volumes )
 	access_patterns = scst.AccessPattern.list()
@@ -739,13 +741,16 @@ function M.caller()
 		lines = M.overall( {
 			physicals = physicals,
 			logicals = logicals,
-			access_patterns = access_patterns } ),
+			access_patterns = access_patterns,
+			sessions = sessions
+		} ),
 		logicals = logicals_for_serialization,
 		physicals = physicals,
 		physical_volumes = physical_volumes,
 		volume_groups = volume_groups,
 		logical_volumes = logical_volumes_for_serialization,
-		access_patterns = access_patterns
+		access_patterns = access_patterns,
+		sessions = sessions
 	}
 	local FILTERS = {
 		M.filter_borders_highlight,
