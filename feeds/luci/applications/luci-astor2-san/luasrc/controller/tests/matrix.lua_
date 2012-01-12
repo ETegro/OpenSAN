@@ -66,6 +66,34 @@ local ACCESS_PATTERNS = {
 	}
 }
 
+local SESSIONS = {
+		["foobar3"] = {
+				["iqn.deadbeef"] = scst.Session:new( {
+					name = "iqn.deadbeef",
+					initiator_name = "iqn.deadbeef",
+					sid = "666",
+					target_iqn = "iqn.OpenSAN:1",
+					targetdriver = "iscsi"
+				} ),
+				["iqn.deadbeef_1"] = scst.Session:new( {
+					name = "iqn.deadbeef_1",
+					initiator_name = "iqn.deadbeef",
+					sid = "667",
+					target_iqn = "iqn.OpenSAN:1",
+					targetdriver = "iscsi"
+				} )
+		},
+		["foobar1"] = {
+				["iqn.deadbeef"] = scst.Session:new( {
+					name = "iqn.deadbeef",
+					initiator_name = "iqn.deadbeef",
+					sid = "668",
+					target_iqn = "iqn.OpenSAN:2",
+					targetdriver = "iscsi"
+				} )
+		}
+}
+
 local PHYSICALS_TRIPLE = {
 	["3:1"] = {
 		id = "3:1",
@@ -304,6 +332,7 @@ TestMatrix = {}
 		self.physicals_with_free = common.deepcopy( PHYSICALS_WITH_FREE )
 		self.logicals_with_free = common.deepcopy( LOGICALS_WITH_FREE )
 		self.logicals_with_snapshots = common.deepcopy( LOGICALS_WITH_SNAPSHOTS )
+		self.sessions = common.deepcopy( SESSIONS )
 	end
 	function TestMatrix:test_matrix_double()
 		local needed = {
@@ -1662,6 +1691,112 @@ TestMatrix = {}
 			bottom = false
 		} ) )
 		assert( common.compare_tables( got[15 + 1 + 4 * 3].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = true
+		} ) )
+	end
+
+	function TestMatrix:test_sessions()
+		local physicals, logicals, logical_id = preparation_access_patterns_many()
+
+		self.access_patterns[1].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[2].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[3].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[4].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[5].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+
+		local got = matrix.overall( {
+			physicals = physicals,
+			logicals = logicals,
+			access_patterns = self.access_patterns,
+			sessions = self.sessions
+		} )
+
+		assertEquals( got[1].logical.rowspan, 60 )
+		assertEquals( got[1].logical_volume.rowspan, 30 )
+		assertEquals( got[1].physical.rowspan, 10 )
+		for i = 1, 30*2, 5*2 do
+			assert( got[ i ].physical )
+		end
+		for i = 1, 30*2, 15*2 do
+			assert( got[ i ].logical_volume )
+		end
+		assertEquals( got[ 15*2 + 1 + 0 * 6 ].access_pattern.name, "foobar3" )
+		assertEquals( got[ 15*2 + 1 + 1 * 6 ].access_pattern.name, "foobar4" )
+		assertEquals( got[ 15*2 + 1 + 2 * 6 ].access_pattern.name, "foobar5" )
+		assertEquals( got[ 15*2 + 1 + 3 * 6 ].access_pattern.name, "foobaz1" )
+		assertEquals( got[ 15*2 + 1 + 4 * 6 ].access_pattern.name, "foobaz2" )
+
+		assertEquals( got[ 15*2 + 1 + 0 * 6 + 0 * 3 ].session.name, "iqn.deadbeef" )
+		assertEquals( got[ 15*2 + 1 + 0 * 6 + 0 * 3 ].session.sid, "666" )
+		assertEquals( got[ 15*2 + 1 + 0 * 6 + 1 * 3 ].session.name, "iqn.deadbeef_1" )
+		assertEquals( got[ 15*2 + 1 + 0 * 6 + 1 * 3 ].session.sid, "667" )
+		assertEquals( got[ 15*2 + 1 + 3 * 6 + 0 * 3 ].session.name, "iqn.deadbeef" )
+		assertEquals( got[ 15*2 + 1 + 3 * 6 + 0 * 3 ].session.sid, "668" )
+	end
+
+	function TestMatrix:test_sessions_highlighting()
+		local physicals, logicals, logical_id = preparation_access_patterns_many()
+
+		self.access_patterns[1].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[2].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[3].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[4].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+		self.access_patterns[5].filename = logicals[ logical_id ].logical_volumes["lvm2"].device
+
+		local got = matrix.filter_borders_highlight( {
+			lines = matrix.overall( {
+				physicals = physicals,
+				logicals = logicals,
+				access_patterns = self.access_patterns,
+				sessions = self.sessions
+			} )
+		} )[ "lines" ]
+		assert( common.compare_tables( got[15*2 + 1 + 0 * 6].access_pattern.highlight, {
+			left = false,
+			top = true,
+			right = false,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[15*2 + 1 + 0 * 6 + 0 * 3].session.highlight, {
+			left = false,
+			top = true,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[15*2 + 1 + 0 * 6 + 1 * 3].session.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = true
+		} ) )
+		assert( common.compare_tables( got[15*2 + 1 + 1 * 6].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[15*2 + 1 + 2 * 6].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = true,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[15*2 + 1 + 3 * 6].access_pattern.highlight, {
+			left = false,
+			top = false,
+			right = false,
+			bottom = false
+		} ) )
+		assert( common.compare_tables( got[15*2 + 1 + 3 * 6 + 0 * 3].session.highlight, {
+			left = false,
+			top = true,
+			right = true,
+			bottom = true
+		} ) )
+		assert( common.compare_tables( got[15*2 + 1 + 4 * 6].access_pattern.highlight, {
 			left = false,
 			top = false,
 			right = true,
