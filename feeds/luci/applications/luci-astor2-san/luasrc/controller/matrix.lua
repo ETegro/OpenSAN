@@ -48,6 +48,21 @@ function M.overall( data )
 	local logical_ids = common.keys( logicals )
 	table.sort( logical_ids )
 
+	-- Sessions filling
+	local access_patterns_sessioned = common.deepcopy( access_patterns )
+	for i, access_pattern in ipairs( access_patterns ) do
+		local ap_sessions = sessions[ access_pattern.section_name ]
+		if ap_sessions then
+			access_patterns_sessioned[ i ].sessions_avail = {}
+			local session_names = common.keys( ap_sessions )
+			table.sort( session_names )
+			for _,session_name in ipairs( session_names ) do
+				access_patterns_sessioned[ i ].sessions_avail[ #access_patterns_sessioned[ i ].sessions_avail + 1 ] = ap_sessions[ session_name ]
+			end
+		end
+	end
+	access_patterns = access_patterns_sessioned
+
 	for _,logical_id in ipairs( logical_ids ) do
 		local logical = logicals[ logical_id ]
 		local physicals_quantity = #common.keys( logical.physicals )
