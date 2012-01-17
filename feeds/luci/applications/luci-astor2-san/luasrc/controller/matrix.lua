@@ -325,9 +325,26 @@ function M.filter_borders_highlight( matrix )
 						local access_patterns_names = common.keys( logical_volume.access_patterns )
 						local access_pattern_rowspan = logical_volume_rowspan / #access_patterns_names
 						for ap_i, access_pattern_name in ipairs( access_patterns_names ) do
-							local access_pattern = lines[ i + ( ap_i - 1 ) * access_pattern_rowspan ].access_pattern
+							local ap_line = i + ( ap_i - 1 ) * access_pattern_rowspan
+							local access_pattern = lines[ ap_line ].access_pattern
 							check_highlights_attribute( access_pattern )
 							access_pattern.highlight.right = true
+							if access_pattern.sessions_avail then
+								access_pattern.highlight.right = false
+
+								local s_line_last = (#access_pattern.sessions_avail - 1) * lines[ ap_line ].session.rowspan
+								for s_line=ap_line, ap_line + s_line_last, lines[ ap_line ].session.rowspan do
+									local session = lines[ s_line ].session
+									check_highlights_attribute( session )
+									session.highlight.right = true
+									if s_line == ap_line then
+										session.highlight.top = true
+									end
+									if s_line == ap_line + s_line_last then
+										session.highlight.bottom = true
+									end
+								end
+							end
 							if ap_i == 1 then
 								access_pattern.highlight.top = true
 							end
