@@ -21,7 +21,7 @@
 local M = {}
 
 local SHELL_PATH = "/bin/sh"
-local LOG_PATH = "/tmp/common.system.log"
+local LOG_PATH = "/var/log/common.system.log"
 
 local function log_append( str )
 	local log_fd = io.open( LOG_PATH, "a" )
