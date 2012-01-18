@@ -332,15 +332,15 @@ function M.filter_borders_highlight( matrix )
 							if access_pattern.sessions_avail then
 								access_pattern.highlight.right = false
 
-								local s_line_last = (#access_pattern.sessions_avail - 1) * lines[ ap_line ].session.rowspan
-								for s_line=ap_line, ap_line + s_line_last, lines[ ap_line ].session.rowspan do
+								local s_line_last = ap_line + (#access_pattern.sessions_avail - 1) * lines[ ap_line ].session.rowspan
+								for s_line=ap_line, s_line_last, lines[ ap_line ].session.rowspan do
 									local session = lines[ s_line ].session
 									check_highlights_attribute( session )
 									session.highlight.right = true
 									if s_line == ap_line then
 										session.highlight.top = true
 									end
-									if s_line == ap_line + s_line_last then
+									if s_line == s_line_last then
 										session.highlight.bottom = true
 									end
 								end
