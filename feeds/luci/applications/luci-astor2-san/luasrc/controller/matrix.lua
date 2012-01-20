@@ -49,21 +49,18 @@ function M.overall( data )
 	table.sort( logical_ids )
 
 	-- Sessions filling
-	local access_patterns_sessioned = common.deepcopy( access_patterns )
-	for i, access_pattern in ipairs( access_patterns ) do
-		local ap_sessions = sessions[ access_pattern.section_name ]
-		if ap_sessions then
-			local session_names = common.keys( ap_sessions )
-			if #session_names > 0 then
-				table.sort( session_names )
-				access_patterns_sessioned[ i ].sessions_avail = {}
-				for _,session_name in ipairs( session_names ) do
-					access_patterns_sessioned[ i ].sessions_avail[ #access_patterns_sessioned[ i ].sessions_avail + 1 ] = ap_sessions[ session_name ]
-				end
+	for section_name,access_pattern_i in pairs( common.unique_keys( "section_name", access_patterns ) ) do
+		local ap_sessions = sessions[ section_name ] or {}
+		local session_names = common.keys( ap_sessions )
+		local access_pattern = access_patterns[ access_pattern_i[1] ]
+		if #session_names > 0 then
+			table.sort( session_names )
+			access_pattern.sessions_avail = {}
+			for _,session_name in ipairs( session_names ) do
+				access_pattern.sessions_avail[ #access_pattern.sessions_avail + 1 ] = ap_sessions[ session_name ]
 			end
 		end
 	end
-	access_patterns = access_patterns_sessioned
 
 	for _,logical_id in ipairs( logical_ids ) do
 		local logical = logicals[ logical_id ]
