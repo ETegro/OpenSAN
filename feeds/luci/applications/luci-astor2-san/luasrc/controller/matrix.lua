@@ -389,6 +389,11 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 					if logical_volume.access_patterns then
 						for _, access_pattern in pairs( logical_volume.access_patterns ) do
 							access_pattern.highlight.color = color
+							if access_pattern.sessions_avail then
+								for _, session in ipairs( access_pattern.sessions_avail ) do
+									session.highlight.color = color
+								end
+							end
 						end
 					end
 				end
