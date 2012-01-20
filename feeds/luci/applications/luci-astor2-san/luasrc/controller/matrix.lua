@@ -453,6 +453,26 @@ function M.filter_highlight_accesss_patterns( matrix )
 	return matrix
 end
 
+function M.filter_highlight_sessions( matrix, colors_array )
+	if not colors_array then
+		colors_array = { "normal_color", "light_color" }
+	end
+	local color_number = 1
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		local color = colors_array[ color_number ]
+		if line.session then
+			if color_number == #colors_array then
+				color_number = 1
+			else
+				color_number = color_number + 1
+			end
+			lines[ current_line ].session.highlight.background_color = color
+		end
+	end
+	return matrix
+end
+
 function M.filter_volume_group_percentage( matrix )
 	local lines = matrix.lines
 	for _, line in ipairs( lines ) do
@@ -808,6 +828,7 @@ function M.caller()
 		M.filter_alternation_border_colors,
 		M.filter_highlight_snapshots,
 		M.filter_highlight_accesss_patterns,
+		M.filter_highlight_sessions,
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
