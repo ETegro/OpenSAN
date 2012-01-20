@@ -347,3 +347,20 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 .access_pattern-disabled {
 	background-color: #CCC;
 }
+
+/* Sessions */
+.session-background-color-lightgreen {
+	background-color: #C8FCB1;
+}
+
+.session-background-color-green {
+	background-color: #9EF98A;
+}
+
+.session-background-color-lightblue {
+	background-color: #BCD2FB;
+}
+
+.session-background-color-blue {
+	background-color: #93B8F6;
+}
