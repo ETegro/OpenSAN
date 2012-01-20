@@ -17,16 +17,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<td valign="top"
-    rowspan="<%= line.session.rowspan %>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<%+san/sessions/title%>
-			<%+san/sessions/information%>
-		</td>
-	</tr>
+<table class="session_information">
+	<tbody>
+		<% for attribute, value in pairs( line.session ) do %>
+			<% if attribute ~= "path" then %>
+				<tr>
+					<td><%= attribute %>:</td>
+					<td><%= value %></td>
+				</tr>
+			<% end %>
+		<% end %>
+	</tbody>
 </table>
-
-</td>
