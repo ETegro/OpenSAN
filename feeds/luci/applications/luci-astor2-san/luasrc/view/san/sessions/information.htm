@@ -20,7 +20,16 @@
 <table class="session_information">
 	<tbody>
 		<% for attribute, value in pairs( line.session ) do %>
-			<% if attribute ~= "path" then %>
+			<% local exceptions = {
+				"highlight",
+				"initiator_name",
+				"path",
+				"rowspan",
+				"sid",
+				"targetdriver",
+				"target_iqn"
+				} %>
+			<% if not common.is_in_array( attribute, exceptions ) then %>
 				<tr>
 					<td><%= attribute %>:</td>
 					<td>
