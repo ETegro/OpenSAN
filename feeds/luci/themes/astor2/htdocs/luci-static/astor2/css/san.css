@@ -146,14 +146,28 @@ table.matrix div.control {
 	float: right;
 }
 
-/* AccessPattern */
+/* AccessPattern and Sessions */
 table.matrix table.access_pattern_information {
 	clear: both;
 }
 
-table.matrix table.access_pattern_information input[ type = "text" ] {
+table.matrix table.access_pattern_information input[ type = "text" ],
+table.matrix div.session_title input[ type = "text" ],
+table.matrix table.session_information input[ type = "text" ] {
 	background-color: inherit;
 	width: 100%;
+}
+
+table.matrix div.session_title {
+	width: 100%;
+}
+
+table.matrix div.session_title input[ type = "text" ] {
+	text-decoration: underline;
+}
+
+table.matrix div.session_title input[ type = "text" ]:hover {
+	cursor: pointer;
 }
 
 /* Bottom table with forms */
