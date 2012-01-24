@@ -1,6 +1,6 @@
 #!/bin/bash
 # aStor2 -- storage area network configurable via Web-interface
-# Copyright (C) 2009-2011 ETegro Technologies, PLC
+# Copyright (C) 2009-2012 ETegro Technologies, PLC
 #                         Sergey Matveev <stargrave@stargrave.org>
 #                         Vladimir Petukhov <vladimir.petukhov@etegro.com>
 # 

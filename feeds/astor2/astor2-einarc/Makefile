@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 Sergey Matveev (stargrave@stargrave.org)
+# Copyright (C) 2011-2012 Sergey Matveev (stargrave@stargrave.org)
 #
 
 include $(TOPDIR)/rules.mk

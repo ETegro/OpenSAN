@@ -1065,7 +1065,7 @@ msgid "IPv6 Setup"
 msgstr "Настройка IPv6"
 
 msgid "IPv6 WAN Status"
-msgstr ""
+msgstr "Статус IPv6 WAN"
 
 msgid "Identity"
 msgstr ""
