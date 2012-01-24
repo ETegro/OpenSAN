@@ -1,0 +1,15 @@
+= Release 1.5.4 =
+We are pleased to announce new OpenSAN's version.
+
+== Release notes ==
+* Disabled console blanking, that is useful for permanent system
+  availability monitoring
+* Snapshot's size is limited by original LogicalVolume's one
+* Bugfix: forcefully activate an array after system reboot anyway,
+  even if it is degraded and dirty
+* Bugfix: clean up possibly staying alive iSCSI sessions linked to
+  failed arrays
+
+=== Download ===
+You can download this release following [/download/V1.5.4/ this link].
+Always cryptographically [wiki:Publickey verify images]!
