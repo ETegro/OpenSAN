@@ -566,6 +566,22 @@ function filter_base64encode( matrix )
 	return matrix
 end
 
+local function unknown_access_patterns_filename_unbind( access_patterns, logical_volumes )
+	for _, access_pattern in ipairs( access_patterns ) do
+		if access_pattern.filename then
+			local logical_volume_found = false
+			for _,logical_volume in ipairs( logical_volumes ) do
+				if logical_volume.device == access_pattern.filename then
+					logical_volume_found = true
+				end
+			end
+			if not logical_volume_found then
+				access_pattern:unbind()
+			end
+		end
+	end
+end
+
 local function logical_volume_group( logical, volume_groups )
 	for _, volume_group in ipairs( volume_groups ) do
 		if volume_group.physical_volumes[1].device == logical.device then
@@ -628,6 +644,10 @@ function M.caller()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
 	local access_patterns = scst.AccessPattern.list()
+
+	unknown_access_patterns_filename_unbind( access_patterns, logical_volumes )
+	access_patterns = scst.AccessPattern.list()
+	scst.Daemon.apply()
 
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
