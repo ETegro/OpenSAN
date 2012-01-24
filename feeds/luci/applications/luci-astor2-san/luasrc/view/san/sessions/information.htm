@@ -23,7 +23,15 @@
 			<% if attribute ~= "path" then %>
 				<tr>
 					<td><%= attribute %>:</td>
-					<td><%= value %></td>
+					<td>
+						<% local element_name = line.session.sid .. line.session.initiator_name %>
+						<input name="<%= element_name %>"
+							   type="text"
+							   readonly="readonly"
+							   class="noborder"
+							   title="<%= value %>"
+							   value="<%= value %>" />
+					</td>
 				</tr>
 			<% end %>
 		<% end %>
