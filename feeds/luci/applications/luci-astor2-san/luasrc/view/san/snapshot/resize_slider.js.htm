@@ -27,7 +27,7 @@ jQuery.noConflict();
 	$( slider_name ).slider( {
 		orientation: 'horizontal',
 		min: <%= line.logical_volume.size_mib %>,
-		max: <%= line.logical_volume.size_mib %> + <%= line.logical_volume.volume_group.total_mib %> - <%= line.logical_volume.volume_group.allocated_mib %>,
+		max: <% for _,lv in pairs( matrix_overall.logical_volumes ) do if lv.name == line.logical_volume.logical_volume then %><%= lv.size %><% end end %>,
 		range: 'min',
 		step: <%= line.logical_volume.volume_group.extent %>,
 		value: <%= line.logical_volume.size_mib %>,
