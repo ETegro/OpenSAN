@@ -60,6 +60,11 @@ function toggle_drives_information() {
 	toggleFadeParentElement( object );
 }
 
+function toggle_session_information() {
+	var object = { click_selector : 'form input[ name ^= "session_info-" ]' }
+	toggleFadeParentElement( object );
+}
+
 function toggle_snapshot_creation() {
 	var object = { click_selector : 'form input[ name ^= "snapshot_creation-" ]' };
 	toggleFadeParentElement( object );
@@ -163,6 +168,7 @@ function setup_hypnorobo() {
 
 toggle_access_pattern_creation();
 toggle_drives_information();
+toggle_session_information();
 toggle_snapshot_creation();
 toggle_resize_snapshot();
 toggle_edit_access_patterns();
