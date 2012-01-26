@@ -493,7 +493,7 @@ M.Daemon = {}
 local Daemon_mt = common.Class( M.Daemon )
 
 M.Daemon.SCSTADMIN_PATH = "/usr/sbin/scstadmin"
-local LOG_PATH = "/tmp/scst.daemon.log"
+local LOG_PATH = "/var/log/scst.daemon.log"
 
 local function log_append( str )
 	local log_fd = io.open( LOG_PATH, "a" )

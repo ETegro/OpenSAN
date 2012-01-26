@@ -28,7 +28,7 @@ ROOTFSSIZE="$(($4 / 512))"
 
 BLOCKS="$((($KERNELSIZE / 2) - 1))"
 
-dd if=/dev/zero of="$OUTPUT" bs=512 seek="$ROOTFSOFFSET" conv=notrunc count="$(( 2 * $ROOTFSSIZE ))"
+dd if=/dev/zero of="$OUTPUT" bs=512 seek="$ROOTFSOFFSET" conv=notrunc count="$(( 3 * $ROOTFSSIZE ))"
 dd if="$ROOTFSIMAGE" of="$OUTPUT" bs=512 seek="$ROOTFSOFFSET" conv=notrunc
 
 [ -n "$NOGRUB" ] && exit 0
