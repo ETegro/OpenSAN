@@ -1801,6 +1801,34 @@ TestFilterPercentage = {}
 		assertEquals( got[5].logical_volume.volume_group.percentage, 19 )
 	end
 
+TestFilterActionsAvailability = {}
+	function TestFilterActionsAvailability:setUp()
+		self.physicals_triple = common.deepcopy( PHYSICALS_TRIPLE )
+		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
+		self.physicals_double = common.deepcopy( PHYSICALS_DOUBLE )
+		self.logicals_double = common.deepcopy( LOGICALS_DOUBLE )
+	end
+	function TestFilterActionsAvailability:test_logical_deletability()
+		assertEquals(
+			matrix.filter_deletability_logical( {
+				lines = matrix.overall( {
+					physicals = self.physicals_double,
+					logicals = self.logicals_double,
+				} )
+			} )["lines"][1]["logical"].deletable,
+			true
+		)
+		assertEquals(
+			matrix.filter_deletability_logical( {
+				lines = matrix.overall( {
+					physicals = self.physicals_triple,
+					logicals = self.logicals_triple,
+				} )
+			} )["lines"][1]["logical"].deletable,
+			false
+		)
+	end
+
 TestFilterAlternationBorderColors = {}
 	function TestFilterAlternationBorderColors:test_colors()
 		local max_logicals = 6

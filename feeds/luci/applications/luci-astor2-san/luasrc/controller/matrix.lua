@@ -497,6 +497,20 @@ local function filter_fillup_auth_credentials( matrix )
 	return matrix
 end
 
+function M.filter_deletability_logical( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical then
+			if #common.keys( line.logical.logical_volumes or {} ) == 0 then
+				line.logical.deletable = true
+			else
+				line.logical.deletable = false
+			end
+		end
+	end
+	return matrix
+end
+
 function M.filter_calculate_hotspares( matrix )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
@@ -696,6 +710,7 @@ function M.caller()
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
+		M.filter_deletability_logical,
 		filter_mib_humanize,
 		filter_size_round,
 		filter_fillup_auth_credentials,

@@ -29,7 +29,7 @@
 				<% if ( line.logical.volume_group.total_mib - line.logical.volume_group.allocated_mib ) ~= 0 then %>
 					<%+san/logical/logical_volume-control%>
 				<% end %>
-				<% if #common.keys( line.logical.logical_volumes ) == 0 then %>
+				<% if line.logical.deletable then %>
 					<%+san/logical/remove%>
 				<% end %>
 			</div>
