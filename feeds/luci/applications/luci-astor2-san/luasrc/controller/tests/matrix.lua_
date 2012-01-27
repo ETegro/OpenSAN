@@ -1810,6 +1810,7 @@ TestFilterActionsAvailability = {}
 		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
 		self.physicals_double = common.deepcopy( PHYSICALS_DOUBLE )
 		self.logicals_double = common.deepcopy( LOGICALS_DOUBLE )
+		self.logicals_with_snapshots = common.deepcopy( LOGICALS_WITH_SNAPSHOTS )
 	end
 	function TestFilterActionsAvailability:test_logical_deletability()
 		assertEquals(
@@ -1855,6 +1856,26 @@ TestFilterActionsAvailability = {}
 					access_patterns = self.access_patterns
 				} )
 			} )["lines"][1]["logical_volume"].deletable,
+			false
+		)
+	end
+	function TestFilterActionsAvailability:test_logical_volume_resizability()
+		assertEquals(
+			matrix.filter_resizability_logical_volume( {
+				lines = matrix.overall( {
+					physicals = self.physicals_triple,
+					logicals = self.logicals_triple,
+				} )
+			} )["lines"][1]["logical_volume"].resizable,
+			true
+		)
+		assertEquals(
+			matrix.filter_resizability_logical_volume( {
+				lines = matrix.overall( {
+					physicals = self.physicals_triple,
+					logicals = self.logicals_with_snapshots,
+				} )
+			} )["lines"][1]["logical_volume"].resizable,
 			false
 		)
 	end

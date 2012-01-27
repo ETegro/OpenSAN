@@ -38,7 +38,7 @@
 						<%+san/logical_volume/bind%>
 					<% end %>
 				<% end %>
-				<% if #line.logical_volume.snapshots == 0 then %>
+				<% if line.logical_volume.resizable then %>
 					<%+san/logical_volume/resize-control%>
 				<% end %>
 				<%+san/logical_volume/snapshot-control%>

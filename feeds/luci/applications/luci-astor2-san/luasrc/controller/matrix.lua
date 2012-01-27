@@ -525,6 +525,20 @@ function M.filter_deletability_logical_volume( matrix )
 	return matrix
 end
 
+function M.filter_resizability_logical_volume( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical_volume and line.logical_volume.snapshots then
+			if( #line.logical_volume.snapshots == 0 ) then
+				line.logical_volume.resizable = true
+			else
+				line.logical_volume.resizable = false
+			end
+		end
+	end
+	return matrix
+end
+
 function M.filter_calculate_hotspares( matrix )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
@@ -726,6 +740,7 @@ function M.caller()
 		M.filter_calculate_hotspares,
 		M.filter_deletability_logical,
 		M.filter_deletability_logical_volume,
+		M.filter_resizability_logical_volume,
 		filter_mib_humanize,
 		filter_size_round,
 		filter_fillup_auth_credentials,
