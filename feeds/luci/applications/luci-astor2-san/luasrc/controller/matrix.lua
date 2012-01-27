@@ -539,6 +539,23 @@ function M.filter_resizability_logical_volume( matrix )
 	return matrix
 end
 
+function M.filter_unbindability_access_pattern( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.access_pattern then
+			line.access_pattern.unbindable = true
+			if line.access_pattern.lun == 0 then
+				for _, inner_line in ipairs( lines ) do
+					if inner_line.access_pattern and inner_line.access_pattern.lun ~= 0 and inner_line.access_pattern.filename == line.access_pattern.filename then
+						line.access_pattern.unbindable = false
+					end
+				end
+			end
+		end
+	end
+	return matrix
+end
+
 function M.filter_calculate_hotspares( matrix )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
@@ -741,6 +758,7 @@ function M.caller()
 		M.filter_deletability_logical,
 		M.filter_deletability_logical_volume,
 		M.filter_resizability_logical_volume,
+		M.filter_unbindability_access_pattern,
 		filter_mib_humanize,
 		filter_size_round,
 		filter_fillup_auth_credentials,
