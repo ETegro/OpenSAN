@@ -21,6 +21,9 @@ msgstr "Такое название шаблона доступа уже сущ�
 msgid "Access pattern's name is not set"
 msgstr "Название шаблона доступа не задано"
 
+msgid "AccessPattern with LUN0 has to be binded first"
+msgstr "Шаблон доступа с LUN0 должен быть прикреплён первым"
+
 msgid "Access patterns"
 msgstr "Шаблоны доступа"
 
