@@ -1,3 +1,4 @@
+* [wiki:News_20120127T1603 Release 1.5.6]
 * [wiki:News_20120126T1843 Release 1.5.5]
 * [wiki:News_20120103T2254 Release 1.5.4]
 * [wiki:News_20111213T1654 Release 1.5.3]
