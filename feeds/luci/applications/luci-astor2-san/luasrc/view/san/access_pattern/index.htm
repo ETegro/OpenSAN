@@ -34,7 +34,9 @@
 			<%+san/access_pattern/title%>
 			<div class="control">
 				<% if line.access_pattern:is_binded() then %>
-					<%+san/access_pattern/unbind%>
+					<% if line.access_pattern.unbindable then %>
+						<%+san/access_pattern/unbind%>
+					<% end %>
 				<% else %>
 					<% if #matrix_overall.logical_volumes > 0 then %>
 						<%+san/access_pattern/bind%>
