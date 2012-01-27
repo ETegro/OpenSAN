@@ -239,6 +239,61 @@ local LOGICALS_WITH_FREE = {
 	}
 }
 
+local LOGICALS_WITH_SNAPSHOTS = {
+	[0] = {
+		id = 0,
+		level = "passthrough",
+		physicals = {
+			["3:1"] = "0",
+		},
+		logical_volumes = {
+			["foo"] = lvm.LogicalVolume:new( {
+				name = "foo",
+				device = "foobar1",
+				volume_group = {}, -- It is dummy
+				size = 12,
+				snapshots = {
+					lvm.Snapshot:new( {
+						name = "foo_2011-06-13_13-13-13",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12,
+						allocated = 6,
+						logical_volume = "foo"
+					} ),
+					lvm.Snapshot:new( {
+						name = "foo_2011-02-26_13-13-26",
+						device = "foobar1",
+						volume_group = {}, -- It is dummy
+						size = 12,
+						allocated = 6,
+						logical_volume = "foo"
+					} )
+				}
+			} ),
+			["foo_2011-06-13_13-13-13"] = lvm.Snapshot:new( {
+				name = "foo_2011-06-13_13-13-13",
+				device = "foobar1",
+				volume_group = {}, -- It is dummy
+				size = 12,
+				allocated = 6,
+				logical_volume = "foo"
+			} ),
+			["foo_2011-02-26_13-13-26"] = lvm.Snapshot:new( {
+				name = "foo_2011-02-26_13-13-26",
+				device = "foobar1",
+				volume_group = {}, -- It is dummy
+				size = 12,
+				allocated = 6,
+				logical_volume = "foo"
+			} )
+		},
+		capacity = 666.0,
+		device = "/dev/md0",
+		state = "normal"
+	}
+}
+
 TestMatrix = {}
 	function TestMatrix:setUp()
 		self.access_patterns = common.deepcopy( ACCESS_PATTERNS )
@@ -248,6 +303,7 @@ TestMatrix = {}
 		self.logicals_double = common.deepcopy( LOGICALS_DOUBLE )
 		self.physicals_with_free = common.deepcopy( PHYSICALS_WITH_FREE )
 		self.logicals_with_free = common.deepcopy( LOGICALS_WITH_FREE )
+		self.logicals_with_snapshots = common.deepcopy( LOGICALS_WITH_SNAPSHOTS )
 	end
 	function TestMatrix:test_matrix_double()
 		local needed = {
@@ -967,60 +1023,6 @@ TestMatrix = {}
 				state = "0"
 			}
 		}
-		local logicals = {
-			[0] = {
-				id = 0,
-				level = "passthrough",
-				physicals = {
-					["3:1"] = "0",
-				},
-				logical_volumes = {
-					["foo"] = lvm.LogicalVolume:new( {
-						name = "foo",
-						device = "foobar1",
-						volume_group = {}, -- It is dummy
-						size = 12,
-						snapshots = {
-							lvm.Snapshot:new( {
-								name = "foo_2011-06-13_13-13-13",
-								device = "foobar1",
-								volume_group = {}, -- It is dummy
-								size = 12,
-								allocated = 6,
-								logical_volume = "foo"
-							} ),
-							lvm.Snapshot:new( {
-								name = "foo_2011-02-26_13-13-26",
-								device = "foobar1",
-								volume_group = {}, -- It is dummy
-								size = 12,
-								allocated = 6,
-								logical_volume = "foo"
-							} )
-						}
-					} ),
-					["foo_2011-06-13_13-13-13"] = lvm.Snapshot:new( {
-						name = "foo_2011-06-13_13-13-13",
-						device = "foobar1",
-						volume_group = {}, -- It is dummy
-						size = 12,
-						allocated = 6,
-						logical_volume = "foo"
-					} ),
-					["foo_2011-02-26_13-13-26"] = lvm.Snapshot:new( {
-						name = "foo_2011-02-26_13-13-26",
-						device = "foobar1",
-						volume_group = {}, -- It is dummy
-						size = 12,
-						allocated = 6,
-						logical_volume = "foo"
-					} )
-				},
-				capacity = 666.0,
-				device = "/dev/md0",
-				state = "normal"
-			}
-		}
 		local needed = {
 			{
 				physical = {
@@ -1148,7 +1150,7 @@ TestMatrix = {}
 		assert( common.compare_tables(
 				matrix.overall( {
 					physicals = physicals,
-					logicals = logicals
+					logicals = self.logicals_with_snapshots
 				} ),
 				needed
 			)
