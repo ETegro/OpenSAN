@@ -1803,6 +1803,7 @@ TestFilterPercentage = {}
 
 TestFilterActionsAvailability = {}
 	function TestFilterActionsAvailability:setUp()
+		self.access_patterns = common.deepcopy( ACCESS_PATTERNS )
 		self.physicals_triple = common.deepcopy( PHYSICALS_TRIPLE )
 		self.logicals_triple = common.deepcopy( LOGICALS_TRIPLE )
 		self.physicals_double = common.deepcopy( PHYSICALS_DOUBLE )
@@ -1825,6 +1826,33 @@ TestFilterActionsAvailability = {}
 					logicals = self.logicals_triple,
 				} )
 			} )["lines"][1]["logical"].deletable,
+			false
+		)
+	end
+	function TestFilterActionsAvailability:test_logical_volume_deletability()
+		assertEquals(
+			matrix.filter_deletability_logical_volume( {
+				lines = matrix.overall( {
+					physicals = self.physicals_triple,
+					logicals = self.logicals_triple,
+					access_patterns = self.access_patterns
+				} )
+			} )["lines"][1]["logical_volume"].deletable,
+			true
+		)
+
+		self.access_patterns[1].filename = self.logicals_triple[9].logical_volumes["bar"].device
+		self.access_patterns[2].filename = self.logicals_triple[9].logical_volumes["baz"].device
+		self.access_patterns[3].filename = self.logicals_triple[9].logical_volumes["foo"].device
+
+		assertEquals(
+			matrix.filter_deletability_logical_volume( {
+				lines = matrix.overall( {
+					physicals = self.physicals_triple,
+					logicals = self.logicals_triple,
+					access_patterns = self.access_patterns
+				} )
+			} )["lines"][1]["logical_volume"].deletable,
 			false
 		)
 	end

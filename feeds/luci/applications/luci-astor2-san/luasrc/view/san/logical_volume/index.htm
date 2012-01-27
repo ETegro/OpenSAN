@@ -42,7 +42,7 @@
 					<%+san/logical_volume/resize-control%>
 				<% end %>
 				<%+san/logical_volume/snapshot-control%>
-				<% if not line.logical_volume.access_patterns then %>
+				<% if line.logical_volume.deletable then %>
 					<%+san/logical_volume/remove%>
 				<% end %>
 				<%+san/logical_volume/credentials/add%>

@@ -511,6 +511,20 @@ function M.filter_deletability_logical( matrix )
 	return matrix
 end
 
+function M.filter_deletability_logical_volume( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical_volume then
+			if( line.logical_volume.access_patterns ) then
+				line.logical_volume.deletable = false
+			else
+				line.logical_volume.deletable = true
+			end
+		end
+	end
+	return matrix
+end
+
 function M.filter_calculate_hotspares( matrix )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
@@ -711,6 +725,7 @@ function M.caller()
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
 		M.filter_deletability_logical,
+		M.filter_deletability_logical_volume,
 		filter_mib_humanize,
 		filter_size_round,
 		filter_fillup_auth_credentials,
