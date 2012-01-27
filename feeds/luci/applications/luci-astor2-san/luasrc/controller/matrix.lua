@@ -574,6 +574,13 @@ local function unknown_access_patterns_filename_unbind( access_patterns, logical
 				if logical_volume.device == access_pattern.filename then
 					logical_volume_found = true
 				end
+				if logical_volume.snapshots then
+					for _,snapshot in ipairs( logical_volume.snapshots ) do
+						if snapshot.device == access_pattern.filename then
+							logical_volume_found = true
+						end
+					end
+				end
 			end
 			if not logical_volume_found then
 				access_pattern:unbind()
