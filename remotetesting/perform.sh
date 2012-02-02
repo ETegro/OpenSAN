@@ -16,7 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-. ./config
+[ -n "$CONFIG" ] || CONFIG=./config
+
+. $CONFIG
 . lib/functions.sh
 
 WORK_DIR=`echo $0 | sed "s/\/perform.sh$//"`

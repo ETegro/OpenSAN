@@ -66,7 +66,11 @@ CMD_SCP()
 {
 	local src="$1"
 	local dst="$2"
-	$SCP "$src" ${REMOTE_USER}@${REMOTE_HOST}:"$dst"
+	key=`mktemp`
+	chmod 600 $key
+	echo "$REMOTE_KEY_PRIV" | base64 -d > $key
+	$SCP -i $key "$src" ${REMOTE_USER}@${REMOTE_HOST}:"$dst"
+	rm -f $key
 }
 
 retrieve_lua()
