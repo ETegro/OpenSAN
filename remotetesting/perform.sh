@@ -25,7 +25,7 @@ export WORK_DIR
 export LC_ALL=C
 
 test_start="`date '+%F_%R:%S'`"
-for test_dir in tests/*; do
+for test_dir in tests/$1/*; do
 	pushdq $test_dir
 
 	test_name="`echo $test_dir | awk -F/ '{print $NF}'`"
