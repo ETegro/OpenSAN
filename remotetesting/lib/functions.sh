@@ -55,7 +55,11 @@ __EOF__
 
 CMD_SSH()
 {
-	$SSH ${REMOTE_USER}@${REMOTE_HOST} $@
+	key=`mktemp`
+	chmod 600 $key
+	echo "$REMOTE_KEY_PRIV" | base64 -d > $key
+	$SSH -i $key ${REMOTE_USER}@${REMOTE_HOST} $@
+	rm -f $key
 }
 
 CMD_SCP()
