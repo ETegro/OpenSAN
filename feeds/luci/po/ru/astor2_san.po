@@ -239,8 +239,8 @@ msgstr "Желательно использовать жёсткие диски 
 msgid "Password"
 msgstr "Пароль"
 
-msgid "Password must be 12 characters long"
-msgstr "Пароль должен иметь длину 12 символов"
+msgid "Password must not be less than 12 characters long"
+msgstr "Пароль не должен иметь длину менее 12 символов"
 
 msgid "Physical drives"
 msgstr "Физические диски"

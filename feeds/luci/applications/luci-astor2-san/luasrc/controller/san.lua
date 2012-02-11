@@ -998,8 +998,8 @@ local function scst_auth_credential_add( inputs, data )
 	end
 
 	local auth_credential_password = inputs[ "new_auth_credential_password-" .. logical_volume_device_hash ]
-	if #auth_credential_password ~= 12 then
-		return index_with_error( i18n("Password must be 12 characters long") )
+	if #auth_credential_password < 12 then
+		return index_with_error( i18n("Password must not be less than 12 characters long") )
 	end
 
 	local return_code, result = pcall(

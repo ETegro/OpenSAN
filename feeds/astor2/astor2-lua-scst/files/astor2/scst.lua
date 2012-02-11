@@ -47,7 +47,7 @@ function M.AuthCredential:new( attrs )
 	        "invalid username" )
 	assert( common.is_string( attrs.password ),
 	        "empty password" )
-	assert( #attrs.password == M.AuthCredential.PASSWORD_LENGTH,
+	assert( #attrs.password >= M.AuthCredential.PASSWORD_LENGTH,
 	        "incorrect password length" )
 	assert( common.is_string( attrs.filename ),
 	        "empty filename" )
