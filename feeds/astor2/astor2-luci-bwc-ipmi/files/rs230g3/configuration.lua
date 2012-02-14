@@ -34,3 +34,8 @@ enclosures = {
 	[11] = "ENC11",
 	[12] = "ENC12"
 }
+
+expanders = {
+	["internal"] = "SASX28 A.1",
+	["jbod"] = "DNS1400-01"
+}
