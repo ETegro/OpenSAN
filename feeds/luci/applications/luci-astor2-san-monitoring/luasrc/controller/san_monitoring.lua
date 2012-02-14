@@ -212,6 +212,40 @@ local function network_data_get( data )
 	return data
 end
 
+local function jbod_data_get( data )
+	local expander_count = 1
+	data["JBOD"] = {}
+	for _,expander in ipairs( einarc.Adapter.expanders() ) do
+		if expander.model == luci.controller.san_monitoring_configuration.expanders.jbod then
+			local result = common.system( "sg_ses --page=0x2 /dev/sg" .. tostring( expander.id ) )
+			local jbod_data = {}
+			for line_number,line in ipairs( result.stdout ) do
+				if string.match( line, "%s+Element type: Power supply" ) then
+					for n,offset in ipairs( { 2, 3 } ) do
+						jbod_data["PS" .. tostring(n)] = { fail = true }
+						if( string.match(
+							result.stdout[ line_number + 1 + 5*offset - 2 ],
+							"^.*Fail=(%d+).*$" ) == "0" ) then
+							jbod_data["PS" .. tostring(n)].fail = false
+						end
+					end
+				end
+				if string.match( line, "%s+Element type: Cooling" ) then
+					for n,offset in ipairs( { 3, 2, 5, 4 } ) do
+						jbod_data["FAN" .. tostring(n)] = { fail = true }
+						if( string.match( result.stdout[ line_number + 1 + 4*offset - 2 ], "^.*Fail=(%d+).*$" ) == "0" ) then
+							jbod_data["FAN" .. tostring(n)].fail = false
+						end
+						jbod_data["FAN" .. tostring(n)].rpm = tonumber( string.match( result.stdout[ line_number + 1 + 4*offset - 1 ], "^.*Actual speed=(%d+) rpm.*$" ) )
+					end
+				end
+			end
+			data["JBOD"][ #data["JBOD"] + 1 ] = jbod_data
+		end
+	end
+	return data
+end
+
 function render()
 	local what = luci.http.formvalue( "what" )
 	local pci = luci.http.formvalue( "pci" )
