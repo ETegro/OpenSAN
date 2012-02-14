@@ -229,22 +229,39 @@ function render()
 			matrix.filter_alternation_border_colors,
 			matrix.filter_physical_enclosures
 		} )
+		-- Keep only the needed enclosures
+		local needed_expander_id = nil
+		for _,expander in ipairs( einarc.Adapter.expanders() ) do
+			if expander.model == luci.controller.san_monitoring_configuration.expanders.internal then
+				needed_expander_id = expander.id
+			end
+		end
+		assert( needed_expander_id, "No needed expander found" )
+
 		-- Postprocess enclosures
 		enclosures = {}
 		for _, line in ipairs( matrix_data.lines ) do
 			if line.physical and line.physical.enclosure_id then
-				local physical = line.physical
-				local enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ physical.enclosure_id ]
-				enclosures[ enclosure_id ] = { physical_id = physical.id }
+				local expander_id, enclosure_id = string.match(
+					line.physical.enclosure_id,
+					"^(%d+):(%d+)$"
+				)
+				expander_id = tonumber( expander_id )
+				enclosure_id = tonumber( enclosure_id )
+				if expander_id == needed_expander_id then
+					local physical = line.physical
+					enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ physical.enclosure_id ]
+					enclosures[ enclosure_id ] = { physical_id = physical.id }
 
-				local color = "gray"
-				if physical.highlight.color then
-					color = physical.highlight.color
-					if physical.state == "hotspare" then
-						color = "dark" .. color
+					local color = "gray"
+					if physical.highlight.color then
+						color = physical.highlight.color
+						if physical.state == "hotspare" then
+							color = "dark" .. color
+						end
 					end
+					enclosures[ enclosure_id ].color = color
 				end
-				enclosures[ enclosure_id ].color = color
 			end
 		end
 		for _, line in ipairs( matrix_data.lines ) do
