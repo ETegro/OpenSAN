@@ -30,13 +30,17 @@ require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
 	local i18n = luci.i18n.translate
-	local e = entry( { "admin", "san", "monitoring" },
-	                 call( "monitoring_overall" ),
-	                 i18n("Monitoring"),
-	                 11 )
+	local e = entry(
+		{ "admin", "san", "monitoring" },
+		call( "monitoring_overall" ),
+		i18n("Monitoring"),
+		11
+	)
 	e.i18n = "astor2_san"
-	e = entry( { "admin", "san", "monitoring", "render" },
-	             call( "render" ), nil, 11 )
+	e = entry(
+		{ "admin", "san", "monitoring", "render" },
+		call( "render" ), nil, 11
+	)
 	e.leaf = true
 end
 
