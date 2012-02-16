@@ -3,22 +3,28 @@
       xmlns:py="http://genshi.edgewall.org/"
       py:strip="">
 
+<head py:match="head" py:attrs="select('@*')">
+	${select('*|comment()|text()')}
+	<link rel="stylesheet" type="text/css" href="${href.chrome('site/style.css')}" />
+</head>
+
 <body py:match="body" py:attrs="select('@*')">
 	<div py:match="div[@id='header']" py:attrs="select('@*')">
-		<div style="margin-bottom: -12em; font-size: 50%"><pre>
-              \____/                                  
-              /    \                                  
-             / O  o \      _______    __    ___   ___ 
+		<div style="margin-bottom: -7em; font-size: 50%"><pre>
+              \____/
+              /    \
+             / O  o \      _______    __    ___   ___
   ____  "o' () \__/ ()    /______/|  /_/\  /__/\ /__/|
  / __ \   \/ \______/ \  /   ____|/ /  \ \ |  \ |  | |
 | /  \ |_ __  |_||_|___O |  (____/\/    \ \|   \|  | |
 | |  | | '_ \ / _ \' _ \'\____   \/  /\  \ |  . `  | |
 | \__/ | |_) |  __/ | | |/____)     ____  \|  |\   | |
- \____/|  __/ \___|_| |_|_______/__/'   \_____|'\__|/ 
-       | |                                            
-       |_|                                            
+ \____/|  __/ \___|_| |_|_______/__/'   \_____|'\__|/
+       | |
+       |_|
 		</pre></div>
 	</div>
+
 	${select('*|text()')}
 </body>
 
