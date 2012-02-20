@@ -284,7 +284,7 @@ function render()
 				enclosure_id = tonumber( enclosure_id )
 				if expander_id == needed_expander_id then
 					local physical = line.physical
-					enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ physical.enclosure_id ]
+					enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ enclosure_id ]
 					enclosures[ enclosure_id ] = { physical_id = physical.id }
 
 					local color = "gray"
