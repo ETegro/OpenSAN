@@ -26,7 +26,8 @@ EMBED_SIZE = {
 	rear = { width = 1159, height = 261 },
 	motherboard = { width = 545, height = 643 },
 	legend = { width = 249, height = 101 },
-	jbod_enclosure = { width = 250, height = 63 }
+	jbod_enclosure = { width = 250, height = 63 },
+	jbod_rear = { width = 991, height = 367 }
 }
 
 local function svg_scaling( svg_template )
@@ -79,7 +80,8 @@ end
 					<%+san_monitoring/jbod_front%>
 				</td>
 				<td width="50%">
-					<%#+san_monitoring/jbod_front%>
+					<embed style="<%= EMBED_SIZE.jbod_rear.style %>"
+						   src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=jbod_rear&jbod_state" />
 				</td>
 			</tr>
 		</tbody>
