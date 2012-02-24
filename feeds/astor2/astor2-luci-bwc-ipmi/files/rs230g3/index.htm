@@ -69,4 +69,20 @@ end
 	</tbody>
 </table>
 
+<% for _,jbod_local in ipairs( data.JBODS ) do %>
+	<% jbod = jbod_local %>
+	<table width="100%" border="1px">
+		<tbody>
+			<tr>
+				<td width="50%">
+					<%+san_monitoring/jbod_front%>
+				</td>
+				<td width="50%">
+					<%#+san_monitoring/jbod_front%>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+<% end %>
+
 <%+san_monitoring/legend%>
