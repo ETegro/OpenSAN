@@ -359,5 +359,13 @@ function render()
 			data[ template_id ] = enclosure
 		end
 	end
+	if what == "jbod_enclosure" then
+		data = {
+			color = luci.http.formvalue( "color" ),
+			physical_id = luci.http.formvalue( "physical_id" ),
+			logical_id = luci.http.formvalue( "logical_id" ),
+			opacity = luci.http.formvalue( "opacity" )
+		}
+	end
 	return render_svg( what, data )
 end
