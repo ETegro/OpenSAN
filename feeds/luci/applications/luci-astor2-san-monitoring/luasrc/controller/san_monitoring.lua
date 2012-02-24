@@ -53,7 +53,53 @@ end
 
 function monitoring_overall()
 	local message_error = luci.http.formvalue( "message_error" )
-	luci.template.render( "san_monitoring", { data = {} } )
+	matrix_data = matrix.caller_minimalistic( {
+		matrix.filter_borders_highlight,
+		matrix.filter_alternation_border_colors,
+		matrix.filter_physical_enclosures
+	} )
+	local data = { JBODS = {} }
+	for _,expander in ipairs( einarc.Adapter.expanders() ) do
+		if expander.model == luci.controller.san_monitoring_configuration.expanders.jbod then
+			local enclosures = {}
+			for _, line in ipairs( matrix_data.lines ) do
+				if line.physical and line.physical.enclosure_id then
+					local expander_id, enclosure_id = string.match(
+						line.physical.enclosure_id,
+						"^(%d+):(%d+)$"
+					)
+					expander_id = tonumber( expander_id )
+					enclosure_id = tonumber( enclosure_id )
+					if expander_id == expander.id then
+						local physical = line.physical
+						enclosures[ enclosure_id ] = { physical_id = physical.id }
+
+						local color = "gray"
+						if physical.highlight.color then
+							color = physical.highlight.color
+							if physical.state == "hotspare" then
+								color = "dark" .. color
+							end
+						end
+						enclosures[ enclosure_id ].color = color
+					end
+				end
+			end
+			for _, line in ipairs( matrix_data.lines ) do
+				if line.logical then
+					for physical_id,_ in pairs( line.logical.physicals ) do
+						for enclosure_id, enclosure in pairs( enclosures ) do
+							if enclosure.physical_id == physical_id then
+								enclosure.logical_id = line.logical.id
+							end
+						end
+					end
+				end
+			end
+			data[ "JBODS" ][ #data[ "JBODS" ] + 1 ] = enclosures
+		end
+	end
+	luci.template.render( "san_monitoring", { data = data } )
 end
 
 local function render_svg( svg_filename, data )
