@@ -22,6 +22,7 @@ function TestClearing:test_clearing()
 	while #scst.AccessPattern.list() > 0 do
 		for _, ap in ipairs( scst.AccessPattern.list() ) do
 			print( "Deleting AccessPattern: " .. ap.name )
+			ap:unbind()
 			ap:delete()
 		end
 	end
