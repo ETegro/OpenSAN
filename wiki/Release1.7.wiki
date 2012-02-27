@@ -1,0 +1,9 @@
+* Ability to view various JBOD related information about disk
+  enclosures, power supply and FAN states. Logical drive members
+  located on JBOD can be easily determined.
+* Fixed possible issues with non viewable system log
+* Password length obviously can be more than 12 characters long
+
+=== Download ===
+You can download this release following [/download/V1.7/ this link].
+Always cryptographically [wiki:Publickey verify images]!
