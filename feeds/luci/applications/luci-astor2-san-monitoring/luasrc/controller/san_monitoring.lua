@@ -258,11 +258,9 @@ local function network_data_get( data )
 	return data
 end
 
-local function jbod_data_get( data )
-	local expander_count = 1
-	data["JBOD"] = {}
+local function jbod_data_get( data, jbod_id )
 	for _,expander in ipairs( einarc.Adapter.expanders() ) do
-		if expander.model == luci.controller.san_monitoring_configuration.expanders.jbod then
+		if expander.id == jbod_id then
 			local result = common.system( "sg_ses --page=0x2 /dev/sg" .. tostring( expander.id ) )
 			local jbod_data = {}
 			for line_number,line in ipairs( result.stdout ) do
@@ -286,7 +284,7 @@ local function jbod_data_get( data )
 					end
 				end
 			end
-			data["JBOD"][ #data["JBOD"] + 1 ] = jbod_data
+			data["JBOD"] = jbod_data
 		end
 	end
 	return data
