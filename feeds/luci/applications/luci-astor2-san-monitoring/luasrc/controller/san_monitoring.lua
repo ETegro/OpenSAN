@@ -267,9 +267,13 @@ local function jbod_data_get( data, jbod_id )
 				if string.match( line, "%s+Element type: Power supply" ) then
 					for n,offset in ipairs( { 2, 3 } ) do
 						jbod_data["PS" .. tostring(n)] = { fail = true }
-						if( string.match(
-							result.stdout[ line_number + 1 + 5*offset - 2 ],
-							"^.*Fail=(%d+).*$" ) == "0" ) then
+						if( string.match( result.stdout[ line_number + 1 + 5*offset - 2 ],
+								"^.*Fail=(%d+).*$" ) == "0" and
+							string.match( result.stdout[ line_number + 2 + 5*offset - 2 ],
+								"^.*AC fail=(%d+).*$" ) == "0" and
+							string.match(result.stdout[ line_number + 2 + 5*offset - 2 ],
+								"^.*DC fail=(%d+).*$" ) == "0"
+						) then
 							jbod_data["PS" .. tostring(n)].fail = false
 						end
 					end
@@ -277,7 +281,11 @@ local function jbod_data_get( data, jbod_id )
 				if string.match( line, "%s+Element type: Cooling" ) then
 					for n,offset in ipairs( { 3, 2, 5, 4 } ) do
 						jbod_data["FAN" .. tostring(n)] = { fail = true }
-						if( string.match( result.stdout[ line_number + 1 + 4*offset - 2 ], "^.*Fail=(%d+).*$" ) == "0" ) then
+						if( string.match( result.stdout[ line_number + 1 + 4*offset - 2 ],
+								"^.*Fail=(%d+).*$" ) == "0" and not
+							string.match( result.stdout[ line_number + 2 + 4*offset - 2 ],
+								"stopped" )
+						) then
 							jbod_data["FAN" .. tostring(n)].fail = false
 						end
 						jbod_data["FAN" .. tostring(n)].rpm = tonumber( string.match( result.stdout[ line_number + 1 + 4*offset - 1 ], "^.*Actual speed=(%d+) rpm.*$" ) )
