@@ -96,7 +96,7 @@ function monitoring_overall()
 					end
 				end
 			end
-			data[ "JBODS" ][ #data[ "JBODS" ] + 1 ] = enclosures
+			data[ "JBODS" ][ expander.id ] = enclosures
 		end
 	end
 	luci.template.render( "san_monitoring", { data = data } )
