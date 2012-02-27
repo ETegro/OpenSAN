@@ -395,7 +395,7 @@ function M.Physical:enclosure()
 	assert( self.id, "unable to get self object" )
 	local output = self:get( "enclosure" )
 	if not output then return nil end
-	return tonumber( output[1] )
+	return output[1]
 end
 
 --- Is physical disk has WriteCache enabled

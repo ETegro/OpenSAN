@@ -46,9 +46,8 @@ data[ "COLORS" ] = ENTITY_STATE_COLORMAP
 data[ "DEFAULT_NA_COLOR" ] = ENTITY_STATE_COLORMAP["gray"]
 data[ "SVG_SCALE" ] = "0.6"
 
-for template_id,_ in pairs( data ) do
-	local entity = data[ template_id ]
-	if common.is_table( entity ) then
+for template_id,entity in pairs( data ) do
+	if common.is_table( entity ) and template_id ~= "JBODS" then
 		entity.color = ENTITY_STATE_COLORMAP[ entity.color ]
 		entity.opacity = DEFAULT_OPACITY
 		for port_id,port in pairs( entity ) do
