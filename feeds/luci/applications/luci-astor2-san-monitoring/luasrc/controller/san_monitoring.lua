@@ -284,6 +284,12 @@ local function jbod_data_get( data, jbod_id )
 					end
 				end
 			end
+			for _,data in pairs( jbod_data ) do
+				data.color = "green"
+				if data.fail then
+					data.color = "red"
+				end
+			end
 			data["JBOD"] = jbod_data
 		end
 	end
