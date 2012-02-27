@@ -371,5 +371,9 @@ function render()
 			opacity = luci.http.formvalue( "opacity" )
 		}
 	end
+	if what == "jbod_rear" then
+		local jbod_id = luci.http.formvalue( "jbod_id" )
+		data = jbod_data_get( data, tonumber( jbod_id ) )
+	end
 	return render_svg( what, data )
 end
