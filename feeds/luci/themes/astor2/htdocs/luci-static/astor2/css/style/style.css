@@ -800,13 +800,6 @@ div.cbi-tab-descr {
 	padding: 0.5em;
 }
 
-.errorbox {
-	border: 1px solid #FF0000;
-	background-color: #FFCCCC;
-	padding: 5px;
-	margin-bottom: 5px;
-}
-
 .uci-change-list {
 	font-family: monospace;
 }
