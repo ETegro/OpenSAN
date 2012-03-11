@@ -8,3 +8,8 @@
 	margin-bottom: 5px;
 	padding: 5px;
 }
+
+#maincontainer {
+	clear: both;
+	width: 100%;
+}
