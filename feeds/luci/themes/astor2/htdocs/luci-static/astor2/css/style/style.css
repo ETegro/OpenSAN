@@ -1,37 +1,150 @@
 @charset "utf-8";
 
+/* Main */
 * {
 	margin: 0;
 	padding: 0;
 }
 
-/* Main */
+.clear {
+	clear: both;
+}
+
 body {
-	background-color: #006B3F;
+	background-color: #383838;
 	color: #FFFFFF;
-	font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-size: 100%;
 }
 
 .errorbox {
 	background-color: #FFCCCC;
-	border-radius: 3px 3px 3px 3px;
+	border-radius: 5px 5px 5px 5px;
 	border: 1px solid #FF0000;
 	color: #650E0E;
+	margin-bottom: 5px;
 	padding: 5px;
-}
-
-#maincontainer {
-	clear: both;
-	width: 100%;
 }
 
 /* Menubar */
 #menubar {
-	width: 100%;
-	color: #D2D1D0;
+	color: #F2F1F0;
+	padding: 20px 20px 0 20px;
 }
 
 #menubar .etegro_logo {
 	float: left;
 }
+
+div.hostinfo {
+	float: right;
+	font-size: 80%;
+	margin-left: 10px;
+	padding: 0.5em;
+	padding: 0;
+	width: auto;
+}
+
+#menubar .warning {
+	background-color: #000;
+	border-radius: 5px 5px 5px 5px;
+	color: red;
+	font-weight: bold;
+	padding: 10px;
+}
+
+#menubar a {
+	font-size: 80%;
+	text-decoration: none;
+}
+
+/* Maincontainer */
+#maincontainer {
+	clear: both;
+	width: 100%;
+}
+
+/* Tab menu */
+ul.tabmenu {
+	margin: 0;
+	float: right;
+	clear: both;
+	display: block;
+	vertical-align: bottom;
+	font-size: 10pt;
+	/*padding: 5px 0 0 5px;*/
+}
+
+ul.tabmenu li {
+	float: left;
+	display: block;
+	overflow: hidden;
+}
+
+ul.tabmenu li a {
+	display: block;
+	padding: 0 20px 15px;
+	text-decoration: none;
+}
+
+ul.tabmenu.l1 li a {
+	color: #F2F1F0;
+}
+
+ul.tabmenu.l1 li a:hover {
+	color: #7CC530;
+}
+
+/* edit
+ul.l1 li.tabmenu-item-logout a {
+	margin-left: 30px;
+	color: #7CC530;
+} */
+
+ul.tabmenu.l1 li.active a {
+	color: #7CC530;
+}
+
+div.tabmenu2 {
+	background-color: #0CA728;
+}
+
+div.tabmenu2 li a {
+	color: #F2F1F0;
+	font-size: 90%;
+	font-weight: bold;
+	padding: 15px 20px;
+}
+
+ul.tabmenu.l2 li a:hover,
+ul.tabmenu.l2 li.active a {
+	color: #245912;
+	text-shadow: #0CA728 0px 0 3px;
+}
+
+div.tabmenu3,
+div.tabmenu4,
+div.tabmenu5 {
+	background-color: #F2F1F0;
+}
+
+div.tabmenu3 li a,
+div.tabmenu4 li a,
+div.tabmenu5 li a {
+	padding: 10px 15px;
+	color: #6FAF2C;
+}
+
+div.tabmenu3 li a {
+	font-size: 80%;
+}
+
+ul.tabmenu.l3 li a:hover {
+	color: #245912;
+}
+
+ul.tabmenu.l3 li.active a {
+	color: #6FAF2C;
+}
+
+/* Maincontent */

@@ -5,11 +5,6 @@ html {
 	height: auto;
 }
 
-* {
-	margin: 0;
-	padding: 0;
-}
-
 a img {
 	border: none;
 	text-decoration: none;
@@ -19,79 +14,88 @@ small {
 	white-space: nowrap;
 }
 
+/* moved
 ul.tabmenu {
 	margin: 0;
-/*	margin-top: -1em;*/
 	float: right;
 	clear: both;
 	display: block;
 	vertical-align: bottom;
 	font-size: 10pt;
 	padding: 5px 0 0 5px;
-}
+} */
+/*	margin-top: -1em;*/
 
+/*
 div.tabmenu2 {
 	background-color: #FFF;
+	border: 1px solid #444444;
+	border-bottom: none;
+} */
 /*	background-image: url(tabbg.png);*/
 /*	background-repeat: repeat-x;*/
 /*	margin-top: -1px;*/
-	border: 1px solid #444444;
-	border-bottom: none;
-}
 
+/* mv
 div.tabmenu3,
 div.tabmenu4,
 div.tabmenu5 {
 	background-color: #FFF;
+	border: none;
+} */
 /*	background-image: url(tabbg.png);*/
 /*	background-repeat: repeat-x;*/
-	border: none;
-}
 
+/* mv
 ul.tabmenu li {
 	float: left;
 	display: block;
 	overflow: hidden;
-}
+} */
 
+/* mv
 ul.tabmenu li a {
 	background-color: #FFF;
 	text-decoration: none;
 	color: #444444;
 	display: block;
 	padding: 5px 12px;
-/*	margin: 0 2px;*/
 	line-height: 1.3em;
 	border: 1px solid transparent;
 	border-bottom: none;
 	font-size: 85%;
-}
+} */
+/*	margin: 0 2px;*/
 
 /* tabmenu */
+/* mv
 ul.tabmenu li.active a {
 	font-weight: bold;
 	color: #000000;
-/*	background: #f5f5f5;*/
 	background: #FFF;
 	border: 1px solid #AAAAAA;
 	border-bottom: none;
-}
+} */
+/*	background: #f5f5f5;*/
 
+/* mv
 ul.tabmenu li a:hover {
 	color: #444444;
 	border-color: #444444;
-}
+} */
 
+/* mv
 ul.l1 li a {
 	background-color: #AAAAAA;
-/*	background-image: url(tabbg.png);*/
 	background-repeat: repeat-x;
 	border-color: #444444;
-}
+}*/
+/*	background-image: url(tabbg.png);*/
 
+/* mv
 ul.l1 li.tabmenu-item-logout a {
 	margin-left: 30px;
-}
+} */
 
 abbr,
 acronym {
@@ -121,16 +125,7 @@ code {
 	margin-left: 2em;
 }
 
-.warning {
-	color: red;
-	background-color: #FFF;
-	font-weight: bold;
-}
-
-.clear {
-	clear: both;
-}
-
+/* Menubar */
 .skiplink,
 .navigation,
 .hidden {
@@ -148,62 +143,60 @@ code {
 	background-color: #FFF;
 }
 
-div.hostinfo {
-	float: right;
-	margin: 0;
-	padding: 0;
-	width: auto;
-	font-size: 80%;
-	padding: 0.5em;
-}
 /*	margin-right: 2em;*/
 /*	clear: right;*/
 
+/* rm
 #menubar .warning {
 	color: red;
 	background-color: #557788;
-}
+} */
 
+/* rm
 html #menubar a:link,
 html #menubar a:visited {
 	position: relative;
 	display: block;
 	padding: 0.5em;
-/*	background: #000000;*/
 	background-color: #006B3F;
 	color: #ffffff;
 	text-decoration: none;
 	font-size: 80%;
 	font-weight: normal;
-}
+} */
+/*	background: #000000;*/
 
+/*
 html #menubar a:link:hover,
 html #menubar a:visited:hover,
 html #menubar a:link:active,
 html #menubar a:visited:active,
 #menubar a:link:focus,
 #menubar a:visited:focus {
-/*	background: #000000;*/
 	color: #ffff00;
 	font-weight: bold;
-}
+} */
+/*	background: #000000;*/
 
+/*
 html #menubar a:link.active,
 html #menubar a:visited.active,
 html #menubar a:link.preactive,
 html #menubar a:visited.preactive {
-/*	background: #000000;*/
 	background-color: #006B3F;
 	color: #ffff00;
 	font-weight: bold;
-}
+} */
+/*	background: #000000;*/
 
+/*
 html #menubar a:link.warning,
 html #menubar a:visited.warning {
 	background: #000000;
 	color: red;
 	font-weight: bold;
-}
+} */
+/* End Menubar */
 
 #modemenu {
 	width: auto;
