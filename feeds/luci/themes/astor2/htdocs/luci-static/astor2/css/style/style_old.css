@@ -1,24 +1,9 @@
 @charset "utf-8";
 
-/*@media all {*/
-
-/* moved
-* {
-	margin: 0;
-	padding: 0;
-} */
-
 html {
 	min-height: 100%;
 	height: auto;
 }
-
-/* moved
-body {
-	font-size: 11pt;
-	line-height: 100%;
-	padding-bottom: 1.5em;
-} */
 
 * {
 	margin: 0;
@@ -163,15 +148,6 @@ code {
 	background-color: #FFF;
 }
 
-/* moved
-div.etegro_logo {
-	float: left;
-	margin-left: 2em;
-	padding-top: 0.5em;
-} */
-/*	margin-right: 2em;*/
-/*	clear: right;*/
-
 div.hostinfo {
 	float: right;
 	margin: 0;
@@ -182,15 +158,6 @@ div.hostinfo {
 }
 /*	margin-right: 2em;*/
 /*	clear: right;*/
-
-/* moved
-#menubar {
-	position: relative;
-	width: 100%;
-	color: #ffffff;
-} */
-/*	background: #000000;*/
-/*	background: #006B3F;*/ /* green */
 
 #menubar .warning {
 	color: red;
