@@ -7,18 +7,12 @@ html {
 	height: auto;
 }
 
+/* not use
 body {
-	color: #ffffff;
-/*	background-color: #4a6b7c;*/
-/*	background-color: #FFF;*/
-	background-color: #006B3F;
-	background-position: bottom center;
-	background-repeat: repeat-x;
-	font-family: Verdana, Arial, sans-serif;
 	font-size: 11pt;
 	line-height: 100%;
 	padding-bottom: 1.5em;
-}
+} */
 
 * {
 	margin: 0;

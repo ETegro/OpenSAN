@@ -1,11 +1,17 @@
 @charset "utf-8";
 
+body {
+	background-color: #006B3F;
+	color: #FFFFFF;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 100%;
+}
+
 .errorbox {
 	background-color: #FFCCCC;
 	border-radius: 3px 3px 3px 3px;
 	border: 1px solid #FF0000;
 	color: #650E0E;
-	margin-bottom: 5px;
 	padding: 5px;
 }
 
