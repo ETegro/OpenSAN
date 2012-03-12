@@ -2,12 +2,18 @@
 
 /*@media all {*/
 
+/* moved
+* {
+	margin: 0;
+	padding: 0;
+} */
+
 html {
 	min-height: 100%;
 	height: auto;
 }
 
-/* not use
+/* moved
 body {
 	font-size: 11pt;
 	line-height: 100%;
@@ -157,32 +163,34 @@ code {
 	background-color: #FFF;
 }
 
+/* moved
 div.etegro_logo {
 	float: left;
-/*	clear: right;*/
 	margin-left: 2em;
-/*	margin-right: 2em;*/
 	padding-top: 0.5em;
-}
+} */
+/*	margin-right: 2em;*/
+/*	clear: right;*/
 
 div.hostinfo {
-/*	clear: right;*/
 	float: right;
 	margin: 0;
 	padding: 0;
 	width: auto;
 	font-size: 80%;
 	padding: 0.5em;
-/*	margin-right: 2em;*/
 }
+/*	margin-right: 2em;*/
+/*	clear: right;*/
 
+/* moved
 #menubar {
 	position: relative;
 	width: 100%;
+	color: #ffffff;
+} */
 /*	background: #000000;*/
 /*	background: #006B3F;*/ /* green */
-	color: #ffffff;
-}
 
 #menubar .warning {
 	color: red;
@@ -201,7 +209,6 @@ html #menubar a:visited {
 	font-size: 80%;
 	font-weight: normal;
 }
-
 
 html #menubar a:link:hover,
 html #menubar a:visited:hover,

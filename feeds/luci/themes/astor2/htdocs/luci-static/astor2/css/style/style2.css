@@ -1,5 +1,11 @@
 @charset "utf-8";
 
+* {
+	margin: 0;
+	padding: 0;
+}
+
+/* Main */
 body {
 	background-color: #006B3F;
 	color: #FFFFFF;
@@ -18,4 +24,14 @@ body {
 #maincontainer {
 	clear: both;
 	width: 100%;
+}
+
+/* Menubar */
+#menubar {
+	width: 100%;
+	color: #D2D1D0;
+}
+
+#menubar .etegro_logo {
+	float: left;
 }
