@@ -168,3 +168,82 @@ ul.tabmenu.l3 li.active a {
 	font-size: 80%;
 	padding: 5px;
 }
+
+/* UCI change list and legend */
+div.uci-change-list {
+	font-family: monospace;
+}
+
+div.uci-change-list ins,
+div.uci-change-legend-label ins {
+	text-decoration: none;
+	border: 1px solid #00FF00;
+	background-color: #CCFFCC;
+	display: block;
+	padding: 2px;
+	border-radius: 5px;
+}
+
+div.uci-change-list del,
+div.uci-change-legend-label del {
+	text-decoration: none;
+	border: 1px solid #FF0000;
+	background-color: #FFCCCC;
+	display: block;
+	font-style: normal;
+	padding: 2px;
+	border-radius: 5px;
+}
+
+div.uci-change-list ins,
+div.uci-change-list del,
+div.uci-change-list var {
+	padding: 5px;
+}
+
+div.uci-change-list var,
+div.uci-change-legend-label var {
+	text-decoration: none;
+	border: 1px solid #CCCCCC;
+	background-color: #EEEEEE;
+	display: block;
+	font-style: normal;
+	padding: 2px;
+	border-radius: 5px;
+}
+
+div.uci-change-list var ins,
+div.uci-change-list var del {
+	/*display: inline;*/
+	border: none;
+	white-space: pre;
+	font-style: normal;
+	padding: 0px;
+}
+
+div.uci-change-legend {
+	padding: 5px;
+}
+
+div.uci-change-legend-label {
+	width: 150px;
+	float: left;
+	font-size: 80%;
+}
+
+div.uci-change-legend-label > ins,
+div.uci-change-legend-label > del,
+div.uci-change-legend-label > var {
+	float: left;
+	margin-right: 4px;
+	width: 10px;
+	height: 10px;
+	display: block;
+	border-radius: 10px;
+}
+
+div.uci-change-legend-label var ins,
+div.uci-change-legend-label var del {
+	line-height: 6px;
+	border: none;
+}
