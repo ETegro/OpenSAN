@@ -17,15 +17,6 @@ body {
 	font-size: 100%;
 }
 
-.errorbox {
-	background-color: #FFCCCC;
-	border-radius: 5px;
-	border: 1px solid #FF0000;
-	color: #650E0E;
-	margin-bottom: 5px;
-	padding: 5px;
-}
-
 /* Menubar */
 #menubar {
 	padding: 20px 20px 0 20px;
@@ -45,6 +36,7 @@ div.hostinfo {
 }
 
 #menubar a {
+	color: #0CA728;
 	text-decoration: none;
 	background-color: #000000;
 	border-radius: 5px;
@@ -52,7 +44,7 @@ div.hostinfo {
 	padding: 10px;
 }
 
-#menubar .warning {
+#menubar .warning a {
 	color: red;
 }
 
@@ -68,7 +60,7 @@ div.hostinfo {
 
 /* Tab menu */
 #tabmenu {
-	margin: 20px;
+	margin: 15px;
 }
 
 ul.tabmenu {
@@ -161,12 +153,41 @@ ul.tabmenu.l3 li.active a {
 	border-radius: 0 0 5px 5px;
 }
 
+div.errorbox {
+	background-color: #FFCCCC;
+	border-radius: 5px;
+	border: 1px solid #FF0000;
+	color: #650E0E;
+	margin: 0 0 15px;
+	padding: 10px;
+}
+
 /* Maincontent */
 #maincontent {
 	background-color: #F2F1F0;
-	color: #383838;
-	font-size: 80%;
+	border-radius: 5px;
+	color: #000000;
+	margin: 15px;
 	padding: 5px;
+}
+
+#maincontent h2 {
+	border-bottom: 1px solid;
+	color: #0CA728;
+	font-size: 120%;
+	font-weight: bold;
+	margin: 0 0 10px;
+}
+
+#maincontent h3 {
+	color: #006B3F;
+	font-size: 100%;
+	font-style: italic;
+	font-weight: bold;
+}
+
+#maincontent p {
+	margin-bottom: 1em;
 }
 
 /* UCI change list and legend */
@@ -195,12 +216,6 @@ div.uci-change-legend-label del {
 	border-radius: 5px;
 }
 
-div.uci-change-list ins,
-div.uci-change-list del,
-div.uci-change-list var {
-	padding: 5px;
-}
-
 div.uci-change-list var,
 div.uci-change-legend-label var {
 	text-decoration: none;
@@ -212,9 +227,14 @@ div.uci-change-legend-label var {
 	border-radius: 5px;
 }
 
+div.uci-change-list ins,
+div.uci-change-list del,
+div.uci-change-list var {
+	padding: 10px;
+}
+
 div.uci-change-list var ins,
 div.uci-change-list var del {
-	/*display: inline;*/
 	border: none;
 	white-space: pre;
 	font-style: normal;
@@ -222,7 +242,7 @@ div.uci-change-list var del {
 }
 
 div.uci-change-legend {
-	padding: 5px;
+	padding: 10px;
 }
 
 div.uci-change-legend-label {

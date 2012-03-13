@@ -250,6 +250,7 @@ textarea#syslog {
 } */
 /*	background: #ECFEDC;*/
 
+/* mv
 #maincontent h2 {
 	font-size: 150%;
 	font-family: Trebuchet MS, Verdana, sans-serif;
@@ -259,31 +260,29 @@ textarea#syslog {
 	padding-top: 10px;
 	padding-bottom: 4px;
 	color: #006B3F;
-}
+} */
 
+/* mv
 #maincontent h3 {
 	margin: 0.5em 0 1.1em 0;
 	font-size: 125%;
 	font-weight: bold;
 	font-style: italic;
 	font-family: Trebuchet MS, Verdana, sans-serif;
-/*	color: #27408B;*/
 	color: #006B3F;
-}
+} */
+/*	color: #27408B;*/
 
-#maincontent p {
-	margin-bottom: 1em;
-}
-
+/* mv
 .cbi-section {
 	margin-bottom: 0.5em;
 	padding: 0.5em 1em;
-/*	border: 1px dotted #555555;*/
 	border: 1px solid #006B3F;
-/*	border: none;*/
 	background-color: #ffffff;
 	color: #000000;
-}
+} */
+/*	border: 1px dotted #555555;*/
+/*	border: none;*/
 
 .cbi-section legend {
 	font-size: 110%;
