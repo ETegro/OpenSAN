@@ -284,17 +284,19 @@ textarea#syslog {
 /*	border: 1px dotted #555555;*/
 /*	border: none;*/
 
+/* mv
 .cbi-section legend {
 	font-size: 110%;
 	font-weight: bold;
 	height: 1em;
 	padding: 0.25em 0.5em;
-/*	background-color: transparent;*/
-/*	background: #B6F7AB;*/
 	background: #fff;
 	color: #006B3F;
-}
+} */
+/*	background-color: transparent;*/
+/*	background: #B6F7AB;*/
 
+/* rm
 .cbi-section h2 {
 	margin: 0em 0 0.5em -0.5em !important;
 }
@@ -306,6 +308,7 @@ textarea#syslog {
 	margin: 0.25em !important;
 	font-size: 100% !important;
 }
+*/
 
 .cbi-section-descr {
 	margin-bottom: 0.5em;

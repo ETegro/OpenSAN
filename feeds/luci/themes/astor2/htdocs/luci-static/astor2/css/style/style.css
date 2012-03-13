@@ -267,3 +267,25 @@ div.uci-change-legend-label var del {
 	line-height: 6px;
 	border: none;
 }
+
+/* cbi-section */
+div.cbi-map {
+	background-color: #F2F1F0;
+}
+
+fieldset.cbi-section {
+	background-color: #FFFFFF;
+	border: 1px solid #006B3F;
+	color: #000000;
+	margin-bottom: 0.5em;
+	padding: 0.5em 1em;
+	border-radius: 5px;
+}
+
+fieldset.cbi-section legend {
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #006B3F;
+	border-radius: 5px;
+	padding: 5px 10px;
+}
