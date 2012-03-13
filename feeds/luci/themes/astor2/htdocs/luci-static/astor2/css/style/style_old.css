@@ -212,11 +212,12 @@ html #menubar a:visited.warning {
 	list-style: none;
 }
 
+/* mv
 #savemenu {
 	float: right;
+} */
 /*	clear: right;*/
 /*	margin-right: 2em;*/
-}
 
 .lang_de #submenu_admin_uci {
 	width: 12em;
@@ -237,16 +238,17 @@ textarea#syslog {
 	color: #eee;
 }
 
+/* mv
 #maincontent {
 	padding: 0.5em;
 	background: #f5f5f5;
-/*	background: #ECFEDC;*/
 	color: #000000;
 	font-size: 80%;
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
 	border-color: #444444;
-}
+} */
+/*	background: #ECFEDC;*/
 
 #maincontent h2 {
 	font-size: 150%;
