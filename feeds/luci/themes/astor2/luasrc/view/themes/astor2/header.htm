@@ -92,13 +92,11 @@ require("luci.http").prepare_content("application/xhtml+xml")
 		%>
 	</ul>
 	<br style="clear:both" />
+	</div>
 <%
 			if selected_node then
 				subtree(prefix .. selected_name .. "/", selected_node, level + 1)
 			end
-%>
-	</div>
-<%
 		end
 	end
 
