@@ -64,6 +64,7 @@ code {
 	width: 11.5em;
 }
 
+/* mv
 textarea#syslog {
 	width: 98%;
 	min-height: 500px;
@@ -73,6 +74,7 @@ textarea#syslog {
 	background-color: #000;
 	color: #eee;
 }
+*/
 
 /* cbi-section */
 /* edit
@@ -366,10 +368,6 @@ div.cbi-section-create .cbi-button {
 
 input.cbi-section-create-name {
 	margin-right: -0.25em;
-}
-
-div.cbi-map-descr {
-	margin-bottom: 1em;
 }
 
 div.cbi-optionals {
