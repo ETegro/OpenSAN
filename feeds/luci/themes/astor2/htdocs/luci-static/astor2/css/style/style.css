@@ -111,7 +111,6 @@ ul.tabmenu li {
 	float: left;
 	display: block;
 	overflow: hidden;
-/*	padding: 0 10px;*/
 }
 
 ul.tabmenu li a {
@@ -361,4 +360,41 @@ textarea#syslog {
 	font-family: monospace;
 	background-color: #000000;
 	color: #20F312;
+}
+
+/* cbi-tabmenu */
+#maincontent ul.cbi-tabmenu {
+	margin-left: 0 !important;
+	list-style-type: none;
+}
+
+#maincontent ul.cbi-tabmenu li.cbi-tab,
+#maincontent ul.cbi-tabmenu li.cbi-tab-disabled {
+	display: inline;
+}
+
+#maincontent ul.cbi-tabmenu li.cbi-tab a {
+	background-color: #0CA728 !important;
+	border: #0CA728 1px solid;
+	border-radius: 5px 5px 0 0;
+	color: #000000 !important;
+	padding: 5px 10px 10px;
+	position: relative;
+	text-decoration: none;
+}
+
+#maincontent ul.cbi-tabmenu li.cbi-tab-disabled a {
+}
+
+/*
+#maincontent ul.cbi-tabmenu li.cbi-tab-highlighted a {
+	color: #000000;
+	background-color: #FFEEAA;
+}
+*/
+
+#maincontent ul.cbi-tabmenu li.cbi-tab a:hover {
+	color: #FFFFFF !important;
+	background-color: #0CA728 !important;
+	border: #0CA728 1px solid;
 }

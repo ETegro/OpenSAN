@@ -447,19 +447,24 @@ td.cbi-value-error {
 	padding: 3px;
 }
 
+/* mv
 ul.cbi-tabmenu {
 	padding: 3px 0;
 	margin-left: 0 !important;
 	list-style-type: none;
 }
+*/
 
+/* mv
 ul.cbi-tabmenu li.cbi-tab,
 ul.cbi-tabmenu li.cbi-tab-disabled {
 	display: inline;
 	margin: 0;
 }
+*/
 
-ul.cbi-tabmenu li.cbi-tab a,
+/*
+ul mv.cbi-tabmenu li.cbi-tab a,
 ul.cbi-tabmenu li.cbi-tab-disabled a {
 	text-decoration: none;
 	padding: 3px 7px;
@@ -469,7 +474,9 @@ ul.cbi-tabmenu li.cbi-tab-disabled a {
 	background-color: #EEEEEE;
 	color: #BBBBBB;
 }
+*/
 
+/*
 ul.cbi-tabmenu li.cbi-tab-highlighted a {
 	color: #000000;
 	background-color: #FFEEAA;
@@ -486,6 +493,7 @@ ul.cbi-tabmenu li.cbi-tab a {
 	color: #000000;
 	background-color: #FFFFFF;
 }
+*/
 
 div.cbi-tab-descr {
 	background-image: url('../,,/../resources/cbi/help.png');
