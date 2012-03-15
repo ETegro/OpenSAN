@@ -20,6 +20,7 @@ body {
 /* Menubar */
 #menubar {
 	padding: 20px 20px 0 20px;
+	font-size: 90%;
 }
 
 #menubar .etegro_logo {
@@ -30,26 +31,60 @@ body {
 /*	box-shadow: #006B3F 0 0 10px;*/
 }
 
-div.hostinfo {
-	float: right;
-	margin-left: 10px;
+.skiplink,
+.navigation,
+.hidden {
+	position: absolute;
+	left: -1000px;
+	top: -1000px;
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+	display: inline;
 }
 
-#menubar a {
-	color: #0CA728;
-	text-decoration: none;
-	background-color: #000000;
-	border-radius: 5px;
-	font-weight: bold;
+div.hostinfo {
+	float: right;
 	padding: 10px;
 }
 
-#menubar .warning a {
-	color: red;
+#menubar #savemenu a {
+	border-radius: 5px;
+	color: #F2F1F0;
+	float: right;
+	font-weight: normal;
+	padding: 10px;
+	text-decoration: none;
 }
 
-#menubar #savemenu {
-	float: right;
+html #menubar a:link,
+html #menubar a:visited {
+	color: #F2F1F0;
+}
+
+#menubar #savemenu a:link:hover,
+#menubar #savemenu a:visited:hover,
+#menubar #savemenu a:link:active,
+#menubar #savemenu a:visited:active,
+#menubar #savemenu a:link:focus,
+#menubar #savemenu a:visited:focus {
+	color: #0CA728;
+}
+
+#menubar #savemenu a:link.active,
+#menubar #savemenu a:visited.active,
+#menubar #savemenu a:link.preactive,
+#menubar #savemenu a:visited.preactive {
+	background-color: #000000;
+	color: #ffff00;
+	font-weight: bold;
+}
+
+#menubar #savemenu a:link.warning,
+#menubar #savemenu a:visited.warning {
+	background-color: #000000;
+	color: #FF0000;
+	font-weight: bold;
 }
 
 /* Maincontainer */
@@ -153,7 +188,9 @@ ul.tabmenu.l3 li.active a {
 	border-radius: 0 0 5px 5px;
 }
 
-div.errorbox {
+div.errorbox,
+div.error {
+	font-size: 100%;
 	background-color: #FFCCCC;
 	border-radius: 5px;
 	border: 1px solid #FF0000;
