@@ -139,6 +139,7 @@ div.tabmenu2 {
 	background-color: #0CA728;
 	border-radius: 5px;
 	margin-top: -6px;
+	padding-right: 5px;
 }
 
 div.tabmenu2 li a {
@@ -233,6 +234,12 @@ div.error {
 }
 
 #maincontent p {
+	margin-bottom: 0.5em;
+	font-size: 85%;
+	padding: 5px 10px;
+}
+
+#maincontent > form > div {
 	margin-bottom: 0.5em;
 	font-size: 85%;
 	padding: 5px 10px;
@@ -343,6 +350,14 @@ fieldset.cbi-section legend {
 	padding: 5px 10px;
 }
 
+div.cbi-section-node,
+fieldset.cbi-section-node {
+	border: #006B3F 1px solid;
+	border-radius: 5px;
+	clear: both;
+	padding: 5px 10px;
+}
+
 div.cbi-map-descr {
 	font-size: 85%;
 	margin: 0 10px 5px;
@@ -364,26 +379,46 @@ textarea#syslog {
 
 /* cbi-tabmenu */
 #maincontent ul.cbi-tabmenu {
-	margin-left: 0 !important;
+/*	margin-left: 0 !important;*/
 	list-style-type: none;
 }
 
 #maincontent ul.cbi-tabmenu li.cbi-tab,
 #maincontent ul.cbi-tabmenu li.cbi-tab-disabled {
-	display: inline;
+	float: left;
+	display: block;
+/*	overflow: hidden;*/
+}
+
+#maincontent ul.cbi-tabmenu li.cbi-tab a,
+#maincontent ul.cbi-tabmenu li.cbi-tab-disabled a {
+	border-radius: 5px 5px 0 0;
+	border: #006B3F 1px solid;
+	border-bottom: #FFF 1px solid;
+	display: block;
+	padding: 5px 10px 3px;
+	text-decoration: none;
+	position: relative;
+	margin-left: 10px;
+	margin-bottom: -1px
 }
 
 #maincontent ul.cbi-tabmenu li.cbi-tab a {
-	background-color: #0CA728 !important;
-	border: #0CA728 1px solid;
-	border-radius: 5px 5px 0 0;
-	color: #000000 !important;
-	padding: 5px 10px 10px;
-	position: relative;
-	text-decoration: none;
+	color: #006B3F;
+	background-color: #FFFFFF;
 }
 
 #maincontent ul.cbi-tabmenu li.cbi-tab-disabled a {
+	color: #F2F1F0;
+	background-color: #0CA728;
+	border: #FFFFFF 1px solid;
+	border-bottom: #006B3F 1px solid;
+}
+
+#maincontent ul.cbi-tabmenu li.cbi-tab-disabled a:hover {
+	color: #006B3F;
+	background-color: #FFFFFF;
+	border: #006B3F 1px solid;
 }
 
 /*
@@ -393,8 +428,18 @@ textarea#syslog {
 }
 */
 
-#maincontent ul.cbi-tabmenu li.cbi-tab a:hover {
-	color: #FFFFFF !important;
-	background-color: #0CA728 !important;
-	border: #0CA728 1px solid;
+#maincontent div.cbi-tabcontainer {
+}
+
+/* cbi */
+div.cbi-value {
+	clear: left;
+	vertical-align: middle;
+	padding: 0.25em;
+	border-bottom: 1px dotted #69F282;
+}
+
+div.cbi-value:hover {
+	background: #f8f8f8;
+	color: #000000;
 }

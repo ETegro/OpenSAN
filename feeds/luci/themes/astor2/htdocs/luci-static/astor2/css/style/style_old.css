@@ -38,9 +38,11 @@ code {
 	white-space: pre;
 }
 
-#maincontent ul {
+/* rm
+#maigcontent ul {
 	margin-left: 2em;
 }
+*/
 
 /* modemenu */
 #modemenu {
@@ -323,6 +325,7 @@ table.cbi-section-table .cbi-rowstyle-1>* {
 	color: #000000;
 }
 
+/* mv
 div.cbi-value {
 	clear: left;
 	vertical-align: middle;
@@ -334,6 +337,7 @@ div.cbi-value:hover {
 	background: #f8f8f8;
 	color: #000000;
 }
+*/
 
 .cbi-value-title {
 	float: left;
@@ -379,6 +383,7 @@ div.cbi-section-remove {
 	float: right;
 }
 
+/* mv
 .cbi-section-node {
 	clear: both;
 	border-top: 1px solid #eee;
@@ -387,6 +392,7 @@ div.cbi-section-remove {
 	border-bottom: none;
 	padding-bottom: 0;
 }
+*/
 
 .cbi-section-node table div {
 	padding-bottom: 0;
