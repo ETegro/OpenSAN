@@ -192,14 +192,21 @@ table.bottom_forms fieldset div.form input[ type = "submit" ] {
 }
 
 table.bottom_forms fieldset {
-	padding: 0.5em;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #006B3F;
+}
+
+table.bottom_forms fieldset legend {
+	padding: 10px;
 }
 
 /* Legend colors */
 .legend_color {
-	border: 1px solid #000;
 	height: 1.5em;
 	width: 90%;
+	margin-bottom: 5px;
+	border-radius: 10px;
 }
 
 /* Sliders */
