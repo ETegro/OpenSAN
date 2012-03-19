@@ -156,6 +156,10 @@ table.matrix div.control input {
 	vertical-align: middle;
 }
 
+table.matrix div.control input {
+	border-radius: 8px;
+}
+
 
 /* AccessPattern and Sessions */
 table.matrix table.access_pattern_information {
