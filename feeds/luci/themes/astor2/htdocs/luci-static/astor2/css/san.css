@@ -218,11 +218,13 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	position: relative;
 	text-align: left;
 	width: 100%;
+	border-radius: 5px;
 }
 
 .fillbar .fillbar_background {
 	height: 1.6em;
 	text-align: left;
+	border-radius: 4px;
 }
 
 .highlight-border-color-darkgreen .fillbar {
