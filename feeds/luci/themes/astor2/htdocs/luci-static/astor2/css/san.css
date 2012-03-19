@@ -86,35 +86,35 @@ table {
 }
 
 .icon-add-wide {
-	background-image: url( 'style/images/add.png' );
-}
-
-.icon-unbind {
-	background-image: url( 'style/images/down.png' );
-}
-
-.icon-remove {
-	background-image: url( 'style/images/remove.png' );
-}
-
-.icon-bind {
-	background-image: url( 'style/images/link.png' );
-}
-
-.icon-fieldadd {
 	background-image: url( 'style/images/fieldadd.png' );
 }
 
+.icon-unbind {
+	background-image: url( 'style/images/san-down.png' );
+}
+
+.icon-remove {
+	background-image: url( 'style/images/san-remove.png' );
+}
+
+.icon-bind {
+	background-image: url( 'style/images/san-link.png' );
+}
+
+.icon-fieldadd {
+	background-image: url( 'style/images/san-add.png' );
+}
+
 .icon-key {
-	background-image: url( 'style/images/key.png' );
+	background-image: url( 'style/images/san-lock.png' );
 }
 
 .icon-reload {
-	background-image: url( 'style/images/reload.png' );
+	background-image: url( 'style/images/san-resize.png' );
 }
 
 .icon-edit {
-	background-image: url( 'style/images/edit.png' );
+	background-image: url( 'style/images/san-edit.png' );
 }
 
 /* Main table */
