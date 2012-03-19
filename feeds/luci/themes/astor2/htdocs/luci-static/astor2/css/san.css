@@ -117,6 +117,11 @@ table {
 	background-image: url( 'style/images/san-edit.png' );
 }
 
+/* DIV-SAN*/
+div#san-page {
+	font-size: 85%;
+}
+
 /* Main table */
 table.matrix {
 	border-width: 0;
@@ -138,13 +143,19 @@ table.matrix .title {
 	float: left;
 	margin-bottom: 0.5em;
 	overflow: auto;
-	width: 70%;
+	width: 60%;
 }
 
 table.matrix fieldset div.form input[ type = "submit" ],
 table.matrix div.control {
 	float: right;
 }
+
+table.matrix div.control input {
+	float: left;
+	vertical-align: middle;
+}
+
 
 /* AccessPattern and Sessions */
 table.matrix table.access_pattern_information {
