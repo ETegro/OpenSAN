@@ -127,8 +127,13 @@ table.matrix {
 	border-width: 0;
 }
 
+table.matrix > tbody tr th {
+	border: none;
+	padding-bottom: 10px;
+}
+
 table.matrix > tbody > tr > td,table.matrix fieldset {
-	padding: 0.5em;
+	padding: 5px;
 }
 
 table.matrix fieldset {
@@ -141,7 +146,7 @@ table.matrix fieldset table.form {
 
 table.matrix .title {
 	float: left;
-	margin-bottom: 0.5em;
+	margin-bottom: 5px;
 	overflow: auto;
 	width: 60%;
 }
@@ -203,7 +208,7 @@ table.bottom_forms fieldset legend {
 
 /* Legend colors */
 .legend_color {
-	height: 1.5em;
+	height: 20px;
 	width: 90%;
 	margin-bottom: 5px;
 	border-radius: 10px;
@@ -214,7 +219,7 @@ div[ id *= "new_volume_slider-" ],
 div[ id *= "logical_volume_resize_slider-" ],
 div[ id *= "new_snapshot_slider-" ],
 div[ id *= "logical_volume_snapshot_resize_slider-" ] {
-	margin: 0.5em 0;
+	margin: 5px 0;
 	border-radius: 5px;
 }
 
@@ -428,4 +433,20 @@ td[ class *= "highlight-top" ][ class *= "highlight-right" ][ class *= "highligh
 
 td[ class *= "highlight-top" ][ class *= "highlight-left" ][ class *= "highlight-bottom" ] {
 	border-radius: 10px 0 0 10px;
+}
+
+td.physical-background-state-free,
+td.access_pattern-disabled {
+	border-radius: 10px;
+	border: none;
+}
+
+td[ colspan = "2" ],
+td[ colspan = "3" ] {
+	border: none;
+}
+
+tr td[ colspan = "3" ] + td {
+	border: #CCCCCC 2px solid;
+	border-radius: 10px;
 }
