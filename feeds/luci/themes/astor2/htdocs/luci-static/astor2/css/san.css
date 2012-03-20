@@ -403,3 +403,29 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 .session-background-color-blue {
 	background-color: #93B8F6;
 }
+
+/* Matrix border-radius */
+
+td[ class *= "highlight-top" ][ class *= "highlight-right" ] {
+	border-radius: 0 10px 0 0;
+}
+
+td[ class *= "highlight-top" ][ class *= "highlight-left" ] {
+	border-radius: 10px 0 0 0;
+}
+
+td[ class *= "highlight-bottom" ][ class *= "highlight-right" ] {
+	border-radius: 0 0 10px 0;
+}
+
+td[ class *= "highlight-bottom" ][ class *= "highlight-left" ] {
+	border-radius: 0 0 0 10px;
+}
+
+td[ class *= "highlight-top" ][ class *= "highlight-right" ][ class *= "highlight-bottom" ] {
+	border-radius: 0 10px 10px 0;
+}
+
+td[ class *= "highlight-top" ][ class *= "highlight-left" ][ class *= "highlight-bottom" ] {
+	border-radius: 10px 0 0 10px;
+}
