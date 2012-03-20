@@ -71,8 +71,9 @@ input.cbi-input-password {
 
 /* Menubar */
 #menubar {
-	padding: 20px 20px 0 20px;
 	font-size: 90%;
+	margin-bottom: -20px;
+	padding: 20px 20px 0 20px;
 }
 
 #menubar .etegro_logo {
