@@ -438,7 +438,10 @@ td[ class *= "highlight-top" ][ class *= "highlight-left" ][ class *= "highlight
 td.physical-background-state-free,
 td.access_pattern-disabled {
 	border-radius: 10px;
-	border: none;
+}
+
+td.physical-background-state-free {
+	border: #CCCCCC 5px solid;
 }
 
 td[ colspan = "2" ],
@@ -446,7 +449,8 @@ td[ colspan = "3" ] {
 	border: none;
 }
 
+tr td[ colspan = "2" ] + td,
 tr td[ colspan = "3" ] + td {
-	border: #CCCCCC 2px solid;
+	border: #CCCCCC 5px solid;
 	border-radius: 10px;
 }
