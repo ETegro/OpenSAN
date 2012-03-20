@@ -42,10 +42,10 @@
 					<%+san/logical_volume/resize-control%>
 				<% end %>
 				<%+san/logical_volume/snapshot-control%>
+				<%+san/logical_volume/credentials/add%>
 				<% if line.logical_volume.deletable then %>
 					<%+san/logical_volume/remove%>
 				<% end %>
-				<%+san/logical_volume/credentials/add%>
 			</div>
 		</td>
 	</tr>
