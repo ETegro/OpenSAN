@@ -240,7 +240,8 @@ ul.tabmenu.l3 li.active a {
 }
 
 div.errorbox,
-div.error {
+div.error,
+p.error {
 	font-size: 100%;
 	background-color: #FFCCCC;
 	border-radius: 5px;
