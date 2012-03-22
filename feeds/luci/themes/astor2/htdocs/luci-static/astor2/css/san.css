@@ -138,6 +138,12 @@ table.matrix > tbody > tr > td,table.matrix fieldset {
 
 table.matrix fieldset {
 	clear: both;
+	border: #006B3F 1px solid;
+	border-radius: 5px;
+}
+
+table.matrix fieldset legend {
+	padding: 5px;
 }
 
 table.matrix fieldset table.form {
