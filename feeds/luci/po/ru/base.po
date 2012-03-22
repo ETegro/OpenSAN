@@ -2447,7 +2447,7 @@ msgstr "Предупреждение"
 
 msgid "Warning: There are unsaved changes that will be lost while rebooting!"
 msgstr ""
-"Внимание: Есть несохранённые изменения которые потеряются после перезагрузки!"
+"Внимание: Есть несохранённые изменения, которые будут утеряны при перезагрузке!"
 
 msgid "Warning: There are unsaved changes that will be lost after shutdown!"
 msgstr "Внимание: Есть несохранённые изменения, которые будут утеряны после выключения!"
