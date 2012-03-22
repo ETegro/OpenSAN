@@ -2449,6 +2449,9 @@ msgid "Warning: There are unsaved changes that will be lost while rebooting!"
 msgstr ""
 "Внимание: Есть несохранённые изменения которые потеряются после перезагрузки!"
 
+msgid "Warning: There are unsaved changes that will be lost after shutdown!"
+msgstr "Внимание: Есть несохранённые изменения, которые будут утеряны после выключения!"
+
 msgid "Web <abbr title=\"User Interface\">UI</abbr>"
 msgstr "Web <abbr title=\"Интерфейс пользователя\">UI</abbr>"
 
