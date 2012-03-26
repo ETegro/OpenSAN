@@ -30,6 +30,8 @@ textarea {
 	border-color: #000000;
 	padding: 3px;
 	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
 	border: 1px solid #717171;
 	outline: none;
 }
@@ -101,6 +103,8 @@ div.hostinfo {
 
 #menubar #savemenu a {
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	color: #F2F1F0;
 	float: right;
 	font-weight: normal;
@@ -178,7 +182,9 @@ ul.tabmenu.l1 li a {
 ul.tabmenu.l1 li a:hover,
 ul.tabmenu.l1 li.active a {
 	background-color: #0CA728;
-	border-radius: 5px 5px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	color: #F2F1F0;
 }
 
@@ -189,6 +195,8 @@ ul.tabmenu.l1 li.tabmenu-item-logout a {
 div.tabmenu2 {
 	background-color: #0CA728;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	margin-top: -6px;
 	padding-right: 5px;
 }
@@ -237,6 +245,8 @@ ul.tabmenu.l3 li a:hover,
 ul.tabmenu.l3 li.active a {
 	background-color: #0CA728;
 	border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px;
 }
 
 div.errorbox,
@@ -245,6 +255,8 @@ p.error {
 	font-size: 100%;
 	background-color: #FFCCCC;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	border: 1px solid #FF0000;
 	color: #650E0E;
 	margin: 0 0 15px;
@@ -256,6 +268,8 @@ p.error {
 #maincontent {
 	background-color: #F2F1F0;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	color: #000000;
 	margin: 15px;
 	padding: 5px;
@@ -315,6 +329,8 @@ div.uci-change-legend-label ins {
 	display: block;
 	padding: 2px;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 div.uci-change-list del,
@@ -326,6 +342,8 @@ div.uci-change-legend-label del {
 	font-style: normal;
 	padding: 2px;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 div.uci-change-list var,
@@ -337,6 +355,8 @@ div.uci-change-legend-label var {
 	font-style: normal;
 	padding: 2px;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 div.uci-change-list ins,
@@ -372,6 +392,8 @@ div.uci-change-legend-label > var {
 	height: 10px;
 	display: block;
 	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 div.uci-change-legend-label var ins,
@@ -388,6 +410,8 @@ div.cbi-map {
 fieldset.cbi-section {
 	background-color: #FFFFFF;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	border: 1px solid #006B3F;
 	color: #000000;
 	font-size: 85%;
@@ -400,6 +424,8 @@ fieldset.cbi-section legend {
 	font-weight: bold;
 	color: #006B3F;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	padding: 5px 10px;
 }
 
@@ -407,6 +433,8 @@ div.cbi-section-node,
 fieldset.cbi-section-node {
 	border: #006B3F 1px solid;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	clear: both;
 	padding: 5px 10px;
 }
@@ -445,6 +473,8 @@ textarea#syslog {
 #maincontent ul.cbi-tabmenu li.cbi-tab a,
 #maincontent ul.cbi-tabmenu li.cbi-tab-disabled a {
 	border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
 	border: #006B3F 1px solid;
 	border-bottom: #FFF 1px solid;
 	display: block;
