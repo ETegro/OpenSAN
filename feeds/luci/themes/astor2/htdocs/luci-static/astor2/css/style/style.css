@@ -249,6 +249,7 @@ p.error {
 	color: #650E0E;
 	margin: 0 0 15px;
 	padding: 10px;
+	box-shadow: 0px 0px 5px #FF0000;
 }
 
 /* Maincontent */
@@ -431,7 +432,6 @@ textarea#syslog {
 
 /* cbi-tabmenu */
 #maincontent ul.cbi-tabmenu {
-/*	margin-left: 0 !important;*/
 	list-style-type: none;
 }
 
@@ -473,16 +473,6 @@ textarea#syslog {
 	border: #006B3F 1px solid;
 }
 
-/*
-#maincontent ul.cbi-tabmenu li.cbi-tab-highlighted a {
-	color: #000000;
-	background-color: #FFEEAA;
-}
-*/
-
-#maincontent div.cbi-tabcontainer {
-}
-
 /* cbi */
 div.cbi-value {
 	clear: left;
@@ -494,4 +484,16 @@ div.cbi-value {
 div.cbi-value:hover {
 	background: #f8f8f8;
 	color: #000000;
+}
+
+.cbi-input-invalid {
+	background-image: url('images/remove.png');
+	background-repeat: no-repeat;
+	background-position: right;
+	color: #FF0000 !important;
+	border-color: #FF0000;
+}
+
+input.cbi-input-invalid:focus {
+	box-shadow: 0px 0px 5px #FF0000;
 }
