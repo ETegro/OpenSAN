@@ -136,7 +136,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 -->
 <div id="menubar">
 <!--<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>-->
-<div class="etegro_logo inline" title="ETegro Technologies"><img src="<%=media%>/css/style/images/etegro_logo.png" alt="ETegro Technologies" /></div>
+<div class="etegro_logo inline" title="ETegro Technologies"><a href="<%=controller%>"><img src="<%=media%>/css/style/images/etegro_logo.png" alt="ETegro Technologies" /></a></div>
 <div class="hostinfo inline">
 	<%=hostname%> | <%=luci.version.distversion%> |
 	<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%>
