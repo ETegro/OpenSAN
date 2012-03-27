@@ -77,42 +77,6 @@ ul.cbi-apply {
 	font-size: 90%;
 }
 
-/* rm
-input:-webkit-input-placeholder {
-	color: #AAAAAA;
-}
-
-input:-moz-input-placeholder {
-	color: #AAAAAA;
-}
-*/
-
-/* mv
-input[type=submit],
-input[type=reset],
-input[type=image],
-input[type=button] {
-	cursor: pointer;
-}
-*/
-
-/* mv
-select,
-input,
-textarea {
-	background: #fff;
-	color: #000000;
-	border-width: 1px;
-	border-color: #000000;
-}
-*/
-
-/* mv
-input[type=image] {
-	border: none;
-}
-*/
-
 input:focus,
 input:hover,
 select:focus,
@@ -122,14 +86,6 @@ textarea:hover {
 	background-color: #ffffff;
 	color: #000000;
 }
-
-/* mv
-select,
-input[type=text],
-input[type=password] {
-	width: 20em;
-}
-*/
 
 td select,
 td input[type=text],
@@ -142,24 +98,6 @@ img.cbi-image-button {
 	margin: 0 2px;
 	vertical-align: middle;
 }
-
-/* mv
-input.cbi-input-user {
-	background: url('images/user.png') no-repeat scroll 1px center;
-	background-color: inherit;
-	color: #000000;
-	text-indent: 17px;
-}
-*/
-
-/* mv
-input.cbi-input-password {
-	background: url('images/key.png') no-repeat scroll 1px center;
-	background-color: inherit;
-	color: #000000;
-	text-indent: 17px;
-}
-*/
 
 input.cbi-input-find {
 	background: url('images/find.png') no-repeat scroll 1px center;
@@ -237,15 +175,6 @@ div.cbi-section-remove input {
 	padding-left: 17px;
 	padding-right: 1px;
 }
-
-/* mv
-.cbi-input-invalid {
-	background-image: url('images/reset.png');
-	background-repeat: no-repeat;
-	background-position: right;
-	color: #FF0000 !important;
-	border-color: #FF0000;
-} */
 
 div.cbi-section-remove input {
 	border-bottom: none;
