@@ -44,10 +44,11 @@ endef
 
 define Package/multipath-tools/install
 	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_DIR) $(1)/lib
 	$(INSTALL_DIR) $(1)/lib64/multipath
 	$(INSTALL_BIN) $(STAGING_DIR)/sbin/multipath* $(1)/sbin/
 	$(INSTALL_BIN) $(STAGING_DIR)/sbin/kpartx $(1)/sbin/
-	$(INSTALL_BIN) $(STAGING_DIR)/lib64/libmultipath.so* $(1)/lib64/
+	$(INSTALL_BIN) $(STAGING_DIR)/lib64/libmultipath.so* $(1)/lib/
 	$(INSTALL_BIN) $(STAGING_DIR)/lib64/multipath/* $(1)/lib64/multipath
 endef
 
