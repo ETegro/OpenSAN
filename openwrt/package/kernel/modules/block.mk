@@ -187,7 +187,7 @@ define KernelPackage/dm
 	CONFIG_DM_DEBUG=n \
 	CONFIG_DM_UEVENT=n \
 	CONFIG_DM_DELAY=n \
-	CONFIG_DM_MULTIPATH=n \
+	CONFIG_DM_MULTIPATH \
 	CONFIG_DM_ZERO=n \
 	CONFIG_DM_SNAPSHOT \
 	CONFIG_DM_LOG_USERSPACE=n \
@@ -196,7 +196,7 @@ define KernelPackage/dm
 	CONFIG_DM_CRYPT \
 	CONFIG_DM_MIRROR
   FILES:=$(LINUX_DIR)/drivers/md/dm-*.ko
-  AUTOLOAD:=$(call AutoLoad,30,dm-mod dm-log dm-region-hash dm-mirror dm-crypt dm-snapshot)
+  AUTOLOAD:=$(call AutoLoad,30,dm-mod dm-log dm-region-hash dm-mirror dm-crypt dm-snapshot dm-multipath)
 endef
 
 define KernelPackage/dm/description
