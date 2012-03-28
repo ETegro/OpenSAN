@@ -225,7 +225,7 @@ menu "Global build settings"
 
 	config KERNEL_AIO
 		bool "Compile the kernel with asynchronous IO support"
-		default n
+		default y
 
 	comment "Package build options"
 
