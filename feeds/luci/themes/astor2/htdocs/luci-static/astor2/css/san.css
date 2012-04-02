@@ -132,6 +132,17 @@ table.matrix > tbody tr th {
 	padding-bottom: 10px;
 }
 
+table.matrix > tbody tr th * {
+	vertical-align: middle;
+}
+
+table.matrix > tbody tr th a,
+table.matrix > tbody tr th img {
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
 table.matrix > tbody > tr > td,table.matrix fieldset {
 	padding: 5px;
 }
