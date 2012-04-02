@@ -208,7 +208,7 @@ if has_rdate then
 	)
 end
 
-
+--[[
 m2 = Map("luci")
 
 f = m2:section(NamedSection, "main", "core", translate("Files to be kept when flashing a new firmware"))
@@ -223,7 +223,9 @@ d = f:taboption("detected", DummyValue, "_detected", translate("Detected files")
 d.rawhtml = true
 d.cfgvalue = function(s)
 	local list = io.popen(
-		"( find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' /etc/sysupgrade.conf " ..
+]]
+--		"( find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' /etc/sysupgrade.conf " ..
+--[[
 		"/lib/upgrade/keep.d/* 2>/dev/null) -type f 2>/dev/null; " ..
 		"opkg list-changed-conffiles ) | sort -u"
 	)
@@ -265,5 +267,7 @@ c.write = function(self, section, value)
 	return nixio.fs.writefile("/etc/sysupgrade.conf", value)
 end
 
-
 return m, m3 or m2, m3 and m2
+]]
+
+return m, m3 or m3
