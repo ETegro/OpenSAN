@@ -49,12 +49,14 @@ function m.on_commit(map)
 	end
 end
 
-
-
+m2 = Map("dropbear", translate("SSH Access"))
+--[[
 m2 = Map("dropbear", translate("SSH Access"),
 	translate("Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"))
+]]
 
-s = m2:section(TypedSection, "dropbear", translate("Dropbear Instance"))
+--s = m2:section(TypedSection, "dropbear", translate("Dropbear Instance"))
+s = m2:section(TypedSection, "dropbear")
 s.anonymous = true
 s.addremove = true
 
