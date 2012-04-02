@@ -183,9 +183,9 @@ define KernelPackage/dm
   # to stop the config from asking the question.
   # MIRROR is M because I've needed it for pvmove.
   KCONFIG:= \
-	CONFIG_BLK_DEV_MD=n \
+	CONFIG_BLK_DEV_MD \
 	CONFIG_DM_DEBUG=n \
-	CONFIG_DM_UEVENT=n \
+	CONFIG_DM_UEVENT \
 	CONFIG_DM_DELAY=n \
 	CONFIG_DM_MULTIPATH \
 	CONFIG_DM_ZERO=n \
