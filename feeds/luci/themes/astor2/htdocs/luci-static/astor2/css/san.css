@@ -175,6 +175,12 @@ table.matrix div.control input {
 	-webkit-border-radius: 8px;
 }
 
+table.matrix fieldset table.auth_cred_users input {
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	vertical-align: middle;
+}
 
 /* AccessPattern and Sessions */
 table.matrix table.access_pattern_information {
