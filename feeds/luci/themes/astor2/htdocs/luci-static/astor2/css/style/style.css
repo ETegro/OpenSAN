@@ -915,7 +915,7 @@ textarea#syslog {
 }
 
 /* Fillbar */
-div.fillbar {
+div.cbi-fillbar {
 	clear: both;
 	margin-button: 0.5em;
 	position: relative;
@@ -927,7 +927,7 @@ div.fillbar {
 	-webkit-border-radius: 5px;
 }
 
-div.fillbar_background {
+div.cbi-fillbar_background {
 	height: 1.6em;
 	text-align: left;
 	border-radius: 4px;
@@ -936,7 +936,7 @@ div.fillbar_background {
 	background-color: #9EF98A;
 }
 
-div.fillbar_info {
+div.cbi-fillbar_info {
 	left: 0;
 	position: absolute;
 	text-align: center;
