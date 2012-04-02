@@ -113,10 +113,13 @@ input[type=image] {
 	border: none;
 }
 
-select,
 input[type=text],
 input[type=password] {
-	width: 20em;
+	width: 260px;
+}
+
+select {
+	width: 268px;
 }
 
 select:focus,
