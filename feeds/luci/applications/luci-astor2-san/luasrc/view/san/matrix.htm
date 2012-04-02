@@ -26,7 +26,12 @@
 				<th scope="col" width="15%"><%: Physical drives %></th>
 				<th scope="col" width="15%"><%: Logical drives %></th>
 				<th scope="col" width="20%"><%: Logical volumes %></th>
-				<th scope="col" width="25%"><a href="#div_access_pattern_new" id="access_patterns"><%: Access patterns %></a></th>
+				<th scope="col" width="25%">
+					<%: Access patterns %>
+					<a href="#div_access_pattern_new" id="access_patterns">
+						<img src="/luci-static/astor2/css/style/images/san-add.png" title="<%: Add access pattern %>">
+					</a>
+				</th>
 				<th scope="col" width="25%"><%: Sessions %></th>
 			</tr>
 			<% for _, line_local in ipairs( matrix_overall.lines ) do %>
