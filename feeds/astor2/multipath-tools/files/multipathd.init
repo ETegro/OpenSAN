@@ -3,9 +3,15 @@ START=55
 
 PID_FILE=/var/run/multipathd.pid
 MULTIPATHD=/sbin/multipathd
+MULTIPATH_CONF=/etc/multipath.conf
 
 start()
 {
+	cat > $MULTIPATH_CONF <<EOF
+defaults {
+	user_friendly_names yes
+}
+EOF
 	$MULTIPATHD
 	echo $! > $PID_FILE
 }
