@@ -155,7 +155,14 @@ function toggle_create_raid_form() {
 }
 
 function show_calendar() {
-	$( 'input[ name *= "_set_sysdate" ]' ).datepicker();
+	var element = $( 'input[ name *= "set_sysdate" ]' );
+	var format = {
+		def: "mm/dd/yy",
+		iso8601: 'yy-mm-dd',
+	};
+	element.datepicker(
+		{ dateFormat: format.iso8601 }
+	);
 }
 
 function setup_hypnorobo() {
