@@ -69,9 +69,6 @@ s:taboption("general", DummyValue, "_memtotal", translate("Memory")).value =
   tostring(translate("free"))
 )
 
-s:taboption("general", DummyValue, "_systime", translate("Local Time")).value =
- os.date("%c")
-
 s:taboption("general", DummyValue, "_uptime", translate("Uptime")).value =
  luci.tools.webadmin.date_format(tonumber(uptime))
 
@@ -102,6 +99,19 @@ function tz.write(self, section, value)
 	self.map.uci:set("system", section, "timezone", timezone)
 	luci.fs.writefile("/etc/TZ", timezone .. "\n")
 end
+
+lt = s:taboption( "general", DummyValue, "_systime", translate( "Local Time" ) )
+lt.value = os.date( "%c" )
+
+local date = os.date( "%Y-%m-%d" )
+sd = s:taboption( "general", Value, "_set_sysdate", translate( "Set Date" ), date )
+sd.placeholder = date
+sd.datatype = "date"
+
+local time = os.date( "%X" )
+st = s:taboption( "general", Value, "_set_systime", translate( "Set Time" ), time )
+st.placeholder = time
+st.datatype = "time"
 
 
 --
