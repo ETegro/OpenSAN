@@ -154,6 +154,10 @@ function toggle_create_raid_form() {
 	} );
 }
 
+function show_calendar() {
+	$( 'input[ name *= "_set_sysdate" ]' ).datepicker();
+}
+
 function setup_hypnorobo() {
 	$( '#hypnorobo_show' ).click( function() {
 		$( '#hypnorobo' ).show();
@@ -177,6 +181,7 @@ toggle_resize_logical_volume();
 hide_all_to_hide_elements();
 pulsate_bind_access_patterns();
 toggle_create_raid_form();
+show_calendar();
 setup_hypnorobo();
 
 } );
