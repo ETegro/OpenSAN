@@ -20,6 +20,7 @@
 
 local M = {}
 
+require( "lfs" )
 local common = require( "astor2.common" )
 
 local EINARC_CMD = "einarc -t software -a 0 "
@@ -30,21 +31,150 @@ M.LOGICAL_STATES = {
 	"initializing",
 	"rebuilding"
 }
+M.LOGICAL_STATES_MAP = {
+	["clean"] = "normal",
+	["clear"] = "normal",
+	["active"] = "normal",
+	["inactive"] = "failed",
+	["Not Started"] = "degraded",
+	["degraded"] = "degraded",
+	["resyncing"] = "initializing",
+	["recovering"] = "rebuilding"
+}
 M.PHYSICAL_STATES = {
 	"hotspare",
 	"failed",
 	"free"
 }
-M.RAIDLEVELS = {
-	"linear",
-	"passthrough",
-	"0", "1", "4",
-	"5", "6", "10"
-}
-M.RAIDLEVELS_HOTSPARE_COMPATIBLE = {
-	"1", "4", "5", "6", "10"
-}
 
+------------------------------------------------------------------------
+-- Internals
+------------------------------------------------------------------------
+local function read_line( path )
+	if lfs.attributes( path ) then
+		return io.input( path ):read()
+	end
+	return nil
+end
+
+local function list_slaves( path )
+	local slaves = {}
+	for slave in lfs.dir( path .. "/slaves" ) do
+		if slave ~= "." and slave ~= ".." then
+			slaves[ #slaves + 1 ] = slave
+		end
+	end
+	return slaves
+end
+
+local function serial_via_smart( device )
+	local result = common.system( "smartctl --all " .. device )
+	for _,line in ipairs( result.stdout ) do
+		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(%w+)" )
+		if serial then return serial end
+	end
+	return nil
+end
+
+local function serial_via_udev( device )
+	local result = common.system( "udevadm info --query=env --name=" .. device )
+	for _,line in ipairs( result.stdout ) do
+		local serial = string.match( line, "ID_SERIAL_SHORT=(.*)" )
+		if serial then return serial end
+		serial = string.match( line, "ID_SERIAL=(.*)" )
+		if serial then return serial end
+	end
+	return nil
+end
+
+local function list_devices()
+	local path_block = "/sys/block/"
+	local devices = {}
+	for ent in lfs.dir( path_block ) do
+		local device = {
+			devnode = ent,
+			path = path_block .. ent
+		}
+		device.size = math.floor( (tonumber( read_line( device.path .. "/size" ) ) or 0) / 2048 )
+		if lfs.attributes( device.path .. "/dm/name" ) then
+			local name = read_line( device.path .. "/dm/name" )
+			if string.match( name, "^mpath" ) then
+				device.type = "multipath"
+				device.slaves = list_slaves( device.path )
+				device.name = name
+				device.uuid = read_line( device.path .. "/dm/uuid" )
+				devices[ device.devnode ] = device
+			end
+		elseif lfs.attributes( device.path .. "/md" ) then
+			device.type = "md"
+			device.slaves = list_slaves( device.path )
+			device.id = tonumber( string.sub( device.devnode, 3, -1 ) )
+			if #device.slaves > 0 then
+				devices[ device.devnode ] = device
+			end
+		elseif string.sub( ent, 1, 2 ) == "sd" then
+			device.type = "sd"
+			device.model = read_line( device.path .. "/device/model" )
+			device.revision = read_line( device.path .. "/device/rev" )
+			device.vendor = read_line( device.path .. "/device/vendor" )
+
+			device.serial = serial_via_smart( device.fdevnode )
+			if not device.serial then
+				device.vendor = read_line( device.path .. "/device/serial" )
+			end
+			if not device.serial then
+				device.serial = serial_via_udev( device.fdevnode )
+			end
+			if not device.serial then
+				device.serial = ""
+			end
+
+			devices[ device.devnode ] = device
+		end
+	end
+	return devices
+end
+
+function M.phys_to_scsi( name )
+	local pre, root = string.match( name, "^([sh])d(%w+)%d*" )
+	assert( pre and root, "Invalid device name" )
+	assert( pre == "s", "Only SCSI devices supported" )
+	local sum = 0
+	for i,c in ipairs( common.split_into_chars( string.reverse(root) ) ) do
+		sum = sum + (string.byte(c) - string.byte("a") + 1) * 26^(i-1)
+	end
+	return "0:" .. tostring( sum )
+end
+
+function M.scsi_to_phys( id )
+	local pre, post = string.match( id, "^(%d+):(%d+)$" )
+	assert( pre == "0", "Invalid internal ID" )
+	local phys = "sd"
+	local i = math.floor( math.log( tonumber( post ) ) / math.log( 26 ) )
+	while i >= 0 do
+		phys = phys .. string.char( string.byte("a") + math.floor( post / 26^i ) -1 )
+		post = post % 26^i
+		i = i - 1
+	end
+	return phys
+end
+
+local function run2( args )
+	local cycle = 4
+	local result
+	while cycle > 0 do
+		result = common.system( "mdadm " .. args .. " 2>&1" )
+		if result.return_code == 0 then
+			cycle = 0
+		else
+			cycle = cycle - 1
+			common.sleep(1)
+		end
+	end
+	return result
+end
+
+-- TODO: remove
 --- Execute einarc and get it's results
 -- @param args "logical add 5 0 0:1,0:2"
 -- @return Either an array of output strings from einarc, or nil if
@@ -64,29 +194,32 @@ local function run( args )
 	return result.stdout
 end
 
+local function check_detached_hotspares()
+	for _,device in pairs( list_devices() ) do
+		if device.type == "md" then
+			run2("/dev/" .. device.devnode .. " --fail detached --remove detached")
+		end
+	end
+end
+
+local function multipath_devices()
+	common.system("multipath")
+end
+
 ------------------------------------------------------------------------
 -- Adapter
 ------------------------------------------------------------------------
 M.Adapter = {}
 local Adapter_mt = common.Class( M.Adapter )
-
---- einarc adapter get
--- @param property "raidlevels"
--- @return { "linear", "passthrough", "0", "1", "5", "6", "10" }
-function M.Adapter:get( property )
-	assert( property and common.is_string( property ),
-	        "no property specified" )
-
-	-- WARNING: This is performance related issue only for
-	-- software einarc module.
-	if property == "raidlevels" then
-		return M.RAIDLEVELS
-	end
-
-	local output = run( "adapter get " .. property )
-	if not output then error( "einarc:adapter.get() failed" ) end
-	return output
-end
+M.Adapter.raidlevels = {
+	"linear",
+	"passthrough",
+	"0", "1", "4",
+	"5", "6", "10"
+}
+M.Adapter.raidlevels_hotspare_compatible = {
+	"1", "4", "5", "6", "10"
+}
 
 --- einarc adapter expanders
 -- @return { { model = "noname", id = "13" }, ... }
@@ -114,36 +247,61 @@ local Logical_mt = common.Class( M.Logical )
 function M.Logical:new( attrs )
 	assert( common.is_number( attrs.id ),
 	        "non-number ID" )
-	assert( common.is_string( attrs.level ),
-	        "empty level" )
+	assert( common.is_string( attrs.state ),
+	        "unknown state" )
+	if attrs.state ~= "failed" then
+		assert( common.is_string( attrs.level ),
+				"empty level" )
+	end
 	assert( common.is_non_negative( attrs.capacity ),
 	        "non-positive capacity" )
 	assert( common.is_string( attrs.device ),
 	        "empty device" )
-	assert( common.is_string( attrs.state ),
-	        "unknown state" )
 	return setmetatable( attrs, Logical_mt )
 end
 
 --- einarc logical list
 -- @return { 0 = Logical, 1 = Logical }
 function M.Logical.list()
-	-- #  RAID level  Physical drives  Capacity  Device   State
-	-- 0  linear      0:1              246.00 MB /dev/md0 normal
-	local output = run( "logical list" )
-	if not output or #output == 0 then return {} end
 	local logicals = {}
-	for _, line in ipairs( output ) do
-		local id = tonumber( string.match( line, "^(%d+)" ) )
-		assert( id, "unable to retreive an ID" )
-		logicals[ id ] = M.Logical:new( {
-			id = id,
-			level = string.match( line, "^%d+\t(.+)\t[%d:,]*\t.*\t.*\t.*$" ) or "",
-			drives = common.split_by( string.match( line, "^%d+\t.+\t([%d:,]*)\t.*\t.*\t.*$" ), "," ) or {},
-			capacity = tonumber( string.match( line, "^%d+\t.+\t[%d:,]*\t([%d\.]+)\t.*\t.*$" ) ) or 0,
-			device = string.match( line, "^%d+\t.+\t[%d:,]*\t.*\t(.*)\t.*$" ) or "",
-			state = string.match( line, "^%d+\t.+\t[%d:,]*\t.*\t.*\t(.*)$" ) or ""
-		} )
+	check_detached_hotspares()
+	multipath_devices()
+	for _,device in pairs( list_devices() ) do
+		if device.type == "md" then
+			local logical = common.deepcopy( device )
+			for _, what in ipairs( {
+				"chunk_size",
+				"level",
+				"sync_speed",
+				"sync_action",
+				"sync_completed",
+				"resync_start",
+				"array_state",
+				"degraded"
+			} ) do
+				logical[ what ] = read_line( device.path .. "/md/" .. what )
+			end
+			logical.state = M.LOGICAL_STATES_MAP[ logical.array_state ]
+			if logical.state ~= "failed" then
+				if string.sub( logical.level, 1, 4 ) == "raid" then
+					logical.level = string.sub( logical.level, 5, -1 )
+				else
+					logical.level = "linear"
+				end
+			end
+			logical.drives = {}
+			for _,slave in ipairs( logical.slaves ) do
+				logical.drives[ #logical.drives + 1 ] = M.phys_to_scsi( slave )
+			end
+			if logical.state == "normal" and
+				logical.sync_completed and
+				logical.sync_completed ~= "none" then
+				logical.state = "rebuilding"
+			end
+			logical.capacity = logical.size
+			logical.device = "/dev/" .. logical.devnode
+			logicals[ logical.id ] = M.Logical:new( logical )
+		end
 	end
 	return logicals
 end
@@ -183,8 +341,11 @@ end
 -- @result Raise error if it fails
 function M.Logical:delete()
 	assert( self.id, "unable to get self object" )
-	local output = run( "logical delete " .. tostring( self.id ) )
-	if output == nil then
+	local result = run2("--stop /dev/" .. self.devnode)
+	for _,id in pairs( self.drives ) do
+		run2("--zero-superblock " .. M.scsi_to_phys( id ))
+	end
+	if result.return_code ~= 0 then
 		error("einarc:logical.delete() failed")
 	end
 end
@@ -217,16 +378,21 @@ function M.Logical:physical_list()
 		return self.physicals
 	end
 	assert( self.id, "unable to get self object" )
-	-- 0:1	free
-	-- 0:2	hotspare
-	local output = run( "logical physical_list " .. tostring( self.id ) )
-	if not output then error( "einarc:logical.physical_list() failed" ) end
+	local devices = list_devices()
 	self.physicals = {}
-	for _, line in ipairs( output ) do
-		local physical_id = string.match( line, "^([%d:]+)" )
-		assert( M.Physical.is_id( physical_id ),
-		        "incorrect physical id" )
-		self.physicals[ physical_id ] = string.match( line, "^[%d:]+\t(.*)$" ) or ""
+	for _,slave in ipairs( self.slaves ) do
+		local state = read_line( self.path .. "/md/dev-" .. slave .. "/state" )
+		if state == "in_sync" and
+			devices[ slave ] and
+			devices[ slave ].slaves[1] and
+			devices[ devices[ slave ].slaves[1] ] then
+			state = tostring( self.id )
+		elseif state == "spare" then
+			state = "hotspare"
+		else
+			state = "failed"
+		end
+		self.physicals[ M.phys_to_scsi( devices[ slave ].devnode ) ] = state
 	end
 	return self.physicals
 end
@@ -237,11 +403,12 @@ function M.Logical:progress_get()
 	if common.is_number( self.progress ) then
 		return self.progress
 	end
-	assert( self.id, "unable to get self object" )
-	for task_id, task in pairs( einarc.Task.list() ) do
-		if task.where == tostring( self.id ) then
-			self.progress = task.progress
-			return self.progress
+	self.progress = nil
+	local sync = read_line( self.path .. "/md/sync_completed" )
+	if sync then
+		local doned, total = string.match( sync, "^(%d+) / (%d+)$" )
+		if doned and total then
+			self.progress = tonumber( doned ) / tonumber( total )
 		end
 	end
 	return self.progress
@@ -328,22 +495,28 @@ end
 --- einarc physical list
 -- @return { "0:1" = Physical, "0:2" = Physical }
 function M.Physical.list()
-	-- ID   Model       Revision  Serial        Size     State
-	-- 1:0  ST980310AS            5ST05LK2  76319.09 MB  free
-	local output = run( "physical list" )
-	if not output or #output == 0 then return {} end
 	local physicals = {}
-	for _, line in ipairs( output ) do
-		local id = string.match( line, "^([%d:]+)" )
-		assert( id, "unable to retreive an ID" )
-		physicals[ id ] = M.Physical:new( {
-			id = id,
-			model = string.match( line, "^[%d:]+\t(.*)\t.*\t.*\t.*\t.*$" ) or "",
-			revision = string.match( line, "^[%d:]+\t.*\t(.*)\t.*\t.*\t.*$" ) or "",
-			serial = string.match( line, "^[%d:]+\t.*\t.*\t(.*)\t.*\t.*$" ) or "",
-			size = tonumber( string.match( line, "^[%d:]+\t.*\t.*\t.*\t([%d\.]+)\t.*$" ) ) or 0,
-			state = string.match( line, "^[%d:]+\t.*\t.*\t.*\t.*\t(.*)$" ) or ""
-		} )
+	local devices = list_devices()
+	for _,device in pairs( devices ) do
+		if device.type == "multipath" then
+			local physical = common.deepcopy( device )
+			physical.model = devices[ physical.slaves[1] ].model
+			physical.vendor = devices[ physical.slaves[1] ].vendor
+			physical.revision = devices[ physical.slaves[1] ].revision
+			physical.serial = devices[ physical.slaves[1] ].serial
+			physical.id = M.phys_to_scsi( physical.devnode )
+
+			physical.state = "free"
+			for _,device_int in pairs( devices ) do
+				if device_int.type == "md" and
+					common.is_in_array( device.devnode, device_int.slaves ) then
+					local physical_list = M.Logical.physical_list( device_int )
+					physical.state = physical_list[ M.phys_to_scsi( device.devnode ) ]
+				end
+			end
+
+			physicals[ physical.id ] = M.Physical:new( physical )
+		end
 	end
 	return physicals
 end
@@ -361,30 +534,11 @@ function M.Physical:get( property )
 	return output
 end
 
---- einarc physical set
--- @param property "writecache"
--- @param value "1"
-function M.Physical:set( property, value )
-	assert( self.id and M.Physical.is_id( self.id ),
-	        "unable to get self object" )
-	assert( value and common.is_string( value ),
-	        "empty value" )
-	local output = run(
-		"physical set " ..
-		self.id .. " " ..
-		property .. " " ..
-		value
-	)
-	if not output then error( "einarc:physical.set() failed" ) end
-end
-
 --- Is physical disk a hotspare
 -- @return true/false
 function M.Physical:is_hotspare()
 	assert( self.id, "unable to get self object" )
-	local output = self:get( "hotspare" )
-	if not output then error( "einarc:physical.is_hotspare() failed" ) end
-	return output[1] == "1"
+	return M.Physical.list()[ self.id ].state == "hotspare"
 end
 
 --- Try to get physical's enclosure
@@ -403,45 +557,6 @@ function M.Physical:is_writecache()
 	local output = self:get( "writecache" )
 	if not output then error( "einarc:physical.is_writecache() failed" ) end
 	return output[1] == "1"
-end
-
-------------------------------------------------------------------------
--- Task
-------------------------------------------------------------------------
-M.Task = {}
-local Task_mt = common.Class( M.Task )
-
-function M.Task:new( attrs )
-	assert( common.is_number( attrs.id ),
-	        "incorrect task id" )
-	assert( common.is_string( attrs.what ),
-	        "unexistent what" )
-	assert( common.is_string( attrs.where ),
-	        "unexistent where" )
-	assert( common.is_number( attrs.progress ),
-	        "no progress" )
-	return setmetatable( attrs, Task_mt )
-end
-
---- einarc task list
--- @return { 0 = Task, 1 = Task }
-function M.Task.list()
-	local output = run( "task list" )
-	if not output or #output == 0 then
-		return {}
-	end
-	local tasks = {}
-	for _, line in ipairs( output ) do
-		local id = string.match( line, "^(%d+)" )
-		assert( id, "unable to retreive an ID" )
-		tasks[ id ] = M.Task:new( {
-			id = tonumber( id ),
-			where = string.match( line, "^%d+\t(.*)\t.*\t.*$" ) or "",
-			what = string.match( line, "^%d+\t.*\t(.*)\t.*$" ) or "",
-			progress = tonumber( string.match( line, "^%d+\t.*\t.*\t(.*)$" ) ) or 0,
-		} )
-	end
-	return tasks
 end
 
 -----------------------------------------------------------------------

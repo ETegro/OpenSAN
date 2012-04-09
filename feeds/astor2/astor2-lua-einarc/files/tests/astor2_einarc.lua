@@ -30,6 +30,16 @@ TestIsId = {}
 		assertEquals( einarc.Physical.is_id( "10_20" ), false )
 	end
 
+TestIdTransform = {}
+	function TestIdTransform:test_phys_to_scsi()
+		assertEquals( einarc.phys_to_scsi( "sda" ), "0:1" )
+		assertEquals( einarc.phys_to_scsi( "sdba" ), "0:53" )
+	end
+	function TestIdTransform:test_scsi_to_phys()
+		assertEquals( einarc.scsi_to_phys( "0:1" ), "sda" )
+		assertEquals( einarc.scsi_to_phys( "0:53" ), "sdba" )
+	end
+
 TestSortPhysicals = {}
 	function TestSortPhysicals:setUp()
 		self.physicals = {
