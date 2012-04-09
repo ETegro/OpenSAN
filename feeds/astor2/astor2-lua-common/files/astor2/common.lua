@@ -353,6 +353,22 @@ function M.split_by( str, separator )
 	return words
 end
 
+--- Split string into characters
+-- @param str
+-- @return An array of characters
+function M.split_into_chars( str )
+	assert( str and M.is_string( str ),
+	        "attempt to split non-string" )
+	if #str == 0 then return {} end
+	local chars = {}
+	local i = 1
+	while i <= #str do
+		chars[ i ] = string.sub( str, i, i )
+		i = i + 1
+	end
+	return chars
+end
+
 ------------------------------------------------------------------------
 -- OOP
 ------------------------------------------------------------------------
