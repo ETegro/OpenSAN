@@ -16,7 +16,7 @@ define Package/astor2-lua-einarc
 	CATEGORY:=aStor2
 	TITLE:=Lua binding for Inquisitor's Einarc
 	URL:=http://www.inquisitor.ru/doc/einarc/
-	DEPENDS:=+lua +astor2-einarc +astor2-lua-common
+	DEPENDS:=+lua +astor2-einarc +astor2-lua-common +luafilesystem
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 

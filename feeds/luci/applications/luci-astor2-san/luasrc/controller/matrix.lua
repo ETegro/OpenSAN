@@ -638,7 +638,8 @@ function M.filter_calculate_hotspares( matrix )
 				if line_inner.logical and
 					common.is_in_array(
 						line_inner.logical.level,
-						einarc.RAIDLEVELS_HOTSPARE_COMPATIBLE ) then
+						einarc.Adapter.raidlevels_hotspare_compatible
+					) then
 					local minimal_size = math.huge
 					for _, physical in pairs( line_inner.logical.physicals ) do
 						if physical.size < minimal_size then

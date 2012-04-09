@@ -306,7 +306,7 @@ local function einarc_logical_delete( inputs, data )
 
 	_,_ = pcall( lvm.PhysicalVolume.prepare, logical.device )
 
-	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
+	local return_code, result = pcall( einarc.Logical.delete, einarc.Logical.list()[ logical_id ] )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk") .. ": " .. result
 	end
@@ -1064,7 +1064,7 @@ function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
 		matrix_overall = matrix.caller(),
-		raidlevels = einarc.Adapter:get( "raidlevels" ),
+		raidlevels = einarc.Adapter.raidlevels,
 		message_error = message_error } )
 end
 
