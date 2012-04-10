@@ -62,6 +62,23 @@ function float(val)
 	return ( tonumber(val) ~= nil )
 end
 
+function time(val)
+	-- Time format: 17:15:01
+	if not ( val and val:match( "^%d%d[:]%d%d[:]%d%d$" ) ) then
+		return false
+	else
+		local parts = util.split( val, ":" )
+		for i = 1,3 do
+			local max
+			if i == 1 then max = 23 else max = 59 end
+			if not range( tonumber( parts[i] ), 0, max ) then
+				return false
+			end
+		end
+		return true
+	end
+end
+
 function date(val)
 	-- Date format: 1970-01-01
 	if not ( val and val:match( "^%d%d%d%d[-]%d%d[-]%d%d$" ) ) then
