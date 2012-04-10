@@ -62,7 +62,6 @@ function float(val)
 	return ( tonumber(val) ~= nil )
 end
 
---TODO: real calculation of leap years
 function date(val)
 	-- Date format: 1970-01-01
 	if not( val and val:match( "^%d+-%d+-%d+$" ) ) then
