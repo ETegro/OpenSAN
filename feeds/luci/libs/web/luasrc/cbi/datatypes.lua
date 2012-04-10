@@ -64,7 +64,7 @@ end
 
 function date(val)
 	-- Date format: 1970-01-01
-	if not( val and val:match( "^%d+-%d+-%d+$" ) ) then
+	if not ( val and val:match( "^%d%d%d%d[-]%d%d[-]%d%d$" ) ) then
 		return false
 	else
 		local parts = util.split( val, "-" )
