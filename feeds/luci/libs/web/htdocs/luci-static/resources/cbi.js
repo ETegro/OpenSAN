@@ -155,6 +155,59 @@ var cbi_validators = {
 		}
 	},
 
+	'date': function(v) {
+		// Date format: 1970:01:01
+		if ( v.match( /^\d{4}-\d{2}-\d{2}$/ ) ) {
+			var parts = v.split( "-" )
+			var date = {
+				year : {
+					val : parts[0],
+					min : 1970,
+					max : 9999
+				},
+				mounth : {
+					val : parts[1],
+					min : 1,
+					max : 12
+				},
+				day : {
+					val : parts[2],
+					min : 1,
+					max : 31
+				}
+			}
+			if ( date.mounth.val % 2 == 0 ) {
+				date.day.max = 30;
+				if ( date.mounth.val == 2 ) {
+					var year = date.year.val;
+					if ( ( ( year % 4 == 0 ) &&
+					       ( year % 100 != 0 ) ) ||
+					     ( year % 400 == 0 ) ) {
+						date.day.max = 29;
+					} else {
+						date.day.max = 28;
+					}
+				}
+			}
+			var result = {
+				year : false,
+				mounth : false,
+				day : false
+			}
+			for( var part in date ) {
+				var val = date[ part ].val
+				var min = date[ part ].min
+				var max = date[ part ].max
+				if ( min <= val && val <= max ) {
+					result[ part ] = true
+				}
+			}
+			if ( result.year == result.mounth == result.day == true ) {
+				return ( v.match( /^\d{4}-\d{2}-\d{2}$/ ) != null )
+			}
+		}
+	},
+
 	'macaddr': function(v)
 	{
 		return (v.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
