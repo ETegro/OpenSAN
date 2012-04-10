@@ -108,11 +108,25 @@ sd = s:taboption( "general", Value, "set_sysdate", translate( "Set Date" ), date
 sd.placeholder = date
 sd.datatype = "date"
 
+function sd.write( self, s, val )
+	local new_date = sd:formvalue( s) or ""
+	local now_time = os.date( "%X" )
+	if new_date then
+		luci.sys.exec( "date --set '" .. new_date .. " " .. now_time .. "'" )
+	end
+end
+
 local time = os.date( "%X" )
 st = s:taboption( "general", Value, "set_systime", translate( "Set Time" ), time )
 st.placeholder = time
 st.datatype = "time"
 
+function st.write( self, s, val )
+	local new_time = st:formvalue( s ) or ""
+	if new_time then
+		luci.sys.exec( "date --set '" .. new_time .. "'" )
+	end
+end
 
 --
 -- Logging
