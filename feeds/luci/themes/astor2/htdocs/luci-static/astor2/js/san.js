@@ -154,6 +154,17 @@ function toggle_create_raid_form() {
 	} );
 }
 
+function show_calendar() {
+	var element = $( 'input[ name *= "set_sysdate" ]' );
+	var format = {
+		def: "mm/dd/yy",
+		iso8601: 'yy-mm-dd',
+	};
+	element.datepicker(
+		{ dateFormat: format.iso8601 }
+	);
+}
+
 function setup_hypnorobo() {
 	$( '#hypnorobo_show' ).click( function() {
 		$( '#hypnorobo' ).show();
@@ -177,6 +188,7 @@ toggle_resize_logical_volume();
 hide_all_to_hide_elements();
 pulsate_bind_access_patterns();
 toggle_create_raid_form();
+show_calendar();
 setup_hypnorobo();
 
 } );

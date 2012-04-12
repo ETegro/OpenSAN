@@ -17,8 +17,8 @@ local fs = require "nixio.fs"
 local ip = require "luci.ip"
 local math = require "math"
 local util = require "luci.util"
-local tonumber, type = tonumber, type
-
+local pairs, tonumber, type = pairs, tonumber, type
+local assert = assert
 
 module "luci.cbi.datatypes"
 
@@ -60,6 +60,67 @@ end
 
 function float(val)
 	return ( tonumber(val) ~= nil )
+end
+
+function time(val)
+	-- Time format: 17:15:01
+	if not ( val and val:match( "^%d%d[:]%d%d[:]%d%d$" ) ) then
+		return false
+	else
+		local parts = util.split( val, ":" )
+		for i = 1,3 do
+			local max
+			if i == 1 then max = 23 else max = 59 end
+			if not range( tonumber( parts[i] ), 0, max ) then
+				return false
+			end
+		end
+		return true
+	end
+end
+
+function date(val)
+	-- Date format: 1970-01-01
+	if not ( val and val:match( "^%d%d%d%d[-]%d%d[-]%d%d$" ) ) then
+		return false
+	else
+		local parts = util.split( val, "-" )
+		local date = {
+			year = {
+				val = tonumber( parts[1] ),
+				min   = 1970,
+				max   = 9999
+			},
+			mounth = {
+				val = tonumber( parts[2] ),
+				min   = 1,
+				max   = 12
+			},
+			day = {
+				val = tonumber( parts[3] ),
+				min   = 1,
+				max   = 31
+			}
+		}
+		if ( date.mounth.val % 2 ) == 0 then
+			date.day.max = 30
+			if date.mounth.val == 2 then
+				local year = date.year.val
+				if ( year % 4 == 0 and year % 100 ~= 0 ) or
+				   year % 400 == 0 then
+					date.day.max = 29
+				else
+					date.day.max = 28
+				end
+			end
+		end
+		for _, part in pairs( date ) do
+			if not range( part.val, part.min, part.max ) then
+				return false
+			end
+		end
+		return true
+	end
 end
 
 function ipaddr(val)
