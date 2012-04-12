@@ -39,6 +39,7 @@ function M.overall( data )
 	local physicals = data.physicals or {}
 	local logicals = data.logicals or {}
 	local access_patterns = data.access_patterns or {}
+	local sessions = data.sessions or {}
 	local physicals_free = common.deepcopy( physicals )
 	local matrix = {}
 	local current_line = 1
@@ -46,6 +47,20 @@ function M.overall( data )
 	-- Sort logicals
 	local logical_ids = common.keys( logicals )
 	table.sort( logical_ids )
+
+	-- Sessions filling
+	for section_name,access_pattern_i in pairs( common.unique_keys( "section_name", access_patterns ) ) do
+		local ap_sessions = sessions[ section_name ] or {}
+		local session_names = common.keys( ap_sessions )
+		local access_pattern = access_patterns[ access_pattern_i[1] ]
+		if #session_names > 0 then
+			table.sort( session_names )
+			access_pattern.sessions_avail = {}
+			for _,session_name in ipairs( session_names ) do
+				access_pattern.sessions_avail[ #access_pattern.sessions_avail + 1 ] = ap_sessions[ session_name ]
+			end
+		end
+	end
 
 	for _,logical_id in ipairs( logical_ids ) do
 		local logical = logicals[ logical_id ]
@@ -55,7 +70,8 @@ function M.overall( data )
 
 		-- Bind access patterns to logical volumes and find maximal
 		-- patterns quantity in single logical volume
-		local quantities = {}
+		local access_patterns_quantity_max = 1
+		local sessions_quantity_max = 1
 		for logical_volume_device, logical_volume in pairs( logical.logical_volumes or {} ) do
 			local quantity = 0
 			for _, access_pattern in ipairs( access_patterns ) do
@@ -65,28 +81,29 @@ function M.overall( data )
 					end
 					logical_volume.access_patterns[ access_pattern.name ] = access_pattern
 					quantity = quantity + 1
+					if access_pattern.sessions_avail and #access_pattern.sessions_avail > 0 then
+						sessions_quantity_max = M.lcm(
+							#access_pattern.sessions_avail,
+							sessions_quantity_max
+						)
+					end
 				end
 			end
 			if quantity ~= 0 then
-				quantities[ #quantities + 1 ] = quantity
+				-- Maximum number of possible divisible without reminder number
+				-- of APs in LV is LCM between each of them
+				access_patterns_quantity_max = M.lcm(
+					quantity,
+					access_patterns_quantity_max
+				)
 			end
 		end
 
-		-- Maximum number of possible divisible without reminder number
-		-- of APs in LV is LCM between each of them
-		local access_patterns_quantity_max = 1
-		for _, quantity in ipairs( quantities ) do
-			access_patterns_quantity_max = M.lcm(
-				quantity,
-				access_patterns_quantity_max
-			)
-		end
-
-		-- Overall lines quantity will be LCM( PVs, APs*LVs )
+		-- Overall lines quantity will be LCM( PVs, APs*LVs*Ss )
 		if logical_volumes_quantity ~= 0 then
 			lines_quantity = M.lcm(
 				physicals_quantity,
-				logical_volumes_quantity * access_patterns_quantity_max
+				logical_volumes_quantity * access_patterns_quantity_max * sessions_quantity_max
 			)
 		end
 		local future_line = current_line + lines_quantity
@@ -159,12 +176,25 @@ function M.overall( data )
 				table.sort( access_pattern_names )
 
 				for ap_i = 1, #access_pattern_names do
-					ap_offset = offset + ( ap_i - 1 ) * access_pattern_rowspan
+					local ap_offset = offset + ( ap_i - 1 ) * access_pattern_rowspan
 					if not matrix[ ap_offset ] then
 						matrix[ ap_offset ] = {}
 					end
 					matrix[ ap_offset ].access_pattern = logical_volume.access_patterns[ access_pattern_names[ ap_i ] ]
 					matrix[ ap_offset ].access_pattern.rowspan = access_pattern_rowspan
+
+					if matrix[ ap_offset ].access_pattern.sessions_avail then
+						ap_sessions = matrix[ ap_offset ].access_pattern.sessions_avail
+						local session_rowspan = access_pattern_rowspan / #ap_sessions
+						for s_i = 1, #ap_sessions do
+							local s_offset = ap_offset + ( s_i - 1 ) * session_rowspan
+							if not matrix[ s_offset ] then
+								matrix[ s_offset ] = {}
+							end
+							matrix[ s_offset ].session = ap_sessions[ s_i ]
+							matrix[ s_offset ].session.rowspan = session_rowspan
+						end
+					end
 				end
 			end
 		end
@@ -292,9 +322,26 @@ function M.filter_borders_highlight( matrix )
 						local access_patterns_names = common.keys( logical_volume.access_patterns )
 						local access_pattern_rowspan = logical_volume_rowspan / #access_patterns_names
 						for ap_i, access_pattern_name in ipairs( access_patterns_names ) do
-							local access_pattern = lines[ i + ( ap_i - 1 ) * access_pattern_rowspan ].access_pattern
+							local ap_line = i + ( ap_i - 1 ) * access_pattern_rowspan
+							local access_pattern = lines[ ap_line ].access_pattern
 							check_highlights_attribute( access_pattern )
 							access_pattern.highlight.right = true
+							if access_pattern.sessions_avail then
+								access_pattern.highlight.right = false
+
+								local s_line_last = ap_line + (#access_pattern.sessions_avail - 1) * lines[ ap_line ].session.rowspan
+								for s_line=ap_line, s_line_last, lines[ ap_line ].session.rowspan do
+									local session = lines[ s_line ].session
+									check_highlights_attribute( session )
+									session.highlight.right = true
+									if s_line == ap_line then
+										session.highlight.top = true
+									end
+									if s_line == s_line_last then
+										session.highlight.bottom = true
+									end
+								end
+							end
 							if ap_i == 1 then
 								access_pattern.highlight.top = true
 							end
@@ -342,6 +389,11 @@ function M.filter_alternation_border_colors( matrix, colors_array )
 					if logical_volume.access_patterns then
 						for _, access_pattern in pairs( logical_volume.access_patterns ) do
 							access_pattern.highlight.color = color
+							if access_pattern.sessions_avail then
+								for _, session in ipairs( access_pattern.sessions_avail ) do
+									session.highlight.color = color
+								end
+							end
 						end
 					end
 				end
@@ -396,6 +448,26 @@ function M.filter_highlight_accesss_patterns( matrix )
 					end
 				end
 			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_highlight_sessions( matrix, colors_array )
+	if not colors_array then
+		colors_array = { "normal_color", "light_color" }
+	end
+	local color_number = 1
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		local color = colors_array[ color_number ]
+		if line.session then
+			if color_number == #colors_array then
+				color_number = 1
+			else
+				color_number = color_number + 1
+			end
+			lines[ current_line ].session.highlight.background_color = color
 		end
 	end
 	return matrix
@@ -497,6 +569,65 @@ local function filter_fillup_auth_credentials( matrix )
 	return matrix
 end
 
+function M.filter_deletability_logical( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical then
+			if #common.keys( line.logical.logical_volumes or {} ) == 0 then
+				line.logical.deletable = true
+			else
+				line.logical.deletable = false
+			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_deletability_logical_volume( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical_volume then
+			if( line.logical_volume.access_patterns ) then
+				line.logical_volume.deletable = false
+			else
+				line.logical_volume.deletable = true
+			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_resizability_logical_volume( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical_volume and line.logical_volume.snapshots then
+			if( #line.logical_volume.snapshots == 0 ) then
+				line.logical_volume.resizable = true
+			else
+				line.logical_volume.resizable = false
+			end
+		end
+	end
+	return matrix
+end
+
+function M.filter_unbindability_access_pattern( matrix )
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.access_pattern then
+			line.access_pattern.unbindable = true
+			if line.access_pattern.lun == 0 then
+				for _, inner_line in ipairs( lines ) do
+					if inner_line.access_pattern and inner_line.access_pattern.lun ~= 0 and inner_line.access_pattern.filename == line.access_pattern.filename then
+						line.access_pattern.unbindable = false
+					end
+				end
+			end
+		end
+	end
+	return matrix
+end
+
 function M.filter_calculate_hotspares( matrix )
 	local lines = matrix.lines
 	for current_line, line in ipairs( lines ) do
@@ -566,6 +697,29 @@ function filter_base64encode( matrix )
 	return matrix
 end
 
+local function unknown_access_patterns_filename_unbind( access_patterns, logical_volumes )
+	for _, access_pattern in ipairs( access_patterns ) do
+		if access_pattern.filename then
+			local logical_volume_found = false
+			for _,logical_volume in ipairs( logical_volumes ) do
+				if logical_volume.device == access_pattern.filename then
+					logical_volume_found = true
+				end
+				if logical_volume.snapshots then
+					for _,snapshot in ipairs( logical_volume.snapshots ) do
+						if snapshot.device == access_pattern.filename then
+							logical_volume_found = true
+						end
+					end
+				end
+			end
+			if not logical_volume_found then
+				access_pattern:unbind()
+			end
+		end
+	end
+end
+
 local function logical_volume_group( logical, volume_groups )
 	for _, volume_group in ipairs( volume_groups ) do
 		if volume_group.physical_volumes[1].device == logical.device then
@@ -628,6 +782,11 @@ function M.caller()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
 	local access_patterns = scst.AccessPattern.list()
+	local sessions = scst.Session.list()
+
+	unknown_access_patterns_filename_unbind( access_patterns, logical_volumes )
+	access_patterns = scst.AccessPattern.list()
+	scst.Daemon.apply()
 
 	for logical_id, logical in pairs( logicals ) do
 		logicals[ logical_id ]:physical_list()
@@ -653,22 +812,30 @@ function M.caller()
 		lines = M.overall( {
 			physicals = physicals,
 			logicals = logicals,
-			access_patterns = access_patterns } ),
+			access_patterns = access_patterns,
+			sessions = sessions
+		} ),
 		logicals = logicals_for_serialization,
 		physicals = physicals,
 		physical_volumes = physical_volumes,
 		volume_groups = volume_groups,
 		logical_volumes = logical_volumes_for_serialization,
-		access_patterns = access_patterns
+		access_patterns = access_patterns,
+		sessions = sessions
 	}
 	local FILTERS = {
 		M.filter_borders_highlight,
 		M.filter_alternation_border_colors,
 		M.filter_highlight_snapshots,
 		M.filter_highlight_accesss_patterns,
+		M.filter_highlight_sessions,
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
+		M.filter_deletability_logical,
+		M.filter_deletability_logical_volume,
+		M.filter_resizability_logical_volume,
+		M.filter_unbindability_access_pattern,
 		filter_mib_humanize,
 		filter_size_round,
 		filter_fillup_auth_credentials,

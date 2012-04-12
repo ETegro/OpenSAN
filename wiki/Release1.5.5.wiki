@@ -1,0 +1,9 @@
+This release brings an important capability of storing all log files
+permanently in a separate partition. After firmware updating, the system
+will create forth separate partition with XFS filesystem. That may lead
+to double system reboot. Syslog daemon is configured to store up to one
+hundred of rotated megabyte log files.
+
+=== Download ===
+You can download this release following [/download/V1.5.5/ this link].
+Always cryptographically [wiki:Publickey verify images]!

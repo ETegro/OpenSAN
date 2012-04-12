@@ -864,6 +864,19 @@ local function scst_access_pattern_bind( inputs )
 	end
 
 	local access_pattern = scst.AccessPattern.find_by_section_name( access_pattern_section_name )
+
+	if access_pattern.lun ~= 0 then
+		local lun0_exists = false
+		for _, ap in ipairs( scst.AccessPattern.list() ) do
+			if ap.filename == logical_volume_device and ap.lun == 0 then
+				lun0_exists = true
+			end
+		end
+		if not lun0_exists then
+			return index_with_error( i18n("AccessPattern with LUN0 has to be binded first") )
+		end
+	end
+
 	local return_code, result = pcall( scst.AccessPattern.bind,
 	                                   access_pattern,
 	                                   logical_volume_device )
@@ -985,8 +998,8 @@ local function scst_auth_credential_add( inputs, data )
 	end
 
 	local auth_credential_password = inputs[ "new_auth_credential_password-" .. logical_volume_device_hash ]
-	if #auth_credential_password ~= 12 then
-		return index_with_error( i18n("Password must be 12 characters long") )
+	if #auth_credential_password < 12 then
+		return index_with_error( i18n("Password must not be less than 12 characters long") )
 	end
 
 	local return_code, result = pcall(

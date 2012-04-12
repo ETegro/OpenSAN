@@ -92,13 +92,11 @@ require("luci.http").prepare_content("application/xhtml+xml")
 		%>
 	</ul>
 	<br style="clear:both" />
+	</div>
 <%
 			if selected_node then
 				subtree(prefix .. selected_name .. "/", selected_node, level + 1)
 			end
-%>
-	</div>
-<%
 		end
 	end
 
@@ -115,6 +113,7 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/ie6.css" /><![endif]-->
 <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/ie7.css" /><![endif]-->
 <!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/ie8.css" /><![endif]-->
+<!--[if IE 9]><link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/css/style/ie9.css" /><![endif]-->
 <% if node and node.css then %><link rel="stylesheet" type="text/css" media="screen" href="<%=resource%>/<%=node.css%>" />
 <% end -%>
 <!--aStor2-theme-insert--> 
@@ -129,15 +128,15 @@ require("luci.http").prepare_content("application/xhtml+xml")
 <title><%=striptags( hostname .. ( (node and node.title) and ' - ' .. node.title or '')) %> - LuCI</title>
 </head>
 <body class="lang_<%=luci.i18n.context.lang%>">
-
+<!--
 <p class="skiplink">
-<span id="skiplink1"><a href="#navigation"><%:Skip to navigation%></a></span>
-<span id="skiplink2"><a href="#content"><%:Skip to content%></a></span>
+	<span id="skiplink1"><a href="#navigation"><%:Skip to navigation%></a></span>
+	<span id="skiplink2"><a href="#content"><%:Skip to content%></a></span>
 </p>
-
+-->
 <div id="menubar">
-<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>
-<div class="etegro_logo inline" title="ETegro Technologies"><img src="<%=media%>/css/style/images/etegro_logo.png" alt="ETegro Technologies" /></div>
+<!--<h2 class="navigation"><a id="navigation" name="navigation"><%:Navigation%></a></h2>-->
+<div class="etegro_logo inline" title="ETegro Technologies"><a href="<%=controller%>"><img src="<%=media%>/css/style/images/etegro_logo.png" alt="ETegro Technologies" /></a></div>
 <div class="hostinfo inline">
 	<%=hostname%> | <%=luci.version.distversion%> |
 	<%:Load%>: <%="%.2f" % load1%> <%="%.2f" % load5%> <%="%.2f" % load15%>

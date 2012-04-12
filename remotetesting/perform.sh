@@ -16,7 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-. ./config
+[ -n "$CONFIG" ] || CONFIG=./config
+
+. $CONFIG
 . lib/functions.sh
 
 WORK_DIR=`echo $0 | sed "s/\/perform.sh$//"`
@@ -25,7 +27,7 @@ export WORK_DIR
 export LC_ALL=C
 
 test_start="`date '+%F_%R:%S'`"
-for test_dir in tests/*; do
+for test_dir in tests/$1/*; do
 	pushdq $test_dir
 
 	test_name="`echo $test_dir | awk -F/ '{print $NF}'`"

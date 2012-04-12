@@ -45,7 +45,7 @@ DEFAULT_PACKAGES += \
 	luafilesystem \
 	xfs-fsck \
 	xfs-growfs \
-	xfs-mkfs
+	astor2-var-partition
 
 define Target/Description
 	Build firmware images for aStor2 project

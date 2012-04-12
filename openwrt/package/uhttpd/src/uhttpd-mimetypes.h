@@ -34,7 +34,7 @@ static struct mimetype uh_mime_types[] = {
 	{ "ko",      "text/x-object" },
 
 	{ "bmp",     "image/bmp" },
-	{ "gif",     "image/gif" },
+	{ "gif",     "image/png" },
 	{ "png",     "image/png" },
 	{ "jpg",     "image/jpeg" },
 	{ "jpeg",    "image/jpeg" },

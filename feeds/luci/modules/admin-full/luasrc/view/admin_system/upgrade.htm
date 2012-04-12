@@ -66,7 +66,7 @@ $Id: upgrade.htm 5458 2009-10-31 20:03:27Z jow $
 
 		<br />
 		<ul>
-			<li><%:Checksum%>: <code><%=checksum%></code></li>
+			<li><%:Checksum%> (SHA256): <code><%=checksum%></code></li>
 			<li><%:Size%>: <%
 				local w = require "luci.tools.webadmin"
 				write(w.byte_format(filesize))

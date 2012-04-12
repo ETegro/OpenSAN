@@ -1,0 +1,57 @@
+<!--
+  aStor2 - storage area network configurable via Web-interface
+  Copyright (C) 2009-2012 ETegro Technologies, PLC
+                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<% DEFAULT_OPACITY = "0.3"
+ENTITY_STATE_COLORMAP = {
+	blue = "93B8F6",
+	darkblue = "2A2E92",
+	darkgreen = "008000",
+	gray = "808080",
+	green = "58E33A",
+	orange = "FFA500",
+	red = "F21",
+	white = "FFF",
+	yellow= "FF0"
+} %>
+
+<table width="100%">
+	<tbody>
+		<% for r=0,5 do %>
+			<tr>
+				<% for d=0,3 do %>
+					<% i = r*4+d %>
+					<% get = "" %>
+					<% if jbod[i] then %>
+					<% color = jbod[i].color %>
+					<% get = table.concat( {
+							"&logical_id=", ( jbod[i][ "logical_id" ] or "" ),
+							"&physical_id=", jbod[i][ "physical_id" ],
+							"&color=", ENTITY_STATE_COLORMAP[ color ],
+							"&opacity=", DEFAULT_OPACITY
+					} ) %>
+					<% end %>
+					<td>
+						<embed style="<%= EMBED_SIZE.jbod_enclosure.style %>"
+							   src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=jbod_enclosure<%= get %>" />
+					</td>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

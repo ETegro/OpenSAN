@@ -30,13 +30,17 @@ require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
 	local i18n = luci.i18n.translate
-	local e = entry( { "admin", "san", "monitoring" },
-	                 call( "monitoring_overall" ),
-	                 i18n("Monitoring"),
-	                 11 )
+	local e = entry(
+		{ "admin", "san", "monitoring" },
+		call( "monitoring_overall" ),
+		i18n("Monitoring"),
+		11
+	)
 	e.i18n = "astor2_san"
-	e = entry( { "admin", "san", "monitoring", "render" },
-	             call( "render" ), nil, 11 )
+	e = entry(
+		{ "admin", "san", "monitoring", "render" },
+		call( "render" ), nil, 11
+	)
 	e.leaf = true
 end
 
@@ -49,7 +53,53 @@ end
 
 function monitoring_overall()
 	local message_error = luci.http.formvalue( "message_error" )
-	luci.template.render( "san_monitoring", { data = {} } )
+	matrix_data = matrix.caller_minimalistic( {
+		matrix.filter_borders_highlight,
+		matrix.filter_alternation_border_colors,
+		matrix.filter_physical_enclosures
+	} )
+	local data = { JBODS = {} }
+	for _,expander in ipairs( einarc.Adapter.expanders() ) do
+		if expander.model == luci.controller.san_monitoring_configuration.expanders.jbod then
+			local enclosures = {}
+			for _, line in ipairs( matrix_data.lines ) do
+				if line.physical and line.physical.enclosure_id then
+					local expander_id, enclosure_id = string.match(
+						line.physical.enclosure_id,
+						"^(%d+):(%d+)$"
+					)
+					expander_id = tonumber( expander_id )
+					enclosure_id = tonumber( enclosure_id )
+					if expander_id == expander.id then
+						local physical = line.physical
+						enclosures[ enclosure_id ] = { physical_id = physical.id }
+
+						local color = "gray"
+						if physical.highlight.color then
+							color = physical.highlight.color
+							if physical.state == "hotspare" then
+								color = "dark" .. color
+							end
+						end
+						enclosures[ enclosure_id ].color = color
+					end
+				end
+			end
+			for _, line in ipairs( matrix_data.lines ) do
+				if line.logical then
+					for physical_id,_ in pairs( line.logical.physicals ) do
+						for enclosure_id, enclosure in pairs( enclosures ) do
+							if enclosure.physical_id == physical_id then
+								enclosure.logical_id = line.logical.id
+							end
+						end
+					end
+				end
+			end
+			data[ "JBODS" ][ expander.id ] = enclosures
+		end
+	end
+	luci.template.render( "san_monitoring", { data = data } )
 end
 
 local function render_svg( svg_filename, data )
@@ -208,6 +258,52 @@ local function network_data_get( data )
 	return data
 end
 
+local function jbod_data_get( data, jbod_id )
+	for _,expander in ipairs( einarc.Adapter.expanders() ) do
+		if expander.id == jbod_id then
+			local result = common.system( "sg_ses --page=0x2 /dev/sg" .. tostring( expander.id ) )
+			local jbod_data = {}
+			for line_number,line in ipairs( result.stdout ) do
+				if string.match( line, "%s+Element type: Power supply" ) then
+					for n,offset in ipairs( { 2, 3 } ) do
+						jbod_data["PS" .. tostring(n)] = { fail = true }
+						if( string.match( result.stdout[ line_number + 1 + 5*offset - 2 ],
+								"^.*Fail=(%d+).*$" ) == "0" and
+							string.match( result.stdout[ line_number + 2 + 5*offset - 2 ],
+								"^.*AC fail=(%d+).*$" ) == "0" and
+							string.match(result.stdout[ line_number + 2 + 5*offset - 2 ],
+								"^.*DC fail=(%d+).*$" ) == "0"
+						) then
+							jbod_data["PS" .. tostring(n)].fail = false
+						end
+					end
+				end
+				if string.match( line, "%s+Element type: Cooling" ) then
+					for n,offset in ipairs( { 3, 2, 5, 4 } ) do
+						jbod_data["FAN" .. tostring(n)] = { fail = true }
+						if( string.match( result.stdout[ line_number + 1 + 4*offset - 2 ],
+								"^.*Fail=(%d+).*$" ) == "0" and not
+							string.match( result.stdout[ line_number + 2 + 4*offset - 2 ],
+								"stopped" )
+						) then
+							jbod_data["FAN" .. tostring(n)].fail = false
+						end
+						jbod_data["FAN" .. tostring(n)].rpm = tonumber( string.match( result.stdout[ line_number + 1 + 4*offset - 1 ], "^.*Actual speed=(%d+) rpm.*$" ) )
+					end
+				end
+			end
+			for _,data in pairs( jbod_data ) do
+				data.color = "green"
+				if data.fail then
+					data.color = "red"
+				end
+			end
+			data["JBOD"] = jbod_data
+		end
+	end
+	return data
+end
+
 function render()
 	local what = luci.http.formvalue( "what" )
 	local pci = luci.http.formvalue( "pci" )
@@ -225,22 +321,39 @@ function render()
 			matrix.filter_alternation_border_colors,
 			matrix.filter_physical_enclosures
 		} )
+		-- Keep only the needed enclosures
+		local needed_expander_id = nil
+		for _,expander in ipairs( einarc.Adapter.expanders() ) do
+			if expander.model == luci.controller.san_monitoring_configuration.expanders.internal then
+				needed_expander_id = expander.id
+			end
+		end
+		assert( needed_expander_id, "No needed expander found" )
+
 		-- Postprocess enclosures
 		enclosures = {}
 		for _, line in ipairs( matrix_data.lines ) do
 			if line.physical and line.physical.enclosure_id then
-				local physical = line.physical
-				local enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ physical.enclosure_id ]
-				enclosures[ enclosure_id ] = { physical_id = physical.id }
+				local expander_id, enclosure_id = string.match(
+					line.physical.enclosure_id,
+					"^(%d+):(%d+)$"
+				)
+				expander_id = tonumber( expander_id )
+				enclosure_id = tonumber( enclosure_id )
+				if expander_id == needed_expander_id then
+					local physical = line.physical
+					enclosure_id = luci.controller.san_monitoring_configuration.enclosures[ enclosure_id ]
+					enclosures[ enclosure_id ] = { physical_id = physical.id }
 
-				local color = "gray"
-				if physical.highlight.color then
-					color = physical.highlight.color
-					if physical.state == "hotspare" then
-						color = "dark" .. color
+					local color = "gray"
+					if physical.highlight.color then
+						color = physical.highlight.color
+						if physical.state == "hotspare" then
+							color = "dark" .. color
+						end
 					end
+					enclosures[ enclosure_id ].color = color
 				end
-				enclosures[ enclosure_id ].color = color
 			end
 		end
 		for _, line in ipairs( matrix_data.lines ) do
@@ -257,6 +370,18 @@ function render()
 		for template_id, enclosure in pairs( enclosures ) do
 			data[ template_id ] = enclosure
 		end
+	end
+	if what == "jbod_enclosure" then
+		data = {
+			color = luci.http.formvalue( "color" ),
+			physical_id = luci.http.formvalue( "physical_id" ),
+			logical_id = luci.http.formvalue( "logical_id" ),
+			opacity = luci.http.formvalue( "opacity" )
+		}
+	end
+	if what == "jbod_rear" then
+		local jbod_id = luci.http.formvalue( "jbod_id" )
+		data = jbod_data_get( data, tonumber( jbod_id ) )
 	end
 	return render_svg( what, data )
 end

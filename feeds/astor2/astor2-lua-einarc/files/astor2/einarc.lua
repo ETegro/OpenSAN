@@ -90,6 +90,23 @@ function M.Adapter:get( property )
 	return output
 end
 
+--- einarc adapter expanders
+-- @return { { model = "noname", id = "13" }, ... }
+function M.Adapter:expanders()
+	local output = run( "adapter expanders" )
+	if not output then error( "einarc:adapter.get() failed" ) end
+	local expanders = {}
+	for _, line in ipairs( output ) do
+		local id, model = string.match( line, "^(%d+)\t(.*)$" )
+		assert( id, "unable to retreive an ID" )
+		expanders[ #expanders + 1 ] = {
+			["id"] = tonumber(id),
+			["model"] = model
+		}
+	end
+	return expanders
+end
+
 ------------------------------------------------------------------------
 -- Logical
 ------------------------------------------------------------------------
@@ -378,7 +395,7 @@ function M.Physical:enclosure()
 	assert( self.id, "unable to get self object" )
 	local output = self:get( "enclosure" )
 	if not output then return nil end
-	return tonumber( output[1] )
+	return output[1]
 end
 
 --- Is physical disk has WriteCache enabled

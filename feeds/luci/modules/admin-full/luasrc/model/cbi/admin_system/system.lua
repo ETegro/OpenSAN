@@ -69,9 +69,6 @@ s:taboption("general", DummyValue, "_memtotal", translate("Memory")).value =
   tostring(translate("free"))
 )
 
-s:taboption("general", DummyValue, "_systime", translate("Local Time")).value =
- os.date("%c")
-
 s:taboption("general", DummyValue, "_uptime", translate("Uptime")).value =
  luci.tools.webadmin.date_format(tonumber(uptime))
 
@@ -103,6 +100,33 @@ function tz.write(self, section, value)
 	luci.fs.writefile("/etc/TZ", timezone .. "\n")
 end
 
+lt = s:taboption( "general", DummyValue, "_systime", translate( "Local Time" ) )
+lt.value = os.date( "%c" )
+
+local date = os.date( "%Y-%m-%d" )
+sd = s:taboption( "general", Value, "set_sysdate", translate( "Set date" ), date )
+sd.placeholder = date
+sd.datatype = "date"
+
+function sd.write( self, s, val )
+	local new_date = sd:formvalue( s) or ""
+	local now_time = os.date( "%X" )
+	if new_date then
+		luci.sys.exec( "date --set '" .. new_date .. " " .. now_time .. "'" )
+	end
+end
+
+local time = os.date( "%X" )
+st = s:taboption( "general", Value, "set_systime", translate( "Set time" ), time )
+st.placeholder = time
+st.datatype = "time"
+
+function st.write( self, s, val )
+	local new_time = st:formvalue( s ) or ""
+	if new_time then
+		luci.sys.exec( "date --set '" .. new_time .. "'" )
+	end
+end
 
 --
 -- Logging
@@ -208,7 +232,7 @@ if has_rdate then
 	)
 end
 
-
+--[[
 m2 = Map("luci")
 
 f = m2:section(NamedSection, "main", "core", translate("Files to be kept when flashing a new firmware"))
@@ -223,7 +247,9 @@ d = f:taboption("detected", DummyValue, "_detected", translate("Detected files")
 d.rawhtml = true
 d.cfgvalue = function(s)
 	local list = io.popen(
-		"( find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' /etc/sysupgrade.conf " ..
+]]
+--		"( find $(sed -ne '/^[[:space:]]*$/d; /^#/d; p' /etc/sysupgrade.conf " ..
+--[[
 		"/lib/upgrade/keep.d/* 2>/dev/null) -type f 2>/dev/null; " ..
 		"opkg list-changed-conffiles ) | sort -u"
 	)
@@ -265,5 +291,7 @@ c.write = function(self, section, value)
 	return nixio.fs.writefile("/etc/sysupgrade.conf", value)
 end
 
-
 return m, m3 or m2, m3 and m2
+]]
+
+return m, m3 or m3

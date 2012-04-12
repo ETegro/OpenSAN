@@ -60,6 +60,11 @@ function toggle_drives_information() {
 	toggleFadeParentElement( object );
 }
 
+function toggle_session_information() {
+	var object = { click_selector : 'form input[ name ^= "session_info-" ]' }
+	toggleFadeParentElement( object );
+}
+
 function toggle_snapshot_creation() {
 	var object = { click_selector : 'form input[ name ^= "snapshot_creation-" ]' };
 	toggleFadeParentElement( object );
@@ -149,6 +154,17 @@ function toggle_create_raid_form() {
 	} );
 }
 
+function show_calendar() {
+	var element = $( 'input[ name *= "set_sysdate" ]' );
+	var format = {
+		def: "mm/dd/yy",
+		iso8601: 'yy-mm-dd',
+	};
+	element.datepicker(
+		{ dateFormat: format.iso8601 }
+	);
+}
+
 function setup_hypnorobo() {
 	$( '#hypnorobo_show' ).click( function() {
 		$( '#hypnorobo' ).show();
@@ -163,6 +179,7 @@ function setup_hypnorobo() {
 
 toggle_access_pattern_creation();
 toggle_drives_information();
+toggle_session_information();
 toggle_snapshot_creation();
 toggle_resize_snapshot();
 toggle_edit_access_patterns();
@@ -171,6 +188,7 @@ toggle_resize_logical_volume();
 hide_all_to_hide_elements();
 pulsate_bind_access_patterns();
 toggle_create_raid_form();
+show_calendar();
 setup_hypnorobo();
 
 } );

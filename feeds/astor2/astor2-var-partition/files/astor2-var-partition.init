@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+START=11
+
+start()
+{
+	if ! [ -e /dev/sda4 ]; then
+		. /etc/functions.sh
+		include /lib/config
+		local log_type
+		config_get log_type system log_type "circular"
+		if [ "$log_type" = "circular" ]; then
+			uci set system."@system[0]".log_type=file
+			uci set system."@system[0]".log_size=1024
+			uci set system."@system[0]".log_keep=99
+			uci commit
+		fi
+		cat > /tmp/fstab-script <<EOF
+n
+p
+
+
+w
+EOF
+		cat /tmp/fstab-script | /sbin/fdisk /dev/sda
+		sync
+		/sbin/reboot
+	fi
+	if ! grep -q "tmp.log" /proc/mounts; then
+		/sbin/reboot
+	fi
+}
