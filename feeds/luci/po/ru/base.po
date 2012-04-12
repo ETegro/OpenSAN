@@ -23,6 +23,12 @@ msgstr "Пожалуйста подождите: устройство выклю
 msgid "Bonding"
 msgstr "Связка"
 
+msgid "Set date"
+msgstr "Задать дату"
+
+msgid "Set time"
+msgstr "Задать время"
+
 msgid "Create a bonding from multiple interfaces"
 msgstr "Создать связку из нескольких интерфейсов"
 
@@ -55,8 +61,8 @@ msgid ""
 "<samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: "
 "<samp>eth0.1</samp>)."
 msgstr ""
-"На этой страничке вы можете сконфигурировать сетевые интерфейсы. Вы можете "
-"связывать различные интерфейсы помечая их как \"Связка\" и "
+"На этой странице вы можете настроить сетевые интерфейсы. Вы можете "
+"объединить несколько интерфейсов, помечая их как \"Связка\", и "
 "добавлять имена различных сетей принадлежащих сетевым интерфейсам "
 "разделённые пробелом. Также вы можете использовать обозначения <abbr title="
 "\"Виртуальные локальные сети\">VLAN</abbr>&#39;ов например <samp>INTERFACE."
@@ -1052,6 +1058,9 @@ msgstr ""
 msgid "IPv4 WAN Status"
 msgstr "Статус IPv4 WAN"
 
+msgid "IPv4 Status"
+msgstr "Статус IPv4"
+
 msgid "IPv4-Address"
 msgstr ""
 
@@ -1066,6 +1075,9 @@ msgstr "Настройка IPv6"
 
 msgid "IPv6 WAN Status"
 msgstr "Статус IPv6 WAN"
+
+msgid "IPv6 Status"
+msgstr "Статус IPv6"
 
 msgid "Identity"
 msgstr ""
@@ -1557,7 +1569,7 @@ msgid ""
 "<samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: "
 "<samp>eth0.1</samp>)."
 msgstr ""
-"На этой страничке вы можете сконфигурировать сетевые интерфейсы. Вы можете "
+"На этой странице вы можете сконфигурировать сетевые интерфейсы. Вы можете "
 "соединять различные интерфейсы в \"мост\" помечая их как \"Мост\" и "
 "добавлять имена различных сетей принадлежащих сетевым интерфейсам "
 "разделённые пробелом. Также вы можете использовать обозначения <abbr title="
@@ -2447,7 +2459,10 @@ msgstr "Предупреждение"
 
 msgid "Warning: There are unsaved changes that will be lost while rebooting!"
 msgstr ""
-"Внимание: Есть несохранённые изменения которые потеряются после перезагрузки!"
+"Внимание: Есть несохранённые изменения, которые будут утеряны при перезагрузке!"
+
+msgid "Warning: There are unsaved changes that will be lost after shutdown!"
+msgstr "Внимание: Есть несохранённые изменения, которые будут утеряны после выключения!"
 
 msgid "Web <abbr title=\"User Interface\">UI</abbr>"
 msgstr "Web <abbr title=\"Интерфейс пользователя\">UI</abbr>"
