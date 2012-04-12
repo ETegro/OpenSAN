@@ -1,0 +1,7 @@
+* New much better interface outlook
+* Ability to manually set date and time and other different
+  useful interface refactoring
+
+=== Download ===
+You can download this release following [/download/V2.1/ this link].
+Always cryptographically [wiki:Publickey verify images]!
