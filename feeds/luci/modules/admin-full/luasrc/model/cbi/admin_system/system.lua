@@ -104,12 +104,12 @@ lt = s:taboption( "general", DummyValue, "_systime", translate( "Local Time" ) )
 lt.value = os.date( "%c" )
 
 local date = os.date( "%Y-%m-%d" )
-sd = s:taboption( "general", Value, "_set_sysdate", translate( "Set Date" ), date )
+sd = s:taboption( "general", Value, "set_sysdate", translate( "Set Date" ), date )
 sd.placeholder = date
 sd.datatype = "date"
 
 local time = os.date( "%X" )
-st = s:taboption( "general", Value, "_set_systime", translate( "Set Time" ), time )
+st = s:taboption( "general", Value, "set_systime", translate( "Set Time" ), time )
 st.placeholder = time
 st.datatype = "time"
 
