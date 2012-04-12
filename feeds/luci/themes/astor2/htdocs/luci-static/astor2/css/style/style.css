@@ -373,6 +373,7 @@ ul.tabmenu.l3 li.active a {
 
 div.errorbox,
 div.error,
+div.cbi-section-error,
 p.error {
 	font-size: 100%;
 	background-color: #FFCCCC;
@@ -871,15 +872,6 @@ td.cbi-value-error {
 .cbi-value-error select {
 	color: red;
 	background-color: #ffcccc;
-}
-
-.cbi-section-error {
-	color: red;
-	background-color: white;
-	font-size: 95%;
-	border: 1px dotted red;
-	margin: 3px;
-	padding: 3px;
 }
 
 ul.cbi-tabmenu li.cbi-tab a {
