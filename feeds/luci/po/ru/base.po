@@ -23,6 +23,12 @@ msgstr "Пожалуйста подождите: устройство выклю
 msgid "Bonding"
 msgstr "Связка"
 
+msgid "Set date"
+msgstr "Задать дату"
+
+msgid "Set time"
+msgstr "Задать время"
+
 msgid "Create a bonding from multiple interfaces"
 msgstr "Создать связку из нескольких интерфейсов"
 
