@@ -140,6 +140,21 @@ var cbi_validators = {
 		}
 	},
 
+	'time': function(v) {
+		// Time format: 17:15:01
+		if ( v.match( /^(\d{2}:){2}\d{2}$/ ) ) {
+			var parts = v.split( ":" )
+			var h = parts[0]
+			var m = parts[1]
+			var s = parts[2]
+			if ( ( h >= 0 && h < 24 ) &&
+			     ( m >= 0 && m < 60 ) &&
+			     ( s >= 0 && s < 60 ) ) {
+				return ( RegExp.$1 != null )
+			}
+		}
+	},
+
 	'macaddr': function(v)
 	{
 		return (v.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null);
