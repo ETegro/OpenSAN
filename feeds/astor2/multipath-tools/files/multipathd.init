@@ -1,9 +1,10 @@
 #!/bin/sh /etc/rc.common
-START=55
+START=49
 
 PID_FILE=/var/run/multipathd.pid
 MULTIPATHD=/sbin/multipathd
 MULTIPATH_CONF=/etc/multipath.conf
+MULTIPATH_STARTED_FLAG="/tmp/multipath-started"
 
 start()
 {
@@ -14,6 +15,8 @@ defaults {
 EOF
 	$MULTIPATHD
 	echo $! > $PID_FILE
+	sleep 2
+	touch $MULTIPATH_STARTED_FLAG
 }
 
 stop()

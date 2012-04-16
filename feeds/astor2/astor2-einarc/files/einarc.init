@@ -1,13 +1,17 @@
 #!/bin/sh /etc/rc.common
 START=50
 
+MULTIPATH_STARTED_FLAG="/tmp/multipath-started"
 EINARC_STARTED_FLAG="/tmp/einarc-started"
 
 start()
 {
+	( # We have to daemonize this process to prevent deadlocks
+	while [ ! -e $MULTIPATH_STARTED_FLAG ]; do sleep 1; done
 	einarc -t software -a 0 adapter restart
 	einarc -t software -a 0 physical list
 	touch $EINARC_STARTED_FLAG
+	)&
 }
 
 stop()
