@@ -369,6 +369,13 @@ function M.split_into_chars( str )
 	return chars
 end
 
+--- Sleep
+-- @param sec
+function M.sleep( sec )
+	local start = os.clock()
+	while os.clock() - start <= sec do end
+end
+
 ------------------------------------------------------------------------
 -- OOP
 ------------------------------------------------------------------------
