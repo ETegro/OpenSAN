@@ -32,12 +32,14 @@ TestIsId = {}
 
 TestIdTransform = {}
 	function TestIdTransform:test_phys_to_scsi()
-		assertEquals( einarc.phys_to_scsi( "sda" ), "0:1" )
-		assertEquals( einarc.phys_to_scsi( "sdba" ), "0:53" )
+		assertEquals( einarc.phys_to_scsi( "dm-0" ), "0:1" )
+		assertEquals( einarc.phys_to_scsi( "dm-1" ), "0:2" )
+		assertEquals( einarc.phys_to_scsi( "dm-43" ), "0:44" )
 	end
 	function TestIdTransform:test_scsi_to_phys()
-		assertEquals( einarc.scsi_to_phys( "0:1" ), "sda" )
-		assertEquals( einarc.scsi_to_phys( "0:53" ), "sdba" )
+		assertEquals( einarc.scsi_to_phys( "0:1" ), "dm-0" )
+		assertEquals( einarc.scsi_to_phys( "0:2" ), "dm-1" )
+		assertEquals( einarc.scsi_to_phys( "0:44" ), "dm-43" )
 	end
 
 TestSortPhysicals = {}
