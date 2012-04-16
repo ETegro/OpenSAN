@@ -399,18 +399,6 @@ function M.Logical:progress_get()
 	return self.progress
 end
 
---- einarc logical get
--- @param property "raidlevels"
--- @return { "0" }
-function M.Logical:get( property )
-	assert( self.id, "unable to get self object" )
-	assert( property and common.is_string( property ),
-	        "empty property" )
-	local output = run( "logical get " .. self.id .. " " .. property )
-	if not output then error( "einarc:logical.get() failed" ) end
-	return output
-end
-
 --- einarc logical set
 -- @param property "writecache"
 -- @param value "0"
@@ -433,9 +421,7 @@ end
 -- @return true/false
 function M.Logical:is_writecache()
 	assert( self.id, "unable to get self object" )
-	local output = self:get( "writecache" )
-	if not output then error( "einarc:logical.is_writecache() failed" ) end
-	return output[1] == "1"
+	return true -- TODO: replace by normal call
 end
 
 ------------------------------------------------------------------------
