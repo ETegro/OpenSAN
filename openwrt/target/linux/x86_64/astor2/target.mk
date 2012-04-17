@@ -26,6 +26,7 @@ DEFAULT_PACKAGES += \
 	kmod-tg3 \
 	kmod-via-rhine \
 	kmod-mptsas \
+	kmod-mpt2sas \
 	kmod-igb \
 	kmod-ixgbe \
 	kmod-fs-xfs \
