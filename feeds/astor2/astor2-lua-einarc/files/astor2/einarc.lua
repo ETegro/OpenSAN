@@ -349,14 +349,15 @@ function M.Logical:hotspare_add( physical )
 end
 
 --- einarc logical hotspare_delete
--- @param physical_id "0:1"
+-- @param physical Physical
 -- @return Raise error if it fails
-function M.Logical:hotspare_delete( physical_id )
+function M.Logical:hotspare_delete( physical )
 	assert( self.id, "unable to get self object" )
-	assert( physical_id and M.Physical.is_id( physical_id ),
-	        "incorrect physical id" )
-	output = run( "logical hotspare_delete " .. tostring( self.id ) .. " " .. physical_id )
-	if not output then error( "einarc:logical.hotspare_delete() failed" ) end
+	assert( physical and physical.id, "invalid Physical object" )
+	local result = run2( "/dev/" .. self.devnode .. " --remove " .. physical.devnode )
+	if result.return_code ~= 0 then
+		error("einarc:logical.hotspare_delete() failed")
+	end
 end
 
 --- einarc logical physical_list
