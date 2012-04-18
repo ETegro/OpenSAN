@@ -413,22 +413,31 @@ function M.Logical:progress_get()
 	return self.progress
 end
 
---- einarc logical set
--- @param property "writecache"
--- @param value "0"
-function M.Logical:set( property, value )
+--- Disable powersaving on logical disk
+function M.Logical:powersaving_disable()
 	assert( self.id, "unable to get self object" )
-	assert( property and common.is_string( property ),
-	        "empty property" )
-	assert( value and common.is_string( value ),
-	        "empty value" )
-	local output = run(
-		"logical set " ..
-		self.id .. " " ..
-		property .. " " ..
-		value
-	)
-	if not output then error( "einarc:logical.set() failed" ) end
+	local physicals = M.Physical.list()
+	for _,drive in ipairs( self.drives ) do
+		physicals[ drive ]:powersaving_disable()
+	end
+end
+
+--- Enable WriteCache on logical disk
+function M.Logical:writecache_enable()
+	assert( self.id, "unable to get self object" )
+	local physicals = M.Physical.list()
+	for _,drive in ipairs( self.drives ) do
+		physicals[ drive ]:writecache_enable()
+	end
+end
+
+--- Disable WriteCache on logical disk
+function M.Logical:writecache_disable()
+	assert( self.id, "unable to get self object" )
+	local physicals = M.Physical.list()
+	for _,drive in ipairs( self.drives ) do
+		physicals[ drive ]:writecache_disable()
+	end
 end
 
 --- Is logical disk has WriteCache enabled
