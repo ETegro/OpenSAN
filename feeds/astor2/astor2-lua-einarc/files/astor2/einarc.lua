@@ -435,7 +435,14 @@ end
 -- @return true/false
 function M.Logical:is_writecache()
 	assert( self.id, "unable to get self object" )
-	return true -- TODO: replace by normal call
+	local enabled = 0
+	local physicals = M.Physical.list()
+	for _,drive in ipairs( self.drives ) do
+		if physicals[ drive ]:is_writecache() then
+			enabled = enabled + 1
+		end
+	end
+	return enabled > 0
 end
 
 ------------------------------------------------------------------------
