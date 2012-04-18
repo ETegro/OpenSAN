@@ -341,7 +341,11 @@ local function einarc_logical_hotspare_add( inputs, data )
 	disable_non_raid_volume_groups( data )
 
 	-- Let's call einarc at last
-	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
+	local return_code, result = pcall(
+		einarc.Logical.hotspare_add,
+		einarc.Logical.list()[ logical_id ],
+		einarc.Physical.list()[ physical_id ]
+	)
 	if not return_code then
 		message_error = i18n("Failed to add dedicated hotspare disk") .. ": " .. result
 	end
