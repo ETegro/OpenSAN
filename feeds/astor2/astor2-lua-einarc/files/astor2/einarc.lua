@@ -93,6 +93,7 @@ local function list_devices()
 	for ent in lfs.dir( path_block ) do
 		local device = {
 			devnode = ent,
+			fdevnode = "/dev/" .. ent,
 			path = path_block .. ent
 		}
 		device.size = math.floor( (tonumber( read_line( device.path .. "/size" ) ) or 0) / 2048 )
@@ -185,7 +186,7 @@ end
 local function check_detached_hotspares()
 	for _,device in pairs( list_devices() ) do
 		if device.type == "md" then
-			run2("/dev/" .. device.devnode .. " --fail detached --remove detached")
+			run2(device.fdevnode .. " --fail detached --remove detached")
 		end
 	end
 end
@@ -287,7 +288,7 @@ function M.Logical.list()
 				logical.state = "rebuilding"
 			end
 			logical.capacity = logical.size
-			logical.device = "/dev/" .. logical.devnode
+			logical.device = logical.fdevnode
 			logicals[ logical.id ] = M.Logical:new( logical )
 		end
 	end
@@ -329,7 +330,7 @@ end
 -- @result Raise error if it fails
 function M.Logical:delete()
 	assert( self.id, "unable to get self object" )
-	local result = run2("--stop /dev/" .. self.devnode)
+	local result = run2("--stop " .. self.fdevnode)
 	for _,id in pairs( self.drives ) do
 		M.Physical.zero_superblock( { id = id } )
 	end
@@ -345,7 +346,7 @@ function M.Logical:hotspare_add( physical )
 	assert( self.id, "unable to get self object" )
 	assert( physical and physical.id, "invalid Physical object" )
 	physical:zero_superblock()
-	local result = run2( "/dev/" .. self.devnode .. " --add " .. physical.devnode )
+	local result = run2( self.fdevnode .. " --add " .. physical.fdevnode )
 	if result.return_code ~= 0 then
 		error("einarc:logical.hotspare_add() failed")
 	end
@@ -357,7 +358,7 @@ end
 function M.Logical:hotspare_delete( physical )
 	assert( self.id, "unable to get self object" )
 	assert( physical and physical.id, "invalid Physical object" )
-	local result = run2( "/dev/" .. self.devnode .. " --remove " .. physical.devnode )
+	local result = run2( self.fdevnode .. " --remove " .. physical.fdevnode )
 	if result.return_code ~= 0 then
 		error("einarc:logical.hotspare_delete() failed")
 	end
