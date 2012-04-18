@@ -542,9 +542,14 @@ end
 -- @return true/false
 function M.Physical:is_writecache()
 	assert( self.id, "unable to get self object" )
-	local output = self:get( "writecache" )
-	if not output then error( "einarc:physical.is_writecache() failed" ) end
-	return output[1] == "1"
+	local result = common.system( "sdparm --quiet --get WCE " .. self.fdevnode )
+	if result.stdout[1] then
+		result = common.split_by( result.stdout[1], " " )
+		if #result > 1 then
+			return result[ 2 ] == "1"
+		end
+	end
+	return false
 end
 
 -----------------------------------------------------------------------
