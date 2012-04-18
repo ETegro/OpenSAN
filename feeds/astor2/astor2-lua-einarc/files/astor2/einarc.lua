@@ -298,31 +298,37 @@ end
 --- einarc logical add
 -- @param raid_level "passthrough" | "linear" | "0" | "1" | "5" | "6" | "10"
 -- @param drives { "0:1", "0:2", "254:1" }
--- @param size 666.0
--- @param properties { "prop1" = "itsvalue", "prop2" = "itsvalue" }
 -- @return Raise error if it fails
 function M.Logical.add( raid_level, drives, size, properties )
 	assert( raid_level, "raid_level argument is required" )
-	local cmd = "logical add " .. raid_level
-	if drives then
-		assert( common.is_array( drives ), "drives have to be an array" )
-		cmd = cmd .. " " .. table.concat( drives, "," )
-	end
-	if size then
-		assert( common.is_non_negative( size ), "size has to be a positive number" )
-		cmd = cmd .. " " .. tostring( size )
-	end
-	if properties then
-		assert( common.is_array( properties ), "properties have to be a table" )
-		local serialized = {}
-		for k, v in pairs( properties ) do
-			serialized[ #serialized + 1 ] = k .. "=" .. v
+	assert( common.is_array( drives ), "drives have to be an array" )
+	-- Find next md device name
+	local devices = list_devices()
+	local next_md_name = nil
+	for i=0,127 do
+		local is = tostring(i)
+		if not next_md_name and not devices[ "md" .. is ] then
+			next_md_name = "/dev/md" .. is
 		end
-		cmd = cmd .. " " .. table.concat( properties, "," )
 	end
-	local output = run( cmd )
-	if output == nil then
-		error("einarc:logical.add() failed")
+	assert( next_md_name, "no available md name found" )
+	local cmd = {
+		"yes |",
+		"mdadm",
+		"--create",
+		"--verbose",
+		next_md_name,
+		"--auto=yes",
+		"--force",
+		"--level=" .. raid_level,
+		"--raid-devices=" .. tostring( #drives ),
+	}
+	for _,drive in ipairs( drives ) do
+		cmd[ #cmd + 1 ] = devices[ M.scsi_to_phys( drive ) ].fdevnode
+	end
+	local result = common.system( table.concat( cmd, " " ) )
+	if result.return_code ~= 0 then
+		error("einarc:logical.add() failed:" .. table.concat( result, " " ))
 	end
 end
 
