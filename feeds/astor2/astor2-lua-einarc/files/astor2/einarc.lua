@@ -328,7 +328,7 @@ function M.Logical:delete()
 	assert( self.id, "unable to get self object" )
 	local result = run2("--stop /dev/" .. self.devnode)
 	for _,id in pairs( self.drives ) do
-		run2("--zero-superblock " .. M.scsi_to_phys( id ))
+		M.Physical.zero_superblock( { id = id } )
 	end
 	if result.return_code ~= 0 then
 		error("einarc:logical.delete() failed")
@@ -493,6 +493,12 @@ function M.Physical.list()
 		end
 	end
 	return physicals
+end
+
+function M.Physical:zero_superblock()
+	assert( self.id and M.Physical.is_id( self.id ),
+	        "unable to get self object" )
+	run2("--zero-superblock /dev/" .. M.scsi_to_phys( self.id ))
 end
 
 --- einarc physical get
