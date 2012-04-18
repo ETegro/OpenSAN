@@ -552,6 +552,18 @@ function M.Physical:is_writecache()
 	return false
 end
 
+--- Physical disk WriteCache enable
+function M.Physical:writecache_enable()
+	assert( self.id, "unable to get self object" )
+	common.system( "sdparm --set WCE=1 " .. self.fdevnode )
+end
+
+--- Physical disk WriteCache disable
+function M.Physical:writecache_disable()
+	assert( self.id, "unable to get self object" )
+	common.system( "sdparm --set WCE=0 " .. self.fdevnode )
+end
+
 -----------------------------------------------------------------------
 -- Physicals sorting
 -----------------------------------------------------------------------
