@@ -636,8 +636,9 @@ function M.filter_calculate_hotspares( matrix )
 			local hotspare_minimal_sizes = {}
 			for _, line_inner in ipairs( lines ) do
 				if line_inner.logical and
-				not common.is_in_array( line_inner.logical.level,
-				                        einarc.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE ) then
+					common.is_in_array(
+						line_inner.logical.level,
+						einarc.RAIDLEVELS_HOTSPARE_COMPATIBLE ) then
 					local minimal_size = math.huge
 					for _, physical in pairs( line_inner.logical.physicals ) do
 						if physical.size < minimal_size then

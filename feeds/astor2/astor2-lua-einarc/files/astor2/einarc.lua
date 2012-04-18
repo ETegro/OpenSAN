@@ -41,10 +41,8 @@ M.RAIDLEVELS = {
 	"0", "1", "4",
 	"5", "6", "10"
 }
-M.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE = {
-	"linear",
-	"passthrough",
-	"0"
+M.RAIDLEVELS_HOTSPARE_COMPATIBLE = {
+	"1", "4", "5", "6", "10"
 }
 
 --- Execute einarc and get it's results
