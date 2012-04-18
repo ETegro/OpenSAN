@@ -365,7 +365,11 @@ local function einarc_logical_hotspare_delete( inputs, data )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
 	-- Let's call einarc at last
-	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
+	local return_code, result = pcall(
+		einarc.Logical.hotspare_delete,
+		einarc.Logical.list()[ logical_id ],
+		einarc.Physical.list()[ physical_id ]
+	)
 	if not return_code then
 		message_error = i18n("Failed to delete dedicated hotspare disk") .. ": " .. result
 	end
