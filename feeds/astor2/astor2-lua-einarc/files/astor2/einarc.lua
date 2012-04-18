@@ -145,7 +145,7 @@ function M.scsi_to_phys( id )
 	return "dm-" .. tostring( tonumber( post ) - 1 )
 end
 
-local function run2( args )
+local function run( args )
 	local cycle = 4
 	local result
 	while cycle > 0 do
@@ -160,30 +160,10 @@ local function run2( args )
 	return result
 end
 
--- TODO: remove
---- Execute einarc and get it's results
--- @param args "logical add 5 0 0:1,0:2"
--- @return Either an array of output strings from einarc, or nil if
---         einarc failed, or raise "NotImplementedError" if it is so
-local function run( args )
-	assert( args and common.is_string( args ),
-	        "empty command line" )
-	local result = common.system( EINARC_CMD .. args )
-	if result.return_code ~= 0 then
-		for _, line in ipairs( result.stderr ) do
-			if string.match( line, "NotImplementedError" ) then
-				error("NotImplementedError")
-			end
-		end
-		return nil
-	end
-	return result.stdout
-end
-
 local function check_detached_hotspares()
 	for _,device in pairs( list_devices() ) do
 		if device.type == "md" then
-			run2(device.fdevnode .. " --fail detached --remove detached")
+			run(device.fdevnode .. " --fail detached --remove detached")
 		end
 	end
 end
@@ -344,7 +324,7 @@ end
 -- @result Raise error if it fails
 function M.Logical:delete()
 	assert( self.id, "unable to get self object" )
-	local result = run2("--stop " .. self.fdevnode)
+	local result = run("--stop " .. self.fdevnode)
 	for _,id in pairs( self.drives ) do
 		M.Physical.zero_superblock( { id = id } )
 	end
@@ -360,7 +340,7 @@ function M.Logical:hotspare_add( physical )
 	assert( self.id, "unable to get self object" )
 	assert( physical and physical.id, "invalid Physical object" )
 	physical:zero_superblock()
-	local result = run2( self.fdevnode .. " --add " .. physical.fdevnode )
+	local result = run( self.fdevnode .. " --add " .. physical.fdevnode )
 	if result.return_code ~= 0 then
 		error("einarc:logical.hotspare_add() failed")
 	end
@@ -372,7 +352,7 @@ end
 function M.Logical:hotspare_delete( physical )
 	assert( self.id, "unable to get self object" )
 	assert( physical and physical.id, "invalid Physical object" )
-	local result = run2( self.fdevnode .. " --remove " .. physical.fdevnode )
+	local result = run( self.fdevnode .. " --remove " .. physical.fdevnode )
 	if result.return_code ~= 0 then
 		error("einarc:logical.hotspare_delete() failed")
 	end
@@ -533,7 +513,7 @@ end
 function M.Physical:zero_superblock()
 	assert( self.id and M.Physical.is_id( self.id ),
 	        "unable to get self object" )
-	run2("--zero-superblock /dev/" .. M.scsi_to_phys( self.id ))
+	run("--zero-superblock /dev/" .. M.scsi_to_phys( self.id ))
 end
 
 local function sgmaps()
