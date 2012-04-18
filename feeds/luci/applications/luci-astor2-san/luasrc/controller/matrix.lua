@@ -772,11 +772,18 @@ local function logical_states_sanity_check( logicals, physicals )
 	return logicals
 end
 
+local function logical_powersaving_disable( logicals )
+	for _,logical in pairs( logicals ) do
+		logical:powersaving_disable()
+	end
+end
+
 function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 	local logicals_for_serialization = {}
 
+	logical_powersaving_disable( logicals )
 	logicals = logical_states_sanity_check( logicals, physicals )
 
 	lvm.restore()
@@ -872,6 +879,7 @@ function M.caller_minimalistic( filters )
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 
+	logical_powersaving_disable( logicals )
 	logicals = logical_states_sanity_check( logicals, physicals )
 
 	for logical_id, logical in pairs( logicals ) do

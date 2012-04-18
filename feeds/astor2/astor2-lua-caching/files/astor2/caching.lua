@@ -46,9 +46,9 @@ function M.apply( logicals, physical_volumes, volume_groups, logical_volumes )
 			end
 		end
 		if writethrough_found then
-			logical:set( "writecache", "0" )
+			logical:writecache_disable()
 		else
-			logical:set( "writecache", "1" )
+			logical:writecache_enable()
 		end
 	end
 end
