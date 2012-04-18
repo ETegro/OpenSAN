@@ -82,6 +82,9 @@ function M.system( cmdline )
 	return result
 end
 
+--- Call external command and check if it succeeds
+-- @param cmdline "mdadm --examine /dev/sda"
+-- @return { "stdoutline1", "stdoutline2" } or raise error if it fails
 function M.system_succeed( cmdline )
 	local result = M.system( cmdline )
 	if result.return_code ~= 0 then

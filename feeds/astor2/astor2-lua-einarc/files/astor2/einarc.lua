@@ -49,6 +49,9 @@ M.PHYSICAL_STATES = {
 ------------------------------------------------------------------------
 -- Internals
 ------------------------------------------------------------------------
+--- Try unexceptionally read single line from given file
+-- @param path "/sys/block/sda/device/model"
+-- @return Either single string or nil
 local function read_line( path )
 	if lfs.attributes( path ) then
 		return io.input( path ):read()
@@ -56,6 +59,9 @@ local function read_line( path )
 	return nil
 end
 
+--- List device's slaves
+-- @param path "/sys/block/sda"
+-- @return { "dm-0", "dm-1" }
 local function list_slaves( path )
 	local slaves = {}
 	for slave in lfs.dir( path .. "/slaves" ) do
@@ -66,6 +72,9 @@ local function list_slaves( path )
 	return slaves
 end
 
+--- Try to determine block device's serial using S.M.A.R.T.
+-- @param device "/dev/sda"
+-- @return "someserial" or nil
 local function serial_via_smart( device )
 	local result = common.system( "smartctl --all " .. device )
 	for _,line in ipairs( result.stdout ) do
@@ -75,6 +84,9 @@ local function serial_via_smart( device )
 	return nil
 end
 
+--- Try to determine block device's serial using udev
+-- @param device "/dev/sda"
+-- @return "someserial" or nil
 local function serial_via_udev( device )
 	local result = common.system( "udevadm info --query=env --name=" .. device )
 	for _,line in ipairs( result.stdout ) do
@@ -86,6 +98,8 @@ local function serial_via_udev( device )
 	return nil
 end
 
+--- List available block devices to work with
+-- @return Big hash of different variable data
 local function list_devices()
 	local path_block = "/sys/block/"
 	local devices = {}
@@ -133,18 +147,27 @@ local function list_devices()
 	return devices
 end
 
+--- Convert system's device ID to SCSI ID
+-- @param id "sdb"
+-- @return "0:2"
 function M.phys_to_scsi( name )
 	local root = string.match( name, "^dm.(%d+)$" )
 	assert( root, "Invalid device name" )
 	return "0:" .. tostring( tonumber( root ) + 1 )
 end
 
+--- Convert SCSI ID to system's device ID
+-- @param id "0:2"
+-- @return "sdb"
 function M.scsi_to_phys( id )
 	local pre, post = string.match( id, "^(%d+):(%d+)$" )
 	assert( pre == "0", "Invalid internal ID" )
 	return "dm-" .. tostring( tonumber( post ) - 1 )
 end
 
+--- Try to run mdadm with given arguments several times until success
+-- @param args "..."
+-- @return common.system()'s result
 local function run( args )
 	local cycle = 4
 	local result
@@ -160,6 +183,7 @@ local function run( args )
 	return result
 end
 
+--- Reattach all possible RAID members
 local function check_detached_hotspares()
 	for _,device in pairs( list_devices() ) do
 		if device.type == "md" then
@@ -187,7 +211,7 @@ M.Adapter.raidlevels_hotspare_compatible = {
 	"1", "4", "5", "6", "10"
 }
 
---- einarc adapter expanders
+--- List available SAS expanders
 -- @return { { model = "noname", id = "13" }, ... }
 function M.Adapter:expanders()
 	local expanders = {}
@@ -237,7 +261,7 @@ function M.Logical:new( attrs )
 	return setmetatable( attrs, Logical_mt )
 end
 
---- einarc logical list
+--- List available Logical disks
 -- @return { 0 = Logical, 1 = Logical }
 function M.Logical.list()
 	local logicals = {}
@@ -283,8 +307,8 @@ function M.Logical.list()
 	return logicals
 end
 
---- einarc logical add
--- @param raid_level "passthrough" | "linear" | "0" | "1" | "5" | "6" | "10"
+--- Create new Logical disk
+-- @param raid_level "passthrough" | "linear" | ... | "10"
 -- @param drives { "0:1", "0:2", "254:1" }
 -- @return Raise error if it fails
 function M.Logical.add( raid_level, drives, size, properties )
@@ -320,7 +344,7 @@ function M.Logical.add( raid_level, drives, size, properties )
 	end
 end
 
---- einarc logical delete
+--- Delete Logical disk
 -- @result Raise error if it fails
 function M.Logical:delete()
 	assert( self.id, "unable to get self object" )
@@ -333,7 +357,7 @@ function M.Logical:delete()
 	end
 end
 
---- einarc logical hotspare_add
+--- Add hotspare Physical to Logical
 -- @param physical Physical
 -- @return Raise error if it fails
 function M.Logical:hotspare_add( physical )
@@ -346,7 +370,7 @@ function M.Logical:hotspare_add( physical )
 	end
 end
 
---- einarc logical hotspare_delete
+--- Remove hotspare Physical from Logical
 -- @param physical Physical
 -- @return Raise error if it fails
 function M.Logical:hotspare_delete( physical )
@@ -358,7 +382,7 @@ function M.Logical:hotspare_delete( physical )
 	end
 end
 
---- einarc logical physical_list
+--- List Logical-related Physicals with the states
 -- @return self.physicals = { "physical1_id" = "state", "physical2_id" = "state" }
 function M.Logical:physical_list()
 	if common.is_table( self.physicals ) then
@@ -481,7 +505,7 @@ function M.Physical:new( attrs )
 	return setmetatable( attrs, Physical_mt )
 end
 
---- einarc physical list
+--- List available Physical disks
 -- @return { "0:1" = Physical, "0:2" = Physical }
 function M.Physical.list()
 	local physicals = {}
@@ -510,6 +534,7 @@ function M.Physical.list()
 	return physicals
 end
 
+--- Zero md-related superblock on Physical
 function M.Physical:zero_superblock()
 	assert( self.id and M.Physical.is_id( self.id ),
 	        "unable to get self object" )
@@ -562,7 +587,7 @@ function M.Physical:is_hotspare()
 	return M.Physical.list()[ self.id ].state == "hotspare"
 end
 
---- Try to get physical's enclosure
+--- Try to get Physical's enclosure
 -- @return enclosure's number
 function M.Physical:enclosure()
 	assert( self.id, "unable to get self object" )
