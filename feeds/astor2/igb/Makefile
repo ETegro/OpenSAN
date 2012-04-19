@@ -23,10 +23,10 @@ define Package/igb
 	MAINTAINER:=Vladimir Petukhov (vladimir.petukhov@etegro.com)
 endef
 
-#define Package/multipath-tools/description
-	#These tools are in charge of maintaining the disk multipath
-	#device maps and react to path and map events.
-#endef
+define Package/igb/description
+	Network Adapter Driver for 82575/6, 82580, and I350-Based
+	Gigabit Network Connections for Linux
+endef
 
 define Build/Configure
 endef
