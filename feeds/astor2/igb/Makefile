@@ -37,7 +37,10 @@ endef
 
 define Package/igb/install
 	$(INSTALL_DIR) $(1)/lib/modules
+	$(INSTALL_DIR) $(1)/etc/init.d
+
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/igb.ko $(1)/lib/modules
+	$(INSTALL_BIN) files/igb.init $(1)/etc/init.d/igb
 endef
 
 $(eval $(call BuildPackage,igb))
