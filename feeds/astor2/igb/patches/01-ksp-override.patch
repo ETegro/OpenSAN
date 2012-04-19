@@ -1,0 +1,11 @@
+diff -ru igb-3.3.6/src/Makefile igb-3.3.6-patch/src/Makefile
+--- igb-3.3.6/src/Makefile	2011-11-30 18:42:32.000000000 +0400
++++ igb-3.3.6-patch/src/Makefile	2012-04-19 17:37:36.142000056 +0400
+@@ -61,6 +61,7 @@
+ # and have an include/linux sub-directory
+ test_dir = $(shell [ -e $(dir)/include/linux ] && echo $(dir))
+ KSP := $(foreach dir, $(KSP), $(test_dir))
++KSP := $(KERNEL_DIR)
+ 
+ # we will use this first valid entry in the search path
+ ifeq (,$(KSRC))
