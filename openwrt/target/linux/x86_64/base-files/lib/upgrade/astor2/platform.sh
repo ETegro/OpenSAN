@@ -158,12 +158,12 @@ timeout 5
 
 title   OpenSAN
 root    (hd0,0)
-kernel  /boot/$CURRENT_KERNEL root=$FUTURE_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
+kernel  /boot/$CURRENT_KERNEL root=$FUTURE_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios consoleblank=0
 boot
 
 title	OpenSAN (failsafe)
 root	(hd0,0)
-kernel  /boot/$FUTURE_KERNEL root=$CURRENT_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios
+kernel  /boot/$FUTURE_KERNEL root=$CURRENT_ROOT rootfstype=ext4 rootwait console=tty0 console=ttyS0,38400n8 noinitrd reboot=bios consoleblank=0
 boot
 __EOF__
 	umount $mountpoint
