@@ -107,7 +107,7 @@ end
 
 --- Rescan all PhysicalVolumes on a system
 function M.PhysicalVolume.rescan()
-	common.system_succeed( "lvm pvscan" )
+	common.system( "lvm pvscan" )
 end
 
 function M.PhysicalVolume:is_orphan()
@@ -130,7 +130,7 @@ end
 -- @return { PhysicalVolume, PhysicalVolume }
 function M.PhysicalVolume.list()
 	local physical_volumes = {}
-	for _, line in ipairs( common.system_succeed( "lvm pvdisplay -c" ) ) do
+	for _, line in ipairs( common.system( "lvm pvdisplay -c" ).stdout ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   /dev/sda5:build:485822464:-1:8:8:-1:4096:59304:0:59304:Ph8MnV-X6m3-h3Na-XI3L-H2N5-dVc7-ZU20Sy
 		local device, volume_group, capacity, volumes, extent, total, free, allocated = string.match( line, "^%s*([^:]+):([^:]*):(%d+):[\-%d]+:%d+:%d+:([\-%d]+):(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
@@ -231,8 +231,8 @@ end
 
 --- Rescan all VolumeGroups on a system
 function M.VolumeGroup.rescan()
-	common.system_succeed( "lvm vgscan --ignorelockingfailure --mknodes" )
-	common.system_succeed( "lvm vgchange -aly --ignorelockingfailure" )
+	common.system( "lvm vgscan --ignorelockingfailure --mknodes" )
+	common.system( "lvm vgchange -aly --ignorelockingfailure" )
 end
 
 --- List all VolumeGroups that are on specified PhysicalVolumes
@@ -240,7 +240,7 @@ end
 -- @return { VolumeGroup, VolumeGroup }
 function M.VolumeGroup.list( physical_volumes )
 	local volume_groups = {}
-	for _, line in ipairs( common.system_succeed( "lvm vgdisplay -c" ) ) do
+	for _, line in ipairs( common.system( "lvm vgdisplay -c" ).stdout ) do
 		if string.match( line, ":.*:.*:.*:" ) then
 		--   build:r/w:772:-1:0:3:3:-1:0:1:1:242909184:4096:59304:59304:0:L1mhxa-57G6-NKgr-Xy0A-OJIr-zuj5-7CJpkH
 		local name, max_volume, extent, total, allocated, free = string.match( line, "^%s*([^:]+):[%w/]+:%d+:[%d\-]+:%d+:%d+:%d+:([%d\-]+):%d+:%d+:%d+:%d+:(%d+):(%d+):(%d+):(%d+):[\-%w]+$" )
@@ -363,7 +363,7 @@ end
 
 --- Rescan all LogicalVolumes on a system
 function M.LogicalVolume.rescan()
-	common.system_succeed( "lvm lvscan" )
+	common.system( "lvm lvscan" )
 end
 
 --- Create snapshot of logical volume
@@ -419,7 +419,7 @@ end
 function M.LogicalVolume.list( volume_groups )
 	local result = {}
 	local volume_groups_by_name = common.unique_keys( "name", volume_groups )
-	for _, line in ipairs( common.system_succeed( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ) ) do
+	for _, line in ipairs( common.system( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ).stdout ) do
 		local splitted = common.split_by( line, " " )
 		local splitted_name = splitted[1]
 		local splitted_volume_group = splitted[2]
