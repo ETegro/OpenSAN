@@ -525,17 +525,43 @@ function M.Physical:zero_superblock()
 	run2("--zero-superblock /dev/" .. M.scsi_to_phys( self.id ))
 end
 
---- einarc physical get
--- @param property "hotspare"
--- @return { "0" }
-function M.Physical:get( property )
-	assert( self.id and M.Physical.is_id( self.id ),
-	        "unable to get self object" )
-	assert( property and common.is_string( property ),
-	        "empty property" )
-	local output = run( "physical get " .. self.id .. " " .. property )
-	if not output then error( "einarc:physical.get() failed" ) end
-	return output
+local function sgmaps()
+	local maps = {}
+	for _,line in ipairs( common.system( "sg_map" ).stdout ) do
+		local paired = common.split_by( line, "%s" )
+		if #paired == 2 then
+			maps[ paired[2] ] = paired[1]
+		end
+	end
+	return maps
+end
+
+--- Try to retrieve Physical's WWN
+-- @return "345...02"
+function M.Physical:wwn()
+	assert( self.id, "unable to get self object" )
+	local SAS_PAGE = "0x19" -- SAS SSP port control mode page
+	local SAS_SUBPAGE = "0x1" -- SAS Phy Control and Discover mode subpage
+	local wwns = {}
+	for _,line in ipairs( common.system(
+		"sginfo -t " ..
+		SAS_PAGE .. "," ..
+		SAS_SUBPAGE .. " " ..
+		sgmaps()[ self.fdevnode ]
+	) ) do
+		if line:sub(1,11) == "SAS address" then
+			wwns[ #wwns + 1 ] = line:match( "^SAS address%s+(%w+)$" )
+		end
+	end
+	if #wwns > 0 then return wwns end
+
+	-- Otherwise we are dealing with SATA
+	-- They can contain also two WWNs: the real one and that is visible to system
+	for _,line in ipairs( common.system( "sdparm --inquiry " .. self.fdevnode ).stdout ) do
+		local wwn = line:match( "^%s+(0x................)" )
+		if wwn then wwns[ #wwns + 1 ] = wwn end
+	end
+	return wwns
 end
 
 --- Is physical disk a hotspare
