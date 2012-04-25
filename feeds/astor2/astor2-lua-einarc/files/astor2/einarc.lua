@@ -76,7 +76,7 @@ end
 -- @param device "/dev/sda"
 -- @return "someserial" or nil
 local function serial_via_smart( device )
-	local result = common.system( "smartctl --all " .. device )
+	local result = common.system( "smartctl --info " .. device )
 	for _,line in ipairs( result.stdout ) do
 		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(%w+)" )
 		if serial then return serial end
@@ -126,21 +126,6 @@ local function list_devices()
 			devices[ device.devnode ] = device
 		elseif string.sub( ent, 1, 2 ) == "sd" then
 			device.type = "sd"
-			device.model = read_line( device.path .. "/device/model" )
-			device.revision = read_line( device.path .. "/device/rev" )
-			device.vendor = read_line( device.path .. "/device/vendor" )
-
-			device.serial = serial_via_smart( device.fdevnode )
-			if not device.serial then
-				device.vendor = read_line( device.path .. "/device/serial" )
-			end
-			if not device.serial then
-				device.serial = serial_via_udev( device.fdevnode )
-			end
-			if not device.serial then
-				device.serial = ""
-			end
-
 			devices[ device.devnode ] = device
 		end
 	end
@@ -490,8 +475,6 @@ function M.Physical:new( attrs )
 	        "empty model" )
 	assert( common.is_string( attrs.revision ),
 	        "empty revision" )
-	assert( common.is_string( attrs.serial ),
-	        "empty serial" )
 	assert( common.is_non_negative( attrs.size ),
 	        "non-positive size" )
 	assert( common.is_string( attrs.state ),
@@ -499,7 +482,6 @@ function M.Physical:new( attrs )
 
 	-- Strip out whitespaces
 	attrs.model = common.strip( attrs.model )
-	attrs.serial = common.strip( attrs.serial )
 	attrs.revision = common.strip( attrs.revision )
 
 	return setmetatable( attrs, Physical_mt )
@@ -513,12 +495,12 @@ function M.Physical.list()
 	for _,device in pairs( devices ) do
 		if device.type == "multipath" then
 			local physical = common.deepcopy( device )
-			physical.model = devices[ physical.slaves[1] ].model
-			physical.vendor = devices[ physical.slaves[1] ].vendor
-			physical.revision = devices[ physical.slaves[1] ].revision
-			physical.serial = devices[ physical.slaves[1] ].serial
+			physical.slave = devices[ physical.slaves[1] ]
+			physical.model = read_line( physical.slave.path .. "/device/model" )
+			physical.revision = read_line( physical.slave.path .. "/device/rev" )
+			physical.vendor = read_line( physical.slave.path .. "/device/vendor" )
 			physical.id = M.phys_to_scsi( physical.devnode )
-			physical.frawnode = "/dev/" .. physical.slaves[1]
+			physical.frawnode = "/dev/" .. physical.slave.devnode
 
 			physical.state = "free"
 			for _,device_int in pairs( devices ) do
@@ -528,11 +510,29 @@ function M.Physical.list()
 					physical.state = physical_list[ M.phys_to_scsi( device.devnode ) ]
 				end
 			end
-
 			physicals[ physical.id ] = M.Physical:new( physical )
 		end
 	end
 	return physicals
+end
+
+function M.Physical:serial_get()
+	assert( self.id, "unable to get self object" )
+	if not self.serial then
+		if self.slave then
+			self.serial = serial_via_smart( self.slave.fdevnode )
+			if not self.serial then
+				self.serial = read_line( self.slave.path .. "/device/serial" )
+			end
+			if not self.serial then
+				self.serial = serial_via_udev( self.slave.fdevnode )
+			end
+		end
+		if not self.serial then
+			self.serial = ""
+		end
+		self.serial = common.strip( self.serial )
+	end
 end
 
 --- Zero md-related superblock on Physical
