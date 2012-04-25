@@ -519,6 +519,7 @@ function M.Physical.list()
 			physical.revision = devices[ physical.slaves[1] ].revision
 			physical.serial = devices[ physical.slaves[1] ].serial
 			physical.id = M.phys_to_scsi( physical.devnode )
+			physical.frawnode = "/dev/" .. physical.slaves[1]
 
 			physical.state = "free"
 			for _,device_int in pairs( devices ) do
@@ -564,7 +565,7 @@ function M.Physical:wwn()
 		"sginfo -t " ..
 		SAS_PAGE .. "," ..
 		SAS_SUBPAGE .. " " ..
-		sgmaps()[ self.fdevnode ]
+		sgmaps()[ self.frawnode ]
 	) ) do
 		if line:sub(1,11) == "SAS address" then
 			wwns[ #wwns + 1 ] = line:match( "^SAS address%s+(%w+)$" )
@@ -574,7 +575,7 @@ function M.Physical:wwn()
 
 	-- Otherwise we are dealing with SATA
 	-- They can contain also two WWNs: the real one and that is visible to system
-	for _,line in ipairs( common.system( "sdparm --inquiry " .. self.fdevnode ).stdout ) do
+	for _,line in ipairs( common.system( "sdparm --inquiry " .. self.frawnode ).stdout ) do
 		local wwn = line:match( "^%s+(0x................)" )
 		if wwn then wwns[ #wwns + 1 ] = wwn end
 	end
@@ -618,7 +619,7 @@ end
 -- @return true/false
 function M.Physical:is_writecache()
 	assert( self.id, "unable to get self object" )
-	local result = common.system( "sdparm --quiet --get WCE " .. self.fdevnode )
+	local result = common.system( "sdparm --quiet --get WCE " .. self.frawnode )
 	if result.stdout[1] then
 		result = common.split_by( result.stdout[1], " " )
 		if #result > 1 then
@@ -631,13 +632,13 @@ end
 --- Physical disk WriteCache enable
 function M.Physical:writecache_enable()
 	assert( self.id, "unable to get self object" )
-	common.system( "sdparm --set WCE=1 " .. self.fdevnode )
+	common.system( "sdparm --set WCE=1 " .. self.frawnode )
 end
 
 --- Physical disk WriteCache disable
 function M.Physical:writecache_disable()
 	assert( self.id, "unable to get self object" )
-	common.system( "sdparm --set WCE=0 " .. self.fdevnode )
+	common.system( "sdparm --set WCE=0 " .. self.frawnode )
 end
 
 --- Physical disk powersaving disable
@@ -650,14 +651,14 @@ function M.Physical:powersaving_disable()
 		"hdparm -B 255", -- ATA/SATA: Try power management turning off at all
 		"hdparm -S 0" -- ATA/SATA: Try setting suspend time to zero (disable)
 	}) do
-		common.system( cmd .. " " .. self.fdevnode )
+		common.system( cmd .. " " .. self.frawnode )
 	end
 	for _,v in ipairs({
 		"PM_BG", -- SAS: Turn off powermanagement
 		"IDLE", -- SAS: Turn off idle timer
 		"STANDBY" -- SAS: Turn off standby timer
 	}) do
-		common.system( "sdparm --set " .. v .. "=0 " .. self.fdevnode )
+		common.system( "sdparm --set " .. v .. "=0 " .. self.frawnode )
 	end
 end
 
