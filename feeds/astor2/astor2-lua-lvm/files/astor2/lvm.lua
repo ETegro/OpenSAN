@@ -419,15 +419,18 @@ end
 function M.LogicalVolume.list( volume_groups )
 	local result = {}
 	local volume_groups_by_name = common.unique_keys( "name", volume_groups )
-	for _, line in ipairs( common.system( "lvm lvs --units m -o lv_name,vg_name,lv_size,origin,snap_percent -O origin" ).stdout ) do
+	for _, line in ipairs( common.system( "lvm lvs --units m -o lv_name,vg_name,lv_size,lv_attr,origin,snap_percent -O origin" ).stdout ) do
 		local splitted = common.split_by( line, " " )
 		local splitted_name = splitted[1]
 		local splitted_volume_group = splitted[2]
 		local splitted_size = tonumber( string.sub( splitted[3], 1, -2 ) )
 		local device = vglv_device( splitted_volume_group, splitted_name )
-		local splitted_possible_logical_volume = splitted[4]
+		local attr = splitted[4]
+		local splitted_possible_logical_volume = splitted[5]
 		if splitted[1] == "LV" and splitted[2] == "VG" then
-			-- Do nothing
+			-- It is header
+		elseif attr:sub(5,5) ~= "a" then
+			-- LV is not active
 		elseif splitted_possible_logical_volume and result[ vglv_device( splitted_volume_group, splitted_possible_logical_volume ) ] then
 			-- Skip if it is not needed VolumeGroup
 			if common.is_in_array( splitted_volume_group, common.keys( volume_groups_by_name ) ) then
@@ -437,7 +440,7 @@ function M.LogicalVolume.list( volume_groups )
 					volume_group = volume_groups[ volume_groups_by_name[ splitted_volume_group ][1] ],
 					size = splitted_size,
 					logical_volume = splitted_possible_logical_volume,
-					allocated = tonumber( splitted[5] )
+					allocated = tonumber( splitted[6] )
 				})
 				result[
 					vglv_device( splitted_volume_group, splitted_possible_logical_volume )
