@@ -866,6 +866,7 @@ function M.filter_physical_enclosures( matrix )
 				model = line.physical.model,
 				revision = line.physical.revision,
 				serial = line.physical.serial or "",
+				frawnode = line.physical.frawnode,
 				size = 1, -- dummy for failed disks
 				state = line.physical.state
 			} )
