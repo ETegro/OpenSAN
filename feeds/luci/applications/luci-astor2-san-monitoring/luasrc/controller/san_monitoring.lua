@@ -60,7 +60,7 @@ function monitoring_overall()
 	} )
 	local data = { JBODS = {} }
 	for _,expander in ipairs( einarc.Adapter.expanders() ) do
-		if expander.model == luci.controller.san_monitoring_configuration.expanders.jbod then
+		if common.is_in_array( expander.model, luci.controller.san_monitoring_configuration.expanders.jbod ) then
 			local enclosures = {}
 			for _, line in ipairs( matrix_data.lines ) do
 				if line.physical and line.physical.enclosure_id then
