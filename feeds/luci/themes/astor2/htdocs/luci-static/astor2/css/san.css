@@ -175,6 +175,14 @@ table.matrix .physical {
 	overflow: hidden;
 }
 
+table.matrix .snapshot {
+	overflow: hidden;
+}
+
+table.matrix .snapshot input {
+	background-color: inherit;
+}
+
 table.matrix fieldset div.form input[ type = "submit" ],
 table.matrix div.control {
 	float: right;
