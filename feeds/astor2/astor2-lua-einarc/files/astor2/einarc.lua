@@ -213,16 +213,27 @@ M.Adapter.raidlevels_hotspare_compatible = {
 --- einarc adapter expanders
 -- @return { { model = "noname", id = "13" }, ... }
 function M.Adapter:expanders()
-	local output = run( "adapter expanders" )
-	if not output then error( "einarc:adapter.get() failed" ) end
 	local expanders = {}
-	for _, line in ipairs( output ) do
-		local id, model = string.match( line, "^(%d+)\t(.*)$" )
-		assert( id, "unable to retreive an ID" )
-		expanders[ #expanders + 1 ] = {
-			["id"] = tonumber(id),
-			["model"] = model
-		}
+	local ENCLOSURE_SCSI_ID = 13
+	for _, line in ipairs( common.system( "sg_map" ).stdout ) do
+		if #common.split_by( line, "%s" ) == 1 then
+			local devtype = nil
+			local model = nil
+			for _, sginfo_line in ipairs( common.system( "sginfo " .. line ).stdout ) do
+				if sginfo_line:sub( 1, 11 ) == "Device Type" then
+					devtype = sginfo_line:match( "^Device Type%s+(%d+)$" )
+				end
+				if sginfo_line:sub( 1, 8 ) == "Product:" then
+					model = common.strip( sginfo_line:match( "^Product:%s+(.+)$" ) )
+				end
+			end
+			if tonumber( devtype ) == ENCLOSURE_SCSI_ID and model then
+				expanders[ #expanders + 1 ] = {
+					["id"] = line:sub(8,-1),
+					["model"] = model
+				}
+			end
+		end
 	end
 	return expanders
 end
