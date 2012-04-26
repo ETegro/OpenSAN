@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div class="title bold">
+<div class="title physical bold">
 	<% if not line.physical.highlight.left then %>
 		<input name="san.physical_id"
 		       type="checkbox"
@@ -33,11 +33,10 @@
 		       type="hidden"
 		       value="<%= line.physical.logical_id %>" />
 	<% end %>
-	<a href="#" id="physical_info-<%= hash( line.physical.id ) %>">
-		<%: ID %>: <%= line.physical.id %>;
-		<%= line.physical.model %>;
-		<span title="<%= line.physical.size_mib %> <%: MiB %>">
-			<%= line.physical.size.value %> <%= line.physical.size.unit %>
-		</span>
-	</a>
+	<input name="physical_info-<%= hash( line.physical.id ) %>"
+		   type="text"
+		   readonly="readonly"
+		   class="noborder bold"
+		   title="<%= line.physical.id %>; <%= line.physical.size_mib %> <%: MiB %>; <%= line.physical.model %>"
+		   value="<%= line.physical.id %>; <%= line.physical.size.value %><%= line.physical.size.unit %>; <%= line.physical.model %>" />
 </div>
