@@ -175,11 +175,13 @@ table.matrix .physical {
 	overflow: hidden;
 }
 
-table.matrix .snapshot {
+table.matrix .snapshot,
+table.matrix .logical_volume {
 	overflow: hidden;
 }
 
-table.matrix .snapshot input {
+table.matrix .snapshot input,
+table.matrix .logical_volume input {
 	background-color: inherit;
 }
 
