@@ -18,25 +18,35 @@
 %>
 
 <div class="title physical bold">
-	<% if not line.physical.highlight.left then %>
-		<input name="san.physical_id"
-		       type="checkbox"
-		       value="<%= line.physical.id %>" />
-	<% end %>
-	<input name="physical_model-<%= hash( line.physical.id ) %>"
-	       class="physical_model"
-	       type="hidden"
-	       value="<%= hash( line.physical.model ) %>" />
-	<% if line.physical.logical_id then %>
-		<input name="physical_in_logical-<%= hash( line.physical.logical_id ) %>"
-		       class="physical_in_logical"
-		       type="hidden"
-		       value="<%= line.physical.logical_id %>" />
-	<% end %>
-	<input name="physical_info-<%= hash( line.physical.id ) %>"
-		   type="text"
-		   readonly="readonly"
-		   class="noborder bold"
-		   title="<%= line.physical.id %>; <%= line.physical.size_mib %> <%: MiB %>; <%= line.physical.model %>"
-		   value="<%= line.physical.id %>; <%= line.physical.size.value %><%= line.physical.size.unit %>; <%= line.physical.model %>" />
+	<table class="physical_title">
+		<tbody>
+			<tr>
+				<td>
+					<% if not line.physical.highlight.left then %>
+						<input name="san.physical_id"
+							   type="checkbox"
+							   value="<%= line.physical.id %>" />
+					<% end %>
+						<input name="physical_model-<%= hash( line.physical.id ) %>"
+							   class="physical_model"
+							   type="hidden"
+							   value="<%= hash( line.physical.model ) %>" />
+					<% if line.physical.logical_id then %>
+						<input name="physical_in_logical-<%= hash( line.physical.logical_id ) %>"
+							   class="physical_in_logical"
+							   type="hidden"
+							   value="<%= line.physical.logical_id %>" />
+					<% end %>
+				</td>
+				<td>
+					<input name="physical_info-<%= hash( line.physical.id ) %>"
+						   type="text"
+						   readonly="readonly"
+						   class="noborder bold"
+						   title="<%= line.physical.id %>; <%= line.physical.size_mib %> <%: MiB %>; <%= line.physical.model %>"
+						   value="<%= line.physical.id %>; <%= line.physical.size.value %><%= line.physical.size.unit %>; <%= line.physical.model %>" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
