@@ -167,7 +167,12 @@ table.matrix .title {
 	float: left;
 	margin-bottom: 5px;
 	overflow: auto;
-	width: 60%;
+	width: 70%;
+}
+
+table.matrix .physical {
+	width: 90%;
+	overflow: hidden;
 }
 
 table.matrix fieldset div.form input[ type = "submit" ],
