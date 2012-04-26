@@ -575,9 +575,26 @@ end
 -- @return enclosure's number
 function M.Physical:enclosure()
 	assert( self.id, "unable to get self object" )
-	local output = self:get( "enclosure" )
-	if not output then return nil end
-	return output[1]
+	local SES_PAGE = "0xa" -- Additional element status (SES-2)
+	if self.state == "failed" then return nil end
+	local wwns = self:wwn()
+
+	for _,expander in pairs( M.Adapter:expanders() ) do
+		local bay = nil
+		for _,line in ipairs( common.system( table.concat( {
+			"sg_ses",
+			"--page",
+			SES_PAGE,
+			"/dev/sg" .. expander.id
+		}, " " ) ).stdout ) do
+			local bay_possible = line:match( "bay number: (%d+)$" )
+			if bay_possible then bay = bay_possible end
+			local addr = line:match( "%s+SAS address: (%w+)$" )
+			if addr and common.is_in_array( addr, wwns ) then
+				return expander.id .. ":" .. bay
+			end
+		end
+	end
 end
 
 --- Is physical disk has WriteCache enabled
