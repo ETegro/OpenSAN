@@ -172,17 +172,19 @@ table.matrix .title {
 
 table.matrix .physical {
 	width: 90%;
-	overflow: hidden;
 }
 
 table.matrix .snapshot,
+table.matrix .physical,
 table.matrix .logical_volume {
 	overflow: hidden;
 }
 
 table.matrix .snapshot input,
+table.matrix .physical input.noborder,
 table.matrix .logical_volume input {
 	background-color: inherit;
+	box-shadow: none;
 }
 
 table.matrix fieldset div.form input[ type = "submit" ],
