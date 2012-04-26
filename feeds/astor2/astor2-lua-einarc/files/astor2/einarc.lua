@@ -497,13 +497,20 @@ function M.Physical.list()
 		if device.type == "multipath" then
 			local physical = common.deepcopy( device )
 			physical.slave = devices[ physical.slaves[1] ]
-			physical.model = read_line( physical.slave.path .. "/device/model" )
-			physical.revision = read_line( physical.slave.path .. "/device/rev" )
-			physical.vendor = read_line( physical.slave.path .. "/device/vendor" )
+			if physical.slave then
+				physical.model = read_line( physical.slave.path .. "/device/model" )
+				physical.revision = read_line( physical.slave.path .. "/device/rev" )
+				physical.vendor = read_line( physical.slave.path .. "/device/vendor" )
+				physical.frawnode = "/dev/" .. physical.slave.devnode
+				physical.state = "free"
+			else
+				physical.model = "None"
+				physical.revision = "None"
+				physical.vendor = "None"
+				physical.frawnode = "/dev/" .. physical.devnode
+				physical.state = "failed"
+			end
 			physical.id = M.phys_to_scsi( physical.devnode )
-			physical.frawnode = "/dev/" .. physical.slave.devnode
-
-			physical.state = "free"
 			for _,device_int in pairs( devices ) do
 				if device_int.type == "md" and
 					common.is_in_array( device.devnode, device_int.slaves ) then
