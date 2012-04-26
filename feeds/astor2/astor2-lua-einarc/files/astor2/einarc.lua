@@ -98,6 +98,22 @@ local function serial_via_udev( device )
 	return nil
 end
 
+-- Workaround for buggy amd64 Lua build
+local function tonumber_unbuggy( s )
+	if s then
+		local try1 = tonumber( s )
+		local try2 = tonumber( s .. "0" ) * 0.1
+		if try1 > try2 then
+			s = try1
+		else
+			s = try2
+		end
+	else
+		s = 0
+	end
+	return s
+end
+
 --- List available block devices to work with
 -- @return Big hash of different variable data
 local function list_devices()
@@ -109,7 +125,7 @@ local function list_devices()
 			fdevnode = "/dev/" .. ent,
 			path = path_block .. ent
 		}
-		device.size = math.floor( (tonumber( read_line( device.path .. "/size" ) ) or 0) / 2048 )
+		device.size = math.floor( tonumber_unbuggy( read_line( device.path .. "/size" ) ) / 2048 )
 		if lfs.attributes( device.path .. "/dm/name" ) then
 			local name = read_line( device.path .. "/dm/name" )
 			if string.match( name, "^mpath" ) then
@@ -402,9 +418,11 @@ function M.Logical:progress_get()
 	self.progress = nil
 	local sync = read_line( self.path .. "/md/sync_completed" )
 	if sync then
-		local doned, total = string.match( sync, "^(%d+) / (%d+)$" )
-		if doned and total then
-			self.progress = tonumber( doned ) / tonumber( total )
+		local done, total = string.match( sync, "^(%d+) / (%d+)$" )
+		done = tonumber_unbuggy( done )
+		total = tonumber_unbuggy( total )
+		if done >= 0 and total > 0 then
+			self.progress = math.floor( 1000 * done / total ) * 0.1
 		end
 	end
 	return self.progress
