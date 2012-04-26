@@ -17,11 +17,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div class="title bold">
-	<span title="<%= line.logical_volume.name %>">
-		<%= line.logical_volume.name %>;
-	</span>
-	<span title="<%= line.logical_volume.size_mib %> <%: MiB %>">
-		<%= line.logical_volume.size.value %> <%= line.logical_volume.size.unit %>
-	</span>
+<div class="title logical_volume bold">
+	<input name="<%= escape_html( line.logical_volume.name ) %>"
+		   type="text"
+		   readonly="readonly"
+		   class="noborder bold"
+		   title="<%= line.logical_volume.size_mib %> <%: MiB %>; <%= escape_html( line.logical_volume.name ) %>"
+		   value="<%= line.logical_volume.size.value %><%= line.logical_volume.size.unit %>; <%= escape_html( line.logical_volume.name ) %>" />
 </div>
