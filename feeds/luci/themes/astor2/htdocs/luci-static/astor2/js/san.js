@@ -52,19 +52,21 @@ function toggleFadeParentElement( fadeObject ) {
 }
 
 function toggle_access_pattern_creation() {
-	var object = { click_selector : '#access_patterns',
-	               fade_selector : '#div_access_pattern_new' };
+	var object = {
+		click_selector : '#access_patterns',
+		fade_selector : '#div_access_pattern_new'
+	};
 	toggleFadeSingleElement( object );
 }
 
 function toggle_drives_information() {
-	var object = { click_selector : 'form input[ name ^= "physical_info-" ]' }
+	var object = { click_selector : 'form input[ name ^= "physical_info-" ]' };
 	object.nexttable = {};
 	toggleFadeParentElement( object );
 }
 
 function toggle_session_information() {
-	var object = { click_selector : 'form input[ name ^= "session_info-" ]' }
+	var object = { click_selector : 'form input[ name ^= "session_info-" ]' };
 	toggleFadeParentElement( object );
 }
 
@@ -100,9 +102,11 @@ function hide_all_to_hide_elements() {
 }
 
 function pulsate_bind_access_patterns() {
-	$( 'form input[ name ^= "san.logical_volume_select" ]' ).click( function() {
-		$( '.icon-bind' ).show( 'pulsate' );
-	} );
+	$( 'form input[ name ^= "san.logical_volume_select" ]' ).click(
+		function() {
+			$( '.icon-bind' ).show( 'pulsate' );
+		}
+	);
 }
 
 function toggle_create_raid_form() {
@@ -134,18 +138,20 @@ function toggle_create_raid_form() {
 		};
 
 		raidlevels.each( function() {
-			var radio = $( this ),
-			    min = restrictions.min[ radio.val() ] || 0,
-			    max = restrictions.max[ radio.val() ] || 1000;
+			var radio = $( this );
+			var min = restrictions.min[ radio.val() ] || 0;
+			var max = restrictions.max[ radio.val() ] || 1000;
 			if ( num >= min && num <= max ) {
 				if ( $( this ).is( ':disabled' ) ) {
 					// .removeAttr() real working only in IE9 and other browser
 					//$( this ).removeAttr( 'disabled' );
 
 					// That is working in IE8 and other browser
-					var attr = { type : "radio",
-					             value : $( this ).val(),
-					             name : $( this ).attr( 'name' ) };
+					var attr = {
+						type : "radio",
+						value : $( this ).val(),
+						name : $( this ).attr( 'name' )
+					};
 					var new_radio = $( '<input type="' + attr.type + '" name="' + attr.name + '" value="' + attr.value + '" />' );
 					new_radio.insertAfter( $( this ) );
 					$( this ).remove();
@@ -161,7 +167,7 @@ function show_calendar() {
 	var element = $( 'input[ name *= "set_sysdate" ]' );
 	var format = {
 		def: "mm/dd/yy",
-		iso8601: 'yy-mm-dd',
+		iso8601: 'yy-mm-dd'
 	};
 	element.datepicker(
 		{ dateFormat: format.iso8601 }
