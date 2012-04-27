@@ -170,6 +170,10 @@ table.matrix .title {
 	width: 70%;
 }
 
+table.matrix .logical {
+	width: 70%;
+}
+
 table.matrix .physical {
 	width: 90%;
 }
