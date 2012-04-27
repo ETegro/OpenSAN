@@ -17,9 +17,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<div class="title bold">
-	<%= escape_html( line.access_pattern.name ) %>;
-	<%= line.access_pattern.targetdriver %>;
-	<% if line.access_pattern.readonly then %>RO;<% else %>RW;<% end %>
-	<%: LUN %><%= line.access_pattern.lun %>
+<div class="title access_pattern bold">
+	<input name="<%= escape_html( line.access_pattern.name ) %>"
+		   type="text"
+		   readonly="readonly"
+		   class="noborder bold"
+		   title="<%= line.access_pattern.targetdriver %>; <% if line.access_pattern.readonly then %>RO;<% else %>RW;<% end %> <%: LUN %><%= line.access_pattern.lun %>; <%= escape_html( line.access_pattern.name ) %>"
+		   value="<%= line.access_pattern.targetdriver %>; <% if line.access_pattern.readonly then %>RO;<% else %>RW;<% end %> <%: LUN %><%= line.access_pattern.lun %>; <%= escape_html( line.access_pattern.name ) %>" />
 </div>
