@@ -174,13 +174,19 @@ table.matrix .physical {
 	width: 90%;
 }
 
+table.matrix .access_pattern {
+	width: 80%;
+}
+
 table.matrix .snapshot,
 table.matrix .physical,
+table.matrix .access_pattern,
 table.matrix .logical_volume {
 	overflow: hidden;
 }
 
 table.matrix .snapshot input,
+table.matrix .access_pattern input.noborder,
 table.matrix .physical input.noborder,
 table.matrix .logical_volume input {
 	background-color: inherit;
