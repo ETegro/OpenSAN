@@ -8,6 +8,7 @@ start()
 {
 	( # We have to daemonize this process to prevent deadlocks
 	while [ ! -e $MULTIPATH_STARTED_FLAG ]; do sleep 1; done
+	multipath
 	einarc -t software -a 0 adapter restart
 	einarc -t software -a 0 physical list
 	touch $EINARC_STARTED_FLAG
