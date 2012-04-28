@@ -1,0 +1,23 @@
+#!/bin/sh
+
+FLAG=/tmp/multipath.running
+
+multipath_process()
+{
+	if [ -e $FLAG ]; then
+		true
+	else
+		touch $FLAG
+		multipath -v0
+		rm -f $FLAG
+	fi
+}
+
+case "$ACTION" in               
+add)
+	multipath_process
+	;;
+remove)
+	multipath_process
+	;;
+esac              
