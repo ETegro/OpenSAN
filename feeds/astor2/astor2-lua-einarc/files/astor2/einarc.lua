@@ -460,18 +460,22 @@ end
 function M.Logical:writecache_enable()
 	assert( self.id, "unable to get self object" )
 	local physicals = M.Physical.list()
+	local nodes = {}
 	for _,drive in ipairs( self.drives ) do
-		physicals[ drive ]:writecache_enable()
+		nodes[ #nodes + 1 ] = physicals[ drive ].frawnode
 	end
+	common.system( "sdparm --set WCE=1 " .. table.concat( nodes, " " ) )
 end
 
 --- Disable WriteCache on logical disk
 function M.Logical:writecache_disable()
 	assert( self.id, "unable to get self object" )
 	local physicals = M.Physical.list()
+	local nodes = {}
 	for _,drive in ipairs( self.drives ) do
-		physicals[ drive ]:writecache_disable()
+		nodes[ #nodes + 1 ] = physicals[ drive ].frawnode
 	end
+	common.system( "sdparm --set WCE=0 " .. table.concat( nodes, " " ) )
 end
 
 --- Is logical disk has WriteCache enabled
@@ -670,18 +674,6 @@ function M.Physical:is_writecache()
 		end
 	end
 	return false
-end
-
---- Physical disk WriteCache enable
-function M.Physical:writecache_enable()
-	assert( self.id, "unable to get self object" )
-	common.system( "sdparm --set WCE=1 " .. self.frawnode )
-end
-
---- Physical disk WriteCache disable
-function M.Physical:writecache_disable()
-	assert( self.id, "unable to get self object" )
-	common.system( "sdparm --set WCE=0 " .. self.frawnode )
 end
 
 -----------------------------------------------------------------------
