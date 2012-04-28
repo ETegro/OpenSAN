@@ -432,9 +432,28 @@ end
 function M.Logical:powersaving_disable()
 	assert( self.id, "unable to get self object" )
 	local physicals = M.Physical.list()
+	local nodes = {}
 	for _,drive in ipairs( self.drives ) do
-		physicals[ drive ]:powersaving_disable()
+		nodes[ #nodes + 1 ] = physicals[ drive ].frawnode
 	end
+
+	-- All commands below may fail, but there is no need to check it
+	-- ATA/SATA: Try setting maximum performance mode of power management
+	for _,cmd in ipairs({
+		"hdparm -B 254", -- ATA/SATA: Lower power management threshold
+		"hdparm -B 255", -- ATA/SATA: Try power management turning off at all
+		"hdparm -S 0" -- ATA/SATA: Try setting suspend time to zero (disable)
+	}) do
+		common.system( cmd .. " " .. table.concat( nodes, " " ) )
+	end
+	for _,v in ipairs({
+		"PM_BG", -- SAS: Turn off powermanagement
+		"IDLE", -- SAS: Turn off idle timer
+		"STANDBY" -- SAS: Turn off standby timer
+	}) do
+		common.system( "sdparm --set " .. v .. "=0 " .. table.concat( nodes, " " ) )
+	end
+
 end
 
 --- Enable WriteCache on logical disk
@@ -663,27 +682,6 @@ end
 function M.Physical:writecache_disable()
 	assert( self.id, "unable to get self object" )
 	common.system( "sdparm --set WCE=0 " .. self.frawnode )
-end
-
---- Physical disk powersaving disable
-function M.Physical:powersaving_disable()
-	assert( self.id, "unable to get self object" )
-	-- All commands below may fail, but there is no need to check it
-	-- ATA/SATA: Try setting maximum performance mode of power management
-	for _,cmd in ipairs({
-		"hdparm -B 254", -- ATA/SATA: Lower power management threshold
-		"hdparm -B 255", -- ATA/SATA: Try power management turning off at all
-		"hdparm -S 0" -- ATA/SATA: Try setting suspend time to zero (disable)
-	}) do
-		common.system( cmd .. " " .. self.frawnode )
-	end
-	for _,v in ipairs({
-		"PM_BG", -- SAS: Turn off powermanagement
-		"IDLE", -- SAS: Turn off idle timer
-		"STANDBY" -- SAS: Turn off standby timer
-	}) do
-		common.system( "sdparm --set " .. v .. "=0 " .. self.frawnode )
-	end
 end
 
 -----------------------------------------------------------------------
