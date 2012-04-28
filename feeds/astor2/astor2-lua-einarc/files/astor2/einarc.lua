@@ -483,14 +483,15 @@ end
 -- @return true/false
 function M.Logical:is_writecache()
 	assert( self.id, "unable to get self object" )
-	local enabled = 0
 	local physicals = M.Physical.list()
+	local nodes = {}
 	for _,drive in ipairs( self.drives ) do
-		if physicals[ drive ]:is_writecache() then
-			enabled = enabled + 1
-		end
+		nodes[ #nodes + 1 ] = physicals[ drive ].frawnode
 	end
-	return enabled > 0
+	for _,line in ipairs( common.system( "sdparm --quiet --get WCE " .. table.concat( nodes, " " ) ).stdout ) do
+		if common.split_by( line, " " )[ 2 ] == "1" then return true end
+	end
+	return false
 end
 
 ------------------------------------------------------------------------
@@ -661,20 +662,6 @@ function M.Physical:enclosure()
 			end
 		end
 	end
-end
-
---- Is physical disk has WriteCache enabled
--- @return true/false
-function M.Physical:is_writecache()
-	assert( self.id, "unable to get self object" )
-	local result = common.system( "sdparm --quiet --get WCE " .. self.frawnode )
-	if result.stdout[1] then
-		result = common.split_by( result.stdout[1], " " )
-		if #result > 1 then
-			return result[ 2 ] == "1"
-		end
-	end
-	return false
 end
 
 -----------------------------------------------------------------------
