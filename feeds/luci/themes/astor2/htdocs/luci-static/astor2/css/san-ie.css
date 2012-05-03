@@ -38,3 +38,30 @@ table.matrix fieldset div.form {
 	float: right;
 	text-align: right;
 }
+
+table.matrix .logical {
+	width: 50%;
+}
+
+table.matrix .physical {
+	width: 80%;
+}
+
+table.matrix .logical_volume,
+table.matrix .snapshot {
+	width: 55%;
+}
+
+table.matrix .access_pattern {
+	width: 75%;
+}
+
+table.matrix table.access_pattern_information input[ type = "text" ],
+table.matrix div.session_title input[ type = "text" ],
+table.matrix table.session_information input[ type = "text" ] {
+	width: 95%;
+}
+
+.fillbar {
+	width: 95%;
+}
