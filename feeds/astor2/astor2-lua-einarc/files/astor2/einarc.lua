@@ -509,9 +509,9 @@ function M.Physical.list()
 			local physical = common.deepcopy( device )
 			physical.slave = devices[ physical.slaves[1] ]
 			if physical.slave then
-				physical.model = read_line( physical.slave.path .. "/device/model" )
-				physical.revision = read_line( physical.slave.path .. "/device/rev" )
-				physical.vendor = read_line( physical.slave.path .. "/device/vendor" )
+				physical.model = common.strip( read_line( physical.slave.path .. "/device/model" ) or "" )
+				physical.revision = common.strip( read_line( physical.slave.path .. "/device/rev" ) or "" )
+				physical.serial = "None"
 				physical.frawnode = "/dev/" .. physical.slave.devnode
 				physical.state = "free"
 			else
