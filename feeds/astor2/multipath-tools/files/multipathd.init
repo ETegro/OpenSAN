@@ -20,6 +20,7 @@ EOF
 	$MULTIPATHD
 	echo $! > $PID_FILE
 	sleep 2
+	multipath -v3
 	touch $MULTIPATH_STARTED_FLAG
 }
 
