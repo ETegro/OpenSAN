@@ -38,6 +38,7 @@ DEFAULT_PACKAGES += \
 	gnu-cpio \
 	uhttpd \
 	astor2-blockdev-parameters \
+	multipath-tools \
 	luci-app-astor2-san \
 	astor2-luci-bwc-ipmi-rs230g3 \
 	astor2-factory-defaults \
