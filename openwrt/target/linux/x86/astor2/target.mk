@@ -45,6 +45,7 @@ DEFAULT_PACKAGES += \
 	luafilesystem \
 	xfs-fsck \
 	xfs-growfs \
+	multipath-tools \
 	astor2-var-partition
 
 define Target/Description

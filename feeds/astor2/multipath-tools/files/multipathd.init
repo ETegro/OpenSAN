@@ -1,0 +1,35 @@
+#!/bin/sh /etc/rc.common
+START=49
+
+PID_FILE=/var/run/multipathd.pid
+MULTIPATHD=/sbin/multipathd
+MULTIPATH_CONF=/etc/multipath.conf
+MULTIPATH_STARTED_FLAG="/tmp/multipath-started"
+
+start()
+{
+	cat > $MULTIPATH_CONF <<EOF
+defaults {
+	user_friendly_names yes
+	selector "round-robin 0"
+	path_grouping_policy failover
+	failback immediate
+	no_path_retry queue
+}
+EOF
+	$MULTIPATHD
+	echo $! > $PID_FILE
+	sleep 2
+	touch $MULTIPATH_STARTED_FLAG
+}
+
+stop()
+{
+	kill -9 `cat $PID_FILE`
+}
+
+restart()
+{
+	stop
+	start
+}
