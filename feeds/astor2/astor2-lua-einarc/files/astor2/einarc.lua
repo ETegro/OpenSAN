@@ -71,32 +71,6 @@ local function list_slaves( path )
 	return slaves
 end
 
---- Try to determine block device's serial using S.M.A.R.T.
--- @param device "/dev/sda"
--- @return "someserial" or nil
-local function serial_via_smart( device )
-	local result = common.system( "smartctl --info " .. device )
-	for _,line in ipairs( result.stdout ) do
-		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(%w+)" )
-		if serial then return serial end
-	end
-	return nil
-end
-
---- Try to determine block device's serial using udev
--- @param device "/dev/sda"
--- @return "someserial" or nil
-local function serial_via_udev( device )
-	local result = common.system( "udevadm info --query=env --name=" .. device )
-	for _,line in ipairs( result.stdout ) do
-		local serial = string.match( line, "ID_SERIAL_SHORT=(.*)" )
-		if serial then return serial end
-		serial = string.match( line, "ID_SERIAL=(.*)" )
-		if serial then return serial end
-	end
-	return nil
-end
-
 -- Workaround for buggy amd64 Lua build
 local function tonumber_unbuggy( s )
 	if s then
@@ -514,10 +488,6 @@ end
 function M.Physical:new( attrs )
 	assert( M.Physical.is_id( attrs.id ),
 	        "incorrect physical id" )
-	assert( common.is_string( attrs.model ),
-	        "empty model" )
-	assert( common.is_string( attrs.revision ),
-	        "empty revision" )
 	assert( common.is_non_negative( attrs.size ),
 	        "non-positive size" )
 	assert( common.is_string( attrs.state ),
@@ -540,9 +510,9 @@ function M.Physical.list()
 			local physical = common.deepcopy( device )
 			physical.slave = devices[ physical.slaves[1] ]
 			if physical.slave then
-				physical.model = read_line( physical.slave.path .. "/device/model" )
-				physical.revision = read_line( physical.slave.path .. "/device/rev" )
-				physical.vendor = read_line( physical.slave.path .. "/device/vendor" )
+				physical.model = common.strip( read_line( physical.slave.path .. "/device/model" ) or "" )
+				physical.revision = common.strip( read_line( physical.slave.path .. "/device/rev" ) or "" )
+				physical.serial = "None"
 				physical.frawnode = "/dev/" .. physical.slave.devnode
 				physical.state = "free"
 			else
@@ -566,23 +536,23 @@ function M.Physical.list()
 	return physicals
 end
 
-function M.Physical:serial_get()
+--- Try to determine physical disk's serial, model and revision using S.M.A.R.T.
+-- @return { model = "model", serial = "serial", revision = "revision" }
+function M.Physical:extended_info()
 	assert( self.id, "unable to get self object" )
-	if not self.serial then
-		if self.slave then
-			self.serial = serial_via_smart( self.slave.fdevnode )
-			if not self.serial then
-				self.serial = read_line( self.slave.path .. "/device/serial" )
-			end
-			if not self.serial then
-				self.serial = serial_via_udev( self.slave.fdevnode )
-			end
-		end
-		if not self.serial then
-			self.serial = ""
-		end
-		self.serial = common.strip( self.serial )
+	local info = {}
+	for _,line in ipairs( common.system( "smartctl --info " .. self.fdevnode ).stdout ) do
+		local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
+		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
+		local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
+		if model then info.model = model end
+		if serial then info.serial = serial end
+		if revision then info.revision = revision end
 	end
+	for _,v in ipairs({ "serial", "model", "revision" }) do
+		info[ v ] = info[ v ] or self[ v ]
+	end
+	return info
 end
 
 --- Zero md-related superblock on Physical
