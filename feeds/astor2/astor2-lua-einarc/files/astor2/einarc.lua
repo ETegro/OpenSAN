@@ -72,20 +72,6 @@ local function list_slaves( path )
 	return slaves
 end
 
---- Try to determine block device's serial using udev
--- @param device "/dev/sda"
--- @return "someserial" or nil
-local function serial_via_udev( device )
-	local result = common.system( "udevadm info --query=env --name=" .. device )
-	for _,line in ipairs( result.stdout ) do
-		local serial = string.match( line, "ID_SERIAL_SHORT=(.*)" )
-		if serial then return serial end
-		serial = string.match( line, "ID_SERIAL=(.*)" )
-		if serial then return serial end
-	end
-	return nil
-end
-
 -- Workaround for buggy amd64 Lua build
 local function tonumber_unbuggy( s )
 	if s then
