@@ -501,10 +501,6 @@ end
 function M.Physical:new( attrs )
 	assert( M.Physical.is_id( attrs.id ),
 	        "incorrect physical id" )
-	assert( common.is_string( attrs.model ),
-	        "empty model" )
-	assert( common.is_string( attrs.revision ),
-	        "empty revision" )
 	assert( common.is_non_negative( attrs.size ),
 	        "non-positive size" )
 	assert( common.is_string( attrs.state ),
