@@ -159,19 +159,6 @@ local function run( args )
 	return result
 end
 
---- Reattach all possible RAID members
-local function check_detached_hotspares()
-	for _,device in pairs( list_devices() ) do
-		if device.type == "md" then
-			run(device.fdevnode .. " --fail detached --remove detached")
-		end
-	end
-end
-
-local function multipath_devices()
-	common.system("multipath")
-end
-
 ------------------------------------------------------------------------
 -- Adapter
 ------------------------------------------------------------------------
@@ -241,8 +228,6 @@ end
 -- @return { 0 = Logical, 1 = Logical }
 function M.Logical.list()
 	local logicals = {}
-	check_detached_hotspares()
-	multipath_devices()
 	for _,device in pairs( list_devices() ) do
 		if device.type == "md" then
 			local logical = common.deepcopy( device )

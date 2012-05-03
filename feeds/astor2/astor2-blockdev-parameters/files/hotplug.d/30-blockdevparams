@@ -1,26 +1,18 @@
-#!/bin/sh /etc/rc.common
-START=49
+#!/bin/sh
 
 READ_AHEAD=2048
 MAX_SECTORS=64
 SCHEDULER=cfq
 
-start()
-{
+case "$ACTION" in
+add)
 	for drive in /sys/block/sd*; do
 		echo $READ_AHEAD > $drive/queue/read_ahead_kb
 		echo $MAX_SECTORS > $drive/queue/max_sectors_kb
 		echo $SCHEDULER > $drive/queue/scheduler
 	done
-}
-
-stop()
-{
+	;;
+remove)
 	true
-}
-
-restart()
-{
-	stop
-	start
-}
+	;;
+esac

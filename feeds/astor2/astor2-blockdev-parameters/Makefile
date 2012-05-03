@@ -29,8 +29,8 @@ define Build/Compile
 endef
 
 define Package/astor2-blockdev-parameters/install
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/astor2-blockdev-parameters.init $(1)/etc/init.d/astor2-blockdev-parameters
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/block/preboot
+	$(INSTALL_DATA) ./files/hotplug.d/* $(1)/etc/hotplug.d/block/preboot
 endef
 
 $(eval $(call BuildPackage,astor2-blockdev-parameters))

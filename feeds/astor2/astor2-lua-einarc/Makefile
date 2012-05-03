@@ -16,7 +16,10 @@ define Package/astor2-lua-einarc
 	CATEGORY:=aStor2
 	TITLE:=Lua binding for Inquisitor's Einarc
 	URL:=http://www.inquisitor.ru/doc/einarc/
-	DEPENDS:=+lua +astor2-einarc +astor2-lua-common +luafilesystem
+	DEPENDS:=+lua +astor2-lua-common +luafilesystem +librt +udev \
+		+mdadm +smartmontools +kmod-md-mod +kmod-md-linear \
+		+kmod-md-raid0 +kmod-md-raid1 +kmod-md-raid10 \
+		+kmod-md-raid456 +sdparm +sg3_utils +hdparm
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
@@ -31,7 +34,9 @@ endef
 
 define Package/astor2-lua-einarc/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/astor2
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/block/preboot
 	$(INSTALL_DATA) ./files/astor2/*.lua $(1)/usr/lib/lua/astor2
+	$(INSTALL_DATA) ./files/hotplug.d/* $(1)/etc/hotplug.d/block/preboot
 endef
 
 $(eval $(call BuildPackage,astor2-lua-einarc))
