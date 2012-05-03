@@ -806,10 +806,6 @@ function M.caller()
 		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
 	end
 
-	for _,physical in pairs( physicals ) do
-		physical:serial_get()
-	end
-
 	-- Some workarounds to prevent recursion during serialization
 	local logical_volumes_for_serialization = common.deepcopy( logical_volumes )
 	logical_volumes_for_serialization = snapshots_to_outer( logical_volumes_for_serialization )
