@@ -786,7 +786,6 @@ function M.caller()
 	logical_powersaving_disable( logicals )
 	logicals = logical_states_sanity_check( logicals, physicals )
 
-	lvm.restore()
 	local physical_volumes = lvm.PhysicalVolume.list()
 	local volume_groups = lvm.VolumeGroup.list( physical_volumes )
 	local logical_volumes = lvm.LogicalVolume.list( volume_groups )
