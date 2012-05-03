@@ -636,8 +636,10 @@ function M.filter_calculate_hotspares( matrix )
 			local hotspare_minimal_sizes = {}
 			for _, line_inner in ipairs( lines ) do
 				if line_inner.logical and
-				not common.is_in_array( line_inner.logical.level,
-				                        einarc.RAIDLEVELS_HOTSPARE_NONCOMPATIBLE ) then
+					common.is_in_array(
+						line_inner.logical.level,
+						einarc.Adapter.raidlevels_hotspare_compatible
+					) then
 					local minimal_size = math.huge
 					for _, physical in pairs( line_inner.logical.physicals ) do
 						if physical.size < minimal_size then
@@ -770,11 +772,18 @@ local function logical_states_sanity_check( logicals, physicals )
 	return logicals
 end
 
+local function logical_powersaving_disable( logicals )
+	for _,logical in pairs( logicals ) do
+		logical:powersaving_disable()
+	end
+end
+
 function M.caller()
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 	local logicals_for_serialization = {}
 
+	logical_powersaving_disable( logicals )
 	logicals = logical_states_sanity_check( logicals, physicals )
 
 	lvm.restore()
@@ -795,6 +804,10 @@ function M.caller()
 		logicals_for_serialization[ logical_id ] = common.deepcopy( logicals[ logical_id ] )
 		logicals[ logical_id ].logical_volumes = logical_logical_volumes( logical, logical_volumes )
 		logicals[ logical_id ].volume_group = logical_volume_group( logical, volume_groups )
+	end
+
+	for _,physical in pairs( physicals ) do
+		physical:serial_get()
 	end
 
 	-- Some workarounds to prevent recursion during serialization
@@ -857,6 +870,7 @@ function M.filter_physical_enclosures( matrix )
 				model = line.physical.model,
 				revision = line.physical.revision,
 				serial = line.physical.serial or "",
+				frawnode = line.physical.frawnode,
 				size = 1, -- dummy for failed disks
 				state = line.physical.state
 			} )
@@ -870,6 +884,7 @@ function M.caller_minimalistic( filters )
 	local logicals = einarc.Logical.list()
 	local physicals = einarc.Physical.list()
 
+	logical_powersaving_disable( logicals )
 	logicals = logical_states_sanity_check( logicals, physicals )
 
 	for logical_id, logical in pairs( logicals ) do

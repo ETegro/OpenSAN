@@ -21,11 +21,11 @@
 local M = {}
 
 local SHELL_PATH = "/bin/sh"
-local LOG_PATH = "/var/log/common.system.log"
+local LOG_CMD = "/usr/bin/logger -t common.astor2 "
 
 local function log_append( str )
-	local log_fd = io.open( LOG_PATH, "a" )
-	log_fd:write( tostring( os.date() ) .. ": " .. str .. "\n" )
+	local log_fd = io.popen( LOG_CMD, "w" )
+	log_fd:write( str )
 	log_fd:close()
 end
 
@@ -82,6 +82,9 @@ function M.system( cmdline )
 	return result
 end
 
+--- Call external command and check if it succeeds
+-- @param cmdline "mdadm --examine /dev/sda"
+-- @return { "stdoutline1", "stdoutline2" } or raise error if it fails
 function M.system_succeed( cmdline )
 	local result = M.system( cmdline )
 	if result.return_code ~= 0 then
@@ -351,6 +354,29 @@ function M.split_by( str, separator )
 		function( word ) words[ #words + 1 ] = word end
 	)
 	return words
+end
+
+--- Split string into characters
+-- @param str
+-- @return An array of characters
+function M.split_into_chars( str )
+	assert( str and M.is_string( str ),
+	        "attempt to split non-string" )
+	if #str == 0 then return {} end
+	local chars = {}
+	local i = 1
+	while i <= #str do
+		chars[ i ] = string.sub( str, i, i )
+		i = i + 1
+	end
+	return chars
+end
+
+--- Sleep
+-- @param sec
+function M.sleep( sec )
+	local start = os.clock()
+	while os.clock() - start <= sec do end
 end
 
 ------------------------------------------------------------------------

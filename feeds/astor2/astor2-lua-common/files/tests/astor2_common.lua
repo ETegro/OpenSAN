@@ -148,6 +148,10 @@ TestSplitting = {}
 	function TestSplitting:test_splitting_whitespace()
 		assert( common.compare_tables( common.split_by( "foo bar   baz", " " ), { "foo", "bar", "baz" } ) )
 	end
+	function TestSplitting:test_character_splitting()
+		assert( common.compare_tables( common.split_into_chars( "foo" ), { "f", "o", "o" } ) )
+		assert( common.compare_tables( common.split_into_chars( "" ), { } ) )
+	end
 
 TestFileExistence = {}
 	function TestFileExistence:test_existent()

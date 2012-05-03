@@ -60,7 +60,7 @@ function monitoring_overall()
 	} )
 	local data = { JBODS = {} }
 	for _,expander in ipairs( einarc.Adapter.expanders() ) do
-		if expander.model == luci.controller.san_monitoring_configuration.expanders.jbod then
+		if common.is_in_array( expander.model, luci.controller.san_monitoring_configuration.expanders.jbod ) then
 			local enclosures = {}
 			for _, line in ipairs( matrix_data.lines ) do
 				if line.physical and line.physical.enclosure_id then
@@ -70,7 +70,7 @@ function monitoring_overall()
 					)
 					expander_id = tonumber( expander_id )
 					enclosure_id = tonumber( enclosure_id )
-					if expander_id == expander.id then
+					if expander_id == tonumber( expander.id ) then
 						local physical = line.physical
 						enclosures[ enclosure_id ] = { physical_id = physical.id }
 
@@ -325,7 +325,7 @@ function render()
 		local needed_expander_id = nil
 		for _,expander in ipairs( einarc.Adapter.expanders() ) do
 			if expander.model == luci.controller.san_monitoring_configuration.expanders.internal then
-				needed_expander_id = expander.id
+				needed_expander_id = tonumber( expander.id )
 			end
 		end
 		assert( needed_expander_id, "No needed expander found" )

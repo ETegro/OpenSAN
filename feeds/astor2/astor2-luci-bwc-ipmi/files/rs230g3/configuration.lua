@@ -37,5 +37,10 @@ enclosures = {
 
 expanders = {
 	["internal"] = "SASX28 A.1",
-	["jbod"] = "DNS1400-01"
+	["jbod"] = { "DNS1400-01", "JS2-01" }
+}
+
+jbods = {
+	["DNS1400-01"] = { 6, 4 },
+	["JS2-01"] = { 3, 4 }
 }

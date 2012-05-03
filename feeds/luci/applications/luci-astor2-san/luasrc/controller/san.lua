@@ -55,17 +55,20 @@ require( "luci.i18n" ).loadc( "astor2_san")
 
 function index()
 	local i18n = luci.i18n.translate
-	local e = entry( { "admin", "san" },
-	                 call( "index_overall" ),
-	                 i18n("SAN"),
-	                 10 )
+	local e = entry(
+		{ "admin", "san" },
+		call( "index_overall" ),
+		i18n("SAN"),
+		10
+	)
 	e.i18n = "astor2_san"
 
-	-- Einarc related
-	e = entry( { "admin", "san", "perform" },
-	           call( "perform" ),
-	           nil,
-	           10 )
+	e = entry(
+		{ "admin", "san", "perform" },
+		call( "perform" ),
+		nil,
+		10
+	)
 	e.leaf = true
 end
 
@@ -82,22 +85,38 @@ end
 local function is_valid_raid_configuration( raid_level, drives )
 	local i18n = luci.i18n.translate
 	local VALIDATORS = {
-		["linear"] = { validator = function( drives ) return #drives > 0 end,
-		               message = i18n("RAID linear level requires at least one drive") },
-		["passthrough"] = { validator = function( drives ) return #drives == 1 end,
-		                    message = i18n("RAID passthrough level requries exactly single drive") },
-		["0"] = { validator = function( drives ) return #drives >= 2 end,
-		          message = i18n("RAID 0 level requires two or more drives") },
-		["1"] = { validator = function( drives ) return #drives >= 2 end,
-		          message = i18n("RAID 1 level requries two or more drives") },
-		["4"] = { validator = function( drives ) return #drives >= 3 end,
-		          message = i18n("RAID 4 level requires three or more drives") },
-		["5"] = { validator = function( drives ) return #drives >= 3 end,
-		          message = i18n("RAID 5 level requires three or more drives") },
-		["6"] = { validator = function( drives ) return #drives >= 4 end,
-		          message = i18n("RAID 6 level requires four or more drives") },
-		["10"] = { validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
-		           message = i18n("RAID 10 level requires odd number of four or more drives") }
+		["linear"] = {
+			validator = function( drives ) return #drives > 0 end,
+			message = i18n("RAID linear level requires at least one drive")
+		},
+		["passthrough"] = {
+			validator = function( drives ) return #drives == 1 end,
+			message = i18n("RAID passthrough level requries exactly single drive")
+		},
+		["0"] = {
+			validator = function( drives ) return #drives >= 2 end,
+			message = i18n("RAID 0 level requires two or more drives")
+		},
+		["1"] = {
+			validator = function( drives ) return #drives >= 2 end,
+			message = i18n("RAID 1 level requries two or more drives")
+		},
+		["4"] = {
+			validator = function( drives ) return #drives >= 3 end,
+			message = i18n("RAID 4 level requires three or more drives")
+		},
+		["5"] = {
+			validator = function( drives ) return #drives >= 3 end,
+			message = i18n("RAID 5 level requires three or more drives")
+		},
+		["6"] = {
+			validator = function( drives ) return #drives >= 4 end,
+			message = i18n("RAID 6 level requires four or more drives")
+		},
+		["10"] = {
+			validator = function( drives ) return #drives >= 4 and common.is_odd( #drives ) end,
+			message = i18n("RAID 10 level requires odd number of four or more drives")
+		}
 	}
 	local succeeded, is_valid = pcall( VALIDATORS[ raid_level ].validator, drives )
 	if not succeeded then
@@ -306,7 +325,7 @@ local function einarc_logical_delete( inputs, data )
 
 	_,_ = pcall( lvm.PhysicalVolume.prepare, logical.device )
 
-	local return_code, result = pcall( einarc.Logical.delete, { id = logical_id } )
+	local return_code, result = pcall( einarc.Logical.delete, einarc.Logical.list()[ logical_id ] )
 	if not return_code then
 		message_error = i18n("Failed to delete logical disk") .. ": " .. result
 	end
@@ -340,8 +359,11 @@ local function einarc_logical_hotspare_add( inputs, data )
 	lvm.restore()
 	disable_non_raid_volume_groups( data )
 
-	-- Let's call einarc at last
-	local return_code, result = pcall( einarc.Logical.hotspare_add, { id = logical_id }, physical_id )
+	local return_code, result = pcall(
+		einarc.Logical.hotspare_add,
+		einarc.Logical.list()[ logical_id ],
+		einarc.Physical.list()[ physical_id ]
+	)
 	if not return_code then
 		message_error = i18n("Failed to add dedicated hotspare disk") .. ": " .. result
 	end
@@ -360,8 +382,11 @@ local function einarc_logical_hotspare_delete( inputs, data )
 	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
 	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
 
-	-- Let's call einarc at last
-	local return_code, result = pcall( einarc.Logical.hotspare_delete, { id = logical_id }, physical_id )
+	local return_code, result = pcall(
+		einarc.Logical.hotspare_delete,
+		einarc.Logical.list()[ logical_id ],
+		einarc.Physical.list()[ physical_id ]
+	)
 	if not return_code then
 		message_error = i18n("Failed to delete dedicated hotspare disk") .. ": " .. result
 	end
@@ -544,10 +569,12 @@ local function lvm_logical_volume_add( inputs, data )
 		end
 	end
 
-	local return_code, result = pcall( lvm.VolumeGroup.logical_volume,
-	                                   volume_group_found,
-	                                   logical_volume_name,
-	                                   logical_volume_size )
+	local return_code, result = pcall(
+		lvm.VolumeGroup.logical_volume,
+		volume_group_found,
+		logical_volume_name,
+		logical_volume_size
+	)
 	if not return_code then
 		message_error = i18n("Failed to add logical volume") .. ": " .. result
 	end
@@ -624,9 +651,12 @@ local function lvm_logical_volume_remove( inputs, data )
 			end
 		end
 	else
-		local return_code, result = pcall( lvm.LogicalVolume.remove,
-		                                   { volume_group = { name = volume_group_name },
-		                                     name = logical_volume_name } )
+		return_code, result = pcall(
+			lvm.LogicalVolume.remove, {
+				volume_group = { name = volume_group_name },
+				name = logical_volume_name
+			}
+		)
 		if not return_code then
 			return index_with_error( i18n("Failed to remove logical volume") .. ": " .. result )
 		end
@@ -659,22 +689,29 @@ local function lvm_logical_volume_resize( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local logical_volume_size = inputs[ "logical_volume_resize_slider_size-" ..
-	                                    volume_group_name_hash .. "-" ..
-	                                    logical_volume_name_hash ]
+	local logical_volume_size = inputs[
+		"logical_volume_resize_slider_size-" ..
+		volume_group_name_hash .. "-" ..
+		logical_volume_name_hash
+	]
 	logical_volume_size = tonumber( logical_volume_size )
 	assert( common.is_positive( logical_volume_size ),
 	        "incorrect non-positive logical volume's size" )
 
-	local logical_volume_found = find_lv_by_name_and_vg_name( logical_volume_name,
-	                                                          volume_group_name,
-	                                                          data.logical_volumes )
+	local logical_volume_found = find_lv_by_name_and_vg_name(
+		logical_volume_name,
+		volume_group_name,
+		data.logical_volumes
+	)
 
-	local return_code, result = pcall( lvm.LogicalVolume.resize,
-	                                   { volume_group = { name = volume_group_name },
-	                                     name = logical_volume_name,
-	                                     size = logical_volume_found.size },
-	                                   logical_volume_size )
+	local return_code, result = pcall(
+		lvm.LogicalVolume.resize, {
+			volume_group = { name = volume_group_name },
+			name = logical_volume_name,
+			size = logical_volume_found.size
+		},
+		logical_volume_size
+	)
 	if not return_code then
 		return index_with_error( i18n("Failed to resize logical volume") .. ": " .. result )
 	end
@@ -698,17 +735,22 @@ local function lvm_logical_volume_snapshot_add( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local snapshot_size = inputs[ "new_snapshot_slider_size-" ..
-	                              volume_group_name_hash .. "-" ..
-	                              logical_volume_name_hash ]
+	local snapshot_size = inputs[
+		"new_snapshot_slider_size-" ..
+		volume_group_name_hash .. "-" ..
+		logical_volume_name_hash
+	]
 	snapshot_size = tonumber( snapshot_size )
 	assert( common.is_positive( snapshot_size ),
 	        "incorrect non-positive snapshot's size" )
 
-	local return_code, result = pcall( lvm.LogicalVolume.snapshot,
-	                                   { name = logical_volume_name,
-	                                     device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name },
-	                                   snapshot_size )
+	local return_code, result = pcall(
+		lvm.LogicalVolume.snapshot, {
+			name = logical_volume_name,
+			device = "/dev/" .. volume_group_name .. "/" .. logical_volume_name
+		},
+		snapshot_size
+	)
 	if not return_code then
 		message_error = i18n("Failed to create snapshot") .. ": " .. result
 	end
@@ -726,26 +768,33 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
-	local snapshot_size_new = inputs[ "logical_volume_snapshot_resize_slider_size-" ..
-	                                  volume_group_name_hash .. "-" ..
-	                                  logical_volume_name_hash ]
+	local snapshot_size_new = inputs[
+		"logical_volume_snapshot_resize_slider_size-" ..
+		volume_group_name_hash .. "-" ..
+		logical_volume_name_hash
+	]
 	snapshot_size_new = tonumber( snapshot_size_new )
 	assert( common.is_positive( snapshot_size_new ),
 	        "incorrect non-positive snapshot's size" )
 
-	local snapshot_found = find_lv_by_name_and_vg_name( logical_volume_name,
-	                                                    volume_group_name,
-	                                                    data.logical_volumes )
+	local snapshot_found = find_lv_by_name_and_vg_name(
+		logical_volume_name,
+		volume_group_name,
+		data.logical_volumes
+	)
 
 	if snapshot_size_new < snapshot_found.size then
 		return index_with_error( i18n("Snapshot size has to be bigger than it's current size") )
 	end
 
-	local return_code, result = pcall( lvm.Snapshot.resize,
-	                                   { volume_group = { name = volume_group_name },
-	                                     size = snapshot_found.size,
-	                                     name = logical_volume_name },
-	                                   snapshot_size_new )
+	local return_code, result = pcall(
+		lvm.Snapshot.resize, {
+			volume_group = { name = volume_group_name },
+			size = snapshot_found.size,
+			name = logical_volume_name
+		},
+		snapshot_size_new
+	)
 	if not return_code then
 		return index_with_error( i18n("Failed to resize snapshot") .. ": " .. result )
 	end
@@ -789,12 +838,14 @@ local function scst_access_pattern_new( inputs )
 	local access_pattern_readonly = inputs[ "access_pattern_new-readonly" ]
 	local access_pattern_writethrough = inputs[ "access_pattern_new-writethrough" ]
 
-	local access_pattern_attributes = { name = access_pattern_name,
-	                                    targetdriver = access_pattern_targetdriver,
-	                                    lun = access_pattern_lun,
-	                                    enabled = access_pattern_enabled,
-	                                    readonly = access_pattern_readonly,
-										writethrough = access_pattern_writethrough }
+	local access_pattern_attributes = {
+		name = access_pattern_name,
+		targetdriver = access_pattern_targetdriver,
+		lun = access_pattern_lun,
+		enabled = access_pattern_enabled,
+		readonly = access_pattern_readonly,
+		writethrough = access_pattern_writethrough
+	}
 
 	local return_code, result = pcall( scst.AccessPattern.new, {}, access_pattern_attributes )
 	if not return_code then
@@ -825,8 +876,10 @@ local function scst_access_pattern_delete( inputs )
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 
-	local return_code, result = pcall( scst.AccessPattern.delete,
-	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
+	local return_code, result = pcall(
+		scst.AccessPattern.delete,
+		scst.AccessPattern.find_by_section_name( access_pattern_section_name )
+	)
 	if not return_code then
 		message_error = i18n("Failed to delete access pattern") .. ": " .. result
 	end
@@ -877,9 +930,11 @@ local function scst_access_pattern_bind( inputs )
 		end
 	end
 
-	local return_code, result = pcall( scst.AccessPattern.bind,
-	                                   access_pattern,
-	                                   logical_volume_device )
+	local return_code, result = pcall(
+		scst.AccessPattern.bind,
+		access_pattern,
+		logical_volume_device
+	)
 	if not return_code then
 		return index_with_error( i18n("Failed to bind access pattern") .. ": " .. result )
 	end
@@ -908,8 +963,10 @@ local function scst_access_pattern_unbind( inputs )
 	        "unable to parse out section's name" )
 	local access_pattern_section_name = find_access_pattern_section_name_by_hash( access_pattern_section_name_hash )
 
-	local return_code, result = pcall( scst.AccessPattern.unbind,
-	                                   scst.AccessPattern.find_by_section_name( access_pattern_section_name ) )
+	local return_code, result = pcall(
+		scst.AccessPattern.unbind,
+		scst.AccessPattern.find_by_section_name( access_pattern_section_name )
+	)
 	if not return_code then
 		return index_with_error( i18n("Failed to unbind access pattern") .. ": " .. result )
 	end
@@ -954,15 +1011,20 @@ local function scst_access_pattern_edit( inputs )
 	local access_pattern_enabled = inputs[ "access_pattern_edit-enabled-" .. access_pattern_section_name_hash ]
 	local access_pattern_readonly = inputs[ "access_pattern_edit-readonly-" .. access_pattern_section_name_hash ]
 	local access_pattern_writethrough = inputs[ "access_pattern_edit-writethrough-" .. access_pattern_section_name_hash ]
-	access_pattern_attributes = { section_name = access_pattern.section_name,
-	                              name = access_pattern_name,
-	                              targetdriver = access_pattern_targetdriver,
-	                              lun = access_pattern_lun,
-	                              enabled = access_pattern_enabled,
-	                              readonly = access_pattern_readonly,
-								  writethrough = access_pattern_writethrough }
+	access_pattern_attributes = {
+		section_name = access_pattern.section_name,
+		name = access_pattern_name,
+		targetdriver = access_pattern_targetdriver,
+		lun = access_pattern_lun,
+		enabled = access_pattern_enabled,
+		readonly = access_pattern_readonly,
+		writethrough = access_pattern_writethrough
+	}
 
-	local return_code, result = pcall( scst.AccessPattern.save, access_pattern_attributes )
+	local return_code, result = pcall(
+		scst.AccessPattern.save,
+		access_pattern_attributes
+	)
 	if not return_code then
 		message_error = i18n("Failed to save config") .. ": " .. result
 	end
@@ -1043,8 +1105,10 @@ local function scst_auth_credential_delete( inputs )
 	        "unable to parse out section's name" )
 	local auth_credential_section_name = find_auth_credential_section_name_by_hash( auth_credential_section_name_hash )
 
-	local return_code, result = pcall( scst.AuthCredential.delete,
-	                                   scst.AuthCredential.find_by_section_name( auth_credential_section_name ) )
+	local return_code, result = pcall(
+		scst.AuthCredential.delete,
+		scst.AuthCredential.find_by_section_name( auth_credential_section_name )
+	)
 	if not return_code then
 		index_with_error( i18n("Failed to delete authentication credential") .. ": " .. result )
 	end
@@ -1064,7 +1128,7 @@ function index_overall()
 	local message_error = luci.http.formvalue( "message_error" )
 	luci.template.render( "san", {
 		matrix_overall = matrix.caller(),
-		raidlevels = einarc.Adapter:get( "raidlevels" ),
+		raidlevels = einarc.Adapter.raidlevels,
 		message_error = message_error } )
 end
 
