@@ -31,10 +31,7 @@ endef
 
 define Package/astor2-lua-caching/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/astor2
-	$(INSTALL_DIR) $(1)/etc/init.d
-
 	$(INSTALL_DATA) ./files/astor2/*.lua $(1)/usr/lib/lua/astor2
-	$(INSTALL_BIN) ./files/astor2-lua-caching.init $(1)/etc/init.d/astor2-lua-caching
 endef
 
 $(eval $(call BuildPackage,astor2-lua-caching))

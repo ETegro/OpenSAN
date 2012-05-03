@@ -34,7 +34,9 @@ endef
 
 define Package/astor2-lua-einarc/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/astor2
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/block/preboot
 	$(INSTALL_DATA) ./files/astor2/*.lua $(1)/usr/lib/lua/astor2
+	$(INSTALL_DATA) ./files/hotplug.d/* $(1)/etc/hotplug.d/block/preboot
 endef
 
 $(eval $(call BuildPackage,astor2-lua-einarc))
