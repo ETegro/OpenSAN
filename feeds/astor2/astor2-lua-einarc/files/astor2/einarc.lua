@@ -72,18 +72,6 @@ local function list_slaves( path )
 	return slaves
 end
 
---- Try to determine block device's serial using S.M.A.R.T.
--- @param device "/dev/sda"
--- @return "someserial" or nil
-local function serial_via_smart( device )
-	local result = common.system( "smartctl --info " .. device )
-	for _,line in ipairs( result.stdout ) do
-		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(%w+)" )
-		if serial then return serial end
-	end
-	return nil
-end
-
 --- Try to determine block device's serial using udev
 -- @param device "/dev/sda"
 -- @return "someserial" or nil
@@ -565,23 +553,23 @@ function M.Physical.list()
 	return physicals
 end
 
-function M.Physical:serial_get()
+--- Try to determine physical disk's serial, model and revision using S.M.A.R.T.
+-- @return { model = "model", serial = "serial", revision = "revision" }
+function M.Physical:extended_info()
 	assert( self.id, "unable to get self object" )
-	if not self.serial then
-		if self.slave then
-			self.serial = serial_via_smart( self.slave.fdevnode )
-			if not self.serial then
-				self.serial = read_line( self.slave.path .. "/device/serial" )
-			end
-			if not self.serial then
-				self.serial = serial_via_udev( self.slave.fdevnode )
-			end
-		end
-		if not self.serial then
-			self.serial = ""
-		end
-		self.serial = common.strip( self.serial )
+	local info = {}
+	for _,line in ipairs( common.system( "smartctl --info " .. self.fdevnode ).stdout ) do
+		local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
+		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
+		local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
+		if model then info.model = model end
+		if serial then info.serial = serial end
+		if revision then info.revision = revision end
 	end
+	for _,v in ipairs({ "serial", "model", "revision" }) do
+		info[ v ] = info[ v ] or self[ v ]
+	end
+	return info
 end
 
 --- Zero md-related superblock on Physical
