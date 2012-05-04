@@ -526,7 +526,7 @@ end
 function M.Physical:extended_info()
 	assert( self.id, "unable to get self object" )
 	local info = {}
-	for _,line in ipairs( common.system( "smartctl --info " .. self.fdevnode ).stdout ) do
+	for _,line in ipairs( common.system( "smartctl --info " .. self.frawnode ).stdout ) do
 		local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
 		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
 		local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
