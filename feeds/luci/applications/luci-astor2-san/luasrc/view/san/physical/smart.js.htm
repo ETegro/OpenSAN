@@ -27,10 +27,13 @@ jQuery.noConflict();
 	var smart_url = '<%= luci.dispatcher.build_url( "smart" ) %>';
 	var id = '<%= line.physical.id %>';
 	var smart_result_element = 'tr#smart-<%= hash( line.physical.id ) %>';
+	var waiting_data = '<td><img src="<%=resource%>/icons/loading.gif" style="vertical-align:middle"/><em><%: Loading data %>...</em></td>&nbsp;<td></td>';
+	var click_element_data = '<tr id="smart-<%= hash( line.physical.id ) %>"><td>&nbsp;</td></tr>';
 
 	$( click_element ).click(
 		function() {
 			if ( $( fade_element).is( ':hidden' ) ) {
+				$( smart_result_element ).html( waiting_data );
 				$( fade_element).fadeIn( 'fast' );
 				$.post(
 					smart_url,
@@ -41,6 +44,8 @@ jQuery.noConflict();
 				);
 			} else {
 				$( fade_element ).fadeOut( 'fast' );
+				$( fade_element + ' tr.smart:first' ).before( click_element_data );
+				$( fade_element + ' tr.smart' ).remove();
 			}
 			return false;
 		}
