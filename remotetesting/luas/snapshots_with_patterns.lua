@@ -35,7 +35,7 @@ end
 LOGICALS = nil
 function TestCreate:test_create_logicals()
 	for _, physical_id in pairs( PS_IDS ) do
-		einarc.Logical.add( "passthrough", { physical_id } )
+		einarc.Logical.add( "linear", { physical_id } )
 		print( physical_id )
 	end
 	LOGICALS = einarc.Logical.list()

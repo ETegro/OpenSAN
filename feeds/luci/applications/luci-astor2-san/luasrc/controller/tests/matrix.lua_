@@ -257,7 +257,7 @@ local PHYSICALS_WITH_FREE = {
 local LOGICALS_WITH_FREE = {
 	[0] = {
 		id = 0,
-		level = "passthrough",
+		level = "linear",
 		physicals = {
 			["3:1"] = "0",
 		},
@@ -270,7 +270,7 @@ local LOGICALS_WITH_FREE = {
 local LOGICALS_WITH_SNAPSHOTS = {
 	[0] = {
 		id = 0,
-		level = "passthrough",
+		level = "linear",
 		physicals = {
 			["3:1"] = "0",
 		},
@@ -989,7 +989,7 @@ TestMatrix = {}
 						bottom = true
 					},
 					id = 0,
-					level = "passthrough",
+					level = "linear",
 					physicals = {
 						["3:1"] = {
 							rowspan = 1,
@@ -1066,7 +1066,7 @@ TestMatrix = {}
 				logical = {
 					rowspan = 3,
 					id = 0,
-					level = "passthrough",
+					level = "linear",
 					physicals = {
 						["3:1"] = {
 							rowspan = 3,
@@ -1200,7 +1200,7 @@ TestMatrix = {}
 		local logicals = {
 			[0] = {
 				id = 0,
-				level = "passthrough",
+				level = "linear",
 				physicals = {
 					["3:1"] = "0",
 				},
@@ -1878,7 +1878,7 @@ TestFilterHotspareCalculation = {}
 				{ [3] = 666, [13] = 333 } ) )
 
 		-- Try to assign hotspare to different RAID levels
-		for _, level in ipairs( { "linear", "passthrough", "0" } ) do
+		for _, level in ipairs( { "linear", "0" } ) do
 			self.logicals_double[13].level = level
 			got = matrix.filter_calculate_hotspares( {
 				lines = matrix.overall( {

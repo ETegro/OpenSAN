@@ -125,23 +125,21 @@ function toggle_create_raid_form() {
 		var num = selected_physicals.length;
 		var raidlevels = $( '#div_raid_create input:radio[ name = "san.raid_level" ]' );
 		var restrictions = {
-			max: { 'passthrough': 1 },
-			min: { 'passthrough': 1,
-			       'linear': 1,
-			       '0': 2,
-			       '1': 2,
-			       '4': 3,
-			       '5': 3,
-			       '6': 4,
-			       '10': 4
+			min: {
+				'linear': 1,
+				'0': 2,
+				'1': 2,
+				'4': 3,
+				'5': 3,
+				'6': 4,
+				'10': 4
 			}
 		};
 
 		raidlevels.each( function() {
 			var radio = $( this );
 			var min = restrictions.min[ radio.val() ] || 0;
-			var max = restrictions.max[ radio.val() ] || 1000;
-			if ( num >= min && num <= max ) {
+			if ( num >= min ) {
 				if ( $( this ).is( ':disabled' ) ) {
 					// .removeAttr() real working only in IE9 and other browser
 					//$( this ).removeAttr( 'disabled' );

@@ -166,7 +166,6 @@ M.Adapter = {}
 local Adapter_mt = common.Class( M.Adapter )
 M.Adapter.raidlevels = {
 	"linear",
-	"passthrough",
 	"0", "1", "4",
 	"5", "6", "10"
 }
@@ -273,7 +272,7 @@ function M.Logical.list()
 end
 
 --- Create new Logical disk
--- @param raid_level "passthrough" | "linear" | ... | "10"
+-- @param raid_level "linear" | ... | "10"
 -- @param drives { "0:1", "0:2", "254:1" }
 -- @return Raise error if it fails
 function M.Logical.add( raid_level, drives, size, properties )

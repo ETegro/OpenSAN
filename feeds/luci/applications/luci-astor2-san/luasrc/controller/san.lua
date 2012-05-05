@@ -89,10 +89,6 @@ local function is_valid_raid_configuration( raid_level, drives )
 			validator = function( drives ) return #drives > 0 end,
 			message = i18n("RAID linear level requires at least one drive")
 		},
-		["passthrough"] = {
-			validator = function( drives ) return #drives == 1 end,
-			message = i18n("RAID passthrough level requries exactly single drive")
-		},
 		["0"] = {
 			validator = function( drives ) return #drives >= 2 end,
 			message = i18n("RAID 0 level requires two or more drives")
