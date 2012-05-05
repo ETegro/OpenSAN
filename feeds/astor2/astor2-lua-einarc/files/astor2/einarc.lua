@@ -534,9 +534,7 @@ function M.Physical:extended_info()
 			local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
 		end
 		if model then
-			if model:find( '%s%s' ) then
-				model = table.concat( common.split_by( model, "%s" ), " " )
-			end
+			model = table.concat( common.split_by( model, "%s" ), " " )
 			info.model = model
 		end
 
