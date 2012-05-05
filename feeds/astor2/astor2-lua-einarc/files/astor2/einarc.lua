@@ -526,13 +526,30 @@ end
 function M.Physical:extended_info()
 	assert( self.id, "unable to get self object" )
 	local info = {}
-	for _,line in ipairs( common.system( "smartctl --info " .. self.frawnode ).stdout ) do
-		local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
-		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
-		local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
-		if model then info.model = model end
-		if serial then info.serial = serial end
+	for _,line in ipairs( common.system( "smartctl --info" .. self.frawnode ).stdout ) do
+		-- Device: SASBRAND    MODEL      Version: 0001
+		local model = string.match( line, "^[Dd]evice:%s*(.+)%s+[Vv]ersion: .*$" )
+		if not model then
+			-- Device Model:     ATA MODEL
+			local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
+		end
+		if model then
+			if model:find( '%s%s' ) then
+				model = table.concat( common.split_by( model, "%s" ), " " )
+			end
+			info.model = model
+		end
+
+		local revision = string.match( line, "^[Dd]evice:%s*.+%s+[Vv]ersion: (.+)%s*$" )
+		if not revision then
+			-- Firmware Version: 1.2b
+			local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
+		end
 		if revision then info.revision = revision end
+
+		-- Serial Number:    000023VDU03
+		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
+		if serial then info.serial = serial end
 	end
 	for _,v in ipairs({ "serial", "model", "revision" }) do
 		info[ v ] = info[ v ] or self[ v ]
