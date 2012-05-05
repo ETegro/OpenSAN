@@ -16,3 +16,9 @@
 		<td><%= revision %></td>
 	</tr>
 <% end %>
+<% if temperature then %>
+	<tr class="smart">
+		<td><%: Temperature %>:</td>
+		<td><%= temperature %> &#x2103;</td>
+	</tr>
+<% end %>
