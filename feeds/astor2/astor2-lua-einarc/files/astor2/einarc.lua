@@ -526,7 +526,7 @@ end
 function M.Physical:extended_info()
 	assert( self.id, "unable to get self object" )
 	local info = {}
-	for _,line in ipairs( common.system( "smartctl --info" .. self.frawnode ).stdout ) do
+	for _,line in ipairs( common.system( "smartctl --info " .. self.frawnode ).stdout ) do
 		-- Device: SASBRAND    MODEL      Version: 0001
 		local model = string.match( line, "^[Dd]evice:%s*(.+)%s+[Vv]ersion:.*$" )
 		if not model then
