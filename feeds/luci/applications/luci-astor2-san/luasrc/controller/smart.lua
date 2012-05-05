@@ -14,7 +14,7 @@ function index()
 end
 
 function get_smart()
-	local id = luci.http.formvalue( "dev" )
+	local id = luci.http.formvalue( "id" )
 	if id then
 		luci.template.render(
 			"smart",

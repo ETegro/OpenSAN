@@ -25,7 +25,7 @@ jQuery.noConflict();
 	var click_element = 'form input[ name ^= "physical_title-<%= hash( line.physical.id ) %>" ]';
 	var fade_element = 'tr[ class ^= "physical_info-<%= hash( line.physical.id ) %>" ]';
 	var smart_url = '<%= luci.dispatcher.build_url( "smart" ) %>';
-	var dev_id = '<%= line.physical.id %>';
+	var id = '<%= line.physical.id %>';
 	var smart_result_element = 'tr#smart-<%= hash( line.physical.id ) %>';
 
 	$( click_element ).click(
@@ -34,7 +34,7 @@ jQuery.noConflict();
 				$( fade_element).fadeIn( 'fast' );
 				$.post(
 					smart_url,
-					{ dev: dev_id },
+					{ "id" : id },
 					function( data ) {
 						$( smart_result_element ).replaceWith( data );
 					}
