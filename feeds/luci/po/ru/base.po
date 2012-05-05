@@ -11,6 +11,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
+msgid "Temperature"
+msgstr "Температура"
+
 msgid "Not connected"
 msgstr "Не подключён"
 
@@ -1290,7 +1293,10 @@ msgid "Load Average"
 msgstr "Средняя нагрузка"
 
 msgid "Loading"
-msgstr ""
+msgstr "Загрузка"
+
+msgid "Loading data"
+msgstr "Загрузка данных"
 
 msgid "Local Startup"
 msgstr "Локальный запуск"
