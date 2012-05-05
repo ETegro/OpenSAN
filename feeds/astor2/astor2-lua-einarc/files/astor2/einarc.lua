@@ -528,7 +528,7 @@ function M.Physical:extended_info()
 	local info = {}
 	for _,line in ipairs( common.system( "smartctl --info" .. self.frawnode ).stdout ) do
 		-- Device: SASBRAND    MODEL      Version: 0001
-		local model = string.match( line, "^[Dd]evice:%s*(.+)%s+[Vv]ersion: .*$" )
+		local model = string.match( line, "^[Dd]evice:%s*(.+)%s+[Vv]ersion:.*$" )
 		if not model then
 			-- Device Model:     ATA MODEL
 			local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
@@ -540,7 +540,7 @@ function M.Physical:extended_info()
 			info.model = model
 		end
 
-		local revision = string.match( line, "^[Dd]evice:%s*.+%s+[Vv]ersion: (.+)%s*$" )
+		local revision = string.match( line, "^[Dd]evice:%s*.+%s+[Vv]ersion:%s*(.+)%s*$" )
 		if not revision then
 			-- Firmware Version: 1.2b
 			local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
