@@ -527,9 +527,11 @@ function M.Physical:extended_info()
 	assert( self.id, "unable to get self object" )
 	local info = {}
 	for _,line in ipairs( common.system( "smartctl --info " .. self.frawnode ).stdout ) do
+		-- SAS output
 		-- Device: SASBRAND    MODEL      Version: 0001
 		local model = string.match( line, "^[Dd]evice:%s*(.+)%s+[Vv]ersion:.*$" )
 		if not model then
+			-- ATA output
 			-- Device Model:     ATA MODEL
 			local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
 		end
@@ -537,14 +539,16 @@ function M.Physical:extended_info()
 			model = table.concat( common.split_by( model, "%s" ), " " )
 			info.model = model
 		end
-
+		-- SAS output
+		-- Device: SASBRAND    MODEL      Version: 0001
 		local revision = string.match( line, "^[Dd]evice:%s*.+%s+[Vv]ersion:%s*(.+)%s*$" )
 		if not revision then
+			-- ATA output
 			-- Firmware Version: 1.2b
 			local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
 		end
 		if revision then info.revision = revision end
-
+		-- SAS/ATA output
 		-- Serial Number:    000023VDU03
 		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
 		if serial then info.serial = serial end
