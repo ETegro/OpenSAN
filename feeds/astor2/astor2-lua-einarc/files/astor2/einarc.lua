@@ -529,11 +529,11 @@ function M.Physical:extended_info()
 	for _,line in ipairs( common.system( "smartctl --info " .. self.frawnode ).stdout ) do
 		-- SAS output
 		-- Device: SASBRAND    MODEL      Version: 0001
-		local model = string.match( line, "^[Dd]evice:%s*(.+)%s+[Vv]ersion:.*$" )
+		local model = line:match( "^[Dd]evice:%s*(.+)%s+[Vv]ersion:.*$" )
 		if not model then
 			-- ATA output
 			-- Device Model:     ATA MODEL
-			local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
+			local model = line:match( "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
 		end
 		if model then
 			model = table.concat( common.split_by( model, "%s" ), " " )
@@ -541,16 +541,16 @@ function M.Physical:extended_info()
 		end
 		-- SAS output
 		-- Device: SASBRAND    MODEL      Version: 0001
-		local revision = string.match( line, "^[Dd]evice:%s*.+%s+[Vv]ersion:%s*(.+)%s*$" )
+		local revision = line:match( "^[Dd]evice:%s*.+%s+[Vv]ersion:%s*(.+)%s*$" )
 		if not revision then
 			-- ATA output
 			-- Firmware Version: 1.2b
-			local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
+			local revision = line:match( "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
 		end
 		if revision then info.revision = revision end
 		-- SAS/ATA output
 		-- Serial Number:    000023VDU03
-		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
+		local serial = line:match( "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
 		if serial then info.serial = serial end
 	end
 	for _,v in ipairs({ "serial", "model", "revision" }) do
