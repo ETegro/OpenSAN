@@ -533,7 +533,7 @@ function M.Physical:extended_info()
 		if not model then
 			-- ATA output
 			-- Device Model:     ATA MODEL
-			local model = line:match( "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
+			model = line:match( "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
 		end
 		if model then
 			model = table.concat( common.split_by( model, "%s" ), " " )
@@ -545,7 +545,7 @@ function M.Physical:extended_info()
 		if not revision then
 			-- ATA output
 			-- Firmware Version: 1.2b
-			local revision = line:match( "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
+			revision = line:match( "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
 		end
 		if revision then info.revision = revision end
 		-- SAS/ATA output
@@ -560,7 +560,7 @@ function M.Physical:extended_info()
 			-- ATA output
 			-- 194 Temperature_Celsius     0x0002   253   253   000    Old_age   Always       -       23 (Min/Max 19/41)
 			if line:match( "^%s*194%s+[Tt]emperature_[Cc]elsius.*" ) then
-				local temperature = common.split_by( line, "%s" )[10]:match( "%d+" )
+				temperature = common.split_by( line, "%s" )[10]:match( "%d+" )
 			end
 		end
 		if temperature then info.temperature = temperature end
