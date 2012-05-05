@@ -50,35 +50,4 @@
 		</tbody>
 	</table>
 </div>
-<script type="text/javascript">
-
-jQuery.noConflict();
-( function( $ ) {
-
-	var click_element = 'form input[ name ^= "physical_title-<%= hash( line.physical.id ) %>" ]';
-	var fade_element = 'tr[ class ^= "physical_info-<%= hash( line.physical.id ) %>" ]';
-	var smart_url = '<%= luci.dispatcher.build_url( "smart" ) %>';
-	var dev_id = '<%= line.physical.id %>';
-	var smart_result_element = 'tr#smart-<%= hash( line.physical.id ) %>';
-
-	$( click_element ).click(
-		function() {
-			if ( $( fade_element).is( ':hidden' ) ) {
-				$( fade_element).fadeIn( 'fast' );
-				$.post(
-					smart_url,
-					{ dev: dev_id },
-					function( data ) {
-						$( smart_result_element ).replaceWith( data );
-					}
-				);
-			} else {
-				$( fade_element ).fadeOut( 'fast' );
-			}
-			return false;
-		}
-	);
-
-} )( jQuery );
-
-</script>
+<%+san/physical/smart.js%>
