@@ -1,12 +1,16 @@
-<% if ( model and serial and revision ) then %>
+<% if model then %>
 	<tr>
 		<td><%: Model %>:</td>
 		<td><%= model %></td>
 	</tr>
+<% end %>
+<% if serial then %>
 	<tr>
 		<td><%: S/N %>:</td>
 		<td><%= serial %></td>
 	</tr>
+<% end %>
+<% if revision then %>
 	<tr>
 		<td><%: Revision %>:</td>
 		<td><%= revision %></td>
