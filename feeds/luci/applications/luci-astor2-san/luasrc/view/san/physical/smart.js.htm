@@ -35,7 +35,7 @@ jQuery.noConflict();
 			if ( $( fade_element).is( ':hidden' ) ) {
 				$( smart_result_element ).html( waiting_data );
 				$( fade_element).fadeIn( 'fast' );
-				$.post(
+				$.get(
 					smart_url,
 					{ "id" : id },
 					function( data ) {
