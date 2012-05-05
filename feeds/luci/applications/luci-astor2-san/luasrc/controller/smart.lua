@@ -1,6 +1,5 @@
 module( "luci.controller.smart", package.seeall )
 
-common = require( "astor2.common" )
 einarc = require( "astor2.einarc" )
 
 function index()
