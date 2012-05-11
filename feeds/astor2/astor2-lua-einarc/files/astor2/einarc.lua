@@ -239,6 +239,7 @@ function M.Logical.list()
 				"sync_completed",
 				"resync_start",
 				"array_state",
+				"raid_disks",
 				"degraded"
 			} ) do
 				logical[ what ] = read_line( device.path .. "/md/" .. what )
@@ -255,7 +256,10 @@ function M.Logical.list()
 			for _,slave in ipairs( logical.slaves ) do
 				logical.drives[ #logical.drives + 1 ] = M.phys_to_scsi( slave )
 			end
-			if logical.state == "normal" and
+			if logical.degraded == "1" then
+				logical.state = "degraded"
+			end
+			if ( logical.state == "normal" or logical.state == "degraded" ) and
 				logical.sync_completed and
 				logical.sync_completed ~= "none" then
 				logical.state = "rebuilding"
@@ -365,6 +369,9 @@ function M.Logical:physical_list()
 			state = "failed"
 		end
 		self.physicals[ M.phys_to_scsi( devices[ slave ].devnode ) ] = state
+	end
+	for i=#self.slaves+1,( tonumber( self.raid_disks ) or #self.slaves ) do
+		self.physicals[ "99:" .. i ] = "failed"
 	end
 	return self.physicals
 end
