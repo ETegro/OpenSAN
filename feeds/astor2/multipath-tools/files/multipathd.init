@@ -14,7 +14,12 @@ defaults {
 	selector "round-robin 0"
 	path_grouping_policy failover
 	failback immediate
-	no_path_retry queue
+	#no_path_retry queue
+}
+blacklist {
+	devnode "^(ram|raw|loop|fd|md|dm-|sr|scd|st)[0-9]*"
+	devnode "^hd[a-z]"
+	devnode "^sda$"
 }
 EOF
 	$MULTIPATHD
