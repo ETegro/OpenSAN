@@ -417,3 +417,6 @@ msgstr "норма"
 
 msgid "rebuilding"
 msgstr "пересборка"
+
+msgid "reshaping"
+msgstr "переразбиение"

@@ -27,7 +27,8 @@ M.LOGICAL_STATES = {
 	"normal",
 	"degraded",
 	"initializing",
-	"rebuilding"
+	"rebuilding",
+	"reshaping",
 }
 M.LOGICAL_STATES_MAP = {
 	["clean"] = "normal",
@@ -239,6 +240,7 @@ function M.Logical.list()
 				"resync_start",
 				"array_state",
 				"raid_disks",
+				"reshape_position",
 				"degraded"
 			} ) do
 				logical[ what ] = read_line( device.path .. "/md/" .. what )
@@ -258,10 +260,12 @@ function M.Logical.list()
 			if logical.degraded == "1" then
 				logical.state = "degraded"
 			end
-			if ( logical.state == "normal" or logical.state == "degraded" ) and
-				logical.sync_completed and
-				logical.sync_completed ~= "none" then
-				logical.state = "rebuilding"
+			if ( logical.state == "normal" or logical.state == "degraded" ) and logical.sync_completed and logical.sync_completed ~= "none" then
+				if logical.sync_action == "reshape" then
+					logical.state = "reshaping"
+				else
+					logical.state = "rebuilding"
+				end
 			end
 			logical.capacity = logical.size
 			logical.device = logical.fdevnode
