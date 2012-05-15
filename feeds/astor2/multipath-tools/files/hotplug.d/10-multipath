@@ -1,16 +1,9 @@
 #!/bin/sh
 
-FLAG=/tmp/multipath.running
-
 multipath_process()
 {
-	if [ -e $FLAG ]; then
-		true
-	else
-		touch $FLAG
-		multipath -v0
-		rm -f $FLAG
-	fi
+	sleep 5
+	ps | grep -q "multipath " || multipath -v0
 }
 
 case "$ACTION" in               
