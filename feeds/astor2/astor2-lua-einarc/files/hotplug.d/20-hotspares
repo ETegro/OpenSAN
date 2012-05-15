@@ -1,21 +1,15 @@
 #!/bin/sh
 
-FLAG=/tmp/hotspares.running
-
 detached_hotspares()
 {
-	if [ -e $FLAG ]; then
-		true
-	else
-		touch $FLAG
 		prevdir=`pwd`
 		cd /sys/block
 		for md in md*; do
+			sleep 5
+			ps | grep "mdadm /dev/$md" ||
 			mdadm /dev/$md --fail detached --remove detached
 		done
 		cd $prevdir
-		rm -f $FLAG
-	fi
 }
 
 case "$ACTION" in
