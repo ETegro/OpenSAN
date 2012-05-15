@@ -335,16 +335,23 @@ function M.Logical:hotspare_add( physical )
 	end
 end
 
---- Remove hotspare Physical from Logical
+--- Detach Physical from Logical
 -- @param physical Physical
 -- @return Raise error if it fails
-function M.Logical:hotspare_delete( physical )
+function M.Logical:detach( physical )
 	assert( self.id, "unable to get self object" )
 	assert( physical and physical.id, "invalid Physical object" )
 	local result = run( self.fdevnode .. " --remove " .. physical.fdevnode )
 	if result.return_code ~= 0 then
-		error("einarc:logical.hotspare_delete() failed")
+		error("einarc:logical.detach() failed")
 	end
+end
+
+--- Remove hotspare Physical from Logical
+-- @param physical Physical
+-- @return Raise error if it fails
+function M.Logical:hotspare_delete( physical )
+	self:detach( physical )
 end
 
 --- List Logical-related Physicals with the states
