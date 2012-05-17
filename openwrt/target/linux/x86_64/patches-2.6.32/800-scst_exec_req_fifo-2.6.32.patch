@@ -132,7 +132,7 @@ diff -upkr linux-2.6.32/block/blk-map.c linux-2.6.32/block/blk-map.c
 +static int __blk_rq_map_kern_sg(struct request *rq, struct scatterlist *sgl,
 +	int nents, struct blk_kern_sg_work *bw, gfp_t gfp)
 +{
-+	int res;
++	int res = 0;
 +	struct request_queue *q = rq->q;
 +	int rw = rq_data_dir(rq);
 +	int max_nr_vecs, i;
