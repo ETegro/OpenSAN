@@ -1,7 +1,7 @@
 <%#
   aStor2 -- storage area network configurable via Web-interface
   Copyright (C) 2009-2012 ETegro Technologies, PLC
-                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                          Sergey Matveev (stargrave@stargrave.org)
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -17,29 +17,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<td valign="top"
-    rowspan="<%= line.physical.rowspan %>"
-    class="<%+san/physical/class%>">
-
-<table border="0px" width="100%" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<%+san/physical/title%>
-			<div class="control">
-				<% if line.physical.state == "hotspare" then %>
-					<%+san/physical/forms/hotspare/delete%>
-				<% end %>
-				<% if line.physical.state == "failed" then %>
-					<%+san/physical/forms/delete%>
-				<% end %>
-			</div>
-		</td>
-	</tr>
-	<tr class="to_hide">
-		<td>
-			<%+san/physical/information%>
-		</td>
-	</tr>
-</table>
-
-</td>
+<input name="san.submit_logical_physical_detach-<%= hash( tostring( line.physical.logical_id ) ) %>-<%= hash( line.physical.id ) %>"
+       onclick=" if ( !confirm( '<%: Really delete failed drive? %>' ) )
+                 return false;
+                 return true;"
+       class="inline icon-remove"
+       type="submit"
+       title="<%: Detach failed drive %>"
+       value="" />
