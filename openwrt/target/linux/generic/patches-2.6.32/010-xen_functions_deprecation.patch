@@ -1,0 +1,29 @@
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -297,6 +297,7 @@
+ 	0
+ };
+ 
++/*
+ static void __cpuinit fltr_xen_cpuid_features(struct cpuinfo_x86 *c, bool warn)
+ {
+ 	const u32 *df;
+@@ -314,6 +315,7 @@
+ 				x86_cap_flags[*df]);
+ 	}
+ }
++*/
+ 
+ static const struct cpuid_dependent_feature __cpuinitconst
+ cpuid_dependent_features[] = {
+@@ -355,9 +357,9 @@
+ 	/*
+ 	 * RHEL Xen HVM guests must filter out additional not masked
+ 	 * by old kernel-xen features, to avoid crashes.
+-	 */
+ 	if (xen_cpuid_base() != 0)
+ 		fltr_xen_cpuid_features(c, warn);
++	 */
+ }
+ 
+ /*
