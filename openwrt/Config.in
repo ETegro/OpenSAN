@@ -195,7 +195,7 @@ menu "Global build settings"
 
 	config KERNEL_DEBUG_KERNEL
 		bool
-		default n
+		default y
 
 	config KERNEL_DEBUG_INFO
 		bool "Compile the kernel with debug information"
