@@ -103,12 +103,16 @@ function pulsate_bind_access_patterns() {
 
 function toggle_create_raid_form() {
 	var physicals = $( 'form input:checkbox[ name = "san.physical_id" ]' );
+	var physicals_grow = $( 'form input:checkbox[ name = "san.grow_physical_id" ]' );
 	$( physicals ).click( function() {
 		if ( $( this ).is( ':checked' ) ) {
+			$( '#div_logical_grow' ).hide();
 			$( '#div_raid_create' ).fadeIn( 'fast' );
+			$( physicals_grow ).hide();
 		} else {
 			if ( !physicals.is( ':checked' ) ) {
 				$( '#div_raid_create' ).fadeOut( 'fast' );
+				$( physicals_grow ).show();
 			}
 		}
 
