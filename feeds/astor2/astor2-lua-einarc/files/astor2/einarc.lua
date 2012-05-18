@@ -355,7 +355,8 @@ function M.Logical:grow( drives )
 	assert( common.is_array( drives ), "drives have to be an array" )
 	for _,physical_id in ipairs( drives ) do
 		assert( common.is_in_array( physical_id, common.keys( self.physicals ) ), "disk doesn't belong to logical" )
-		assert( self.physicals[ physical_id ].state == "hotspare" )
+		local condition = self.physicals[ physical_id ].state == "hotspare"
+		assert( condition )
 	end
 	local hotspare_restore = {}
 	for _,physical in pairs( self.physicals ) do
@@ -368,9 +369,9 @@ function M.Logical:grow( drives )
 	local result = run( self.fdevnode ..
 	                    " --grow" ..
 	                    " --raid-devices=" .. tostring( #common.keys( self.physicals ) ) )
-	if result.return_code ~= 0 then
-		error("einarc:logical.grow() failed")
-	end
+	--if result.return_code ~= 0 then
+	--	error("einarc:logical.grow() failed")
+	--end
 	for _,physical in ipairs( hotspare_restore ) do
 		self:hotspare_add( physical )
 	end
