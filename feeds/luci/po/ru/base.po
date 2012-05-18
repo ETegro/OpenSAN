@@ -11,6 +11,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.1.1\n"
 
+msgid "Logical drive expanding"
+msgstr "Расширение логического диска"
+
+msgid "Expand logical drive"
+msgstr "Расширить логический диска"
+
+msgid "Expand"
+msgstr "Расширить"
+
 msgid "Temperature"
 msgstr "Температура"
 
