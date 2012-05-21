@@ -159,6 +159,13 @@ function M.PhysicalVolume.list()
 	return physical_volumes
 end
 
+--- Resize PhysicalVolume
+function M.PhysicalVolume:resize()
+	assert( self.name and common.is_string( self.name ),
+	        "unable to get self object" )
+	common.system_succeed( "lvm pvresize " .. self.name )
+end
+
 --------------------------------------------------------------------------
 -- VolumeGroup
 --------------------------------------------------------------------------
