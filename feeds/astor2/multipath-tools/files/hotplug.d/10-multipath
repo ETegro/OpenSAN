@@ -1,16 +1,28 @@
 #!/bin/sh
 
-multipath_process()
-{
-	sleep 5
-	ps | grep -q "multipath " || multipath -v0
-}
-
 case "$ACTION" in               
 add)
-	multipath_process
+	multipath "/dev/$DEVICENAME"
 	;;
 remove)
-	multipath_process
+	BLOCK_PATH=/sys/block
+	prevdir=`pwd`
+	cd $BLOCK_PATH
+	for dm in dm-*; do
+		name=`cat $dm/dm/name`
+		echo $name | grep -q "^mpath" || continue
+		slaves_exist=false
+		cd $dm/slaves
+		for slave in *; do
+			if [ -b "/dev/$slave" ]; then
+				slaves_exist=true
+				break
+			fi
+		done
+		cd $BLOCK_PATH
+		$slaves_exist && continue
+		multipath -f $name
+	done
+	cd $prevdir
 	;;
 esac              
