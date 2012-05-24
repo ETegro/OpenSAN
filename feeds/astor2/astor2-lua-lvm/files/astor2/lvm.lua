@@ -123,6 +123,8 @@ end
 function M.PhysicalVolume.expected_size( size, extent )
 	assert( common.is_number( size ),
 	        "non-number size" )
+	assert( common.is_positive( extent ),
+	        "non-positive extent's size" )
 	return size - ( size % (extent or PE_DEFAULT_SIZE) )
 end
 
