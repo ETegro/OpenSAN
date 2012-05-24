@@ -1,0 +1,56 @@
+<%#
+  aStor2 -- storage area network configurable via Web-interface
+  Copyright (C) 2009-2012 ETegro Technologies, PLC
+                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
+<script type="text/javascript">
+
+jQuery.noConflict();
+( function( $ ) {
+
+	var click_element = 'form input[ name ^= "physical_title-<%= hash( line.physical.id ) %>" ]';
+	var fade_element = 'tr[ class ^= "physical_info-<%= hash( line.physical.id ) %>" ]';
+	var smart_url = '<%= luci.dispatcher.build_url( "smart" ) %>';
+	var id = '<%= line.physical.id %>';
+	var smart_result_element = 'tr#smart-<%= hash( line.physical.id ) %>';
+	var waiting_data = '<td><img src="<%=resource%>/icons/loading.gif" style="vertical-align:middle"/><em><%: Loading data %>...</em></td>&nbsp;<td></td>';
+	var click_element_data = '<tr id="smart-<%= hash( line.physical.id ) %>"><td>&nbsp;</td></tr>';
+
+	$( click_element ).click(
+		function() {
+			if ( $( fade_element).is( ':hidden' ) ) {
+				$( smart_result_element ).html( waiting_data );
+				$( fade_element).fadeIn( 'fast' );
+				$.get(
+					smart_url,
+					{ "id" : id },
+					function( data ) {
+						$( smart_result_element ).replaceWith( data );
+					}
+				);
+			} else {
+				$( fade_element ).fadeOut( 'fast' );
+				$( fade_element + ' tr.smart:first' ).before( click_element_data );
+				$( fade_element + ' tr.smart' ).remove();
+			}
+			return false;
+		}
+	);
+
+} )( jQuery );
+
+</script>

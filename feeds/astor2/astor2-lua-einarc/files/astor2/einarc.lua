@@ -539,15 +539,46 @@ end
 function M.Physical:extended_info()
 	assert( self.id, "unable to get self object" )
 	local info = {}
-	for _,line in ipairs( common.system( "smartctl --info " .. self.fdevnode ).stdout ) do
-		local model = string.match( line, "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
-		local serial = string.match( line, "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
-		local revision = string.match( line, "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
-		if model then info.model = model end
-		if serial then info.serial = serial end
+	for _,line in ipairs( common.system( "smartctl --info --attributes " .. self.frawnode ).stdout ) do
+		-- SAS output
+		-- Device: SASBRAND    MODEL      Version: 0001
+		local model = line:match( "^[Dd]evice:%s*(.+)%s+[Vv]ersion:.*$" )
+		if not model then
+			-- ATA output
+			-- Device Model:     ATA MODEL
+			model = line:match( "^[Dd]evice [Mm]odel:%s*(.+)%s*$" )
+		end
+		if model then
+			model = table.concat( common.split_by( model, "%s" ), " " )
+			info.model = model
+		end
+		-- SAS output
+		-- Device: SASBRAND    MODEL      Version: 0001
+		local revision = line:match( "^[Dd]evice:%s*.+%s+[Vv]ersion:%s*(.+)%s*$" )
+		if not revision then
+			-- ATA output
+			-- Firmware Version: 1.2b
+			revision = line:match( "^[Ff]irmware [Vv]ersion:%s*(.+)%s*$" )
+		end
 		if revision then info.revision = revision end
+		-- SAS/ATA output
+		-- Serial Number:    000023VDU03
+		local serial = line:match( "^[Ss]erial [Nn]umber:%s*(.+)%s*$" )
+		if serial then info.serial = serial end
+
+		-- SAS output
+		-- Current Drive Temperature:     25 C
+		local temperature = line:match( "^[Cc]urrent [Dd]rive [Tt]emperature:%s*(%d+).*$" )
+		if not temperature then
+			-- ATA output
+			-- 194 Temperature_Celsius     0x0002   253   253   000    Old_age   Always       -       23 (Min/Max 19/41)
+			if line:match( "^%s*194%s+[Tt]emperature_[Cc]elsius.*" ) then
+				temperature = common.split_by( line, "%s" )[10]:match( "%d+" )
+			end
+		end
+		if temperature then info.temperature = temperature end
 	end
-	for _,v in ipairs({ "serial", "model", "revision" }) do
+	for _,v in ipairs({ "serial", "model", "revision", "temperature" }) do
 		info[ v ] = info[ v ] or self[ v ]
 	end
 	return info

@@ -1,0 +1,24 @@
+<% if model then %>
+	<tr class="smart">
+		<td><%: Model %>:</td>
+		<td><%= model %></td>
+	</tr>
+<% end %>
+<% if serial then %>
+	<tr class="smart">
+		<td><%: S/N %>:</td>
+		<td><%= serial %></td>
+	</tr>
+<% end %>
+<% if revision then %>
+	<tr class="smart">
+		<td><%: Revision %>:</td>
+		<td><%= revision %></td>
+	</tr>
+<% end %>
+<% if temperature then %>
+	<tr class="smart">
+		<td><%: Temperature %>:</td>
+		<td><%= temperature %> &#x2103;</td>
+	</tr>
+<% end %>

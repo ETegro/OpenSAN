@@ -41,8 +41,6 @@ function toggleFadeParentElement( fadeObject ) {
 	click_element.click( function() {
 		if ( fadeObject.next ) {
 			var fade_element = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' ).next( 'tr' );
-		} else if ( fadeObject.nexttable ) {
-			var fade_element = $( this ).parent( 'td' ).parent( 'tr' ).parent( 'tbody' ).parent( 'table' ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		} else {
 			var fade_element = $( this ).parent( 'div' ).parent( 'td' ).parent( 'tr' ).next( 'tr' );
 		}
@@ -57,12 +55,6 @@ function toggle_access_pattern_creation() {
 		fade_selector : '#div_access_pattern_new'
 	};
 	toggleFadeSingleElement( object );
-}
-
-function toggle_drives_information() {
-	var object = { click_selector : 'form input[ name ^= "physical_info-" ]' };
-	object.nexttable = {};
-	toggleFadeParentElement( object );
 }
 
 function toggle_session_information() {
@@ -185,7 +177,6 @@ function setup_hypnorobo() {
 }
 
 toggle_access_pattern_creation();
-toggle_drives_information();
 toggle_session_information();
 toggle_snapshot_creation();
 toggle_resize_snapshot();

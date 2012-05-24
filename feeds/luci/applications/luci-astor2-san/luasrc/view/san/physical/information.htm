@@ -19,18 +19,7 @@
 
 <table class="physical_information">
 	<tbody>
-		<tr>
-			<td><%: Model %>:</td>
-			<td><%= line.physical.model %></td>
-		</tr>
-		<tr>
-			<td><%: S/N %>:</td>
-			<td><%= line.physical.serial %></td>
-		</tr>
-		<tr>
-			<td><%: Revision %>:</td>
-			<td><%= line.physical.revision %></td>
-		</tr>
+		<tr id="smart-<%= hash( line.physical.id ) %>"></tr>
 		<tr>
 			<td><%: State %>:</td>
 			<td>

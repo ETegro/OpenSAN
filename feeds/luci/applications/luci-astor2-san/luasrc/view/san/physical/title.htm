@@ -39,7 +39,7 @@
 					<% end %>
 				</td>
 				<td>
-					<input name="physical_info-<%= hash( line.physical.id ) %>"
+					<input name="physical_title-<%= hash( line.physical.id ) %>"
 						   type="text"
 						   readonly="readonly"
 						   class="noborder bold"
@@ -50,3 +50,4 @@
 		</tbody>
 	</table>
 </div>
+<%+san/physical/smart.js%>
