@@ -33,7 +33,12 @@
 		</tr>
 		<tr>
 			<td><%: State %>:</td>
-			<td><%= line.physical.state %></td>
+			<td>
+				<%= line.physical.state %>
+				<% if line.physical.slaves and #line.physical.slaves > 0 then %>
+					/ <%= #line.physical.slaves %> <%: paths %>
+				<% end %>
+			</td>
 		</tr>
 		<tr>
 			<td><%: Size %>:</td>
