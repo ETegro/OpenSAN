@@ -37,7 +37,6 @@ DEFAULT_PACKAGES += \
 	dash \
 	gnu-cpio \
 	uhttpd \
-	multipath-tools \
 	astor2-init \
 	luci-app-astor2-san \
 	astor2-luci-bwc-ipmi-rs230g3 \
