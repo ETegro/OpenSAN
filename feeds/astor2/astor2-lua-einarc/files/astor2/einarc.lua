@@ -99,24 +99,18 @@ local function list_devices()
 			path = path_block .. ent
 		}
 		device.size = math.floor( tonumber_unbuggy( read_line( device.path .. "/size" ) ) / 2048 )
-		if lfs.attributes( device.path .. "/dm/name" ) then
-			local name = read_line( device.path .. "/dm/name" )
-			if string.match( name, "^mpath" ) then
-				device.type = "multipath"
-				device.slaves = list_slaves( device.path )
-				device.name = name
-				device.uuid = read_line( device.path .. "/dm/uuid" )
-				devices[ device.devnode ] = device
-			end
-		elseif lfs.attributes( device.path .. "/md" ) then
+		if lfs.attributes( device.path .. "/md" ) then
 			device.type = "md"
 			device.slaves = list_slaves( device.path )
 			device.id = tonumber( string.sub( device.devnode, 3, -1 ) )
 			if #device.slaves > 0 then
 				devices[ device.devnode ] = device
 			end
+		elseif string.sub( ent, 1, 3 ) == "sda" then
+			-- skip this root device
 		elseif string.sub( ent, 1, 2 ) == "sd" then
 			device.type = "sd"
+			device.name = device.devnode
 			devices[ device.devnode ] = device
 		end
 	end
@@ -376,10 +370,7 @@ function M.Logical:physical_list()
 	self.physicals = {}
 	for _,slave in ipairs( self.slaves ) do
 		local state = read_line( self.path .. "/md/dev-" .. slave .. "/state" )
-		if state == "in_sync" and
-			devices[ slave ] and
-			devices[ slave ].slaves[1] and
-			devices[ devices[ slave ].slaves[1] ] then
+		if state == "in_sync" and devices[ slave ] then
 			state = tostring( self.id )
 		elseif state == "spare" then
 			state = "hotspare"
@@ -516,22 +507,13 @@ function M.Physical.list()
 	local physicals = {}
 	local devices = list_devices()
 	for _,device in pairs( devices ) do
-		if device.type == "multipath" then
+		if device.type == "sd" then
 			local physical = common.deepcopy( device )
-			physical.slave = devices[ physical.slaves[1] ]
-			if physical.slave then
-				physical.model = common.strip( read_line( physical.slave.path .. "/device/model" ) or "" )
-				physical.revision = common.strip( read_line( physical.slave.path .. "/device/rev" ) or "" )
-				physical.serial = "None"
-				physical.frawnode = "/dev/" .. physical.slave.devnode
-				physical.state = "free"
-			else
-				physical.model = "None"
-				physical.revision = "None"
-				physical.vendor = "None"
-				physical.frawnode = "/dev/" .. physical.devnode
-				physical.state = "failed"
-			end
+			physical.model = common.strip( read_line( physical.path .. "/device/model" ) or "" )
+			physical.revision = common.strip( read_line( physical.path .. "/device/rev" ) or "" )
+			physical.serial = "None"
+			physical.frawnode = "/dev/" .. physical.devnode
+			physical.state = "free"
 			physical.id = M.phys_to_scsi( physical.devnode )
 			for _,device_int in pairs( devices ) do
 				if device_int.type == "md" and
