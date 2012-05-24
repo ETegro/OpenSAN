@@ -17,7 +17,7 @@ define Package/astor2-init
 	TITLE:=opensaninit
 	URL:=TODO
 	DEPENDS:=+astor2-blockdev-parameters +astor2-lua-einarc \
-		+multipath-tools +astor2-lua-caching \
+		+astor2-lua-caching \
 		+astor2-lua-lvm astor2-lua-scst
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
@@ -34,7 +34,6 @@ endef
 define Package/astor2-init/install
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/block
 	$(INSTALL_DIR) $(1)/etc/init.d
-	ln -s /tmp/10-multipath $(1)/etc/hotplug.d/block/
 	ln -s /tmp/20-hotspares $(1)/etc/hotplug.d/block/
 	ln -s /tmp/30-blockdevparams $(1)/etc/hotplug.d/block/
 	$(INSTALL_BIN) ./files/astor2.init $(1)/etc/init.d/astor2-init
