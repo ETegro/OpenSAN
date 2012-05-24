@@ -127,9 +127,14 @@ end
 -- @param id "sdb"
 -- @return "0:2"
 function M.phys_to_scsi( name )
-	local root = string.match( name, "^dm.(%d+)$" )
-	assert( root, "Invalid device name" )
-	return "0:" .. tostring( tonumber( root ) + 1 )
+	local pre, root = string.match( name, "^([sh])d(%w+)%d*" )
+	assert( pre and root, "Invalid device name" )
+	assert( pre == "s", "Only SCSI devices supported" )
+	local sum = 0
+	for i,c in ipairs( common.split_into_chars( string.reverse(root) ) ) do
+		sum = sum + (string.byte(c) - string.byte("a") + 1) * 26^(i-1)
+	end
+	return "0:" .. tostring( sum )
 end
 
 --- Convert SCSI ID to system's device ID
@@ -138,7 +143,14 @@ end
 function M.scsi_to_phys( id )
 	local pre, post = string.match( id, "^(%d+):(%d+)$" )
 	assert( pre == "0", "Invalid internal ID" )
-	return "dm-" .. tostring( tonumber( post ) - 1 )
+	local phys = "sd"
+	local i = math.floor( math.log( tonumber( post ) ) / math.log( 26 ) )
+	while i >= 0 do
+		phys = phys .. string.char( string.byte("a") + math.floor( post / 26^i ) -1 )
+		post = post % 26^i
+		i = i - 1
+	end
+	return phys
 end
 
 --- Try to run mdadm with given arguments several times until success
