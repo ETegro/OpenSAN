@@ -389,6 +389,28 @@ local function einarc_logical_hotspare_delete( inputs, data )
 	return index_with_error( message_error )
 end
 
+local function einarc_logical_physical_detach( inputs, data )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local tmp = parse_inputs_by_re( inputs, {"^submit_logical_physical_detach.(",hashre,").(",hashre,")"} )
+	assert( tmp, "unable to parse out logical's and physical's ids" )
+	local logical_id_hash = tmp[1]
+	local physical_id_hash = tmp[2]
+	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
+	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
+
+	local return_code, result = pcall(
+		einarc.Logical.detach,
+		einarc.Logical.list()[ logical_id ],
+		einarc.Physical.list()[ physical_id ]
+	)
+	if not return_code then
+		message_error = i18n("Failed to detach disk") .. ": " .. result
+	end
+	return index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- LVM related functions
 ------------------------------------------------------------------------
@@ -1175,6 +1197,7 @@ function perform()
 		logical_delete = function() einarc_logical_delete( inputs, data ) end,
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs, data ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs, data ) end,
+		logical_physical_detach = function() einarc_logical_physical_detach( inputs, data ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs, data ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs, data ) end,
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs, data ) end,
