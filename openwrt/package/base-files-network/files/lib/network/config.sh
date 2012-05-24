@@ -260,6 +260,7 @@ prepare_interface() {
 							}
 						done
 						ifconfig "$bond_name" up >/dev/null 2>&1 && \
+						sysctl -w net.ipv6.conf.$bond_name.accept_dad=0
 						ifconfig "$iface" >/dev/null 2>&1 && \
 						ifenslave "$bond_name" "$iface"
 					}
