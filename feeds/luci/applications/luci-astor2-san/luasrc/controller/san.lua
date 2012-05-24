@@ -404,6 +404,16 @@ local function find_volume_group_name_in_data_by_hash( volume_group_name_hash, d
 	)
 end
 
+local function physical_volume_bounds_check( physical_volume, logical_size )
+	logical_size = lvm.PhysicalVolume.expected_size(
+		tonumber( logical_size ) or 0,
+		tonumber( physical_volume.extent ) or lvm.VolumeGroup.PE_DEFAULT_SIZE
+	)
+	if logical_size > ( tonumber( physical_volume.total ) or 0 ) then
+		lvm.PhysicalVolume.resize( physical_volume )
+	end
+end
+
 --[[
          +- - - - - - - - - - - - - - -+
          ' Creation of LogicalVolume   '
@@ -527,16 +537,12 @@ local function lvm_logical_volume_add( inputs, data )
 	end
 
 	if create_from_scratch then
-		local function find_physical_volume_by_device( device, physical_volumes )
-			if not physical_volumes then
-				physical_volumes = lvm.PhysicalVolume.list()
-			end
-			for _, physical_volume in ipairs( physical_volumes ) do
-				if physical_volume.device == device then
-					return physical_volume
-				end
-			end
-			return nil
+		local function find_physical_volume_by_device( device )
+			return common.search_attr(
+				lvm.PhysicalVolume.list(),
+				"device",
+				device
+			)[0]
 		end
 
 		return_code, result = pcall( lvm.PhysicalVolume.create, device )
@@ -557,14 +563,19 @@ local function lvm_logical_volume_add( inputs, data )
 
 		physical_volume = find_physical_volume_by_device( device )
 		volume_group_found = lvm.VolumeGroup.list( { physical_volume } )[1]
+	else
+		physical_volume_bounds_check(
+			find_physical_volume_by_device( device ),
+			data.logicals[ logical_id ].size
+		)
 	end
 
 	assert( volume_group_found,
 	        "unable to find corresponding volume group" )
 
 	for _, logical_volume in ipairs( data.logical_volumes ) do
-		if logical_volume.name == logical_volume_name and
-		   logical_volume.volume_group == volume_group_found.name then
+		if ( logical_volume.name == logical_volume_name and
+		     logical_volume.volume_group == volume_group_found.name ) then
 			return index_with_error( i18n("Logical disk can not contain equally named logical volumes") )
 		end
 	end
