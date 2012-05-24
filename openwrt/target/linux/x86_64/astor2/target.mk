@@ -47,6 +47,7 @@ DEFAULT_PACKAGES += \
 	sysstat \
 	apcupsd \
 	sgeraser \
+	strace \
 	luafilesystem \
 	xfs-fsck \
 	xfs-growfs \
