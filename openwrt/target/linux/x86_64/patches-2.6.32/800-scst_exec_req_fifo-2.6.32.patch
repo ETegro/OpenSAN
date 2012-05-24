@@ -1,11 +1,12 @@
 diff -upkr linux-2.6.32/block/blk-map.c linux-2.6.32/block/blk-map.c
 --- linux-2.6.32/block/blk-map.c	2009-12-02 22:51:21.000000000 -0500
 +++ linux-2.6.32/block/blk-map.c	2011-05-17 20:56:18.341812997 -0400
-@@ -5,6 +5,7 @@
+@@ -5,6 +5,8 @@
  #include <linux/module.h>
  #include <linux/bio.h>
  #include <linux/blkdev.h>
 +#include <linux/scatterlist.h>
++#include <linux/slab.h>
  #include <scsi/sg.h>		/* for struct sg_iovec */
  
  #include "blk.h"
