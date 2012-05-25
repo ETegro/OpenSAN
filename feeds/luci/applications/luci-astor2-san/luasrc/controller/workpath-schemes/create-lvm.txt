@@ -17,12 +17,11 @@
 
 graph { flow: south }
 
-( Creation of LogicalVolume
-
-[] ==> [ Does PV exist? ] -- YES --> [ Does VG exist? ] -- YES --> [ Does LV exist? ] -- YES --> [ Create LV ]
-[ Does LV exist? ] -- NO --> [ Stop VG ] --> [ prepare( RAID ) ]
-[ Does PV exist? ], [ Does VG exist? ] -- NO --> [ prepare( RAID ) ]
+[] ==> [ PV exists? ] -- YES --> [ VG exists? ] -- YES --> [ LV exists? ]
+[ LV exists? ] -- NO --> [ Stop VG ] --> [ prepare( RAID ) ]
+[ LV exists? ] -- YES --> [ PV bounded? ]
+[ PV bounded? ] -- NO --> [ Maximize PV ] --> [ Create LV ]
+[ PV bounded? ] -- YES --> [ Create LV ]
+[ PV exists? ], [ VG exists? ] -- NO --> [ prepare( RAID ) ]
 
 [ prepare( RAID ) ] --> [ Create PV ] --> [ Create VG ] --> [ Create LV ] ==> []
-
-)

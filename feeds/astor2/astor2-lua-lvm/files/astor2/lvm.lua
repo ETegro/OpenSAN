@@ -123,7 +123,10 @@ end
 function M.PhysicalVolume.expected_size( size, extent )
 	assert( common.is_number( size ),
 	        "non-number size" )
-	return size - ( size % (extent or PE_DEFAULT_SIZE) )
+	assert( common.is_positive( extent ),
+	        "non-positive extent's size" )
+	extent = extent or PE_DEFAULT_SIZE
+	return size - ( size % extent ) - extent
 end
 
 --- List all PhysicalVolumes
@@ -157,6 +160,13 @@ function M.PhysicalVolume.list()
 		end
 	end
 	return physical_volumes
+end
+
+--- Resize PhysicalVolume
+function M.PhysicalVolume:resize()
+	assert( self.device and common.is_string( self.device ),
+	        "unable to get self object" )
+	common.system_succeed( "lvm pvresize " .. self.device )
 end
 
 --------------------------------------------------------------------------
