@@ -153,6 +153,51 @@ TestSplitting = {}
 		assert( common.compare_tables( common.split_into_chars( "" ), { } ) )
 	end
 
+TestAttrSearching = {}
+	function TestAttrSearching:test_single_attr_only_in_arr()
+		assert( common.compare_tables( common.search_attr( {
+			{ foo = "bar" },
+			{ bar = "baz" },
+			{ neededone = "foo" }
+		}, "neededone" ), {
+			{ neededone = "foo" }
+		} ) )
+	end
+	function TestAttrSearching:test_single_attr_only_in_table()
+		assert( common.compare_tables( common.search_attr( {
+			foo = { foo = "bar" },
+			bar = { bar = "baz" },
+			baz = { neededone = "foo" }
+		}, "neededone" ), {
+			{ neededone = "foo" }
+		} ) )
+	end
+	function TestAttrSearching:test_single_attr_in_table()
+		assert( common.compare_tables( common.search_attr( {
+			foo = { foo = "bar" },
+			bar = { bar = "baz" },
+			baz = { neededone = "foo" }
+		}, "neededone", "needthis" ), { } ) )
+		assert( common.compare_tables( common.search_attr( {
+			foo = { foo = "bar" },
+			bar = { bar = "baz" },
+			baz = { neededone = "needthis" }
+		}, "neededone", "needthis" ), {
+			{ neededone = "needthis" }
+		} ) )
+	end
+	function TestAttrSearching:test_several_attr_in_arr()
+		assert( common.compare_tables( common.search_attr( {
+			{ foo = "bar" },
+			{ bar = "baz" },
+			{ neededone = "needthis" },
+			{ neededone = "needthis", triv = "foo" }
+		}, "neededone", "needthis" ), {
+			{ neededone = "needthis" },
+			{ neededone = "needthis", triv = "foo" }
+		} ) )
+	end
+
 TestFileExistence = {}
 	function TestFileExistence:test_existent()
 		assert( common.file_exists( "tests/astor2_common.lua" ) == true )

@@ -372,6 +372,29 @@ function M.split_into_chars( str )
 	return chars
 end
 
+--- Search for hash with specified attribute value
+-- @param where Table
+-- @param what Attribute searched for
+-- @param with Optional needed attribute's value
+-- @return { obj1, obj2, ... }
+function M.search_attr( where, what, with )
+	assert( where and M.is_table( where ) )
+	assert( what and M.is_string( what ) )
+	local found = {}
+	for _,v in pairs( where ) do
+		if v[ what ] then
+			local needed = true
+			if with and v[ what ] ~= with then
+				needed = false
+			end
+			if needed then
+				found[ #found + 1 ] = v
+			end
+		end
+	end
+	return found
+end
+
 --- Sleep
 -- @param sec
 function M.sleep( sec )
