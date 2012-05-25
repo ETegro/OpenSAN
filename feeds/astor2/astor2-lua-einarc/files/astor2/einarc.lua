@@ -363,6 +363,35 @@ function M.Logical:hotspare_delete( physical )
 	self:detach( physical )
 end
 
+--- Growing Logical disk
+-- @param drives { "0:1", "0:2", "254:1" }
+-- @return Raise error if it fails
+function M.Logical:grow( drives )
+	assert( self.id, "unable to get self object" )
+	assert( common.is_array( drives ), "drives have to be an array" )
+	for _,physical_id in ipairs( drives ) do
+		assert( common.is_in_array( physical_id, common.keys( self.physicals ) ), "disk doesn't belong to logical" )
+		assert( self.physicals[ physical_id ] == "hotspare" )
+	end
+	local physicals = M.Physical.list()
+	local hotspare_restore = {}
+	for physical_id, physical_state in pairs( self.physicals ) do
+		if ( physical_state == "hotspare" and
+		     not common.is_in_array( physical_id, drives ) ) then
+			self:hotspare_delete( physicals[ physical_id ] )
+			hotspare_restore[ #hotspare_restore + 1 ] = physicals[ physical_id ]
+		end
+	end
+	run(
+		self.fdevnode ..
+		" --grow" ..
+		" --raid-devices=" .. tostring( #common.keys( self.physicals ) - #hotspare_restore )
+	)
+	for _,physical in ipairs( hotspare_restore ) do
+		self:hotspare_add( physical )
+	end
+end
+
 --- List Logical-related Physicals with the states
 -- @return self.physicals = { "physical1_id" = "state", "physical2_id" = "state" }
 function M.Logical:physical_list()

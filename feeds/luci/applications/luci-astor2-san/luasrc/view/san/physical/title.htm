@@ -27,6 +27,12 @@
 							   type="checkbox"
 							   value="<%= line.physical.id %>" />
 					<% end %>
+					<% if line.physical.state == "hotspare" then %>
+						<input name="san.grow_physical_id"
+							   type="checkbox"
+						       class="<%= hash( line.physical.id ) %>-<%= hash( line.physical.logical_id ) %>"
+							   value="<%= line.physical.id %>" />
+					<% end %>
 						<input name="physical_model-<%= hash( line.physical.id ) %>"
 							   class="physical_model"
 							   type="hidden"
@@ -35,7 +41,7 @@
 						<input name="physical_in_logical-<%= hash( line.physical.logical_id ) %>"
 							   class="physical_in_logical"
 							   type="hidden"
-							   value="<%= line.physical.logical_id %>" />
+							   value="<%= hash( line.physical.logical_id ) %>" />
 					<% end %>
 				</td>
 				<td>

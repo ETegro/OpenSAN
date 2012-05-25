@@ -411,6 +411,36 @@ local function einarc_logical_physical_detach( inputs, data )
 	return index_with_error( message_error )
 end
 
+local function einarc_logical_grow( inputs, drives, data )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local logical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_grow.(",hashre,")"} )
+	assert( logical_id_hash, "unable to parse out logical's ids" )
+	local logical_id = find_logical_id_in_data_by_hash( logical_id_hash, data )
+
+	if common.is_string( drives ) then
+		drives = { drives }
+	end
+
+	if not drives then
+		return index_with_error( i18n("Drives are not selected") )
+	end
+
+	local logical = einarc.Logical.list()[ logical_id ]
+	logical:physical_list()
+
+	local return_code, result = pcall(
+		einarc.Logical.grow,
+		logical,
+		drives
+	)
+	if not return_code then
+		return index_with_error( i18n("Failed to expand logical disk") .. ": " .. result )
+	end
+	return index_with_error( message_error )
+end
+
 ------------------------------------------------------------------------
 -- LVM related functions
 ------------------------------------------------------------------------
@@ -1198,6 +1228,7 @@ function perform()
 		logical_hotspare_add = function() einarc_logical_hotspare_add( inputs, data ) end,
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs, data ) end,
 		logical_physical_detach = function() einarc_logical_physical_detach( inputs, data ) end,
+		logical_grow = function() einarc_logical_grow( inputs, get( "san.grow_physical_id" ), data ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs, data ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs, data ) end,
 		logical_volume_resize = function() lvm_logical_volume_resize( inputs, data ) end,

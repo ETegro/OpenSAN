@@ -103,12 +103,16 @@ function pulsate_bind_access_patterns() {
 
 function toggle_create_raid_form() {
 	var physicals = $( 'form input:checkbox[ name = "san.physical_id" ]' );
+	var physicals_grow = $( 'form input:checkbox[ name = "san.grow_physical_id" ]' );
 	$( physicals ).click( function() {
 		if ( $( this ).is( ':checked' ) ) {
+			$( '#div_logical_grow' ).hide();
 			$( '#div_raid_create' ).fadeIn( 'fast' );
+			$( physicals_grow ).hide();
 		} else {
 			if ( !physicals.is( ':checked' ) ) {
 				$( '#div_raid_create' ).fadeOut( 'fast' );
+				$( physicals_grow ).show();
 			}
 		}
 
@@ -153,6 +157,32 @@ function toggle_create_raid_form() {
 	} );
 }
 
+function toggle_logical_grow_form() {
+	var physicals_hotspare = $( 'form input:checkbox[ name = "san.grow_physical_id" ]' );
+	var physicals = $( 'form input:checkbox[ name = "san.physical_id" ]' );
+	$( physicals_hotspare ).click( function() {
+		if ( $( this ).is( ':checked' ) ) {
+			$( '#div_raid_create' ).hide();
+			$( '#div_logical_grow' ).fadeIn( 'fast' );
+
+			var logical = $( this ).next( 'input' ).next( 'input.physical_in_logical' ).val();
+			$( '#div_logical_grow input' ).attr( 'name', 'san.submit_logical_grow-' + logical );
+
+			$( physicals_hotspare ).hide();
+			$( 'form input:checkbox[ class $= "' + logical + '" ]' ).show();
+
+			$( physicals ).hide();
+		} else {
+			if ( !physicals_hotspare.is( ':checked' ) ) {
+				$( '#div_logical_grow' ).fadeOut( 'fast' );
+				$( physicals_hotspare ).show();
+				$( physicals ).show();
+				$( '#div_logical_grow input' ).attr( 'name', 'san.submit_logical_grow' );
+			}
+		}
+	} );
+}
+
 function show_calendar() {
 	var element = $( 'input[ name *= "set_sysdate" ]' );
 	var format = {
@@ -186,6 +216,7 @@ toggle_resize_logical_volume();
 hide_all_to_hide_elements();
 pulsate_bind_access_patterns();
 toggle_create_raid_form();
+toggle_logical_grow_form();
 show_calendar();
 setup_hypnorobo();
 
