@@ -415,9 +415,6 @@ local function physical_volume_bounds_check( physical_volume, logical_size )
 end
 
 --[[
-
-
-
                                      ║
                                      ║
                                      ∨
@@ -523,15 +520,15 @@ local function lvm_logical_volume_add( inputs, data )
 		end
 	end
 
-	if create_from_scratch then
-		local function find_physical_volume_by_device( device )
-			return common.search_attr(
-				lvm.PhysicalVolume.list(),
-				"device",
-				device
-			)[0]
-		end
+	local function find_physical_volume_by_device( device )
+		return common.search_attr(
+			lvm.PhysicalVolume.list(),
+			"device",
+			device
+		)[0]
+	end
 
+	if create_from_scratch then
 		return_code, result = pcall( lvm.PhysicalVolume.create, device )
 		if not return_code then
 			return index_with_error( i18n("Failed to create PhysicalVolume on logical disk") .. ": " .. result )
