@@ -525,7 +525,7 @@ local function lvm_logical_volume_add( inputs, data )
 			lvm.PhysicalVolume.list(),
 			"device",
 			device
-		)[0]
+		)[1]
 	end
 
 	if create_from_scratch then
@@ -688,14 +688,14 @@ local function lvm_logical_volume_resize( inputs, data )
 		data.physical_volumes,
 		"volume_group",
 		volume_group_name
-	)[0]
+	)[1]
 	physical_volume_bounds_check(
 		physical_volume,
 		common.search_attr(
 			data.logicals,
 			"device",
 			physical_volume.device
-		)[0].size
+		)[1].size
 	)
 
 	local logical_volume_size = inputs[
@@ -748,14 +748,14 @@ local function lvm_logical_volume_snapshot_add( inputs, data )
 		data.physical_volumes,
 		"volume_group",
 		volume_group_name
-	)[0]
+	)[1]
 	physical_volume_bounds_check(
 		physical_volume,
 		common.search_attr(
 			data.logicals,
 			"device",
 			physical_volume.device
-		)[0].size
+		)[1].size
 	)
 
 	local snapshot_size = inputs[
@@ -795,14 +795,14 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 		data.physical_volumes,
 		"volume_group",
 		volume_group_name
-	)[0]
+	)[1]
 	physical_volume_bounds_check(
 		physical_volume,
 		common.search_attr(
 			data.logicals,
 			"device",
 			physical_volume.device
-		)[0].size
+		)[1].size
 	)
 
 	local snapshot_size_new = inputs[
