@@ -11,6 +11,16 @@ endif
 ifeq ($(LINUX_VERSION),2.6.32.33)
   LINUX_KERNEL_MD5SUM:=2b4e5ed210534d9b4f5a563089dfcc80
 endif
+# Special 2.6.32.35 version is Ubuntu's 2.6.35.14 one:
+# wget ftp://mirror.yandex.ru/ubuntu/pool/main/l/linux/linux-source-2.6.35_2.6.35-32.68_all.deb
+# dpkg --extract linux-source-2.6.35_2.6.35-32.68_all.deb linux-source
+# cd linux-source/usr/src/linux-source-2.6.35/
+# bunzip2 -c < linux-source-2.6.35.tar.bz2 | pax -r
+# mv linux-source-2.6.35 linux-2.6.32.35
+# find linux-2.6.32.35 | pax -wd | bzip2 -9c > linux-2.6.32.35.tar.bz2
+ifeq ($(LINUX_VERSION),2.6.32.35)
+  LINUX_KERNEL_MD5SUM:=474d20070e2e787d383c71b0315bb410
+endif
 ifeq ($(LINUX_VERSION),2.6.32.50)
   LINUX_KERNEL_MD5SUM:=b8968ef9605467332a45739c392956d1
 endif
