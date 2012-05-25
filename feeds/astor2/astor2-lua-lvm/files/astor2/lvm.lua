@@ -125,7 +125,8 @@ function M.PhysicalVolume.expected_size( size, extent )
 	        "non-number size" )
 	assert( common.is_positive( extent ),
 	        "non-positive extent's size" )
-	return size - ( size % (extent or PE_DEFAULT_SIZE) )
+	extent = extent or PE_DEFAULT_SIZE
+	return size - ( size % extent ) - extent
 end
 
 --- List all PhysicalVolumes
