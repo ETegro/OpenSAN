@@ -412,6 +412,10 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	background-color: #F21;
 }
 
+.logical-state-reshaping {
+	background-color: #F21;
+}
+
 .logical-state-initializing {
 	background-color: #EF4;
 }
