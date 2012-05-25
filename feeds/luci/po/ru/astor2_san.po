@@ -420,3 +420,9 @@ msgstr "пересборка"
 
 msgid "reshaping"
 msgstr "переразбиение"
+
+msgid "Really delete failed drive?"
+msgstr "Действительно удалить отказавший диск?"
+
+msgid "Detach failed drive"
+msgstr "Отключить отказавший диск"
