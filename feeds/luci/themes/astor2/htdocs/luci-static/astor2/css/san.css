@@ -257,7 +257,8 @@ table.bottom_forms fieldset div.form input[ type = "submit" ] {
 	float: right;
 }
 
-table.bottom_forms fieldset {
+table.bottom_forms fieldset,
+fieldset.monitoring_legend {
 	padding: 10px;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -265,6 +266,7 @@ table.bottom_forms fieldset {
 	border: 1px solid #006B3F;
 }
 
+fieldset.monitoring_legend legend,
 table.bottom_forms fieldset legend {
 	padding: 10px;
 }

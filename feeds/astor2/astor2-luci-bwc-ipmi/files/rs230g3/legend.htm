@@ -44,7 +44,6 @@ local common = {
 	[i18n("Normal")] = "green"
 }
 
-local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 %>
 
 <fieldset class="monitoring_legend">
@@ -66,8 +65,8 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 					<tr>
 						<td width="20%">
 							<% for _,color in ipairs( enclosure_colors.in_array ) do %>
-								<div style="<%= div_legend_style %>;
-											background-color: <%= data.COLORS[ color ] %>">
+								<div style="background-color: <%= data.COLORS[ color ] %>"
+									 class="legend_color">
 								</div>
 							<% end %>
 						</td>
@@ -78,8 +77,8 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 					<tr>
 						<td width="20%">
 							<% for _,color in pairs( enclosure_colors.hotspare ) do %>
-								<div style="<%= div_legend_style %>;
-											background-color: <%= data.COLORS[ color ] %>">
+								<div style="background-color: <%= data.COLORS[ color ] %>"
+								     class="legend_color">
 								</div>
 							<% end %>
 						</td>
@@ -90,8 +89,8 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 					<tr>
 						<td width="20%">
 							<% for _,color in pairs( enclosure_colors.free ) do %>
-								<div style="<%= div_legend_style %>;
-											background-color: <%= data.COLORS[ color ] %>">
+								<div style="background-color: <%= data.COLORS[ color ] %>"
+								     class="legend_color">
 								</div>
 							<% end %>
 						</td>
@@ -102,8 +101,13 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 					<tr>
 						<td width="20%">
 							<% for _,color in pairs( enclosure_colors.empty ) do %>
-								<div style="<%= div_legend_style %>;
-											background-color: <%= data.COLORS[ color ] %>">
+								<% local div_legend_style = "" %>
+								<% if color == "white" then %>
+									<% div_legend_style = "border: 1px solid #000;" %>
+								<% end %>
+								<div style="<%= div_legend_style %>
+								     background-color: <%= data.COLORS[ color ] %>"
+								     class="legend_color">
 								</div>
 							<% end %>
 						</td>
@@ -120,8 +124,8 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 					<% for _,pair in pairs( network_colors ) do %>
 					<tr>
 						<td width="20%">
-							<div style="<%= div_legend_style %>;
-										background-color: <%= data.COLORS[ pair.color ] %>">
+							<div style="background-color: <%= data.COLORS[ pair.color ] %>"
+								 class="legend_color">
 							</div>
 						</td>
 						<td width="80%" style="padding:10px;">
@@ -141,8 +145,8 @@ local div_legend_style = "width: 100%; height: 20px; border: 1px solid #000;"
 					<% for status,color in pairs( common ) do %>
 					<tr>
 						<td width="20%">
-							<div style="<%= div_legend_style %>;
-										background-color: <%= data.COLORS[ color ] %>">
+							<div style="background-color: <%= data.COLORS[ color ] %>"
+								 class="legend_color">
 							</div>
 						</td>
 						<td width="80%" style="padding:10px;">
