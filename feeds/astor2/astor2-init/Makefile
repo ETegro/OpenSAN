@@ -14,8 +14,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/astor2-init
 	SECTION:=astor2
 	CATEGORY:=aStor2
-	TITLE:=opensaninit
-	URL:=TODO
+	TITLE:=OpenSAN's main initialization script
+	URL:=http://www.opensan.org
 	DEPENDS:=+astor2-blockdev-parameters +astor2-lua-einarc \
 		+astor2-lua-caching \
 		+astor2-lua-lvm astor2-lua-scst

@@ -1,7 +1,6 @@
 #!/bin/sh /etc/rc.common
 START=50
 
-MULTIPATH_STARTED_FLAG="/tmp/multipath-started"
 HOTPLUG_DIR="/etc/hotplug.d/block/preboot"
 
 start()
@@ -18,7 +17,7 @@ start()
 	echo 'lvm = require "astor2.lvm"; lvm.restore()' | lua -
 	echo 'caching = require "astor2.caching"; caching.apply()' | lua -
 	echo 'scst = require "astor2.scst"; scst.Daemon.apply()' | lua -
-	for f in 10-multipath 20-hotspares 30-blockdevparams; do
+	for f in 20-hotspares 30-blockdevparams; do
 		cp $HOTPLUG_DIR/$f /tmp/
 	done
 	)&
