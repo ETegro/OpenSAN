@@ -163,9 +163,9 @@ end
 
 --- Resize PhysicalVolume
 function M.PhysicalVolume:resize()
-	assert( self.name and common.is_string( self.name ),
+	assert( self.device and common.is_string( self.device ),
 	        "unable to get self object" )
-	common.system_succeed( "lvm pvresize " .. self.name )
+	common.system_succeed( "lvm pvresize " .. self.device )
 end
 
 --------------------------------------------------------------------------
