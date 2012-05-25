@@ -807,6 +807,20 @@ local function lvm_logical_volume_snapshot_resize( inputs, data )
 	local volume_group_name = find_volume_group_name_in_data_by_hash( volume_group_name_hash, data )
 	local logical_volume_name = find_logical_volume_name_in_data_by_hash( logical_volume_name_hash, data )
 
+	local physical_volume = common.search_attr(
+		data.physical_volumes,
+		"volume_group",
+		volume_group_name
+	)[0]
+	physical_volume_bounds_check(
+		physical_volume,
+		common.search_attr(
+			data.logicals,
+			"device",
+			physical_volume.device
+		)[0].size
+	)
+
 	local snapshot_size_new = inputs[
 		"logical_volume_snapshot_resize_slider_size-" ..
 		volume_group_name_hash .. "-" ..
