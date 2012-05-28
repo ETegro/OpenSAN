@@ -1,4 +1,13 @@
 * [[Image(ConsoleWithHypnorobo.png)]]
+
+= 2.x =
+* [[Image(Reshaping.png)]]
+* [[Image(MainWindowV2.2-Forms.png)]]
+* [[Image(Expand.png)]]
+* [[Image(SetDate.png)]]
+* [[Image(NetworkInterfacesV2.2.png)]]
+
+= 1.x =
 * [[Image(MainWindow.png)]]
 * [[Image(DifferentToggledForms.png)]]
 * [[Image(DifferentAddAndEditForms.png)]]
