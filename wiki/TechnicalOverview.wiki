@@ -8,10 +8,6 @@ upgradable environment for the following subsystems.
 [http://luci.subsignal.org/ LuCI] is used as MVC-framework for the
 overall Web-interface configuration management.
 
-[http://www.inquisitor.ru/doc/einarc/ Einarc] with software module
-enabled -- all configuration related to physical and logical drives
-management is performed through it.
-
 [http://sourceware.org/lvm2/ LVM2] for logical volumes with snapshots
 management.
 
@@ -24,5 +20,5 @@ utility programs to control and monitor storage systems using SMART
 [http://jquery.com/ jQuery] is used to make different pretty
 outlooking interface interactions.
 
-All interaction with Einarc, LVM2 and SCST subsystems is going through
+All interaction with LVM2 and SCST subsystems is going through
 the self-written API (**astor2.** libraries) on Lua programming language.
