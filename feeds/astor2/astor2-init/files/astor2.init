@@ -5,8 +5,6 @@ HOTPLUG_DIR="/etc/hotplug.d/block/preboot"
 
 start()
 {
-	( # We have to daemonize this process to prevent deadlocks
-	while [ ! -e $MULTIPATH_STARTED_FLAG ]; do sleep 1; done
 	ACTION=add . $HOTPLUG_DIR/30-blockdevparams
 	mdadm --examine --scan |
 		sed 's#^ARRAY .dev.md.\([0-9]*\) .* UUID=\([0-9:a-z]\{1,\}\).*$#\2 /dev/md\1#' |
@@ -20,7 +18,6 @@ start()
 	for f in 20-hotspares 30-blockdevparams; do
 		cp $HOTPLUG_DIR/$f /tmp/
 	done
-	)&
 }
 
 stop()
