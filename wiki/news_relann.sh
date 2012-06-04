@@ -14,15 +14,3 @@ Always cryptographically [wiki:Publickey verify images]!
 __EOF__
 
 echo "* [wiki:Release$WHAT $WHAT]" >> Releases.wiki
-
-echo "= Release $WHAT =" > News_$curdate.wiki
-echo "We are pleased to announce new OpenSAN's version." >> News_$curdate.wiki
-echo >> News_$curdate.wiki
-echo "== Release notes ==" >> News_$curdate.wiki
-cat Release$WHAT.wiki >> News_$curdate.wiki
-
-tmp=`mktemp`
-echo "* [wiki:News_$curdate Release $WHAT]" > $tmp
-cat News.wiki >> $tmp
-mv $tmp News.wiki
-rm -f $tmp
