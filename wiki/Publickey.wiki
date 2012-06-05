@@ -1,34 +1,9 @@
-= Check distrubution integrity =
-All our distributions have signed checksums file.
-It is wise and more secure to check out for it's integrity.
-
-* import our public PGP key into your keyring for the first time. For
-  example you can do it using this command:
-{{{
-  % wget -O - http://www.opensan.org/trac/wiki/Publickey | gpg --import
-}}}
-* after downloading either //-combined-ext4.img.gz// or //.opensan//
-  distribution image you should also download their SHA256 checksums:
-  **checksums.sha256** and this file's signature **checksums.sha256.sign**
-* verify checksums file signature:
-{{{
-  % gpg --verify checksums.sha256.asc
-}}}
-* and (at last) compare downloaded image's checksum with corresponding
-  from checksums.sha256 one:
-{{{
-  % sha256sum IMAGE
-}}}
-= Key itself =
-Our public PGP key used for signing the releases:
-
 {{{
 pub   2048D/90EC3862 2011-06-28
 uid                  OpenSAN development team <team@opensan.org>
 sub   2048g/1CEBB66E 2011-06-28
 
 -----BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v1.4.10 (GNU/Linux)
 
 mQMuBE4JyWoRCADt402M2O0qO1k9hkrCQprUoGOnfv9vK+UXxC7tltFvVPWP8ob/
 mdf31kwIOj81fhS4KEQqmSalI3NLQk22WcKtKiY0mWkSuujDMgPVsLjDppglY5Xj

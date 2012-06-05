@@ -1,6 +1,0 @@
-Source code is always available on
-[https://github.com/astor2-team/astor2 Git-repository].
-You can clone it using the following command:
-{{{
-% git clone git://github.com/astor2-team/astor2.git
-}}}
