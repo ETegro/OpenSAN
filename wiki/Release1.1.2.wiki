@@ -1,7 +1,0 @@
-Removed unnecessary status information about active TCP connections.
-This information has no value for SAN system, that does not have even
-NAT capabilities.
-
-=== Download ===
-You can download this release following [/download/V1.1.2/ this link].
-Always cryptographically [wiki:Publickey verify images]!

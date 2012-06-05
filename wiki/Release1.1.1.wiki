@@ -1,9 +1,0 @@
-This release is interesting only to developers, not the common users.
-It's distribution contains useful **ip addr/route/link** network
-utilities. Of course they can be used remotely by system/network
-administers. Also SCST Lua library **logs** all scstadmin's command
-**output** in separate file, that can be useful for debugging purposes.
-
-=== Download ===
-You can download this release following [/download/V1.1.1/ this link].
-Always cryptographically [wiki:Publickey verify images]!

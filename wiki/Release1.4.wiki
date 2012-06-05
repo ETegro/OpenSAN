@@ -1,6 +1,0 @@
-This release brings IPv6 protocol support. iSCSI, SSH and overall
-routing are ready to work over IPv6 protocol.
-
-=== Download ===
-You can download this release following [/download/V1.4/ this link].
-Always cryptographically [wiki:Publickey verify images]!
