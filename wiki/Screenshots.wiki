@@ -1,16 +1,15 @@
-* [[Image(ConsoleWithHypnorobo.png)]]
+= Branch 2.x =
+[[Image(Reshaping.png, 200px)]]
+[[Image(MainWindowV2.2-Forms.png, 200px)]]
+[[Image(Expand.png, 200px)]]
+[[Image(SetDate.png, 200px)]]
+[[Image(NetworkInterfacesV2.2.png, 200px)]]
 
-= 2.x =
-* [[Image(Reshaping.png)]]
-* [[Image(MainWindowV2.2-Forms.png)]]
-* [[Image(Expand.png)]]
-* [[Image(SetDate.png)]]
-* [[Image(NetworkInterfacesV2.2.png)]]
-
-= 1.x =
-* [[Image(MainWindow.png)]]
-* [[Image(DifferentToggledForms.png)]]
-* [[Image(DifferentAddAndEditForms.png)]]
-* [[Image(VariousLogicalDriveStates.png)]]
-* [[Image(ArraysAreRebuildingAfterFailure.png)]]
-* [[Image(MonitoringSection.png)]]
+= Branch 1.x =
+[[Image(MainWindow.png, 200px)]]
+[[Image(DifferentToggledForms.png, 200px)]]
+[[Image(DifferentAddAndEditForms.png, 200px)]]
+[[Image(VariousLogicalDriveStates.png, 200px)]]
+[[Image(ArraysAreRebuildingAfterFailure.png, 200px)]]
+[[Image(MonitoringSection.png, 200px)]]
+[[Image(ConsoleWithHypnorobo.png, 200px)]]
