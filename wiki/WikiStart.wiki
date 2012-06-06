@@ -21,9 +21,6 @@ single Web-interface's page.
 * [wiki:Licence]
 * [wiki:Team]
 
-Also, you can contact our team directly by sending email to
-**team at opensan dot org**.
-
 ----
 
 [[Image(sponsor_etegro.png)]]

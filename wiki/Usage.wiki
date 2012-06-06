@@ -1,5 +1,8 @@
 = Downloads =
-All releases can be downloaded by following [/download/ this link].
+
+Recommended and suitable for your needs releases can be found
+'''[wiki:Downloads there]'''.
+
 '''Always''' cryptographically verify downloaded image files.
 
 Each release directory contains several files:

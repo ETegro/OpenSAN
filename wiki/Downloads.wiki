@@ -1,0 +1,19 @@
+= Generic usage =
+Officially supported and recommended by our team releases are:
+
+* [/download/V2.2 2.2]
+
+= Supported vendors =
+
+List of vendors and their hardware compatible SAN-solutions, that can
+successfully run OpenSAN and that are intensively tested with it.
+
+Please, contact our [wiki:Team team] if you are interested in validation
+of your SAN-solutions compatibility with OpenSAN, therefore we can
+approve and recommend it's usage within your products.
+
+== ETegro Technologies ==
+
+=== [http://www.etegro.ru/configurator/storage/san/fs100g2 Fastor FS100 G2] ===
+
+* [/download/V2.2 2.2]
