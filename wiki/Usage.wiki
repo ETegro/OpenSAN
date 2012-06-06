@@ -91,3 +91,38 @@ Contents of that download directory must be placed into
 ''openwrt/dl''.
 
 Ready to use images after build are in ''openwrt/bin/x86*''.
+
+= Running under virtual machine =
+
+== KVM ==
+
+You should configure disk and network subsystems to be able to use
+OpenSAN.
+
+* Create several raw hard drive images. We will create three. They are
+  just big empty files. You can create them with ''dd'' command
+  (''SIZE'' is measured in gibibytes):
+{{{
+dd if=/dev/zero of=disk1.raw bs=1G count=SIZE
+dd if=/dev/zero of=disk2.raw bs=1G count=SIZE
+dd if=/dev/zero of=disk3.raw bs=1G count=SIZE
+}}}
+* Decompress ''.img.gz'' disk image:
+{{{
+gunzip openwrt-x86*-astor2-combined-ext4.img.gz
+}}}
+* Run KVM itself:
+{{{
+kvm -m 256 -hda openwrt-x86*-astor2-combined-ext4.img \
+	-hdb disk1.raw -hdc disk2.raw -hdd disk3.raw \
+	-net nic -net tap
+}}}
+* After successful startup KVM will create ''tap'' virtual network
+  interface. Assume that we got ''tap0'' device. You can configure
+  IPv4 network on it, to be able to access via Web-browser to OpenSAN's
+  user interface:
+{{{
+ip link set up dev tap0
+ip addr add 192.168.1.2/30 dev tap0
+}}}
+* Follow http://192.168.1.1/ URL in your Web-browser
