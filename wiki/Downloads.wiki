@@ -8,7 +8,7 @@ Officially supported and recommended by our team releases are:
 List of vendors and their hardware compatible SAN-solutions, that can
 successfully run OpenSAN and that are intensively tested with it.
 
-Please, contact our [wiki:Team team] if you are interested in validation
+Please [wiki:Contacts contact us] if you are interested in validation
 of your SAN-solutions compatibility with OpenSAN, therefore we can
 approve and recommend it's usage within your products.
 

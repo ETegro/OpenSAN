@@ -10,7 +10,7 @@ Each release directory contains several files:
   hash checksum of ''.img.gz'' and ''.opensan'' images. It should be
   used to check integrity of those images after downloading.
 * checksums.sha256.asc — checksum-file verification signature made by
-  our [wiki:Team team]. It should be used to check the validity of
+  our [wiki:Contacts team]. It should be used to check the validity of
   provided checksum-file and therefore if retrieved images are approved
   exactly by us.
 * openwrt-x86*-astor2-combined-ext4.img.gz — compressed raw binary image

@@ -1,3 +1,0 @@
-* English
-* Russian (russian documentation can be
-  [https://www.etegro.com/configurator/storage/san/fs100g2/support found here])

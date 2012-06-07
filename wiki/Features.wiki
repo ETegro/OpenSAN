@@ -28,3 +28,7 @@
 * Power supply, FAN, temperature, hard drive enclosure **placement**
   viewing, including additional SAS-attached **JBOD** expansion array
   overall information
+
+== Documentation ==
+* Russian documentation can be
+  [https://www.etegro.com/configurator/storage/san/fs100g2/support found here]

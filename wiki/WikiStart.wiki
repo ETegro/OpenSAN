@@ -16,14 +16,11 @@ single Web-interface's page.
 * [wiki:TechnicalOverview]
 * [wiki:Releases]
 * [wiki:Usage Downloads and usage]
-* [wiki:Translations]
-* [wiki:Maillists]
-* [wiki:Licence]
-* [wiki:Team]
+* [wiki:Contacts]
 
 ----
 
-[[Image(sponsor_etegro.png)]]
+[[Image(sponsor_etegro.png, align=right)]]
 
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]
