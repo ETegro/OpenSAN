@@ -1,7 +1,7 @@
 = Generic usage =
 Officially supported and recommended by our team releases are:
 
-* [/download/V2.2 2.2]
+* [/download/V2.2.1 2.2.1]
 
 = Supported vendors =
 
@@ -16,4 +16,4 @@ approve and recommend it's usage within your products.
 
 === [http://www.etegro.ru/configurator/storage/san/fs100g2 Fastor FS100 G2] ===
 
-* [/download/V2.2 2.2]
+* [/download/V2.2.1 2.2.1]

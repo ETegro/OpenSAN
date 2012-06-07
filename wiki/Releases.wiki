@@ -1,3 +1,10 @@
+= 2.2.1 =
+This release contains only single bugfix related to produced
+*combined* disk images size. Previously it could not create the
+forth partition dedicated for log saving. You had to enlarge this
+file. Hardware storage devices, as a rule, are larger than disk
+image file and work perfectly.
+
 = 2.2 =
 * MPT2 SAS controller support
 * I350-based Intel NICs support
