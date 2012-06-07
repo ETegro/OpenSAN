@@ -2,8 +2,7 @@
 [http://www.gnu.org/philosophy/free-sw.html free software]
 project realizing
 [https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network Storage Area Network]
-system. This is small firmware that turns server (having at least one
-hard drive) into an
+system. This is small firmware that turns server into an
 [https://secure.wikimedia.org/wikipedia/en/wiki/iSCSI iSCSI]
 target accessible through the Ethernet interface.
 
