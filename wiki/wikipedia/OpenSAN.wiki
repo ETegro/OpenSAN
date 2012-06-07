@@ -1,0 +1,59 @@
+{{Infobox OS
+| logo               = [[File:OpenSAN-logo.png|250px]]
+| screenshot         = [[File:OpenSAN-screenshot.png|250px]]
+| caption            = OpenSAN v2.2
+| developer          = [[:ru:ETegro Technologies|ETegro Technologies]] / [http://www.opensan.org/ OpenSAN project]
+| family             = [[Unix-like]]
+| working_state      = Current
+| source_model       = [[Free and open source software]]
+| released           = {{Start date|df=yes|2011|05}}
+|latest release version= OpenSAN v2.2
+| frequently_updated = yes
+| language           = English, Russian
+| supported_platforms = 2 different platforms using the following CPU architectures: [[x86]], [[x86-64]]
+| kernel_type        = [[Monolithic kernel|Monolithic]] ([[Linux kernel|Linux]])
+| license            = [[Free software]], [[GNU GPL]]
+| website            = {{URL|www.opensan.org}}
+}}
+'''OpenSAN''' is a free software project realizing [[Storage Area Network]] system. This is small firmware that turns server into an  [[iSCSI]] target accessible through the Ethernet interface.
+
+It is intended to be easy configurable using user-friendly Web-interface. Nearly everything related to SAN can be configured from single Web-interface's page.
+
+== Features ==
+* Physical drives and logical drives (either [[JBOD]] or [[RAID]]) management
+** Supported RAID levels: 0, 1, 4, 5, 6, 10
+** Dedicated hotspare drives support
+** Online transparent growing capability
+* WriteBack and WriteThrough caching policies switching
+* Logical volumes management
+** Virtually unlimited volumes quantity on single logical drive
+** Logical volume resize support
+** Snapshots support
+* iSCSI targets management
+* iSCSI-3 technology support
+* iSCSI [[Challenge-Handshake Authentication Protocol|CHAP]] authentication support
+* [[IPv6]] protocol support
+* Network bonding ability for gaining performance and reliability (including 802.3ad dynamic link aggregation protocol support)
+* Comprehensive controller code unittesting and small so-called remotetesting framework to perform exhaustive benchmarking and testing of different system components and subsystems
+* Text-mode console is also available on RS232 serial port
+* Firmware updating through Web-interface form
+* Command-line interface (CLI) accessibility via SSH 2.0 (with SCP support)
+* Ability to backup overall configuration with restoring it later
+* Network configuration can be doned using either static IPv4, static IPv6 addressing and routing, DHCP or using bonded interfaces
+* Real-time load average, traffic and connections monitoring
+* Power supply, FAN, temperature, hard drive enclosure placement viewing, including additional SAS-attached JBOD expansion array overall information
+
+== Technical overview ==
+[[File:OpenSAN-monitoring screenshot.png|thumb|250px|Web-interface screenshot of monitoring section]]
+* [[Free software]] project, licenced under [[GNU GPLv3]]
+* [[OpenWRT]] with own modified version of [[Linux]] is used as a base providing all necessary libraries, building framework and utilities to create lightweight, highly customized, easily upgradable environment for the following subsystems
+* Built-in kernel md module provides RAID creation capability
+* [[LuCI]] is used as MVC-framework for the overall Web-interface configuration management
+* [[LVM2]] for logical volumes with snapshots management
+* [http://scst.sourceforge.net/index.html SCST] framework for creating iSCSI targets
+* [[jQuery]] is used to make different pretty outlooking interface interactions
+* All interaction with LVM2 and SCST subsystems is going through the self-written API (astor2. libraries) on Lua programming language.
+
+==External links==
+*{{Official website|www.opensan.org}}
+*[http://www.etegro.ru/configurator/storage/san/fs100g2 Fastor FS100 G2]
