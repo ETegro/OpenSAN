@@ -36,11 +36,11 @@ may help in solving issues with heterogeneous initiators.
 = 1.5.6 =
 This is bugfix release:
 * SCST subsystem requires LUN0 existence. Now you are forced to use LUN0
-  for the first binded AccessPattern. Also you can not unbind LUN0 if
+  for the first binded !AccessPattern. Also you can not unbind LUN0 if
   other LUNs exist.
 * Fixed possible Snapshot's size calculation. It can not be larger than
   free space on Logical drive anyway.
-* Fixed issue with inability to bind AccessPattern to the Snapshot.
+* Fixed issue with inability to bind !AccessPattern to the Snapshot.
 
 = 1.5.5 =
 This release brings an important capability of storing all log files
@@ -52,7 +52,7 @@ hundred of rotated megabyte log files.
 = 1.5.4 =
 * Disabled console blanking, that is useful for permanent system
   availability monitoring
-* Snapshot's size is limited by original LogicalVolume's one
+* Snapshot's size is limited by original !LogicalVolume's one
 * Bugfix: forcefully activate an array after system reboot anyway,
   even if it is degraded and dirty
 * Bugfix: clean up possibly staying alive iSCSI sessions linked to
@@ -70,7 +70,7 @@ hundred of rotated megabyte log files.
 
 = 1.5.2 =
 This update release includes 1.4.3 and contains serious bugfix (bug can
-occur with manually created LVM VolumeGroups with slightly different
+occur with manually created LVM !VolumeGroups with slightly different
 format values).
 
 = 1.5.1 =
@@ -95,7 +95,7 @@ This release contains several very important bugfixes:
 
 * All available hard drives have disabled any power management
   capabilities and power saving modes.
-* AccessPatterns pointing to non-existent device targets won't be
+* !AccessPatterns pointing to non-existent device targets won't be
   applied and tried to be configured. System will just skip them.
   That will help if dirty SCST's configuration is on.
 
