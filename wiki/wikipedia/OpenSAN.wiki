@@ -52,8 +52,12 @@ It is intended to be easy configurable using user-friendly Web-interface. Nearly
 * [[LVM2]] for logical volumes with snapshots management
 * [http://scst.sourceforge.net/index.html SCST] framework for creating iSCSI targets
 * [[jQuery]] is used to make different pretty outlooking interface interactions
-* All interaction with LVM2 and SCST subsystems is going through the self-written API (astor2. libraries) on Lua programming language.
+* All interaction with LVM2 and SCST subsystems is going through the self-written API (astor2. libraries) on Lua programming language
 
 ==External links==
+{{Portal|Free software}}
 *{{Official website|www.opensan.org}}
 *[http://www.etegro.ru/configurator/storage/san/fs100g2 Fastor FS100 G2]
+
+[[Category:Storage software]]
+[[Category:Lua-scriptable software]]
