@@ -1,6 +1,11 @@
+= 2.3 =
+Extensive use of system memory for caching purposes. **All** reads from
+block devices are cached. However ability to switch between either
+!WriteBack or !WriteThrough modes of operation is possible.
+
 = 2.2.1 =
 This release contains only single bugfix related to produced
-*combined* disk images size. Previously it could not create the
+**combined** disk images size. Previously it could not create the
 forth partition dedicated for log saving. You had to enlarge this
 file. Hardware storage devices, as a rule, are larger than disk
 image file and work perfectly.
