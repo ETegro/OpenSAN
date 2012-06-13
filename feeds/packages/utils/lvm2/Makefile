@@ -75,6 +75,7 @@ endef
 define Package/lvm2/install
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tools/lvm $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tools/dmsetup $(1)/sbin
 	$(INSTALL_DIR) $(1)/etc/lvm
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/example.conf $(1)/etc/lvm/lvm.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
