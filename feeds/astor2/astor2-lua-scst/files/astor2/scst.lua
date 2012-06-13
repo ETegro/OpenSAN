@@ -514,6 +514,9 @@ function M.Configuration.dump()
 		local device = "fileio" .. fileio_counter
 		configuration = configuration .. "\tDEVICE " .. device .. " {\n"
 		configuration = configuration .. "\t\tfilename " .. access_pattern.filename .. "\n"
+		if access_pattern.writethrough then
+			configuration = configuration .. "\t\twrite_through 1\n"
+		end
 		configuration = configuration .. "\t}\n"
 		fileio_counter = fileio_counter + 1
 		devices[ #devices + 1 ] = device
