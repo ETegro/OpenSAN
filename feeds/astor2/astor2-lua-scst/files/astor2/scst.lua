@@ -506,16 +506,16 @@ function M.Configuration.dump()
 	local devices = {}
 
 	-- Create HANDLERs
-	local blockios = {}
-	local blockio_counter = 1
-	configuration = configuration .. "HANDLER vdisk_blockio {\n"
+	local fileios = {}
+	local fileio_counter = 1
+	configuration = configuration .. "HANDLER vdisk_fileio {\n"
 	for _, access_pattern in ipairs( access_patterns_enabled  ) do
-		blockios[ access_pattern.filename ] = blockio_counter
-		local device = "blockio" .. blockio_counter
+		fileios[ access_pattern.filename ] = fileio_counter
+		local device = "fileio" .. fileio_counter
 		configuration = configuration .. "\tDEVICE " .. device .. " {\n"
 		configuration = configuration .. "\t\tfilename " .. access_pattern.filename .. "\n"
 		configuration = configuration .. "\t}\n"
-		blockio_counter = blockio_counter + 1
+		fileio_counter = fileio_counter + 1
 		devices[ #devices + 1 ] = device
 	end
 	configuration = configuration .. "}\n"
@@ -556,8 +556,8 @@ function M.Configuration.dump()
 					end
 					configuration = configuration ..
 					                "\t\tLUN " .. lun ..
-					                " blockio" ..
-					                tostring( blockios[ access_pattern.filename ] ) ..
+					                " fileio" ..
+					                tostring( fileios[ access_pattern.filename ] ) ..
 					                " {\n" ..
 					                "\t\t\tread_only " .. read_only .. "\n" ..
 					                "\t\t}\n"
