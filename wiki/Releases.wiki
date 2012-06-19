@@ -1,3 +1,6 @@
+= 2.3.1 =
+This is bugfix release. Fixes issues with invalid service boot sequence.
+
 = 2.3 =
 Extensive use of system memory for caching purposes. **All** reads from
 block devices are cached. However ability to switch between either
