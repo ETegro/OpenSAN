@@ -1,10 +1,11 @@
 #!/bin/sh /etc/rc.common
-START=50
+START=51
 
 HOTPLUG_DIR="/etc/hotplug.d/block/preboot"
 
 start()
 {
+	sleep 5
 	ACTION=add . $HOTPLUG_DIR/30-blockdevparams
 	mdadm --examine --scan |
 		sed 's#^ARRAY .dev.md.\([0-9]*\) .* UUID=\([0-9:a-z]\{1,\}\).*$#\2 /dev/md\1#' |
