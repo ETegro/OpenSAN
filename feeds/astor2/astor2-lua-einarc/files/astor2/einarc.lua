@@ -21,6 +21,7 @@
 local M = {}
 
 require( "lfs" )
+require( "sha2" )
 local common = require( "astor2.common" )
 
 M.LOGICAL_STATES = {
@@ -279,6 +280,19 @@ function M.Logical.list()
 		end
 	end
 	return logicals
+end
+
+--- Retreive Logical's md UUID
+-- @return str UUID
+function M.Logical:uuid()
+	assert( self.id, "unable to get self object" )
+	for _,line in ipairs( common.system( table.concat( {
+		"mdadm", "--detail", "--export", self.fdevnode
+	}, " " ) ).stdout ) do
+		if string.sub( line, 1, 7 ) == "MD_UUID" then
+			return string.sub( line, 9 )
+		end
+	end
 end
 
 --- Create new Logical disk
@@ -688,6 +702,44 @@ function M.Physical:enclosure()
 			end
 		end
 	end
+end
+
+-----------------------------------------------------------------------
+-- Flashcache
+-----------------------------------------------------------------------
+M.Flashcache = {}
+local Flashcache_mt = common.Class( M.Flashcache )
+
+M.Flashcache.modes = {
+	["around"] = "A",
+	["back"] = "B",
+	["thru"] = "T"
+}
+
+--- Cache Logical by Physical in specified mode
+-- @param physical Physical
+-- @param logical Logical
+-- @param mode "through"
+function M.Flashcache.bind( physical, logical, mode )
+	assert( physical and physical.id, "invalid Physical object" )
+	assert( logical.id, "unable to get Logical object" )
+	assert( common.is_in_array( mode, common.keys( M.Flashcache.modes ) ), "unknown mode" )
+	local mode_string = M.Flashcache.modes[ mode ]
+	local logical_uuid = logical:uuid()
+	local metainfo = mode_string .. logical_uuid ..
+		sha2.sha256hex( logical_uuid .. mode_string .. "OpenSAN" )
+	local fd = io.open( physical.fdevnode, "w" )
+	fd:seek( "end", -#metainfo )
+	fd:write( metainfo )
+	fd:close()
+	common.system_succeed( table.concat( {
+		"flashcache_create",
+		"-p", mode,
+		"-s", tostring( math.floor( physical.size * 0.80 ) ) .. "m",
+		"flashcache" .. logical.devnode,
+		physical.fdevnode,
+		logical.fdevnode
+	}, " " ) )
 end
 
 -----------------------------------------------------------------------
