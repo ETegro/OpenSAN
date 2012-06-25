@@ -2685,4 +2685,166 @@ TestFilterHighlightSnapshots = {}
 		assertEquals( got[ 13 ].logical_volume.highlight.background_color, colors_array[ color ] )
 	end
 
+TestFilterFlashcacheCalculation = {}
+	function TestFilterFlashcacheCalculation:test_flashcache_calculation_with_two_normal_logicals()
+		local physicals = common.deepcopy( PHYSICALS_DOUBLE )
+		local logicals  = common.deepcopy( LOGICALS_DOUBLE )
+		-- logical  3 normal
+		-- logical 13 normal
+		physicals[ "13:4" ].state = "13"
+		physicals[ "13:5" ].state = "13"
+		logicals[ 13 ].physicals[ "13:4" ] = "13"
+		logicals[ 13 ].physicals[ "13:5" ] = "13"
+		logicals[ 13 ].state = "normal"
+
+		needed = {
+			[ 3 ] = { cacheable = true },
+			[ 13 ] = { cacheable = true }
+		}
+
+		assert( common.compare_tables(
+			matrix.filter_calculate_flashcache( {
+				lines = matrix.overall( {
+					physicals = physicals,
+					logicals  = logicals
+				} )
+			} )[ "flashcache" ],
+			needed
+		) )
+	end
+
+	function TestFilterFlashcacheCalculation:test_flashcache_calculation_with_other_states_of_logical()
+		local physicals = common.deepcopy( PHYSICALS_DOUBLE )
+		local logicals  = common.deepcopy( LOGICALS_DOUBLE )
+		-- logical  3 normal
+		-- logical 13 normal
+		physicals[ "13:4" ].state = "13"
+		physicals[ "13:5" ].state = "13"
+		logicals[ 13 ].physicals[ "13:4" ] = "13"
+		logicals[ 13 ].physicals[ "13:5" ] = "13"
+		logicals[ 13 ].state = "normal"
+
+		-- if logical state not equal normal
+		for _,state in ipairs( einarc.LOGICAL_STATES ) do
+			if ( state ~= "normal" ) then
+				logicals[ 13 ].state = state
+
+				needed = {
+					[ 3 ] = { cacheable = true },
+					[ 13 ] = {
+						cacheable = false,
+						message = 'Array must be in "normal" state'
+					}
+				}
+
+				assert( common.compare_tables(
+					matrix.filter_calculate_flashcache( {
+						lines = matrix.overall( {
+							physicals = physicals,
+							logicals  = logicals
+						} )
+					} )[ "flashcache" ],
+					needed
+				) )
+			end
+		end
+	end
+
+	function TestFilterFlashcacheCalculation:test_flashcache_calculation_with_failed_logical()
+		local physicals = common.deepcopy( PHYSICALS_DOUBLE )
+		local logicals  = common.deepcopy( LOGICALS_DOUBLE )
+		-- physical 13:5 failed
+		-- physical 13:4 failed
+		-- logical     3 normal
+		-- logical    13 degraded
+		local needed = {
+			[ 3 ] = { cacheable = true },
+			[ 13 ] = {
+				cacheable = false,
+				message = 'Array must be in "normal" state'
+			}
+		}
+
+		assert( common.compare_tables(
+			matrix.filter_calculate_flashcache( {
+				lines = matrix.overall( {
+					physicals = physicals,
+					logicals  = logicals
+				} )
+			} )[ "flashcache" ],
+			needed
+		) )
+	end
+
+	function TestFilterFlashcacheCalculation:test_flashcache_calculation_with_normal_and_cached_logical()
+		local physicals = common.deepcopy( PHYSICALS_DOUBLE )
+		local logicals  = common.deepcopy( LOGICALS_DOUBLE )
+		-- physical 13:5 cached
+		-- logical     3 normal
+		-- logical    13 cached
+		physicals[ "13:4" ].state = "13"
+		physicals[ "13:5" ].state = "cache"
+		logicals[ 13 ].physicals[ "13:4" ] = "13"
+		logicals[ 13 ].physicals[ "13:5" ] = "cache"
+		logicals[ 13 ].state = "normal"
+		logicals[ 13 ].cached_by = "13:5"
+
+		needed = {
+			[ 3 ] = { cacheable = true },
+			[ 13 ] = {
+				cacheable = false,
+				message = "Already cached"
+			}
+		}
+
+		assert( common.compare_tables(
+			matrix.filter_calculate_flashcache( {
+				lines = matrix.overall( {
+					physicals = physicals,
+					logicals  = logicals
+				} )
+			} )[ "flashcache" ],
+			needed
+		) )
+	end
+
+	function TestFilterFlashcacheCalculation:test_flashcache_calculation_with_other_states_and_cached_logical()
+		local physicals = common.deepcopy( PHYSICALS_DOUBLE )
+		local logicals  = common.deepcopy( LOGICALS_DOUBLE )
+		-- physical 13:5 cached
+		-- logical     3 normal
+		-- logical    13 cached
+		physicals[ "13:4" ].state = "13"
+		physicals[ "13:5" ].state = "cache"
+		logicals[ 13 ].physicals[ "13:4" ] = "13"
+		logicals[ 13 ].physicals[ "13:5" ] = "cache"
+		logicals[ 13 ].state = "normal"
+		logicals[ 13 ].cached_by = "13:5"
+
+		-- if logical state not equal normal
+		for _,state in ipairs( einarc.LOGICAL_STATES ) do
+			if ( state ~= "normal" ) then
+				logicals[ 13 ].state = state
+
+				needed = {
+					[ 3 ] = { cacheable = true },
+					[ 13 ] = {
+						cacheable = false,
+						message = "Already cached"
+					}
+				}
+
+				assert( common.compare_tables(
+					matrix.filter_calculate_flashcache( {
+						lines = matrix.overall( {
+							physicals = physicals,
+							logicals  = logicals
+						} )
+					} )[ "flashcache" ],
+					needed
+				) )
+			end
+		end
+	end
+
 LuaUnit:run()
