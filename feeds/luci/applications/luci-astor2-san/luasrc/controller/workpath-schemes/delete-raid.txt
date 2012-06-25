@@ -19,8 +19,11 @@ graph { flow: south }
 
 ( Deletion of RAID
 
-[] ==> [ Does PV exist? ] -- YES --> [ Does VG exist? ] -- YES --> [ Stop VG ] --> [ prepare( RAID ) ]
-[ Does PV exist? ], [ Does VG exist? ] -- NO --> [ prepare( RAID ) ]
-[ prepare( RAID ) ] --> [ Delete RAID ] ==> []
+[] ==> [ PV exist? ] -- YES --> [ VG exist? ] -- YES --> [ Stop VG ] --> [ prepare( RAID ) ]
+[ PV exist? ], [ VG exist? ] -- NO --> [ prepare( RAID ) ]
+[ prepare( RAID ) ] --> [ RAID cached? ]
+[ RAID cached? ] -- NO --> [ Delete RAID ]
+[ RAID cached? ] -- YES --> [ Unbind cache device ] --> [ Delete RAID ]
+[ Delete RAID ] ==> []
 
 )
