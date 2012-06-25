@@ -726,7 +726,8 @@ M.Flashcache.MODES = {
 	},
 	["WRITE_BACK"] = {
 		meta = "B",
-		cmdline = "back"
+		cmdline = "back",
+		load_first = true
 	}
 }
 
@@ -739,10 +740,9 @@ local function flashcache_destroy_meta( fdevnode )
 	fd:close()
 end
 
-local function flashcache_destroy( physical )
-	assert( physical.fdevnode, "no valid Physical is found" )
-	common.system( "flashcache_destroy " .. physical.fdevnode )
-	pcall( flashcache_destroy_meta, physical.fdevnode )
+local function flashcache_destroy( fdevnode )
+	common.system( "flashcache_destroy " .. fdevnode )
+	pcall( flashcache_destroy_meta, fdevnode )
 end
 
 --- Cache Logical by Physical in specified mode
@@ -753,7 +753,7 @@ function M.Flashcache.bind( physical, logical, mode )
 	assert( physical and physical.id, "invalid Physical object" )
 	assert( logical.id, "unable to get Logical object" )
 	assert( common.is_in_array( mode, common.keys( M.Flashcache.MODES ) ), "unknown mode" )
-	flashcache_destroy( physical )
+	flashcache_destroy( physical.fdevnode )
 	local mode_string = M.Flashcache.MODES[ mode ].meta
 	local metainfo = mode_string .. logical:uuid() ..
 		sha2.sha256hex( logical:uuid() .. mode_string .. "OpenSAN" )
@@ -804,7 +804,7 @@ function M.Flashcache.unbind( physical )
 			flashcache_destroy_map(
 				M.Logical.list()[ info.logical_id ].devnode
 			)
-			flashcache_destroy( M.Physical.list()[ info.physical_id ] )
+			flashcache_destroy( M.Physical.list()[ info.physical_id ].fdevnode )
 		end
 	end
 end
@@ -848,6 +848,10 @@ function flashcache_metaread( fdevnode )
 	return meta_parsed
 end
 
+function flashcache_load( fdevnode )
+	common.system( "flashcache_load " .. fdevnode )
+end
+
 function M.Flashcache.assemble()
 	local logicals = {}
 	for logical_id,logical in pairs( M.Logical.list() ) do
@@ -859,7 +863,11 @@ function M.Flashcache.assemble()
 		if return_code and metainfo then
 			for _,logical in pairs( logicals ) do
 				if logical:uuid() == metainfo.uuid then
-					M.Flashcache.bind( physical, logical, metainfo.mode )
+					if M.Flashcache.MODES[ metainfo.mode ].load_first then
+						flashcache_load( physical.fdevnode )
+					else
+						M.Flashcache.bind( physical, logical, metainfo.mode )
+					end
 				end
 			end
 		end
