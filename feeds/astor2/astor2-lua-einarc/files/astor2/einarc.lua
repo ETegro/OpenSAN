@@ -235,6 +235,7 @@ end
 -- @return { 0 = Logical, 1 = Logical }
 function M.Logical.list()
 	local logicals = {}
+	local flashcache_map = M.Flashcache.list()
 	for _,device in pairs( list_devices() ) do
 		if device.type == "md" then
 			local logical = common.deepcopy( device )
@@ -272,6 +273,12 @@ function M.Logical.list()
 					logical.state = "reshaping"
 				else
 					logical.state = "rebuilding"
+				end
+			end
+			for _,map in ipairs( flashcache_map ) do
+				if map.logical_id == logical.id then
+					logical.cache_mode = map.mode
+					logical.cached_by = map.physical_id
 				end
 			end
 			logical.capacity = logical.size
@@ -557,6 +564,7 @@ end
 function M.Physical.list()
 	local physicals = {}
 	local devices = list_devices()
+	local flashcache_map = M.Flashcache.list()
 	for _,device in pairs( devices ) do
 		if device.type == "sd" then
 			local physical = common.deepcopy( device )
@@ -571,6 +579,11 @@ function M.Physical.list()
 					common.is_in_array( device.devnode, device_int.slaves ) then
 					local physical_list = M.Logical.physical_list( device_int )
 					physical.state = physical_list[ M.phys_to_scsi( device.devnode ) ]
+				end
+			end
+			for _,map in ipairs( flashcache_map ) do
+				if map.physical_id == physical.id then
+					physical.state = "cache"
 				end
 			end
 			physicals[ physical.id ] = M.Physical:new( physical )
