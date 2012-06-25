@@ -711,20 +711,45 @@ M.Flashcache = {}
 local Flashcache_mt = common.Class( M.Flashcache )
 
 M.Flashcache.modes = {
-	["around"] = "A",
-	["back"] = "B",
-	["thru"] = "T"
+	["WRITE_THROUGH"] = {
+		meta = "T",
+		cmdline = "through"
+	},
+	["WRITE_AROUND"] = {
+		meta = "A",
+		cmdline = "around"
+	},
+	["WRITE_BACK"] = {
+		meta = "B",
+		cmdline = "back"
+	}
 }
 
+local function flashcache_destroy_meta( fdevnode )
+	local fd = io.open( fdevnode, "w" )
+	local metainfo = ""
+	for i=1,120 do metainfo = metainfo + '\0' end
+	fd:seek( "end", -#metainfo )
+	fd:write( metainfo )
+	fd:close()
+end
+
+local function flashcache_destroy( physical )
+	assert( physical.fdevnode, "no valid Physical is found" )
+	common.system( "flashcache_destroy " .. physical.fdevnode )
+	pcall( flashcache_destroy_meta, physical.fdevnode )
+end
+
 --- Cache Logical by Physical in specified mode
--- @param physical Physical
--- @param logical Logical
+-- @param physical Physical to use as cache device
+-- @param logical Logical is needed to be cached
 -- @param mode "through"
 function M.Flashcache.bind( physical, logical, mode )
 	assert( physical and physical.id, "invalid Physical object" )
 	assert( logical.id, "unable to get Logical object" )
 	assert( common.is_in_array( mode, common.keys( M.Flashcache.modes ) ), "unknown mode" )
-	local mode_string = M.Flashcache.modes[ mode ]
+	flashcache_destroy( physical )
+	local mode_string = M.Flashcache.modes[ mode ].meta
 	local logical_uuid = logical:uuid()
 	local metainfo = mode_string .. logical_uuid ..
 		sha2.sha256hex( logical_uuid .. mode_string .. "OpenSAN" )
@@ -734,7 +759,7 @@ function M.Flashcache.bind( physical, logical, mode )
 	fd:close()
 	common.system_succeed( table.concat( {
 		"flashcache_create",
-		"-p", mode,
+		"-p", M.Flashcache.modes[ mode ].cmdline,
 		"-s", tostring( math.floor( physical.size * 0.80 ) ) .. "m",
 		"flashcache" .. logical.devnode,
 		physical.fdevnode,
