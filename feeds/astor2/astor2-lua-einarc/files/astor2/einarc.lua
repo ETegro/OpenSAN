@@ -788,6 +788,23 @@ function M.Flashcache.list()
 	return maps
 end
 
+local function flashcache_destroy_map( logical_devnode )
+	common.system( "dmsetup remove flashcache" .. logical_devnode )
+end
+
+--- Unbind Physical cache device from Logical
+function M.Flashcache.unbind( physical )
+	assert( physical and physical.id, "invalid Physical object" )
+	for _,info in ipairs( M.Flashcache.list() ) do
+		if info.physical_id == physical.id then
+			flashcache_destroy_map(
+				M.Logical.list()[ info.logical_id ].devnode
+			)
+			flashcache_destroy( M.Physical.list()[ info.physical_id ] )
+		end
+	end
+end
+
 -----------------------------------------------------------------------
 -- Physicals sorting
 -----------------------------------------------------------------------
