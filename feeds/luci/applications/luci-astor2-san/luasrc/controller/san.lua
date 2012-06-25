@@ -239,56 +239,70 @@ local function parse_inputs_by_re( inputs, re )
 end
 
 --[[
-                    + - - - - - - - - - - +
-                    '                     '
-                    '                     '
-                    '                     '
-                    '                     '
-                    '   H                 '
-                    '   H                 '
-                    '   H                 '
-                    '   H                   - - - -+
-                    '   v                          '
-                    ' +-----------------+          '
-                    ' | Does PV exist?  | ---+     '
-                    ' +-----------------+    |     '
-                    '   |                    |     '
-                    '   | YES                |     '
-                    '   |                    |     '
-+ - - - - - - - - -     |                    |     '
-' Deletion of RAID      |                    |     '
-'                       v                    |     '
-'                     +-----------------+    |     '
-'   +---------------- | Does VG exist?  |    |     '
-'   |                 +-----------------+    |     '
-'   |                   |                    | NO  '
-'   |                   | YES                |     '
-'   |                   v                    |     '
-'   |                 +-----------------+    |     '
-'   | NO              |     Stop VG     |    |     '
-'   |                 +-----------------+    |     '
-'   |                   |                    |     '
-'   |                   |                    |     '
-'   |                   v                    |     '
-'   |                 +-----------------+    |     '
-'   +---------------> | prepare( RAID ) | <--+     '
-'                     +-----------------+          '
-'                       |                          '
-+ - - - - - - - - -     |                   - - - -+
-                    '   |                 '
-                    '   |                 '
-                    '   v                 '
-                    ' +-----------------+ '
-                    ' |   Delete RAID   | '
-                    ' +-----------------+ '
-                    '   H                 '
-                    '   H                 '
-                    '   v                 '
-                    '                     '
-                    '                     '
-                    '                     '
-                    '                     '
-                    + - - - - - - - - - - +
+         ┌−−−−−−−−−−−−−−−−−−−−−−−−−┐
+         ╎ Deletion of RAID        ╎
+         ╎                         ╎
+         ╎                         ╎
+         ╎                         ╎
+         ╎                         ╎
+         ╎   ║                     ╎
+         ╎   ║                     ╎
+         ╎   ║                     ╎
+         ╎   ║                      −−−−−−−−┐
+         ╎   ∨                              ╎
+         ╎ ┌─────────────────────┐          ╎
+         ╎ │      PV exist?      │ ───┐     ╎
+         ╎ └─────────────────────┘    │     ╎
+         ╎   │                        │     ╎
+         ╎   │ YES                    │     ╎
+         ╎   │                        │     ╎
+┌−−−−−−−−    │                        │     ╎
+╎            ∨                        │     ╎
+╎          ┌─────────────────────┐    │     ╎
+╎   ┌───── │      VG exist?      │    │     ╎
+╎   │      └─────────────────────┘    │     ╎
+╎   │        │                        │ NO  ╎
+╎   │        │ YES                    │     ╎
+╎   │        ∨                        │     ╎
+╎   │      ┌─────────────────────┐    │     ╎
+╎   │ NO   │       Stop VG       │    │     ╎
+╎   │      └─────────────────────┘    │     ╎
+╎   │        │                        │     ╎
+╎   │        │                        │     ╎
+╎   │        ∨                        │     ╎
+╎   │      ┌─────────────────────┐    │     ╎
+╎   └────> │   prepare( RAID )   │ <──┘     ╎
+╎          └─────────────────────┘          ╎
+╎            │                              ╎
+└−−−−−−−−    │                              ╎
+         ╎   │                              ╎
+         ╎   │                              ╎
+         ╎   ∨                              ╎
+         ╎ ┌─────────────────────┐          ╎
+         ╎ │    RAID cached?     │ ───┐     ╎
+         ╎ └─────────────────────┘    │     ╎
+         ╎   │                        │     ╎
+         ╎   │ YES                    │     ╎
+         ╎   ∨                        │     ╎
+         ╎ ┌─────────────────────┐    │     ╎
+         ╎ │ Unbind cache device │    │ NO  ╎
+         ╎ └─────────────────────┘    │     ╎
+         ╎   │                        │     ╎
+         ╎   │                        │     ╎
+         ╎   ∨                        │     ╎
+         ╎ ┌─────────────────────┐    │     ╎
+         ╎ │     Delete RAID     │ <──┘     ╎
+         ╎ └─────────────────────┘          ╎
+         ╎   ║                              ╎
+         ╎   ║                      −−−−−−−−┘
+         ╎   ║                     ╎
+         ╎   ║                     ╎
+         ╎   ∨                     ╎
+         ╎                         ╎
+         ╎                         ╎
+         ╎                         ╎
+         ╎                         ╎
+         └−−−−−−−−−−−−−−−−−−−−−−−−−┘
 ]]
 local function einarc_logical_delete( inputs, data )
 	local i18n = luci.i18n.translate
@@ -320,6 +334,12 @@ local function einarc_logical_delete( inputs, data )
 	end
 
 	_,_ = pcall( lvm.PhysicalVolume.prepare, logical.device )
+
+	for _,map in ipairs( einarc.Flashcache.list() ) do
+		if map.logical_id == logical_id then
+			einarc.Flashcache.unbind( einarc.Physical.list()[ map.physical_id ] )
+		end
+	end
 
 	local return_code, result = pcall( einarc.Logical.delete, einarc.Logical.list()[ logical_id ] )
 	if not return_code then

@@ -13,6 +13,7 @@ start()
 		mdadm --assemble --force --uuid=$cmdline
 	done
 	ACTION=add . $HOTPLUG_DIR/20-hotspares
+	echo 'einarc = require "astor2.einarc"; einarc.Flashcache.assemble()' | lua -
 	echo 'lvm = require "astor2.lvm"; lvm.restore()' | lua -
 	echo 'caching = require "astor2.caching"; caching.apply()' | lua -
 	echo 'scst = require "astor2.scst"; scst.Daemon.apply()' | lua -

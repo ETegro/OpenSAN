@@ -16,7 +16,7 @@ define Package/astor2-lua-lvm
 	CATEGORY:=aStor2
 	TITLE:=Lua binding for LVM2
 	URL:=http://www.opensan.org/
-	DEPENDS:=+lua +lvm2 +astor2-lua-common
+	DEPENDS:=+lua +lvm2 +astor2-lua-common +astor2-lua-einarc
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 

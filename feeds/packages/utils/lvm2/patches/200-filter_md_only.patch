@@ -5,7 +5,7 @@
  
      # By default we accept every block device:
 -    filter = [ "a/.*/" ]
-+    filter = [ "a|^/dev/md|", "r|.*|" ]
++    filter = [ "a|^/dev/md|", "a|^/dev/mapper/flashcachemd|", "r|.*|" ]
  
      # Exclude the cdrom drive
      # filter = [ "r|/dev/cdrom|" ]

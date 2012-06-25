@@ -235,6 +235,7 @@ end
 -- @return { 0 = Logical, 1 = Logical }
 function M.Logical.list()
 	local logicals = {}
+	local flashcache_map = M.Flashcache.list()
 	for _,device in pairs( list_devices() ) do
 		if device.type == "md" then
 			local logical = common.deepcopy( device )
@@ -274,8 +275,18 @@ function M.Logical.list()
 					logical.state = "rebuilding"
 				end
 			end
+			for _,map in ipairs( flashcache_map ) do
+				if map.logical_id == logical.id then
+					logical.cache_mode = map.mode
+					logical.cached_by = map.physical_id
+				end
+			end
 			logical.capacity = logical.size
-			logical.device = logical.fdevnode
+			if logical.cache_mode then
+				logical.device = M.Flashcache.PREFIX .. logical.devnode
+			else
+				logical.device = logical.fdevnode
+			end
 			logicals[ logical.id ] = M.Logical:new( logical )
 		end
 	end
@@ -557,6 +568,7 @@ end
 function M.Physical.list()
 	local physicals = {}
 	local devices = list_devices()
+	local flashcache_map = M.Flashcache.list()
 	for _,device in pairs( devices ) do
 		if device.type == "sd" then
 			local physical = common.deepcopy( device )
@@ -571,6 +583,11 @@ function M.Physical.list()
 					common.is_in_array( device.devnode, device_int.slaves ) then
 					local physical_list = M.Logical.physical_list( device_int )
 					physical.state = physical_list[ M.phys_to_scsi( device.devnode ) ]
+				end
+			end
+			for _,map in ipairs( flashcache_map ) do
+				if map.physical_id == physical.id then
+					physical.state = "cache"
 				end
 			end
 			physicals[ physical.id ] = M.Physical:new( physical )
@@ -715,6 +732,7 @@ M.Flashcache = {}
 local Flashcache_mt = common.Class( M.Flashcache )
 
 M.Flashcache.META_SIZE = 100
+M.Flashcache.PREFIX = "/dev/mapper/flashcache"
 M.Flashcache.MODES = {
 	["WRITE_THROUGH"] = {
 		meta = "T",
@@ -872,6 +890,17 @@ function M.Flashcache.assemble()
 			end
 		end
 	end
+end
+
+function M.Flashcache.path_cached( fdevnode )
+	local md = string.sub( fdevnode, 6 )
+	local logical_id = tonumber( string.sub( md, 3 ) )
+	for _,map in ipairs( M.Flashcache.list() ) do
+		if map.logical_id == logical_id then
+			return M.Flashcache.PREFIX .. md
+		end
+	end
+	return fdevnode
 end
 
 -----------------------------------------------------------------------

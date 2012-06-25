@@ -22,6 +22,7 @@ local PE_DEFAULT_SIZE = 64 -- MiB
 local M = {}
 
 local common = require( "astor2.common" )
+local einarc = require( "astor2.einarc" )
 
 --- Check if specified string is a disk device
 -- It performs simple matching by ^/dev/ regular expression
@@ -30,9 +31,12 @@ local common = require( "astor2.common" )
 local function is_disk( disk )
 	assert( disk and common.is_string( disk ),
 	        "no disk specified" )
-	local dev_exists = string.match( disk, "^/dev/[^/]+$" )
-	if not dev_exists then return false end
-	return true
+	if string.match( disk, "^/dev/[^/]+$" ) or
+		string.match( disk, "^/dev/mapper/[^/]+$" ) then
+		return true
+	else
+		return false
+	end
 end
 
 --------------------------------------------------------------------------
@@ -154,7 +158,7 @@ function M.PhysicalVolume.list()
 			capacity = capacity,
 			unusable = unusable,
 			extent = extent,
-			device = device,
+			device = einarc.Flashcache.path_cached( device ),
 			volume_group = volume_group
 		} )
 		end
