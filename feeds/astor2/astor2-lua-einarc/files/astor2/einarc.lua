@@ -286,11 +286,15 @@ end
 -- @return str UUID
 function M.Logical:uuid()
 	assert( self.id, "unable to get self object" )
+	if self.uuid_cached then
+		return self.uuid_cached
+	end
 	for _,line in ipairs( common.system( table.concat( {
 		"mdadm", "--detail", "--export", self.fdevnode
 	}, " " ) ).stdout ) do
 		if string.sub( line, 1, 7 ) == "MD_UUID" then
-			return string.sub( line, 9 )
+			self.uuid_cached = string.sub( line, 9 )
+			return self.uuid_cached
 		end
 	end
 end
@@ -710,7 +714,8 @@ end
 M.Flashcache = {}
 local Flashcache_mt = common.Class( M.Flashcache )
 
-M.Flashcache.modes = {
+M.Flashcache.META_SIZE = 100
+M.Flashcache.MODES = {
 	["WRITE_THROUGH"] = {
 		meta = "T",
 		cmdline = "through"
@@ -728,7 +733,7 @@ M.Flashcache.modes = {
 local function flashcache_destroy_meta( fdevnode )
 	local fd = io.open( fdevnode, "w" )
 	local metainfo = ""
-	for i=1,120 do metainfo = metainfo + '\0' end
+	for i=1,M.Flashcache.META_SIZE do metainfo = metainfo + '\0' end
 	fd:seek( "end", -#metainfo )
 	fd:write( metainfo )
 	fd:close()
@@ -747,19 +752,18 @@ end
 function M.Flashcache.bind( physical, logical, mode )
 	assert( physical and physical.id, "invalid Physical object" )
 	assert( logical.id, "unable to get Logical object" )
-	assert( common.is_in_array( mode, common.keys( M.Flashcache.modes ) ), "unknown mode" )
+	assert( common.is_in_array( mode, common.keys( M.Flashcache.MODES ) ), "unknown mode" )
 	flashcache_destroy( physical )
-	local mode_string = M.Flashcache.modes[ mode ].meta
-	local logical_uuid = logical:uuid()
-	local metainfo = mode_string .. logical_uuid ..
-		sha2.sha256hex( logical_uuid .. mode_string .. "OpenSAN" )
+	local mode_string = M.Flashcache.MODES[ mode ].meta
+	local metainfo = mode_string .. logical:uuid() ..
+		sha2.sha256hex( logical:uuid() .. mode_string .. "OpenSAN" )
 	local fd = io.open( physical.fdevnode, "w" )
 	fd:seek( "end", -#metainfo )
 	fd:write( metainfo )
 	fd:close()
 	common.system_succeed( table.concat( {
 		"flashcache_create",
-		"-p", M.Flashcache.modes[ mode ].cmdline,
+		"-p", M.Flashcache.MODES[ mode ].cmdline,
 		"-s", tostring( math.floor( physical.size * 0.80 ) ) .. "m",
 		"flashcache" .. logical.devnode,
 		physical.fdevnode,
@@ -801,6 +805,63 @@ function M.Flashcache.unbind( physical )
 				M.Logical.list()[ info.logical_id ].devnode
 			)
 			flashcache_destroy( M.Physical.list()[ info.physical_id ] )
+		end
+	end
+end
+
+function flashcache_metaread( fdevnode )
+	local fd = io.open( fdevnode, "r" )
+	fd:seek( "end", -M.Flashcache.META_SIZE )
+	local metainfo = fd:read( "*a" )
+	fd:close()
+	local meta_parsed = {}
+	if #metainfo ~= M.Flashcache.META_SIZE then
+		return false
+	end
+	meta_parsed.mode = string.sub( metainfo, 1, 1 )
+	local mode_found = false
+	for mode_name,mode in pairs( M.Flashcache.MODES ) do
+		if mode.meta == meta_parsed.mode then
+			meta_parsed.mode = mode_name
+			mode_found = true
+		end
+	end
+	if not mode_found then return false end
+	meta_parsed.uuid = string.sub( metainfo, 2, 36 )
+	local valid_re = {}
+	for i=1,4 do
+		local part = ""
+		for j=1,8 do
+			part = part .. "[0-9a-f]"
+		end
+		valid_re[ #valid_re + 1 ] = part
+	end
+	valid_re = table.concat( valid_re, ":" )
+	if not string.match( meta_parsed.uuid, valid_re ) then
+		return false
+	end
+	if sha2.sha256hex(
+		meta_parsed.uuid .. M.Flashcache.MODES[ meta_parsed.mode ].meta .. "OpenSAN"
+	) ~= string.sub( metainfo, 37 ) then
+		return false
+	end
+	return meta_parsed
+end
+
+function M.Flashcache.assemble()
+	local logicals = {}
+	for logical_id,logical in pairs( M.Logical.list() ) do
+		logical:uuid() -- pre-cache UUID
+		logicals[ logical_id ] = logical
+	end
+	for _,physical in pairs( M.Physical.list() ) do
+		local return_code, metainfo = pcall( flashcache_metaread, physical.fdevnode )
+		if return_code and metainfo then
+			for _,logical in pairs( logicals ) do
+				if logical:uuid() == metainfo.uuid then
+					M.Flashcache.bind( physical, logical, metainfo.mode )
+				end
+			end
 		end
 	end
 end
