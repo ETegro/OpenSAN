@@ -767,6 +767,27 @@ function M.Flashcache.bind( physical, logical, mode )
 	}, " " ) )
 end
 
+--- List all flashcache-related devices
+function M.Flashcache.list()
+	local result = common.system( "dmsetup table" ).stdout
+	local maps = {}
+	for i=1,#result do
+		if common.split_by( result[ i ], " " )[4] == "flashcache" then
+			local physical_dev, logical_id, mode = string.match(
+				result[ i + 1 ],
+				"^.*ssd dev ..dev.(%w+)., disk dev ..dev.md(%d+). cache mode.(.+).$"
+			)
+			assert( physical_dev and logical_id and mode )
+			maps[ #maps + 1 ] = {
+				physical_id = M.phys_to_scsi( physical_dev ),
+				logical_id = tonumber( logical_id ),
+				mode = mode
+			}
+		end
+	end
+	return maps
+end
+
 -----------------------------------------------------------------------
 -- Physicals sorting
 -----------------------------------------------------------------------
