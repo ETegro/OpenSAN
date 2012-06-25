@@ -282,7 +282,11 @@ function M.Logical.list()
 				end
 			end
 			logical.capacity = logical.size
-			logical.device = logical.fdevnode
+			if logical.cache_mode then
+				logical.device = M.Flashcache.PREFIX .. logical.devnode
+			else
+				logical.device = logical.fdevnode
+			end
 			logicals[ logical.id ] = M.Logical:new( logical )
 		end
 	end
@@ -728,6 +732,7 @@ M.Flashcache = {}
 local Flashcache_mt = common.Class( M.Flashcache )
 
 M.Flashcache.META_SIZE = 100
+M.Flashcache.PREFIX = "/dev/mapper/flashcache"
 M.Flashcache.MODES = {
 	["WRITE_THROUGH"] = {
 		meta = "T",
@@ -885,6 +890,17 @@ function M.Flashcache.assemble()
 			end
 		end
 	end
+end
+
+function M.Flashcache.path_cached( fdevnode )
+	local md = string.sub( fdevnode, 6 )
+	local logical_id = tonumber( string.sub( md, 3 ) )
+	for _,map in ipairs( M.Flashcache.list() ) do
+		if map.logical_id == logical_id then
+			return M.Flashcache.PREFIX .. md
+		end
+	end
+	return fdevnode
 end
 
 -----------------------------------------------------------------------
