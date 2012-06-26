@@ -64,6 +64,12 @@ function M.overall( data )
 
 	for _,logical_id in ipairs( logical_ids ) do
 		local logical = logicals[ logical_id ]
+
+		-- Fill up cached physicals
+		if logical.cached_by then
+			logical.physicals[ logical.cached_by ] = physicals[ logical.cached_by ]
+		end
+
 		local physicals_quantity = #common.keys( logical.physicals )
 		local logical_volumes_quantity = #common.keys( logical.logical_volumes or {} )
 		local lines_quantity = physicals_quantity
