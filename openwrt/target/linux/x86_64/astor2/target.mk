@@ -43,6 +43,7 @@ DEFAULT_PACKAGES += \
 	astor2-factory-defaults \
 	astor2-var-partition \
 	kmod-crypto-core \
+	flashcache \
 	sysstat \
 	apcupsd \
 	sgeraser \
