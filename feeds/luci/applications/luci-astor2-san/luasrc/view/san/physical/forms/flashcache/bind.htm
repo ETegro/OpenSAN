@@ -50,6 +50,17 @@
 		</select>
 	</div>
 
+	<div class="inline"><%: Mode %>: </div>
+	<div class="inline">
+		<select id="san.logical_id_flashcache_mode-<%= hash( line.physical.id ) %>"
+			name="san.logical_id_flashcache_mode-<%= hash( line.physical.id ) %>"
+			size="1" >
+			<% for _, mode in ipairs( flashcache_modes ) do %>
+				<option value="<%= mode %>"><%= mode %></option>
+			<% end %>
+		</select>
+	</div>
+
 	<div class="inline">
 		<input id="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
 		       name="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
