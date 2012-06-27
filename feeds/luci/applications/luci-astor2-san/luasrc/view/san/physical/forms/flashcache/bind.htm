@@ -19,6 +19,24 @@
 
 <fieldset id="fieldset_flashcache-<%= hash( line.physical.id ) %>">
 	<legend><%: Flashcache %></legend>
+
+	<table>
+		<tbody>
+			<% for logical_id, flashcache_info in pairs( flashcache ) do %>
+				<% if flashcache_info.cacheable == false then %>
+					<tr>
+						<td>
+							<div><%: RAID %> <%: ID %>: <%= logical_id %></div>
+						</td>
+						<td>
+							<div><%= flashcache_info.message %></div>
+						</td>
+					</tr>
+				<% end %>
+			<% end %>
+		</tbody>
+	</table>
+
 	<div class="inline">
 		<input id="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
 		       name="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
