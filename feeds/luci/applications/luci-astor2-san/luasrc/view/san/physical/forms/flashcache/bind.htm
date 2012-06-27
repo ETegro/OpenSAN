@@ -37,6 +37,19 @@
 		</tbody>
 	</table>
 
+	<div class="inline"><%: RAID %> <%: ID %>: </div>
+	<div class="inline">
+		<select id="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
+			name="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
+			size="1" >
+			<% for logical_id, flashcache_info in pairs( flashcache ) do %>
+				<% if flashcache_info.cacheable == true then %>
+					<option value="<%= logical_id %>"><%= logical_id %></option>
+				<% end %>
+			<% end %>
+		</select>
+	</div>
+
 	<div class="inline">
 		<input id="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
 		       name="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
