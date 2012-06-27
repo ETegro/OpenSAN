@@ -35,6 +35,7 @@
 				<th scope="col" width="25%"><%: Sessions %></th>
 			</tr>
 			<% flashcache = matrix_overall.flashcache %>
+			<% flashcache_modes = matrix_overall.flashcache_modes %>
 			<% for _, line_local in ipairs( matrix_overall.lines ) do %>
 				<%# Our templates must be able to access locally scoped line_local %>
 				<% line = line_local %>
