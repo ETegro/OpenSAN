@@ -400,6 +400,10 @@ div[ id *= "logical_volume_snapshot_resize_slider-" ] {
 	background-color: #CCC;
 }
 
+.physical-background-state-cache {
+	background-color: #B1FCF6;
+}
+
 /* Logicals */
 .logical-background-color-lightgreen {
 	background-color: #C8FCB1;
