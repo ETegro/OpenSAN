@@ -701,6 +701,36 @@ function M.filter_calculate_flashcache( matrix )
 	return matrix
 end
 
+function M.filter_unbindability_physical_flashcache( matrix )
+	local lines = matrix.lines
+	for _, main_line in ipairs( lines ) do
+		if main_line.logical and main_line.logical.cached_by then
+			local unbindable = true
+			for _, line in ipairs( lines ) do
+				if ( line.logical and line.logical.cached_by ) then
+					if line.logical.logical_volumes then
+						for _, logical_volume in pairs( line.logical.logical_volumes ) do
+							if logical_volume.access_patterns then
+								for _, access_pattern in pairs( logical_volume.access_patterns ) do
+									if access_pattern then
+										unbindable = false
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+			for _, line in ipairs( lines ) do
+				if line.physical and line.physical.id == main_line.logical.cached_by then
+					line.physical.unbindable = unbindable
+				end
+			end
+		end
+	end
+	return matrix
+end
+
 function filter_serialize( matrix )
 	local serializer = luci.util.serialize_data
 	matrix.serialized_physicals = serializer( matrix.physicals )
@@ -882,6 +912,7 @@ function M.caller()
 		M.filter_deletability_logical_volume,
 		M.filter_resizability_logical_volume,
 		M.filter_unbindability_access_pattern,
+		M.filter_unbindability_physical_flashcache,
 		filter_mib_humanize,
 		filter_size_round,
 		filter_fillup_auth_credentials,
