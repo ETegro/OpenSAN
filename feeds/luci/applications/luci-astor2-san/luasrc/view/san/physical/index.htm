@@ -30,7 +30,9 @@
 					<%+san/physical/forms/hotspare/delete%>
 				<% end %>
 				<% if line.physical.state == "cache" then %>
-					<%+san/physical/forms/flashcache/unbind%>
+					<% if line.physical.unbindable then %>
+						<%+san/physical/forms/flashcache/unbind%>
+					<% end %>
 				<% end %>
 				<% if line.physical.state == "failed" then %>
 					<%+san/physical/forms/delete%>
