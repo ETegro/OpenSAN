@@ -464,6 +464,24 @@ local function einarc_logical_flashcache_bind( inputs, data )
 	return index_with_error( message_error )
 end
 
+local function einarc_logical_flashcache_unbind( inputs, data )
+	local i18n = luci.i18n.translate
+	local message_error = nil
+
+	local physical_id_hash = parse_inputs_by_re( inputs, {"^submit_logical_flashcache_unbind.(",hashre,")"} )
+	assert( physical_id_hash, "unable to parse out physical's id" )
+	local physical_id = find_physical_id_in_data_by_hash( physical_id_hash, data )
+
+	local return_code, result = pcall(
+		einarc.Flashcache.unbind,
+		einarc.Physical.list()[ physical_id ]
+	)
+	if not return_code then
+		message_error = i18n("Failed to unbind SSD cache") .. ": " .. result
+	end
+	return index_with_error( message_error )
+end
+
 local function einarc_logical_grow( inputs, drives, data )
 	local i18n = luci.i18n.translate
 	local message_error = nil
@@ -1319,6 +1337,7 @@ function perform()
 		logical_hotspare_delete = function() einarc_logical_hotspare_delete( inputs, data ) end,
 		logical_physical_detach = function() einarc_logical_physical_detach( inputs, data ) end,
 		logical_flashcache_bind = function() einarc_logical_flashcache_bind( inputs, data ) end,
+		logical_flashcache_unbind = function() einarc_logical_flashcache_unbind( inputs, data ) end,
 		logical_grow = function() einarc_logical_grow( inputs, get( "san.grow_physical_id" ), data ) end,
 		logical_volume_add = function() lvm_logical_volume_add( inputs, data ) end,
 		logical_volume_remove = function() lvm_logical_volume_remove( inputs, data ) end,
