@@ -33,31 +33,43 @@
 					</tr>
 				<% end %>
 			<% end %>
+			<tr>
+				<td>
+					<div class="inline"><%: RAID %> <%: ID %>: </div>
+				</td>
+				<td>
+					<div class="inline">
+						<select id="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
+							name="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
+							size="1" >
+							<% for logical_id, flashcache_info in pairs( flashcache ) do %>
+								<% if flashcache_info.cacheable == true then %>
+									<option value="<%= logical_id %>"><%= logical_id %></option>
+								<% end %>
+							<% end %>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="inline"><%: Mode %>: </div>
+				</td>
+				<td>
+					<div class="inline">
+						<select id="san.logical_id_flashcache_mode-<%= hash( line.physical.id ) %>"
+							name="san.logical_id_flashcache_mode-<%= hash( line.physical.id ) %>"
+							size="1" >
+							<% for _, mode in ipairs( flashcache_modes ) do %>
+								<option value="<%= mode %>"><%= mode %></option>
+							<% end %>
+						</select>
+					</div>
+				</td>
+			</tr>
 		</tbody>
 	</table>
-	<div class="inline"><%: RAID %> <%: ID %>: </div>
-	<div class="inline">
-		<select id="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
-			name="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
-			size="1" >
-			<% for logical_id, flashcache_info in pairs( flashcache ) do %>
-				<% if flashcache_info.cacheable == true then %>
-					<option value="<%= logical_id %>"><%= logical_id %></option>
-				<% end %>
-			<% end %>
-		</select>
-	</div>
-	<div class="inline"><%: Mode %>: </div>
-	<div class="inline">
-		<select id="san.logical_id_flashcache_mode-<%= hash( line.physical.id ) %>"
-			name="san.logical_id_flashcache_mode-<%= hash( line.physical.id ) %>"
-			size="1" >
-			<% for _, mode in ipairs( flashcache_modes ) do %>
-				<option value="<%= mode %>"><%= mode %></option>
-			<% end %>
-		</select>
-	</div>
-	<div class="inline">
+	<div class="form">
 		<input id="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
 		       name="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
 		       class="icon-add-wide"
