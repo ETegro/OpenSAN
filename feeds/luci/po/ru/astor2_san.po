@@ -423,3 +423,12 @@ msgstr "Действительно удалить отказавший диск?
 
 msgid "Detach failed drive"
 msgstr "Отключить отказавший диск"
+
+msgid "Array must be in \"normal\" state"
+msgstr "Массив должен быть в \"нормальном\" состоянии"
+
+msgid "Unbind all Access patterns"
+msgstr "Открепите все шаблоны доступа"
+
+msgid "Already cached"
+msgstr "Уже закэширован"
