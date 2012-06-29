@@ -441,3 +441,12 @@ msgstr "Невозможно прикрепить SSD кэш"
 
 msgid "Failed to unbind SSD cache"
 msgstr "Невозможно открепить SSD кэш"
+
+msgid "WRITE_AROUND"
+msgstr "WriteAround"
+
+msgid "WRITE_BACK"
+msgstr "WriteBack"
+
+msgid "WRITE_THROUGH"
+msgstr "WriteThrough"
