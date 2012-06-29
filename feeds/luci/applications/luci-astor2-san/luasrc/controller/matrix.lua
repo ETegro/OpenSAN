@@ -64,6 +64,12 @@ function M.overall( data )
 
 	for _,logical_id in ipairs( logical_ids ) do
 		local logical = logicals[ logical_id ]
+
+		-- Fill up cached physicals
+		if logical.cached_by then
+			logical.physicals[ logical.cached_by ] = physicals[ logical.cached_by ]
+		end
+
 		local physicals_quantity = #common.keys( logical.physicals )
 		local logical_volumes_quantity = #common.keys( logical.logical_volumes or {} )
 		local lines_quantity = physicals_quantity
@@ -662,6 +668,69 @@ function M.filter_calculate_hotspares( matrix )
 	return matrix
 end
 
+function M.filter_calculate_flashcache( matrix )
+	matrix.flashcache = {}
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical then
+			local cacheable = true
+			local message
+			if line.logical.state ~= "normal" then
+				cacheable = false
+				message = 'Array must be in "normal" state'
+			end
+			if line.logical.logical_volumes then
+				for _,logical_volume in pairs( line.logical.logical_volumes ) do
+					if logical_volume.access_patterns then
+						cacheable = false
+						message = 'Unbind all Access patterns'
+					end
+				end
+			end
+			if line.logical.cached_by then
+				cacheable = false
+				message = 'Already cached'
+			end
+			matrix.flashcache[ line.logical.id ] = { cacheable = cacheable }
+			if cacheable == false then
+				matrix.flashcache[ line.logical.id ].message = message
+			end
+		end
+	end
+	matrix.flashcache_modes = common.keys( einarc.Flashcache.MODES )
+	return matrix
+end
+
+function M.filter_unbindability_physical_flashcache( matrix )
+	local lines = matrix.lines
+	for _, main_line in ipairs( lines ) do
+		if main_line.logical and main_line.logical.cached_by then
+			local unbindable = true
+			for _, line in ipairs( lines ) do
+				if ( line.logical and line.logical.cached_by ) then
+					if line.logical.logical_volumes then
+						for _, logical_volume in pairs( line.logical.logical_volumes ) do
+							if logical_volume.access_patterns then
+								for _, access_pattern in pairs( logical_volume.access_patterns ) do
+									if access_pattern then
+										unbindable = false
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+			for _, line in ipairs( lines ) do
+				if line.physical and line.physical.id == main_line.logical.cached_by then
+					line.physical.unbindable = unbindable
+				end
+			end
+		end
+	end
+	return matrix
+end
+
 function filter_serialize( matrix )
 	local serializer = luci.util.serialize_data
 	matrix.serialized_physicals = serializer( matrix.physicals )
@@ -838,10 +907,12 @@ function M.caller()
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
+		M.filter_calculate_flashcache,
 		M.filter_deletability_logical,
 		M.filter_deletability_logical_volume,
 		M.filter_resizability_logical_volume,
 		M.filter_unbindability_access_pattern,
+		M.filter_unbindability_physical_flashcache,
 		filter_mib_humanize,
 		filter_size_round,
 		filter_fillup_auth_credentials,
