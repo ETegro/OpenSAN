@@ -18,10 +18,10 @@
 %>
 
 <input name="san.submit_logical_flashcache_unbind-<%= hash( line.physical.id ) %>"
-       onclick=" if ( !confirm( '<%: Really unbind flashcache drive? %>' ) )
+       onclick=" if ( !confirm( '<%: Really unbind SSD cache? %>' ) )
                  return false;
                  return true;"
        class="inline icon-remove"
        type="submit"
-       title="<%: Unbind flashcache drive%>"
+       title="<%: Unbind SSD cache %>"
        value="" />

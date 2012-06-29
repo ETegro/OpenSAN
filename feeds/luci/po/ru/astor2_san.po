@@ -450,3 +450,18 @@ msgstr "WriteBack"
 
 msgid "WRITE_THROUGH"
 msgstr "WriteThrough"
+
+msgid "Unbind SSD cache"
+msgstr "Открепить SSD кэш"
+
+msgid "Really unbind SSD cache?"
+msgstr "Действительно открепить SSD кэш?"
+
+msgid "Mode"
+msgstr "Режим"
+
+msgid "Bind"
+msgstr "Прикрепить"
+
+msgid "Bind SSD cache"
+msgstr "Прикрепить SSD кэш"
