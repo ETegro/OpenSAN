@@ -465,3 +465,6 @@ msgstr "Прикрепить"
 
 msgid "Bind SSD cache"
 msgstr "Прикрепить SSD кэш"
+
+msgid "SSD cache"
+msgstr "SSD кэш"
