@@ -662,6 +662,39 @@ function M.filter_calculate_hotspares( matrix )
 	return matrix
 end
 
+function M.filter_calculate_flashcache( matrix )
+	matrix.flashcache = {}
+	local lines = matrix.lines
+	for current_line, line in ipairs( lines ) do
+		if line.logical then
+			local cacheable = true
+			local message
+			if line.logical.state ~= "normal" then
+				cacheable = false
+				message = 'Array must be in "normal" state'
+			end
+			if line.logical.logical_volumes then
+				for _,logical_volume in pairs( line.logical.logical_volumes ) do
+					if logical_volume.access_patterns then
+						cacheable = false
+						message = 'Unbind all Access patterns'
+					end
+				end
+			end
+			if line.logical.cached_by then
+				cacheable = false
+				message = 'Already cached'
+			end
+			matrix.flashcache[ line.logical.id ] = { cacheable = cacheable }
+			if cacheable == false then
+				matrix.flashcache[ line.logical.id ].message = message
+			end
+		end
+	end
+	matrix.flashcache_modes = common.keys( einarc.Flashcache.MODES )
+	return matrix
+end
+
 function filter_serialize( matrix )
 	local serializer = luci.util.serialize_data
 	matrix.serialized_physicals = serializer( matrix.physicals )
@@ -838,6 +871,7 @@ function M.caller()
 		M.filter_volume_group_percentage,
 		filter_add_logical_id_to_physical,
 		M.filter_calculate_hotspares,
+		M.filter_calculate_flashcache,
 		M.filter_deletability_logical,
 		M.filter_deletability_logical_volume,
 		M.filter_resizability_logical_volume,
