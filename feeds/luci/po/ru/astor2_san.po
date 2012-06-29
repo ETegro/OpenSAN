@@ -432,3 +432,12 @@ msgstr "Открепите все шаблоны доступа"
 
 msgid "Already cached"
 msgstr "Уже закэширован"
+
+msgid "Caching mode is not selected"
+msgstr "Не выбран режим кэширования"
+
+msgid "Failed to bind SSD cache"
+msgstr "Невозможно прикрепить SSD кэш"
+
+msgid "Failed to unbind SSD cache"
+msgstr "Невозможно открепить SSD кэш"
