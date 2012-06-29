@@ -61,7 +61,7 @@
 							name="san.logical_id_flashcache_mode-<%= hash( line.physical.id ) %>"
 							size="1" >
 							<% for _, mode in ipairs( flashcache_modes ) do %>
-								<option value="<%= mode %>"><%= mode %></option>
+								<option value="<%= mode %>"><%= translate( mode ) %></option>
 							<% end %>
 						</select>
 					</div>
