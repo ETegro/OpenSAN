@@ -21,8 +21,11 @@
 	<legend><%: SSD cache %></legend>
 	<table>
 		<tbody>
+			<% cacheables_found = {} %>
 			<% for logical_id, flashcache_info in pairs( flashcache ) do %>
-				<% if flashcache_info.cacheable == false then %>
+				<% if flashcache_info.cacheable then %>
+					<% cacheables_found[ #cacheables_found + 1 ] = logical_id %>
+				<% else %>
 					<tr>
 						<td>
 							<div><%: RAID %> <%: ID %>: <%= logical_id %></div>
@@ -33,6 +36,8 @@
 					</tr>
 				<% end %>
 			<% end %>
+			<% if #cacheables_found > 0 then %>
+			<% table.sort( cacheables_found ) %>
 			<tr>
 				<td>
 					<div class="inline"><%: RAID %> <%: ID %>: </div>
@@ -42,10 +47,8 @@
 						<select id="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
 							name="san.logical_id_flashcache-<%= hash( line.physical.id ) %>"
 							size="1" >
-							<% for logical_id, flashcache_info in pairs( flashcache ) do %>
-								<% if flashcache_info.cacheable == true then %>
-									<option value="<%= logical_id %>"><%= logical_id %></option>
-								<% end %>
+							<% for _,logical_id in ipairs( cacheables_found ) do %>
+								<option value="<%= logical_id %>"><%= logical_id %></option>
 							<% end %>
 						</select>
 					</div>
@@ -67,8 +70,10 @@
 					</div>
 				</td>
 			</tr>
+			<% end %>
 		</tbody>
 	</table>
+	<% if #cacheables_found > 0 then %>
 	<div class="form">
 		<input id="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
 		       name="san.submit_logical_flashcache_bind-<%= hash( line.physical.id ) %>"
@@ -77,4 +82,5 @@
 		       title="<%: Bind SSD cache %>"
 		       value="<%: Bind %>" />
 	</div>
+	<% end %>
 </fieldset>
