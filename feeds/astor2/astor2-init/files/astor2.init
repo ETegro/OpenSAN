@@ -3,15 +3,27 @@ START=51
 
 HOTPLUG_DIR="/etc/hotplug.d/block/preboot"
 
-start()
+arrays_stop()
 {
-	sleep 5
-	ACTION=add . $HOTPLUG_DIR/30-blockdevparams
+	cd /sys/block
+	for md in md*; do mdadm --stop --force /dev/$md; done
+}
+
+arrays_assemble()
+{
 	mdadm --examine --scan |
 		sed 's#^ARRAY .dev.md.\([0-9]*\) .* UUID=\([0-9:a-z]\{1,\}\).*$#\2 /dev/md\1#' |
 	while read cmdline; do
 		mdadm --assemble --force --uuid=$cmdline
 	done
+}
+
+start()
+{
+	sleep 60
+	ACTION=add . $HOTPLUG_DIR/30-blockdevparams
+	arrays_stop
+	arrays_assemble
 	ACTION=add . $HOTPLUG_DIR/20-hotspares
 	echo 'einarc = require "astor2.einarc"; einarc.Flashcache.assemble()' | lua -
 	echo 'lvm = require "astor2.lvm"; lvm.restore()' | lua -
