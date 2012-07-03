@@ -468,3 +468,6 @@ msgstr "Прикрепить SSD кэш"
 
 msgid "SSD cache"
 msgstr "SSD кэш"
+
+msgid "Cache mode"
+msgstr "Режим кэширования"
