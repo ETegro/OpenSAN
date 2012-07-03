@@ -12,6 +12,8 @@
   management.
 * [http://scst.sourceforge.net/index.html SCST] framework for creating
   iSCSI targets.
+* [https://github.com/facebook/flashcache Flashcache] module for SSD
+  caching support.
 * [http://jquery.com/ jQuery] is used to make different pretty
   outlooking interface interactions.
 * All interaction with LVM2 and SCST subsystems is going through the

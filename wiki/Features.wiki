@@ -11,6 +11,7 @@
 * **iSCSI** targets management
 * **iSCSI-3** [http://publib.boulder.ibm.com/infocenter/clresctr/vxrx/topic/com.ibm.cluster.gpfs32.diagnosis.doc/bl1pdg_understandpr.html persistent reservation] technology support
 * iSCSI **CHAP authentication** support
+* **SSD caching** capability
 * **IPv6** protocol support
 * Network bonding ability for gaining performance and reliability
   (including 802.3ad dynamic link aggregation protocol support)
