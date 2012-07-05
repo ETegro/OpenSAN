@@ -11,4 +11,6 @@ for t in tests/*_; do
 	ln -f -s `basename $t` tests/`basename $t _`
 done
 
-echo "return {}" > uci.lua
+for l in uci sha2; do
+	echo "return {}" > $l.lua
+done
