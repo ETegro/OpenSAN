@@ -1,3 +1,8 @@
+= 2.4 =
+SSD caching capability. You can use free physical drives for caching of
+hot most-frequently used data heap. Drive is just simply ''attached'' to
+existing logical drive.
+
 = 2.3.1 =
 This is bugfix release. Fixes issues with invalid service boot sequence.
 
@@ -210,6 +215,6 @@ administers. Also SCST Lua library **logs** all scstadmin's command
 * Command-line interface (CLI) accessibility via **SSH 2.0** (with SCP
   support)
 * Ability to **backup** overall configuration with restoring it later
-* Network configuration can be doned using either **static IPv4**
+* Network configuration can be done using either **static IPv4**
   addressing and routing, **DHCP** or using **bridged** interfaces
 * Real-time load average, traffic and connections **monitoring**
