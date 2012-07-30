@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %>
 
-<% if line.physical.state == 'free' then %>
+<% if line.physical.state == 'free' and #flashcache > 0 then %>
 	<% if flashcache then %>
 		<%+san/physical/forms/flashcache/bind%>
 	<% end %>
