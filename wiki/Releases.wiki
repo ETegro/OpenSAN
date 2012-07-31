@@ -1,3 +1,6 @@
+= 2.4.1 =
+Broadcom NetXtremeII-based NICs support.
+
 = 2.4 =
 SSD caching capability. You can use free physical drives for caching of
 hot most-frequently used data heap. Drive is just simply ''attached'' to
