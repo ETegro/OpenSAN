@@ -29,6 +29,7 @@ DEFAULT_PACKAGES += \
 	kmod-mpt2sas \
 	kmod-igb \
 	kmod-ixgbe \
+	kmod-cnic \
 	kmod-fs-xfs \
 	kmod-bonding \
 	kmod-ipv6 \

@@ -364,6 +364,39 @@ endef
 $(eval $(call KernelPackage,e1000))
 
 
+define KernelPackage/bnx2
+  SUBMENU:=$(NETWORK_DEVICES_MENU)
+  TITLE:=Broadcom NetXtremeII support
+  DEPENDS:=@PCIE_SUPPORT
+  KCONFIG:=CONFIG_BNX2
+  FILES:=$(LINUX_DIR)/drivers/net/bnx2.ko
+  AUTOLOAD:=$(call AutoLoad,50,bnx2)
+endef
+
+define KernelPackage/bnx2/description
+ Kernel module for Broadcom NetXtremeII gigabit Ethernet cards support
+endef
+
+$(eval $(call KernelPackage,bnx2))
+
+
+define KernelPackage/cnic
+  SUBMENU:=$(NETWORK_DEVICES_MENU)
+  TITLE:=Broadcom CNIC support
+  DEPENDS:=+kmod-bnx2
+  KCONFIG:=CONFIG_CNIC
+  FILES:=$(LINUX_DIR)/drivers/net/cnic.ko
+  AUTOLOAD:=$(call AutoLoad,50,cnic)
+endef
+
+define KernelPackage/cnic/description
+ Kernel module for offload features of Broadcom NetXtremeII
+ gigabit Ethernet cards
+endef
+
+$(eval $(call KernelPackage,cnic))
+
+
 define KernelPackage/e1000e
   SUBMENU:=$(NETWORK_DEVICES_MENU)
   TITLE:=Intel(R) PRO/1000 PCIe cards kernel support
