@@ -659,8 +659,12 @@ define KernelPackage/mpt2sas
   TITLE:=Fusion MPT2 SAS driver
   DEPENDS:=@TARGET_x86||TARGET_x86_64
   KCONFIG:=CONFIG_SCSI_MPT2SAS
-  FILES:=$(LINUX_DIR)/drivers/scsi/mpt2sas/mpt2sas.ko
-  AUTOLOAD:=$(call AutoLoad,31,mpt2sas)
+  FILES:= \
+	$(LINUX_DIR)/drivers/scsi/mpt2sas/mpt2sas.ko \
+	$(LINUX_DIR)/drivers/scsi/raid_class.ko
+  AUTOLOAD:= \
+	$(call AutoLoad,30,raid_class) \
+	$(call AutoLoad,31,mpt2sas)
 endef
 
 $(eval $(call KernelPackage,mpt2sas))
