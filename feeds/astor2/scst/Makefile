@@ -7,7 +7,7 @@ PKG_VERSION:=svn$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://scst.svn.sourceforge.net/svnroot/scst/branches/2.1.0.x
+PKG_SOURCE_URL:=https://scst.svn.sourceforge.net/svnroot/scst/branches/2.2.x
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
