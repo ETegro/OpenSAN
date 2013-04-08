@@ -74,7 +74,7 @@ call_build
 cleanup
 
 cd $WORK_DIR
-for tag in `git tag | grep "^V"`; do
+for tag in `git tag | grep "^V2.4"`; do
 	if ls "$WORK_DIR"/output/ | grep -q "[-]${tag}.\?$"; then
 		true
 	else
