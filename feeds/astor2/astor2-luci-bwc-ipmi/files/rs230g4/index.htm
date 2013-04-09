@@ -1,0 +1,91 @@
+<!--
+  aStor2 - storage area network configurable via Web-interface
+  Copyright (C) 2009-2012 ETegro Technologies, PLC
+                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+                          Sergey Matveev (stargrave@stargrave.org)
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<%+san_monitoring/attributes%>
+
+<%
+EMBED_SIZE = {
+	front = { width = 1155, height = 262 },
+	rear = { width = 1159, height = 261 },
+	motherboard = { width = 545, height = 643 },
+	legend = { width = 249, height = 101 },
+	jbod_enclosure = { width = 250, height = 63 },
+	jbod_rear = { width = 991, height = 367 }
+}
+
+local function svg_scaling( svg_template )
+	for property_name, property in pairs( svg_template ) do
+		svg_template[ property_name ] = property * tonumber( data.SVG_SCALE )
+	end
+	return svg_template
+end
+
+local function embed_style( svg_template )
+	local width = svg_template.width
+	local height = svg_template.height
+	return "width: " .. width .. "px; height: " .. height .. "px;"
+end
+
+for svg_template_name, svg_template in pairs( EMBED_SIZE ) do
+	if svg_template_name ~= "legend" then
+		local scaling = svg_scaling( svg_template )
+		svg_template.style = embed_style( scaling )
+	else
+		svg_template.style = embed_style( svg_template )
+	end
+end
+%>
+
+<table width="100%">
+	<tbody>
+		<tr>
+			<td>
+				<embed style="<%= EMBED_SIZE.front.style %> padding: 20px;"
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&bwc=1&enclosures=1" />
+				<br />
+				<embed style="<%= EMBED_SIZE.rear.style %> padding: 20px;"
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&bwc=1&network=1&pci=1" />
+			</td>
+			<td>
+				<embed style="<%= EMBED_SIZE.motherboard.style %> padding: 20px;"
+				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard&bwc=1" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<% for jbod_id,jbod_local in pairs( data.JBODS ) do %>
+	<% jbod = jbod_local %>
+	<table width="100%" border="1px">
+		<tbody>
+			<tr>
+				<td width="50%">
+					<%+san_monitoring/jbod_front%>
+				</td>
+				<td width="50%">
+					<embed style="<%= EMBED_SIZE.jbod_rear.style %>"
+						   src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=jbod_rear&jbod_id=<%= jbod_id %>" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+<% end %>
+
+<%+san_monitoring/legend%>

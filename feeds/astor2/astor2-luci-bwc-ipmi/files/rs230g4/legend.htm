@@ -1,0 +1,162 @@
+<%#
+  aStor2 - storage area network configurable via Web-interface
+  Copyright (C) 2009-2012 ETegro Technologies, PLC
+                          Vladimir Petukhov (vladimir.petukhov@etegro.com)
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%>
+
+<%+san_monitoring/attributes%>
+
+<%
+local enclosure_colors = {
+	in_array = { "blue", "green" },
+	hotspare = { "darkblue", "darkgreen" },
+	free = { "gray" },
+	empty = { "white" }
+}
+
+local network_colors = {
+	{ speed = 0, color = "gray" },
+	{ speed = 10, color = "red" },
+	{ speed = 100, color = "orange" },
+	{ speed = 1000, color = "yellow" },
+	{ speed = 10000, color = "green" }
+}
+
+require( "luci.i18n" ).loadc( "astor2_san")
+local i18n = luci.i18n.translate
+
+local common = {
+	[i18n("Critical")] = "red",
+	[i18n("Non critical")] = "orange",
+	[i18n("Normal")] = "green"
+}
+
+%>
+
+<fieldset class="monitoring_legend">
+	<legend><%: States %></legend>
+	<table class="legend" width="100%">
+		<tbody>
+		<tr>
+			<th colspan="2" scope="col" width="50%"><%: Enclosures %></th>
+			<th scope="col" width="25%"><%: Network interfaces %></th>
+			<th scope="col" width="25%"><%: Common %></th>
+		</tr>
+			<td>
+				<embed style="<%= EMBED_SIZE.legend.style %> padding: 20px;"
+					   src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=enclosure_legend" />
+			</td>
+			<td>
+				<table>
+					<tbody>
+					<tr>
+						<td width="20%">
+							<% for _,color in ipairs( enclosure_colors.in_array ) do %>
+								<div style="background-color: <%= data.COLORS[ color ] %>"
+									 class="legend_color">
+								</div>
+							<% end %>
+						</td>
+						<td width="80%" style="padding:10px;">
+							&#8211; <%: In array %>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%">
+							<% for _,color in pairs( enclosure_colors.hotspare ) do %>
+								<div style="background-color: <%= data.COLORS[ color ] %>"
+								     class="legend_color">
+								</div>
+							<% end %>
+						</td>
+						<td width="80%" style="padding:10px;">
+							&#8211; <%: Dedicated hotspare %>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%">
+							<% for _,color in pairs( enclosure_colors.free ) do %>
+								<div style="background-color: <%= data.COLORS[ color ] %>"
+								     class="legend_color">
+								</div>
+							<% end %>
+						</td>
+						<td width="80%" style="padding:10px;">
+							&#8211; <%: Not in array %>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%">
+							<% for _,color in pairs( enclosure_colors.empty ) do %>
+								<% local div_legend_style = "" %>
+								<% if color == "white" then %>
+									<% div_legend_style = "border: 1px solid #000;" %>
+								<% end %>
+								<div style="<%= div_legend_style %>
+								     background-color: <%= data.COLORS[ color ] %>"
+								     class="legend_color">
+								</div>
+							<% end %>
+						</td>
+						<td width="80%" style="padding:10px;">
+							&#8211; <%: Empty %>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</td>
+			<td>
+				<table>
+					<tbody>
+					<% for _,pair in pairs( network_colors ) do %>
+					<tr>
+						<td width="20%">
+							<div style="background-color: <%= data.COLORS[ pair.color ] %>"
+								 class="legend_color">
+							</div>
+						</td>
+						<td width="80%" style="padding:10px;">
+							<% if pair.speed ~= 0 then %>
+								&#8211; <%= pair.speed %> Mbps
+							<% else %>
+								&#8211; <%: No link %>
+							<% end %>
+						</td>
+					</tr>
+					<% end %>
+					</tbody>
+				</table>
+			</td>
+			<td>
+				<table>
+					<% for status,color in pairs( common ) do %>
+					<tr>
+						<td width="20%">
+							<div style="background-color: <%= data.COLORS[ color ] %>"
+								 class="legend_color">
+							</div>
+						</td>
+						<td width="80%" style="padding:10px;">
+							&#8211; <%= status %>
+						</td>
+					</tr>
+					<% end %>
+				</table>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</fieldset>
