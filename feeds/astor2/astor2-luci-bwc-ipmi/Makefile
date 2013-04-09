@@ -73,3 +73,4 @@ endef
 
 $(eval $(call BuildPackage,astor2-luci-bwc-ipmi))
 $(eval $(call BuildPackage,astor2-luci-bwc-ipmi-rs230g3))
+$(eval $(call BuildPackage,astor2-luci-bwc-ipmi-rs230g4))
