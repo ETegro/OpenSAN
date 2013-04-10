@@ -20,15 +20,6 @@ define Package/astor2-luci-bwc-ipmi
 	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
-define Package/astor2-luci-bwc-ipmi-rs230g3
-	SECTION:=astor2
-	CATEGORY:=aStor2
-	TITLE:=IPMI LuCI BWC-like daemon RS230 G3 profile
-	URL:=http://www.opensan.org/
-	DEPENDS:=+astor2-luci-bwc-ipmi +luci-app-astor2-san-monitoring
-	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
-endef
-
 define Package/astor2-luci-bwc-ipmi-rs230g4
 	SECTION:=astor2
 	CATEGORY:=aStor2
@@ -55,14 +46,6 @@ define Package/astor2-luci-bwc-ipmi/install
 	$(INSTALL_BIN) ./files/astor2-luci-bwc-ipmi.init $(1)/etc/init.d/astor2-luci-bwc-ipmi
 endef
 
-define Package/astor2-luci-bwc-ipmi-rs230g3/install
-	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
-	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/san_monitoring
-
-	$(INSTALL_CONF) ./files/rs230g3/configuration.lua $(1)/usr/lib/lua/luci/controller/san_monitoring_configuration.lua
-	$(INSTALL_DATA) ./files/rs230g3/*.htm $(1)/usr/lib/lua/luci/view/san_monitoring
-endef
-
 define Package/astor2-luci-bwc-ipmi-rs230g4/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/san_monitoring
@@ -72,5 +55,4 @@ define Package/astor2-luci-bwc-ipmi-rs230g4/install
 endef
 
 $(eval $(call BuildPackage,astor2-luci-bwc-ipmi))
-$(eval $(call BuildPackage,astor2-luci-bwc-ipmi-rs230g3))
 $(eval $(call BuildPackage,astor2-luci-bwc-ipmi-rs230g4))
