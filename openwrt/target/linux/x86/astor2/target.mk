@@ -37,7 +37,7 @@ DEFAULT_PACKAGES += \
 	uhttpd \
 	astor2-blockdev-parameters \
 	luci-app-astor2-san \
-	astor2-luci-bwc-ipmi-rs230g3 \
+	astor2-luci-bwc-ipmi-rs230g4 \
 	astor2-factory-defaults \
 	sysstat \
 	apcupsd \
