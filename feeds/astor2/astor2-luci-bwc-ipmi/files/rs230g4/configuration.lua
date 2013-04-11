@@ -36,7 +36,7 @@ enclosures = {
 }
 
 expanders = {
-	["internal"] = "BACKPLANE",
+	["internal"] = "BACKPLANE       ",
 	["jbod"] = { "DNS1400-01", "JS2-01" }
 }
 
