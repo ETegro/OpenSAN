@@ -32,11 +32,6 @@ my $BIN_TEMPLATE = "Nnnnnn";
 my @SENSORS;
 my %DATA;
 
-exit 0 unless defined $ARGV[0];
-config_read;
-daemonize and cycling if $ARGV[0] eq "-d";
-data_show @ARGV;
-
 sub config_read {
 	open SENSORS_FD, "< $SENSORS_CONFIG" or
 		die "Unable to read sensors config: $!\n";
@@ -125,4 +120,9 @@ sub data_show {
 	print join " ", unpack( $BIN_TEMPLATE, $step ), "\n" if $only_last;
 	close SENSOR_DATA;
 };
+
+exit 0 unless defined $ARGV[0];
+config_read;
+daemonize and cycling if $ARGV[0] eq "-d";
+data_show @ARGV;
 
