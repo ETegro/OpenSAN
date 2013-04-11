@@ -23,10 +23,10 @@ endef
 define Package/astor2-luci-bwc-ipmi-rs230g4
 	SECTION:=astor2
 	CATEGORY:=aStor2
-	TITLE:=IPMI LuCI BWC-like daemon RS230 G4 profile
+	TITLE:=IPMI LuCI BWC-like daemon RS230 G3 profile
 	URL:=http://www.opensan.org/
 	DEPENDS:=+astor2-luci-bwc-ipmi +luci-app-astor2-san-monitoring
-	MAINTAINER:=Denis Zheleztsov <dz@etegro.com>
+	MAINTAINER:=Sergey Matveev <stargrave@stargrave.org>
 endef
 
 define Build/Prepare
