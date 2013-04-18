@@ -2,7 +2,7 @@ module( "luci.controller.san_monitoring_configuration", package.seeall )
 
 configuration = {
 	front = {
-		["FP Temp"] = "FP"
+		["BP_Temp"] = "FP"
 	},
 	rear = {
 		["PSU Output"] = "PSU0",
@@ -10,7 +10,7 @@ configuration = {
 		["BP Fan1"] = "FAN0",
 		["BP Fan2"] = "FAN1",
 		["BP Fan3"] = "FAN2",
-		["BP_Temp"] = "BP"
+		["BP Temp"] = "BP"
 	},
 	motherboard = {
 		["CPU0 Temp"] = "CPU0",
