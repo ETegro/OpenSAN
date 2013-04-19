@@ -7,9 +7,10 @@ configuration = {
 	rear = {
 		["PSU Output"] = "PSU0",
 		["PSU1 Output"] = "PSU1",
-		["BP Fan1"] = "FAN0",
-		["BP Fan2"] = "FAN1",
-		["BP Fan3"] = "FAN2",
+		["SYS_FAN1-1"] = "FAN0",
+		["SYS_FAN2-1"] = "FAN1",
+		["SYS_FAN3-1"] = "FAN2",
+        ["SYS_FAN4-1"] = "FAN3",
 		["Exhaust_Temp"] = "BP"
 	},
 	motherboard = {
