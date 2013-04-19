@@ -10,12 +10,14 @@ configuration = {
 		["BP Fan1"] = "FAN0",
 		["BP Fan2"] = "FAN1",
 		["BP Fan3"] = "FAN2",
-		["BP Temp"] = "BP"
+		["Exhaust_Temp"] = "BP"
 	},
 	motherboard = {
 		["CPU0 Temp"] = "CPU0",
 		["CPU1 Temp"] = "CPU1",
-		["Temp_DIMM_A0"] = "MEM-BLOCK",
+		["Temp_DIMM_A0"] = "MEM-BLOCK0",
+        ["Temp_DIMM_D0"] = "MEM-BLOCK1",
+        ["TEMP_DIMM_F0"] = "MEM-BLOCK2",
 		["MB Temp"] = "MB"
 	}
 }
