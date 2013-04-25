@@ -19,7 +19,7 @@ configuration = {
 		["Temp_DIMM_A0"] = "MEM-BLOCK0",
         ["Temp_DIMM_D0"] = "MEM-BLOCK1",
         ["TEMP_DIMM_F0"] = "MEM-BLOCK2",
-		["MB Temp"] = "MB"
+		["Inlet_Temp"] = "MB"
 	}
 }
 
