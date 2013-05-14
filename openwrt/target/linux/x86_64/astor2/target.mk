@@ -40,7 +40,6 @@ DEFAULT_PACKAGES += \
 	uhttpd \
 	astor2-init \
 	luci-app-astor2-san \
-	astor2-luci-bwc-ipmi-rs230g3 \
 	astor2-factory-defaults \
 	astor2-var-partition \
 	kmod-crypto-core \
