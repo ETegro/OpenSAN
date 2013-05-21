@@ -44,6 +44,7 @@ define Package/astor2-luci-bwc-ipmi/install
 
 	$(INSTALL_BIN) ./files/luci-bwc-ipmi $(1)/usr/bin
 	$(INSTALL_BIN) ./files/astor2-luci-bwc-ipmi.init $(1)/etc/init.d/astor2-luci-bwc-ipmi
+	$(INSTALL_BIN) ./files/lib/IPMI.pm $(1)/usr/lib/perl5/5.10/IPMI.pm
 endef
 
 define Package/astor2-luci-bwc-ipmi-rs230g3/install
