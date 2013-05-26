@@ -47,6 +47,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 </metadata>
 <g transform="scale(<%= data.SVG_SCALE %>)">
 	<defs id="defs100" />
+<%# begin ASTOR2_MONITORING-BACK_PANEL %>
 	<g id="BODY">
 		<rect
 			width="1050"
@@ -57,7 +58,6 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			y="1.4"
 			id="rear"
 			style="fill:#ffffff" />
-		<!-- ASTOR2_MONITORING-REAR -->
 		<rect
 			width="1040"
 			height="208.8"
@@ -65,9 +65,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			ry="3"
 			x="6.3"
 			y="6.8"
-			id="ASTOR2_MONITORING-REAR"
-			style="fill:#008000;fill-opacity:0.3" />
-			<!-- DEBUG: set 'fill' and 'fill-opacity' -->
+			id="ASTOR2_MONITORING-BACK_PANEL"
+			style="fill:<%= data.BP.color %>;fill-opacity:<%= data.BP.opacity %>" />
 		<g id="gr_panel">
 			<rect
 				width="530"
@@ -859,6 +858,20 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				id="path4170"
 				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
 		</g>
+		<text
+			x="349.28485"
+			y="24.391571"
+			id="ASTOR2-MONITORING-BACK_PANEL"
+			xml:space="preserve"
+			style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+			<tspan
+				x="349.28485"
+				y="24.391571"
+				id="tspan5874"
+				style="font-size:18px;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">Back panel: <% if data.BP then %><%= data.BP.value %>°C<% else %>N/A<% end %></tspan>
+		</text>
+<%# end ASTOR2_MONITORING-BACK_PANEL %>
+
 	</g>
 	<g
 		id="HARDWARE"
@@ -2101,21 +2114,6 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			y="26.391571"
 			id="tspan5364"
 			style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth3</tspan>
-			<!-- DEBUG: set 'text' -->
-	</text>
-]] %>
-<% --[[
-	<text
-		x="349.28485"
-		y="24.391571"
-		id=" ASTOR2-MONITORING-PANEL"
-		xml:space="preserve"
-		style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-		<tspan
-			x="349.28485"
-			y="24.391571"
-			id="tspan5874"
-			style="font-size:18px;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">Back panel: 40°C</tspan>
 			<!-- DEBUG: set 'text' -->
 	</text>
 ]] %>
