@@ -980,11 +980,10 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			</g>
 		</g>
 ]] %>
-		<!-- ASTOR2-MONITORING-PSU -->
+<%# begin ASTOR2_MONITORING-PSU0 %>
 		<g
 			id="ASTOR2_MONITORING-PSU0"
 			style="fill:<%= data.PSU0.color or data.DEFAULT_NA_COLOR %>">
-			<!-- DEBUG: set 'fill' -->
 			<g id="PSU0-body">
 				<rect
 					width="220"
@@ -1173,14 +1172,14 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 						y="172.0787"
 						id="tspan5019"
 						style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.PSU0.value then %><%= data.PSU0.value %> W<% else %>N/A<% end %></tspan>
-						<!-- DEBUG: set 'text' -->
 				</text>
 			</g>
 		</g>
+<%# end ASTOR2_MONITORING-PSU0 %>
+<%# begin ASTOR2_MONITORING-PSU1 %>
 		<g
 			id="ASTOR2_MONITORING-PSU1"
 			style="fill:<%= data.PSU1.color or data.DEFAULT_NA_COLOR %>">
-			<!-- DEBUG: set 'fill' -->
 			<g id="PSU1_body">
 				<rect
 					width="220"
@@ -1372,6 +1371,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
+<%# end ASTOR2_MONITORING-PSU1 %>
 <% --[[
 		<g id="ASTOR2_MONITORING-PSU-TOTAL-TITLE">
 			<rect
