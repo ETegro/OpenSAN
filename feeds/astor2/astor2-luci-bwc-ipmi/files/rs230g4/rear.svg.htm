@@ -47,6 +47,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 </metadata>
 <g transform="scale(<%= data.SVG_SCALE %>)">
 	<defs id="defs100" />
+<%# begin ASTOR2_MONITORING-BACK_PANEL %>
 	<g id="BODY">
 		<rect
 			width="1050"
@@ -57,7 +58,6 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			y="1.4"
 			id="rear"
 			style="fill:#ffffff" />
-		<!-- ASTOR2_MONITORING-REAR -->
 		<rect
 			width="1040"
 			height="208.8"
@@ -65,9 +65,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			ry="3"
 			x="6.3"
 			y="6.8"
-			id="ASTOR2_MONITORING-REAR"
-			style="fill:#008000;fill-opacity:0.3" />
-			<!-- DEBUG: set 'fill' and 'fill-opacity' -->
+			id="ASTOR2_MONITORING-BACK_PANEL"
+			style="fill:<%= data.BP.color %>;fill-opacity:<%= data.BP.opacity %>" />
 		<g id="gr_panel">
 			<rect
 				width="530"
@@ -859,68 +858,27 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				id="path4170"
 				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
 		</g>
+		<text
+			x="349.28485"
+			y="24.391571"
+			id="ASTOR2-MONITORING-BACK_PANEL"
+			xml:space="preserve"
+			style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+			<tspan
+				x="349.28485"
+				y="24.391571"
+				id="tspan5874"
+				style="font-size:18px;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">Back panel: <% if data.BP then %><%= data.BP.value %>°C<% else %>N/A<% end %></tspan>
+		</text>
+<%# end ASTOR2_MONITORING-BACK_PANEL %>
 	</g>
 	<g
 		id="HARDWARE"
-		style="fill-opacity: 0.3">
-		<!-- DEBUG: set 'fill-opacity' -->
-	<!-- ASTOR2-MONITORING-HDD -->
-<% --[[
-		<g
-			id="ASTOR2_MONITORING-HDD1"
-			style="fill:#008000">
-			<!-- DEBUG: set 'fill' -->
-			<path
-				d="m 13.3,11.894 c -1.662,0 -3,1.338 -3,3 l 0,39 c 0,1.662 1.338,3 3,3 l 174,0 c 1.66,0 3,-1.338 3,-3 l 0,-39 c 0,-1.662 -1.34,-3 -3,-3 l -174,0 z m 1.219,3.218 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z"
-				id="HDD1-body" />
-			<path
-				d="m 149.18,14.05 0,6.625 -5.35,0 c -2.77,0 -5,2.23 -5,5 l 0,17.437 c 0,2.77 2.23,5 5,5 l 5.35,0 0,6.625 37.68,0 0,-40.687 -37.68,0 z"
-				id="rect4173"
-				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
-			<path
-				d="m 165.49,15.416 0,37.968 8.87,0 2.56,0 0.72,0 c 4.44,0 8,-3.568 8,-8 l 0,-21.968 c 0,-4.432 -3.56,-8 -8,-8 l -0.72,0 -2.56,0 z"
-				id="rect4008"
-				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
-			<rect
-				width="26.517"
-				height="27.42"
-				rx="5"
-				ry="5"
-				x="138.83"
-				y="20.69"
-				id="rect4015"
-				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
-			<g id="ASTOR2_MONITORING-HDD1-TITLE">
-				<rect
-					width="110"
-					height="40"
-					rx="15"
-					ry="15"
-					x="19.3"
-					y="14.394"
-					id="rect5312"
-					style="fill-opacity:0.7;stroke:none" />
-				<text
-					x="73.284866"
-					y="42.39156"
-					id="text5314"
-					xml:space="preserve"
-					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-					<tspan
-						x="73.284866"
-						y="42.39156"
-						id="tspan5316"
-						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">HDD1</tspan>
-						<!-- DEBUG: set 'text' -->
-				</text>
-			</g>
-		</g>
-]] %>
-<% --[[
+		style="fill-opacity:<%= data.DEFAULT_OPACITY %>">
+<%# begin ASTOR2_MONITORING-HDD0 %>
 		<g
 			id="ASTOR2_MONITORING-HDD0"
-			style="fill:#2a2e92">
-			<!-- DEBUG: set 'fill' -->
+			style="fill:<%= data.HDD0.color or data.DEFAULT_NA_COLOR %>">
 			<path
 				d="m 13.3,61.894 c -1.662,0 -3,1.338 -3,3 l 0,38.996 c 0,1.67 1.338,3 3,3 l 174,0 c 1.66,0 3,-1.33 3,-3 l 0,-38.996 c 0,-1.662 -1.34,-3 -3,-3 l -174,0 z m 1.219,3.218 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,6.998 -7,0 0,-6.998 z m 16,0 7,0 0,6.998 -7,0 0,-6.998 z m 16,0 7,0 0,6.998 -7,0 0,-6.998 z m 16,0 7,0 0,6.998 -7,0 0,-6.998 z m 16,0 7,0 0,6.998 -7,0 0,-6.998 z m 16,0 7.001,0 0,6.998 -7.001,0 0,-6.998 z m 16.001,0 7,0 0,6.998 -7,0 0,-6.998 z m 16,0 7,0 0,6.998 -7,0 0,-6.998 z"
 				id="HDD0-body" />
@@ -961,17 +919,64 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 						x="73.284866"
 						y="92.391563"
 						id="tspan5322"
-						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">HDD0</tspan>
-						<!-- DEBUG: set 'text' -->
+						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.HDD0 then %><%= data.HDD1.value %><% else %>N/A<% end %></tspan>
 				</text>
 			</g>
 		</g>
-]] %>
-		<!-- ASTOR2-MONITORING-PSU -->
+<%# end ASTOR2_MONITORING-HDD0 %>
+<%# begin ASTOR2_MONITORING-HDD1 %>
+		<g
+			id="ASTOR2_MONITORING-HDD1"
+			style="fill:<%= data.HDD1.color or data.DEFAULT_NA_COLOR %>">
+			<path
+				d="m 13.3,11.894 c -1.662,0 -3,1.338 -3,3 l 0,39 c 0,1.662 1.338,3 3,3 l 174,0 c 1.66,0 3,-1.338 3,-3 l 0,-39 c 0,-1.662 -1.34,-3 -3,-3 l -174,0 z m 1.219,3.218 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z"
+				id="HDD1-body" />
+			<path
+				d="m 149.18,14.05 0,6.625 -5.35,0 c -2.77,0 -5,2.23 -5,5 l 0,17.437 c 0,2.77 2.23,5 5,5 l 5.35,0 0,6.625 37.68,0 0,-40.687 -37.68,0 z"
+				id="rect4173"
+				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+			<path
+				d="m 165.49,15.416 0,37.968 8.87,0 2.56,0 0.72,0 c 4.44,0 8,-3.568 8,-8 l 0,-21.968 c 0,-4.432 -3.56,-8 -8,-8 l -0.72,0 -2.56,0 z"
+				id="rect4008"
+				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+			<rect
+				width="26.517"
+				height="27.42"
+				rx="5"
+				ry="5"
+				x="138.83"
+				y="20.69"
+				id="rect4015"
+				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+			<g id="ASTOR2_MONITORING-HDD1-TITLE">
+				<rect
+					width="110"
+					height="40"
+					rx="15"
+					ry="15"
+					x="19.3"
+					y="14.394"
+					id="rect5312"
+					style="fill-opacity:0.7;stroke:none" />
+				<text
+					x="73.284866"
+					y="42.39156"
+					id="text5314"
+					xml:space="preserve"
+					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+					<tspan
+						x="73.284866"
+						y="42.39156"
+						id="tspan5316"
+						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.HDD1 then %><%= data.HDD1.value %><% else %>N/A<% end %></tspan>
+				</text>
+			</g>
+		</g>
+<%# end ASTOR2_MONITORING-HDD1 %>
+<%# begin ASTOR2_MONITORING-PSU0 %>
 		<g
 			id="ASTOR2_MONITORING-PSU0"
 			style="fill:<%= data.PSU0.color or data.DEFAULT_NA_COLOR %>">
-			<!-- DEBUG: set 'fill' -->
 			<g id="PSU0-body">
 				<rect
 					width="220"
@@ -1160,14 +1165,14 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 						y="172.0787"
 						id="tspan5019"
 						style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.PSU0.value then %><%= data.PSU0.value %> W<% else %>N/A<% end %></tspan>
-						<!-- DEBUG: set 'text' -->
 				</text>
 			</g>
 		</g>
+<%# end ASTOR2_MONITORING-PSU0 %>
+<%# begin ASTOR2_MONITORING-PSU1 %>
 		<g
 			id="ASTOR2_MONITORING-PSU1"
 			style="fill:<%= data.PSU1.color or data.DEFAULT_NA_COLOR %>">
-			<!-- DEBUG: set 'fill' -->
 			<g id="PSU1_body">
 				<rect
 					width="220"
@@ -1359,6 +1364,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
+<%# end ASTOR2_MONITORING-PSU1 %>
 <% --[[
 		<g id="ASTOR2_MONITORING-PSU-TOTAL-TITLE">
 			<rect
@@ -1385,6 +1391,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			</text>
 		</g>
 ]] %>
+<% --[[
 		<!-- ASTOR2-MONITORING-SHORT-SLOTS -->
 		<g
 			id="ASTOR2_MONITORING-SLOTS"
@@ -1588,14 +1595,14 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					<!-- DEBUG: set 'fill' -->
 			</g>
 		</g>
-		<!-- ASTOR2-MONITORING-NETWORK -->
+]] %>
 		<g
 			id="ASTOR2_MONITORING-NETWORK"
 			style="fill-opacity:0.6">
+<%# begin ASTOR2_MONITORING-SLOT999-PORT0 %>
 			<g
-				id="ASTOR2_MONITORING-ETH0"
-				style="fill:#808080">
-				<!-- DEBUG: set 'fill' -->
+				id="ASTOR2_MONITORING-SLOT999-PORT0"
+				style="fill:<% if data.SLOT999 then if data.SLOT999.PORT0 then %><%= data.SLOT999.PORT0.color %><% end else %>none<% end %>">
 				<rect
 					width="42.575"
 					height="27.883"
@@ -1631,21 +1638,21 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				<text
 					x="959.28485"
 					y="172.39157"
-					id="eth0-title"
+					id="ASTOR2_MONITORING-SLOT999-PORT0-TITLE"
 					xml:space="preserve"
 					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
 					<tspan
 						x="959.28485"
 						y="172.39157"
 						id="tspan5340"
-						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth0</tspan>
-						<!-- DEBUG: set 'text' -->
+						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><% if data.SLOT999 then if data.SLOT999.PORT0 then %><%= data.SLOT999.PORT0.port_name %><% end end %></tspan>
 				</text>
 			</g>
+<%# end ASTOR2_MONITORING-SLOT999-PORT0 %>
+<%# begin ASTOR2_MONITORING-SLOT999-PORT1 %>
 			<g
-				id="ASTOR2_MONITORING-ETH1"
-				style="fill:#ffff00">
-				<!-- DEBUG: set 'fill' -->
+				id="ASTOR2_MONITORING-SLOT999-PORT1"
+				style="fill:<% if data.SLOT999 then if data.SLOT999.PORT1 then %><%= data.SLOT999.PORT1.color %><% end else %>none<% end %>">
 				<rect
 					width="42.575"
 					height="27.883"
@@ -1681,21 +1688,21 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				<text
 					x="901.28485"
 					y="172.39157"
-					id="eth1-title"
+					id="ASTOR2_MONITORING-SLOT999-PORT1-TITLE"
 					xml:space="preserve"
 					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
 					<tspan
 						x="901.28485"
 						y="172.39157"
 						id="tspan5336"
-						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth1</tspan>
-						<!-- DEBUG: set 'text' -->
+						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><% if data.SLOT999 then if data.SLOT999.PORT1 then %><%= data.SLOT999.PORT1.port_name %><% end end %></tspan>
 				</text>
 			</g>
+<%# end ASTOR2_MONITORING-SLOT999-PORT1 %>
+<%# begin ASTOR2_MONITORING-SLOT999-PORT2 %>
 			<g
-				id="ASTOR2_MONITORING-ETH2"
-				style="fill:#ffa500">
-				<!-- DEBUG: set 'fill' -->
+				id="ASTOR2_MONITORING-SLOT999-PORT2"
+				style="fill:<% if data.SLOT999 then if data.SLOT999.PORT2 then %><%= data.SLOT999.PORT2.color %><% end else %>none<% end %>">
 				<rect
 					width="42.575"
 					height="27.883"
@@ -1731,18 +1738,18 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				<text
 					x="843.28485"
 					y="172.39157"
-					id="eth2-title"
+					id="ASTOR2_MONITORING-SLOT999-PORT2-TITLE"
 					xml:space="preserve"
 					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
 					<tspan
 						x="843.28485"
 						y="172.39157"
 						id="tspan5332"
-						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth2</tspan>
-						<!-- DEBUG: set 'text' -->
+						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><% if data.SLOT999 then if data.SLOT999.PORT2 then %><%= data.SLOT999.PORT2.port_name %><% end end %></tspan>
 				</text>
 			</g>
 		</g>
+<%# end ASTOR2_MONITORING-SLOT999-PORT2 %>
 	</g>
 <% --[[
 	<text
@@ -2101,21 +2108,6 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			y="26.391571"
 			id="tspan5364"
 			style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth3</tspan>
-			<!-- DEBUG: set 'text' -->
-	</text>
-]] %>
-<% --[[
-	<text
-		x="349.28485"
-		y="24.391571"
-		id=" ASTOR2-MONITORING-PANEL"
-		xml:space="preserve"
-		style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-		<tspan
-			x="349.28485"
-			y="24.391571"
-			id="tspan5874"
-			style="font-size:18px;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">Back panel: 40°C</tspan>
 			<!-- DEBUG: set 'text' -->
 	</text>
 ]] %>
