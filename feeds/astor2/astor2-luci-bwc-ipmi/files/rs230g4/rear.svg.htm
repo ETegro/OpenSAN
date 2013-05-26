@@ -875,55 +875,6 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 	<g
 		id="HARDWARE"
 		style="fill-opacity:<%= data.DEFAULT_OPACITY %>">
-<%# begin ASTOR2_MONITORING-HDD1 %>
-		<g
-			id="ASTOR2_MONITORING-HDD1"
-			style="fill:<%= data.HDD1.color or data.DEFAULT_NA_COLOR %>">
-			<path
-				d="m 13.3,11.894 c -1.662,0 -3,1.338 -3,3 l 0,39 c 0,1.662 1.338,3 3,3 l 174,0 c 1.66,0 3,-1.338 3,-3 l 0,-39 c 0,-1.662 -1.34,-3 -3,-3 l -174,0 z m 1.219,3.218 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z"
-				id="HDD1-body" />
-			<path
-				d="m 149.18,14.05 0,6.625 -5.35,0 c -2.77,0 -5,2.23 -5,5 l 0,17.437 c 0,2.77 2.23,5 5,5 l 5.35,0 0,6.625 37.68,0 0,-40.687 -37.68,0 z"
-				id="rect4173"
-				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
-			<path
-				d="m 165.49,15.416 0,37.968 8.87,0 2.56,0 0.72,0 c 4.44,0 8,-3.568 8,-8 l 0,-21.968 c 0,-4.432 -3.56,-8 -8,-8 l -0.72,0 -2.56,0 z"
-				id="rect4008"
-				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
-			<rect
-				width="26.517"
-				height="27.42"
-				rx="5"
-				ry="5"
-				x="138.83"
-				y="20.69"
-				id="rect4015"
-				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
-			<g id="ASTOR2_MONITORING-HDD1-TITLE">
-				<rect
-					width="110"
-					height="40"
-					rx="15"
-					ry="15"
-					x="19.3"
-					y="14.394"
-					id="rect5312"
-					style="fill-opacity:0.7;stroke:none" />
-				<text
-					x="73.284866"
-					y="42.39156"
-					id="text5314"
-					xml:space="preserve"
-					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-					<tspan
-						x="73.284866"
-						y="42.39156"
-						id="tspan5316"
-						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.HDD1 then %><%= data.HDD1.value %><% else %>N/A<% end %></tspan>
-				</text>
-			</g>
-		</g>
-<%# end ASTOR2_MONITORING-HDD1 %>
 <%# begin ASTOR2_MONITORING-HDD0 %>
 		<g
 			id="ASTOR2_MONITORING-HDD0"
@@ -973,6 +924,55 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			</g>
 		</g>
 <%# end ASTOR2_MONITORING-HDD0 %>
+<%# begin ASTOR2_MONITORING-HDD1 %>
+		<g
+			id="ASTOR2_MONITORING-HDD1"
+			style="fill:<%= data.HDD1.color or data.DEFAULT_NA_COLOR %>">
+			<path
+				d="m 13.3,11.894 c -1.662,0 -3,1.338 -3,3 l 0,39 c 0,1.662 1.338,3 3,3 l 174,0 c 1.66,0 3,-1.338 3,-3 l 0,-39 c 0,-1.662 -1.34,-3 -3,-3 l -174,0 z m 1.219,3.218 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m -112.001,16 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z m 16,0 7.001,0 0,7 -7.001,0 0,-7 z m 16.001,0 7,0 0,7 -7,0 0,-7 z m 16,0 7,0 0,7 -7,0 0,-7 z"
+				id="HDD1-body" />
+			<path
+				d="m 149.18,14.05 0,6.625 -5.35,0 c -2.77,0 -5,2.23 -5,5 l 0,17.437 c 0,2.77 2.23,5 5,5 l 5.35,0 0,6.625 37.68,0 0,-40.687 -37.68,0 z"
+				id="rect4173"
+				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+			<path
+				d="m 165.49,15.416 0,37.968 8.87,0 2.56,0 0.72,0 c 4.44,0 8,-3.568 8,-8 l 0,-21.968 c 0,-4.432 -3.56,-8 -8,-8 l -0.72,0 -2.56,0 z"
+				id="rect4008"
+				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+			<rect
+				width="26.517"
+				height="27.42"
+				rx="5"
+				ry="5"
+				x="138.83"
+				y="20.69"
+				id="rect4015"
+				style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+			<g id="ASTOR2_MONITORING-HDD1-TITLE">
+				<rect
+					width="110"
+					height="40"
+					rx="15"
+					ry="15"
+					x="19.3"
+					y="14.394"
+					id="rect5312"
+					style="fill-opacity:0.7;stroke:none" />
+				<text
+					x="73.284866"
+					y="42.39156"
+					id="text5314"
+					xml:space="preserve"
+					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+					<tspan
+						x="73.284866"
+						y="42.39156"
+						id="tspan5316"
+						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.HDD1 then %><%= data.HDD1.value %><% else %>N/A<% end %></tspan>
+				</text>
+			</g>
+		</g>
+<%# end ASTOR2_MONITORING-HDD1 %>
 <%# begin ASTOR2_MONITORING-PSU0 %>
 		<g
 			id="ASTOR2_MONITORING-PSU0"
