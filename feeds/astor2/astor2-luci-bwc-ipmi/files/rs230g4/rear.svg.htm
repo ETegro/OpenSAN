@@ -1699,10 +1699,10 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 <%# end ASTOR2_MONITORING-SLOT999-PORT1 %>
+<%# begin ASTOR2_MONITORING-SLOT999-PORT2 %>
 			<g
-				id="ASTOR2_MONITORING-ETH2"
-				style="fill:#ffa500">
-				<!-- DEBUG: set 'fill' -->
+				id="ASTOR2_MONITORING-SLOT999-PORT2"
+				style="fill:<% if data.SLOT999 then if data.SLOT999.PORT2 then %><%= data.SLOT999.PORT2.color %><% end else %>none<% end %>">
 				<rect
 					width="42.575"
 					height="27.883"
@@ -1738,18 +1738,18 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				<text
 					x="843.28485"
 					y="172.39157"
-					id="eth2-title"
+					id="ASTOR2_MONITORING-SLOT999-PORT2-TITLE"
 					xml:space="preserve"
 					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
 					<tspan
 						x="843.28485"
 						y="172.39157"
 						id="tspan5332"
-						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth2</tspan>
-						<!-- DEBUG: set 'text' -->
+						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><% if data.SLOT999 then if data.SLOT999.PORT2 then %><%= data.SLOT999.PORT2.port_name %><% end end %></tspan>
 				</text>
 			</g>
 		</g>
+<%# end ASTOR2_MONITORING-SLOT999-PORT2 %>
 	</g>
 <% --[[
 	<text
