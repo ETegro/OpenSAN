@@ -875,7 +875,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 	<g
 		id="HARDWARE"
 		style="fill-opacity:<%= data.DEFAULT_OPACITY %>">
-<%# begin ASTOR2_MONITORING-HDD0 %>
+<%# begin ASTOR2_MONITORING-HDD0 (bottom)%>
 		<g
 			id="ASTOR2_MONITORING-HDD0"
 			style="fill:none">
@@ -925,8 +925,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
-<%# end ASTOR2_MONITORING-HDD0 %>
-<%# begin ASTOR2_MONITORING-HDD1 %>
+<%# end ASTOR2_MONITORING-HDD0 (bottom) %>
+<%# begin ASTOR2_MONITORING-HDD1 (top) %>
 		<g
 			id="ASTOR2_MONITORING-HDD1"
 			style="fill:none">
@@ -976,8 +976,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
-<%# end ASTOR2_MONITORING-HDD1 %>
-<%# begin ASTOR2_MONITORING-PSU0 %>
+<%# end ASTOR2_MONITORING-HDD1 (top) %>
+<%# begin ASTOR2_MONITORING-PSU0 (left) %>
 		<g
 			id="ASTOR2_MONITORING-PSU0"
 			style="fill:<%= data.PSU0.color or data.DEFAULT_NA_COLOR %>">
@@ -1172,8 +1172,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
-<%# end ASTOR2_MONITORING-PSU0 %>
-<%# begin ASTOR2_MONITORING-PSU1 %>
+<%# end ASTOR2_MONITORING-PSU0 (left) %>
+<%# begin ASTOR2_MONITORING-PSU1 (right) %>
 		<g
 			id="ASTOR2_MONITORING-PSU1"
 			style="fill:<%= data.PSU1.color or data.DEFAULT_NA_COLOR %>">
@@ -1368,7 +1368,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
-<%# end ASTOR2_MONITORING-PSU1 %>
+<%# end ASTOR2_MONITORING-PSU1 (right) %>
 <% --[[
 		<g id="ASTOR2_MONITORING-PSU-TOTAL-TITLE">
 			<rect
@@ -1398,7 +1398,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 		<g
 			id="ASTOR2_MONITORING-SLOTS"
 			style="fill-opacity:0.6">
-<%# begin ASTOR2_MONITORING-SLOT0 %>
+<%# begin ASTOR2_MONITORING-SLOT0 (short bottom) %>
 	<% if data.SLOT0 then %>
 		<% if data.SLOT0.device_class == "scsi" then %>
 			<text
@@ -1476,7 +1476,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			</g>
 		<% end %>
 	<% end %>
-<%# end ASTOR2_MONITORING-SLOT0 %>
+<%# end ASTOR2_MONITORING-SLOT0 (short bottom) %>
+<%# begin ASTOR2_MONITORING-SLOT2 (short middle) %>
 			<!-- ASTOR2-MONITORING-SHORT-SLOT1 -->
 			<!-- DEBUG: select slot type 'HBA' or 'NIC' -->
 			<g id="ASTOR2-MONITORING-SHORT-SLOT1-HBA">
@@ -1501,6 +1502,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					style="fill:#008000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 					<!-- DEBUG: set 'fill' -->
 			</g>
+<%# end ASTOR2_MONITORING-SLOT2 (short middle) %>
+<%# begin ASTOR2_MONITORING-SLOT3 (short top) %>
 			<!-- ASTOR2-MONITORING-SHORT-SLOT2 -->
 			<!-- DEBUG: select slot type 'HBA' or 'NIC' -->
 			<g id="ASTOR2-MONITORING-SHORT-SLOT2-HBA">
@@ -1525,6 +1528,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					style="fill:#008000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 					<!-- DEBUG: set 'fill' -->
 			</g>
+<%# end ASTOR2_MONITORING-SLOT3 (short top) %>
+<%# begin ASTOR2_MONITORING-SLOT6 (long bottom) %>
 			<!-- ASTOR2-MONITORING-LONG-SLOT0 -->
 			<!-- DEBUG: select slot type 'HBA' or 'NIC' -->
 			<g id="ASTOR2-MONITORING-LONG-SLOT0-HBA">
@@ -1567,6 +1572,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					style="fill:#008000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 					<!-- DEBUG: set 'fill' -->
 			</g>
+<%# end ASTOR2_MONITORING-SLOT6 (long bottom) %>
+<%# begin ASTOR2_MONITORING-SLOT5 (long middle) %>
 			<!-- ASTOR2-MONITORING-LONG-SLOT1 -->
 			<!-- DEBUG: select slot type 'HBA' or 'NIC' -->
 			<g id="ASTOR2-MONITORING-LONG-SLOT1-HBA">
@@ -1609,6 +1616,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					style="fill:#008000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 					<!-- DEBUG: set 'fill' -->
 			</g>
+<%# end ASTOR2_MONITORING-SLOT5 (long middle) %>
+<%# begin ASTOR2_MONITORING-SLOT4 (long top) %>
 			<!-- ASTOR2-MONITORING-LONG-SLOT2 -->
 			<!-- DEBUG: select slot type 'HBA' or 'NIC' -->
 			<g id="ASTOR2-MONITORING-LONG-SLOT2-HBA">
@@ -1651,11 +1660,13 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					style="fill:#008000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 					<!-- DEBUG: set 'fill' -->
 			</g>
+<%# end ASTOR2_MONITORING-SLOT4 (long top) %>
 		</g>
+<%# begin ASTOR2_MONITORING-SLOT1 (networks) %>
 		<g
 			id="ASTOR2_MONITORING-NETWORK"
 			style="fill-opacity:0.6">
-<%# begin ASTOR2_MONITORING-SLOT1-PORT0 %>
+	<%# begin ASTOR2_MONITORING-SLOT1-PORT0 (network right) %>
 			<g
 				id="ASTOR2_MONITORING-SLOT1-PORT0"
 				style="fill:<% if data.SLOT1 then if data.SLOT1.PORT0 then %><%= data.SLOT1.PORT0.color %><% end else %>none<% end %>">
@@ -1704,8 +1715,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><% if data.SLOT1 then if data.SLOT1.PORT0 then %><%= data.SLOT1.PORT0.port_name %><% end end %></tspan>
 				</text>
 			</g>
-<%# end ASTOR2_MONITORING-SLOT1-PORT0 %>
-<%# begin ASTOR2_MONITORING-SLOT1-PORT1 %>
+	<%# end ASTOR2_MONITORING-SLOT1-PORT0 (network right) %>
+	<%# begin ASTOR2_MONITORING-SLOT1-PORT1 (network centre) %>
 			<g
 				id="ASTOR2_MONITORING-SLOT1-PORT1"
 				style="fill:<% if data.SLOT1 then if data.SLOT1.PORT1 then %><%= data.SLOT1.PORT1.color %><% end else %>none<% end %>">
@@ -1754,8 +1765,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><% if data.SLOT1 then if data.SLOT1.PORT1 then %><%= data.SLOT1.PORT1.port_name %><% end end %></tspan>
 				</text>
 			</g>
-<%# end ASTOR2_MONITORING-SLOT1-PORT1 %>
-<%# begin ASTOR2_MONITORING-SLOT1-PORT2 %>
+	<%# end ASTOR2_MONITORING-SLOT1-PORT1 (network center) %>
+	<%# begin ASTOR2_MONITORING-SLOT1-PORT2 (network left) %>
 			<g
 				id="ASTOR2_MONITORING-SLOT1-PORT2"
 				style="fill:<% if data.SLOT1 then if data.SLOT1.PORT2 then %><%= data.SLOT1.PORT2.color %><% end else %>none<% end %>">
@@ -1804,8 +1815,9 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 						style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><% if data.SLOT1 then if data.SLOT1.PORT2 then %><%= data.SLOT1.PORT2.port_name %><% end end %></tspan>
 				</text>
 			</g>
+	<%# end ASTOR2_MONITORING-SLOT1-PORT2 (network left) %>
 		</g>
-<%# end ASTOR2_MONITORING-SLOT1-PORT2 %>
+<%# end ASTOR2_MONITORING-SLOT1 (networks) %>
 	</g>
 <% --[[
 	<text
