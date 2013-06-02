@@ -1557,30 +1557,83 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 	<% end %>
 <%# end ASTOR2_MONITORING-SLOT2 (short middle) %>
 <%# begin ASTOR2_MONITORING-SLOT3 (short top) %>
-			<!-- ASTOR2-MONITORING-SHORT-SLOT2 -->
-			<!-- DEBUG: select slot type 'HBA' or 'NIC' -->
-			<g id="ASTOR2-MONITORING-SHORT-SLOT2-HBA">
+	<% if data.SLOT3 then %>
+		<% if data.SLOT3.device_class == "scsi" then %>
+			<text
+				x="515.28485"
+				y="48.391571"
+				id="ASTOR2_MONITORING-SLOT3-TITLE"
+				xml:space="preserve"
+				style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+				<tspan
+					x="515.28485"
+					y="48.391571"
+					id="tspan5440"
+					style="font-size:18px;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">HBA</tspan>
+			</text>
+			<g id="ASTOR2-MONITORING-SLOT3-HBA">
 				<path
 					d="m 548.97,40.975 39.39,0 0,2.534 -39.39,0 z m -8.4,-4.418 55.24,0 0,11.754 -55.24,0 z"
-					id="ASTOR2-MONITORING-SHORT-SLOT2-SAS0"
+					id="ASTOR2-MONITORING-SLOT3-SAS0"
 					style="stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 				<path
 					d="m 604.97,40.975 39.39,0 0,2.534 -39.39,0 z m -8.4,-4.418 55.24,0 0,11.754 -55.24,0 z"
-					id="ASTOR2-MONITORING-SHORT-SLOT2-SAS1"
+					id="ASTOR2-MONITORING-SLOT3-SAS1"
 					style="stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 			</g>
-			<g id="ASTOR2-MONITORING-SHORT-SLOT2-NIC">
-				<path
-					d="m 541.3,39.686 38.6,0 0,3.894 -38.6,0 z m -2.15,-7.877 42.9,0 0,18.907 -42.9,0 z m -1.95,-1.391 46.64,0 0,21.764 -46.64,0 z"
-					id="ASTOR2-MONITORING-SHORT-SLOT2-ETH0"
-					style="fill:#008000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
-					<!-- DEBUG: set 'fill' -->
-				<path
-					d="m 613.3,39.686 38.6,0 0,3.894 -38.6,0 z m -2.15,-7.877 42.9,0 0,18.907 -42.9,0 z m -1.95,-1.391 46.64,0 0,21.764 -46.64,0 z"
-					id="ASTOR2-MONITORING-SHORT-SLOT2-ETH1"
-					style="fill:#008000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
-					<!-- DEBUG: set 'fill' -->
+		<% elseif data.SLOT3.device_class == "ethernet" then %>
+			<text
+				x="515.28485"
+				y="48.391571"
+				id="ASTOR2_MONITORING-SLOT3-TITLE"
+				xml:space="preserve"
+				style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+				<tspan
+					x="515.28485"
+					y="48.391571"
+					id="tspan5440"
+					style="font-size:18px;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">NIC</tspan>
+			</text>
+			<g id="ASTOR2-MONITORING-SLOT3-NIC">
+				<% if data.SLOT3.port0 then %>
+					<path
+						d="m 541.3,39.686 38.6,0 0,3.894 -38.6,0 z m -2.15,-7.877 42.9,0 0,18.907 -42.9,0 z m -1.95,-1.391 46.64,0 0,21.764 -46.64,0 z"
+						id="ASTOR2-MONITORING-SLOT3-ETH0"
+						style="fill:<% if data.SLOT3.port0.color then %><%= data.SLOT3.port0.color %><% else %>none<% end %>;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+					<text
+						x="561.28485"
+						y="26.391571"
+						id="short2-port0"
+						xml:space="preserve"
+						style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+						<tspan
+							x="561.28485"
+							y="26.391571"
+							id="tspan5396"
+							style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><%= data.SLOT3.port0.port_name %></tspan>
+					</text>
+				<% end %>
+				<% if data.SLOT3.port1 then %>
+					<path
+						d="m 613.3,39.686 38.6,0 0,3.894 -38.6,0 z m -2.15,-7.877 42.9,0 0,18.907 -42.9,0 z m -1.95,-1.391 46.64,0 0,21.764 -46.64,0 z"
+						id="ASTOR2-MONITORING-SLOT3-ETH1"
+						style="fill:<% if data.SLOT3.port1.color then %><%= data.SLOT3.port1.color %><% else %>none<% end %>;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+					<text
+						x="631.28485"
+						y="26.391571"
+						id="short2-port1"
+						xml:space="preserve"
+						style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+						<tspan
+							x="631.28485"
+							y="26.391571"
+							id="tspan5400"
+							style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><%= data.SLOT3.port1.port_name %></tspan>
+					</text>
+				<% end %>
 			</g>
+		<% end %>
+	<% end %>
 <%# end ASTOR2_MONITORING-SLOT3 (short top) %>
 <%# begin ASTOR2_MONITORING-SLOT6 (long bottom) %>
 			<!-- ASTOR2-MONITORING-LONG-SLOT0 -->
@@ -1872,51 +1925,6 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 		</g>
 <%# end ASTOR2_MONITORING-SLOT1 (networks) %>
 	</g>
-<% --[[
-	<text
-		x="515.28485"
-		y="48.391571"
-		id="short2"
-		xml:space="preserve"
-		style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-		<tspan
-			x="515.28485"
-			y="48.391571"
-			id="tspan5440"
-			style="font-size:18px;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">NIC</tspan>
-			<!-- DEBUG: set 'text' -->
-	</text>
-]] %>
-<% --[[
-	<text
-		x="561.28485"
-		y="26.391571"
-		id="short2-port0"
-		xml:space="preserve"
-		style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-		<tspan
-			x="561.28485"
-			y="26.391571"
-			id="tspan5396"
-			style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth0</tspan>
-			<!-- DEBUG: set 'text' -->
-	</text>
-]] %>
-<% --[[
-	<text
-		x="631.28485"
-		y="26.391571"
-		id="short2-port1"
-		xml:space="preserve"
-		style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-		<tspan
-			x="631.28485"
-			y="26.391571"
-			id="tspan5400"
-			style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">eth1</tspan>
-			<!-- DEBUG: set 'text' -->
-	</text>
-]] %>
 <% --[[
 	<text
 		x="737.28485"
