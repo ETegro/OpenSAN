@@ -4,9 +4,7 @@ configuration = {
 	rear = {
 		["PSU Output"] = "PSU0",
 		["PSU1 Output"] = "PSU1",
-		["BP Fan1"] = "FAN0",
-		["BP Fan2"] = "FAN1",
-		["BP Fan3"] = "FAN2",
+		["PSU Total"] = "PSU_TOTAL",
 		["BP Temp"] = "BP"
 	}
 }
