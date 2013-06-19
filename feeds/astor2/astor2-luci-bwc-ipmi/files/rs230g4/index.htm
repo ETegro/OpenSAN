@@ -22,16 +22,12 @@
 
 <%
 EMBED_SIZE = {
-<<<<<<< HEAD
 	front = { width = 1159, height = 261 },
 	rear = { width = 1155, height = 261 },
 	motherboard = { width = 545, height = 643 },
 	legend = { width = 249, height = 101 },
 	jbod_enclosure = { width = 250, height = 63 },
 	jbod_rear = { width = 991, height = 367 }
-=======
-	rear = { width = 1159, height = 261 }
->>>>>>> 7d18bb93998a32a293b069e40f1dac80dc542e87
 }
 
 local function svg_scaling( svg_template )
@@ -60,20 +56,12 @@ end
 <table width="100%">
 	<tbody>
 		<tr>
-<<<<<<< HEAD
             	<td>
             			<embed style="<%= EMBED_SIZE.front.style %>"
             			       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&bwc=1&enclosures=1" />
 			<br />            		
 
 				<embed style="<%= EMBED_SIZE.rear.style %> padding: 20px; margin-left: 10px;"
-=======
-            <tr>
-                Ambient temp: 
-            </tr>
-			<td>
-				<embed style="<%= EMBED_SIZE.rear.style %> padding: 20px;"
->>>>>>> 7d18bb93998a32a293b069e40f1dac80dc542e87
 				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&bwc=1&network=1&pci=1" />
 			</td>
 		</tr>
