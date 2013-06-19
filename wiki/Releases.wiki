@@ -1,3 +1,6 @@
+= 2.4.2 =
+SCST update to 2.2.x version
+
 = 2.4.1 =
 Broadcom NetXtremeII-based NICs support.
 
