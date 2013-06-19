@@ -1402,13 +1402,13 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 		<g
 			id="ASTOR2_MONITORING-SLOTS"
 			style="fill-opacity:0.6">
-<%# begin ASTOR2_MONITORING-SLOT0 (short bottom) %>
-	<% if data.SLOT0 then %>
-		<% if data.SLOT0.device_class == "scsi" then %>
+<%# begin ASTOR2_MONITORING-SLOT83 (short bottom) %>
+	<% if data.SLOT83 then %>
+		<% if data.SLOT83.device_class == "scsi" then %>
 			<text
 				x="491.28485"
 				y="158.39157"
-				id="ASTOR2_MONITORING-SLOT0-TITLE"
+				id="ASTOR2_MONITORING-SLOT83-TITLE"
 				xml:space="preserve"
 				style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
 				<tspan
@@ -1417,21 +1417,21 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					id="tspan5444"
 					style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">HBA</tspan>
 			</text>
-			<g id="ASTOR2-MONITORING-SLOT0-HBA">
+			<g id="ASTOR2-MONITORING-SLOT83-HBA">
 				<path
 					d="m 524.97,150.97 39.39,0 0,2.54 -39.39,0 z m -8.4,-4.41 55.24,0 0,11.75 -55.24,0 z"
-					id="ASTOR2-MONITORING-SLOT0-SAS0"
+					id="ASTOR2-MONITORING-SLOT83-SAS0"
 					style="stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 				<path
 					d="m 580.97,150.97 39.39,0 0,2.54 -39.39,0 z m -8.4,-4.41 55.24,0 0,11.75 -55.24,0 z"
-					id="ASTOR2-MONITORING-SLOT0-SAS1"
+					id="ASTOR2-MONITORING-SLOT83-SAS1"
 					style="stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 			</g>
-		<% elseif data.SLOT0.device_class == "ethernet" then %>
+		<% elseif data.SLOT83.device_class == "ethernet" then %>
 			<text
 				x="491.28485"
 				y="158.39157"
-				id="ASTOR2_MONITORING-SLOT0-TITLE"
+				id="ASTOR2_MONITORING-SLOT83-TITLE"
 				xml:space="preserve"
 				style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
 				<tspan
@@ -1440,12 +1440,12 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					id="tspan5444"
 					style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol">NIC</tspan>
 			</text>
-			<g id="ASTOR2-MONITORING-SLOT0-NIC">
-				<% if data.SLOT0.PORT0 then %>
+			<g id="ASTOR2-MONITORING-SLOT83-NIC">
+				<% if data.SLOT83.PORT0 then %>
 					<path
 						d="m 517.3,149.69 38.6,0 0,3.89 -38.6,0 z m -2.15,-7.88 42.9,0 0,18.91 -42.9,0 z m -1.95,-1.39 46.64,0 0,21.76 -46.64,0 z"
-						id="ASTOR2-MONITORING-SLOT0-ETH0"
-						style="fill:<% if data.SLOT0.PORT0.color then %><%= data.SLOT0.PORT0.color %><% else %>none<% end %>;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+						id="ASTOR2-MONITORING-SLOT83-ETH0"
+						style="fill:<% if data.SLOT83.PORT0.color then %><%= data.SLOT83.PORT0.color %><% else %>none<% end %>;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 					<text
 						x="537.28485"
 						y="136.39157"
@@ -1456,14 +1456,14 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 							x="537.28485"
 							y="136.39157"
 							id="tspan5412"
-							style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><%= data.SLOT0.PORT0.PORT_name %></tspan>
+							style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><%= data.SLOT83.PORT0.PORT_name %></tspan>
 					</text>
 				<% end %>
-				<% if data.SLOT0.PORT1 then %>
+				<% if data.SLOT83.PORT1 then %>
 					<path
 						d="m 589.3,149.69 38.6,0 0,3.89 -38.6,0 z m -2.15,-7.88 42.9,0 0,18.91 -42.9,0 z m -1.95,-1.39 46.64,0 0,21.76 -46.64,0 z"
-						id="ASTOR2-MONITORING-SLOT0-ETH1"
-						style="fill:<% if data.SLOT0.PORT1.color then %><%= data.SLOT0.PORT1.color %><% else %>none<% end %>;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+						id="ASTOR2-MONITORING-SLOT83-ETH1"
+						style="fill:<% if data.SLOT83.PORT1.color then %><%= data.SLOT83.PORT1.color %><% else %>none<% end %>;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 					<text
 						x="609.28485"
 						y="136.39157"
@@ -1474,13 +1474,13 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 							x="609.28485"
 							y="136.39157"
 							id="tspan5416"
-							style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><%= data.SLOT0.PORT1.PORT_name %></tspan>
+							style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bol"><%= data.SLOT83.PORT1.PORT_name %></tspan>
 					</text>
 				<% end %>
 			</g>
 		<% end %>
 	<% end %>
-<%# end ASTOR2_MONITORING-SLOT0 (short bottom) %>
+<%# end ASTOR2_MONITORING-SLOT83 (short bottom) %>
 <%# begin ASTOR2_MONITORING-SLOT2 (short middle) %>
 	<% if data.SLOT2 then %>
 		<% if data.SLOT2.device_class == "scsi" then %>
