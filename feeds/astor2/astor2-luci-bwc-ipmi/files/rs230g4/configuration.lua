@@ -1,6 +1,7 @@
 module( "luci.controller.san_monitoring_configuration", package.seeall )
 
 configuration = {
+<<<<<<< HEAD
 	front = {
 		["BP_Temp"] = "FP",
 		["Ambient_Temp"] = "Ambient"
@@ -45,3 +46,12 @@ jbods = {
         ["DNS1400-01"] = { 6, 4 },
         ["JS2-01"] = { 3, 4 }
 }
+=======
+	rear = {
+		["PSU Output"] = "PSU0",
+		["PSU1 Output"] = "PSU1",
+		["PSU Total"] = "PSU_TOTAL",
+		["BP Temp"] = "BP"
+	}
+}
+>>>>>>> 7d18bb93998a32a293b069e40f1dac80dc542e87
