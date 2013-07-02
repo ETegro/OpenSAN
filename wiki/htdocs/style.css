@@ -1,8 +1,0 @@
-body {
-	font-family: sans-serif;
-	font-size: 100%;
-}
-
-:link, :visited, dt em, .milestone .info h2 em, #content.build h2.config :link, #content.build h2.config :visited, .plugin h3 a {
-	color: #355F7C;
-}
