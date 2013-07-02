@@ -22,9 +22,33 @@ use Text::Markup;
 use Git::Repository;
 use File::Copy;
 
-my $dir = '/var/www/git/';
-my $git_dir = $dir . ".git";
-my $out_dir = '/var/www/site/';
+# Load configuration
+open(CONF, "<config") or die "Cannot open file: $!\n";
+my ($dir, $git_dir, $out_dir);
+while(<CONF>) {
+    my $param = $_;
+    if ($param =~ /(\w+)=(.+$)/) {
+        my $key = $1;
+        my $value = $2;
+        if ($key eq 'Directory') {
+            $dir = $value;
+        }
+        elsif ($key eq 'GitDirectory') {
+            $git_dir = $value;
+        }
+        elsif ($key eq 'OutputDirectory') {
+            $out_dir = $value;
+        }
+        else {
+            die "Cannot load configuration. Check syntax. Error: $!\n";
+        }
+    }
+}
+close(CONF);
+
+# my $dir = '/var/www/git/';
+# my $git_dir = $dir . ".git";
+# my $out_dir = '/var/www/site/';
 
 sub recurse($) {
     my $dir = shift;
@@ -72,7 +96,7 @@ sub process_files($) {
 
                 # Parsing markup files
                 my $parser = Text::Markup->new(
-                            default_format => 'markdown',
+                            default_format => 'rest',
                             default_encoding => 'UTF-8',
                         );
                 my $parse_out = $parser->parse(file => $file);
