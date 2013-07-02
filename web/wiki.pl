@@ -85,8 +85,8 @@ sub process_files($) {
                 open(NEW, ">$new_file") or die "$!\n";
                 print NEW $parse_out;
             }
-            # Screenshots
-            if ($_ =~ /.+\/(.+\.png$)/) {
+            # Images
+            elsif ($_ =~ /.+\/(.+\.png$)/) {
                 my $file = $_;
                 my $new_file = $1;
                 $new_file = "$out_dir" . "img/" . "$new_file";
