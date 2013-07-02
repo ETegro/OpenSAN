@@ -1,0 +1,12 @@
+== Maillists ==
+You are always welcome in our general discussion maillist:
+ Information:: https://groups.google.com/group/opensan-discuss
+ Subscribe:: Email to **opensan-discuss+subscribe at googlegroups dot com** with subject "subscribe"
+
+== Team ==
+* Andrew Sapronov ([/query?owner=andrew.sapronov&status=accepted&status=assigned&status=new&status=reopened user: andrew.sapronov])
+* [http://stargrave.tel/ Sergey Matveev] ([/query?owner=stargrave&status=accepted&status=assigned&status=new&status=reopened user: stargrave])
+* Vladimir Petukhov ([/query?owner=kavinator&status=accepted&status=assigned&status=new&status=reopened user: kavinator])
+
+Also, you can contact us directly by sending email to
+**team at opensan dot org**.

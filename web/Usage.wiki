@@ -1,0 +1,201 @@
+= Downloads =
+
+Recommended and suitable for your needs releases can be found
+'''[wiki:Downloads there]'''.
+
+'''Always''' cryptographically verify downloaded image files.
+
+Each release directory contains several files:
+* checksums.sha256 — this file contains cryptographically strong secure
+  hash checksum of ''.img.gz'' and ''.opensan'' images. It should be
+  used to check integrity of those images after downloading.
+* checksums.sha256.asc — checksum-file verification signature made by
+  our [wiki:Contacts team]. It should be used to check the validity of
+  provided checksum-file and therefore if retrieved images are approved
+  exactly by us.
+* openwrt-x86*-astor2-combined-ext4.img.gz — compressed raw binary image
+  of hard drive containing OpenSAN installation. Can be used as a
+  starting point of the very new OpenSAN setup.
+* openwrt-x86*-astor2.opensan — firmware image that is used for
+  upgrading existing installation through Web-interface.
+* output.log.gz — compressed log-file of overall build process. 
+  Useful from development point of view.
+
+= Checking distribution integrity =
+* If you verify OpenSAN-related files for the first time, then you must
+  import our team's public [wiki:Publickey PGP key] into your keyring.
+  You can do it using the following command:
+{{{
+wget -O - http://www.opensan.org/trac/wiki/Publickey | gpg --import
+}}}
+* After downloading either ''.img.gz'' or ''.opensan'' distribution
+  images your should also download corresponding checksum-file and it's
+  signature.
+* Verify checksum-file validity by executing the following command
+  inside the directory containing both checksum-file and it's signature:
+{{{
+gpg --verify checksums.sha256.asc
+}}}
+* At last compare calculated downloaded distribution image's checksum
+  with corresponding one in checksum-file:
+{{{
+sha256sum IMAGE
+}}}
+
+= Building from source code=
+Source code is always available on
+[https://github.com/astor2-team/astor2 Git-repository].
+You can clone it using following command:
+{{{
+git clone git://github.com/astor2-team/astor2.git astor2
+}}}
+
+You will require following dependencies necessary for building OpenSAN
+image:
+* GNU build tools
+* bash
+* binutils
+* bzip2
+* flex
+* g++
+* gcc
+* GNU awk
+* intltool
+* libz-dev
+* make
+* ncurses
+* OpenSSL
+* patch
+* perl-modules
+* unzip
+* zlib1g-dev
+
+Under !Debian/Ubuntu distributions you can install everything of this by
+single command:
+{{{
+apt-get install build-essential bash binutils bzip2 flex g++ gcc \
+  gawk intltool zlib1g-dev make libncurses5-dev libssl-dev patch \
+  perl-modules unzip
+}}}
+
+After sourcecode is got and dependencies are met, you should change
+you directory to ''openwrt'' and execute following:
+{{{
+./scripts/feeds update
+./scripts/feeds install -a
+make defconfig
+make
+}}}
+
+Some packages may grow old and links to them can die, so we provide our
+[/download/dl/ cached download] directory of all those packages. Use it,
+if something is not available. However we try to keep an eye on them.
+Contents of that download directory must be placed into
+''openwrt/dl''.
+
+Ready to use images after build are in ''openwrt/bin/x86*''.
+
+= Running under virtual machine =
+
+== KVM ==
+
+You should configure disk and network subsystems to be able to use
+OpenSAN.
+
+* Create several raw hard drive images. We will create three. They are
+  just big empty files. You can create them with ''dd'' command
+  (''SIZE'' is measured in gibibytes):
+{{{
+dd if=/dev/zero of=disk1.raw bs=1G count=SIZE
+dd if=/dev/zero of=disk2.raw bs=1G count=SIZE
+dd if=/dev/zero of=disk3.raw bs=1G count=SIZE
+}}}
+* Decompress ''.img.gz'' disk image:
+{{{
+gunzip openwrt-x86*-astor2-combined-ext4.img.gz
+}}}
+* Run KVM itself:
+{{{
+kvm -m 256 -hda openwrt-x86*-astor2-combined-ext4.img \
+  -hdb disk1.raw -hdc disk2.raw -hdd disk3.raw \
+  -net nic -net tap
+}}}
+* After successful startup KVM will create ''tap'' virtual network
+  interface. Assume that we got ''tap0'' device. You can configure
+  IPv4 network on it, to be able to access via Web-browser to OpenSAN's
+  user interface:
+{{{
+ip link set up dev tap0
+ip addr add 192.168.1.2/30 dev tap0
+}}}
+* Follow http://192.168.1.1/ URL in your Web-browser
+
+== !VirtualBox OSE ==
+
+* Create virtual machine instance (named ''opensan''):
+{{{
+mkdir -p $HOME/.VirtualBox/Machines
+VBoxManage createvm --name opensan --ostype Ubuntu_64 \
+  --basefolder $HOME/.VirtualBox/Machines --register
+}}}
+* Tune default machine configuration (for example single CPU system with
+  256 MiB RAM):
+{{{
+VBoxManage modifyvm opensan --memory 256 --cpus 1 --hwvirtex on
+}}}
+* Create virtual network interface card:
+{{{
+VBoxManage hostonlyif create
+}}}
+* Find the newly created interface name (for example ''vboxnet0''):
+{{{
+VBoxManage list hostonlyifs
+}}}
+* Add this interface to virtual machine instance:
+{{{
+VBoxManage modifyvm opensan --nic1 hostonly \
+  --nictype1 82540EM --cableconnected1 on \
+  --hostonlyadapter1 vboxnet0
+}}}
+* Add hardware SATA controller:
+{{{
+VBoxManage storagectl opensan --name sata-controller \
+  --add sata --controller IntelAhci --sataportcount 4
+}}}
+* !VirtualBox looks at file extension and it requires raw images to have
+  ''.hdd'' one:
+{{{
+mv openwrt-x86_64-astor2-combined-ext4.img openwrt-x86_64-astor2-combined-ext4.hdd
+}}}
+* Create several raw hard drive images. We will create three. They are
+  just big empty files. You can create them with ''dd'' command
+  (''SIZE'' is measured in gibibytes):
+{{{
+dd if=/dev/zero of=disk1.hdd bs=1G count=SIZE
+dd if=/dev/zero of=disk2.hdd bs=1G count=SIZE
+dd if=/dev/zero of=disk3.hdd bs=1G count=SIZE
+}}}
+* Attach all images to virtual machine instance (assume that all those
+  images are in user's home directory):
+{{{
+VBoxManage storageattach opensan --storagectl sata-controller \
+  --port 0 --device 0 --type hdd \
+  --medium $HOME/openwrt-x86_64-astor2-combined-ext4.hdd
+VBoxManage storageattach opensan --storagectl sata-controller \
+  --port 1 --device 0 --type hdd --medium $HOME/disk1.hdd
+VBoxManage storageattach opensan --storagectl sata-controller \
+  --port 2 --device 0 --type hdd --medium $HOME/disk2.hdd
+VBoxManage storageattach opensan --storagectl sata-controller \
+  --port 3 --device 0 --type hdd --medium $HOME/disk3.hdd
+}}}
+* Specify the bootable media:
+{{{
+VBoxManage modifyvm opensan --boot1 disk --boot2 none \
+  --boot3 none --boot4 none
+}}}
+* And start virtual machine instance at last:
+{{{
+VBoxManage startvm opensan
+}}}
+* Configure your network and point your browser as described in
+  KVM section

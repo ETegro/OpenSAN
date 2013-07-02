@@ -1,0 +1,30 @@
+[http://www.opensan.org/ OpenSAN] is a
+[http://www.gnu.org/philosophy/free-sw.html free software]
+project realizing
+[https://secure.wikimedia.org/wikipedia/en/wiki/Storage_area_network Storage Area Network]
+system. This is small firmware that turns server into an
+[https://secure.wikimedia.org/wikipedia/en/wiki/iSCSI iSCSI]
+target accessible through the Ethernet interface.
+
+It is intended to be easy configurable using user-friendly
+Web-interface. Nearly everything related to SAN can be configured from
+single Web-interface's page.
+
+* [wiki:Features]
+* [wiki:Screenshots]
+* [wiki:TechnicalOverview]
+* [wiki:Releases]
+* [wiki:Usage Downloads and usage]
+* [wiki:Contacts]
+
+----
+
+[[Image(sponsor_etegro.png, align=right)]]
+
+Project is sponsored and developed under the hood of
+[http://www.etegro.com/ ETegro Technologies]
+company. It's some kind of codename there is **aStor2**.
+
+----
+
+Useful pages: [wiki:TitleIndex] [wiki:WikiFormatting]

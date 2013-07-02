@@ -1,0 +1,20 @@
+* This is free software project, licenced under.
+  [https://www.gnu.org/licenses/gpl.html GNU GPLv3]
+* [http://www.openwrt.org/ OpenWRT] with own modified version of
+  [https://www.kernel.org/ Linux] is used as a base providing all
+  necessary libraries, building framework and utilities to create
+  lightweight, highly customized, easily upgradable environment for the
+  following subsystems.
+* Built-in kernel '''md''' module provides RAID creation capability.
+* [http://luci.subsignal.org/ LuCI] is used as MVC-framework for the
+  overall Web-interface configuration management.
+* [http://sourceware.org/lvm2/ LVM2] for logical volumes with snapshots
+  management.
+* [http://scst.sourceforge.net/index.html SCST] framework for creating
+  iSCSI targets.
+* [https://github.com/facebook/flashcache Flashcache] module for SSD
+  caching support.
+* [http://jquery.com/ jQuery] is used to make different pretty
+  outlooking interface interactions.
+* All interaction with LVM2 and SCST subsystems is going through the
+  self-written API (**astor2.** libraries) on Lua programming language.
