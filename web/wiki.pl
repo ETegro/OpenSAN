@@ -7,6 +7,7 @@
 #
 #  DESCRIPTION: This script updates site from github
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
+#      LICENSE: GNU GPL v3
 # ORGANIZATION: ETegro Technologies
 #      VERSION: 0.1
 #      CREATED: 01.07.2013 15:45:20
@@ -18,6 +19,8 @@ use warnings;
 use utf8;
 
 use Text::Markup;
+use Git::Repository;
+use File::Copy;
 
 my $dir = '/var/www/git/';
 my $git_dir = $dir . ".git";
@@ -67,7 +70,7 @@ sub process_files($) {
                 my $new_file = $1;
                 #$new_file =~ s/.+\/(w+)\.wiki/$1/g;
 
-                # Parsing markup_files files
+                # Parsing markup files
                 my $parser = Text::Markup->new(
                             default_format => 'markdown',
                             default_encoding => 'UTF-8',
@@ -78,18 +81,22 @@ sub process_files($) {
                 $parse_out =~ s/}}}/<\/pre>/g;
                 $parse_out =~ s/(<html>)/$1\n<head>\n<link rel="stylesheet" href="http:\/\/st\.pimg\.net\/tucs\/style\.css" type="text\/css" \/>\n<link rel="stylesheet" href="http:\/\/yandex\.st\/highlightjs\/7\.3\/styles\/default\.min\.css">\n<script src="http:\/\/yandex.st\/highlightjs\/7\.3\/highlight\.min\.js"><\/script>\n/g;
 
-                print "80\nfile: $file\nnew file: $new_file";
                 $new_file = "$out_dir" . "$new_file" . ".html";
-                print "82\nnew file: $new_file";
                 open(NEW, ">$new_file") or die "$!\n";
                 print NEW $parse_out;
+            }
+            # Screenshots
+            if ($_ =~ /.+\/(.+\.png$)/) {
+                my $file = $_;
+                my $new_file = $1;
+                $new_file = "$out_dir" . "img/" . "$new_file";
+                copy("$file", "$new_file") or die "Copy fiiled: $!\n";
             }
         }
     }
 }
 
 # Check site updates on github.
-use Git::Repository;
 sub check_git() {
     my $r = Git::Repository->new(git_dir => $git_dir) or die "$!\n";
     my $output = $r->run("pull") or die "$!\n";
