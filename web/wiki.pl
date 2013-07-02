@@ -19,9 +19,9 @@ use utf8;
 
 use Text::Markup;
 
-my $dir = '/home/denis/perl/dotiac/';
+my $dir = '/var/www/git/';
 my $git_dir = $dir . "git/.git";
-my $out_dir = '/home/denis/perl/dotiac/site/';
+my $out_dir = '/var/www/site/';
 
 sub recurse($) {
     my $dir = shift;
