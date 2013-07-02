@@ -1,3 +1,3 @@
-Directory=/var/www/git/
+WorkDirectory=/var/www/git/
 GitDirectory=/var/www/git/.git/
 OutputDirectory=/var/www/site/

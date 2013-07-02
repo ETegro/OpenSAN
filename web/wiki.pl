@@ -5,13 +5,13 @@
 #
 #        USAGE: ./wiki.pl  
 #
-#  DESCRIPTION: This script updates site from github
+#  DESCRIPTION: Script updates site from github
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
 #      LICENSE: GNU GPL v3
 # ORGANIZATION: ETegro Technologies
 #      VERSION: 0.1
 #      CREATED: 01.07.2013 15:45:20
-#     REVISION: 000
+#     REVISION: 001
 #===============================================================================
 
 use strict;
@@ -22,15 +22,15 @@ use Text::Markup;
 use Git::Repository;
 use File::Copy;
 
-# Load configuration
+# Load configuration. Put 'config' file into dir contains wiki.pl script.
 open(CONF, "<config") or die "Cannot open file: $!\n";
 my ($dir, $git_dir, $out_dir);
 while(<CONF>) {
-    my $param = $_;
-    if ($param =~ /(\w+)=(.+$)/) {
+    my $config = $_;
+    if ($config =~ /(^\w+)=(.+$)/) {
         my $key = $1;
         my $value = $2;
-        if ($key eq 'Directory') {
+        if ($key eq 'WorkDirectory') {
             $dir = $value;
         }
         elsif ($key eq 'GitDirectory') {
@@ -84,7 +84,7 @@ sub process_files($) {
             # Here is where we recurse.
             # This makes a new call to process_files()
             # using a new directory we just found.
-            recurse($_);
+            process_files($_);
 
         # If it isn't a directory, lets just do some
         # processing on it.
