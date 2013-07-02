@@ -20,7 +20,7 @@ use utf8;
 use Text::Markup;
 
 my $dir = '/var/www/git/';
-my $git_dir = $dir . "git/.git";
+my $git_dir = $dir . ".git";
 my $out_dir = '/var/www/site/';
 
 sub recurse($) {
@@ -95,14 +95,5 @@ sub check_git() {
     my $output = $r->run("pull") or die "$!\n";
     return $output;
 }
-process_files($dir);
-# my $out = check_git();
-# print $out . "\n";
-# 
-# if (!($out eq 'Already up-to-date.')) {
-#     process_files("$dir");
-#     my @formats = Text::Markup->formats;
-# }
-# else {
-#     print $out;
-# }
+
+process_files("$dir") if $out ne 'Already up-to-date.';
