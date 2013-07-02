@@ -1,2 +1,0 @@
-0 */1 * * * root /home/build/astor2/build/cron/astor2-build-docs.sh
-0 2 * * 1-5 root /home/build/astor2/build/cron/astor2-build.sh

@@ -1,8 +1,0 @@
-                    SVN checkouts and their versions
-+----------------+------------------------------------------+----------+
-| Path           | Subversion path                          | Revision |
-+----------------+------------------------------------------+----------+
-| openwrt        | svn://svn.openwrt.org/openwrt/trunk      | 28713    |
-| feeds/packages | svn://svn.openwrt.org/openwrt/packages   | 28714    |
-| feeds/luci     | http://svn.luci.subsignal.org/luci/trunk | 7083     |
-+----------------+------------------------------------------+----------+

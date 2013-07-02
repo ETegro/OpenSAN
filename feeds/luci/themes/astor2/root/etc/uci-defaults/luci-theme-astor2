@@ -1,8 +1,0 @@
-#!/bin/sh
-uci batch <<-EOF
-	set luci.themes.astor2=/luci-static/astor2
-	set luci.main.mediaurlbase=/luci-static/astor2
-	set luci.main.lang=ru
-        commit luci
-EOF
-
