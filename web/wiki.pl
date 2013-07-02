@@ -96,4 +96,6 @@ sub check_git() {
     return $output;
 }
 
+my $out = check_git();
+
 process_files("$dir") if $out ne 'Already up-to-date.';
