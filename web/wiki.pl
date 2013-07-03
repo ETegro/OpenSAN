@@ -127,6 +127,6 @@ sub check_git() {
     return $output;
 }
 
-my $out = check_git();
+my $git_stat = check_git();
 
-process_files("$dir") if $out ne 'Already up-to-date.';
+process_files("$dir") if $git_stat ne 'Already up-to-date.';
