@@ -1,7 +1,7 @@
 [Directory]
-WorkDirectory=/var/www/git/
-GitDirectory=/var/www/git/.git/
-OutputDirectory=/var/www/site/
+WorkDirectory=/home/denis/perl/opensan/git/
+GitDirectory=/home/denis/perl/opensan/git/.git/
+OutputDirectory=/home/denis/perl/opensan/site/
 
 [Files]
-TemplateFile=/var/www/site/tmplt/site.html
+TemplateFile=/home/denis/perl/opensan/site/tmplts/site.html

@@ -10,21 +10,17 @@ It is intended to be easy configurable using user-friendly
 Web-interface. Nearly everything related to SAN can be configured from
 single Web-interface's page.
 
-* [wiki:Features]
-* [wiki:Screenshots]
-* [wiki:TechnicalOverview]
-* [wiki:Releases]
-* [wiki:Usage Downloads and usage]
-* [wiki:Contacts]
+* [http://www.opensan.org/Features.html Features]
+* [http://www.opensan.org/Screenshots.html Screenshots]
+* [http://www.opensan.org/TechnicalOverview.html TechnicalOverview]
+* [http://www.opensan.org/Releases.html Releases]
+* [http://www.opensan.org/Usage.html Downloads and usage]
+* [http://www.opensan.org/Contacts.html Contacts]
 
 ----
 
-[[Image(sponsor_etegro.png, align=right)]]
+[[File:sponsor_etegro.png|align=right|ETegro Tecnologies]]
 
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]
 company. It's some kind of codename there is **aStor2**.
-
-----
-
-Useful pages: [wiki:TitleIndex] [wiki:WikiFormatting]

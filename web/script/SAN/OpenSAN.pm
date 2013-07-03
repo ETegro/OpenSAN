@@ -101,14 +101,13 @@ sub process_files($) {
 
                 # Load template
                 if (defined($template_file)) {
-                    our $tmplt = SAN::OpenSAN->load_template($template_file);
+                    $tmplt = SAN::OpenSAN->load_template($template_file);
                 }
 
                 # Parsing markup files
                 #
                 # FORMATS. Must be: 
-                # 
-                # asciidoc, html, markdown,
+	            # asciidoc, html, markdown,
                 # mediawiki, multimarkdown, pod, rest,
                 # textile, trac
                 my $parser = Text::Markup->new(
@@ -120,7 +119,7 @@ sub process_files($) {
                 $parse_out =~ s/\{{3}/<pre>/g;
                 $parse_out =~ s/}}}/<\/pre>/g;
                 # $parse_out =~ s/(<html>)/$1\n<head>\n<link rel="stylesheet" href="http:\/\/st\.pimg\.net\/tucs\/style\.css" type="text\/css" \/>\n<link rel="stylesheet" href="http:\/\/yandex\.st\/highlightjs\/7\.3\/styles\/default\.min\.css">\n<script src="http:\/\/yandex.st\/highlightjs\/7\.3\/highlight\.min\.js"><\/script>\n/g;
-                $parse_out =~ s/<html>/$tmplt/g;
+                $parse_out =~ s/<html>/$tmplt<\/body><\/html>/g;
 
                 $new_file = "$out_dir" . "$new_file" . ".html";
                 open(NEW, ">$new_file") or die "$!\n";

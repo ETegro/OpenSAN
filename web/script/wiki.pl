@@ -5,7 +5,7 @@
 #
 #        USAGE: ./wiki.pl  
 #
-#  DESCRIPTION: Script updates site from github
+#  DESCRIPTION: Script update site from github
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
 #      LICENSE: GNU GPL v3
 # ORGANIZATION: ETegro Technologies
@@ -20,8 +20,10 @@ my $config_file = './config';
 
 # Load configuration
 my ($dir, $git_dir, $out_dir, $template_file) = SAN::OpenSAN->load_config($config_file);
+
 # Load HTML template
 my $template = SAN::OpenSAN->load_template($template_file);
+my $tmplt;
 
 # Check site updates on github.
 my $git_stat = SAN::OpenSAN->check_git();
