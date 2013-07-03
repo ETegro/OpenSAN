@@ -5,7 +5,10 @@ Git::Repository
 
 Install from cpan:
 
-	localhost@localdomain # cpan 
-	localhost@localdomain # notest force install MODULE::NAME
+	localhost@localdomain # cpan
+	cpan shell -- CPAN exploration and modules installation (v1.9800)
+	Enter 'h' for help.
+
+	cpan[1]> notest force install MODULE::NAME
 
 Try find it in repository in you distributive. It's popular modules

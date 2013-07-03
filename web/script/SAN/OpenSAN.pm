@@ -14,8 +14,8 @@ use Cwd 'abs_path';
 
 sub load_config($) {
 	# Load configuration. Put 'config' file into dir contains wiki.pl script.
-	# I know. It's a shitcode but I to lazy for XML, JSON, YAML, or somethin else :)
-	# TODO: Rewrite 'load configuration' code block :)
+	# I know it's shitcode but Im to lazy into XML, JSON, YAML, or somethin else :)
+	# TODO: Rewrite this function
 	my $config_file = shift;
 	open(CONF, "<$config_file") or die "Cannot open file: $!\n";
 	my ($dir, $git_dir, $out_dir, $template_file);
@@ -106,15 +106,15 @@ sub process_files($) {
 
                 # Parsing markup files
                 #
-                # FORMATS
-                # Must be: 
+                # SUPPORTED FORMATS:
 	            # asciidoc, html, markdown,
                 # mediawiki, multimarkdown, pod, rest,
                 # textile, trac
+                # We use mediawiki format
                 my $parser = Text::Markup->new(
-                            default_format => 'rest',    
-                            default_encoding => 'UTF-8', 
-                            );                           
+                            default_format => 'rest',
+                            default_encoding => 'UTF-8',
+                            );
                 my $parse_out = $parser->parse(file => $file);
                 $parse_out =~ s/\{{3}/<pre>/g;
                 $parse_out =~ s/}}}/<\/pre>/g;
