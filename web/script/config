@@ -1,0 +1,7 @@
+[Directory]
+WorkDirectory=/var/www/git/
+GitDirectory=/var/www/git/.git/
+OutputDirectory=/var/www/site/
+
+[Files]
+TemplateFile=/var/www/site/tmplt/site.html
