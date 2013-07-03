@@ -16,39 +16,10 @@
 	"buffers":
 	[
 		{
-			"contents": "#!/usr/bin/env perl \n#===============================================================================\n#\n#         FILE: wiki.pl\n#\n#        USAGE: ./wiki.pl  \n#\n#  DESCRIPTION: Script updates site from github\n#       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com\n#      LICENSE: GNU GPL v3\n# ORGANIZATION: ETegro Technologies\n#      VERSION: 0.1\n#      CREATED: 01.07.2013 15:45:20\n#     REVISION: 001\n#===============================================================================\n\nuse strict;\nuse warnings;\nuse utf8;\n\nuse Text::Markup;\nuse Git::Repository;\nuse File::Copy;\n\n# Load configuration. Put 'config' file into dir contains wiki.pl script.\nopen(CONF, \"<config\") or die \"Cannot open file: $!\\n\";\nmy ($dir, $git_dir, $out_dir);\nwhile(<CONF>) {\n    my $config = $_;\n    if ($config =~ /(^\\w+)=(.+$)/) {\n        my $key = $1;\n        my $value = $2;\n        if ($key eq 'WorkDirectory') {\n            $dir = $value;\n        }\n        elsif ($key eq 'GitDirectory') {\n            $git_dir = $value;\n        }\n        elsif ($key eq 'OutputDirectory') {\n            $out_dir = $value;\n        }\n        else {\n            die \"Cannot load configuration. Check syntax. Error: $!\\n\";\n        }\n    }\n}\nclose(CONF);\n\n# my $dir = '/var/www/git/';\n# my $git_dir = $dir . \".git\";\n# my $out_dir = '/var/www/site/';\n\nsub recurse($) {\n    my $dir = shift;\n    process_files($dir);\n}\n\nsub process_files($) {\n    my $path = shift;\n\n    # Open the directory.\n    opendir (DIR, $path)\n        or die \"Unable to open $path: $!\";\n\n    my @files = grep { !/^\\.{1,2}$/ } readdir (DIR);\n\n    # Close the directory.\n    closedir (DIR);\n\n    # At this point you will have a list of filenames\n    #  without full paths ('filename' rather than\n    #  '/home/count0/filename', for example)\n    # You will probably have a much easier time if you make\n    #  sure all of these files include the full path,\n    #  so here we will use map() to tack it on.\n    #  (note that this could also be chained with the grep\n    #   mentioned above, during the readdir() ).\n    @files = map { $path . '/' . $_ } @files;\n\n    for (@files) {\n\n        # If the file is a directory\n        if (-d $_) {\n            # Here is where we recurse.\n            # This makes a new call to process_files()\n            # using a new directory we just found.\n            process_files($_);\n\n        # If it isn't a directory, lets just do some\n        # processing on it.\n        } else {\n            if ($_ =~ /.+\\/(.+)\\.wiki$/) {\n                my $file = $_;\n                my $new_file = $1;\n                #$new_file =~ s/.+\\/(w+)\\.wiki/$1/g;\n\n                # Parsing markup files\n                my $parser = Text::Markup->new(\n                            default_format => 'rest',\n                            default_encoding => 'UTF-8',\n                        );\n                my $parse_out = $parser->parse(file => $file);\n#                 $parse_out =~ s/\\*\\*(.+)\\*\\*/<i>$1<\\/i>/g;\n                $parse_out =~ s/\\{{3}/<pre>/g;\n                $parse_out =~ s/}}}/<\\/pre>/g;\n                $parse_out =~ s/(<html>)/$1\\n<head>\\n<link rel=\"stylesheet\" href=\"http:\\/\\/st\\.pimg\\.net\\/tucs\\/style\\.css\" type=\"text\\/css\" \\/>\\n<link rel=\"stylesheet\" href=\"http:\\/\\/yandex\\.st\\/highlightjs\\/7\\.3\\/styles\\/default\\.min\\.css\">\\n<script src=\"http:\\/\\/yandex.st\\/highlightjs\\/7\\.3\\/highlight\\.min\\.js\"><\\/script>\\n/g;\n\n                $new_file = \"$out_dir\" . \"$new_file\" . \".html\";\n                open(NEW, \">$new_file\") or die \"$!\\n\";\n                print NEW $parse_out;\n            }\n            # Images\n            elsif ($_ =~ /.+\\/(.+\\.png$)/) {\n                my $file = $_;\n                my $new_file = $1;\n                $new_file = \"$out_dir\" . \"img/\" . \"$new_file\";\n                copy(\"$file\", \"$new_file\") or die \"Copy fiiled: $!\\n\";\n            }\n        }\n    }\n}\n\n# Check site updates on github.\nsub check_git() {\n    my $r = Git::Repository->new(git_dir => $git_dir) or die \"$!\\n\";\n    my $output = $r->run(\"pull\") or die \"$!\\n\";\n    return $output;\n}\n\nmy $git_stat = check_git();\n\nprocess_files(\"$dir\") if $git_stat ne 'Already up-to-date.';",
 			"file": "wiki.pl",
-			"file_size": 4187,
-			"file_write_time": 1372847523000000,
 			"settings":
 			{
 				"buffer_size": 4147,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/denis/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 302,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "Package Control Messages\n========================\n\nPerlTidy:\n--------\n\n  perltidy for Sublime Text 2/3\n  =============================\n  \n  Version: 0.4.0\n  \n  Thanks for installing PerlTidy! Below are some quick notes to get you started.\n  Please refer to:\n  \n      https://github.com/vifo/SublimePerlTidy\n  \n  for full documentation.\n  \n  Quick start\n  -----------\n  \n  To reformat Perl source code with PerlTidy, open your Perl file of choice and\n  hit `Control+Shift+t`.\n  \n  PerlTidy will try to find your perltidy installation by looking at your PATH\n  environment variable and in addition by searching for perltidy in default\n  installation locations.\n  \n  Should this automatic detection fail, please inspect any error output on the\n  Sublime Text console and adjust user setting \"perltidy_cmd\" as described in\n  the full documentation.\n  \n  Thank You.\n  \n",
-			"settings":
-			{
-				"buffer_size": 864,
-				"line_ending": "Unix",
-				"name": "Package Control Messages",
-				"scratch": true
-			}
-		},
-		{
-			"file": "css/style.css",
-			"settings":
-			{
-				"buffer_size": 203,
 				"line_ending": "Unix"
 			}
 		}
@@ -81,9 +52,10 @@
 	},
 	"file_history":
 	[
+		"/home/denis/soft/job/astor2/web/css/style.css",
+		"/home/denis/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
 		"/home/denis/.config/sublime-text-2/Packages/User/Scroll Offset.sublime-settings",
 		"/home/denis/.config/sublime-text-2/Packages/User/Default (Linux).sublime-keymap",
-		"/home/denis/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
 		"/home/denis/Desktop/test.html",
 		"/home/denis/.config/sublime-text-2/Packages/User/ScrollOffCommand.py",
 		"/home/denis/.config/sublime-text-2/Packages/Default/Preferences.sublime-settings",
@@ -105,6 +77,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"sub",
+			"sub check_git() {\n    my $r = Git::Repository->new(git_dir => $git_dir) or die \"$!\\n\";\n    my $output = $r->run(\"pull\") or die \"$!\\n\";\n    return $output;\n}",
+			"\n                "
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -122,7 +97,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -137,8 +112,8 @@
 						"selection":
 						[
 							[
-								2621,
-								2621
+								3835,
+								3835
 							]
 						],
 						"settings":
@@ -148,86 +123,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2408.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/home/denis/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
-					"settings":
-					{
-						"buffer_size": 302,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								143,
-								143
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"settings":
-					{
-						"buffer_size": 864,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								267,
-								267
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"word_wrap": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 195.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "css/style.css",
-					"settings":
-					{
-						"buffer_size": 203,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								33,
-								33
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/CSS/CSS.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2927.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

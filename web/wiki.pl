@@ -22,9 +22,12 @@ use Text::Markup;
 use Git::Repository;
 use File::Copy;
 
+use Cwd 'abs_path';
+
 # Load configuration. Put 'config' file into dir contains wiki.pl script.
-open(CONF, "<config") or die "Cannot open file: $!\n";
-my ($dir, $git_dir, $out_dir);
+my $config_file = './config';
+open(CONF, "<$config_file") or die "Cannot open file: $!\n";
+my ($dir, $git_dir, $out_dir, $template_file);
 while(<CONF>) {
     my $config = $_;
     if ($config =~ /(^\w+)=(.+$)/) {
@@ -39,6 +42,16 @@ while(<CONF>) {
         elsif ($key eq 'OutputDirectory') {
             $out_dir = $value;
         }
+        # Require filename only! 
+        # Script tried to find it on WorkDirectory or in the script location.
+        elsif ($key eq 'TemplateFile') {
+            if (-e $value) {
+                $template_file = $value
+            }
+            else {
+                print "WARNING: File not found. Template cannot be loaded!";
+            }
+        }
         else {
             die "Cannot load configuration. Check syntax. Error: $!\n";
         }
@@ -46,13 +59,20 @@ while(<CONF>) {
 }
 close(CONF);
 
-# my $dir = '/var/www/git/';
-# my $git_dir = $dir . ".git";
-# my $out_dir = '/var/www/site/';
+# sub recurse($) {
+#     my $dir = shift;
+#     process_files($dir);
+# }
 
-sub recurse($) {
-    my $dir = shift;
-    process_files($dir);
+sub load_template($) {
+    my $temp_file = shift;
+    my $load;
+    open(my $temp, "<$temp_file") or die "! Line 131 ! Cannot open file: $!\n";
+    while(<$temp>) {
+        $load .= $_;
+    }
+    my $template = $load;
+    return $template;
 }
 
 sub process_files($) {
@@ -85,14 +105,16 @@ sub process_files($) {
             # This makes a new call to process_files()
             # using a new directory we just found.
             process_files($_);
-
-        # If it isn't a directory, lets just do some
-        # processing on it.
         } else {
             if ($_ =~ /.+\/(.+)\.wiki$/) {
                 my $file = $_;
                 my $new_file = $1;
                 #$new_file =~ s/.+\/(w+)\.wiki/$1/g;
+
+                # Load template
+                if (defined($template_file)) {
+                    our $tmplt = load_template($template_file);
+                }
 
                 # Parsing markup files
                 my $parser = Text::Markup->new(
@@ -103,7 +125,8 @@ sub process_files($) {
 #                 $parse_out =~ s/\*\*(.+)\*\*/<i>$1<\/i>/g;
                 $parse_out =~ s/\{{3}/<pre>/g;
                 $parse_out =~ s/}}}/<\/pre>/g;
-                $parse_out =~ s/(<html>)/$1\n<head>\n<link rel="stylesheet" href="http:\/\/st\.pimg\.net\/tucs\/style\.css" type="text\/css" \/>\n<link rel="stylesheet" href="http:\/\/yandex\.st\/highlightjs\/7\.3\/styles\/default\.min\.css">\n<script src="http:\/\/yandex.st\/highlightjs\/7\.3\/highlight\.min\.js"><\/script>\n/g;
+                # $parse_out =~ s/(<html>)/$1\n<head>\n<link rel="stylesheet" href="http:\/\/st\.pimg\.net\/tucs\/style\.css" type="text\/css" \/>\n<link rel="stylesheet" href="http:\/\/yandex\.st\/highlightjs\/7\.3\/styles\/default\.min\.css">\n<script src="http:\/\/yandex.st\/highlightjs\/7\.3\/highlight\.min\.js"><\/script>\n/g;
+                $parse_out =~ s/<html>/$tmplt/g;
 
                 $new_file = "$out_dir" . "$new_file" . ".html";
                 open(NEW, ">$new_file") or die "$!\n";
