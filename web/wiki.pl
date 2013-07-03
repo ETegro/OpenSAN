@@ -25,6 +25,8 @@ use File::Copy;
 use Cwd 'abs_path';
 
 # Load configuration. Put 'config' file into dir contains wiki.pl script.
+# I know. It's a shitcode but I to lazy for XML. 
+# TODO: Rewrite 'load configuration' code block :)
 my $config_file = './config';
 open(CONF, "<$config_file") or die "Cannot open file: $!\n";
 my ($dir, $git_dir, $out_dir, $template_file);
