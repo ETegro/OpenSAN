@@ -1,0 +1,11 @@
+Required Perl modules:
+
+Text::Markup,
+Git::Repository
+
+Install from cpan:
+
+	localhost@localdomain # cpan 
+	localhost@localdomain # notest force install MODULE::NAME
+
+Try find it in repository in you distributive. It's popular modules

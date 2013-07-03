@@ -106,7 +106,8 @@ sub process_files($) {
 
                 # Parsing markup files
                 #
-                # FORMATS. Must be: 
+                # FORMATS
+                # Must be: 
 	            # asciidoc, html, markdown,
                 # mediawiki, multimarkdown, pod, rest,
                 # textile, trac
@@ -115,10 +116,8 @@ sub process_files($) {
                             default_encoding => 'UTF-8', 
                             );                           
                 my $parse_out = $parser->parse(file => $file);
-#                 $parse_out =~ s/\*\*(.+)\*\*/<i>$1<\/i>/g;
                 $parse_out =~ s/\{{3}/<pre>/g;
                 $parse_out =~ s/}}}/<\/pre>/g;
-                # $parse_out =~ s/(<html>)/$1\n<head>\n<link rel="stylesheet" href="http:\/\/st\.pimg\.net\/tucs\/style\.css" type="text\/css" \/>\n<link rel="stylesheet" href="http:\/\/yandex\.st\/highlightjs\/7\.3\/styles\/default\.min\.css">\n<script src="http:\/\/yandex.st\/highlightjs\/7\.3\/highlight\.min\.js"><\/script>\n/g;
                 $parse_out =~ s/<html>/$tmplt<\/body><\/html>/g;
 
                 $new_file = "$out_dir" . "$new_file" . ".html";
@@ -130,7 +129,14 @@ sub process_files($) {
                 my $file = $_;
                 my $new_file = $1;
                 $new_file = "$out_dir" . "img/" . "$new_file";
-                copy("$file", "$new_file") or die "Copy fiiled: $!\n";
+                copy("$file", "$new_file") or die "Copy failed: $!\n";
+            }
+            # CSS
+            elsif ($_ =~ /.+\/(.+\.css)/) {
+            	my $file = $_;
+            	my $new_file = $1;
+            	$new_file = "$out_dir" . "css/" . "$new_file";
+            	copy("$file", "$new_file") or die "Copy failed: $!\n";
             }
         }
     }
