@@ -977,7 +977,381 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 			</g>
 		</g>
 <%# end ASTOR2_MONITORING-HDD1 (top) %>
-<%# begin ASTOR2_MONITORING-PSU0 (left) %>
+<%# begin ASTOR2_MONITORING-PSU %>
+	<% if data.PSU_TOTAL then %>
+		<%# begin ASTOR2_MONITORING-PSU_TOTAL %>
+		<g
+			id="ASTOR2_MONITORING-PSU_TOTAL"
+			style="fill:<%= data.PSU_TOTAL.color or data.DEFAULT_NA_COLOR %>;fill-opacity:0.7;stroke:none">
+			<%# begin ASTOR2_MONITORING-TOTAL-PSU0 (left) %>
+			<g id="ASTOR2_MONITORING-PSU0">
+				<g id="PSU0-body">
+					<rect
+						width="220"
+						height="100"
+						rx="3"
+						ry="3"
+						x="10.3"
+						y="111.9"
+						id="rect4775" />
+					<path
+						d="m 91.084,118.77 c 0.759,10.85 1.952,24.55 -2.372,34.32 -4.52,-9.88 -12.096,-15.19 -25.048,-13.83 -3,-4.94 -10.703,-6.55 -19.887,-7.45 l 0,-13.05 z"
+						id="path3867"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 110.86,185.17 c -9.65,0.71 -24.506,1.97 -34.312,-2.37 9.877,-4.52 15.189,-12.1 13.823,-25.05 4.945,-3 6.626,-10.4 7.457,-19.89 l 13.052,0 z"
+						id="path3873"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 44.487,204.92 c -0.407,-11.69 -2.101,-24.6 2.373,-34.31 4.519,9.88 12.095,15.19 25.048,13.82 3,4.95 9.96,6.48 19.887,7.46 l 0,13.05 z"
+						id="path3875"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 24.661,138.44 c 11.287,-0.6 24.553,-1.93 34.313,2.38 -9.877,4.52 -15.19,12.09 -13.823,25.04 -4.945,3 -6.849,10.56 -7.458,19.89 l -13.051,0 z"
+						id="path3877"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="27.457"
+						x="21.116"
+						y="151.44"
+						id="rect3882"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="13.7"
+						x="19.116"
+						y="151.44"
+						id="rect3886"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 38.236,122.46 c -2.501,-2.5 -6.558,-2.5 -9.06,0 -2.501,2.5 -2.501,6.56 0,9.06 2.502,2.5 6.559,2.5 9.06,0 2.502,-2.5 2.502,-6.56 0,-9.06 z m -2.629,0.68 1.922,1.93 -1.922,1.92 1.922,1.92 -1.922,1.92 -1.923,-1.92 -1.9,1.9 -1.923,-1.92 1.901,-1.9 -1.901,-1.9 1.923,-1.93 1.9,1.91 1.923,-1.93 z"
+						id="path3900"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 106.24,122.46 c -2.51,-2.5 -6.562,-2.5 -9.064,0 -2.501,2.5 -2.501,6.56 0,9.06 2.502,2.5 6.554,2.5 9.064,0 2.5,-2.5 2.5,-6.56 0,-9.06 z m -2.63,0.68 1.92,1.93 -1.92,1.92 1.92,1.92 -1.92,1.92 -1.93,-1.92 -1.896,1.9 -1.923,-1.92 1.901,-1.9 -1.901,-1.9 1.923,-1.93 1.896,1.91 1.93,-1.93 z"
+						id="path3908"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 38.236,190.46 c -2.501,-2.5 -6.558,-2.5 -9.06,0 -2.501,2.5 -2.501,6.56 0,9.06 2.502,2.5 6.559,2.5 9.06,0 2.502,-2.5 2.502,-6.56 0,-9.06 z m -2.629,0.68 1.922,1.93 -1.922,1.92 1.922,1.92 -1.922,1.92 -1.923,-1.92 -1.9,1.9 -1.923,-1.92 1.901,-1.9 -1.901,-1.9 1.923,-1.93 1.9,1.91 1.923,-1.93 z"
+						id="path3910"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 106.24,190.46 c -2.51,-2.5 -6.562,-2.5 -9.064,0 -2.501,2.5 -2.501,6.56 0,9.06 2.502,2.5 6.554,2.5 9.064,0 2.5,-2.5 2.5,-6.56 0,-9.06 z m -2.63,0.68 1.92,1.93 -1.92,1.92 1.92,1.92 -1.92,1.92 -1.93,-1.92 -1.896,1.9 -1.923,-1.92 1.901,-1.9 -1.901,-1.9 1.923,-1.93 1.896,1.91 1.93,-1.93 z"
+						id="path3912"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 15.831,178.89 0,22.5 c 0,2.77 2.23,5 5,5 l 93.129,0 c 2.77,0 5,-2.23 5,-5 l 0,-22.5 -12.07,0 0,11.47 c 0,2.77 -2.23,5 -5,5 l -68.559,0 c -2.77,0 -5,-2.23 -5,-5 l 0,-11.47 -12.5,0 z"
+						id="rect3892"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="56.32"
+						height="69.304"
+						rx="5"
+						ry="5"
+						x="150.86"
+						y="126.91"
+						id="rect3854"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="9.0397"
+						height="35.858"
+						rx="0"
+						ry="0"
+						x="217.21"
+						y="143.63"
+						id="rect3856"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 171.74,133.75 -12.35,12.12 0,30.91 12.57,12.56 11.15,0 c 0.17,0 0.33,0 0.5,0 l 10.03,0 c 2.77,0 5,-2.23 5,-5 l 0,-45.62 c 0,-2.77 -2.23,-5 -5,-5 l -5,0 -5.03,0 -11.87,0 z"
+						id="rect3879"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 172.13,135.24 -11.58,11.47 0,29.26 11.78,11.89 10.56,0 c 0.16,0 0.31,0 0.48,0 l 9.49,0 c 2.62,0 4.52,-2.11 4.52,-4.74 l 0,-43.18 c 0,-2.62 -1.9,-4.73 -4.52,-4.73 l -4.73,0 -4.76,0 z"
+						id="path5155"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 172.52,136.72 -10.71,10.83 0,27.6 10.9,11.22 9.97,0 c 0.15,0 0.29,0 0.44,0 l 8.96,0 c 2.47,0 3.93,-1.99 3.93,-4.46 l 0,-40.75 c 0,-2.47 -1.46,-4.47 -3.93,-4.47 l -4.47,0 -4.49,0 z"
+						id="path5157"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="10.866"
+						height="4.9006"
+						x="180.04"
+						y="142.61"
+						id="rect5161"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="4.7301"
+						height="1.5767"
+						x="183.11"
+						y="144.27"
+						id="rect5163"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="10.866"
+						height="4.9006"
+						x="180.04"
+						y="174.61"
+						id="rect3083"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="4.7301"
+						height="1.5767"
+						x="183.11"
+						y="176.27"
+						id="rect3085"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="10.866"
+						height="4.9006"
+						x="168.04"
+						y="158.61"
+						id="rect3087"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="4.7301"
+						height="1.5767"
+						x="171.11"
+						y="160.27"
+						id="rect3089"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="18.892"
+						height="47.007"
+						rx="3"
+						ry="3"
+						x="203.74"
+						y="138.06"
+						id="rect3858"
+						style="fill:#008000;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 138.34,156.14 a 2.7119,2.7119 0 1 1 -5.42,0 2.7119,2.7119 0 1 1 5.42,0 z"
+						id="path3091"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 138.34,168.14 a 2.7119,2.7119 0 1 1 -5.42,0 2.7119,2.7119 0 1 1 5.42,0 z"
+						id="path3861"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 133.52,130.52 c -4.49,0 -8.13,3.66 -8.13,8.15 0,4.5 3.64,8.13 8.13,8.13 4.49,0 8.12,-3.63 8.12,-8.13 0,-4.49 -3.63,-8.15 -8.12,-8.15 z m 0,2.4 c 3.16,0 5.72,2.59 5.72,5.75 0,3.17 -2.56,5.72 -5.72,5.72 -3.16,0 -5.72,-2.55 -5.72,-5.72 0,-3.16 2.56,-5.75 5.72,-5.75 z"
+						id="path3863"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="27.457"
+						x="112.73"
+						y="151.44"
+						id="rect3888"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="13.7"
+						x="114.74"
+						y="151.44"
+						id="rect3890"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+				</g>
+			</g>
+			<%# end ASTOR2_MONITORING-TOTAL-PSU0 (left) %>
+			<%# begin ASTOR2_MONITORING-TOTAL-PSU1 (right) %>
+			<g id="ASTOR2_MONITORING-PSU1">
+				<g id="PSU1_body">
+					<rect
+						width="220"
+						height="100"
+						rx="3"
+						ry="3"
+						x="240.3"
+						y="111.9"
+						id="rect4899" />
+					<path
+						d="m 321.08,118.77 c 0.76,10.85 1.96,24.55 -2.37,34.32 -4.52,-9.88 -12.09,-15.19 -25.05,-13.83 -3,-4.94 -10.7,-6.55 -19.88,-7.45 l 0,-13.05 z"
+						id="path4032"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 340.86,185.17 c -9.65,0.71 -24.51,1.97 -34.31,-2.37 9.88,-4.52 15.19,-12.1 13.82,-25.05 4.95,-3 6.63,-10.4 7.46,-19.89 l 13.05,0 z"
+						id="path4034"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 274.49,204.92 c -0.41,-11.69 -2.1,-24.6 2.37,-34.31 4.52,9.88 12.1,15.19 25.05,13.82 3,4.95 9.96,6.48 19.88,7.46 l 0,13.05 z"
+						id="path4036"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 254.66,138.44 c 11.29,-0.6 24.55,-1.93 34.31,2.38 -9.87,4.52 -15.19,12.09 -13.82,25.04 -4.94,3 -6.85,10.56 -7.46,19.89 l -13.05,0 z"
+						id="path4038"
+						style="stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="27.457"
+						x="251.12"
+						y="151.44"
+						id="rect4040"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="13.7"
+						x="249.12"
+						y="151.44"
+						id="rect4042"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="27.457"
+						x="342.55"
+						y="151.44"
+						id="rect4044"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="1.848"
+						height="13.7"
+						x="344.62"
+						y="151.44"
+						id="rect4046"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 268.24,122.46 c -2.51,-2.5 -6.56,-2.5 -9.06,0 -2.51,2.5 -2.51,6.56 0,9.06 2.5,2.5 6.55,2.5 9.06,0 2.5,-2.5 2.5,-6.56 0,-9.06 z m -2.63,0.68 1.92,1.93 -1.92,1.92 1.92,1.92 -1.92,1.92 -1.93,-1.92 -1.9,1.9 -1.92,-1.92 1.9,-1.9 -1.9,-1.9 1.92,-1.93 1.9,1.91 1.93,-1.93 z"
+						id="path4048"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 336.24,122.46 c -2.51,-2.5 -6.56,-2.5 -9.06,0 -2.51,2.5 -2.51,6.56 0,9.06 2.5,2.5 6.55,2.5 9.06,0 2.5,-2.5 2.5,-6.56 0,-9.06 z m -2.63,0.68 1.92,1.93 -1.92,1.92 1.92,1.92 -1.92,1.92 -1.93,-1.92 -1.9,1.9 -1.92,-1.92 1.9,-1.9 -1.9,-1.9 1.92,-1.93 1.9,1.91 1.93,-1.93 z"
+						id="path4050"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 268.24,190.46 c -2.51,-2.5 -6.56,-2.5 -9.06,0 -2.51,2.5 -2.51,6.56 0,9.06 2.5,2.5 6.55,2.5 9.06,0 2.5,-2.5 2.5,-6.56 0,-9.06 z m -2.63,0.68 1.92,1.93 -1.92,1.92 1.92,1.92 -1.92,1.92 -1.93,-1.92 -1.9,1.9 -1.92,-1.92 1.9,-1.9 -1.9,-1.9 1.92,-1.93 1.9,1.91 1.93,-1.93 z"
+						id="path4052"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 336.24,190.46 c -2.51,-2.5 -6.56,-2.5 -9.06,0 -2.51,2.5 -2.51,6.56 0,9.06 2.5,2.5 6.55,2.5 9.06,0 2.5,-2.5 2.5,-6.56 0,-9.06 z m -2.63,0.68 1.92,1.93 -1.92,1.92 1.92,1.92 -1.92,1.92 -1.93,-1.92 -1.9,1.9 -1.92,-1.92 1.9,-1.9 -1.9,-1.9 1.92,-1.93 1.9,1.91 1.93,-1.93 z"
+						id="path4054"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 245.83,178.89 0,22.5 c 0,2.77 2.23,5 5,5 l 93.13,0 c 2.77,0 5,-2.23 5,-5 l 0,-22.5 -12.07,0 0,11.47 c 0,2.77 -2.23,5 -5,5 l -68.56,0 c -2.77,0 -5,-2.23 -5,-5 l 0,-11.47 -12.5,0 z"
+						id="path4056"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="56.32"
+						height="69.304"
+						rx="5"
+						ry="5"
+						x="380.86"
+						y="126.91"
+						id="rect4058"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="9.0397"
+						height="35.858"
+						rx="0"
+						ry="0"
+						x="447.21"
+						y="143.63"
+						id="rect4060"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 401.74,133.75 -12.35,12.12 0,30.91 12.57,12.56 11.15,0 c 0.17,0 0.33,0 0.5,0 l 10.03,0 c 2.77,0 5,-2.23 5,-5 l 0,-45.62 c 0,-2.77 -2.23,-5 -5,-5 l -5,0 -5.03,0 -11.87,0 z"
+						id="path4062"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 402.13,135.24 -11.58,11.47 0,29.26 11.78,11.89 10.56,0 c 0.16,0 0.31,0 0.48,0 l 9.49,0 c 2.62,0 4.52,-2.11 4.52,-4.74 l 0,-43.18 c 0,-2.62 -1.9,-4.73 -4.52,-4.73 l -4.73,0 -4.76,0 z"
+						id="path4064"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 402.52,136.72 -10.71,10.83 0,27.6 10.9,11.22 9.97,0 c 0.15,0 0.29,0 0.44,0 l 8.96,0 c 2.47,0 3.93,-1.99 3.93,-4.46 l 0,-40.75 c 0,-2.47 -1.46,-4.47 -3.93,-4.47 l -4.47,0 -4.49,0 z"
+						id="path4066"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="10.866"
+						height="4.9006"
+						x="410.04"
+						y="142.61"
+						id="rect4068"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="4.7301"
+						height="1.5767"
+						x="413.11"
+						y="144.27"
+						id="rect4070"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="10.866"
+						height="4.9006"
+						x="410.04"
+						y="174.61"
+						id="rect4072"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="4.7301"
+						height="1.5767"
+						x="413.11"
+						y="176.27"
+						id="rect4074"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="10.866"
+						height="4.9006"
+						x="398.04"
+						y="158.61"
+						id="rect4076"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="4.7301"
+						height="1.5767"
+						x="401.11"
+						y="160.27"
+						id="rect4078"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<rect
+						width="18.892"
+						height="47.007"
+						rx="3"
+						ry="3"
+						x="433.74"
+						y="138.06"
+						id="rect4080"
+						style="stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 368.34,156.14 a 2.7119,2.7119 0 1 1 -5.42,0 2.7119,2.7119 0 1 1 5.42,0 z"
+						id="path4082"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 368.34,168.14 a 2.7119,2.7119 0 1 1 -5.42,0 2.7119,2.7119 0 1 1 5.42,0 z"
+						id="path4084"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+					<path
+						d="m 363.52,130.52 c -4.49,0 -8.13,3.66 -8.13,8.15 0,4.5 3.64,8.13 8.13,8.13 4.49,0 8.12,-3.63 8.12,-8.13 0,-4.49 -3.63,-8.15 -8.12,-8.15 z m 0,2.4 c 3.16,0 5.72,2.59 5.72,5.75 0,3.17 -2.56,5.72 -5.72,5.72 -3.16,0 -5.72,-2.55 -5.72,-5.72 0,-3.16 2.56,-5.75 5.72,-5.75 z"
+						id="path4086"
+						style="stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+				</g>
+			</g>
+			<%# end ASTOR2_MONITORING-TOTAL-PSU1 (right) %>
+			<g id="ASTOR2_MONITORING-PSU-TOTAL-TITLE">
+				<rect
+					width="320"
+					height="60"
+					rx="20"
+					ry="20"
+					x="75.3"
+					y="131.9"
+					id="rect5324"
+					style="fill:<%= data.PSU_TOTAL.color or data.DEFAULT_NA_COLOR %>;fill-opacity:0.7;stroke:none" />
+				<text
+					x="234.00801"
+					y="172.0787"
+					id="text5326"
+					xml:space="preserve"
+					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
+					<tspan
+						x="234.00801"
+						y="172.0787"
+						id="tspan5328"
+						style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.PSU_TOTAL.value then %><%= data.PSU_TOTAL.value %> W<% else %>N/A<% end %></tspan>
+				</text>
+			</g>
+		</g>
+		<%# end ASTOR2_MONITORING-PSU_TOTAL %>
+	<% else %>
+		<%# begin ASTOR2_MONITORING-PSU0 (left) %>
 		<g
 			id="ASTOR2_MONITORING-PSU0"
 			style="fill:<%= data.DEFAULT_NA_COLOR %>">
@@ -1172,8 +1546,8 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
-<%# end ASTOR2_MONITORING-PSU0 (left) %>
-<%# begin ASTOR2_MONITORING-PSU1 (right) %>
+		<%# end ASTOR2_MONITORING-PSU0 (left) %>
+		<%# begin ASTOR2_MONITORING-PSU1 (right) %>
 		<g
 			id="ASTOR2_MONITORING-PSU1"
 			style="fill:<%= data.DEFAULT_NA_COLOR %>">
@@ -1368,37 +1742,9 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 				</text>
 			</g>
 		</g>
-<%# end ASTOR2_MONITORING-PSU1 (right) %>
-<%# begin ASTOR2_MONITORING-PSU_TOTAL %>
-	<% if data.PSU_TOTAL then %>
-		<g
-			id="ASTOR2_MONITORING-PSU_TOTAL">
-			<g id="ASTOR2_MONITORING-PSU-TOTAL-TITLE">
-				<rect
-					width="320"
-					height="60"
-					rx="20"
-					ry="20"
-					x="75.3"
-					y="131.9"
-					id="rect5324"
-					style="fill:<%= data.PSU_TOTAL.color or data.DEFAULT_NA_COLOR %>;fill-opacity:0.7;stroke:none" />
-				<text
-					x="234.00801"
-					y="172.0787"
-					id="text5326"
-					xml:space="preserve"
-					style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">
-					<tspan
-						x="234.00801"
-						y="172.0787"
-						id="tspan5328"
-						style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.PSU_TOTAL.value then %><%= data.PSU_TOTAL.value %> W<% else %>N/A<% end %></tspan>
-				</text>
-			</g>
-		</g>
+		<%# end ASTOR2_MONITORING-PSU1 (right) %>
 	<% end %>
-<%# end ASTOR2_MONITORING-PSU_TOTAL %>
+<%# end ASTOR2_MONITORING-PSU %>
 		<g
 			id="ASTOR2_MONITORING-SLOTS"
 			style="fill-opacity:0.6">
