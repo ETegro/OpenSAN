@@ -4,6 +4,62 @@
 		"selected_items":
 		[
 			[
+				"te",
+				"temp_file"
+			],
+			[
+				"con",
+				"config_file"
+			],
+			[
+				"nw",
+				"new_file"
+			],
+			[
+				"new",
+				"new_file"
+			],
+			[
+				"opens",
+				"opensan"
+			],
+			[
+				"Op",
+				"OpenSAN"
+			],
+			[
+				"tem",
+				"template_file"
+			],
+			[
+				"O",
+				"OpenSAN"
+			],
+			[
+				"for",
+				"formats"
+			],
+			[
+				"par",
+				"parse_out"
+			],
+			[
+				"load",
+				"load_template"
+			],
+			[
+				"els",
+				"elsif"
+			],
+			[
+				"temp",
+				"template"
+			],
+			[
+				"open",
+				"opendir"
+			],
+			[
 				"git",
 				"git_stat"
 			],
@@ -16,10 +72,21 @@
 	"buffers":
 	[
 		{
-			"file": "wiki.pl",
+			"contents": "#!/usr/bin/env perl \n#===============================================================================\n#\n#         FILE: wiki.pl\n#\n#        USAGE: ./wiki.pl  \n#\n#  DESCRIPTION: Script update site from github\n#       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com\n#      LICENSE: GNU GPLv3 [https://www.gnu.org/licenses/gpl.html]\n# ORGANIZATION: ETegro Technologies\n#      VERSION: 0.1\n#      CREATED: 01.07.2013 15:45:20\n#     REVISION: 005\n#===============================================================================\nuse SAN::WEB;\nmy $opensan = new SAN::WEB;\n\n# Path to configuration file\nmy $config_file;\nif (-e './config') {\n    $config_file = './config';\n}\nelsif (-e '/var/www/config') {\n    $config_file = '/var/www/config';\n}\nelsif (-e './config' and -e '/var/www/config') {\n    $config_file = './config';\n}\nelse {\n    print \"Config file not found!\" and die;\n}\n\n# Load configuration\nmy ($dir, $git_dir, $out_dir, $template_file) = $opensan->load_config($config_file);\n\n# Load HTML template\nmy $tmplt;\nmy $template = $opensan->load_template($template_file);\n\n# Check site updates on github.\nmy $git_stat = $opensan->check_git();\n\n# Run main proccess\n$opensan->process_files($dir) if $git_stat ne 'Already up-to-date.';",
+			"file": "script/wiki.pl",
+			"file_size": 1250,
+			"file_write_time": 1372862911000000,
 			"settings":
 			{
-				"buffer_size": 4147,
+				"buffer_size": 1242,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "script/SAN/WEB.pm",
+			"settings":
+			{
+				"buffer_size": 4624,
 				"line_ending": "Unix"
 			}
 		}
@@ -35,7 +102,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 424.0
+		"width": 536.0
 	},
 	"console":
 	{
@@ -52,6 +119,18 @@
 	},
 	"file_history":
 	[
+		"/home/denis/.config/sublime-text-2/Packages/Default/Default.sublime-theme",
+		"/home/denis/.config/sublime-text-2/Packages/Default/Side Bar.sublime-menu",
+		"/home/denis/soft/job/astor2/web/script/REQUIREMENTS",
+		"/home/denis/soft/job/astor2/web/script/REQUIRES",
+		"/home/denis/soft/job/astor2/web/script/SAN/OpenSAN.pm",
+		"/home/denis/soft/job/astor2/web/templates/site.html",
+		"/home/denis/soft/job/astor2/web/WikiStart.wiki",
+		"/home/denis/soft/job/astor2/web/Usage.wiki",
+		"/home/denis/soft/job/astor2/web/wiki.pl",
+		"/home/denis/soft/job/astor2/web/formats.pl",
+		"/home/denis/soft/job/astor2/web/config",
+		"/home/denis/soft/job/astor2/web/test.pl",
 		"/home/denis/soft/job/astor2/web/css/style.css",
 		"/home/denis/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
 		"/home/denis/.config/sublime-text-2/Packages/User/Scroll Offset.sublime-settings",
@@ -63,7 +142,7 @@
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 44.0
 	},
 	"find_in_files":
 	{
@@ -77,6 +156,18 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"^$",
+			"s/^$//g",
+			"OpenSAN",
+			"cwd",
+			"key",
+			"Text",
+			"Markup",
+			"sub",
+			"SAN",
+			"Script",
+			";\n",
+			".';",
 			"sub",
 			"sub check_git() {\n    my $r = Git::Repository->new(git_dir => $git_dir) or die \"$!\\n\";\n    my $output = $r->run(\"pull\") or die \"$!\\n\";\n    return $output;\n}",
 			"\n                "
@@ -84,9 +175,10 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			""
 		],
 		"reverse": false,
 		"show_context": true,
@@ -97,23 +189,23 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "wiki.pl",
+					"file": "script/wiki.pl",
 					"settings":
 					{
-						"buffer_size": 4147,
+						"buffer_size": 1242,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3835,
-								3835
+								127,
+								127
 							]
 						],
 						"settings":
@@ -123,7 +215,35 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2927.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "script/SAN/WEB.pm",
+					"settings":
+					{
+						"buffer_size": 4624,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3799,
+								3799
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Perl/Perl.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 867.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -164,7 +284,7 @@
 	"menu_visible": true,
 	"replace":
 	{
-		"height": 0.0
+		"height": 82.0
 	},
 	"save_all_on_build": true,
 	"select_file":
