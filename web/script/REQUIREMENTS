@@ -11,4 +11,4 @@ Install from cpan:
 
 	cpan[1]> notest force install MODULE::NAME
 
-Try find it in repository in you distributive. It's popular modules
+Try find it in repository in you distributive. 

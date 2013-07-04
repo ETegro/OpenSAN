@@ -1,4 +1,4 @@
-package SAN::OpenSAN;
+package SAN::WEB;
 
 use strict;
 use warnings;
@@ -21,7 +21,7 @@ sub load_config($) {
 	my ($dir, $git_dir, $out_dir, $template_file);
 	while(<CONF>) {
 	    my $config = $_;
-	    if ($config =~ /(^\w+)=(.+$)/) {
+	    if ($config =~ /(^\w+)=(.+)$/) {
 	        my $key = $1;
 	        my $value = $2;
 	        if ($key eq 'WorkDirectory') {
@@ -55,7 +55,7 @@ sub load_config($) {
 sub load_template($) {
     my $temp_file = shift;
     my $load;
-    open(my $temp, "<$temp_file") or die "! Line 131 ! Cannot open file: $!\n";
+    open(my $temp, "<$temp_file") or die "Cannot open file $temp_file: $!\n";
     while(<$temp>) {
         $load .= $_;
     }
@@ -92,7 +92,7 @@ sub process_files($) {
             # Here is where we recurse.
             # This makes a new call to process_files()
             # using a new directory we just found.
-            SAN::OpenSAN->process_files($_);
+            SAN::WEB->process_files($_);
         } else {
             if ($_ =~ /.+\/(.+)\.wiki$/) {
                 my $file = $_;
@@ -101,7 +101,7 @@ sub process_files($) {
 
                 # Load template
                 if (defined($template_file)) {
-                    $tmplt = SAN::OpenSAN->load_template($template_file);
+                    $tmplt = SAN::WEB->load_template($template_file);
                 }
 
                 # Parsing markup files
@@ -112,7 +112,7 @@ sub process_files($) {
                 # textile, trac
                 # We use mediawiki format
                 my $parser = Text::Markup->new(
-                            default_format => 'rest',
+                            default_format => 'mediawiki',
                             default_encoding => 'UTF-8',
                             );
                 my $parse_out = $parser->parse(file => $file);
