@@ -12,6 +12,13 @@ use Git::Repository;
 use File::Copy;
 use Cwd 'abs_path';
 
+sub new() {
+    my $class = shift;
+    my $self = {};
+    bless $self, $class;
+    return $self;
+}
+
 sub load_config($) {
 	# Load configuration. Put 'config' file into dir contains wiki.pl script.
 	# I know it's shitcode but Im to lazy into XML, JSON, YAML, or somethin else :)

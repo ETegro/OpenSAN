@@ -13,8 +13,9 @@
 #      CREATED: 01.07.2013 15:45:20
 #     REVISION: 005
 #===============================================================================
-use SAN::OpenSAN;
-my $opensan = new SAN::OpenSAN;
+use SAN::WEB;
+
+my $opensan = SAN::WEB->new();
 
 # Path to configuration file
 my $config_file;
