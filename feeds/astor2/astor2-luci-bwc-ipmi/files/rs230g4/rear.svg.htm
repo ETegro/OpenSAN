@@ -1354,7 +1354,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 		<%# begin ASTOR2_MONITORING-PSU0 (left) %>
 		<g
 			id="ASTOR2_MONITORING-PSU0"
-			style="fill:<%= data.DEFAULT_NA_COLOR %>">
+			style="fill:<%= data.PSU0.color or data.DEFAULT_NA_COLOR %>">
 			<g id="PSU0-body">
 				<rect
 					width="220"
@@ -1550,7 +1550,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 		<%# begin ASTOR2_MONITORING-PSU1 (right) %>
 		<g
 			id="ASTOR2_MONITORING-PSU1"
-			style="fill:<%= data.DEFAULT_NA_COLOR %>">
+			style="fill:<%= data.PSU1.color or data.DEFAULT_NA_COLOR %>">
 			<g id="PSU1_body">
 				<rect
 					width="220"
