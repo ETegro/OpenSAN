@@ -27,6 +27,7 @@ ENTITY_STATE_COLORMAP = {
 	darkgreen = "#008000",
 	gray = "#808080",
 	green = "#58E33A",
+	psugreen = "#CDF7C4",
 	orange = "#FFA500",
 	red = "#F21",
 	white = "#FFF",
@@ -45,6 +46,9 @@ DEFAULT_OPACITY = "0.3"
 data[ "COLORS" ] = ENTITY_STATE_COLORMAP
 data[ "DEFAULT_NA_COLOR" ] = ENTITY_STATE_COLORMAP["gray"]
 data[ "SVG_SCALE" ] = "0.6"
+data[ "DEFAULT_PSU_COLOR" ] = ENTITY_STATE_COLORMAP["green"]
+data[ "PSU_DARK" ] = ENTITY_STATE_COLORMAP["darkgreen"]
+data[ "DEFAULT_PSU_TITLE" ] = ENTITY_STATE_COLORMAP["white"]
 
 for template_id,entity in pairs( data ) do
 	if common.is_table( entity ) and template_id ~= "JBODS" then

@@ -25,6 +25,7 @@
 ]] %>
 
 <%+san_monitoring/attributes%>
+<% local rear_svg_scale = 0.5839 %>
 
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg
@@ -45,7 +46,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 		</cc:Work>
 	</rdf:RDF>
 </metadata>
-<g transform="scale(<%= data.SVG_SCALE %>)">
+<g transform="scale(<%= rear_svg_scale %>)">
 	<defs id="defs100" />
 <%# begin ASTOR2_MONITORING-BACK_PANEL %>
 	<g id="BODY">
@@ -982,7 +983,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 		<%# begin ASTOR2_MONITORING-PSU_TOTAL %>
 		<g
 			id="ASTOR2_MONITORING-PSU_TOTAL"
-			style="fill:<%= data.PSU_TOTAL.color or data.DEFAULT_NA_COLOR %>">
+			style="fill:<%= data.DEFAULT_PSU_COLOR %>">
 			<%# begin ASTOR2_MONITORING-TOTAL-PSU0 (left) %>
 			<g id="ASTOR2_MONITORING-PSU0">
 				<g id="PSU0-body">
@@ -1334,7 +1335,7 @@ style="fill:none;stroke:#000000;stroke-width:0.6">
 					x="75.3"
 					y="131.9"
 					id="rect5324"
-					style="fill:<%= data.PSU_TOTAL.color or data.DEFAULT_NA_COLOR %>;fill-opacity:0.7;stroke:none" />
+					style="fill:<%= data.PSU_DARK %>;fill-opacity:0.7;stroke:none" />
 				<text
 					x="234.00801"
 					y="172.0787"
