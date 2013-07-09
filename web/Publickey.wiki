@@ -1,4 +1,4 @@
-{{{
+<pre>
 pub   2048D/90EC3862 2011-06-28
 uid                  OpenSAN development team <team@opensan.org>
 sub   2048g/1CEBB66E 2011-06-28
@@ -45,4 +45,4 @@ CgkQefw3JJDsOGLU+QD9HB4ODaDcv44Uj1anll7vePqelDX0XS+bfmYsvGkEXeQA
 /32+wKmA0x7X7Im4FO02duRko5ev4pF3VQMtQx8j8ScC
 =VALr
 -----END PGP PUBLIC KEY BLOCK-----
-}}}
+</pre>

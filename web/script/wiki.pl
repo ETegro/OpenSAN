@@ -33,7 +33,7 @@ else {
 }
 
 # Load configuration
-my ($dir, $git_dir, $out_dir, $template_file) = $opensan->load_config($config_file);
+my ($dir, $git_dir, $out_dir, $template_file, %config) = $opensan->load_config($config_file);
 
 # Load HTML template
 my $tmplt;

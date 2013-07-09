@@ -26,11 +26,13 @@ sub load_config($) {
 	my $config_file = shift;
 	open(CONF, "<$config_file") or die "Cannot open file: $!\n";
 	my ($dir, $git_dir, $out_dir, $template_file);
+    my %config_hash = ();
 	while(<CONF>) {
 	    my $config = $_;
 	    if ($config =~ /(^\w+)=(.+)$/) {
 	        my $key = $1;
 	        my $value = $2;
+            $config_hash{$key} = $value;
 	        if ($key eq 'WorkDirectory') {
 	            $dir = $value;
 	        }
@@ -56,7 +58,7 @@ sub load_config($) {
 	    }
 	}
 	close(CONF);
-	return $dir, $git_dir, $out_dir, $template_file;
+	return $dir, $git_dir, $out_dir, $template_file, %config_hash;
 }
 
 sub load_template($) {
@@ -151,7 +153,7 @@ sub process_files($) {
 
 # Check site updates on github.
 sub check_git() {
-    my $r = Git::Repository->new(git_dir => $git_dir) or die "$!\n";
+    my $r = Git::Repository->new(git_dir => "$git_dir") or die "$!\n";
     my $output = $r->run("pull") or die "$!\n";
     return $output;
 }

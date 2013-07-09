@@ -1,20 +1,37 @@
-{{Infobox OS
-| logo               = [[File:OpenSAN-logo.png|250px]]
-| screenshot         = [[File:OpenSAN-screenshot.png|250px]]
-| caption            = OpenSAN v2.4
-| developer          = [[:ru:ETegro Technologies|ETegro Technologies]] / [http://www.opensan.org/ OpenSAN project]
-| family             = [[Unix-like]]
-| working_state      = Current
-| source_model       = [[Free and open source software]]
-| released           = {{Start date|df=yes|2011|05}}
-| latest release version = OpenSAN v2.4
-| frequently_updated = yes
-| language           = English, Russian
-| supported_platforms = [[x86]], [[x86-64]]
-| kernel_type        = [[Monolithic kernel|Monolithic]] ([[Linux kernel|Linux]])
-| license            = [[Free software]], [[GNU GPL]]
+{|
+|-
+!Infobox OS
+|-
+| logo               || = [[File:OpenSAN-logo.png|250px]]
+|-
+| screenshot         || = [[File:OpenSAN-screenshot.png|250px]]
+|-
+| caption            || = OpenSAN v2.4
+|-
+| developer          || = [[:ru:ETegro Technologies|ETegro Technologies]] / [http://www.opensan.org/ OpenSAN project]
+|-
+| family             || = [[Unix-like]]
+|-
+| working_state      || = Current
+|-
+| source_model       || = [[Free and open source software]]
+|-
+| released           || = {{Start date|df=yes|2011|05}}
+|-
+| latest release version || = OpenSAN v2.4
+|-
+| frequently_updated || = yes
+|-
+| language           || = English, Russian
+|-
+| supported_platforms || = [[x86]], [[x86-64]]
+|- 
+| kernel_type        || = [[Monolithic kernel|Monolithic]] ([[Linux kernel|Linux]])
+|-
+| license            || = [[Free software]], [[GNU GPL]]
+|- 
 | website            = {{URL|www.opensan.org}}
-}}
+|}
 '''OpenSAN''' is a free software project realizing [[Storage Area Network]] system. This is small firmware that turns server into an [[iSCSI]] target accessible through the Ethernet interface.
 
 It is intended to be easy configurable using user-friendly Web-interface. Nearly everything related to SAN can be configured from single Web-interface's page.
