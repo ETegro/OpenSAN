@@ -4,13 +4,13 @@ use strict;
 use warnings;
 use utf8;
 
-# Markup parser. Support most popular formats
+# Markup parser. This modules support most popular formats
 use Text::Markup;
+
 # Git API
 use Git::Repository;
 
 use File::Copy;
-use Cwd 'abs_path';
 
 sub new() {
     my $class = shift;
@@ -20,7 +20,7 @@ sub new() {
 }
 
 sub load_template($) {
-    my $temp_file = shift;
+    my ($class, $temp_file) = @_;
     my $load;
     open(my $temp, "<$temp_file") or die "Cannot open file $temp_file: $!\n";
     while(<$temp>) {
@@ -30,8 +30,9 @@ sub load_template($) {
     return $template;
 }
 
-sub process_files($) {
-    my $path = shift;
+sub process_files() {
+    my ($class, $template_file, $path, $git_dir, $out_dir) = @_;
+    my $tmplt;
 
     # Open the directory.
     opendir (DIR, $path)
@@ -111,8 +112,9 @@ sub process_files($) {
 
 # Check site updates in github.
 sub check_git() {
+    my ($class, $git_dir) = @_;
     my $r = Git::Repository->new(git_dir => "$git_dir") or die "$!\n";
-    my $output = $r->run("pull") or die "$!\n";
+    my $output = $r->run("status") or die "$!\n";
     return $output;
 }
 
