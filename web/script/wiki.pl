@@ -20,7 +20,8 @@ my $opensan = SAN::WEB->new();
 
 my $config_file = "./config.ini";
 # Load configuration
-my ($dir, $git_dir, $out_dir, $template_file) = SAN::Config->config($config_file);
+my $Config = SAN::Config->new();
+my ($dir, $git_dir, $out_dir, $template_file) = $Config->config("$config_file");
 
 # Load HTML template
 my $tmplt;
