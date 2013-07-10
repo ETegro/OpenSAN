@@ -26,13 +26,13 @@ sub load_config($) {
 	my $config_file = shift;
 	open(CONF, "<$config_file") or die "Cannot open file: $!\n";
 	my ($dir, $git_dir, $out_dir, $template_file);
-    my %config_hash = ();
+    # my %config_hash = (); # Uncomment this if you are know what to do with this hash
 	while(<CONF>) {
 	    my $config = $_;
-	    if ($config =~ /(^\w+)=(.+)$/) {
+	    if ($config =~ /(^\w+)\s+=\s+(.+)$/) {
 	        my $key = $1;
 	        my $value = $2;
-            $config_hash{$key} = $value;
+            # $config_hash{$key} = $value; # I donn't know needs it realy or not :) Just comment this line at this time
 	        if ($key eq 'WorkDirectory') {
 	            $dir = $value;
 	        }
@@ -45,12 +45,7 @@ sub load_config($) {
 	        # Require filename only! 
 	        # Script tried to find it on WorkDirectory or in the script location.
 	        elsif ($key eq 'TemplateFile') {
-	            if (-e $value) {
-	                $template_file = $value
-	            }
-	            else {
-	                print "WARNING: File not found. Template cannot be loaded!";
-	            }
+	                $template_file = $value;
 	        }
 	        else {
 	            die "Cannot load configuration. Check syntax. Error: $!\n";
@@ -58,7 +53,7 @@ sub load_config($) {
 	    }
 	}
 	close(CONF);
-	return $dir, $git_dir, $out_dir, $template_file, %config_hash;
+	return $dir, $git_dir, $out_dir, $template_file;#, %config_hash;
 }
 
 sub load_template($) {
@@ -151,7 +146,7 @@ sub process_files($) {
     }
 }
 
-# Check site updates on github.
+# Check site updates in github.
 sub check_git() {
     my $r = Git::Repository->new(git_dir => "$git_dir") or die "$!\n";
     my $output = $r->run("pull") or die "$!\n";

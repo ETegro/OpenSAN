@@ -14,26 +14,13 @@
 #     REVISION: 005
 #===============================================================================
 use SAN::WEB;
+use SAN::Config;
 
 my $opensan = SAN::WEB->new();
 
-# Path to configuration file
-my $config_file;
-if (-e './config') {
-    $config_file = './config';
-}
-elsif (-e '/var/www/config') {
-    $config_file = '/var/www/config';
-}
-elsif (-e './config' and -e '/var/www/config') {
-    $config_file = './config';
-}
-else {
-    print "Config file not found!" and die;
-}
-
+my $config_file = "./config.ini";
 # Load configuration
-my ($dir, $git_dir, $out_dir, $template_file, %config) = $opensan->load_config($config_file);
+my ($dir, $git_dir, $out_dir, $template_file) = SAN::Config->config($config_file);
 
 # Load HTML template
 my $tmplt;
