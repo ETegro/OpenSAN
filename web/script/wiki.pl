@@ -9,9 +9,9 @@
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
 #      LICENSE: GNU GPLv3 [https://www.gnu.org/licenses/gpl.html]
 # ORGANIZATION: ETegro Technologies
-#      VERSION: 0.1
+#      VERSION: 0.1.1
 #      CREATED: 01.07.2013 15:45:20
-#     REVISION: 005
+#     REVISION: 023
 #===============================================================================
 use SAN::Config;
 use SAN::WEB;
@@ -28,7 +28,7 @@ ERR
 my $Config = SAN::Config->new();
 my ($dir, $git_dir, $out_dir, $template_file) = $Config->config("$config_file");
 
-# print "TEMP: $template_file\nDIR: $dir\nGIT_DIR: $git_dir\nOUT_DIR: $out_dir\n";
+# print "TEMP: $template_file\nDIR: $dir\nGIT_DIR: $git_dir\nOUT_DIR: $out_dir\n"; # Debug
 
 my $WEB = SAN::WEB->new();
 # Load HTML template
@@ -38,4 +38,4 @@ my $template = $WEB->load_template($template_file);
 my $git_stat = $WEB->check_git($git_dir);
 print $git_stat;
 # Run main proccess
-# $WEB->process_files($template_file, $dir, $git_dir, $out_dir) if $git_stat ne 'Already up-to-date.';
+$WEB->process_files($template_file, $dir, $git_dir, $out_dir) if $git_stat ne 'Already up-to-date.';

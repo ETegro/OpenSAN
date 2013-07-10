@@ -1,7 +1,8 @@
 Required Perl modules:
 
 Text::Markup,
-Git::Repository
+Git::Repository,
+Config::Tiny
 
 Install from cpan:
 
