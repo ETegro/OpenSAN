@@ -9,7 +9,7 @@ sub new() {
     return $self;
 }
 
-sub config($) {
+sub config() {
 	my ($class, $config_file) = @_;
 	die "14: Config file not defined\n" if (!(defined($config_file)));
 
