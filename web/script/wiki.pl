@@ -1,4 +1,4 @@
-#!/usr/bin/env perl 
+#!/usr/bin/env perl
 #===============================================================================
 #
 #         FILE: wiki.pl
@@ -9,9 +9,9 @@
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
 #      LICENSE: GNU GPLv3 [https://www.gnu.org/licenses/gpl.html]
 # ORGANIZATION: ETegro Technologies
-#      VERSION: 0.1.1
+#      VERSION: 0.1.1(prealfa)
 #      CREATED: 01.07.2013 15:45:20
-#     REVISION: 023
+#     REVISION: 031
 #===============================================================================
 use SAN::Config;
 use SAN::WEB;

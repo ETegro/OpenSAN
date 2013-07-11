@@ -11,7 +11,7 @@ sub new() {
 
 sub config() {
 	my ($class, $config_file) = @_;
-	die "14: Config file not defined\n" if (!(defined($config_file)));
+	die "Config file not defined\n" if (!(defined($config_file)));
 
 	# Read config file
 	my $config = Config::Tiny->new();
