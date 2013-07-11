@@ -11,7 +11,6 @@
 # ORGANIZATION: ETegro Technologies
 #      VERSION: 0.1.1(prealfa)
 #      CREATED: 01.07.2013 15:45:20
-#     REVISION: 031
 #===============================================================================
 use SAN::Config;
 use SAN::WEB;
