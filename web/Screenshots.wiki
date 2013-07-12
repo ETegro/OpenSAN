@@ -1,15 +1,15 @@
 = Branch 2.x =
-[[Image(Reshaping.png, 200px)]]
-[[Image(MainWindowV2.2-Forms.png, 200px)]]
-[[Image(Expand.png, 200px)]]
-[[Image(SetDate.png, 200px)]]
-[[Image(NetworkInterfacesV2.2.png, 200px)]]
+!./img/Reshaping.png (Reshaping)!
+!./img/MainWindowV2.2-Forms.png (Main Window)!
+!./img/Expand.png (Expand)!
+!./img/SetDate.png (Set Date)!
+!./img/NetworkInterfacesV2.2.png (Network Interfaces)!
 
 = Branch 1.x =
-[[Image(MainWindow.png, 200px)]]
-[[Image(DifferentToggledForms.png, 200px)]]
-[[Image(DifferentAddAndEditForms.png, 200px)]]
-[[Image(VariousLogicalDriveStates.png, 200px)]]
-[[Image(ArraysAreRebuildingAfterFailure.png, 200px)]]
-[[Image(MonitoringSection.png, 200px)]]
-[[Image(ConsoleWithHypnorobo.png, 200px)]]
+!./img/MainWindow.png (Main Window)!
+!./img/DifferentToggledForms.png (Different Toggled Forms)!
+!./img/DifferentAddAndEditForms.png (Different add and edit forms)!
+!./img/VariousLogicalDriveStates.png (Various Logical Drive States)!
+!./img/ArraysAreRebuildingAfterFailure.png (Arrays Are Rebuilding)!
+!./img/MonitoringSection.png (Monitoring)!
+!./img/ConsoleWithHypnorobo.png (Console With Hypnorobo)!
