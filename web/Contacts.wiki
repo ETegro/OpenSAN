@@ -1,13 +1,13 @@
 == Maillists ==
 You are always welcome in our general discussion maillist:<br>
- Information:: https://groups.google.com/group/opensan-discuss<br>
- Subscribe:: Email to ''opensan-discuss+subscribe at googlegroups dot com'' with subject "subscribe"
+ Information: https://groups.google.com/group/opensan-discuss<br>
+ Subscribe: Email to ''opensan-discuss+subscribe at googlegroups dot com'' with subject "subscribe"
 
 == Team ==
-* [[andrew.sapronov@gmail.com | Andrew Sapronov]]
-* [[http://stargrave.tel/ | Sergey Matveev]]
+* [mailto:andrew.sapronov@gmail.com | Andrew Sapronov]
+* [http://stargrave.tel/ Sergey Matveev]
 * Vladimir Petukhov
-* [[mailto:dz@etegro.com | Denis Zheleztsov]]
+* [mailto:dz@etegro.com Denis Zheleztsov]
 
 Also, you can contact us directly by sending email to
 ''team at opensan dot org''.
