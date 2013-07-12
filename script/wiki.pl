@@ -5,7 +5,7 @@
 #
 #        USAGE: ./wiki.pl  
 #
-#  DESCRIPTION: Script update site from github
+#  DESCRIPTION: Script updates site from github
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
 #      LICENSE: GNU GPLv3 [https://www.gnu.org/licenses/gpl.html]
 # ORGANIZATION: ETegro Technologies

@@ -65,7 +65,7 @@ span:hover .anchor {
 }
 
 /* Header */
-#header hr { display: none }
+#header hr { display: block; }
 #header h1 { margin: 1.5em 0 -1.5em; padding: 0 }
 #header img { border: none; margin: 0 0 -3em }
 #header :link, #header :visited, #header :link:hover, #header :visited:hover {
