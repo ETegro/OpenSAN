@@ -3,12 +3,11 @@
       xmlns:py="http://genshi.edgewall.org/"
       py:strip="">
 
-<head py:match="head" py:attrs="select('@*')">
-	${select('*|comment()|text()')}
-	<link rel="stylesheet" type="text/css" href="/css/style.css" />
+<head>
+	<link rel="stylesheet" type="text/css" href="./css/style.css" />
 </head>
 
-<body py:match="body" py:attrs="select('@*')">
+<body>
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-24174502-1']);
@@ -20,8 +19,9 @@
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
-	<div py:match="div[@id='header']" py:attrs="select('@*')">
-		<div style="margin-bottom: -7em; font-size: 50%"><pre>
+	<div>
+		<div style="margin-bottom: -7em; font-size: 50%; padding: 10pt;">
+			<pre>
               \____/
               /    \
              / O  o \      _______    __    ___   ___
@@ -33,5 +33,6 @@
  \____/|  __/ \___|_| |_|_______/__/'   \_____|'\__|/
        | |
        |_|
-		</pre></div>
+			</pre>
+		</div>
 	</div>
