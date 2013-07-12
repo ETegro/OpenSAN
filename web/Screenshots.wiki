@@ -6,10 +6,10 @@
 !./img/NetworkInterfacesV2.2.png (Network Interfaces)!
 
 = Branch 1.x =
-!./img/MainWindow.png (Main Window)!
-!./img/DifferentToggledForms.png (Different Toggled Forms)!
-!./img/DifferentAddAndEditForms.png (Different add and edit forms)!
-!./img/VariousLogicalDriveStates.png (Various Logical Drive States)!
-!./img/ArraysAreRebuildingAfterFailure.png (Arrays Are Rebuilding)!
-!./img/MonitoringSection.png (Monitoring)!
-!./img/ConsoleWithHypnorobo.png (Console With Hypnorobo)!
+!./img/MainWindow.png width="200px" (Main Window)!
+!./img/DifferentToggledForms.png width="200px" (Different Toggled Forms)!
+!./img/DifferentAddAndEditForms.png width="200px" (Different add and edit forms)!
+!./img/VariousLogicalDriveStates.png width="200px" (Various Logical Drive States)!
+!./img/ArraysAreRebuildingAfterFailure.png width="200px" (Arrays Are Rebuilding)!
+!./img/MonitoringSection.png width="200px" (Monitoring)!
+!./img/ConsoleWithHypnorobo.png width="200px" (Console With Hypnorobo)!
