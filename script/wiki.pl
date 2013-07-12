@@ -30,11 +30,12 @@ my ($dir, $git_dir, $out_dir, $template_file) = $Config->config("$config_file");
 # print "TEMP: $template_file\nDIR: $dir\nGIT_DIR: $git_dir\nOUT_DIR: $out_dir\n"; # Debug
 
 my $WEB = SAN::WEB->new();
-# Load HTML template
-my $template = $WEB->load_template($template_file);
 
 # Check site updates on github.
 my $git_stat = $WEB->check_git($git_dir);
+
+# Load HTML template
+my $template = $WEB->load_template($template_file);
 
 # Run main proccess
 $WEB->process_files($dir, $git_dir, $out_dir, $template_file)
