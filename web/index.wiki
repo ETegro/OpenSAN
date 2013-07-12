@@ -19,7 +19,7 @@ single Web-interface's page.
 
 ----
 
-((src='/img/sponsor_etegro.png' alt='ETegro Tecnologies'))
+[[File:img/sponsor_etegro.png|align=right|ETegro Tecnologies]]
 
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]

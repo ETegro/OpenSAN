@@ -9,7 +9,7 @@
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
 #      LICENSE: GNU GPLv3 [https://www.gnu.org/licenses/gpl.html]
 # ORGANIZATION: ETegro Technologies
-#      VERSION: 0.1.1-3a
+#      VERSION: 0.1.1-4alfa
 #      CREATED: 01.07.2013 15:45:20
 #===============================================================================
 use SAN::Config;
