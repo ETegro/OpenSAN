@@ -20,7 +20,7 @@ single Web-interface's page.
 ----
 
 !./img/sponsor_etegro.png style='float:right' (ETegro Tecnologies)!
-----
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]
 company. It's some kind of codename there is '''aStor2'''.
+----
