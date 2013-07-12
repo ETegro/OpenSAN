@@ -3,6 +3,12 @@
 	[
 		{
 			"path": "/home/denis/soft/job/astor2/web"
+		},
+		{
+			"path": "/home/denis/soft/job/astor2/script"
+		},
+		{
+			"path": "/home/denis/soft/job/astor2/templates"
 		}
 	]
 }

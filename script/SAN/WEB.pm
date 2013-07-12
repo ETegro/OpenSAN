@@ -31,7 +31,7 @@ sub load_template($) {
 }
 
 sub process_files() {
-    my ($class, $template_file, $path, $git_dir, $out_dir) = @_;
+    my ($class, $path, $git_dir, $out_dir, $template_file) = @_;
     my $tmplt;
 
     # Open the directory.
@@ -60,7 +60,7 @@ sub process_files() {
             # Here is where we recurse.
             # This makes a new call to process_files()
             # using a new directory we just found.
-            SAN::WEB->process_files($_);
+            SAN::WEB->process_files($_, $git_dir, $out_dir, $template_file);
         } else {
             if ($_ =~ /.+\/(.+)\.wiki$/) {
                 my $file = $_;

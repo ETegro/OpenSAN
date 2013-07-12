@@ -9,7 +9,7 @@
 #       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com
 #      LICENSE: GNU GPLv3 [https://www.gnu.org/licenses/gpl.html]
 # ORGANIZATION: ETegro Technologies
-#      VERSION: 0.1.1(prealfa)
+#      VERSION: 0.1.1-2a
 #      CREATED: 01.07.2013 15:45:20
 #===============================================================================
 use SAN::Config;
@@ -35,6 +35,7 @@ my $template = $WEB->load_template($template_file);
 
 # Check site updates on github.
 my $git_stat = $WEB->check_git($git_dir);
-print $git_stat;
+
 # Run main proccess
-$WEB->process_files($template_file, $dir, $git_dir, $out_dir) if $git_stat ne 'Already up-to-date.';
+$WEB->process_files($dir, $git_dir, $out_dir, $template_file)
+    if $git_stat ne 'Already up-to-date.';
