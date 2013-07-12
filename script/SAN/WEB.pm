@@ -86,7 +86,7 @@ sub process_files() {
                 my $parse_out = $parser->parse(file => $file);
                 $parse_out =~ s/\{{3}/<pre>/g; # I don't know really needs it or not
                 $parse_out =~ s/}}}/<\/pre>/g; #
-                $parse_out =~ s/\({2}(.+)\){2}/<img $1 \/>/g;
+                $parse_out =~ s/!(.+)\s\((.+)\)!/<img src="$1" alt="$2" \/>/g;
                 print "DEBUG 90: $1\n" if defined($1);
                 $parse_out =~ s/<html>/$tmplt<\/body><\/html>/g; # Paste HTML template in files head
 
