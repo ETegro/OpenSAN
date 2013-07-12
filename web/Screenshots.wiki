@@ -12,4 +12,4 @@
 !./img/VariousLogicalDriveStates.png width='200px' (Various Logical Drive States)!
 !./img/ArraysAreRebuildingAfterFailure.png width='200px' (Arrays Are Rebuilding)!
 !./img/MonitoringSection.png width='200px' (Monitoring)!
-!./img/ConsoleWithHypnorobo.png width='200px'(Console With Hypnorobo)!
+!./img/ConsoleWithHypnorobo.png width='200px' (Console With Hypnorobo)!
