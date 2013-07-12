@@ -19,7 +19,7 @@ use SAN::WEB;
 my $config_file = "/etc/website/config.ini";
 die <<"ERR"
     Config file doesn't exists. Please write it. 
-    See EXAMPLE.config. Save it to /etc/website/config.ini.
+    See example.config. Save it to /etc/website/config.ini.
     You can change path to file in \$config_file variable
     in wiki.pl file
 ERR
