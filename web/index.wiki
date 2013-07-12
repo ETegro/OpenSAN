@@ -19,8 +19,8 @@ single Web-interface's page.
 
 ----
 
---[src="/img/sponsor_etegro.png" alt="ETegro Tecnologies"]--
+\\src="/img/sponsor_etegro.png" alt="ETegro Tecnologies"\\
 
 Project is sponsored and developed under the hood of
 [http://www.etegro.com/ ETegro Technologies]
-company. It's some kind of codename there is **aStor2**.
+company. It's some kind of codename there is '''aStor2'''.

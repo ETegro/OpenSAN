@@ -86,7 +86,7 @@ sub process_files() {
                 my $parse_out = $parser->parse(file => $file);
                 # $parse_out =~ s/\{{3}/<pre>/g; # I'm don't know really needs it or not
                 # $parse_out =~ s/}}}/<\/pre>/g; #
-                $parse_out =~ s/--\[(.+)\]--/<img $1 \/>/g;
+                $parse_out =~ s/\\\\(.+)\\\\/<img $1 \/>/g;
                 $parse_out =~ s/<html>/$tmplt<\/body><\/html>/g; # Paste HTML template in files head
 
                 $new_file = "$out_dir" . "$new_file" . ".html";
