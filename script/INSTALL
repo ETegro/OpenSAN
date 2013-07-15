@@ -13,8 +13,17 @@ Installation:
 		mkdir -p /path/to/www/{css,img}
 5) Just copy script directory to where are you want
 6) Add wiki.pl script to you crontab
-7) Run it's first time manually to generate HTML:
+7) Edit 
+8) Run it's first time manually to generate HTML:
 	cd /path/to/script
 	chmod +x wiki.pl
+
+	Change it:
+		41 $WEB->process_files($dir, $git_dir, $out_dir, $template_file)
+ 		42     if $git_stat ne 'Already up-to-date.';
+ 	To it:
+ 		41 $WEB->process_files($dir, $git_dir, $out_dir, $template_file);
+ 		42 #    if $git_stat ne 'Already up-to-date.';
+ 	# Run script and revert changes
 	./wiki.pl
-8) Have lot a fun :)
+9) Have lot a fun :)

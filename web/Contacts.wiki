@@ -4,7 +4,7 @@ You are always welcome in our general discussion maillist:<br>
  Subscribe: Email to ''opensan-discuss+subscribe at googlegroups dot com'' with subject "subscribe"
 
 == Team ==
-* [mailto:andrew.sapronov@gmail.com | Andrew Sapronov]
+* [mailto:andrew.sapronov@gmail.com Andrew Sapronov]
 * [http://stargrave.tel/ Sergey Matveev]
 * Vladimir Petukhov
 * [mailto:dz@etegro.com Denis Zheleztsov]
