@@ -117,7 +117,7 @@ sub process_files() {
 sub check_git() {
     my ($class, $git_dir) = @_;
     my $r = Git::Repository->new(git_dir => "$git_dir") or die "$!\n";
-    my $output = $r->run("status") or die "$!\n";
+    my $output = $r->run("pull") or die "$!\n";
     return $output;
 }
 

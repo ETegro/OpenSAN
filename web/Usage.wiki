@@ -1,7 +1,7 @@
 = Downloads =
 
 Recommended and suitable for your needs releases can be found
-[[/Downloads.html |here]].
+[Downloads.html here].
 
 '''Always''' cryptographically verify downloaded image files.
 
