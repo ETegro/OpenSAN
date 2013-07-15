@@ -8,7 +8,6 @@ use warnings;
 use utf8;
 
 use HTTP::Server::Brick;
-use HTTP::Status;
     
 my $server = HTTP::Server::Brick->new( port => 5000 );
     
