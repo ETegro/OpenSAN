@@ -10,12 +10,12 @@ It is intended to be easy configurable using user-friendly
 Web-interface. Nearly everything related to SAN can be configured from
 single Web-interface's page.
 
-* [/Features.html Features]
-* [/Screenshots.html Screenshots]
-* [/TechnicalOverview.html TechnicalOverview]
-* [/Releases.html Releases]
-* [/Usage.html Downloads and usage]
-* [/Contacts.html Contacts]
+* [Features.html Features]
+* [Screenshots.html Screenshots]
+* [TechnicalOverview.html TechnicalOverview]
+* [Releases.html Releases]
+* [Usage.html Downloads and usage]
+* [Contacts.html Contacts]
 
 ----
 !./img/sponsor_etegro.png style='float:right' (ETegro Tecnologies)!
