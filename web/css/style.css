@@ -77,17 +77,6 @@ span:hover .anchor {
 }
 #header h1 :link:hover, #header h1 :visited:hover { color: #000 }
 
-/* Quick search */
-#search {
- clear: both;
- font-size: 10px;
- height: 2.2em;
- margin: 0 0 1em;
- text-align: right;
-}
-#search input { font-size: 10px }
-#search label { display: none }
-
 /* Navigation */
 .nav h2, .nav hr { display: none }
 .nav ul { 

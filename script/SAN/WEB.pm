@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use utf8;
 
-# Markup parser. This modules support most popular formats
+# Markup parser. This module supports most popular formats
 use Text::Markup;
 
 # Git API
