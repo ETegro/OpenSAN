@@ -3,6 +3,13 @@ We use mediawiki format with some changes. See https://www.mediawiki.org/wiki/He
 To place images you are need this construction: !./image/path/img.png width='200px' (Alt Text)!
 If you want link in image use this: [./path/to/large/image !./image/path/img.png width='200px' (Alt Text)!]
 
-If you want uses preformated text put it's to {{{ this construction }}}
+If you want uses preformated text put it's to 
+{{{ 
+	this 
+			construction
+}}}
+
+'' italic ''
+''' bold '''
 
 Tables don't render right now. But this is alpha release. This feature will be added in future if it's will be need :)
