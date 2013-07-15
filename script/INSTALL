@@ -9,7 +9,7 @@ Installation:
 	/path/to/www/css/
 	/path/to/www/img/
 	
-	It's possible to make this in one command:
+	It's possible to make in one command:
 		mkdir -p /path/to/www/{css,img}
 5) Just copy script directory to where are you want
 6) Add wiki.pl script to you crontab

@@ -89,12 +89,13 @@ sub process_files() {
                 $parse_out =~ s/!(.+)\s(.+)\s\((.+)\)!/<img src="$1" $2 alt="$3" \/>/g;
                 # print "DEBUG 90: $1\n" if defined($1);
                 $parse_out =~ s/<html>/$tmplt<\/body><\/html>/g; # Paste HTML template in files head
+                $parse_out =~ s/<title>(.+)<\/title>/<title>$1 :: $new_file<\/title>/g;
 
                 $new_file = "$out_dir" . "$new_file" . ".html";
                 open(NEW, ">$new_file") or die "$!\n";
                 print NEW $parse_out;
-            }
-            # Images
+            } 
+           # Images
             elsif ($_ =~ /.+\/(.+\.png$)/) {
                 my $file = $_;
                 my $new_file = $1;
