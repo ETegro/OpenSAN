@@ -1,0 +1,20 @@
+Installation:
+
+1) Install perl and required modules(see REQUIREMENTS)
+2) Get latests code from github:
+	git clone -b web https://github.com/astor2-team/astor2.git web
+3) Modify and copy web/script/example.config file to /etc/website/config.ini
+4) Create directories for html output:
+	
+	/path/to/www/css/
+	/path/to/www/img/
+	
+	It's possible to make this in one command:
+		mkdir -p /path/to/www/{css,img}
+5) Just copy script directory to where are you want
+6) Add wiki.pl script to you crontab
+7) Run it's first time manually to generate HTML:
+	cd /path/to/script
+	chmod +x wiki.pl
+	./wiki.pl
+8) Have lot a fun :)

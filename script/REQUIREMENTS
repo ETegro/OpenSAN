@@ -4,6 +4,8 @@ Text::Markup,
 Git::Repository,
 Config::Tiny
 
+HTTP::Server::Brick if you are want to run test web server
+
 Install from cpan:
 
 	localhost@localdomain # cpan
