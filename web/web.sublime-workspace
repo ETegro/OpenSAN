@@ -4,8 +4,52 @@
 		"selected_items":
 		[
 			[
+				"tem",
+				"template_file"
+			],
+			[
+				"git",
+				"git_dir"
+			],
+			[
+				"ou",
+				"out_dir"
+			],
+			[
+				"git_",
+				"git_stat"
+			],
+			[
+				"template",
+				"template_file"
+			],
+			[
 				"te",
+				"template_file"
+			],
+			[
+				"config",
+				"config_file"
+			],
+			[
+				"D",
+				"D"
+			],
+			[
+				"Dum",
+				"Dumper  (module)"
+			],
+			[
+				"va",
+				"values"
+			],
+			[
+				"temp",
 				"temp_file"
+			],
+			[
+				"co",
+				"config_hash"
 			],
 			[
 				"con",
@@ -28,10 +72,6 @@
 				"OpenSAN"
 			],
 			[
-				"tem",
-				"template_file"
-			],
-			[
 				"O",
 				"OpenSAN"
 			],
@@ -52,16 +92,8 @@
 				"elsif"
 			],
 			[
-				"temp",
-				"template"
-			],
-			[
 				"open",
 				"opendir"
-			],
-			[
-				"git",
-				"git_stat"
 			],
 			[
 				"li",
@@ -72,21 +104,66 @@
 	"buffers":
 	[
 		{
-			"contents": "#!/usr/bin/env perl \n#===============================================================================\n#\n#         FILE: wiki.pl\n#\n#        USAGE: ./wiki.pl  \n#\n#  DESCRIPTION: Script update site from github\n#       AUTHOR: Denis Zheleztsov (Difrex), denis.zheleztsov@etegro.com\n#      LICENSE: GNU GPLv3 [https://www.gnu.org/licenses/gpl.html]\n# ORGANIZATION: ETegro Technologies\n#      VERSION: 0.1\n#      CREATED: 01.07.2013 15:45:20\n#     REVISION: 005\n#===============================================================================\nuse SAN::WEB;\nmy $opensan = new SAN::WEB;\n\n# Path to configuration file\nmy $config_file;\nif (-e './config') {\n    $config_file = './config';\n}\nelsif (-e '/var/www/config') {\n    $config_file = '/var/www/config';\n}\nelsif (-e './config' and -e '/var/www/config') {\n    $config_file = './config';\n}\nelse {\n    print \"Config file not found!\" and die;\n}\n\n# Load configuration\nmy ($dir, $git_dir, $out_dir, $template_file) = $opensan->load_config($config_file);\n\n# Load HTML template\nmy $tmplt;\nmy $template = $opensan->load_template($template_file);\n\n# Check site updates on github.\nmy $git_stat = $opensan->check_git();\n\n# Run main proccess\n$opensan->process_files($dir) if $git_stat ne 'Already up-to-date.';",
-			"file": "script/wiki.pl",
-			"file_size": 1250,
-			"file_write_time": 1372862911000000,
+			"file": "/home/denis/soft/job/astor2/script/wiki.pl",
 			"settings":
 			{
-				"buffer_size": 1242,
+				"buffer_size": 1364,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "script/SAN/WEB.pm",
+			"file": "/home/denis/soft/job/astor2/templates/site.html",
 			"settings":
 			{
-				"buffer_size": 4624,
+				"buffer_size": 1281,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "css/style.css",
+			"settings":
+			{
+				"buffer_size": 16172,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "index.wiki",
+			"settings":
+			{
+				"buffer_size": 967,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/denis/soft/job/astor2/script/web_server.pl",
+			"settings":
+			{
+				"buffer_size": 401,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Screenshots.wiki",
+			"settings":
+			{
+				"buffer_size": 1164,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Usage.wiki",
+			"settings":
+			{
+				"buffer_size": 6411,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/denis/soft/job/astor2/script/SAN/WEB.pm",
+			"settings":
+			{
+				"buffer_size": 3810,
 				"line_ending": "Unix"
 			}
 		}
@@ -119,14 +196,30 @@
 	},
 	"file_history":
 	[
+		"/home/denis/soft/job/astor2/script/SAN/WEB.pm",
+		"/home/denis/soft/job/astor2/web/TechnicalOverview.wiki",
+		"/home/denis/soft/job/astor2/web/Releases.wiki",
+		"/home/denis/soft/job/astor2/web/OpenSAN.wiki",
+		"/home/denis/soft/job/astor2/web/Downloads.wiki",
+		"/home/denis/soft/job/astor2/web/Features.wiki",
+		"/home/denis/soft/job/astor2/web/Contacts.wiki",
+		"/home/denis/soft/job/astor2/script/INSTALL",
+		"/home/denis/soft/job/astor2/web/script/SAN/Config.pm",
+		"/home/denis/soft/job/astor2/web/script/wiki.pl",
+		"/home/denis/soft/job/astor2/web/script/SAN/WEB.pm",
+		"/home/denis/soft/job/astor2/web/script/config.ini",
+		"/home/denis/soft/job/astor2/web/script/REQUIREMENTS",
+		"/home/denis/soft/job/astor2/web/script/old_code.pl",
+		"/home/denis/soft/job/astor2/web/script/config",
+		"/home/denis/soft/job/astor2/web/script/test_ini.pl",
+		"/home/denis/soft/job/astor2/web/Publickey.wiki",
+		"/home/denis/soft/job/astor2/web/Usage.wiki",
 		"/home/denis/.config/sublime-text-2/Packages/Default/Default.sublime-theme",
 		"/home/denis/.config/sublime-text-2/Packages/Default/Side Bar.sublime-menu",
-		"/home/denis/soft/job/astor2/web/script/REQUIREMENTS",
 		"/home/denis/soft/job/astor2/web/script/REQUIRES",
 		"/home/denis/soft/job/astor2/web/script/SAN/OpenSAN.pm",
 		"/home/denis/soft/job/astor2/web/templates/site.html",
 		"/home/denis/soft/job/astor2/web/WikiStart.wiki",
-		"/home/denis/soft/job/astor2/web/Usage.wiki",
 		"/home/denis/soft/job/astor2/web/wiki.pl",
 		"/home/denis/soft/job/astor2/web/formats.pl",
 		"/home/denis/soft/job/astor2/web/config",
@@ -156,6 +249,18 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"\n",
+			"\\*\\*",
+			"**",
+			");\n",
+			"/\\(\\((.+)\\)\\)/<",
+			"]\n",
+			"'",
+			"''",
+			"die",
+			"my",
+			"my $cfg = Config::IniFiles->new(-file => \"./config\");\nmy %ini;",
+			"tmplt",
 			"^$",
 			"s/^$//g",
 			"OpenSAN",
@@ -178,6 +283,8 @@
 		"regex": true,
 		"replace_history":
 		[
+			"'''",
+			"'",
 			""
 		],
 		"reverse": false,
@@ -189,29 +296,82 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "script/wiki.pl",
+					"file": "/home/denis/soft/job/astor2/script/wiki.pl",
 					"settings":
 					{
-						"buffer_size": 1242,
+						"buffer_size": 1364,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								127,
-								127
+								403,
+								403
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Perl/Perl.tmLanguage",
-							"tab_size": 4,
+							"syntax": "Packages/Perl/Perl.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 336.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/denis/soft/job/astor2/templates/site.html",
+					"settings":
+					{
+						"buffer_size": 1281,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1245,
+								1245
+							]
+						],
+						"settings":
+						{
+							"is_xml": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 168.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "css/style.css",
+					"settings":
+					{
+						"buffer_size": 16172,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -221,19 +381,125 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "script/SAN/WEB.pm",
+					"buffer": 3,
+					"file": "index.wiki",
 					"settings":
 					{
-						"buffer_size": 4624,
+						"buffer_size": 967,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3799,
-								3799
+								539,
+								539
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 27.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/home/denis/soft/job/astor2/script/web_server.pl",
+					"settings":
+					{
+						"buffer_size": 401,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								162,
+								162
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Perl/Perl.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Screenshots.wiki",
+					"settings":
+					{
+						"buffer_size": 1164,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1164,
+								1164
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Usage.wiki",
+					"settings":
+					{
+						"buffer_size": 6411,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6411,
+								6411
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4591.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/home/denis/soft/job/astor2/script/SAN/WEB.pm",
+					"settings":
+					{
+						"buffer_size": 3810,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -243,7 +509,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 867.0,
+						"translation.y": 2016.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -253,7 +519,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 0.0
+		"height": 44.0
 	},
 	"input":
 	{
