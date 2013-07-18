@@ -944,7 +944,7 @@
 		</g>
 		<g
 			id="ASTOR2_MONITORING-DIMM2"
-			style="fill:red;fill-opacity:0.6">
+			style="fill:<%= data.DIMM2.color or data.DEFAULT_NA_COLOR %>;fill-opacity:<%= data.DIMM2.opacity or default_opacity %>">
 			<rect
 				width="208.533"
 				height="71.2929"
@@ -1129,7 +1129,7 @@
 						x="594.31085"
 						y="106.04056"
 						id="tspan9785"
-						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">85°C</tspan></text>
+						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.DIMM2 then %><%= data.DIMM2.value %>°C<% else %>N/A<% end %></tspan></text>
 			</g>
 		</g>
 		<g
