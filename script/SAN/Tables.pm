@@ -8,7 +8,9 @@ sub new() {
 }
 
 sub parse_tables() {
-	my ($class, $self) = shift;
+	my ($class, $input) = shift;
+	$input =~ s/^\{|\s?(.+)?\s?(.+)/<table\s$1\s$2>/g;
+	$input =~ s/^|-/<tr><td>/g;
 	
 }
 
