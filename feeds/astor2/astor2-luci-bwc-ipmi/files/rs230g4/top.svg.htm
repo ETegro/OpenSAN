@@ -269,7 +269,7 @@
 		</g>
 		<g
 			id="ASTOR2_MONITORING-FAN2"
-			style="fill:green;fill-opacity:0.6">
+			style="fill:<%= data.FAN2.color or data.DEFAULT_NA_COLOR %>;fill-opacity:<%= data.FAN2.opacity or default_opacity %>">
 			<path
 				d="m 354.438,248.969 0,114.375 5.5,0 0,-1.656 45.843,0 0,1.656 5.5,0 0,-114.375 -5.5,0 0,1.5 -45.843,0 0,-1.5 -5.5,0 z"
 				id="ASTOR2_MONITORING-FAN2_BG"
@@ -329,7 +329,7 @@
 						x="382.31085"
 						y="312.04056"
 						id="tspan4029"
-						style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">13500 RPM</tspan></text>
+						style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.FAN2 then %><%= data.FAN2.value %> RPM<% else %>N/A<% end %></tspan></text>
 			</g>
 		</g>
 		<g
