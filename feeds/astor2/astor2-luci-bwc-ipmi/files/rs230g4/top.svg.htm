@@ -1134,7 +1134,7 @@
 		</g>
 		<g
 			id="ASTOR2_MONITORING-CPU0"
-			style="fill:green;fill-opacity:0.6">
+			style="fill:<%= data.CPU0.color or data.DEFAULT_NA_COLOR %>;fill-opacity:<%= data.CPU0.opacity or default_opacity %>">
 			<rect
 				width="149.809"
 				height="120.748"
@@ -1296,7 +1296,7 @@
 						x="612.31085"
 						y="503.04056"
 						id="tspan10192"
-						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">85°C</tspan></text>
+						style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.CPU0 then %><%= data.CPU0.value %>°C<% else %>N/A<% end %></tspan></text>
 			</g>
 		</g>
 		<g
