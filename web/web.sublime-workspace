@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"parse",
+				"parse_out"
+			],
+			[
 				"tem",
 				"template_file"
 			],
@@ -112,59 +116,20 @@
 			}
 		},
 		{
-			"file": "/home/denis/soft/job/astor2/templates/site.html",
-			"settings":
-			{
-				"buffer_size": 1281,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "css/style.css",
-			"settings":
-			{
-				"buffer_size": 16172,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "index.wiki",
-			"settings":
-			{
-				"buffer_size": 967,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/denis/soft/job/astor2/script/web_server.pl",
-			"settings":
-			{
-				"buffer_size": 401,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Screenshots.wiki",
-			"settings":
-			{
-				"buffer_size": 1164,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Usage.wiki",
-			"settings":
-			{
-				"buffer_size": 6411,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "/home/denis/soft/job/astor2/script/SAN/WEB.pm",
 			"settings":
 			{
-				"buffer_size": 3810,
+				"buffer_size": 3898,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/denis/soft/job/astor2/script/TODO",
+			"settings":
+			{
+				"buffer_size": 130,
+				"line_ending": "Unix",
+				"name": "TODO"
 			}
 		}
 	],
@@ -196,14 +161,22 @@
 	},
 	"file_history":
 	[
+		"/home/denis/soft/job/astor2/script/README",
+		"/home/denis/soft/job/astor2/script/INSTALL",
+		"/home/denis/soft/job/astor2/web/Usage.wiki",
+		"/home/denis/soft/job/astor2/web/index.wiki",
+		"/home/denis/soft/job/astor2/web/css/style.css",
+		"/home/denis/soft/job/astor2/templates/site.html",
+		"/home/denis/soft/job/astor2/web/Features.wiki",
+		"/home/denis/soft/job/astor2/web/Downloads.wiki",
+		"/home/denis/soft/job/astor2/web/Contacts.wiki",
+		"/home/denis/soft/job/astor2/script/REQUIREMENTS",
+		"/home/denis/soft/job/astor2/web/Screenshots.wiki",
+		"/home/denis/soft/job/astor2/script/web_server.pl",
 		"/home/denis/soft/job/astor2/script/SAN/WEB.pm",
 		"/home/denis/soft/job/astor2/web/TechnicalOverview.wiki",
 		"/home/denis/soft/job/astor2/web/Releases.wiki",
 		"/home/denis/soft/job/astor2/web/OpenSAN.wiki",
-		"/home/denis/soft/job/astor2/web/Downloads.wiki",
-		"/home/denis/soft/job/astor2/web/Features.wiki",
-		"/home/denis/soft/job/astor2/web/Contacts.wiki",
-		"/home/denis/soft/job/astor2/script/INSTALL",
 		"/home/denis/soft/job/astor2/web/script/SAN/Config.pm",
 		"/home/denis/soft/job/astor2/web/script/wiki.pl",
 		"/home/denis/soft/job/astor2/web/script/SAN/WEB.pm",
@@ -213,7 +186,6 @@
 		"/home/denis/soft/job/astor2/web/script/config",
 		"/home/denis/soft/job/astor2/web/script/test_ini.pl",
 		"/home/denis/soft/job/astor2/web/Publickey.wiki",
-		"/home/denis/soft/job/astor2/web/Usage.wiki",
 		"/home/denis/.config/sublime-text-2/Packages/Default/Default.sublime-theme",
 		"/home/denis/.config/sublime-text-2/Packages/Default/Side Bar.sublime-menu",
 		"/home/denis/soft/job/astor2/web/script/REQUIRES",
@@ -224,7 +196,6 @@
 		"/home/denis/soft/job/astor2/web/formats.pl",
 		"/home/denis/soft/job/astor2/web/config",
 		"/home/denis/soft/job/astor2/web/test.pl",
-		"/home/denis/soft/job/astor2/web/css/style.css",
 		"/home/denis/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
 		"/home/denis/.config/sublime-text-2/Packages/User/Scroll Offset.sublime-settings",
 		"/home/denis/.config/sublime-text-2/Packages/User/Default (Linux).sublime-keymap",
@@ -296,7 +267,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -311,205 +282,240 @@
 						"selection":
 						[
 							[
-								403,
-								403
+								19,
+								19
 							]
 						],
 						"settings":
 						{
+							"auto_complete": false,
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_disabled_languages":
+							[
+							],
+							"codeintel_live": true,
+							"codeintel_live_disabled_languages":
+							[
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"sublime_auto_complete": false,
 							"syntax": "Packages/Perl/Perl.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 336.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "/home/denis/soft/job/astor2/templates/site.html",
+					"file": "/home/denis/soft/job/astor2/script/SAN/WEB.pm",
 					"settings":
 					{
-						"buffer_size": 1281,
+						"buffer_size": 3898,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1245,
-								1245
+								17,
+								17
 							]
 						],
 						"settings":
 						{
-							"is_xml": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage"
+							"auto_complete": false,
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_disabled_languages":
+							[
+							],
+							"codeintel_live": true,
+							"codeintel_live_disabled_languages":
+							[
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"sublime_auto_complete": false,
+							"syntax": "Packages/Perl/Perl.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 168.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "css/style.css",
+					"file": "/home/denis/soft/job/astor2/script/TODO",
 					"settings":
 					{
-						"buffer_size": 16172,
+						"buffer_size": 130,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								11,
+								11
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "index.wiki",
-					"settings":
-					{
-						"buffer_size": 967,
-						"regions":
-						{
-						},
-						"selection":
-						[
+							"auto_complete": false,
+							"auto_name": "TODO",
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_disabled_languages":
 							[
-								539,
-								539
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 27.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/home/denis/soft/job/astor2/script/web_server.pl",
-					"settings":
-					{
-						"buffer_size": 401,
-						"regions":
-						{
-						},
-						"selection":
-						[
+							],
+							"codeintel_live": true,
+							"codeintel_live_disabled_languages":
 							[
-								162,
-								162
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Perl/Perl.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "Screenshots.wiki",
-					"settings":
-					{
-						"buffer_size": 1164,
-						"regions":
-						{
-						},
-						"selection":
-						[
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
 							[
-								1164,
-								1164
-							]
-						],
-						"settings":
-						{
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"is_xml": false,
+							"sublime_auto_complete": false,
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "Usage.wiki",
-					"settings":
-					{
-						"buffer_size": 6411,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6411,
-								6411
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4591.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/home/denis/soft/job/astor2/script/SAN/WEB.pm",
-					"settings":
-					{
-						"buffer_size": 3810,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Perl/Perl.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2016.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
