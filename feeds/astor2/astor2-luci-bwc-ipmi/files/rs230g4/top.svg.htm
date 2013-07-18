@@ -334,7 +334,7 @@
 		</g>
 		<g
 			id="ASTOR2_MONITORING-FAN3"
-			style="fill:grey;fill-opacity:0.6">
+			style="fill:<%= data.FAN3.color or data.DEFAULT_NA_COLOR %>;fill-opacity:<%= data.FAN3.opacity or default_opacity %>">
 			<path
 				d="m 354.438,125.969 0,114.375 5.5,0 0,-1.656 45.843,0 0,1.656 5.5,0 0,-114.375 -5.5,0 0,1.5 -45.843,0 0,-1.5 -5.5,0 z"
 				id="ASTOR2_MONITORING-FAN3_BG"
@@ -394,7 +394,7 @@
 						x="382.31085"
 						y="190.04056"
 						id="tspan10485"
-						style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold">N/A</tspan></text>
+						style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono Bold"><% if data.FAN3 then %><%= data.FAN3.value %> RPM<% else %>N/A<% end %></tspan></text>
 			</g>
 		</g>
 		<g
