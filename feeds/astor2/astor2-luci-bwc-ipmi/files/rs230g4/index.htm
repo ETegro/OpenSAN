@@ -23,8 +23,8 @@
 <%
 EMBED_SIZE = {
 	front = { width = 1159, height = 261 },
-	rear = { width = 1155, height = 261 },
-	motherboard = { width = 1100, height = 700 },
+	rear = { width = 1055, height = 261 },
+	motherboard = { width = 1110, height = 700 },
 	legend = { width = 249, height = 101 },
 	jbod_enclosure = { width = 250, height = 63 },
 	jbod_rear = { width = 991, height = 367 }
@@ -56,16 +56,20 @@ end
 <table width="100%">
 	<tbody>
 		<tr>
-            	<td>
-            			<embed style="<%= EMBED_SIZE.front.style %>"
-            			       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&bwc=1&enclosures=1" />
+			<td>
+				<embed style="<%= EMBED_SIZE.front.style %>"
+					src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&bwc=1&enclosures=1" />
 			<br />            		
 
-				<embed style="<%= EMBED_SIZE.rear.style %> padding: 20px; margin-left: 10px;"
-				       src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&bwc=1&network=1&pci=1" />
+				<embed style="<%= EMBED_SIZE.rear.style %> padding: 20px; margin-left: 20px;"
+					src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&bwc=1&network=1&pci=1" />
+			<br />
+				<embed style="<%= EMBED_SIZE.motherboard.style %> padding: 20px;"
+					src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard&bwc=1" />
 			</td>
-		</tr>
+			<td valign="top">
+				<%+san_monitoring/legend%>
+			</td>
+	</tr>
 	</tbody>
 </table>
-
-<%+san_monitoring/legend%>

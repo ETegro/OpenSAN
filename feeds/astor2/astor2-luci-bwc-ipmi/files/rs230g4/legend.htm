@@ -53,8 +53,6 @@ local common = {
 		<tbody>
 		<tr>
 			<th colspan="2" scope="col" width="50%"><%: Enclosures %></th>
-			<th scope="col" width="25%"><%: Network interfaces %></th>
-			<th scope="col" width="25%"><%: Common %></th>
 		</tr>
 			<td>
 				<embed style="<%= EMBED_SIZE.legend.style %> padding: 20px;"
@@ -71,8 +69,8 @@ local common = {
 								</div>
 							<% end %>
 						</td>
-						<td width="80%" style="padding:10px;">
-							&#8211; <%: In array %>
+						<td width="80%" style="padding:5px;">
+							<%: In array %>
 						</td>
 					</tr>
 					<tr>
@@ -83,8 +81,8 @@ local common = {
 								</div>
 							<% end %>
 						</td>
-						<td width="80%" style="padding:10px;">
-							&#8211; <%: Dedicated hotspare %>
+						<td width="80%" style="padding:5px;">
+							<%: HotSpare %>
 						</td>
 					</tr>
 					<tr>
@@ -95,8 +93,8 @@ local common = {
 								</div>
 							<% end %>
 						</td>
-						<td width="80%" style="padding:10px;">
-							&#8211; <%: Not in array %>
+						<td width="80%" style="padding:5px;">
+							<%: Свободен %>
 						</td>
 					</tr>
 					<tr>
@@ -112,13 +110,17 @@ local common = {
 								</div>
 							<% end %>
 						</td>
-						<td width="80%" style="padding:10px;">
-							&#8211; <%: Empty %>
+						<td width="80%" style="padding:5px;">
+							<%: Empty %>
 						</td>
 					</tr>
 					</tbody>
 				</table>
 			</td>
+        <tr>
+			<th scope="col" width="25%"><%: Network interfaces %></th>
+        	<th scope="col" width="25%"><%: Common %></th>
+		</tr>	
 			<td>
 				<table>
 					<tbody>
@@ -129,11 +131,11 @@ local common = {
 								 class="legend_color">
 							</div>
 						</td>
-						<td width="80%" style="padding:10px;">
+						<td width="80%" style="padding:5px;">
 							<% if pair.speed ~= 0 then %>
-								&#8211; <%= pair.speed %> Mbps
+								<%= pair.speed %> Mbps
 							<% else %>
-								&#8211; <%: No link %>
+								<%: No link %>
 							<% end %>
 						</td>
 					</tr>
@@ -150,8 +152,8 @@ local common = {
 								 class="legend_color">
 							</div>
 						</td>
-						<td width="80%" style="padding:10px;">
-							&#8211; <%= status %>
+						<td width="80%" style="padding:5px;">
+							<%= status %>
 						</td>
 					</tr>
 					<% end %>
