@@ -53,7 +53,7 @@ for svg_template_name, svg_template in pairs( EMBED_SIZE ) do
 end
 %>
 
-<table width="100%">
+<table width="100%" style="padding: 20px;">
 	<tbody>
 		<tr>
 			<td>
@@ -67,9 +67,9 @@ end
 				<embed style="<%= EMBED_SIZE.motherboard.style %> padding: 20px;"
 					src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard&bwc=1" />
 			</td>
-			<td valign="top">
+			<td valign="top" top="10px">
 				<%+san_monitoring/legend%>
 			</td>
-	</tr>
+		</tr>
 	</tbody>
 </table>
