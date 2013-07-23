@@ -49,6 +49,7 @@ data[ "SVG_SCALE" ] = "0.6"
 data[ "DEFAULT_PSU_COLOR" ] = ENTITY_STATE_COLORMAP["green"]
 data[ "PSU_DARK" ] = ENTITY_STATE_COLORMAP["darkgreen"]
 data[ "DEFAULT_PSU_TITLE" ] = ENTITY_STATE_COLORMAP["white"]
+data[ "DEFAULT_FAN_COLOR" ] = ENTITY_STATE_COLORMAP["green"]
 
 for template_id,entity in pairs( data ) do
 	if common.is_table( entity ) and template_id ~= "JBODS" then

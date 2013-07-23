@@ -53,21 +53,21 @@ for svg_template_name, svg_template in pairs( EMBED_SIZE ) do
 end
 %>
 
-<table width="100%" style="padding: 20px;">
+<table width="100%" height="80%" style="padding: 5px;">
 	<tbody>
 		<tr>
 			<td>
 				<embed style="<%= EMBED_SIZE.front.style %>"
 					src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=front&bwc=1&enclosures=1" />
 			<br />            		
-
+			<br />
 				<embed style="<%= EMBED_SIZE.rear.style %> padding: 20px; margin-left: 20px;"
 					src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=rear&bwc=1&network=1&pci=1" />
 			<br />
-				<embed style="<%= EMBED_SIZE.motherboard.style %> padding: 20px;"
+				<embed style="<%= EMBED_SIZE.motherboard.style %> padding: 20px; margin-left: 5px;"
 					src="<%= luci.dispatcher.build_url( "admin", "san", "monitoring", "render" ) %>?what=motherboard&bwc=1" />
 			</td>
-			<td valign="top" top="10px">
+			<td valign="top">
 				<%+san_monitoring/legend%>
 			</td>
 		</tr>
