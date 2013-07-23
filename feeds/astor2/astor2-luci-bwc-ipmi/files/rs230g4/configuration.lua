@@ -17,7 +17,15 @@ configuration = {
 		["SYS_FAN0_PCI"] = "FAN0",
 		["SYS_FAN1"] = "FAN1",
 		["SYS_FAN2"] = "FAN2",
-		["SYS_FAN3"] = "FAN3"
+		["SYS_FAN3"] = "FAN3",
+		["BP_Temp"] = "BP_TEMP",
+		["Inlet_Temp"] = "INLET_TEMP",
+		["Exhaust_Temp"] = "EXHAUST_TEMP",
+		["Temp_DIMM_A0"] = "DIMM0",
+		["Temp_DIMM_D0"] = "DIMM1",
+		["Temp_DIMM_F0"] = "DIMM2",
+		["PCH Temp"] = "PCH",
+		["PWR Consumption"] = "PSU_TOTAL"
 	}
 }
 
