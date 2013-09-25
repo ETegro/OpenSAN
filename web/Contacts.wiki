@@ -5,7 +5,7 @@ You are always welcome in our general discussion maillist:<br>
 
 == Team ==
 * [mailto:andrew.sapronov@gmail.com Andrew Sapronov]
-* [http://stargrave.tel/ Sergey Matveev]
+* [http://stargrave.org/ Sergey Matveev]
 * Vladimir Petukhov
 * [mailto:dz@etegro.com Denis Zheleztsov]
 
