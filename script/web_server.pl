@@ -12,9 +12,12 @@ use HTTP::Server::Brick;
 my $server = HTTP::Server::Brick->new( port => 5000 );
     
 $server->mount( '/' => {
-	path => "/path/to/you/html/files/",
-});
+	path => "/home/denis/soft/job/",
+    });
      
+$server->mount( '/soft' => {
+        path => "/home/denis/soft/",
+        });
 # start accepting requests (won't return unless/until process
 # receives a HUP signal)
 $server->start;
