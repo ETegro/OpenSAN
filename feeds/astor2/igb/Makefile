@@ -7,11 +7,11 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=igb
 PKG_RELEASE:=1
-PKG_VERSION:=3.3.6
+PKG_VERSION:=5.0.6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://downloadcenter.intel.com/detail_desc.aspx?agr=Y&DwnldID=13663
-PKG_MD5SUM:=b9267beb43f41d364f73b4d5b9040f1e
+PKG_SOURCE_URL:=http://downloadmirror.intel.com/13663/eng
+PKG_MD5SUM:=701717fbbba6065af4ff5138bd3a3a9c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -19,7 +19,7 @@ define Package/igb
 	SECTION:=astor2
 	CATEGORY:=aStor2
 	TITLE:=Ethernet igb driver
-	URL:=http://downloadcenter.intel.com/detail_desc.aspx?agr=Y&DwnldID=13663
+	URL:=http://downloadmirror.intel.com/13663/eng/igb-5.0.6.tar.gz
 	MAINTAINER:=Vladimir Petukhov (vladimir.petukhov@etegro.com)
 endef
 
