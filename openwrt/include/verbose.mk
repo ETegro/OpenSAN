@@ -5,28 +5,40 @@
 # See /LICENSE for more information.
 #
 
-ifeq ($(NO_TRACE_MAKE),)
-NO_TRACE_MAKE := $(MAKE) V=99
-export NO_TRACE_MAKE
-endif
-
-ifndef KBUILD_VERBOSE
-  KBUILD_VERBOSE:=0
+ifndef OPENWRT_VERBOSE
+  OPENWRT_VERBOSE:=
 endif
 ifeq ("$(origin V)", "command line")
-  KBUILD_VERBOSE:=$(V)
+  OPENWRT_VERBOSE:=$(V)
+endif
+
+ifeq ($(OPENWRT_VERBOSE),1)
+  OPENWRT_VERBOSE:=w
+endif
+ifeq ($(OPENWRT_VERBOSE),99)
+  OPENWRT_VERBOSE:=s
+endif
+
+ifeq ($(NO_TRACE_MAKE),)
+NO_TRACE_MAKE := $(MAKE) V=s$(OPENWRT_VERBOSE)
+export NO_TRACE_MAKE
 endif
 
 ifeq ($(IS_TTY),1)
   ifneq ($(strip $(NO_COLOR)),1)
     _Y:=\\033[33m
+    _R:=\\033[31m
     _N:=\\033[m
   endif
 endif
 
-ifneq ($(KBUILD_VERBOSE),99)
+ifeq ($(findstring s,$(OPENWRT_VERBOSE)),)
   define MESSAGE
 	printf "$(_Y)%s$(_N)\n" "$(1)" >&8
+  endef
+
+  define ERROR_MESSAGE
+	printf "$(_R)%s$(_N)\n" "$(1)" >&8
   endef
 
   ifeq ($(QUIET),1)
@@ -40,13 +52,9 @@ ifneq ($(KBUILD_VERBOSE),99)
     ))
     SUBMAKE=$(MAKE)
   else
-    ifeq ($(KBUILD_VERBOSE),0)
-      SILENT:=>/dev/null 2>&1
-    else
-      SILENT:=
-    endif
+    SILENT:=>/dev/null $(if $(findstring w,$(OPENWRT_VERBOSE)),,2>&1)
     export QUIET:=1
-    SUBMAKE=cmd() { $(SILENT) $(MAKE) -s $$* < /dev/null || { echo "make $$*: build failed. Please re-run make with V=99 to see what's going on"; false; } } 8>&1 9>&2; cmd
+    SUBMAKE=cmd() { $(SILENT) $(MAKE) -s $$* < /dev/null || { echo "make $$*: build failed. Please re-run make with V=s to see what's going on"; false; } } 8>&1 9>&2; cmd
   endif
 
   .SILENT: $(MAKECMDGOALS)
@@ -55,4 +63,5 @@ else
   define MESSAGE
     printf "%s\n" "$(1)"
   endef
+  ERROR_MESSAGE=$(MESSAGE)
 endif

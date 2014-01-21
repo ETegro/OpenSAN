@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,22 +7,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bison
-PKG_VERSION:=2.4.3
+PKG_VERSION:=3.0.2
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
-PKG_MD5SUM:=c1d3ea81bc370dbd43b6f0b2cd21287e
-PKG_CAT:=bzcat
+PKG_MD5SUM:=146be9ff9fbd27497f0bf2286a5a2082
+PKG_CAT:=xzcat
+
+HOST_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 
-define Host/Compile
-	$(MAKE) -C $(HOST_BUILD_DIR)
-endef
-
-define Host/Install
-	$(MAKE) -C $(HOST_BUILD_DIR) install
-endef
+HOST_LDFLAGS += $(HOST_STATIC_LINKING)
 
 define Host/Clean
 	-$(MAKE) -C $(HOST_BUILD_DIR) uninstall

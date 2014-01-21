@@ -16,30 +16,27 @@ PKG_MD5SUM:=b7b6361bcce2cedff1ae437fadafe53b
 
 include $(INCLUDE_DIR)/host-build.mk
 
-define Host/Configure
-	( cd $(HOST_BUILD_DIR); \
-		./configure \
-			--target=$(GNU_HOST_NAME) \
-			--host=$(GNU_HOST_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--sbindir=/usr/sbin \
-			--libexecdir=/usr/lib \
-			--sysconfdir=/etc \
-			--datadir=/usr/share \
-			--localstatedir=/var \
-			--mandir=/usr/man \
-			--infodir=/usr/info \
-	)
-endef
+HOST_CONFIGURE_ARGS = \
+	--target=$(GNU_HOST_NAME) \
+	--host=$(GNU_HOST_NAME) \
+	--build=$(GNU_HOST_NAME) \
+	--program-prefix="" \
+	--program-suffix="" \
+	--prefix=/usr \
+	--exec-prefix=/usr \
+	--bindir=/usr/bin \
+	--sbindir=/usr/sbin \
+	--libexecdir=/usr/lib \
+	--sysconfdir=/etc \
+	--datadir=/usr/share \
+	--localstatedir=/var \
+	--mandir=/usr/man \
+	--infodir=/usr/info \
 
 define Host/Compile
 	$(MAKE) -C $(HOST_BUILD_DIR) \
-		CFLAGS="$(HOST_CFLAGS) -include getline.h" \
+		CFLAGS="$(HOST_CFLAGS)" \
+		LDFLAGS="$(HOST_LDFLAGS) $(HOST_STATIC_LINKING)" \
 		all
 endef
 

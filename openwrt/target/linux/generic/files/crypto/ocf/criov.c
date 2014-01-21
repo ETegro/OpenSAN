@@ -143,7 +143,6 @@ EXPORT_SYMBOL(cuio_copyback);
 EXPORT_SYMBOL(cuio_copydata);
 EXPORT_SYMBOL(cuio_getptr);
 
-
 static void
 skb_copy_bits_back(struct sk_buff *skb, int offset, caddr_t cp, int len)
 {
@@ -156,7 +155,7 @@ skb_copy_bits_back(struct sk_buff *skb, int offset, caddr_t cp, int len)
 	offset -= skb_headlen(skb);
 	for (i = 0; len > 0 && i < skb_shinfo(skb)->nr_frags; i++) {
 		if (offset < skb_shinfo(skb)->frags[i].size) {
-			memcpy(page_address(skb_shinfo(skb)->frags[i].page) +
+			memcpy(page_address(skb_frag_page(&skb_shinfo(skb)->frags[i])) +
 					skb_shinfo(skb)->frags[i].page_offset,
 					cp, min_t(int, skb_shinfo(skb)->frags[i].size, len));
 			len -= skb_shinfo(skb)->frags[i].size;

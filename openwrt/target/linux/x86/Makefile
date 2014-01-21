@@ -9,12 +9,13 @@ include $(TOPDIR)/rules.mk
 ARCH:=i386
 BOARD:=x86
 BOARDNAME:=x86
-FEATURES:=ext4 vdi vmdk pcmcia targz
-SUBTARGETS=astor2 generic olpc xen_domu ep80579 net5501 kvm_guest geos alix2 thincan
+FEATURES:=squashfs ext4 vdi vmdk pcmcia targz
+SUBTARGETS=generic olpc xen_domu ep80579 net5501 kvm_guest geos alix2 thincan \
+	   rdc
 
-LINUX_VERSION:=2.6.39.4
+LINUX_VERSION:=3.3.8
 
-DEVICE_TYPE=
+KERNELNAME:=bzImage
 
 include $(INCLUDE_DIR)/target.mk
 

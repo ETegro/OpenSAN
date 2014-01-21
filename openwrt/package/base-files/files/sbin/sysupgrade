@@ -1,19 +1,26 @@
 #!/bin/sh
-. /etc/functions.sh
+. /lib/functions.sh
 
 # initialize defaults
 RAMFS_COPY_BIN=""	# extra programs for temporary ramfs root
 RAMFS_COPY_DATA=""	# extra data files
+export MTD_CONFIG_ARGS=""
 export INTERACTIVE=0
 export VERBOSE=1
 export SAVE_CONFIG=1
 export SAVE_OVERLAY=0
 export DELAY=
 export CONF_IMAGE=
+export CONF_BACKUP_LIST=0
+export CONF_BACKUP=
+export CONF_RESTORE=
+export NEED_IMAGE=
 export HELP=0
+export FORCE=0
+export TEST=0
 
 # parse options
-while [ -n "$1" ]; do 
+while [ -n "$1" ]; do
 	case "$1" in
 		-i) export INTERACTIVE=1;;
 		-d) export DELAY="$2"; shift;;
@@ -21,7 +28,12 @@ while [ -n "$1" ]; do
 		-q) export VERBOSE="$(($VERBOSE - 1))";;
 		-n) export SAVE_CONFIG=0;;
 		-c) export SAVE_OVERLAY=1;;
+		-b|--create-backup) export CONF_BACKUP="$2" NEED_IMAGE=1; shift;;
+		-r|--restore-backup) export CONF_RESTORE="$2" NEED_IMAGE=1; shift;;
+		-l|--list-backup) export CONF_BACKUP_LIST=1; break;;
 		-f) export CONF_IMAGE="$2"; shift;;
+		-F|--force) export FORCE=1;;
+		-T|--test) export TEST=1;;
 		-h|--help) export HELP=1; break;;
 		-*)
 			echo "Invalid option: $1"
@@ -38,23 +50,52 @@ export CONF_TAR=/tmp/sysupgrade.tgz
 export ARGV="$*"
 export ARGC="$#"
 
-[ -z "$ARGV" -o $HELP -gt 0 ] && {
+[ -z "$ARGV" -a -z "$NEED_IMAGE" -o $HELP -gt 0 ] && {
 	cat <<EOF
-Usage: $0 [options] <image file or URL>
+Usage: $0 [<upgrade-option>...] <image file or URL>
+       $0 [-q] [-i] <backup-command> <file>
 
-Options:
+upgrade-option:
 	-d <delay>   add a delay before rebooting
 	-f <config>  restore configuration from .tar.gz (file or url)
 	-i           interactive mode
 	-c           attempt to preserve all changed files in /etc/
 	-n           do not save configuration over reflash
+	-T | --test
+	             Verify image and config .tar.gz but do not actually flash.
+	-F | --force
+	             Flash image even if image checks fail, this is dangerous!
 	-q           less verbose
 	-v           more verbose
-	-h / --help  display this help
+	-h | --help  display this help
+
+backup-command:
+	-b | --create-backup <file>
+	             create .tar.gz of files specified in sysupgrade.conf
+	             then exit. Does not flash an image. If file is '-',
+	             i.e. stdout, verbosity is set to 0 (i.e. quiet).
+	-r | --restore-backup <file>
+	             restore a .tar.gz created with sysupgrade -b
+	             then exit. Does not flash an image. If file is '-',
+	             the archive is read from stdin.
+	-l | --list-backup
+	             list the files that would be backed up when calling
+	             sysupgrade -b. Does not create a backup file.
 
 EOF
 	exit 1
 }
+
+[ -n "$ARGV" -a -n "$NEED_IMAGE" ] && {
+	cat <<-EOF
+		-b|--create-backup and -r|--restore-backup do not perform a firmware upgrade.
+		Do not specify both -b|-r and a firmware image.
+	EOF
+	exit 1
+}
+
+# prevent messages from clobbering the tarball when using stdout
+[ "$CONF_BACKUP" = "-" ] && export VERBOSE=0
 
 add_uci_conffiles() {
 	local file="$1"
@@ -85,6 +126,8 @@ sysupgrade_image_check="platform_check_image"
 include /lib/upgrade
 
 do_save_conffiles() {
+	local conf_tar="${1:-$CONF_TAR}"
+
 	[ -z "$(rootfs_type)" ] && {
 		echo "Cannot save config while running from ramdisk."
 		ask_bool 0 "Abort" && exit
@@ -95,8 +138,33 @@ do_save_conffiles() {
 
 	v "Saving config files..."
 	[ "$VERBOSE" -gt 1 ] && TAR_V="v" || TAR_V=""
-	tar c${TAR_V}zf "$CONF_TAR" -T "$CONFFILES" 2>/dev/null
+	tar c${TAR_V}zf "$conf_tar" -T "$CONFFILES" 2>/dev/null
+
+	rm -f "$CONFFILES"
 }
+
+if [ $CONF_BACKUP_LIST -eq 1 ]; then
+	add_uci_conffiles "$CONFFILES"
+	cat "$CONFFILES"
+	rm -f "$CONFFILES"
+	exit 0
+fi
+
+if [ -n "$CONF_BACKUP" ]; then
+	do_save_conffiles "$CONF_BACKUP"
+	exit $?
+fi
+
+if [ -n "$CONF_RESTORE" ]; then
+	if [ "$CONF_RESTORE" != "-" ] && [ ! -f "$CONF_RESTORE" ]; then
+		echo "Backup archive '$CONF_RESTORE' not found."
+		exit 1
+	fi
+
+	[ "$VERBOSE" -gt 1 ] && TAR_V="v" || TAR_V=""
+	tar -C / -x${TAR_V}zf "$CONF_RESTORE"
+	exit $?
+fi
 
 type platform_check_image >/dev/null 2>/dev/null || {
 	echo "Firmware upgrade is not implemented for this platform."
@@ -105,8 +173,13 @@ type platform_check_image >/dev/null 2>/dev/null || {
 
 for check in $sysupgrade_image_check; do
 	( eval "$check \"\$ARGV\"" ) || {
-		echo "Image check '$check' failed."
-		exit 1
+		if [ $FORCE -eq 1 ]; then
+			echo "Image check '$check' failed but --force given - will update anyway!"
+			break
+		else
+			echo "Image check '$check' failed."
+			exit 1
+		fi
 	}
 done
 
@@ -122,21 +195,30 @@ if [ -n "$CONF_IMAGE" ]; then
 	get_image "$CONF_IMAGE" "cat" > "$CONF_TAR"
 	export SAVE_CONFIG=1
 elif ask_bool $SAVE_CONFIG "Keep config files over reflash"; then
-	do_save_conffiles
+	[ $TEST -eq 1 ] || do_save_conffiles
 	export SAVE_CONFIG=1
 else
 	export SAVE_CONFIG=0
 fi
 
-kill_remaining TERM
-sleep 3
-kill_remaining KILL
+if [ $TEST -eq 1 ]; then
+	exit 0
+fi
 
 run_hooks "" $sysupgrade_pre_upgrade
 
-#if [ -n "$(rootfs_type)" ]; then
-#	v "Switching to ramdisk..."
-#	run_ramfs '. /etc/functions.sh; include /lib/upgrade; do_upgrade'
-#else
+ubus call system upgrade
+touch /tmp/sysupgrade
+
+if [ ! -f /tmp/failsafe ] ; then
+	kill_remaining TERM
+	sleep 3
+	kill_remaining KILL
+fi
+
+if [ -n "$(rootfs_type)" ]; then
+	v "Switching to ramdisk..."
+	run_ramfs '. /lib/functions.sh; include /lib/upgrade; do_upgrade'
+else
 	do_upgrade
-#fi
+fi

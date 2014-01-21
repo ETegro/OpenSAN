@@ -22,7 +22,7 @@ HOST_BUILD_DIR:=$(KERNEL_BUILD_DIR)/linux-$(LINUX_VERSION)
 PKG_MD5SUM:=$(LINUX_KERNEL_MD5SUM)
 LINUX_DIR := $(HOST_BUILD_DIR)
 FILES_DIR := 
-PATCH_DIR := ./patches$(if $(wildcard ./patches-$(KERNEL_PATCHVER)),-$(KERNEL_PATCHVER))
+PATCH_DIR := ./patches$(if $(wildcard ./patches-$(LINUX_VERSION)),-$(LINUX_VERSION))
 
 include $(INCLUDE_DIR)/toolchain-build.mk
 include $(INCLUDE_DIR)/kernel-defaults.mk
@@ -36,6 +36,7 @@ HOST_EXTRACFLAGS=
 LINUX_HAS_HEADERS_INSTALL:=y
 
 KMAKE := $(MAKE) -C $(HOST_BUILD_DIR) \
+	HOSTCFLAGS="$(HOST_CFLAGS) -Wall -Wmissing-prototypes -Wstrict-prototypes" \
 	ARCH=$(LINUX_KARCH) \
 	CC="$(KERNEL_CC)" \
 	CFLAGS="$(TARGET_CFLAGS)" \
@@ -67,15 +68,6 @@ define Host/Configure/post/cris
 	ln -snf $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/arch-v10/arch \
 		$(BUILD_DIR_TOOLCHAIN)/linux-dev/include/arch
 	$(SED) '/#include <asm\/page\.h>/d' $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/asm/user.h
-endef
-
-define Host/Configure/post/ubicom32
-	$(CP) \
-		$(HOST_BUILD_DIR)/arch/ubicom32/include/asm/elf.h \
-		$(HOST_BUILD_DIR)/arch/ubicom32/include/asm/user.h \
-		$(HOST_BUILD_DIR)/arch/ubicom32/include/asm/page.h \
-		$(HOST_BUILD_DIR)/arch/ubicom32/include/asm/page_offset.h \
-		$(BUILD_DIR_TOOLCHAIN)/linux-dev/include/asm/
 endef
 
 define Host/Configure/post/mips

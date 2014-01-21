@@ -11,8 +11,15 @@ REAL_STAGING_DIR_HOST:=$(STAGING_DIR_HOST)
 STAGING_DIR_HOST:=$(TOOLCHAIN_DIR)
 BUILD_DIR_HOST:=$(BUILD_DIR_TOOLCHAIN)
 
-TOOLCHAIN_JOBS?=$(if $(CONFIG_TOOLCHAIN_PARALLEL),-j$(CONFIG_PKG_BUILD_JOBS))
-
 include $(INCLUDE_DIR)/host-build.mk
 
 HOST_STAMP_PREPARED=$(HOST_BUILD_DIR)/.prepared
+
+define FixupLibdir
+	if [ -d $(1)/lib64 -a \! -L $(1)/lib64 ]; then \
+		mkdir -p $(1)/lib; \
+		mv $(1)/lib64/* $(1)/lib/; \
+		rm -rf $(1)/lib64; \
+	fi
+	ln -sf lib $(1)/lib64
+endef

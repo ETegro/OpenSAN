@@ -161,7 +161,13 @@ struct ocf_device {
 	sigemptyset(&current->blocked); \
 	recalc_sigpending(current); \
 	spin_unlock_irq(&current->sigmask_lock); \
-	sprintf(current->comm, str);
+	sprintf(current->comm, str); \
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0) \
+	spin_lock_irq(&current->sigmask_lock); \
+	sigemptyset(&current->blocked); \
+	recalc_sigpending(current); \
+	spin_unlock_irq(&current->sigmask_lock); \
+	sprintf(current->comm, str); \
 #else
 #define ocf_daemonize(str) daemonize(str);
 #endif
@@ -287,6 +293,8 @@ static inline void *sg_virt(struct scatterlist *sg)
 
 #define sg_init_table(sg, n)
 
+#define sg_mark_end(sg)
+
 #endif
 
 #ifndef late_initcall
@@ -357,6 +365,11 @@ static inline int ocf_run_thread(void *arg)
 
 #else
 #include <linux/kthread.h>
+#endif
+
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,2,0)
+#define	skb_frag_page(x)	((x)->page)
 #endif
 
 #endif /* __KERNEL__ */

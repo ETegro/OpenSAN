@@ -11,8 +11,8 @@ include $(INCLUDE_DIR)/host.mk
 
 override MAKEFLAGS=
 
-PKG_OS:=$(shell uname -s)
-PKG_CPU:=$(shell uname -m)
+PKG_OS:=$(word 2,$(subst -, ,$(shell $(HOSTCC) -dumpmachine)))
+PKG_CPU:=$(word 1,$(subst -, ,$(shell $(HOSTCC) -dumpmachine)))
 
 SDK_NAME:=OpenWrt-SDK-$(BOARD)-for-$(PKG_OS)-$(PKG_CPU)-gcc-$(GCCV)_$(LIBC)-$(LIBCV)
 SDK_BUILD_DIR:=$(BUILD_DIR)/$(SDK_NAME)
@@ -40,7 +40,7 @@ $(BIN_DIR)/$(SDK_NAME).tar.bz2: clean
 	rm -rf \
 		$(SDK_BUILD_DIR)/target/linux/*/files \
 		$(SDK_BUILD_DIR)/target/linux/*/patches
-	$(CP) \
+	$(CP) -L \
 		$(TOPDIR)/LICENSE \
 		$(TOPDIR)/rules.mk \
 		$(TOPDIR)/.config \
@@ -52,11 +52,12 @@ $(BIN_DIR)/$(SDK_NAME).tar.bz2: clean
 		./files/package/rules.mk \
 		$(TOPDIR)/package/Makefile \
 		$(SDK_BUILD_DIR)/package/
-	echo "src-svn trunk $(SVN_PACKAGE_URL)" \
-		> $(SDK_BUILD_DIR)/feeds.conf.default
+	$(if $(SVN_PACKAGE_URL),echo "src-svn trunk $(SVN_PACKAGE_URL)" \
+		> $(SDK_BUILD_DIR)/feeds.conf.default,\
+		-rm -f $(SDK_BUILD_DIR)/feeds.conf.default)
 	cat $(TOPDIR)/feeds.conf.default \
 		>> $(SDK_BUILD_DIR)/feeds.conf.default
-	echo REVISION:="$(REVISION)" > $(SDK_BUILD_DIR)/include/version.mk
+	$(SED) 's,^# REVISION:=.*,REVISION:=$(REVISION),g' $(SDK_BUILD_DIR)/include/version.mk
 	find $(SDK_BUILD_DIR) -name .git | $(XARGS) rm -rf
 	find $(SDK_BUILD_DIR) -name .svn | $(XARGS) rm -rf
 	find $(SDK_BUILD_DIR) -name CVS | $(XARGS) rm -rf

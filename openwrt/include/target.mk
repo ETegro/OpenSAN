@@ -12,9 +12,9 @@ __target_inc=1
 DEVICE_TYPE?=router
 
 # Default packages - the really basic set
-DEFAULT_PACKAGES:=base-files libc libgcc busybox dropbear mtd uci opkg hotplug2
+DEFAULT_PACKAGES:=base-files libc libgcc busybox dropbear mtd uci opkg netifd
 # For router targets
-DEFAULT_PACKAGES.router:=dnsmasq iptables ppp ppp-mod-pppoe kmod-ipt-nathelper firewall
+DEFAULT_PACKAGES.router:=dnsmasq iptables ip6tables ppp ppp-mod-pppoe kmod-ipt-nathelper firewall odhcpd odhcp6c
 DEFAULT_PACKAGES.bootloader:=
 
 ifneq ($(DUMP),)
@@ -76,7 +76,7 @@ define Profile
 	$(SH_FUNC) getvar "$(call shvar,Profile/$(1)/Description)"; \
 	echo "@@"; \
 	echo;
-  ifeq ($(CONFIG_TARGET_$(call target_conf,$(BOARD)_$(if $(SUBTARGET),$(SUBTARGET)_)$(1))),y)
+  ifeq ($(CONFIG_TARGET_$(call target_conf,$(BOARD)_$(if $(SUBTARGET),$(SUBTARGET)_))$(1)),y)
     PROFILE=$(1)
   endif
 endef
@@ -84,12 +84,12 @@ endif
 
 ifneq ($(PLATFORM_DIR),$(PLATFORM_SUBDIR))
   define IncludeProfiles
-    -include $(PLATFORM_DIR)/profiles/*.mk
-    -include $(PLATFORM_SUBDIR)/profiles/*.mk
+    -include $(sort $(wildcard $(PLATFORM_DIR)/profiles/*.mk))
+    -include $(sort $(wildcard $(PLATFORM_SUBDIR)/profiles/*.mk))
   endef
 else
   define IncludeProfiles
-    -include $(PLATFORM_DIR)/profiles/*.mk
+    -include $(sort $(wildcard $(PLATFORM_DIR)/profiles/*.mk))
   endef
 endif
 
@@ -132,7 +132,7 @@ USE_SUBTARGET_CONFIG = $(if $(wildcard $(LINUX_TARGET_CONFIG)),,$(if $(LINUX_SUB
 LINUX_RECONFIG_LIST = $(wildcard $(GENERIC_LINUX_CONFIG) $(LINUX_TARGET_CONFIG) $(if $(USE_SUBTARGET_CONFIG),$(LINUX_SUBTARGET_CONFIG)))
 LINUX_RECONFIG_TARGET = $(if $(USE_SUBTARGET_CONFIG),$(LINUX_SUBTARGET_CONFIG),$(LINUX_TARGET_CONFIG))
 
-# select the config file to be cahnged by kernel_menuconfig/kernel_oldconfig
+# select the config file to be changed by kernel_menuconfig/kernel_oldconfig
 ifeq ($(CONFIG_TARGET),platform)
   LINUX_RECONFIG_LIST = $(wildcard $(GENERIC_LINUX_CONFIG) $(LINUX_TARGET_CONFIG))
   LINUX_RECONFIG_TARGET = $(LINUX_TARGET_CONFIG)
@@ -140,6 +140,10 @@ endif
 ifeq ($(CONFIG_TARGET),subtarget)
   LINUX_RECONFIG_LIST = $(wildcard $(GENERIC_LINUX_CONFIG) $(LINUX_TARGET_CONFIG) $(LINUX_SUBTARGET_CONFIG))
   LINUX_RECONFIG_TARGET = $(LINUX_SUBTARGET_CONFIG)
+endif
+ifeq ($(CONFIG_TARGET),subtarget_platform)
+  LINUX_RECONFIG_LIST = $(wildcard $(GENERIC_LINUX_CONFIG) $(LINUX_SUBTARGET_CONFIG) $(LINUX_TARGET_CONFIG))
+  LINUX_RECONFIG_TARGET = $(LINUX_TARGET_CONFIG)
 endif
 ifeq ($(CONFIG_TARGET),env)
   LINUX_RECONFIG_LIST = $(LINUX_KCONFIG_LIST)
@@ -163,7 +167,10 @@ ifeq ($(DUMP),1)
     .SILENT: $(TMP_CONFIG)
     .PRECIOUS: $(TMP_CONFIG)
 
-    ifneq ($(CONFIG_GENERIC_GPIO),)
+    ifneq ($(CONFIG_OF),)
+      FEATURES += dt
+    endif
+    ifneq ($(CONFIG_GENERIC_GPIO)$(CONFIG_GPIOLIB),)
       FEATURES += gpio
     endif
     ifneq ($(CONFIG_PCI),)
@@ -183,21 +190,63 @@ ifeq ($(DUMP),1)
     ifneq ($(CONFIG_VGA_CONSOLE)$(CONFIG_FB),)
       FEATURES += display
     endif
+    ifneq ($(CONFIG_RTC_CLASS),)
+      FEATURES += rtc
+    endif
+    FEATURES += $(foreach v,v4 v5 v6 v7,$(if $(findstring -march=arm$(v),$(CFLAGS)),arm_$(v)))
 
     # remove duplicates
     FEATURES:=$(sort $(FEATURES))
   endif
-  DEFAULT_CFLAGS_i386=-O2 -pipe -march=i486 -fno-caller-saves
-  DEFAULT_CFLAGS_x86_64=-O2 -pipe -march=nocona -fno-caller-saves -m64
-  DEFAULT_CFLAGS_m68k=-Os -pipe -mcfv4e -fno-caller-saves
-  DEFAULT_CFLAGS_mips=-Os -pipe -mips32 -mtune=mips32 -fno-caller-saves
-  DEFAULT_CFLAGS_mipsel=$(DEFAULT_CFLAGS_mips)
-  DEFAULT_CFLAGS_mips64=-Os -pipe -mips64 -mtune=mips64 -mabi=64 -fno-caller-saves
-  DEFAULT_CFLAGS_mips64el=$(DEFAULT_CFLAGS_mips64)
-  DEFAULT_CFLAGS_sparc=-Os -pipe -mcpu=ultrasparc -fno-caller-saves
-  DEFAULT_CFLAGS_arm=-Os -pipe -march=armv5te -mtune=xscale -fno-caller-saves
-  DEFAULT_CFLAGS_armeb=$(DEFAULT_CFLAGS_arm)
-  DEFAULT_CFLAGS=$(if $(DEFAULT_CFLAGS_$(ARCH)),$(DEFAULT_CFLAGS_$(ARCH)),-Os -pipe -fno-caller-saves)
+  CPU_CFLAGS = -Os -pipe
+  ifneq ($(findstring mips,$(ARCH)),)
+    ifneq ($(findstring mips64,$(ARCH)),)
+      CPU_TYPE ?= mips64
+    else
+      CPU_TYPE ?= mips32
+    endif
+    CPU_CFLAGS += -mno-branch-likely
+    CPU_CFLAGS_mips32 = -mips32 -mtune=mips32
+    CPU_CFLAGS_mips32r2 = -mips32r2 -mtune=mips32r2
+    CPU_CFLAGS_mips64 = -mips64 -mtune=mips64 -mabi=64
+    CPU_CFLAGS_24kec = -mips32r2 -mtune=24kec
+    CPU_CFLAGS_34kc = -mips32r2 -mtune=34kc
+    CPU_CFLAGS_dsp = -mdsp
+    CPU_CFLAGS_dsp2 = -mdspr2
+  endif
+  ifeq ($(ARCH),i386)
+    CPU_TYPE ?= i486
+    CPU_CFLAGS_i486 = -march=i486
+    CPU_CFLAGS_geode = -march=geode -mmmx -m3dnow
+  endif
+  ifneq ($(findstring arm,$(ARCH)),)
+    CPU_TYPE ?= xscale
+    CPU_CFLAGS_arm920t = -march=armv4t -mtune=arm920t
+    CPU_CFLAGS_arm926ej-s = -march=armv5te -mtune=arm926ej-s
+    CPU_CFLAGS_arm1136j-s = -march=armv6 -mtune=arm1136j-s
+    CPU_CFLAGS_arm1176jzf-s = -march=armv6 -mtune=arm1176jzf-s
+    CPU_CFLAGS_cortex-a7 = -march=armv7-a -mtune=cortex-a7
+    CPU_CFLAGS_cortex-a8 = -march=armv7-a -mtune=cortex-a8
+    CPU_CFLAGS_cortex-a9 = -march=armv7-a -mtune=cortex-a9
+    CPU_CFLAGS_fa526 = -march=armv4 -mtune=fa526
+    CPU_CFLAGS_mpcore = -march=armv6k -mtune=mpcore
+    CPU_CFLAGS_xscale = -march=armv5te -mtune=xscale
+    ifneq ($(CONFIG_SOFT_FLOAT),)
+      CPU_CFLAGS_vfp = -mfpu=vfp
+      CPU_CFLAGS_vfpv3 = -mfpu=vfpv3-d16
+    endif
+  endif
+  ifeq ($(ARCH),powerpc)
+    CPU_CFLAGS_603e:=-mcpu=603e
+    CPU_CFLAGS_8540:=-mcpu=8540
+    CPU_CFLAGS_405:=-mcpu=405
+    CPU_CFLAGS_440:=-mcpu=440
+  endif
+  ifeq ($(ARCH),sparc)
+    CPU_TYPE = sparc
+    CPU_CFLAGS_ultrasparc = -mcpu=ultrasparc
+  endif
+  DEFAULT_CFLAGS=$(strip $(CPU_CFLAGS) $(CPU_CFLAGS_$(CPU_TYPE)) $(CPU_CFLAGS_$(CPU_SUBTYPE)))
 endif
 
 define BuildTargets/DumpCurrent
@@ -212,6 +261,7 @@ define BuildTargets/DumpCurrent
 	 echo 'Target-Features: $(FEATURES)'; \
 	 echo 'Target-Depends: $(DEPENDS)'; \
 	 echo 'Target-Optimization: $(if $(CFLAGS),$(CFLAGS),$(DEFAULT_CFLAGS))'; \
+	 echo 'CPU-Type: $(CPU_TYPE)$(if $(CPU_SUBTYPE),+$(CPU_SUBTYPE))'; \
 	 echo 'Linux-Version: $(LINUX_VERSION)'; \
 	 echo 'Linux-Release: $(LINUX_RELEASE)'; \
 	 echo 'Linux-Kernel-Arch: $(LINUX_KARCH)'; \

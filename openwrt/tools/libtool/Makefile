@@ -13,14 +13,12 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
 PKG_MD5SUM:=b32b04148ecdd7344abc6fe8bd1bb021
 
+HOST_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/host-build.mk
 
 HOST_CONFIGURE_VARS += \
 	lt_cv_sys_dlsearch_path=""
-
-define Host/Compile
-	$(MAKE) -C $(HOST_BUILD_DIR)
-endef
 
 define Host/Install
 	$(MAKE) -C $(HOST_BUILD_DIR) install

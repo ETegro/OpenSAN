@@ -11,22 +11,26 @@ GCC_CONFIGURE += \
 
 define Host/Compile
 	$(CP) $(BUILD_DIR_TOOLCHAIN)/linux-dev/* $(BUILD_DIR_TOOLCHAIN)/$(LIBC)-dev/
-	$(GCC_MAKE) -C $(GCC_BUILD_DIR) \
+	+$(GCC_MAKE) $(HOST_JOBS) -C $(GCC_BUILD_DIR) \
 		all-build-libiberty \
 		all-gcc \
-		$(if $(GCC_BUILD_TARGET_LIBGCC),all-target-libgcc)
+		all-target-libgcc
 endef
 
 define Host/Install
 	$(GCC_MAKE) -C $(GCC_BUILD_DIR) \
+		prefix="$(TOOLCHAIN_DIR)/initial" \
 		install-gcc \
-		$(if $(GCC_BUILD_TARGET_LIBGCC),install-target-libgcc)
+		install-target-libgcc
 
 	# XXX: glibc insists on linking against libgcc_eh
-	( cd $(TOOLCHAIN_DIR)/lib/gcc/$(REAL_GNU_TARGET_NAME)/$(PKG_VERSION) ; \
+	( cd $(TOOLCHAIN_DIR)/initial/lib/gcc/$(REAL_GNU_TARGET_NAME)/$(PKG_VERSION) ; \
 		[ -e libgcc_eh.a ] || ln -sf libgcc.a libgcc_eh.a ; \
 		cp libgcc.a libgcc_initial.a; \
 	)
+
+	$(call FixupLibdir,$(TOOLCHAIN_DIR)/initial)
+	$$(call file_copy,$(TOOLCHAIN_DIR)/initial/.,$(TOOLCHAIN_DIR)/)
 endef
 
 $(eval $(call HostBuild))

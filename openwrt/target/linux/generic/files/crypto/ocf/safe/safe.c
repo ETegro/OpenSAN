@@ -208,7 +208,7 @@ pci_map_skb(struct safe_softc *sc,struct safe_operand *buf,struct sk_buff *skb)
 
 	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
 		pci_map_linear(sc, buf,
-				page_address(skb_shinfo(skb)->frags[i].page) +
+				page_address(skb_frag_page(&skb_shinfo(skb)->frags[i])) +
 				                        skb_shinfo(skb)->frags[i].page_offset,
 				skb_shinfo(skb)->frags[i].size);
 	}
@@ -1944,12 +1944,10 @@ static int safe_probe(struct pci_dev *dev, const struct pci_device_id *ent)
 		return(-ENODEV);
 	}
 
-#ifdef HAVE_PCI_SET_MWI
 	if (pci_set_mwi(dev)) {
 		printk("safe: pci_set_mwi failed!");
 		return(-ENODEV);
 	}
-#endif
 
 	sc = (struct safe_softc *) kmalloc(sizeof(*sc), GFP_KERNEL);
 	if (!sc)
@@ -2227,6 +2225,6 @@ static void __exit safe_exit (void)
 module_init(safe_init);
 module_exit(safe_exit);
 
-MODULE_LICENSE("BSD");
+MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("David McCullough <david_mccullough@mcafee.com>");
 MODULE_DESCRIPTION("OCF driver for safenet PCI crypto devices");

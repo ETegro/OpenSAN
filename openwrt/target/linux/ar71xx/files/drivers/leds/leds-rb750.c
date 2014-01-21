@@ -9,12 +9,13 @@
  *
  */
 #include <linux/kernel.h>
+#include <linux/module.h>
 #include <linux/init.h>
 #include <linux/platform_device.h>
 #include <linux/leds.h>
 #include <linux/slab.h>
 
-#include <asm/mach-ar71xx/mach-rb750.h>
+#include <asm/mach-ath79/mach-rb750.h>
 
 #define DRV_NAME	"leds-rb750"
 
@@ -22,6 +23,7 @@ struct rb750_led_dev {
 	struct led_classdev	cdev;
 	u32			mask;
 	int			active_low;
+	void			(*latch_change)(u32 clear, u32 set);
 };
 
 struct rb750_led_drvdata {
@@ -45,12 +47,12 @@ static void rb750_led_brightness_set(struct led_classdev *led_cdev,
 	level ^= rbled->active_low;
 
 	if (level)
-		rb750_latch_change(0, rbled->mask);
+		rbled->latch_change(0, rbled->mask);
 	else
-		rb750_latch_change(rbled->mask, 0);
+		rbled->latch_change(rbled->mask, 0);
 }
 
-static int __devinit rb750_led_probe(struct platform_device *pdev)
+static int rb750_led_probe(struct platform_device *pdev)
 {
 	struct rb750_led_platform_data *pdata;
 	struct rb750_led_drvdata *drvdata;
@@ -81,6 +83,7 @@ static int __devinit rb750_led_probe(struct platform_device *pdev)
 
 		rbled->mask = led_data->mask;
 		rbled->active_low = !!led_data->active_low;
+		rbled->latch_change = pdata->latch_change;
 
 		ret = led_classdev_register(&pdev->dev, &rbled->cdev);
 		if (ret)
@@ -98,7 +101,7 @@ err:
 	return ret;
 }
 
-static int __devexit rb750_led_remove(struct platform_device *pdev)
+static int rb750_led_remove(struct platform_device *pdev)
 {
 	struct rb750_led_drvdata *drvdata;
 	int i;
@@ -113,7 +116,7 @@ static int __devexit rb750_led_remove(struct platform_device *pdev)
 
 static struct platform_driver rb750_led_driver = {
 	.probe		= rb750_led_probe,
-	.remove		= __devexit_p(rb750_led_remove),
+	.remove		= rb750_led_remove,
 	.driver		= {
 		.name	= DRV_NAME,
 		.owner	= THIS_MODULE,

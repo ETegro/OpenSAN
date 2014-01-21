@@ -1,6 +1,0 @@
-config system
-	option hostname	OpenSAN
-	option timezone	UTC
-
-config rdate
-	option interface	lan

@@ -56,7 +56,7 @@ static inline void rb153_pata_finish_io(struct ata_port *ap)
 	ata_sff_dma_pause(ap);
 	ndelay(RB153_CF_IO_DELAY);
 
-	set_irq_type(info->irq, IRQ_TYPE_LEVEL_HIGH);
+	irq_set_irq_type(info->irq, IRQ_TYPE_LEVEL_HIGH);
 }
 
 static void rb153_pata_exec_command(struct ata_port *ap,
@@ -107,11 +107,11 @@ static irqreturn_t rb153_pata_irq_handler(int irq, void *dev_instance)
 	struct rb153_cf_info *info = ah->private_data;
 
 	if (gpio_get_value(info->gpio_line)) {
-		set_irq_type(info->irq, IRQ_TYPE_LEVEL_LOW);
+		irq_set_irq_type(info->irq, IRQ_TYPE_LEVEL_LOW);
 		if (!info->frozen)
 			ata_sff_interrupt(irq, dev_instance);
 	} else {
-		set_irq_type(info->irq, IRQ_TYPE_LEVEL_HIGH);
+		irq_set_irq_type(info->irq, IRQ_TYPE_LEVEL_HIGH);
 	}
 
 	return IRQ_HANDLED;
@@ -138,7 +138,6 @@ static void rb153_pata_setup_port(struct ata_host *ah)
 
 	ap->ops		= &rb153_pata_port_ops;
 	ap->pio_mask	= 0x1f; /* PIO4 */
-	ap->flags	= ATA_FLAG_NO_LEGACY | ATA_FLAG_MMIO;
 
 	ap->ioaddr.cmd_addr	= info->iobase + RB153_CF_REG_CMD;
 	ap->ioaddr.ctl_addr	= info->iobase + RB153_CF_REG_CTRL;
@@ -149,7 +148,7 @@ static void rb153_pata_setup_port(struct ata_host *ah)
 	ap->ioaddr.data_addr = info->iobase + RB153_CF_REG_DATA;
 }
 
-static __devinit int rb153_pata_driver_probe(struct platform_device *pdev)
+static int rb153_pata_driver_probe(struct platform_device *pdev)
 {
 	unsigned int irq;
 	int gpio;
@@ -223,7 +222,7 @@ err_free_gpio:
 	return ret;
 }
 
-static __devexit int rb153_pata_driver_remove(struct platform_device *pdev)
+static int rb153_pata_driver_remove(struct platform_device *pdev)
 {
 	struct ata_host *ah = platform_get_drvdata(pdev);
 	struct rb153_cf_info *info = ah->private_data;
@@ -236,7 +235,7 @@ static __devexit int rb153_pata_driver_remove(struct platform_device *pdev)
 
 static struct platform_driver rb153_pata_platform_driver = {
 	.probe		= rb153_pata_driver_probe,
-	.remove		= __devexit_p(rb153_pata_driver_remove),
+	.remove		= rb153_pata_driver_remove,
 	.driver	 = {
 		.name   = DRV_NAME,
 		.owner  = THIS_MODULE,

@@ -32,13 +32,13 @@ OBJCOPY_BIN := $(TARGET_CROSS)objcopy -S -O binary $(addprefix --remove-section=
 
 define Image/Prepare
 	cat $(KDIR)/vmlinux | $(STAGING_DIR_HOST)/bin/lzma e -si -so -eos -lc1 -lp2 -pb2 > $(KDIR)/vmlinux.lzma
-	
+
 	# Build RAM image
 	$(MAKE) -C $(GENERIC_PLATFORM_DIR)/image/lzma-loader \
 		$(LOADER_MAKEOPTS) \
 		clean compile
 	$(OBJCOPY_SREC) $(KDIR)/loader.elf $(KDIR)/kernel.ram.srec
-	
+
 	# Build Flash image
 	$(MAKE) -C $(GENERIC_PLATFORM_DIR)/image/lzma-loader \
 		$(LOADER_MAKEOPTS) \
@@ -51,7 +51,7 @@ define Image/Prepare
 endef
 
 define Image/Build/Initramfs
-	$(OBJCOPY_SREC) $(BIN_DIR)/$(IMG_PREFIX)-vmlinux.elf $(BIN_DIR)/$(IMG_PREFIX)-vmlinux.srec
+	$(OBJCOPY_SREC) $(KDIR)/vmlinux-initramfs.elf $(BIN_DIR)/$(IMG_PREFIX)-vmlinux-initramfs.srec
 endef
 
 define Image/Build
@@ -62,6 +62,9 @@ define Image/Build
 	$(CP) $(KDIR)/root.$(1) $(BIN_DIR)/$(IMG_PREFIX)-$(1).fs
 	$(CP) $(KDIR)/kernel.flash.srec $(BIN_DIR)/$(IMG_PREFIX)-vmlinux-flash.srec
 	$(CP) $(KDIR)/kernel.ram.srec $(BIN_DIR)/$(IMG_PREFIX)-vmlinux-ram.srec
+	$(CP) $(BIN_DIR)/$(IMG_PREFIX)-$(1).fs $(TMP_DIR)/$(IMG_PREFIX)-root.fs
+	tar -C $(BIN_DIR) -cvzf $(BIN_DIR)/$(IMG_PREFIX)-$(1)-sysupgrade.bin \
+		$(IMG_PREFIX)-vmlinux.bin -C $(TMP_DIR) $(IMG_PREFIX)-root.fs
 ifeq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
 	$(call Image/Build/Initramfs)
 endif

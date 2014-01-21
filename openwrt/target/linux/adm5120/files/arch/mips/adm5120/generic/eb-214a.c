@@ -25,10 +25,11 @@
 #include <asm/mach-adm5120/adm5120_defs.h>
 
 
-#define EB214A_GPIO_DEV_MASK	0
 #define EB214A_CONFIG_OFFSET	0x4000
 
-#ifdef CONFIG_MTD_PARTITIONS
+#define EB214A_KEYS_POLL_INTERVAL	20
+#define EB214A_KEYS_DEBOUNCE_INTERVAL	(3 * EB214A_KEYS_POLL_INTERVAL)
+
 static struct mtd_partition eb214a_partitions[] = {
 	{
 		.name	= "bootloader",
@@ -45,7 +46,6 @@ static struct mtd_partition eb214a_partitions[] = {
 		.size	= MTDPART_SIZ_FULL,
 	}
 };
-#endif /* CONFIG_MTD_PARTITIONS */
 
 static struct adm5120_pci_irq eb214a_pci_irqs[] __initdata = {
 	PCIIRQ(4, 0, 1, ADM5120_IRQ_PCI0),
@@ -62,12 +62,12 @@ static struct gpio_led eb214a_gpio_leds[] __initdata = {
 	GPIO_LED_INV(ADM5120_GPIO_P3L0, "usb4",		NULL),
 };
 
-static struct gpio_button eb214a_gpio_buttons[] __initdata = {
+static struct gpio_keys_button eb214a_gpio_buttons[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
-		.code		= BTN_0,
-		.threshold	= 5,
+		.code           = KEY_RESTART,
+		.debounce_interval = EB214A_KEYS_DEBOUNCE_INTERVAL,
 		.gpio		= ADM5120_GPIO_PIN1,
 	}
 };
@@ -94,13 +94,9 @@ static void __init eb214a_mac_setup(void)
 
 static void __init eb214a_setup(void)
 {
-#ifdef CONFIG_MTD_PARTITIONS
 	adm5120_flash0_data.nr_parts = ARRAY_SIZE(eb214a_partitions);
 	adm5120_flash0_data.parts = eb214a_partitions;
-#endif /* CONFIG_MTD_PARTITIONS */
 	adm5120_add_device_flash(0);
-
-	adm5120_add_device_gpio(EB214A_GPIO_DEV_MASK);
 
 	adm5120_add_device_uart(0);
 	/* adm5120_add_device_uart(1); */
@@ -109,8 +105,9 @@ static void __init eb214a_setup(void)
 
 	eb214a_mac_setup();
 
-	adm5120_add_device_gpio_buttons(ARRAY_SIZE(eb214a_gpio_buttons),
-					eb214a_gpio_buttons);
+	adm5120_register_gpio_buttons(-1, EB214A_KEYS_POLL_INTERVAL,
+				      ARRAY_SIZE(eb214a_gpio_buttons),
+				      eb214a_gpio_buttons);
 
 	adm5120_add_device_gpio_leds(ARRAY_SIZE(eb214a_gpio_leds),
 					eb214a_gpio_leds);

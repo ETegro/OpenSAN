@@ -6,15 +6,14 @@
 #
 include $(TOPDIR)/rules.mk
 
-ARCH:=mips
 BOARD:=lantiq
-BOARDNAME:=Lantiq GPON/XWAY
-FEATURES:=squashfs jffs2
-DEFAULT_SUBTARGET:=danube
+BOARDNAME:=Lantiq GPON/XWAY/SVIP
+FEATURES:=squashfs
+SUBTARGETS=xway xrx200 ase falcon
 
-LINUX_VERSION:=3.0.3
+LINUX_VERSION:=3.10.26
 
-CFLAGS=-Os -pipe -mips32r2 -mtune=mips32r2 -fno-caller-saves
+CPU_TYPE:=mips32r2
 
 define Target/Description
 	Build firmware images for Lantiq SoC

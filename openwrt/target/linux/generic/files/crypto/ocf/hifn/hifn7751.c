@@ -241,7 +241,7 @@ pci_map_skb(struct hifn_softc *sc,struct hifn_operand *buf,struct sk_buff *skb)
 	for (i = 0; i < skb_shinfo(skb)->nr_frags; ) {
 		buf->segs[buf->nsegs].ds_len = skb_shinfo(skb)->frags[i].size;
 		buf->segs[buf->nsegs].ds_addr = pci_map_single(sc->sc_pcidev,
-				page_address(skb_shinfo(skb)->frags[i].page) +
+				page_address(skb_frag_page(&skb_shinfo(skb)->frags[i])) +
 					skb_shinfo(skb)->frags[i].page_offset,
 				buf->segs[buf->nsegs].ds_len, PCI_DMA_BIDIRECTIONAL);
 		buf->mapsize += buf->segs[buf->nsegs].ds_len;
@@ -434,10 +434,8 @@ hifn_probe(struct pci_dev *dev, const struct pci_device_id *ent)
 	if (pci_enable_device(dev) < 0)
 		return(-ENODEV);
 
-#ifdef HAVE_PCI_SET_MWI
 	if (pci_set_mwi(dev))
 		return(-ENODEV);
-#endif
 
 	if (!dev->irq) {
 		printk("hifn: found device with no IRQ assigned. check BIOS settings!");
@@ -2951,6 +2949,6 @@ static void __exit hifn_exit (void)
 module_init(hifn_init);
 module_exit(hifn_exit);
 
-MODULE_LICENSE("BSD");
+MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("David McCullough <david_mccullough@mcafee.com>");
 MODULE_DESCRIPTION("OCF driver for hifn PCI crypto devices");

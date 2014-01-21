@@ -24,6 +24,13 @@ load_led() {
 	config_get delayoff $1 delayoff
 	config_get interval $1 interval "50"
 	config_get port_state $1 port_state
+	config_get delay $1 delay "150"
+	config_get message $1 message ""
+
+	if [ "$trigger" = "rssi" ]; then
+		# handled by rssileds userspace process
+		return
+	fi
 
 	[ -e /sys/class/leds/${sysfs}/brightness ] && {
 		echo "setting up led ${name}"
@@ -34,21 +41,46 @@ load_led() {
 				echo 0 >/sys/class/leds/${sysfs}/brightness
 		}
 		echo $trigger > /sys/class/leds/${sysfs}/trigger
-		[ "$trigger" == "netdev" -a -n "$dev" ] && {
-			echo $dev > /sys/class/leds/${sysfs}/device_name
-			echo $mode > /sys/class/leds/${sysfs}/mode
-		}
-		[ "$trigger" == "timer" ] && {
-			[ -n "$delayon" ] && echo $delayon > /sys/class/leds/${sysfs}/delay_on
-			[ -n "$delayoff" ] && echo $delayoff > /sys/class/leds/${sysfs}/delay_off
-		}
-		[ "$trigger" == "usbdev" -a -n "$dev" ] && {
-			echo $dev > /sys/class/leds/${sysfs}/device_name
-			echo $interval > /sys/class/leds/${sysfs}/activity_interval
-		}
-		[ "$trigger" == "port_state" -a -n "$port_state" ] && {
-			echo $port_state > /sys/class/leds/${sysfs}/port_state
-		}
+		case "$trigger" in
+		"netdev")
+			[ -n "$dev" ] && {
+				echo $dev > /sys/class/leds/${sysfs}/device_name
+				echo $mode > /sys/class/leds/${sysfs}/mode
+			}
+			;;
+
+		"timer")
+			[ -n "$delayon" ] && \
+				echo $delayon > /sys/class/leds/${sysfs}/delay_on
+			[ -n "$delayoff" ] && \
+				echo $delayoff > /sys/class/leds/${sysfs}/delay_off
+			;;
+
+		"usbdev")
+			[ -n "$dev" ] && {
+				echo $dev > /sys/class/leds/${sysfs}/device_name
+				echo $interval > /sys/class/leds/${sysfs}/activity_interval
+			}
+			;;
+
+		"port_state")
+			[ -n "$port_state" ] && \
+				echo $port_state > /sys/class/leds/${sysfs}/port_state
+			;;
+
+		"morse")
+			echo $message > /sys/class/leds/${sysfs}/message
+			echo $delay > /sys/class/leds/${sysfs}/delay
+			;;
+
+		switch[0-9]*)
+			local port_mask
+
+			config_get port_mask $1 port_mask
+			[ -n "$port_mask" ] && \
+				echo $port_mask > /sys/class/leds/${sysfs}/port_mask
+			;;
+		esac
 	}
 }
 

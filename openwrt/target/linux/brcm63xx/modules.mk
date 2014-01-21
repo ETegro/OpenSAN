@@ -5,22 +5,6 @@
 # See /LICENSE for more information.
 #
 
-define KernelPackage/bcm63xx-spi
-  SUBMENU:=$(SPI_MENU)
-  TITLE:=Broadcom BCM63xx SPI driver
-  DEPENDS:=@TARGET_brcm63xx +kmod-spi-bitbang
-  KCONFIG:=CONFIG_SPI_BCM63XX
-  FILES:=$(LINUX_DIR)/drivers/spi/bcm63xx_spi.ko
-  AUTOLOAD:=$(call AutoLoad,92,bcm63xx_spi)
-endef
-
-define KernelPackage/bcm63xx-spi/description
-  This package contains the Broadcom BCM63xx SPI Master driver
-endef
-
-$(eval $(call KernelPackage,bcm63xx-spi))
-
-
 define KernelPackage/pcmcia-bcm63xx
   SUBMENU:=$(PCMCIA_MENU)
   TITLE:=Broadcom BCM63xx PCMCIA support
@@ -35,3 +19,19 @@ define KernelPackage/pcmcia-bcm63xx/description
 endef
 
 $(eval $(call KernelPackage,pcmcia-bcm63xx))
+
+define KernelPackage/bcm63xx-udc
+  SUBMENU:=$(USB_MENU)
+  TITLE:=Broadcom BCM63xx UDC support
+  DEPENDS:=@TARGET_brcm63xx +kmod-usb-gadget
+  KCONFIG:=CONFIG_USB_BCM63XX_UDC
+  FILES:=$(LINUX_DIR)/drivers/usb/gadget/bcm63xx_udc.ko
+  AUTOLOAD:=$(call AutoLoad,51,bcm63xx_udc)
+  $(call AddDepends/usb)
+endef
+
+define KernelPackage/bcm63xx-udc/description
+  Kernel support for the USB gadget (device) controller on the BCM63xx SoC
+endef
+
+$(eval $(call KernelPackage,bcm63xx-udc))

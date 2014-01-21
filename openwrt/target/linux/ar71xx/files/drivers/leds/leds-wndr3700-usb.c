@@ -12,7 +12,8 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 
-#include <asm/mach-ar71xx/ar71xx.h>
+#include <asm/mach-ath79/ar71xx_regs.h>
+#include <asm/mach-ath79/ath79.h>
 
 #define DRIVER_NAME	"wndr3700-led-usb"
 
@@ -20,28 +21,28 @@ static void wndr3700_usb_led_set(struct led_classdev *cdev,
 				 enum led_brightness brightness)
 {
 	if (brightness)
-		ar71xx_device_start(RESET_MODULE_GE1_PHY);
+		ath79_device_reset_clear(AR71XX_RESET_GE1_PHY);
 	else
-		ar71xx_device_stop(RESET_MODULE_GE1_PHY);
+		ath79_device_reset_set(AR71XX_RESET_GE1_PHY);
 }
 
 static enum led_brightness wndr3700_usb_led_get(struct led_classdev *cdev)
 {
-	return ar71xx_device_stopped(RESET_MODULE_GE1_PHY) ? LED_OFF : LED_FULL;
+	return ath79_device_reset_get(AR71XX_RESET_GE1_PHY) ? LED_OFF : LED_FULL;
 }
 
 static struct led_classdev wndr3700_usb_led = {
-	.name = "wndr3700:green:usb",
+	.name = "netgear:green:usb",
 	.brightness_set = wndr3700_usb_led_set,
 	.brightness_get = wndr3700_usb_led_get,
 };
 
-static int __devinit wndr3700_usb_led_probe(struct platform_device *pdev)
+static int wndr3700_usb_led_probe(struct platform_device *pdev)
 {
 	return led_classdev_register(&pdev->dev, &wndr3700_usb_led);
 }
 
-static int __devexit wndr3700_usb_led_remove(struct platform_device *pdev)
+static int wndr3700_usb_led_remove(struct platform_device *pdev)
 {
 	led_classdev_unregister(&wndr3700_usb_led);
 	return 0;
@@ -49,7 +50,7 @@ static int __devexit wndr3700_usb_led_remove(struct platform_device *pdev)
 
 static struct platform_driver wndr3700_usb_led_driver = {
 	.probe = wndr3700_usb_led_probe,
-	.remove = __devexit_p(wndr3700_usb_led_remove),
+	.remove = wndr3700_usb_led_remove,
 	.driver = {
 		.name = DRIVER_NAME,
 		.owner = THIS_MODULE,

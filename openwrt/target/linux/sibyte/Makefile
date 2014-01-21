@@ -9,11 +9,12 @@ include $(TOPDIR)/rules.mk
 ARCH:=mips
 BOARD:=sibyte
 BOARDNAME:=Broadcom/SiByte SB-1
-FEATURES:=fpu ramdisk
-CFLAGS:=-Os -pipe -march=sb1 -fno-caller-saves
+FEATURES:=fpu ramdisk broken
+CPU_TYPE:=sb1
+CPU_CFLAGS_sb1:=-march=sb1
 MAINTAINER:=Imre Kaloz <kaloz@openwrt.org>
 
-LINUX_VERSION:=2.6.37.6
+LINUX_VERSION:=3.3.8
 
 include $(INCLUDE_DIR)/target.mk
 

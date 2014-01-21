@@ -6,7 +6,9 @@
 START=05
 
 start() {
-	local board=astor2
+	. /lib/soekris.sh
+
+	local board=$(net48xx_board_name)
 
 	[ ! -d /etc/defconfig/$board ] && board="net4826"
 

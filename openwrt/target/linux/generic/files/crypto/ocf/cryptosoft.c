@@ -777,7 +777,7 @@ static void swcr_process_req(struct swcr_req *req)
 				if (len + sg_len > crd->crd_len)
 					len = crd->crd_len - sg_len;
 				sg_set_page(&req->sg[sg_num],
-					skb_shinfo(skb)->frags[i].page,
+					skb_frag_page(&skb_shinfo(skb)->frags[i]),
 					len,
 					skb_shinfo(skb)->frags[i].page_offset + skip);
 				sg_len += len;
@@ -814,6 +814,8 @@ static void swcr_process_req(struct swcr_req *req)
 			sg_len, offset_in_page(crp->crp_buf + skip));
 		sg_num = 1;
 	}
+	if (sg_num > 0)
+		sg_mark_end(&req->sg[sg_num-1]);
 
 	switch (sw->sw_type & SW_TYPE_ALG_AMASK) {
 

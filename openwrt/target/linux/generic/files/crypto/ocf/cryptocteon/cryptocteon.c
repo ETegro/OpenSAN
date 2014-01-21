@@ -473,7 +473,7 @@ octo_process(device_t dev, struct cryptop *crp, int hint)
 		for (i = 0; i < skb_shinfo(skb)->nr_frags && sg_num < SCATTERLIST_MAX;
 				i++) {
 			len = skb_shinfo(skb)->frags[i].size;
-			sg_set_page(&sg[sg_num], skb_shinfo(skb)->frags[i].page,
+			sg_set_page(&sg[sg_num], skb_frag_page(&skb_shinfo(skb)->frags[i]),
 					len, skb_shinfo(skb)->frags[i].page_offset);
 			sg_len += len;
 			sg_num++;
@@ -497,7 +497,8 @@ octo_process(device_t dev, struct cryptop *crp, int hint)
 				offset_in_page(crp->crp_buf));
 		sg_num = 1;
 	}
-
+	if (sg_num > 0)
+		sg_mark_end(&sg[sg_num-1]);
 
 	/*
 	 * setup a new explicit key
@@ -570,6 +571,6 @@ cryptocteon_exit(void)
 module_init(cryptocteon_init);
 module_exit(cryptocteon_exit);
 
-MODULE_LICENSE("BSD");
+MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("David McCullough <david_mccullough@mcafee.com>");
 MODULE_DESCRIPTION("Cryptocteon (OCF module for Cavium OCTEON crypto)");

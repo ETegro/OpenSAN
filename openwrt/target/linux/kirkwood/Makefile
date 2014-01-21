@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,15 +9,14 @@ include $(TOPDIR)/rules.mk
 ARCH:=arm
 BOARD:=kirkwood
 BOARDNAME:=Marvell Kirkwood
-FEATURES:=targz usb jffs2
+FEATURES:=targz usb jffs2_nand ubifs
+CPU_TYPE:=xscale
 MAINTAINER:=Imre Kaloz <kaloz@openwrt.org>
 
-LINUX_VERSION:=2.6.37.6
+LINUX_VERSION:=3.10.26
 
 include $(INCLUDE_DIR)/target.mk
 
-KERNELNAME:="uImage"
-
-DEFAULT_PACKAGES +=
+KERNELNAME:="zImage dtbs"
 
 $(eval $(call BuildTarget))

@@ -10,8 +10,9 @@ use Cwd 'abs_path';
 
 chdir "$FindBin::Bin/..";
 $ENV{TOPDIR}=getcwd();
+$ENV{GIT_CONFIG_PARAMETERS}="'core.autocrlf=false'";
 
-my $mk=`which gmake`;	# select the right 'make' program
+my $mk=`which gmake 2>/dev/null`;	# select the right 'make' program
 chomp($mk);		# trim trailing newline
 $mk or $mk = "make";	# default to 'make'
 
@@ -105,22 +106,28 @@ my %update_method = (
 	'src-svn' => {
 		'init'		=> "svn checkout '%s' '%s'",
 		'update'	=> "svn update",
-		'controldir'	=> ".svn"},
+		'controldir'	=> ".svn",
+		'revision'	=> "svn info | grep 'Revision' | cut -d ' ' -f 2 | tr -d '\n'"},
 	'src-cpy' => {
 		'init'		=> "cp -Rf '%s' '%s'",
-		'update'	=> ""},
+		'update'	=> "",
+		'revision'	=> "echo -n 'local'"},
 	'src-link' => {
 		'init'		=> "ln -s '%s' '%s'",
-		'update'	=> ""},
+		'update'	=> "",
+		'revision'	=> "echo -n 'local'"},
 	'src-git' => {
-		'init'		=> "git clone --depth 1 '%s' '%s'",
-		'init_branch'	=> "git clone --depth 1 --branch '%s' '%s' '%s'",
-		'update'	=> "git pull",
-		'controldir'	=> ".git"},
+		'init'          => "git clone --depth 1 '%s' '%s'",
+		'init_branch'   => "git clone --depth 1 --branch '%s' '%s' '%s'",
+		'init_commit'   => "git clone '%s' '%s' && cd '%s' && git checkout -b '%s' '%s' && cd -",
+		'update'	=> "git pull --ff",
+		'controldir'	=> ".git",
+		'revision'	=> "git show --abbrev-commit HEAD | head -n 1 | cut -d ' ' -f 2 | tr -d '\n'"},
 	'src-gitsvn' => {
-                'init'          => "git svn clone -r HEAD '%s' '%s'",
-                'update'        => "git svn rebase",
-                'controldir'    => ".git"},
+		'init'	=> "git svn clone -r HEAD '%s' '%s'",
+		'update'	=> "git svn rebase",
+		'controldir'	=> ".git",
+		'revision'	=> "git show --abbrev-commit HEAD | head -n 1 | cut -d ' ' -f 2 | tr -d '\n'"},
 	'src-bzr' => {
 		'init'		=> "bzr checkout --lightweight '%s' '%s'",
 		'update'	=> "bzr update",
@@ -148,15 +155,20 @@ sub update_feed_via($$$$) {
 	my $localpath = "./feeds/$name";
 	my $safepath = $localpath;
 	$safepath =~ s/'/'\\''/;
-	my ($base, $branch) = split(/;/, $src, 2);
+	my ($base_branch, $branch) = split(/;/, $src, 2);
+	my ($base_commit, $commit) = split(/\^/, $src, 2);
 
 	if( $relocate || !$m->{'update'} || !-d "$localpath/$m->{'controldir'}" ) {
 		system("rm -rf '$safepath'");
 		if ($m->{'init_branch'} and $branch) {
-			system(sprintf($m->{'init_branch'}, $branch, $base, $safepath)) == 0 or return 1;
+			system(sprintf($m->{'init_branch'}, $branch, $base_branch, $safepath)) == 0 or return 1;
+		} elsif ($m->{'init_commit'} and $commit) {
+			system(sprintf($m->{'init_commit'}, $base_commit, $safepath, $safepath, $commit, $commit)) == 0 or return 1;
 		} else {
 			system(sprintf($m->{'init'}, $src, $safepath)) == 0 or return 1;
 		}
+	} elsif ($m->{'init_commit'} and $commit) {
+		# in case git hash has been provided don't update the feed
 	} else {
 		system("cd '$safepath'; $m->{'update'}") == 0 or return 1;
 	}
@@ -249,14 +261,31 @@ sub list_feed {
 sub list {
 	my %opts;
 
-	getopts('r:sh', \%opts);
+	getopts('r:d:sh', \%opts);
 	if ($opts{h}) {
 		usage();
 		return 0;
 	}
 	if ($opts{s}) {
 		foreach my $feed (@feeds) {
-			printf "\%-32s\tURL: %s\n", $feed->[1], join(", ", @{$feed->[2]});
+			my $localpath = "./feeds/$feed->[1]";
+			my $m = $update_method{$feed->[0]};
+			my $revision;
+			if( !$m->{'revision'} ) {
+				$revision = "X";
+			}
+			elsif( $m->{'controldir'} && -d "$localpath/$m->{'controldir'}" ) {
+				$revision = `cd '$localpath'; $m->{'revision'}`;
+			}
+			else {
+				$revision = "local";
+			}
+			if ($opts{d}) {
+				printf "%s%s%s%s%s%s%s\n", $feed->[1], $opts{d}, $feed->[0], $opts{d}, $revision, $opts{d}, join(", ", @{$feed->[2]});
+			}
+			else {
+				printf "\%-8s \%-8s \%-8s \%s\n", $feed->[1], $feed->[0], $revision, join(", ", @{$feed->[2]});
+			}
 		}
 		return 0;
 	}
@@ -310,6 +339,15 @@ sub lookup_package($$) {
 	return;
 }
 
+sub is_core_package($) {
+	my $package = shift;
+	foreach my $file ("tmp/info/.packageinfo-$package", glob("tmp/info/.packageinfo-*_$package")) {
+		next unless index($file, "tmp/info/.packageinfo-feeds_");
+		return 1 if -s $file;
+	}
+	return 0;
+}
+
 sub install_package {
 	my $feed = shift;
 	my $name = shift;
@@ -319,7 +357,7 @@ sub install_package {
 	$feed or do {
 		$installed{$name} and return 0;
 		# TODO: check if it's already installed within ./package directory
-		$feed_src->{$name} or -d "./package/$name" or warn "WARNING: No feed for package '$name' found, maybe it's already part of the standard packages?\n";
+		$feed_src->{$name} or is_core_package($name) or warn "WARNING: No feed for package '$name' found, maybe it's already part of the standard packages?\n";
 		return 0;
 	};
 
@@ -518,7 +556,7 @@ sub update {
 	my $perform_update=1;
 
 	$ENV{SCAN_COOKIE} = $$;
-	$ENV{KBUILD_VERBOSE} = 99;
+	$ENV{OPENWRT_VERBOSE} = 's';
 
 	getopts('ahi', \%opts);
 
@@ -564,10 +602,11 @@ sub usage() {
 Usage: $0 <command> [options]
 
 Commands:
-	list [options]: List feeds and their content
+	list [options]: List feeds, their content and revisions (if installed)
 	Options:
-	    -s :           List of feed names and their URL.
-	    -r <feedname>: List packages of specified feed.
+	    -s :            List of feed names and their URL.
+	    -r <feedname>:  List packages of specified feed.
+	    -d <delimiter>: Use specified delimiter to distinguish rows (default: spaces)
 
 	install [options] <package>: Install a package
 	Options:

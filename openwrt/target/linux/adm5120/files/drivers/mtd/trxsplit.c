@@ -53,8 +53,7 @@ static int trxsplit_checktrx(struct mtd_info *mtd, unsigned long offset)
 	size_t retlen;
 	int err;
 
-	err = mtd->read(mtd, offset, sizeof(trx_hdr), &retlen,
-			(void *)&trx_hdr);
+	err = mtd_read(mtd, offset, sizeof(trx_hdr), &retlen, (void *)&trx_hdr);
 	if (err) {
 		printk(KERN_ALERT PFX "unable to read from '%s'\n", mtd->name);
 		goto err_out;
@@ -144,7 +143,7 @@ static void trxsplit_create_partitions(struct mtd_info *mtd)
 	part = &trx_parts[i];
 	part->name = "rootfs";
 
-	err = add_mtd_partitions(mtd, trx_parts, trx_nr_parts);
+	err = mtd_device_register(mtd, trx_parts, trx_nr_parts);
 	if (err) {
 		printk(KERN_ALERT PFX "adding TRX partitions failed\n");
 		return;
@@ -159,7 +158,7 @@ static int trxsplit_refresh_partitions(struct mtd_info *mtd)
 		mtd->name, MTD_BLOCK_MAJOR, mtd->index);
 
 	/* remove old partitions */
-	del_mtd_partitions(mtd);
+	mtd_device_unregister(mtd);
 
 	trxsplit_findtrx(mtd);
 	if (!trx_mtd)

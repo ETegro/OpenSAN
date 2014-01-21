@@ -29,7 +29,7 @@ sub load_config($$) {
 	my $mod_plus = shift;
 	my %config;
 
-	open FILE, "$file" or die "can't open file";
+	open FILE, "$file" or die "can't open file '$file'";
 	while (<FILE>) {
 		chomp;
 		/^$PREFIX(.+?)=(.+)/ and do {
@@ -73,7 +73,10 @@ sub config_add($$$) {
 		my %cfg = %$_;
 		
 		foreach my $config (keys %cfg) {
-			next if $mod_plus and $config{$config} and $config{$config} eq "y";
+			if ($mod_plus and $config{$config}) {
+				next if $config{$config} eq "y";
+				next if $cfg{$config} eq '#undef';
+			}
 			$config{$config} = $cfg{$config};
 		}
 	}

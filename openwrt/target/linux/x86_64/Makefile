@@ -1,7 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
-# Copyright (C) 2011-2012 ETegro Technologies, PLC
-#                         Sergey Matveev <stargrave@stargrave.org>
+# Copyright (C) 2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,13 +9,15 @@ include $(TOPDIR)/rules.mk
 ARCH:=x86_64
 BOARD:=x86_64
 BOARDNAME:=x86_64
-FEATURES:=ext4 targz pci usb x86_64
-SUBTARGETS=astor2
+FEATURES:=ext4 vdi vmdk targz
+MAINTAINER:=Imre Kaloz <kaloz@openwrt.org>
 
-LINUX_VERSION:=2.6.32.35
+LINUX_VERSION:=3.10.26
 
-DEVICE_TYPE=
+KERNELNAME:=bzImage
 
 include $(INCLUDE_DIR)/target.mk
+
+DEFAULT_PACKAGES += kmod-e1000
 
 $(eval $(call BuildTarget))

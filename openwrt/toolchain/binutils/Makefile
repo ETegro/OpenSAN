@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,21 +10,29 @@ PKG_NAME:=binutils
 PKG_VERSION:=$(call qstrip,$(CONFIG_BINUTILS_VERSION))
 BIN_VERSION:=$(PKG_VERSION)
 
-PKG_SOURCE_URL:=@GNU/binutils/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+ifeq ($(findstring linaro, $(CONFIG_BINUTILS_VERSION)),linaro)
+  PKG_SOURCE_URL:=https://releases.linaro.org/13.12/components/toolchain/binutils-linaro/
+  PKG_REV:=2.24-2013.12
+  PKG_SOURCE:=$(PKG_NAME)-linaro-$(PKG_REV).tar.xz
+  PKG_MD5SUM:=4f0fe947895a260b8386de63b09feb18
+  BINUTILS_DIR:=$(PKG_NAME)-linaro-$(PKG_REV)
+  HOST_BUILD_DIR:=$(BUILD_DIR_TOOLCHAIN)/$(BINUTILS_DIR)
+else
+  PKG_SOURCE_URL:=@GNU/binutils/
+  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
-ifeq ($(PKG_VERSION),2.19.1)
-  PKG_MD5SUM:=09a8c5821a2dfdbb20665bc0bd680791
+  ifeq ($(PKG_VERSION),2.20.1)
+    PKG_MD5SUM:=9cdfb9d6ec0578c166d3beae5e15c4e5
+  endif
+  ifeq ($(PKG_VERSION),2.22)
+    PKG_MD5SUM:=ee0f10756c84979622b992a4a61ea3f5
+  endif
+  ifeq ($(PKG_VERSION),2.23.1)
+    PKG_MD5SUM:=33adb18c3048d057ac58d07a3f1adb38
+  endif
 endif
-ifeq ($(PKG_VERSION),2.20.1)
-  PKG_MD5SUM:=9cdfb9d6ec0578c166d3beae5e15c4e5
-endif
-ifeq ($(PKG_VERSION),2.21)
-  PKG_MD5SUM:=c84c5acc9d266f1a7044b51c85a823f5
-endif
-ifeq ($(PKG_VERSION),2.21.1)
-  PKG_MD5SUM:=a22801a9cad45c85e9ff6afc10537d72
-endif
+
+HOST_BUILD_PARALLEL:=1
 
 PATCH_DIR:=./patches/$(PKG_VERSION)
 
@@ -72,11 +80,16 @@ define Host/Configure
 endef
 
 define Host/Compile
-	$(MAKE) $(TOOLCHAIN_JOBS) -C $(HOST_BUILD_DIR) all
+	+$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) all
 endef
 
 define Host/Install
-	$(MAKE) -C $(HOST_BUILD_DIR) install
+	mkdir -p $(TOOLCHAIN_DIR)/initial
+	$(MAKE) -C $(HOST_BUILD_DIR) \
+		prefix=$(TOOLCHAIN_DIR)/initial \
+		install
+	$(call FixupLibdir,$(TOOLCHAIN_DIR)/initial)
+	$(CP) $(TOOLCHAIN_DIR)/initial/. $(TOOLCHAIN_DIR)/
 	$(CP) $(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-readelf $(REAL_STAGING_DIR_HOST)/bin/readelf
 endef
 

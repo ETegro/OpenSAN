@@ -14,6 +14,8 @@
  */
 
 #include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/version.h>
 #include <linux/slab.h>
 #include <linux/init.h>
 #include <linux/vmalloc.h>
@@ -30,9 +32,9 @@ struct part_data {
 	char names[MYLO_MAX_PARTITIONS][PART_NAME_LEN];
 };
 
-int myloader_parse_partitions(struct mtd_info *master,
-			struct mtd_partition **pparts,
-			unsigned long origin)
+static int myloader_parse_partitions(struct mtd_info *master,
+				     struct mtd_partition **pparts,
+				     struct mtd_part_parser_data *data)
 {
 	struct part_data *buf;
 	struct mylo_partition_table *tab;
@@ -64,8 +66,8 @@ int myloader_parse_partitions(struct mtd_info *master,
 		printk(KERN_DEBUG "%s: searching for MyLoader partition table"
 				" at offset 0x%lx\n", master->name, offset);
 
-		ret = master->read(master, offset, sizeof(*buf), &retlen,
-					(void *)buf);
+		ret = mtd_read(master, offset, sizeof(*buf), &retlen,
+			       (void *)buf);
 		if (ret)
 			goto out_free_buf;
 
@@ -87,8 +89,12 @@ int myloader_parse_partitions(struct mtd_info *master,
 		goto out_free_buf;
 	}
 
-	/* The MyLoader and the Partition Table is always present */
-	num_parts = 2;
+	/*
+	 * The MyLoader and the Partition Table is always present.
+	 * Additionally, an extra partition is generated to cover
+	 * everything after the bootloader.
+	 */
+	num_parts = 3;
 
 	/* Detect number of used partitions */
 	for (i = 0; i < MYLO_MAX_PARTITIONS; i++) {
@@ -116,6 +122,13 @@ int myloader_parse_partitions(struct mtd_info *master,
 	mtd_part->offset = 0;
 	mtd_part->size = offset;
 	mtd_part->mask_flags = MTD_WRITEABLE;
+	mtd_part++;
+	names += PART_NAME_LEN;
+
+	strncpy(names, "firmware", PART_NAME_LEN);
+	mtd_part->name = names;
+	mtd_part->offset = offset;
+	mtd_part->size = master->size - offset;
 	mtd_part++;
 	names += PART_NAME_LEN;
 

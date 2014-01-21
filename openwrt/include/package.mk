@@ -5,18 +5,33 @@
 # See /LICENSE for more information.
 #
 
+__package_mk:=1
+
 all: $(if $(DUMP),dumpinfo,compile)
 
 PKG_BUILD_DIR ?= $(BUILD_DIR)/$(PKG_NAME)$(if $(PKG_VERSION),-$(PKG_VERSION))
 PKG_INSTALL_DIR ?= $(PKG_BUILD_DIR)/ipkg-install
 PKG_MD5SUM ?= unknown
 PKG_BUILD_PARALLEL ?=
+PKG_USE_MIPS16 ?= 1
+
+ifneq ($(CONFIG_PKG_BUILD_USE_JOBSERVER),)
+  MAKE_J:=$(if $(MAKE_JOBSERVER),$(MAKE_JOBSERVER) -j)
+else
+  MAKE_J:=-j$(CONFIG_PKG_BUILD_JOBS)
+endif
 
 ifeq ($(strip $(PKG_BUILD_PARALLEL)),0)
 PKG_JOBS?=-j1
 else
 PKG_JOBS?=$(if $(PKG_BUILD_PARALLEL)$(CONFIG_PKG_DEFAULT_PARALLEL),\
-	$(if $(CONFIG_PKG_BUILD_PARALLEL),-j$(CONFIG_PKG_BUILD_JOBS),-j1),-j1)
+	$(if $(CONFIG_PKG_BUILD_PARALLEL),$(MAKE_J),-j1),-j1)
+endif
+ifdef CONFIG_USE_MIPS16
+  ifeq ($(strip $(PKG_USE_MIPS16)),1)
+    TARGET_ASFLAGS_DEFAULT = $(filter-out -mips16 -minterlink-mips16,$(TARGET_CFLAGS))
+    TARGET_CFLAGS += -mips16 -minterlink-mips16
+  endif
 endif
 
 include $(INCLUDE_DIR)/prereq.mk
@@ -30,9 +45,10 @@ ifneq ($(PREV_STAMP_PREPARED),)
   STAMP_PREPARED:=$(PREV_STAMP_PREPARED)
   CONFIG_AUTOREBUILD:=
 else
-  STAMP_PREPARED=$(PKG_BUILD_DIR)/.prepared$(if $(QUILT)$(DUMP),,_$(shell $(call find_md5,${CURDIR} $(PKG_FILE_DEPENDS),)))
+  STAMP_PREPARED=$(PKG_BUILD_DIR)/.prepared$(if $(QUILT)$(DUMP),,_$(shell $(call find_md5,${CURDIR} $(PKG_FILE_DEPENDS),))$(call confvar,$(PKG_PREPARED_DEPENDS)))
 endif
 STAMP_CONFIGURED:=$(PKG_BUILD_DIR)/.configured$(if $(DUMP),,_$(call confvar,$(PKG_CONFIG_DEPENDS)))
+STAMP_CONFIGURED_WILDCARD=$(patsubst %_$(call confvar,$(PKG_CONFIG_DEPENDS)),%_*,$(STAMP_CONFIGURED))
 STAMP_BUILT:=$(PKG_BUILD_DIR)/.built
 STAMP_INSTALLED:=$(STAGING_DIR)/stamp/.$(PKG_NAME)_installed
 
@@ -41,6 +57,9 @@ ifneq ($(if $(CONFIG_SRC_TREE_OVERRIDE),$(wildcard ./git-src)),)
   USE_GIT_TREE:=1
   QUILT:=1
 endif
+
+PKG_DIR_NAME:=$(lastword $(subst /,$(space),$(CURDIR)))
+PKG_INSTALL_STAMP:=$(PKG_INFO_DIR)/$(PKG_DIR_NAME).$(if $(BUILD_VARIANT),$(BUILD_VARIANT),default).install
 
 include $(INCLUDE_DIR)/download.mk
 include $(INCLUDE_DIR)/quilt.mk
@@ -55,6 +74,7 @@ CONFIG_SITE:=$(INCLUDE_DIR)/site/$(REAL_GNU_TARGET_NAME)
 CUR_MAKEFILE:=$(filter-out Makefile,$(firstword $(MAKEFILE_LIST)))
 SUBMAKE:=$(NO_TRACE_MAKE) $(if $(CUR_MAKEFILE),-f $(CUR_MAKEFILE))
 PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+unexport QUIET
 
 ifeq ($(DUMP)$(filter prereq clean refresh update,$(MAKECMDGOALS)),)
   ifneq ($(if $(QUILT),,$(CONFIG_AUTOREBUILD)),)
@@ -71,6 +91,9 @@ ifeq ($(CONFIG_$(PKG_NAME)_USE_CUSTOM_SOURCE_DIR),y)
 PKG_SOURCE_URL:=
 # add hook to install a link to customer source path of dedicated package
 Hooks/Prepare/Pre += prepare_custom_source_directory
+ifeq ($(filter autoreconf,$(Hooks/Configure/Pre)),)
+  Hooks/Configure/Pre += autoreconf_target
+endif
 # define empty default action
 define Build/Prepare/Default
 	@: 
@@ -131,6 +154,7 @@ define Build/DefaultTargets
 	$(foreach hook,$(Hooks/Configure/Pre),$(call $(hook))$(sep))
 	$(Build/Configure)
 	$(foreach hook,$(Hooks/Configure/Post),$(call $(hook))$(sep))
+	rm -f $(STAMP_CONFIGURED_WILDCARD)
 	touch $$@
 
   $(call Build/Exports,$(STAMP_BUILT))
@@ -154,6 +178,11 @@ define Build/DefaultTargets
 	$(foreach hook,$(Hooks/InstallDev/Post),\
 		$(call $(hook),$(TMP_DIR)/stage-$(PKG_NAME),$(TMP_DIR)/stage-$(PKG_NAME)/host)$(sep)\
 	)
+	if [ -f $(STAGING_DIR)/packages/$(STAGING_FILES_LIST) ]; then \
+		$(SCRIPT_DIR)/clean-package.sh \
+			"$(STAGING_DIR)/packages/$(STAGING_FILES_LIST)" \
+			"$(STAGING_DIR)"; \
+	fi
 	if [ -d $(TMP_DIR)/stage-$(PKG_NAME) ]; then \
 		(cd $(TMP_DIR)/stage-$(PKG_NAME); find ./ > $(TMP_DIR)/stage-$(PKG_NAME).files); \
 		$(call locked, \
@@ -198,7 +227,7 @@ define Package/$(1)/description
 endef
 endif
 
-  $(foreach FIELD, TITLE CATEGORY PRIORITY SECTION VERSION,
+  $(foreach FIELD, TITLE CATEGORY SECTION VERSION,
     ifeq ($($(FIELD)),)
       $$(error Package/$(1) is missing the $(FIELD) field)
     endif
@@ -233,6 +262,14 @@ Build/Install=$(if $(PKG_INSTALL),$(call Build/Install/Default,))
 Build/Dist=$(call Build/Dist/Default,)
 Build/DistCheck=$(call Build/DistCheck/Default,)
 
+.NOTPARALLEL:
+
+.PHONY: prepare-package-install
+prepare-package-install:
+	@mkdir -p $(PKG_INFO_DIR)
+	@touch $(PKG_INSTALL_STAMP).clean
+	@echo "$(filter-out essential,$(PKG_FLAGS))" > $(PKG_INSTALL_STAMP).flags
+
 $(PACKAGE_DIR):
 	mkdir -p $@
 	
@@ -240,8 +277,8 @@ dumpinfo:
 download:
 prepare:
 configure:
-compile:
-install:
+compile: prepare-package-install
+install: compile
 clean-staging: FORCE
 	rm -f $(STAMP_INSTALLED)
 	@-(\

@@ -40,7 +40,7 @@ endef
 
 define prepare_zimage
 	echo -en "\x$(2)\x1c\xa0\xe3\x$(3)\x10\x81\xe3" > $(KDIR)/$(call zimage_name,$(1))
-	cat $(LINUX_DIR)/arch/arm/boot/zImage >> $(KDIR)/$(call zimage_name,$(1))
+	cat $(KDIR)/zImage >> $(KDIR)/$(call zimage_name,$(1))
 endef
 
 define prepare_uimage
@@ -55,19 +55,20 @@ define Image/Prepare
 	# NSB3AST : mach id 2917 (0xb65)
 	$(call prepare_zimage,nsb3ast,0b,65)
 	# NS-K330 : mach id 3108 (0xc24)
-	$(call prepare_zimage,ns-k330,0c,24)
+	$(call prepare_uimage,ns-k330,0c,24)
 endef
 
 define Image/BuildKernel
 	cat $(KDIR)/$(call zimage_name,nsb3ast) > $(BIN_DIR)/$(call zimage_name,nsb3ast)
 	cat $(KDIR)/$(call zimage_name,ns-k330) > $(BIN_DIR)/$(call zimage_name,ns-k330)
+	cat $(KDIR)/$(call uimage_name,ns-k330) > $(BIN_DIR)/$(call uimage_name,ns-k330)
 endef
 
 define Image/Build/Generic
 	if [ `stat -c%s "$(KDIR)/$(call zimage_name,$(2))"` -gt 1048576 ]; then \
-		echo "Warning: $(KDIR)/$(call zimage_name,$(2)) is too big"; \
+		echo "Warning: $(KDIR)/$(call zimage_name,$(2)) is too big" >&2; \
 	else if [ `stat -c%s $(KDIR)/root.$(1)` -gt $(3) ]; then \
-		echo "Warning: of=$(BIN_DIR)/$(IMG_PREFIX)-root.$(1) is too big"; \
+		echo "Warning: of=$(BIN_DIR)/$(IMG_PREFIX)-root.$(1) is too big" >&2; \
 	else \
 		cat $(KDIR)/root.$(1) > $(call rootfsname,$(1),$(2)); \
 		( \
@@ -79,9 +80,9 @@ endef
 
 define Image/Build/uImage
 	if [ `stat -c%s "$(KDIR)/$(call uimage_name,$(2))"` -gt 1048576 ]; then \
-		echo "Warning: $(KDIR)/$(call uimage_name,$(2)) is too big"; \
+		echo "Warning: $(KDIR)/$(call uimage_name,$(2)) is too big" >&2; \
 	else if [ `stat -c%s $(KDIR)/root.$(1)` -gt $(3) ]; then \
-		echo "Warning: of=$(BIN_DIR)/$(IMG_PREFIX)-root.$(1) is too big"; \
+		echo "Warning: of=$(BIN_DIR)/$(IMG_PREFIX)-root.$(1) is too big" >&2; \
 	else \
 		cat $(KDIR)/root.$(1) > $(call rootfsname,$(1),$(2)); \
 		( \
@@ -97,6 +98,7 @@ endef
 
 define Image/Build/NSK330
 	$(call Image/Build/Generic,$(1),ns-k330,2686976)
+	$(call Image/Build/uImage,$(1),ns-k330,2686976)
 endef
 
 define Image/Build/squashfs

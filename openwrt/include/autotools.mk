@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -43,7 +43,7 @@ define autoreconf
 					$(if $(word 2,$(3)),--no-recursive) \
 					-B $(STAGING_DIR_HOST)/share/aclocal \
 					$(patsubst %,-I %,$(5)) \
-					$(patsubst %,-I %,$(4)) $(4) || true; \
+					$(patsubst %,-I %,$(4)) $(p) || true; \
 			fi; \
 		) \
 	);
@@ -51,9 +51,9 @@ endef
 
 # 1: build dir
 define patch_libtool
-	(cd $(1); \
+	@(cd $(1); \
 		for lt in $$$$($$(STAGING_DIR_HOST)/bin/find . -name ltmain.sh); do \
-			lt_version="$$$$($$(STAGING_DIR_HOST)/bin/sed -ne 's,^[[:space:]]*VERSION=\([0-9]\.[0-9]\+\).*,\1,p' $$$$lt)"; \
+			lt_version="$$$$($$(STAGING_DIR_HOST)/bin/sed -ne 's,^[[:space:]]*VERSION="\?\([0-9]\.[0-9]\+\).*,\1,p' $$$$lt)"; \
 			case "$$$$lt_version" in \
 				1.5|2.2|2.4) echo "autotools.mk: Found libtool v$$$$lt_version - applying patch to $$$$lt"; \
 					(cd $$$$(dirname $$$$lt) && $$(PATCH) -N -s -p1 < $$(TOPDIR)/tools/libtool/files/libtool-v$$$$lt_version.patch || true) ;; \
@@ -83,6 +83,15 @@ define patch_libtool_target
     $(PKG_BUILD_DIR)))
 endef
 
+define gettext_version_target
+  cd $(PKG_BUILD_DIR) && \
+  GETTEXT_VERSION=$(shell $(STAGING_DIR_HOST)/bin/gettext -V | $(STAGING_DIR_HOST)/bin/sed -ne '1s/.* //p') && \
+  $(STAGING_DIR_HOST)/bin/sed \
+  -i $(PKG_BUILD_DIR)/configure.ac \
+  -e "s/AM_GNU_GETTEXT_VERSION(\[.*\])/AM_GNU_GETTEXT_VERSION(\[$$$$GETTEXT_VERSION\])/g" && \
+  $(STAGING_DIR_HOST)/bin/autopoint --force
+endef
+
 ifneq ($(filter patch-libtool,$(PKG_FIXUP)),)
   Hooks/Configure/Pre += patch_libtool_target
 endif
@@ -105,6 +114,10 @@ ifneq ($(filter autoreconf,$(PKG_FIXUP)),)
   ifeq ($(filter autoreconf,$(Hooks/Configure/Pre)),)
     Hooks/Configure/Pre += autoreconf_target
   endif
+endif
+
+ifneq ($(filter gettext-version,$(PKG_FIXUP)),)
+  Hooks/Configure/Pre += gettext_version_target
 endif
 
 

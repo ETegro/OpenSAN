@@ -5,6 +5,14 @@
 # See /LICENSE for more information.
 #
 
+PKG_DEFAULT_DEPENDS = +libc +USE_EGLIBC:librt +USE_EGLIBC:libpthread
+
+ifneq ($(PKG_NAME),toolchain)
+  PKG_FIXUP_DEPENDS = $(if $(filter kmod-%,$(1)),$(2),$(PKG_DEFAULT_DEPENDS) $(filter-out $(PKG_DEFAULT_DEPENDS),$(2)))
+else
+  PKG_FIXUP_DEPENDS = $(2)
+endif
+
 define Package/Default
   CONFIGFILE:=
   SECTION:=opt
@@ -13,7 +21,7 @@ define Package/Default
   MDEPENDS:=
   PROVIDES:=
   EXTRA_DEPENDS:=
-  MAINTAINER:=OpenWrt Developers Team <openwrt-devel@openwrt.org>
+  MAINTAINER:=$(PKG_MAINTAINER)
   SOURCE:=$(patsubst $(TOPDIR)/%,%,$(CURDIR))
   ifneq ($(PKG_VERSION),)
     ifneq ($(PKG_RELEASE),)
@@ -34,7 +42,6 @@ define Package/Default
   else
     PKGARCH:=$(BOARD)
   endif
-  PRIORITY:=optional
   DEFAULT:=
   MENU:=
   SUBMENU:=
@@ -50,10 +57,12 @@ endef
 Build/Patch:=$(Build/Patch/Default)
 ifneq ($(strip $(PKG_UNPACK)),)
   define Build/Prepare/Default
-	$(SH_FUNC) $(PKG_UNPACK)
+	$(PKG_UNPACK)
 	$(Build/Patch)
   endef
 endif
+
+EXTRA_CXXFLAGS = $(EXTRA_CFLAGS)
 
 CONFIGURE_PREFIX:=/usr
 CONFIGURE_ARGS = \
@@ -79,7 +88,7 @@ CONFIGURE_ARGS = \
 CONFIGURE_VARS = \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
-		CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		CXXFLAGS="$(TARGET_CXXFLAGS) $(EXTRA_CFLAGS)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" \
 
@@ -104,7 +113,7 @@ endef
 
 MAKE_VARS = \
 	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS) $(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS) $(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
+	CXXFLAGS="$(TARGET_CXXFLAGS) $(EXTRA_CXXFLAGS) $(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)"
 
 MAKE_FLAGS = \
@@ -119,7 +128,7 @@ MAKE_INSTALL_FLAGS = \
 MAKE_PATH = .
 
 define Build/Compile/Default
-	$(MAKE_VARS) \
+	+$(MAKE_VARS) \
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) \
 		$(MAKE_FLAGS) \
 		$(1);
