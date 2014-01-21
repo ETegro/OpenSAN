@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2010 Gianluigi Tiesi <sherpya@netfarm.it>
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=debootstrap
-PKG_VERSION:=1.0.30
+PKG_VERSION:=1.0.55
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-udeb_$(PKG_VERSION)_all.udeb
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/d/debootstrap
-PKG_MD5SUM:=d87b35670aa735ae5b7d3f8bf1b76245
+PKG_MD5SUM:=f01432f4d7c193ac7a868416ace41bad
 
-UNPACK_CMD=ar -p "$(DL_DIR)/$(PKG_SOURCE)" data.tar.gz | ( cd $(1) && tar -xzf - )
+UNPACK_CMD=ar -p "$(DL_DIR)/$(PKG_SOURCE)" data.tar.xz | xzcat | tar -C $(1) -xf -
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,8 +25,7 @@ define Package/debootstrap
   CATEGORY:=Administration
   TITLE:=Bootstrap a basic Debian system
   URL:=http://wiki.debian.org/Debootstrap
-  DEPENDS:=+coreutils-chroot +coreutils-sha1sum
-  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
+  DEPENDS:= +coreutils +coreutils-chroot +coreutils-sha1sum
 endef
 
 define Package/debootstrap/description
@@ -37,7 +36,7 @@ define Package/debootstrap/description
 endef
 
 define Build/Compile
-# file pkgdetails.c was imported from debian package base-installer version 1.119
+# file pkgdetails.c was imported from debian package base-installer version 1.130
 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) ./files/pkgdetails.c -o $(PKG_BUILD_DIR)/usr/share/debootstrap/pkgdetails
 endef
 
@@ -47,6 +46,7 @@ define Package/debootstrap/install
 	$(INSTALL_DIR) $(1)/usr/share/debootstrap
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/usr/share/debootstrap/pkgdetails $(1)/usr/share/debootstrap
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/usr/share/debootstrap/functions $(1)/usr/share/debootstrap
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/usr/share/debootstrap/devices.tar.gz $(1)/usr/share/debootstrap
 	$(INSTALL_DIR) $(1)/usr/share/debootstrap/scripts
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/usr/share/debootstrap/scripts/* $(1)/usr/share/debootstrap/scripts
 endef

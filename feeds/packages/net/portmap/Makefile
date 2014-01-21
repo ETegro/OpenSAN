@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=portmap
 PKG_VERSION:=6.0
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://neil.brown.name/portmap/
 PKG_MD5SUM:=ac108ab68bf0f34477f8317791aaf1ff
+
+PKG_LICENSE:=BSD-4c
+PKG_LICENSE_FILES:=portmap.man
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
@@ -34,7 +37,7 @@ endef
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD" \
-	RPCUSER="nobody" \
+	RPCUSER="rpc" \
 	LDLIBS="$(TARGET_LDFLAGS) -lwrap $(LIBRPC)" \
 	all
 

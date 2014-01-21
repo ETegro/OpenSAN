@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sdparm
-PKG_VERSION:=1.06
+PKG_VERSION:=1.04
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://sg.danny.cz/sg/p
-PKG_MD5SUM:=27a8197ce2a176473613b82c788718ec
+PKG_MD5SUM:=f4b8c7bfc1cd27d30fbdc066a65a44ea
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

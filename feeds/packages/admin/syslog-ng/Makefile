@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
 PKG_VERSION:=1.6.12
-PKG_RELEASE:=2
+PKG_RELEASE:=6
 PKG_MD5SUM:=a3cbfdb6e1e5beea181a7349749719f3
 
 PKG_SOURCE_URL:= \
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/syslog-ng
   SECTION:=admin
   CATEGORY:=Administration
-  DEPENDS:=+libol
+  DEPENDS:=+libol +librt
   TITLE:=A powerful syslog daemon
   URL:=http://www.balabit.com/products/syslog_ng/
 endef

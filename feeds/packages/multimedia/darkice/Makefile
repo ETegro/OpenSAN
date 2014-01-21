@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkice
 PKG_VERSION:=1.0
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://darkice.googlecode.com/files/
 PKG_MD5SUM:= 1804e63d42a9703d01fe378c9a77c473
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,7 +25,7 @@ define Package/darkice
   CATEGORY:=Multimedia
   SUBMENU:=Streaming
   TITLE:=DarkIce is a live audio streamer
-  DEPENDS:=+lame +libpthread +libstdcpp
+  DEPENDS:=+lame-lib +librt +libpthread +libstdcpp
   MAINTAINER:=Artur Wronowski <arteqw@gmail.com>
 endef
 
@@ -42,12 +42,17 @@ CONFIGURE_ARGS += \
 	--without-samplerate \
 	--without-twolame \
 	--without-vorbis \
+	--with-lame-prefix="$(STAGING_DIR)/usr" \
 
 define Package/darkice/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/darkice $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/darkice.cfg $(1)/etc/
+endef
+
+define Package/darkice/conffiles
+/etc/darkice.cfg
 endef
 
 $(eval $(call BuildPackage,darkice))

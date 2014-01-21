@@ -10,7 +10,7 @@ PKG_SOURCE_URL:=http://www.auto.tuwien.ac.at/~mkoegler/pth/
 PKG_MD5SUM:=9144b26dcc27e67498d63dd5456f934c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
@@ -21,6 +21,7 @@ define Package/pthsem
   CATEGORY:=Libraries
   TITLE:=GNU pth extended with semaphore support
   URL:=http://www.auto.tuwien.ac.at/~mkoegler/index.php/pth
+  DEPENDS:=@USE_EGLIBC @TARGET_x86
 endef
 
 define Package/pthsem/description

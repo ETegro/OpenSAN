@@ -14,7 +14,10 @@ PKG_RELEASE:=3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/lame
 PKG_MD5SUM:=719dae0ee675d0c16e0e89952930ed35
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
+
+PKG_LICENSE:=LGPLv2
+PKG_LICENSE_FILES:=COPYING LICENSE
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,6 +34,7 @@ define Package/lame
 $(call Package/lame/Default)
   TITLE:=lame
   MENU:=1
+  DEPENDS += +libncurses
 endef
 
 define Package/lame/description

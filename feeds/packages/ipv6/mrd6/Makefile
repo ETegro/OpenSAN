@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrd6
 PKG_VERSION:=0.9.6
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/m/mrd6/
@@ -21,11 +21,11 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mrd6
-  SECTION:=ipv6
-  CATEGORY:=IPv6
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=IPv6 multicast routing daemon
   URL:=http://fivebits.net/proj/mrd6
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+kmod-ipv6 +libstdcpp
 endef
 
 define Package/mrd6/description
@@ -49,7 +49,7 @@ MRD6_MAKEFLAGS:= \
 	PREFIX="/usr"
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src $(MRD6_MAKEFLAGS) all
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src $(MRD6_MAKEFLAGS) all
 endef
 
 define Build/Install

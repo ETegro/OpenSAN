@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,24 +8,25 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=4.3.1
-PKG_RELEASE:=1
+PKG_VERSION:=4.3.6
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
   http://lftp.cybermirror.org/old
-PKG_MD5SUM:=ccef0f84416fc964b7b8a5e3f2e87631
+PKG_MD5SUM:=ffcdbaec5d1416cb6dd754efd43fa61a
 
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lftp
   SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libncurses +libopenssl +libreadline +uclibcxx +libexpat
-  TITLE:=lftp
+  DEPENDS:=+libncurses +libopenssl +libreadline $(CXX_DEPENDS) +libexpat
+  TITLE:=Sophisticated file transfer program
   URL:=http://lftp.yar.ru/
 endef
 
@@ -45,15 +46,11 @@ CONFIGURE_ARGS += \
 	--disable-static
 
 CONFIGURE_VARS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -lz -lutil -lc -luClibc++ -lcurses $(LIBGCC_S) -ldl" \
+	LIBS="-lz -lutil -lcurses -ldl" \
 	i_cv_posix_fallocate_works=no
 
 MAKE_VARS += \
-	LD="\$$$$(CC)"
+	LD="$(TARGET_CXX)"
 
 define Package/lftp/install
 	$(INSTALL_DIR) $(1)/usr/bin

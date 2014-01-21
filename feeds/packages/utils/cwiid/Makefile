@@ -23,7 +23,6 @@ $(call include_mk, python-package.mk)
 define Package/cwiid/Default
   TITLE:=Linux Nintendo Wiimote interface
   URL:=http://abstrakraft.org/cwiid/
-  DEPENDS:= @!LINUX_2_4
 endef
 
 define Package/libcwiid
@@ -31,7 +30,7 @@ $(call Package/cwiid/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DEPENDS+= +bluez-libs
+  DEPENDS+= +bluez-libs +libpthread +librt
 endef
 
 define Package/wminput
@@ -59,6 +58,7 @@ CONFIGURE_ARGS += \
 
 TARGET_CFLAGS += $(FPIC)
 TARGET_CPPFLAGS += -I$(PKG_BUILD_DIR)/libcwiid/
+TARGET_LDFLAGS += -lpthread -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Build/Prepare
 	$(call Build/Prepare/Default)

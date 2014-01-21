@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rrdtool
 PKG_VERSION:=1.2.30
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://oss.oetiker.ch/rrdtool/pub/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -21,7 +21,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_python-rrd \
 	CONFIG_PACKAGE_rrdcgi \
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 
@@ -40,7 +40,7 @@ $(call Package/rrdtool/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= management library (v1.2.x)
-  DEPENDS+= +libart +libfreetype +libpng +zlib
+  DEPENDS+= +libart +libfreetype +libpng +zlib +libpthread
 endef
 
 define Package/rrdcgi
@@ -137,5 +137,5 @@ $(eval $(call BuildPackage,librrd))
 $(eval $(call BuildPackage,rrdcgi))
 $(eval $(call BuildPackage,rrdtool))
 
-$(eval $(call PyPackage,python-rrd))
-$(eval $(call BuildPackage,python-rrd))
+#$(eval $(call PyPackage,python-rrd))
+#$(eval $(call BuildPackage,python-rrd))

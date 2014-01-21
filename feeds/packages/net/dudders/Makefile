@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dudders
 PKG_VERSION:=1.04
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=1d368a86f3c284e95d260a94767a8ded
 
 PKG_BUILD_DEPENDS:=+libopenssl +libgcrypt
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,6 +25,7 @@ define Package/dudders
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=IP Addresses and Names
+  DEPENDS:=+libopenssl +libgcrypt +libgpg-error
   TITLE:=DNS Update SIG(0) client
   MAINTAINER:=Dean Scarff <dos@scarff.id.au>
   URL:=http://dudders.sourceforge.net/
@@ -58,7 +59,7 @@ define Package/dudders/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/dudders/crypt_openssl.so \
 		       $(1)/usr/lib/dudders/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./files/dudders.conf $(1)/etc/config/dudders
+	$(INSTALL_CONF) ./files/dudders.config $(1)/etc/config/dudders
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) ./files/dudders.hotplug $(1)/etc/hotplug.d/iface/50-dudders
 endef

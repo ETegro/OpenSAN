@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
-PKG_VERSION:=2.2.1
-PKG_RELEASE:=2
+PKG_VERSION:=2.2.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/netatalk
-PKG_MD5SUM:=4a371025daf96adb73fa491efdbfef28
+PKG_MD5SUM:=40753a32340c24e4ec395aeb55ef056e
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -41,7 +41,7 @@ define Package/netatalk/conffiles
 /etc/netatalk/afpd.conf
 endef
 
-TARGET_CFLAGS += -std=gnu99 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_CFLAGS += -std=gnu99
 TARGET_LDFLAGS += $(LIBRPC)
 
 CONFIGURE_ARGS += \
@@ -58,10 +58,11 @@ CONFIGURE_ARGS += \
 	--with-libgcrypt-dir="$(STAGING_DIR)/usr" \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
 	--with-uams-path="/usr/lib/uams" \
+	--without-pam \
 	--disable-admin-group \
 	--disable-srvloc \
 	--disable-zeroconf \
-	--without-shadow \
+	$(if $(CONFIG_SHADOW_PASSWORDS),--with-shadow,--without-shadow) \
 	--without-ldap
 
 define Package/netatalk/install

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 Nuno Goncalves <nunojpg@gmail.com>
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,12 +11,15 @@
 #
 
 include $(TOPDIR)/rules.mk
+
 PKG_NAME:=nmap
-PKG_VERSION:=5.51
-PKG_RELEASE:=2
+PKG_VERSION:=6.40
+PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://nmap.org/dist/
-PKG_MD5SUM:=0b80d2cb92ace5ebba8095a4c2850275
+PKG_MD5SUM:=c0e2f3370e1fb97fb53185b15aa22aff
+
 PKG_INSTALL:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
@@ -25,7 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 
 NMAP_DEPENDS:=+libpcap +libstdcpp
 NCAT_DEPENDS:=+libpcap
-NPING_DEPENDS:=+libpcap +libpthread
+NPING_DEPENDS:=+libpcap +libpthread +libstdcpp
 NDIFF_DEPENDS:=+python
 
 define Package/nmap/default
@@ -33,7 +36,6 @@ define Package/nmap/default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://nmap.org/
-  MAINTAINER:=Nuno Goncalves <nunojpg@gmail.com>
 endef
 
 define Package/nmap
@@ -84,7 +86,7 @@ CONFIGURE_ARGS += \
 	--with-libpcap="$(STAGING_DIR)/usr" \
 	--without-liblua
 
-CONFIGURE_VARS += CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti"
+CONFIGURE_VARS += CXXFLAGS="$$$$CXXFLAGS -fno-builtin"
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += --with-openssl="$(STAGING_DIR)/usr"

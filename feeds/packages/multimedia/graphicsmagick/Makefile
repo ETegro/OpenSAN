@@ -19,7 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 
 export PATH:=$(PKG_BUILD_DIR)/bin:$(TARGET_PATH)
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 define Package/GraphicsMagick/Default
@@ -27,6 +27,7 @@ define Package/GraphicsMagick/Default
   CATEGORY:=Multimedia
   TITLE:=GraphicsMagick
   URL:=http://www.graphicsmagick.org/
+  DEPENDS:=+libbz2 +libfreetype +libltdl +libpthread +libstdcpp +zlib
 endef
 
 define Package/GraphicsMagick

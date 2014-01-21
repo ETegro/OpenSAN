@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
 PKG_VERSION:=1.6.17
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads
 PKG_MD5SUM:=81e5dc5beee4b3fc025ac70c0b6caa14
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_MACRO_PATHS:=build/ac-macros
 
 include $(INCLUDE_DIR)/package.mk
@@ -39,6 +39,7 @@ endef
 
 define Package/subversion-libs
   $(call Package/subversion/Default)
+  DEPENDS+=+unixodbc
   TITLE:=subversion libs
 endef
 
@@ -72,6 +73,9 @@ endef
 define Package/subversion-server/conffiles
 /etc/config/subversion
 endef
+
+TARGET_CFLAGS += $(FPIC)
+TARGET_CPPFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
 
 CONFIGURE_ARGS += \
 	--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \

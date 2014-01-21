@@ -9,12 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=taglib
 PKG_VERSION:=1.6.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
 PKG_MD5SUM:=ddf02f4e1d2dc30f76734df806e613eb
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
@@ -23,7 +24,7 @@ PKG_INSTALL:=1
 define Package/taglib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:= +uclibcxx +zlib @!TARGET_avr32
+  DEPENDS:= $(CXX_DEPENDS) +zlib @!TARGET_avr32
   TITLE:=Audio output library
   URL:=http://developer.kde.org/~wheeler/taglib.html
 endef
@@ -37,7 +38,6 @@ define Package/taglibc
 endef
 
 TARGET_CFLAGS += $(FPIC)
-CMAKE_OPTIONS += -DCMAKE_CXX_COMPILER="g++-uc"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin

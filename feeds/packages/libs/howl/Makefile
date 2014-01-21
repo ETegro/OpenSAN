@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=howl
 PKG_VERSION:=1.0.0
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.porchdogsoft.com/download/
@@ -43,7 +43,7 @@ endef
 define Package/howl-autoipd
   $(call Package/howl/Default)
   SUBMENU:=IP Addresses and Names
-  DEPENDS:=+libhowl
+  DEPENDS:=+libhowl +libpthread
   TITLE:=An IPv4 Link-Local address self-assigner daemon
 endef
 
@@ -71,7 +71,7 @@ endef
 define Package/howl-nifd
   $(call Package/howl/Default)
   SUBMENU:=IP Addresses and Names
-  DEPENDS:=+libhowl
+  DEPENDS:=+libhowl +libpthread
   TITLE:=A network interface monitor daemon
 endef
 
@@ -82,7 +82,7 @@ endef
 define Package/howl-utils
   $(call Package/howl/Default)
   SUBMENU:=IP Addresses and Names
-  DEPENDS:=+libhowl
+  DEPENDS:=+libhowl +libpthread
   TITLE+= (utilities)
 endef
 
@@ -117,7 +117,7 @@ define Package/howl-autoipd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/autoipd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/autoipd.init $(1)/etc/init.d/autoipd
+	$(INSTALL_BIN) ./files/autoipd.init $(1)/etc/init.d/autoipd
 endef
 
 define Package/howl-mdnsresponder/install
@@ -133,7 +133,7 @@ define Package/howl-nifd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/nifd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/nifd.init $(1)/etc/init.d/nifd
+	$(INSTALL_BIN) ./files/nifd.init $(1)/etc/init.d/nifd
 endef
 
 define Package/howl-utils/install

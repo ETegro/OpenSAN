@@ -18,7 +18,7 @@
 "noip.com"		"http://[USERNAME]:[PASSWORD]@dynupdate.no-ip.com/nic/update?hostname=[DOMAIN]&myip=[IP]"
 
 #freedns.afraid.org is weird, you just need an update code, for which we use the password variable
-"freedns.afraid.org"	"http://freedns.afraid.org/dynamic/update.php?[PASSWORD]"
+"freedns.afraid.org"	"http://freedns.afraid.org/dynamic/update.php?[PASSWORD]&address=[IP]"
 
 #### ADD YOURS HERE! ######################################################################################
 #                                                                                                         #
@@ -37,3 +37,23 @@
 
 # DNSdynamic.org
 "dnsdynamic.org"	"http://[USERNAME]:[PASSWORD]@www.dnsdynamic.org/api/?hostname=[DOMAIN]&myip=[IP]"
+
+# dnsExit.com free dynamic DNS update url
+"dnsexit.com"		"http://www.dnsexit.com/RemoteUpdate.sv?login=[USERNAME]&password=[PASSWORD]&host=[DOMAIN]&myip=[IP]"
+
+# OVH
+"ovh.com" "http://[USERNAME]:[PASSWORD]@www.ovh.com/nic/update?system=dyndns&hostname=[DOMAIN]&myip=[IP]"
+
+# dns-o-matic is a free service by opendns.com for updating multiple hosts and
+# dynamic dns services in one api call. To update all your configured services
+# at once, use "all.dnsomatic.com as the hostname.
+"dnsomatic.com" "http://[USERNAME]:[PASSWORD]@updates.dnsomatic.com/nic/update?hostname=[DOMAIN]&myip=[IP]"
+
+# 3322.org
+"3322.org"  "http://[USERNAME]:[PASSWORD]@members.3322.org/dyndns/update?system=dyndns&hostname=[DOMAIN]&myip=[IP]"
+
+# namecheap.com
+"namecheap.com" "http://dynamicdns.park-your-domain.com/update?host=[USERNAME]&domain=[DOMAIN]&password=[PASSWORD]&ip=[IP]"
+
+# easydns.com dynamic DNS
+"easydns.com"		"http://[USERNAME]:[PASSWORD]@api.cp.easydns.com/dyn/tomato.php?hostname=[DOMAIN]&myip=[IP]"

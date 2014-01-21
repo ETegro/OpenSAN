@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=loop-aes
-PKG_VERSION:=3.6c
+PKG_VERSION:=3.7a
 PKG_RELEASE:=1
 
 PKG_SOURCE:=loop-AES-v$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=a030eb9af42e167d11434e2475187f00
+PKG_MD5SUM:=f267cb2108ee94b09a30b2fc7e292104
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/loop-AES-v$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
@@ -37,7 +37,7 @@ define KernelPackage/loop-aes/description
 endef
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		ARCH="$(LINUX_KARCH)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		CC="$(TARGET_CC)" \

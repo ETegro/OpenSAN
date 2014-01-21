@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=crtmpserver
-PKG_REV:=346
+PKG_REV:=726
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/crtmpserver
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libopenssl +libstdcpp
+  DEPENDS:=+libopenssl +libstdcpp +liblua
   TITLE:=C++ RTMP Server
   URL:=http://www.rtmpd.com/
 endef
@@ -53,30 +53,32 @@ define Build/Configure
 		cp linux.mk linux-openwrt-uclibc.mk; \
 		$(SED) 's,^TOOLCHAIN_BASE[[:space:]]*=.*,TOOLCHAIN_BASE=$(TS_BASE),' \
 			-e 's,^TOOLCHAIN_PREFIX[[:space:]]*=.*,TOOLCHAIN_PREFIX=$(TARGET_CROSS),' \
+			-e 's,^CCOMPILER[[:space:]]*=.*,CCOMPILER=$(TARGET_CC),' \
+			-e 's,^CXXCOMPILER[[:space:]]*=.*,CXXCOMPILER=$(TARGET_CXX),' \
 			-e 's,^OPTIMIZATIONS[[:space:]]*=.*,OPTIMIZATIONS=-O2,' \
 			-e 's,^SSL_BASE[[:space:]]*=.*,SSL_BASE=$(STAGING_DIR)/usr,' \
 			linux-openwrt-uclibc.mk)
 endef
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/builders/make \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/builders/make \
 		PLATFORM=linux-openwrt-uclibc
 endef
 
 define Package/crtmpserver/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/builders/make/output/dynamic/rtmpserver $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/usr/lib/rtmpserver
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/builders/make/output/dynamic/*.so $(1)/usr/lib/rtmpserver/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/builders/make/output/dynamic/crtmpserver $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/crtmpserver
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/builders/make/output/dynamic/*.so $(1)/usr/lib/crtmpserver/
 	$(foreach app,flvplayback samplefactory admin stresstest appselector vptests applestreamingclient proxypublish, \
-		$(INSTALL_DIR) $(1)/usr/lib/rtmpserver/$(app); \
+		$(INSTALL_DIR) $(1)/usr/lib/crtmpserver/$(app); \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/builders/make/output/dynamic/applications/$(app)/lib$(app).so \
-			$(1)/usr/lib/rtmpserver/$(app)/; \
+			$(1)/usr/lib/crtmpserver/$(app)/; \
 	)
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/builders/make/output/dynamic/rtmpserver.lua $(1)/etc/
-	$(INSTALL_DIR) $(1)/usr/share/rtmpserver/appselector
-	$(INSTALL_DIR) $(1)/usr/share/rtmpserver/media
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/builders/make/output/dynamic/crtmpserver.lua $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/share/crtmpserver/appselector
+	$(INSTALL_DIR) $(1)/usr/share/crtmpserver/media
 endef
 
 $(eval $(call BuildPackage,crtmpserver))

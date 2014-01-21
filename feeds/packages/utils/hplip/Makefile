@@ -9,14 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hplip
 PKG_VERSION:=3.9.12
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/hplip
 PKG_MD5SUM:=2b0906b4a57b437988829557ca62adfd
 
 PKG_BUILD_DEPENDS := python
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,7 +25,7 @@ define Package/hplip
   CATEGORY:=Utilities
   TITLE:=HP Linux Imaging and Printing
   URL:=http://sourceforge.net/projects/hplip/
-  DEPENDS+=+libjpeg +sane-libs +cups +libusb
+  DEPENDS+=+libjpeg +libtiff +libusb-compat +cups +sane-libs
 endef
 
 define Package/hplip/description
@@ -71,6 +71,10 @@ define Package/hplip/install
 
 	$(INSTALL_DIR) $(1)/etc/sane.d/dll.d/
 	$(INSTALL_DATA) ./files/hplib.conf $(1)/etc/sane.d/dll.d/hplib
+endef
+
+define Package/hplip/conffiles
+/etc/hp/hplip.conf
 endef
 
 $(eval $(call BuildPackage,hplip))

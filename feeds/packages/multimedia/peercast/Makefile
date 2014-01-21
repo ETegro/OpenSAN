@@ -15,17 +15,18 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
 PKG_MD5SUM:=4e8449cde7135ad97f788e67e1bd64ee
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4
 
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/peercast
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread $(CXX_DEPENDS)
   TITLE:=P2P audio and video streaming server
   URL:=http://www.peercast.org/
 endef
@@ -45,9 +46,9 @@ CONFIGURE_ARGS += \
 	--enable-staticbin \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -luClibc++ -lpthread" \
+	LIBS="-lpthread"
+
+TARGET_CFLAGS += -fpermissive
 
 define Package/peercast/install
 	$(INSTALL_DIR) $(1)/usr/sbin

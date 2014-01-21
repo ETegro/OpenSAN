@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://downloads.openwrt.org/sources
 PKG_MD5SUM:=32ed12f60eab771a79bd5f90622fa2a3
 
 BUILD_DEPENDS:=libwrap
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/nProbe
 
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nprobe
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpcap +libpcre +libpthread +NPROBE_MYSQL_SUPPORT:libmysqlclient
+  DEPENDS:=+libpcap +libpcre +libpthread +NPROBE_MYSQL_SUPPORT:libmysqlclient +zlib
   TITLE:=nProbe
   URL:=http://invisible-island.net/dialog/
 endef

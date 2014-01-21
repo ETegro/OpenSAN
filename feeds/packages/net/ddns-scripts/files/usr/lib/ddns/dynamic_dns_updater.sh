@@ -46,6 +46,7 @@ fi
 #
 #
 #config_get use_https $service_id use_https
+#config_get use_syslog $service_id use_syslog
 #config_get cacert $service_id cacert
 #
 #config_get ip_source $service_id ip_source
@@ -68,11 +69,15 @@ then
 	check_interval=600
 fi
 
+if [ -z "$retry_interval" ]
+then
+	retry_interval=60
+fi
+
 if [ -z "$check_unit" ]
 then
 	check_unit="seconds"
 fi
-
 
 if [ -z "$force_interval" ]
 then
@@ -84,28 +89,44 @@ then
 	force_unit="hours"
 fi
 
+if [ -z $use_syslog ]
+then
+	use_syslog=0
+fi
+
 if [ -z "$use_https" ]
 then
 	use_https=0
 fi
 
 
-
 #some constants
 
+retrieve_prog="/usr/bin/wget -O - ";
 if [ "x$use_https" = "x1" ]
 then
-	retrieve_prog="/usr/bin/curl "
-	if [ -f "$cacert" ]
+	/usr/bin/wget --version 2>&1 |grep -q "\+ssl"
+	if [ $? -eq 0 ]
 	then
-		retrieve_prog="${retrieve_prog}--cacert $cacert "
-	elif [ -d "$cacert" ]
-	then
-		retrieve_prog="${retrieve_prog}--capath $cacert "
+		if [ -f "$cacert" ]
+		then
+			retrieve_prog="${retrieve_prog}--ca-certificate=${cacert} "
+		elif [ -d "$cacert" ]
+		then
+			retrieve_prog="${retrieve_prog}--ca-directory=${cacert} "
+		fi
+	else
+		retrieve_prog="/usr/bin/curl "
+		if [ -f "$cacert" ]
+		then
+			retrieve_prog="${retrieve_prog}--cacert $cacert "
+		elif [ -d "$cacert" ]
+		then
+			retrieve_prog="${retrieve_prog}--capath $cacert "
+		fi
 	fi
-else
-	retrieve_prog="/usr/bin/wget -O - ";
 fi
+
 
 service_file="/usr/lib/ddns/services"
 
@@ -113,7 +134,6 @@ ip_regex="[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"
 
 NEWLINE_IFS='
 '
-
 
 #determine what update url we're using if the service_name is supplied
 if [ -n "$service_name" ]
@@ -144,20 +164,13 @@ then
 	update_url=$(echo $update_url | sed -e 's/^http:/https:/')
 fi
 
-
 verbose_echo "update_url=$update_url"
-
-
 
 #if this service isn't enabled then quit
 if [ "$enabled" != "1" ] 
 then
 	return 0
 fi
-
-
-
-
 
 #compute update interval in seconds
 case "$force_unit" in
@@ -180,7 +193,6 @@ case "$force_unit" in
 esac
 
 
-
 #compute check interval in seconds
 case "$check_unit" in
 	"days" )
@@ -201,6 +213,26 @@ case "$check_unit" in
 		;;
 esac
 
+
+#compute retry interval in seconds
+case "$retry_unit" in
+	"days" )
+		retry_interval_seconds=$(($retry_interval*60*60*24))
+		;;
+	"hours" )
+		retry_interval_seconds=$(($retry_interval*60*60))
+		;;
+	"minutes" )
+		retry_interval_seconds=$(($retry_interval*60))
+		;;
+	"seconds" )
+		retry_interval_seconds=$retry_interval
+		;;
+	* )
+		#default is seconds
+		retry_interval_seconds=$retry_interval
+		;;
+esac
 
 
 verbose_echo "force seconds = $force_interval_seconds"
@@ -245,21 +277,18 @@ verbose_echo "time_since_update = $human_time_since_update hours"
 
 
 
-
-registered_ip=$(echo $(nslookup "$domain" 2>/dev/null) |  grep -o "Name:.*" | grep -o "$ip_regex")
-
-
 #do update and then loop endlessly, checking ip every check_interval and forcing an updating once every force_interval
 
 while [ true ]
 do
+	registered_ip=$(echo $(nslookup "$domain" 2>/dev/null) |  grep -o "Name:.*" | grep -o "$ip_regex")
 	current_ip=$(get_current_ip)
 
 
 	current_time=$(monotonic_time)
 	time_since_update=$(($current_time - $last_update))
 
-
+	syslog_echo "Running IP check ..."
 	verbose_echo "Running IP check..."
 	verbose_echo "current system ip = $current_ip"
 	verbose_echo "registered domain ip = $registered_ip"
@@ -281,7 +310,7 @@ do
 				final_url=$(echo $final_url | sed s^"$replace_name"^"$replace_value"^g )
 			fi
 		done
-		final_url=$(echo $final_url | sed s/"\[HTTPAUTH\]"/"$username${password:+:$password}"/g )
+		final_url=$(echo $final_url | sed s^"\[HTTPAUTH\]"^"${username//^/\\^}${password:+:${password//^/\\^}}"^g )
 		final_url=$(echo $final_url | sed s/"\[IP\]"/"$current_ip"/g )
 
 
@@ -289,7 +318,14 @@ do
 
 		#here we actually connect, and perform the update
 		update_output=$( $retrieve_prog "$final_url" )
-
+		if [ $? -gt 0 ]
+		then
+			syslog_echo "update failed, retrying in $retry_interval_seconds seconds"
+			verbose_echo "update failed"
+			sleep $retry_interval_seconds
+			continue
+		fi
+		syslog_echo "Update successful"
 		verbose_echo "Update Output:"
 		verbose_echo "$update_output"
 		verbose_echo ""

@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/phidget21
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libpthread
   TITLE:=Phidget API
   URL:=http://www.phidgets.com/
 endef
@@ -58,7 +59,7 @@ define Build/Compile
 		phidget21internal.h
 	$(MAKE) -C $(PKG_BUILD_DIR)/webservice \
 		$(TARGET_CONFIGURE_OPTS) LDCONFIG="true" \
-		LIBS="-lphidget21 -L../phidget21" \
+		LIBS="-lphidget21 -lpthread -ldl -L../phidget21" \
 		CFLAGS="$(TARGET_CFLAGS) -static -D_LINUX -I. -I../phidget21 -I../phidget21/utils" \
 		webservice21
 endef

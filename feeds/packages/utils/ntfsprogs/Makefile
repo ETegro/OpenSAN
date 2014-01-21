@@ -1,4 +1,5 @@
 #
+# Copyright (C) 2010-2011 OpenWrt.org
 # Copyright (C) 2010 Gianluigi Tiesi <sherpya@netfarm.it>
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,25 +10,26 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntfsprogs
 PKG_VERSION:=2.0.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-ntfs
 PKG_MD5SUM:=2c402b647bb7aeb1d3f8ce1cc354fd68
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
+PKG_BUILD_DEPENDS:=libgcrypt
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ntfsprogs
-    SECTION:=utils
-    CATEGORY:=Utilities
-    SUBMENU:=Filesystem
-    TITLE:=Linux-NTFS
-    URL:=http://www.linux-ntfs.org/
-    DEPENDS:=+libgcrypt
-    MAINTAINER:=Gianluigi Tiesi <sherpya@netfarm.it>
+  SECTION:=utils
+  CATEGORY:=Utilities
+  SUBMENU:=Filesystem
+  TITLE:=Linux-NTFS
+  DEPENDS:=+libuuid
+  URL:=http://www.linux-ntfs.org/
+  MAINTAINER:=Gianluigi Tiesi <sherpya@netfarm.it>
 endef
 
 define Package/ntfsprogs/description
@@ -37,6 +39,7 @@ endef
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
+	--with-uuid \
 	--disable-crypto \
 	--disable-gnome-vfs \
 	--disable-ntfsmount

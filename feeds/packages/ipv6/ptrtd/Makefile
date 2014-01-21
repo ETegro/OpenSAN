@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ptrtd
 PKG_VERSION:=0.5.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/ptrtd/dist/
@@ -18,8 +18,8 @@ PKG_MD5SUM:=bfe026445fdc4fe509a9c70ec4551744
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ptrtd
-  SECTION:=ipv6
-  CATEGORY:=IPv6
+  SECTION:=net
+  CATEGORY:=Network
   DEPENDS:=+kmod-ipv6 +kmod-tun +ip
   TITLE:=Portable Transport Relay Translator Daemon
   URL:=http://v6web.litech.org/ptrtd/

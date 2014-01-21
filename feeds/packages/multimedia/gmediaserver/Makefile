@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gmediaserver
 PKG_VERSION:=0.13.0
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/gmediaserver/
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/gmediaserver
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+id3lib +libmagic +file +libupnp +libuuid +uclibcxx +zlib $(ICONV_DEPENDS)
+  DEPENDS:=+id3lib +libmagic +file +libupnp +libuuid +zlib $(ICONV_DEPENDS)
   TITLE:=An UPnP music media server
   URL:=http://www.nongnu.org/gmediaserver/
 endef
@@ -44,7 +44,7 @@ CONFIGURE_ARGS += \
 	--with-id3lib="$(STAGING_DIR)/usr" \
 	--with-libupnp="$(STAGING_DIR)/usr" \
 	, \
-	LIBS=" -luClibc++ -lz" \
+	LIBS="-lz" \
 
 MAKE_FLAGS += \
 	AR="$(TARGET_CROSS)ar" \
@@ -58,6 +58,10 @@ define Package/gmediaserver/install
 	$(INSTALL_DATA) ./files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+endef
+
+define Package/gmediaserver/conffiles
+/etc/config/gmediaserver
 endef
 
 $(eval $(call BuildPackage,gmediaserver))

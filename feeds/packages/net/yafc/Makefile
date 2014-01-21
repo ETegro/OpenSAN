@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=832d074183a36ee15b47553ed5962fce
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,6 +30,13 @@ define Package/yafc
 endef
 
 # uses GNU configure
+CONFIGURE_ARGS += \
+	--with-socks=no \
+	--with-socks5=no \
+	--with-krb4=no \
+	--with-krb5=no \
+	--with-gssapi=no
+
 CONFIGURE_VARS += \
 	bash_cv_func_sigsetjmp=missing
 

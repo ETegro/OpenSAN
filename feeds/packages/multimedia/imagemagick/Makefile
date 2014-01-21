@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,17 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imagemagick
-PKG_VERSION:=6.6.7
-PKG_REVISION:=3
+PKG_VERSION:=6.7.8
+PKG_REVISION:=10
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/ImageMagick-$(PKG_VERSION)-$(PKG_REVISION)
 PKG_SOURCE:=ImageMagick-$(PKG_VERSION)-$(PKG_REVISION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.fifi.org/pub/ImageMagick/
-PKG_MD5SUM:=
+PKG_MD5SUM:=c66bea4710370b2e115aed512fbe4601
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 m4/libtool.m4
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,6 +34,7 @@ endef
 
 define Package/imagemagick
   $(call Package/imagemagick/Default)
+  DEPENDS:=+libpthread +libltdl +libjpeg +libtiff +zlib
 endef
 
 define Package/imagemagick/description
@@ -42,7 +44,7 @@ endef
 define Package/imagemagick-jpeg
   $(call Package/imagemagick/Default)
   TITLE+= (jpeg)
-  DEPENDS:=+imagemagick +libjpeg +zlib
+  DEPENDS:=+imagemagick
 endef
 
 define Package/imagemagick-jpeg/description
@@ -52,7 +54,7 @@ endef
 define Package/imagemagick-png
   $(call Package/imagemagick/Default)
   TITLE+= (png)
-  DEPENDS:=+imagemagick +libpng +zlib
+  DEPENDS:=+imagemagick +libpng
 endef
 
 define Package/imagemagick-png/description
@@ -72,7 +74,7 @@ endef
 define Package/imagemagick-tiff
   $(call Package/imagemagick/Default)
   TITLE+= (tiff)
-  DEPENDS:=+imagemagick +libtiff +zlib
+  DEPENDS:=+imagemagick
 endef
 
 define Package/imagemagick-tiff/description
@@ -81,11 +83,18 @@ endef
 
 
 CONFIGURE_ARGS += \
-	  --with-modules \
-	  --enable-shared \
-	  --enable-static \
-	  --without-xml \
-	  --without-x
+	--with-modules \
+	--enable-shared \
+	--enable-static \
+	--without-pango \
+	--without-bzlib \
+	--without-freetype \
+	--without-fontconfig \
+	--without-rsvg \
+	--without-fftw \
+	--without-xml \
+	--without-x \
+	--without-magick-plus-plus
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -95,7 +104,6 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/magick
-	$(INSTALL_DIR) $(1)/usr/include/Magick++
 	$(INSTALL_DIR) $(1)/usr/include/wand
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/* \

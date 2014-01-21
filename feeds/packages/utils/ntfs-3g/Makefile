@@ -37,7 +37,7 @@ PKG_MD5SUM_2011.1.15:=15a5cf5752012269fa168c24191f00e2
 PKG_MD5SUM_2011.4.12:=9c4ce318373b15332239a77a9d2a39fe
 PKG_MD5SUM:=$(PKG_MD5SUM_$(PKG_VERSION))
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 # release contains fuseext/int hint
@@ -126,12 +126,13 @@ endef
 define Package/ntfsprogs_ntfs-3g
   $(call Package/ntfs-3g/common)
   TITLE:=ntfsprogs (ntfs-3g)
-  DEPENDS+= +ntfs-3g +libgcrypt
+  DEPENDS+= +ntfs-3g +libgcrypt +libuuid
 endef
 
 CONFIGURE_ARGS += \
 	--enable-shared \
-	--enable-static
+	--enable-static \
+	--with-uuid
 
 # configure/make according selection
 ifdef CONFIG_PACKAGE_NTFS-3G_USE_LIBFUSE

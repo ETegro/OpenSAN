@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yaddns
-PKG_VERSION:=1.1-rc2
-PKG_RELEASE:=1
+PKG_VERSION:=1.1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.gna.org/yaddns/
-PKG_MD5SUM:=919a25bd66abf926e049f3afea619e19
+PKG_MD5SUM:=d8b6ed9bed61dabaa17188d831e352d1
 
 PKG_INSTALL:=1
 
@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/yaddns
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+USE_EGLIBC:librt
   SUBMENU:=IP Addresses and Names
   TITLE:=Yet Another DDNS client
   URL:=http://patatrac.info/yaddns

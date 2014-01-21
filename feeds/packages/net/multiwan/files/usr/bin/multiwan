@@ -1,6 +1,7 @@
 #!/bin/sh
 
-. /etc/functions.sh
+. /lib/functions.sh
+. /lib/functions/network.sh
 
 silencer() {
     if [ -z "$debug" -o "$debug" == "0" ]; then
@@ -136,9 +137,10 @@ acquire_wan_data() {
     local old_ipaddr
     local old_gateway
 
-    local ifname=$(uci_get_state network ${1} ifname 'x')
-    local ipaddr=$(uci_get_state network ${1} ipaddr 'x')
-    local gateway=$(uci_get_state network ${1} gateway 'x')
+    local ifname ipaddr gateway
+    network_get_device  ifname  ${1} || ifname=x
+    network_get_ipaddr  ipaddr  ${1} || ipaddr=x
+    network_get_gateway gateway ${1} || gateway=x
 
     check_old_map=$(echo $wan_id_map 2>&1 | grep -o "$1\[")
 
@@ -257,10 +259,10 @@ clear_rules() {
     local restore_single=$1
     local group 
 
-    iptables -t mangle -F PREROUTING 
-    iptables -t mangle -F FORWARD
-    iptables -t mangle -F POSTROUTING
-    iptables -t mangle -F OUTPUT
+    iptables -t mangle -D PREROUTING -j MultiWan
+    iptables -t mangle -D FORWARD -j MultiWan
+    iptables -t mangle -D OUTPUT -j MultiWan
+    iptables -t mangle -D POSTROUTING -j MultiWan
     iptables -t mangle -F MultiWan
     iptables -t mangle -X MultiWan
     iptables -t mangle -F MultiWanRules
@@ -285,6 +287,10 @@ clear_rules() {
     done
 
     if [ ! -z "$CHKFORQOS" ]; then
+	iptables -t mangle -F PREROUTING
+	iptables -t mangle -F FORWARD
+	iptables -t mangle -F OUTPUT
+	iptables -t mangle -F POSTROUTING
 	iptables -t mangle -F MultiWanQoS
 	iptables -t mangle -X MultiWanQoS
 
@@ -455,7 +461,7 @@ refresh_dns() {
 	failchk=$(query_config failchk $group)
 
 	dns=$(uci_get_state multiwan ${group} dns 'auto')
-	[ "$dns" == "auto" ] && dns=$(uci_get_state network ${group} dns)
+	[ "$dns" == "auto" ] && network_get_dnsserver dns ${group}
 	dns=$(echo $dns | sed -e "s/ /\n/g")
 
 	if [ ! -z "$dns" -a "$failchk" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" -a "$ifname" != "x" ]; then
@@ -792,9 +798,9 @@ monitor_wan() {
     while :; do
 	[ "${health_monitor%.*}" = 'parallel' ] && sleep $health_interval
 
-	ifname=$(uci_get_state network ${1} ifname 'x')
-	ipaddr=$(uci_get_state network ${1} ipaddr 'x')
-	gateway=$(uci_get_state network ${1} gateway 'x')
+	network_get_device  ifname  ${1} || ifname=x
+	network_get_ipaddr  ipaddr  ${1} || ipaddr=x
+	network_get_gateway gateway ${1} || gateway=x
 
 	if [ "$ifname_cur" != "$ifname" -o "$ipaddr_cur" != "$ipaddr" -o "$gateway_cur" != "$gateway" ]; then
 	    add_task "$1" acquire
@@ -815,7 +821,7 @@ monitor_wan() {
 	    elif [ "$icmp_hosts" == "dns" ]; then
 		icmp_hosts_acquire=$(uci_get_state multiwan $1 dns 'auto')
 		[ "$icmp_hosts_acquire" == "auto" ] &&
-		    icmp_hosts_acquire=$(uci_get_state network $1 dns)
+			network_get_dnsserver icmp_hosts_acquire $1
 	    else
 		icmp_hosts_acquire=$icmp_hosts
 	    fi
@@ -961,7 +967,7 @@ do_tasks() {
 			pass) recover_wan $1;;
 			acquire)
 			    acquire_wan_data $1
-			    [ "${health_monitor%.* }" = 'parallel' ] && {
+			    [ "${health_monitor%.*}" = 'parallel' ] && {
 				monitor_wan $1 &
 				echo "## Started background monitor_wan ##"
 			    }
@@ -1011,6 +1017,8 @@ max_interval=$(((1<<31) - 1))
 
 config_clear
 config_load "multiwan"
+config_get_bool	enabled	config	enabled '1'
+[ "$enabled" -gt 0 ] || exit
 config_get default_route	config default_route
 config_get health_monitor	config health_monitor
 config_get iptables_interval	config iptables_interval '30'

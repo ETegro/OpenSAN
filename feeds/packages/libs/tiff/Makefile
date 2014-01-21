@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tiff
-PKG_VERSION:=3.9.2
+PKG_VERSION:=4.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.osgeo.org/libtiff
-PKG_MD5SUM:=93e56e421679c591de7552db13384cb8
+PKG_MD5SUM:=051c1068e6a0627f461948c365290410
 
 PKG_FIXUP:=libtool-ucxx
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
@@ -23,6 +23,7 @@ PKG_INSTALL:=1
 
 PKG_CONFIG_DEPENDS:=CONFIG_PACKAGE_libtiffxx
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tiff/Default
@@ -43,7 +44,7 @@ $(call Package/tiff/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= library(c++ bindings)
-  DEPENDS:=+libtiff +uclibcxx
+  DEPENDS:=+libtiff $(CXX_DEPENDS)
 endef
 
 define Package/tiff-utils
@@ -55,9 +56,6 @@ $(call Package/tiff/Default)
 endef
 
 TARGET_CFLAGS += $(FPIC)
-
-MAKE_FLAGS += \
-    CXX="g++-uc"
 
 define Build/Configure
 	$(call Build/Configure/Default, \
@@ -78,8 +76,6 @@ define Build/Configure
 		--disable-jbig \
 		--without-x \
 		--with-apple-opengl-framework \
-		, \
-		CXX="g++-uc" \
 	)
 endef
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,20 +9,21 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miredo
 PKG_VERSION:=1.2.4
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://www.remlab.net/files/miredo
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=1281e7e75bddbde244cd778d99fa22d4
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/miredo/Default
-  SECTION:=ipv6
-  CATEGORY:=IPv6
+  SECTION:=net
+  CATEGORY:=Network
   SUBMENU:=miredo: Teredo (IPv6 tunneling over UDP through NAT)
   URL:=http://www.remlab.net/miredo/
 endef
@@ -30,7 +31,7 @@ endef
 define Package/miredo-common
 $(call Package/miredo/Default)
   TITLE:=Teredo (IPv6 tunneling over UDP through NAT) shared libraries
-  DEPENDS+= +ip +libpthread +librt +uclibcxx +kmod-ipv6 +kmod-tun
+  DEPENDS+= +ip +libpthread +librt $(CXX_DEPENDS) +kmod-ipv6 +kmod-tun
 endef
 
 define Package/miredo-server
@@ -61,17 +62,16 @@ CONFIGURE_ARGS += \
 	--disable-chroot \
 	--enable-teredo-client \
 	--enable-miredo-user=root \
-	--without-Judy \
+	--without-Judy
+
+EXTRA_CXXFLAGS=-fno-rtti
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	LIBS="-nodefaultlibs -luClibc++ -lm" \
-	ac_cv_file__proc_self_maps=yes\
+	LIBS="-lm" \
+	ac_cv_file__proc_self_maps=yes \
+	ac_cv_header_sys_capability_h=no
 
-# XXX: override (:=), don't append (+=)
-MAKE_FLAGS := \
-	CXXLINK="\$$$$(LINK)" \
+MAKE_FLAGS := CXXLINK="$(TARGET_CXX)"
 
 define Package/miredo-common/install
 	$(INSTALL_DIR) $(1)/usr/lib

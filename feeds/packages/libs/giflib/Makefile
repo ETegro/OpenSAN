@@ -15,7 +15,10 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/giflib
 PKG_MD5SUM:=7125644155ae6ad33dbc9fc15a14735f
 
-PKG_FIXUP:=libtool
+PKG_LICENSE:=MIT
+PKG_LICENSE_FILES:=COPYING
+
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
@@ -34,7 +37,7 @@ define Package/giflib/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
-CONFIGURE_ARGS += --without-x
+CONFIGURE_ARGS += --enable-x11=no
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)

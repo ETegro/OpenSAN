@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=proftpd
-PKG_VERSION:=1.3.3e
+PKG_VERSION:=1.3.4c
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.proftpd.org/distrib/source
-PKG_MD5SUM:=acc49b6589bc8c9fdf1dce9000bebdbd
+PKG_MD5SUM:=65f61e953bea249f8377e681594143a5
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -43,6 +43,9 @@ MAKE_FLAGS += \
 CONFIGURE_ARGS += \
 	--disable-cap \
 	--enable-devel \
+	--disable-auth-pam \
+	ac_cv_header_curses_h=no \
+	ac_cv_header_ncurses_h=no
 
 define Package/proftpd/install
 	$(INSTALL_DIR) $(1)/etc

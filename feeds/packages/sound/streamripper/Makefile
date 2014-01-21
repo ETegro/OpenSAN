@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=1a8353af3c36d56f2d8ee8552f632071
 
 PKG_INSTALL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=. tre-0.7.2
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/streamripper
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libmad +libfaad2
+  DEPENDS:=+libmad +libfaad2 +libpthread
   TITLE:=streamripper
   URL:=http://streamripper.sourceforge.net/
 endef

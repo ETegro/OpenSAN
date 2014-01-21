@@ -1,20 +1,21 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=remotefs
-PKG_REV:=854
+PKG_REV:=a4c25cee1e677c30acd559ff36ed1cfdc4b99c91
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=remotefs-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://remotefs.svn.sourceforge.net/svnroot/remotefs/trunk
+PKG_SOURCE_URL:=git://git.code.sf.net/p/remotefs/git
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +24,7 @@ define Package/remotefs
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+libfuse +libc +libgcc +libpthread
+  DEPENDS:=+libfuse +libpthread
   URL:=http://remotefs.sourceforge.net
 endef
 
@@ -37,11 +38,6 @@ endef
 define Package/remotefs-server
   $(call Package/remotefs)
   TITLE:=RemoteFS server
-  DEPENDS:=+libc +libgcc
-endef
-
-define Package/opkg/conffiles
-/etc/rfs-exports
 endef
 
 define Build/Compile
@@ -66,9 +62,13 @@ define Package/remotefs-server/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/rfsd $(1)/bin/rfsd
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/rfspasswd $(1)/bin/rfspasswd
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/rfs-exports $(1)/etc/rfs-exports
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/build/etc/rfs-exports $(1)/etc/rfs-exports
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/rfsd $(1)/etc/init.d/rfsd
+endef
+
+define Package/remotefs-server/conffiles
+/etc/rfs-exports
 endef
 
 $(eval $(call BuildPackage,remotefs))

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wing
-PKG_VERSION:=20110709
+PKG_VERSION:=20121218
 PKG_RELEASE:=1
-PKG_REV:=6aaea18b8e199781dc600681882cb2648f43ec38
+PKG_REV:=a4f901c3442c5bc49d1250007db7f45436069716
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=git://github.com/rriggio/click.git
@@ -24,9 +24,10 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/host-build.mk
 
 define Package/wing
-	TITLE:=Wireless mesh networking toolkit
 	SECTION:=net
 	CATEGORY:=Network
+	SUBMENU:=Routing and Redirection
+	TITLE:=Wireless mesh networking toolkit
 	MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
 	DEPENDS:=+kmod-tun +libpcap +libstdcpp
 	URL:=http://www.wing-project.org/
@@ -44,12 +45,16 @@ CONFIGURE_ARGS += \
 	--enable-tools=host \
 	--enable-userlevel \
 	--enable-wifi \
+	--enable-wing \
+	--enable-diffserv \
 	--disable-linuxmodule \
 	--disable-dynamic-linking \
 
 HOST_CONFIGURE_ARGS += \
 	--enable-userlevel \
 	--enable-wifi \
+	--enable-wing \
+	--enable-diffserv \
 	--disable-linuxmodule \
 
 define Host/Compile
@@ -62,7 +67,7 @@ define Build/Compile
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
 		-A --all -E Discard -E Print -E PrintWifi -E Strip -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
-		-E RadiotapEncapHT -E SetTXRateHT \
+		-E SetTXRateHT \
 		-E WINGETTMetric -E WINGETXMetric -E WINGHopCountMetric \
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback -E Minstrel \
 		-E FairBuffer -E DeAggregator -E DWRRSched -E WFQSched -E WRRSched; \

@@ -7,9 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-kernel-server
-PKG_VERSION:=1.1.6
+PKG_VERSION:=1.2.9
 PKG_RELEASE:=1
-PKG_MD5SUM:=b0d1b8ec5c8c081a340cfc77bb8670cd
+PKG_MD5SUM:=18869d16db3f49c053f8c68eba3fe2e0
 
 PKG_SOURCE_URL:=@SF/nfs
 PKG_SOURCE:=nfs-utils-$(PKG_VERSION).tar.bz2
@@ -67,14 +67,24 @@ define Package/nfs-utils/description
   Updated mount.nfs command - allows mounting nfs4 volumes
 endef
 
-TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include -Drpc_uint=uint
-TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC)
+TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include/libevent \
+		 -I$(STAGING_DIR)/usr/include/ -Drpc_uint=uint
+TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC) \
+		  -L$(STAGING_DIR)/usr/lib/libevent
 
 CONFIGURE_ARGS += \
 	--disable-gss \
 	--disable-nfsv4 \
+	--disable-nfsv41 \
 	--enable-static \
-	--enable-shared
+	--enable-shared \
+	--disable-caps \
+	--disable-tirpc \
+	--disable-nfsdcld
+
+CONFIGURE_VARS += \
+	CONFIG_SQLITE3_TRUE="\#" \
+	CONFIG_NFSDCLD_TRUE="\#"
 
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
@@ -88,6 +98,7 @@ HOST_CFLAGS += -Dlinux
 HOST_CONFIGURE_ARGS += \
 	--disable-gss \
 	--disable-nfsv4 \
+	--disable-nfsv41 \
 	--without-tcp-wrappers
 
 HOST_CONFIGURE_VARS += \
@@ -101,7 +112,8 @@ HOST_CONFIGURE_VARS += \
 	GSSGLUE_LIBS=" " \
 	RPCSECGSS_CFLAGS=" " \
 	RPCSECGSS_LIBS=" " \
-
+	CONFIG_SQLITE3_TRUE="\#" \
+	CONFIG_NFSDCLD_TRUE="\#"
 
 define Host/Compile
 	$(MAKE) -C $(HOST_BUILD_DIR)/tools/rpcgen all

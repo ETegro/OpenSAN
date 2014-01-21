@@ -18,7 +18,7 @@ PKG_SOURCE_URL:= \
 	http://mirrors.evolva.ro/netfilter.org/libnetfilter_log/
 PKG_MD5SUM:=acdb188a1e7504e95636d0770ade393c
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 
@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libnetfilter-log
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@!LINUX_2_4 +libnfnetlink +kmod-nfnetlink-log
+  DEPENDS:=+libnfnetlink +kmod-nfnetlink-log
   TITLE:=API to packets logged by the kernel packet filter
   URL:=http://www.netfilter.org/projects/libnetfilter_log/
 endef

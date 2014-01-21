@@ -1,29 +1,24 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 # Copyright (C) 2006 loswillios
+
 START=65
 
-include /lib/network
-scan_interfaces
-config_get WAN wan ifname
-config_get LAN lan ifname
-
 start() {
-    echo -n "Starting UPnP: "
-    route add -net 239.0.0.0 netmask 255.0.0.0 $LAN
-    upnpd $WAN $LAN
-    echo "OK"
+	. /lib/functions/network.sh
+
+	network_get_device wan_if 'wan' || return 1
+	network_get_device lan_if 'lan' || return 1
+
+	route add -net 239.0.0.0 netmask 255.0.0.0 $lan_if
+	service_start /usr/sbin/upnpd $wan_if $lan_if
 }
 
 stop() {
-    echo -n "Stopping UPnP: "
-    route del -net 239.0.0.0 netmask 255.0.0.0 $LAN
-    killall upnpd
-    echo "OK"
-}
+	. /lib/functions/network.sh
 
-restart() {
-        stop
-        sleep 5
-        start
+	service_stop /usr/sbin/upnpd
+
+	network_get_device lan_if 'lan' && \
+		route del -net 239.0.0.0 netmask 255.0.0.0 $lan_if
 }

@@ -32,14 +32,25 @@ coldplug_interface_tayga() {
 	setup_interface_tayga "tayga-$1" "$1"
 }
 
-conf_rule_add() {
-	local cfg="$1"
-	local tmpconf="$2"
-	local ipv4_addr ipv6_addr
-	config_get ipv4_addr "$cfg" ipv4_addr ""
-	config_get ipv6_addr "$cfg" ipv6_addr ""
-	[ -n "$ipv4_addr" ] && [ -n "$ipv6_addr" ] &&
-		echo "map $ipv4_addr $ipv6_addr" >>$tmpconf
+tayga_add_static_mappings() {
+	local tmpconf="$1"
+
+	(
+		. /lib/functions.sh
+		config_load firewall
+
+		tayga_map_rule_add() {
+			local cfg="$1"
+			local tmpconf="$2"
+			local ipv4_addr ipv6_addr
+			config_get ipv4_addr "$cfg" ipv4_addr ""
+			config_get ipv6_addr "$cfg" ipv6_addr ""
+			[ -n "$ipv4_addr" ] && [ -n "$ipv6_addr" ] &&
+				echo "map $ipv4_addr $ipv6_addr" >>$tmpconf
+		}
+
+		config_foreach tayga_map_rule_add nat64 "$tmpconf"
+	)
 }
 
 setup_interface_tayga() {
@@ -81,7 +92,7 @@ setup_interface_tayga() {
 
 	[ -n "$wanip4" ] && [ -n "$wanip6" ] || {
 		echo "Cannot determine local IPv4 and IPv6 addressed for tayga NAT64 $cfg - skipping"
-		return
+		return 1
 	}
 
 	local tmpconf="/var/etc/tayga-$cfg.conf"
@@ -96,7 +107,7 @@ setup_interface_tayga() {
 	[ -n "$prefix" ] &&
 		echo "prefix $prefix" >>$tmpconf
 
-	config_foreach conf_rule_add map_rule "$tmpconf"
+	tayga_add_static_mappings "$tmpconf"
 
 	[ -n "$dynamic_pool" ] &&
 		echo "dynamic-pool $dynamic_pool" >>$tmpconf
@@ -107,7 +118,9 @@ setup_interface_tayga() {
 	uci_set_state network "$cfg" ifname $link
 	uci_set_state network "$cfg" auto 0
 
-	tayga $args --mktun
+	# here we create TUN device and check configuration
+	tayga $args --mktun || return 1
+
 	ip link set "$link" up
 
 	ip addr add "$wanip4" dev "$link"

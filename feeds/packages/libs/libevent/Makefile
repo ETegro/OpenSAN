@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/
 PKG_MD5SUM:=a00e037e4d3f9e4fe9893e8a2d27918c
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
@@ -26,6 +26,7 @@ define Package/libevent
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Event notification library
+  DEPENDS:=+librt
   URL:=http://www.monkey.org/~provos/libevent/
 endef
 
@@ -51,10 +52,10 @@ MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{a,so} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/include/libevent
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/libevent/
+	$(INSTALL_DIR) $(1)/usr/lib/libevent
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{a,so} $(1)/usr/lib/libevent/
 endef
 
 define Package/libevent/install

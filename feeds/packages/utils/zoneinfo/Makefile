@@ -4,20 +4,19 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id:$
-#
 # Author: Michael Geddes
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zoneinfo
-PKG_VERSION:=2011i
+PKG_VERSION:=2011n
+PKG_VERSION_CODE:=2011i
 PKG_RELEASE:=1
 
 PKG_SOURCE:=tzdata$(PKG_VERSION).tar.gz
-PKG_SOURCE_CODE:=tzcode${PKG_VERSION}.tar.gz
-PKG_SOURCE_URL:=http://source.icu-project.org/repos/icu/data/trunk/tzdata/mirror/
-PKG_MD5SUM:=c7a86ec34f30f8d6aa77ef94902a3047
+PKG_SOURCE_CODE:=tzcode$(PKG_VERSION_CODE).tar.gz
+PKG_SOURCE_URL:=http://www.iana.org/time-zones/repository/releases
+PKG_MD5SUM:=20dbfb28efa008ddbf6dd34601ea40fa
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -124,9 +123,9 @@ define Package/zoneinfo-core/install
 	for i in \
 		CET CST6CDT EET EST EST5EDT GB-Eire Eire \
 		GB    GMT   GMT+0 GMT-0 GMT0  Greenwich  \
-		HST   MET   MST   MST7MDT NZ    NZ-CHAT  \
+		HST   MET   MST   MST7MDT                \
 		PRC   PST8PDT ROC ROK     UCT   UTC      \
-		Universal W-SU WET Zulu Etc/*  ; do \
+		Universal W-SU WET Zulu Etc/* zone.tab ; do \
 	  $(CP) $(PKG_INSTALL_DIR)/zoneinfo/$$$$i \
 	      $(1)/usr/share/zoneinfo ; \
 	done

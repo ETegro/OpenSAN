@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2009, 2010 Stefan Monnier
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2009-2010 Stefan Monnier
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v3+.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=LVM2
-PKG_VERSION:=2.02.88
+PKG_VERSION:=2.02.97
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://sources.redhat.com/pub/lvm2
-PKG_MD5SUM:=321429cd1b1526a29cf6d75018b1e4bb
+PKG_MD5SUM:=d18bd01334309db1c422b9bf6b181057
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME).$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,7 +25,6 @@ define Package/libdevmapper
   TITLE:=The Linux Kernel Device Mapper userspace library
   URL:=http://sourceware.org/dm/
   DEPENDS:=+kmod-dm
-  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/libdevmapper/description
@@ -40,7 +39,6 @@ define Package/lvm2
   TITLE:=The Linux Logical Volume Manager
   URL:=http://sourceware.org/lvm2/
   DEPENDS:=+libdevmapper +libreadline +libncurses
-  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/lvm2/description
@@ -75,7 +73,6 @@ endef
 define Package/lvm2/install
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tools/lvm $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tools/dmsetup $(1)/sbin
 	$(INSTALL_DIR) $(1)/etc/lvm
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/example.conf $(1)/etc/lvm/lvm.conf
 	$(INSTALL_DIR) $(1)/etc/init.d

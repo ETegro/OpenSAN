@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pcre
 PKG_MD5SUM:=ef907b8792ec7f90f0dcd773848f0b3b
 
+PKG_LICENSE:=BSD-3c
+PKG_LICENSE_FILES:=LICENCE
+
 PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
@@ -35,7 +38,7 @@ endef
 define Package/libpcrecpp
   $(call Package/libpcre/default)
   TITLE:=C++ wrapper for Perl Compatible Regular Expression library
-  DEPENDS:=+libpcre
+  DEPENDS:=+libpcre +libstdcpp
 endef
 
 

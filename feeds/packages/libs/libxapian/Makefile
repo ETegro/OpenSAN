@@ -8,15 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xapian-core
-PKG_VERSION:=1.0.7
-PKG_RELEASE:=3
+PKG_VERSION:=1.2.8
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oligarchy.co.uk/xapian/$(PKG_VERSION)
-PKG_MD5SUM:=b4acff50028120852d4a8d943065f6d2
+PKG_MD5SUM:=6c9f9e7ac43aa4e086283201329e98ee
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
+
+PKG_BUILD_DEPENDS:=util-linux
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -26,8 +28,11 @@ define Package/libxapian
   CATEGORY:=Libraries
   TITLE:=xapian
   URL:=http://xapian.org
-  DEPENDS:=+libstdcpp +zlib
+  DEPENDS:=+libstdcpp +libuuid +zlib
 endef
+
+MAKE_FLAGS += \
+	SUBDIRS=.
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/share/aclocal

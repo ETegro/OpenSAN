@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mgen
 PKG_VERSION:=5.01b
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=src-$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://downloads.pf.itd.nrl.navy.mil/mgen/
@@ -17,13 +17,14 @@ PKG_MD5SUM:=1e467131446d649c8a0aebdcd8e5f2a9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mgen
   TITLE:=Multi-Generator
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread $(CXX_DEPENDS)
   URL:=http://cs.itd.nrl.navy.mil/work/mgen/
 endef
 
@@ -38,9 +39,9 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/unix \
 		CC="$(TARGET_CXX)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++"  \
+		CPPFLAGS="$(TARGET_CPPFLAGS)"  \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		SYSTEM_LIBS="-ldl -lpthread -luClibc++" \
+		SYSTEM_LIBS="-ldl -lpthread" \
 		-f Makefile.linux mgen
 endef
 

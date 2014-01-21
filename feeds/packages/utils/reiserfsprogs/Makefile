@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@KERNEL/linux/utils/fs/reiserfs/
 PKG_MD5SUM:=bc00c7c4e047902575dc4e1c64ab3ba4
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,6 +25,7 @@ define Package/reiserfsprogs
   CATEGORY:=Utilities
   SUBMENU:=Filesystem
   TITLE:=ReiserFS filesystems utilities
+  DEPENDS:=+libuuid
   URL:=http://www.namesys.com/
 endef
 

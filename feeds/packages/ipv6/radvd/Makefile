@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,24 +8,24 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
-PKG_VERSION:=1.8.2
-PKG_RELEASE:=1
+PKG_VERSION:=1.9.1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
-PKG_MD5SUM:=ac8a862d2b232d25ea2622274a2da8a4
+PKG_MD5SUM:=e807ad7e9a76d46b6133df391385cd31
 
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/radvd/Default
-  SECTION:=ipv6
-  CATEGORY:=IPv6
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=IPv6 Routing Advertisement
   URL:=http://v6web.litech.org/radvd/
-  DEPENDS:=+kmod-ipv6
+  DEPENDS:=+kmod-ipv6 +libdaemon
 endef
 
 define Package/radvd
@@ -66,8 +66,6 @@ define Package/radvd/install
 	$(INSTALL_CONF) ./files/radvd.config $(1)/etc/config/radvd
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/radvd.init $(1)/etc/init.d/radvd
-	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_DATA) ./files/radvd.hotplug $(1)/etc/hotplug.d/iface/05-radvd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radvd $(1)/usr/sbin/
 endef

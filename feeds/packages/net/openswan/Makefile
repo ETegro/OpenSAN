@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.6.35
-PKG_RELEASE:=1
+PKG_VERSION:=2.6.38
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
-PKG_MD5SUM:=7909a251fbbb807914545b7f42437013
+PKG_MD5SUM:=13073eb5314b83a31be88e4117e8bbcd
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -24,7 +24,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openswan/Default
   TITLE:=Openswan
   URL:=http://www.openswan.org/
-  DEPENDS:=@!LINUX_2_4
 endef
 
 define Package/openswan/Default/description
@@ -37,7 +36,7 @@ $(call Package/openswan/Default)
   SECTION:=net
   CATEGORY:=Network
   TITLE+= (daemon)
-  DEPENDS+= +kmod-openswan +libgmp +ip
+  DEPENDS+= +libgmp +ip
 endef
 
 define Package/openswan/description
@@ -58,7 +57,7 @@ $(call Package/openswan/Default/description)
  This package contains the Openswan kernel module.
 endef
 
-TARGET_CPPFLAGS += -I$(LINUX_DIR)/include -D__EXPORTED_HEADERS__
+TARGET_CPPFLAGS += -I$(LINUX_DIR)/$(LINUX_UAPI_DIR)include -D__EXPORTED_HEADERS__
 
 OPENSWAN_MAKEFLAGS:= \
 	-C $(PKG_BUILD_DIR) \
@@ -72,12 +71,11 @@ OPENSWAN_MAKEFLAGS:= \
 	INC_USRLOCAL="/usr" \
 	INC_RCDEFAULT="/etc/init.d" \
 	MODPROBE="/sbin/insmod" \
-	LDFLAGS="$(TARGET_LDFLAGS)" \
 	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) programs
-	$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) module
+	+$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) programs
+	+$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) module
 endef
 
 define Build/Install
@@ -87,17 +85,24 @@ endef
 define Package/openswan/conffiles
 /etc/ipsec.conf
 /etc/ipsec.secrets
+/etc/config/ipsec
 endef
 
 define Package/openswan/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/ipsec.init $(1)/etc/init.d/ipsec
+	$(CP) ./files/ipsec.conf $(1)/etc/ipsec.conf
+	$(CP) ./files/ipsec.secrets $(1)/etc/ipsec.secrets
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/ipsec.config $(1)/etc/config/ipsec
 	rm -rf $(1)/usr/share
 	rm -rf $(1)/usr/man
 	rm -rf $(1)/var
 	rm -rf $(1)/etc/rc.d
 	find $(1) -name \*.old | xargs rm -rf
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) files/ipsec.upgrade $(1)/lib/upgrade/keep.d/ipsec
 endef
 
 $(eval $(call BuildPackage,openswan))

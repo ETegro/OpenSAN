@@ -19,6 +19,7 @@ PKG_FIXUP:=libtool-ucxx
 
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/fcgi/Default
@@ -36,7 +37,7 @@ endef
 
 define Package/fcgixx
   $(call Package/fcgi/Default)
-  DEPENDS:=fcgi +USE_UCLIBC:uclibcxx
+  DEPENDS:=fcgi $(CXX_DEPENDS)
   TITLE:=Shared library of FastCGI++
 endef
 
@@ -53,9 +54,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	LIBS="-nodefaultlibs -luClibc++ -lm" \
+	LIBS="-lm" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

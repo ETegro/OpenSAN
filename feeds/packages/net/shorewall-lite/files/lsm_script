@@ -1,33 +1,27 @@
 #!/bin/sh
+#
+# (C) 2009 Mika Ilmaranta <ilmis@nullnet.fi>
+# (C) 2009 Tom Eastep <teastep@shorewall.net>
+#
+# License: GPLv2
+#
 
 STATE=${1}
-NAME=${2}
-CHECKIP=${3}
 DEVICE=${4}
-WARN_EMAIL=${5}
-REPLIED=${6}
-WAITING=${7}
-TIMEOUT=${8}
-REPLY_LATE=${9}
-CONS_RCVD=${10}
-CONS_WAIT=${11}
-CONS_MISS=${12}
-AVG_RTT=${13}
 
 if [ -f /usr/share/shorewall-lite/lib.base ]; then
-    VARDIR=/var/lib/shorewall-lite
-    STATEDIR=/etc/shorewall-lite
-else
-    VARDIR=/var/lib/shorewall
-    STATEDIR=/etc/shorewall
+	VARDIR=/etc/shorewall-lite/state
+	STATEDIR=/etc/shorewall-lite
 fi
 
 [ -f ${STATEDIR}/vardir ] && . ${STATEDIR}/vardir
 
-[ ${STATE} = up ] && state=0 || state=1
+if [ ${STATE} = up ]; then
+	${VARDIR}/firewall enable ${DEVICE}
+else
+	${VARDIR}/firewall disable ${DEVICE}
+fi
 
-echo $state > ${VARDIR}/${DEVICE}.status
+/sbin/shorewall-lite show routing > /var/log/lsm
 
-/sbin/shorewall-lite restart -f >> /var/log/lsm 2>&1
-
-/sbin/shorewall-lite show routing >> /var/log/lsm
+exit 0

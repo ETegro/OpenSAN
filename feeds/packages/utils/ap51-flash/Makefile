@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ap51-flash
 PKG_REV:=232
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=ap51-flash-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://dev.cloudtrax.com/downloads/svn/ap51-flash/trunk
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
+PKG_MIRROR_MD5SUM:=3bff5b2ffa77ee80a807f3d24165b7cf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,7 +48,11 @@ define Package/ap51-flash/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ap51-flash $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/ap51-flash.init $(1)/etc/init.d/ap51-flash
 	$(INSTALL_BIN) ./files/ap51-flash.sh $(1)/usr/lib/ap51-flash/ap51-flash.sh
-	$(INSTALL_DATA) ./files/ap51-flash.conf $(1)/etc/config/ap51-flash
+	$(INSTALL_DATA) ./files/ap51-flash.config $(1)/etc/config/ap51-flash
+endef
+
+define Package/ap51-flash/conffiles
+/etc/config/ap51-flash
 endef
 
 $(eval $(call BuildPackage,ap51-flash))

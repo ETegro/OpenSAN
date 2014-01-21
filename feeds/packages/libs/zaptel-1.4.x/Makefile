@@ -22,11 +22,13 @@ include $(INCLUDE_DIR)/package.mk
 define Package/zaptel14/Default
   TITLE:=Zaptel
   URL:=http://ftp.digium.com/pub/zaptel/releases
+  DEPENDS:=
 endef
 
 define KernelPackage/zaptel14/Default
   TITLE:=Zaptel (kernel module)
-  SUBMENU:=Other modules
+  SUBMENU:=Voice over IP
+  DEPENDS:=
 endef
 
 define KernelPackage/zaptel14
@@ -45,7 +47,7 @@ endef
 define KernelPackage/zaptel14-dummy
   $(call KernelPackage/zaptel14/Default)
   TITLE:=Zaptel Dummy (timer; kernel module)
-  DEPENDS += +kmod-zaptel14 @TARGET_x86:@BROKEN
+  DEPENDS += +kmod-zaptel14
   FILES:=$(PKG_BUILD_DIR)/kernel/ztdummy.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,71,ztdummy)
 endef
@@ -129,6 +131,8 @@ define Build/Compile/user
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	        ARCH="$(LINUX_KARCH)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		AR="$(TARGET_CROSS)ar" \
+		RANLIB="$(TARGET_CROSS)ranlib" \
 		install-libs install-include zttest ztcfg zttool ztdiag fxotune ztmonitor ztscan ztspeed fxstest
 endef
 

@@ -17,7 +17,7 @@ PKG_MD5SUM:=7f123e53b3daaaba2478d3af5a0752e3
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)$(PKG_VERSION)
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tcl
   SECTION:=lang
   CATEGORY:=Languages
+  DEPENDS:=+libpthread
   TITLE:=TCL Lang
   URL:=http://www.tcl.tk
 endef

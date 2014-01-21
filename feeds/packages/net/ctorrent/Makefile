@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ctorrent
 PKG_VERSION:=dnh3.3.2
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/dtorrent \
@@ -18,13 +18,14 @@ PKG_MD5SUM:=59b23dd05ff70791cd6449effa7fc3b6
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ctorrent/Default
   SUBMENU:=BitTorrent
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx
+  DEPENDS:=$(CXX_DEPENDS)
   TITLE:=console-based BitTorrent client
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.rahul.net/dholmes/ctorrent/
@@ -60,9 +61,7 @@ $(call Package/ctorrent/Default/description)
 endef
 
 CONFIGURE_VARS += \
-	CXX="g++-uc" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
-	LIBS="-nodefaultlibs -luClibc++ $(LIBGCC_S) -lc"
+	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bemused-mpd
 PKG_VERSION:=r062
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/526
@@ -40,7 +40,7 @@ EXTRA_CPPFLAGS:= \
 	-I$(STAGING_DIR)/usr/lib/glib/include
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
 		CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
@@ -57,6 +57,11 @@ define Package/bemusedlinuxserver/install
 	$(INSTALL_CONF) ./files/bemused-bookmarks $(1)/etc/bemused-bookmarks
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/bemused.init $(1)/etc/init.d/bemused
+endef
+
+define Package/bemusedlinuxserver/conffiles
+/etc/bemused.conf
+/etc/bemused-bookmarks
 endef
 
 $(eval $(call BuildPackage,bemusedlinuxserver))

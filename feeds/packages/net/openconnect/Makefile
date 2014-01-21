@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openconnect
-PKG_VERSION:=2.25
+PKG_VERSION:=4.08
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.infradead.org/pub/openconnect/
-PKG_MD5SUM:=796a32b611ee6210a5367eb9684d6778
+PKG_MD5SUM:=3dd065194d87c08084675d255c8e29ef
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openconnect
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libxml2 +libopenssl +kmod-tun
+  DEPENDS:=+libxml2 +libopenssl +kmod-tun +resolveip
   TITLE:=VPN client for Cisco's AnyConnect SSL VPN
   URL:=http://www.infradead.org/openconnect/
   SUBMENU:=VPN
@@ -34,22 +34,16 @@ define Package/openconnect/description
         3800, 7200 Series and Cisco 7301 Routers.  
 endef
 
-define Build/Compile
-	$(call Build/Compile/Default, \
-		SSL_CFLAGS="" \
-		OPT_FLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
-		OS="Linux" \
-		STAGING_DIR="$(STAGING_DIR)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		PREFIX=/usr \
-		all install \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-shared \
+	--with-vpnc-script=/lib/netifd/vpnc-script
 
 define Package/openconnect/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP)	$(PKG_INSTALL_DIR)/usr/bin/openconnect \
-		$(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/lib/netifd/proto
+	$(INSTALL_BIN) ./files/openconnect.sh $(1)/lib/netifd/proto/
+	$(INSTALL_BIN) ./files/vpnc-script $(1)/lib/netifd/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openconnect $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,openconnect))

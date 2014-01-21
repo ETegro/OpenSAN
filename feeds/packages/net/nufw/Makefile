@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.nufw.org/download/nufw/
 PKG_MD5SUM:=7eb500e7ddb3db622dc6c5d43b495c9a
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
@@ -87,7 +87,7 @@ define Build/Compile
 			-L$(INTL_PREFIX)/lib \
 			-L$(ICONV_PREFIX)/lib \
 			-Wl,-rpath-link,$(STAGING_DIR)/usr/lib -liconv \
-			-lgnutls -lnetfilter_queue -lpthread" \
+			-lgnutls -lnetfilter_queue -lpthread -lgcrypt" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef

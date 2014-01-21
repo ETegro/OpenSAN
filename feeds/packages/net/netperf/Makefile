@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netperf
-PKG_VERSION:=2.4.5
+PKG_VERSION:=2.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.netperf.org/netperf/
-PKG_MD5SUM:=5cfaae1d024551161b8eafbd48faedf4
+PKG_MD5SUM:=9654ffdfd4c4f2c93ce3733cd9ed9236
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,6 +23,8 @@ define Package/netperf
   TITLE:=Network performance measurement tool
   URL:=http://www.netperf.org/
 endef
+
+CONFIGURE_ARGS += --enable-demo
 
 define Package/netperf/install
 	$(INSTALL_DIR) $(1)/etc/init.d

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2008-2011 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,15 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=5.9p1
-PKG_RELEASE:=1
+PKG_VERSION:=6.4p1
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://openbsd.wiretapped.net/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://ftp.belnet.be/packages/openbsd/OpenSSH/portable/ \
 		ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
-PKG_MD5SUM:=afe17eee7e98d3b8550cc349834a85d0
+PKG_MD5SUM:=a62b88b884df0b09b8a8c5789ac9e51b
+
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:=libopenssl
 
@@ -25,23 +28,23 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openssh/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib +libgcc
+  DEPENDS:=+libopenssl +zlib +SSP_SUPPORT:libssp
   TITLE:=OpenSSH
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
+  VARIANT:=without-pam
 endef
 
 define Package/openssh-moduli
   $(call Package/openssh/Default)
-  DEPENDS+= +openssh-server
+  DEPENDS+= +openssh-keygen
   TITLE+= moduli file
 endef
 
 define Package/openssh-moduli/description
 OpenSSH server moduli file.
 endef
-
 
 define Package/openssh-client
   $(call Package/openssh/Default)
@@ -89,6 +92,23 @@ define Package/openssh-server/conffiles
 /etc/ssh/sshd_config
 endef
 
+define Package/openssh-server-pam
+  $(call Package/openssh/Default)
+  DEPENDS+= +libpthread +openssh-keygen +libpam
+  TITLE+= server (with PAM support)
+  VARIANT:=with-pam
+endef
+
+define Package/openssh-server-pam/description
+OpenSSH server (with PAM support).
+endef
+
+define Package/openssh-server-pam/conffiles
+/etc/pam.d/sshd
+/etc/security/access-sshd-local.conf
+/etc/ssh/sshd_config
+endef
+
 define Package/openssh-sftp-client
   $(call Package/openssh/Default)
   TITLE+= SFTP client
@@ -100,7 +120,6 @@ endef
 
 define Package/openssh-sftp-server
   $(call Package/openssh/Default)
-  DEPENDS:=+libgcc
   TITLE+= SFTP server
 endef
 
@@ -111,6 +130,8 @@ endef
 CONFIGURE_ARGS+= \
 	$(DISABLE_NLS) \
 	--sysconfdir=/etc/ssh \
+	--with-privsep-user=sshd \
+	--with-privsep-path=/var/empty \
 	--enable-shared \
 	--disable-static \
 	--disable-debug \
@@ -123,8 +144,20 @@ CONFIGURE_ARGS+= \
 	--disable-wtmpx \
 	--without-bsd-auth \
 	--without-kerberos5 \
-	--without-pam \
 	--without-x
+
+ifeq ($(BUILD_VARIANT),with-pam)
+CONFIGURE_ARGS += \
+	--with-pam
+else
+CONFIGURE_ARGS += \
+	--without-pam
+endif
+
+ifeq ($(CONFIG_OPENSSL_ENGINE),y)
+CONFIGURE_ARGS+= \
+	--with-ssl-engine
+endif
 
 ifneq ($(CONFIG_SSP_SUPPORT),y)
 CONFIGURE_ARGS += \
@@ -132,6 +165,10 @@ CONFIGURE_ARGS += \
 endif
 
 CONFIGURE_VARS += LD="$(TARGET_CC)"
+
+ifeq ($(BUILD_VARIANT),with-pam)
+TARGET_LDFLAGS += -lpthread
+endif
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -144,9 +181,27 @@ define Build/Compile
 		all install
 endef
 
+define Package/openssh-client/preinst
+#!/bin/sh
+if [ -L $${IPKG_INSTROOT}/usr/bin/ssh ] && [ -L $${IPKG_INSTROOT}/usr/bin/scp ]; then
+  rm -f $${IPKG_INSTROOT}/usr/bin/ssh $${IPKG_INSTROOT}/usr/bin/scp;
+fi
+exit 0
+endef
+
+define Package/openssh-client/postrm
+#!/bin/sh
+rm -f $${IPKG_INSTROOT}/usr/bin/ssh $${IPKG_INSTROOT}/usr/bin/scp;
+if [ -x $${IPKG_INSTROOT}/usr/sbin/dropbear ] ; then
+  ln -s /usr/sbin/dropbear $${IPKG_INSTROOT}/usr/bin/ssh;
+  ln -s /usr/sbin/dropbear $${IPKG_INSTROOT}/usr/bin/scp;
+fi
+exit 0
+endef
+
 define Package/openssh-moduli/install
 	$(INSTALL_DIR) $(1)/etc/ssh
-	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/moduli $(1)/etc/ssh/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ssh/moduli $(1)/etc/ssh/
 endef
 
 define Package/openssh-client/install
@@ -168,32 +223,24 @@ define Package/openssh-keygen/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ssh-keygen $(1)/usr/bin/
 endef
 
-
 define Package/openssh-server/install
 	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
-	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/sshd.init $(1)/etc/init.d/sshd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/sshd $(1)/usr/sbin/
 endef
 
-define Package/openssh-server/postinst
-#!/bin/sh
-
-name=sshd
-id=22
-
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-	echo "adding group $$name to /etc/group"
-	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-fi
-
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-	echo "adding user $$name to /etc/passwd"
-	echo "$${name}:x:$${id}:$${id}:$${name}:/var/empty/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
-fi
+define Package/openssh-server-pam/install
+	$(call Package/openssh-server/install,$(1))
+	sed -i 's,#PasswordAuthentication yes,PasswordAuthentication no,g' $(1)/etc/ssh/sshd_config
+	sed -i 's,#UsePAM no,UsePAM yes,g' $(1)/etc/ssh/sshd_config
+	$(INSTALL_DIR) $(1)/etc/pam.d
+	$(INSTALL_DATA) ./files/sshd.pam $(1)/etc/pam.d/sshd
+	$(INSTALL_DIR) $(1)/etc/security
+	$(INSTALL_DATA) ./files/sshd.pam-access $(1)/etc/security/access-sshd-local.conf
 endef
 
 define Package/openssh-sftp-client/install
@@ -213,5 +260,6 @@ $(eval $(call BuildPackage,openssh-moduli))
 $(eval $(call BuildPackage,openssh-client-utils))
 $(eval $(call BuildPackage,openssh-keygen))
 $(eval $(call BuildPackage,openssh-server))
+$(eval $(call BuildPackage,openssh-server-pam))
 $(eval $(call BuildPackage,openssh-sftp-client))
 $(eval $(call BuildPackage,openssh-sftp-server))

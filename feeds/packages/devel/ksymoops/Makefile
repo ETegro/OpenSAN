@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ksymoops
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=@!LINUX_2_4 @mips||mipsel||m68k||i386
+  DEPENDS:=@mips||mipsel||m68k||i386 +zlib
   TITLE:=Interpret oops of the kernel
   URL:=http://www.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4/
   MENU:=1
@@ -46,6 +46,7 @@ define Build/Compile
 		DEF_MAP='\"$(LINUX_DIR)/System.map\"' \
 		CROSS="$(TARGET_CROSS)" \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
+		LDFLAGS="-lz" \
 		all install
 endef
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gzip
 PKG_VERSION:=1.4
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gzip
@@ -33,6 +33,7 @@ endef
 
 CONFIGURE_VARS += \
 	gl_cv_func_getopt_gnu=yes \
+	ac_cv_search_clock_gettime=no
 
 define Package/gzip/install
 	$(SED) 's,/bin/bash,/bin/sh,g' $(PKG_INSTALL_DIR)/usr/bin/{gunzip,zcat}
@@ -43,7 +44,7 @@ endef
 define Package/gzip/postinst
 #!/bin/sh
 for app in gunzip gzip zcat; do
-  ln -sf $${IPKG_INSTROOT}/usr/bin/$$app $${IPKG_INSTROOT}/bin/$$app
+  ln -sf ../usr/bin/$$app $${IPKG_INSTROOT}/bin/$$app
 done
 endef
 

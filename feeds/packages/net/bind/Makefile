@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,23 +8,26 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.8.0-P4
+PKG_VERSION:=9.9.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=13e36e3f28dc1ce7675b45a4192e8389
+PKG_MD5SUM:=f69757adc86776daed8e5acb0ee7c0ca
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
+PKG_REMOVE_FILES:=aclocal.m4 libtool.m4
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/bind/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+bind-libs +libopenssl
+  DEPENDS:=+bind-libs
   TITLE:=bind
   URL:=https://www.isc.org/software/bind
   SUBMENU:=IP Addresses and Names
@@ -33,8 +36,9 @@ endef
 define Package/bind-libs
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libopenssl
   TITLE:=bind shared libraries
-  URL:=http://www.isc.org/sw/bind/
+  URL:=https://www.isc.org/software/bind
 endef
 
 define Package/bind-server
@@ -84,10 +88,15 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--with-randomdev="/dev/urandom" \
 	--disable-threads \
+	--disable-linux-caps \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-libtool \
 	--with-libxml2=no \
 	--enable-epoll=yes \
+	--with-gost=no \
+	--with-gssapi=no \
+	--with-ecdsa=no \
+	--with-readline=no
 
 CONFIGURE_VARS += \
 	BUILD_CC="$(TARGET_CC)" \
@@ -99,9 +108,7 @@ define Build/Compile
 		CFLAGS="-O2" \
 		LIBS="" \
 		gen
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(call Build/Compile/Default)
 endef
 
 define Package/bind-libs/install
@@ -112,11 +119,27 @@ endef
 define Package/bind-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/named $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(CP) ./files/bind $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/bind
+	$(CP) \
+		./files/bind/db.0 \
+		./files/bind/db.127 \
+		./files/bind/db.255 \
+		./files/bind/db.local \
+		./files/bind/db.root \
+		$(1)/etc/bind/
+	$(CP) ./files/bind/named.conf.example $(1)/etc/bind/named.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/named.init $(1)/etc/init.d/named
 	find $(1)/etc/bind/ -name ".svn" | xargs rm -rf
+endef
+
+define Package/bind-server/conffiles
+/etc/bind/db.0
+/etc/bind/db.127
+/etc/bind/db.255
+/etc/bind/db.local
+/etc/bind/db.root
+/etc/bind/named.conf
 endef
 
 define Package/bind-client/install

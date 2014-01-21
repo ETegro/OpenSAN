@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgphoto2
-PKG_VERSION:=2.4.9
-PKG_RELEASE:=2
+PKG_VERSION:=2.4.12
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=32b233189e3df7e5e67d2a81163682b8
+PKG_MD5SUM:=735c50ebb15cb8be61bac400ee4afb1e
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=. libgphoto2_port
 PKG_INSTALL:=1
 
@@ -30,14 +30,14 @@ endef
 
 define Package/libgphoto2
   $(call Package/libgphoto2/Default)
-  DEPENDS:=+libusb +libexif +libjpeg +libpthread +libltdl $(ICONV_DEPENDS)
+  DEPENDS:=+libexif +libjpeg +libpthread +libltdl $(ICONV_DEPENDS)
   TITLE:=The basic library of the gphoto2 program.
   MENU:=1
 endef
 
 define Package/libgphoto2-drivers
   $(call Package/libgphoto2/Default)
-  DEPENDS:=libgphoto2
+  DEPENDS:=libgphoto2 +libusb-compat +libgd
   TITLE:=Gphoto2 drivers for various cameras
 endef
 
@@ -59,7 +59,7 @@ CONFIGURE_VARS += \
 	LIBUSB_LIBS="$$$$LDFLAGS -lusb" \
 	LIBS="-lltdl" \
 
-# If OpenWrt is using the iconv stub, we disable iconv support 
+# If OpenWrt is using the iconv stub, we disable iconv support
 # in libgphoto2 entirely since the stub lacks some essential
 # conversions like UCS-2 to UTF-8 which will let certain drivers
 # fail with "Failed to create iconv converter" .
@@ -96,6 +96,7 @@ define Package/libgphoto2-drivers/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgphoto2{,_port} $(1)/usr/lib/
 	rm -rf $(1)/usr/lib/libgphoto2{,_port}/*/*.{,l}a
+	rm -f $(1)/usr/lib/libgphoto2_port/*/usb.so
 endef
 
 $(eval $(call BuildPackage,libgphoto2))

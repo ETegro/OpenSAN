@@ -12,7 +12,7 @@ PKG_SOURCE_URL:=@SF/curlftpfs
 PKG_MD5SUM:=b452123f755114cd4461d56c648d9f12
 
 PKG_BUILD_DEPENDS:=libiconv
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -38,7 +38,8 @@ EXTRA_CFLAGS += \
 
 EXTRA_LDFLAGS += \
 	-L$(INTL_PREFIX)/lib \
-	-L$(ICONV_PREFIX)/lib
+	-L$(ICONV_PREFIX)/lib \
+	-lpthread
 
 define Package/curlftpfs/install
 	$(INSTALL_DIR) $(1)/usr/bin

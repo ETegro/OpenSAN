@@ -1,11 +1,12 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=rrs
 PKG_VERSION:=1.70
@@ -20,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rrs/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx
+  DEPENDS:=$(CXX_DEPENDS)
   TITLE:=A reverse (connecting) remote shell
   URL:=http://www.cycom.se/dl/rrs/
 endef
@@ -48,8 +49,8 @@ $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs $(4) -luClibc++ -lm -lutil" \
-		LDFLAGSNOSSL="$(TARGET_LDFLAGS) -nodefaultlibs $(4) -luClibc++ -lm -lutil" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -lc $(4) -luClibc++ -lm -lutil $(LIBGCC_S)" \
+		LDFLAGSNOSSL="$(TARGET_LDFLAGS) -nodefaultlibs -lc $(4) -luClibc++ -lm -lutil $(LIBGCC_S)" \
 		$(3)
 	( cd $(PKG_BUILD_DIR); mv -f rrs rrs-$(2); )
 	touch $$@

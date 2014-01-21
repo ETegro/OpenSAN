@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tspc
 PKG_VERSION:=2.1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.fr.debian.org/debian/pool/main/t/tspc/
@@ -20,8 +20,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tspc
-  SECTION:=ipv6
-  CATEGORY:=IPv6
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=Client for Hexago's (Freenet6's) IPv6 service
   URL:=http://www.hexago.com
 endef
@@ -43,6 +43,10 @@ define Package/tspc/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/bin/tspc.conf.sample $(1)/etc/tsp/tspc.conf
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/template/linux.sh $(1)/etc/tsp/setup.sh
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/template/checktunnel.sh $(1)/etc/tsp/
+endef
+
+define Package/tspc/conffiles
+/etc/tsp/tspc.conf
 endef
 
 $(eval $(call BuildPackage,tspc))

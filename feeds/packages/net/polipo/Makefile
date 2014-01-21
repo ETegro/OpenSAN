@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=polipo
 PKG_VERSION:=1.0.4.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freehaven.net/~chrisd/polipo/
@@ -22,8 +22,8 @@ define Package/polipo
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A caching web proxy
-  URL:=http://www.pps.jussieu.fr/~jch/software/polipo/
-  MAINTAINER:=Gabriel Kerneis <kerneis@pps.jussieu.fr>
+  URL:=http://www.pps.univ-paris-diderot.fr/~jch/software/polipo/
+  MAINTAINER:=Gabriel Kerneis <kerneis@pps.univ-paris-diderot.fr>
 endef
 
 define Package/polipo/description

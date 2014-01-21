@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 # Copyright (C) 2006 loswillios
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=linuxigd
 PKG_VERSION:=1.0
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-igd
@@ -25,7 +25,7 @@ define Package/linuxigd
   CATEGORY:=Network
   TITLE:=UPnP daemon
   SUBMENU:=Firewall
-  DEPENDS:=+libiptc +libupnp +libpthread @!LINUX_2_4
+  DEPENDS:=+libip4tc +libupnp +libpthread @BROKEN
   URL:=http://linux-igd.sourceforge.net/
 endef
 
@@ -46,6 +46,7 @@ define Build/Compile
 		HAVE_LIBIPTC=1 \
 		LIBIPTC_PREFIX="$(STAGING_DIR)/usr" \
 		LIBUPNP_PREFIX="$(STAGING_DIR)/usr" \
+		LIBS="-lpthread -lupnp -lixml -lthreadutil -lip4tc -L../lib" \
 		all
 endef
 

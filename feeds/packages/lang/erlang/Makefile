@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=erlang
-PKG_VERSION:=R13A
-PKG_RELEASE:=2
+PKG_VERSION:=R16B02
+PKG_RELEASE:=1
 
 PKG_SOURCE:=otp_src_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://www.erlang.org/download/ \
 	http://erlang.mirror.su.se/	
-PKG_MD5SUM:=76804ff9c18710184cf0c0230a0443fc
+PKG_MD5SUM:= ca63bcde0e5ae0f2df9457f97b3115a4
 
 PKG_BUILD_DEPENDS:=erlang/host openssl
 
@@ -38,11 +38,10 @@ define Package/erlang/Default/description
  and fault tolerance.
 endef
 
-
 define Package/erlang
 $(call Package/erlang/Default)
-  DEPENDS+= +libncurses +librt
-  PROVIDES:= erlang-erts=5.7 erlang-kernel=2.13 erlang-sasl=2.1.6 erlang-stdlib=1.16
+  DEPENDS+= +libncurses +librt +zlib
+  PROVIDES:= erlang-erts=5.10.3 erlang-kernel=2.16.3 erlang-sasl=2.3.3 erlang-stdlib=1.19.3
 endef
 
 define Package/erlang/description
@@ -56,7 +55,7 @@ endef
 define Package/erlang-asn1
 $(call Package/erlang/Default)
   TITLE:=Abstract Syntax Notation One (ASN.1) support
-  VERSION:=1.6.8
+  VERSION:=2.0.3
   DEPENDS+= +erlang +erlang-syntax-tools
 endef
 
@@ -71,7 +70,7 @@ endef
 define Package/erlang-compiler
 $(call Package/erlang/Default)
   TITLE:=Byte code compiler
-  VERSION:=4.6
+  VERSION:=4.9.3
   DEPENDS+= +erlang +erlang-hipe
 endef
 
@@ -86,7 +85,7 @@ endef
 define Package/erlang-crypto
 $(call Package/erlang/Default)
   TITLE:=Cryptography support
-  VERSION:=4.6
+  VERSION:=3.1
   DEPENDS+= +erlang +libopenssl
 endef
 
@@ -101,7 +100,7 @@ endef
 define Package/erlang-hipe
 $(call Package/erlang/Default)
   TITLE:=High Performance Erlang
-  VERSION:=5.0.13
+  VERSION:=3.10.2.1
   DEPENDS+= +erlang
 endef
 
@@ -116,7 +115,7 @@ endef
 define Package/erlang-inets
 $(call Package/erlang/Default)
   TITLE:=Internet clients and servers
-  VERSION:=5.0.13
+  VERSION:=5.9.6
   DEPENDS+= +erlang
 endef
 
@@ -132,7 +131,7 @@ endef
 define Package/erlang-mnesia
 $(call Package/erlang/Default)
   TITLE:=Distributed database
-  VERSION:=4.4.8
+  VERSION:=4.10
   DEPENDS+= +erlang
 endef
 
@@ -149,7 +148,7 @@ endef
 define Package/erlang-runtime-tools
 $(call Package/erlang/Default)
   TITLE:=Low-profile debugging/tracing tools
-  VERSION:=1.8
+  VERSION:=1.8.12
   DEPENDS+= +erlang
 endef
 
@@ -164,7 +163,7 @@ endef
 define Package/erlang-snmp
 $(call Package/erlang/Default)
   TITLE:=Simple Network Management Protocol (SNMP) support
-  VERSION:=4.13
+  VERSION:=4.24.2
   DEPENDS+= +erlang +erlang-asn1
 endef
 
@@ -180,7 +179,7 @@ endef
 define Package/erlang-ssh
 $(call Package/erlang/Default)
   TITLE:=Secure Shell (SSH) support
-  VERSION:=1.1.1
+  VERSION:=2.1.8
   DEPENDS+= +erlang +erlang-crypto
 endef
 
@@ -195,7 +194,7 @@ endef
 define Package/erlang-ssl
 $(call Package/erlang/Default)
   TITLE:=Secure Sockets Layer (SSL) support
-  VERSION:=3.10.1
+  VERSION:=5.3.1
   DEPENDS+= +erlang +erlang-crypto
 endef
 
@@ -210,7 +209,7 @@ endef
 define Package/erlang-syntax-tools
 $(call Package/erlang/Default)
   TITLE:=Abstract Erlang syntax trees handling support
-  VERSION:=1.6
+  VERSION:=1.6.11
   DEPENDS+= +erlang
 endef
 
@@ -227,12 +226,7 @@ endef
 HOST_CONFIGURE_ARGS += \
 	--disable-hipe \
 	--disable-smp-support \
-	--without-java \
-	--without-ssl
-
-HOST_CONFIGURE_VARS += \
-	ac_cv_prog_JAVAC="" \
-	ac_cv_prog_javac_ver_1_2=no
+	--without-javac 
 
 define Host/Compile
 	$(MAKE) -C $(HOST_BUILD_DIR) all
@@ -248,20 +242,16 @@ endef
 CONFIGURE_ARGS += \
 	--disable-hipe \
 	--disable-smp-support \
-	--disable-threads \
-	--without-java \
-	--with-ssl="$(STAGING_DIR)/usr" \
+	--without-javac \
 	--enable-dynamic-ssl-lib
 
 CONFIGURE_VARS += \
 	SHLIB_LD="$(TARGET_CC)" \
 	TARGET_ARCH="$(TARGET_ARCH)" \
-	ac_cv_prog_RX_LD="$(TARGET_LD)" \
-	ac_cv_prog_JAVAC="" \
-	ac_cv_prog_javac_ver_1_2=no \
-	ac_cv_func_getaddrinfo=no \
 	ac_cv_func_mmap_fixed_mapped=yes \
-	ac_cv_path_WX_CONFIG_PATH=no
+	ac_cv_path_WX_CONFIG_PATH=no \
+	erl_xcomp_getaddrinfo=no \
+	erl_xcomp_sysroot="$(STAGING_DIR)"
 
 EXTRA_LDFLAGS+=-lz
 
@@ -304,6 +294,12 @@ define Package/erlang/install
 	done
 endef
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/lib/erl_interface/obj/*/*.a $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/lib/erl_interface/include/*.h $(1)/usr/include
+endef
 
 define BuildModule
 
