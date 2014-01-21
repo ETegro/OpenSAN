@@ -11,10 +11,6 @@ LC_ALL:=C
 LANG:=C
 export TOPDIR LC_ALL LANG
 
-empty:=
-space:= $(empty) $(empty)
-$(if $(findstring $(space),$(TOPDIR)),$(error ERROR: The path to the OpenWrt directory must not include any spaces))
-
 world:
 
 include $(TOPDIR)/include/host.mk
@@ -44,9 +40,11 @@ else
 
 $(toolchain/stamp-install): $(tools/stamp-install)
 $(target/stamp-compile): $(toolchain/stamp-install) $(tools/stamp-install) $(BUILD_DIR)/.prepared
+$(package/stamp-cleanup): $(target/stamp-compile)
 $(package/stamp-compile): $(target/stamp-compile) $(package/stamp-cleanup)
 $(package/stamp-install): $(package/stamp-compile)
-$(target/stamp-install): $(package/stamp-compile) $(package/stamp-install)
+$(package/stamp-rootfs-prepare): $(package/stamp-install)
+$(target/stamp-install): $(package/stamp-compile) $(package/stamp-install) $(package/stamp-rootfs-prepare)
 
 printdb:
 	@true
@@ -54,6 +52,7 @@ printdb:
 prepare: $(target/stamp-compile)
 
 clean: FORCE
+	$(_SINGLE)$(SUBMAKE) target/linux/clean
 	rm -rf $(BUILD_DIR) $(BIN_DIR) $(BUILD_LOG_DIR)
 
 dirclean: clean
@@ -79,15 +78,9 @@ endif
 
 # check prerequisites before starting to build
 prereq: $(target/stamp-prereq) tmp/.prereq_packages
-	@if [ ! -f "$(INCLUDE_DIR)/site/$(REAL_GNU_TARGET_NAME)" ]; then \
-		echo 'ERROR: Missing site config for target "$(REAL_GNU_TARGET_NAME)" !'; \
-		echo '       The missing file will cause configure scripts to fail during compilation.'; \
-		echo '       Please provide a "$(INCLUDE_DIR)/site/$(REAL_GNU_TARGET_NAME)" file and restart the build.'; \
-		exit 1; \
-	fi
 
 prepare: .config $(tools/stamp-install) $(toolchain/stamp-install)
-world: prepare $(target/stamp-compile) $(package/stamp-compile) $(package/stamp-install) $(target/stamp-install) FORCE
+world: prepare $(target/stamp-compile) $(package/stamp-cleanup) $(package/stamp-compile) $(package/stamp-install) $(package/stamp-rootfs-prepare) $(target/stamp-install) FORCE
 	$(_SINGLE)$(SUBMAKE) -r package/index
 
 # update all feeds, re-create index files, install symlinks
