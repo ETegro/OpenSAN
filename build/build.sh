@@ -1,7 +1,8 @@
 #!/bin/bash -ex
 # aStor2 -- storage area network configurable via Web-interface
-# Copyright (C) 2009-2012 ETegro Technologies, PLC
+# Copyright (C) 2009-2014 ETegro Technologies, PLC
 #                         Sergey Matveev <sergey.matveev@etegro.com>
+#                         Denis Zheleztsov <dz@etegro.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
