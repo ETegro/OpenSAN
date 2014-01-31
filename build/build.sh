@@ -42,6 +42,7 @@ mmake()
 cleanup_openwrt_config()
 {
 	rm -f "$TARGET_DIR"/.config
+        cp ${TARGET_DIR}/config-default ${TARGET_DIR}/.config
 	mmake defconfig
 }
 
