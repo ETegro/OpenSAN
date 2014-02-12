@@ -421,6 +421,17 @@ function M.Logical:grow( drives )
 	end
 end
 
+-- Check file
+local function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then
+        io.close(f)
+        return true
+   else 
+        return false
+   end
+end
+
 --- List Logical-related Physicals with the states
 -- @return self.physicals = { "physical1_id" = "state", "physical2_id" = "state" }
 function M.Logical:physical_list()
@@ -431,16 +442,22 @@ function M.Logical:physical_list()
 	local devices = list_devices()
 	self.physicals = {}
 	for _,slave in ipairs( self.slaves ) do
-		local state = read_line( self.path .. "/md/dev-" .. slave .. "/state" )
-		if state == "in_sync" and devices[ slave ] then
-			state = tostring( self.id )
-		elseif state == "spare" then
-			state = "hotspare"
-		else
-			state = "failed"
-		end
-		self.physicals[ M.phys_to_scsi( devices[ slave ].devnode ) ] = state
-	end
+                local file = self.path .. "/md/dev-" .. slave .. "/state"
+                local exist = file_exists( file )
+                if exist == true then
+                        local state = read_line( file )
+        --		local state = read_line( self.path .. "/md/dev-" .. slave .. "/state" )
+        		if state == "in_sync" and devices[ slave ] then
+        			state = tostring( self.id )
+        		elseif state == "spare" then
+        			state = "hotspare"
+        		else
+        			state = "failed"
+        		end
+        		self.physicals[ M.phys_to_scsi( devices[ slave ].devnode ) ] = state
+                else
+                        state == "failed"
+        	end
 	for i=#self.slaves+1,( tonumber( self.raid_disks ) or #self.slaves ) do
 		self.physicals[ "99:" .. i ] = "failed"
 	end
