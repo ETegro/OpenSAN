@@ -2,6 +2,7 @@
 Officially supported and recommended by our team releases are:
 
 * [/download/V2.4.2 2.4.2]
+* [/download/V2.4.2-WO-MONITORING 2.4.2-wo-monitoring] for VM's
 
 = Supported vendors =
 
